@@ -503,7 +503,7 @@ export default function PomodoroClient() {
                 const h = (d.focusCount / maxBar) * 90 + 4
                 return (
                   <div key={i} className={styles.barCol}>
-                    <div className={styles.bar} style={{ height: `${h}px`, background: d.focusCount > 0 ? '#0EA5E9' : 'var(--bg3)' }} />
+                    <div className={styles.bar} style={{ height: `${h}px`, background: d.focusCount > 0 ? 'var(--sky-500)' : 'var(--bg3)' }} />
                     <div className={styles.barLabel}>{DOW_KO[dt.getDay()]}</div>
                     <div className={styles.barLabel}>{d.focusCount}</div>
                   </div>
@@ -577,7 +577,7 @@ export default function PomodoroClient() {
                     setSessions([]); saveSessions([])
                   }
                 }}
-                style={{ marginTop: 10, background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, padding: '6px 12px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
+                style={{ marginTop: 10, background: 'transparent', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '6px 12px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
                 전체 기록 삭제
               </button>
             )}
@@ -715,8 +715,8 @@ export default function PomodoroClient() {
                     background: dailyGoal === n ? 'var(--accent)' : 'var(--bg3)',
                     color: dailyGoal === n ? '#0D0D0D' : 'var(--muted)',
                     border: '1px solid var(--border)',
-                    borderRadius: 8, padding: '8px 14px', fontSize: 13, fontWeight: 600,
-                    cursor: 'pointer', fontFamily: 'Noto Sans KR, sans-serif',
+                    borderRadius: 'var(--radius-s)', padding: '8px 14px', fontSize: 13, fontWeight: 600,
+                    cursor: 'pointer', fontFamily: 'var(--font-sans)',
                   }}>
                   {n}회
                 </button>
@@ -741,7 +741,7 @@ export default function PomodoroClient() {
                 { step: '4', title: '긴 휴식', desc: '4사이클(2시간) 후 15~30분 긴 휴식. 산책·낮잠 등 뇌를 식혀주세요.' },
               ].map(s => (
                 <div key={s.step} className={styles.guideCard}>
-                  <span className={styles.guideEmoji} style={{ color: '#0EA5E9', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{s.step}</span>
+                  <span className={styles.guideEmoji} style={{ color: 'var(--sky-500)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{s.step}</span>
                   <div>
                     <div className={styles.guideTitle}>{s.title}</div>
                     <div className={styles.guideDesc}>{s.desc}</div>
@@ -795,7 +795,7 @@ export default function PomodoroClient() {
       )}
 
       {/* 면책 */}
-      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, padding: '10px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 8, lineHeight: 1.7 }}>
+      <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, padding: '10px 14px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', lineHeight: 1.7 }}>
         ⚠️ 본 도구는 집중 보조용 타이머이며, 학습·업무 효과는 개인의 컨디션·환경·작업 성격에 따라 달라집니다. 충분한 수면·휴식·운동이 어떤 시간 관리 기법보다 우선합니다. 무리한 연속 사용은 권장하지 않습니다.
       </p>
     </div>

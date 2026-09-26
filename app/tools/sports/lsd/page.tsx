@@ -18,10 +18,10 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px',
+  fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px',
 }
 const card: React.CSSProperties = {
-  background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px',
+  background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px',
 }
 const cell: React.CSSProperties = {
   padding: '10px 14px',
@@ -39,7 +39,7 @@ const headCell: React.CSSProperties = {
   borderBottom: '1px solid var(--border)',
   background: 'var(--bg3)',
 }
-const ACCENT = '#059669'
+const ACCENT = 'var(--emerald-600)'
 
 const FAQ_LD = [
               { q: 'LSD는 얼마나 자주, 얼마나 길게 해야 하나요?', a: '주간 거리의 상당 부분을 이지 강도로 채우되, 가장 긴 롱런은 주 1회가 일반적입니다. 거리는 무리하지 말고 주당 10% 이내로 늘리세요. 초보자는 시간(예: 60~90분)으로 잡는 편이 안전합니다.' },
@@ -53,7 +53,7 @@ export default function LsdPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(26px, 5vw, 40px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />LSD·이지런 페이스 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -79,7 +79,7 @@ export default function LsdPage() {
         {/* 2. 너무 빨리 뛰면 안 되는 이유 */}
         <section>
           <h2 style={sectionTitle}>이지런을 너무 빨리 뛰면 안 되는 이유</h2>
-          <div style={{ ...card, borderLeft: `3px solid #A16207`, marginBottom: 12 }}>
+          <div style={{ ...card, borderLeft: `3px solid var(--yellow-700)`, marginBottom: 12 }}>
             <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 6 }}>🚦 회색지대(Gray Zone) = 정크 마일</p>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               마라톤 페이스보다 살짝 느린 &ldquo;힘들진 않은데 회복도 안 되는&rdquo; 애매한 속도입니다. 대부분의 아마추어가 매일 여기서 달립니다 — 충분히 느리지 않아 유산소 적응은 약하고, 충분히 빠르지도 않아 자극도 부족하며, 피로만 누적돼 부상·정체로 이어집니다.
@@ -237,7 +237,7 @@ export default function LsdPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: 12,
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: 12, padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
                 <div>

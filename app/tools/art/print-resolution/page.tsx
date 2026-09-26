@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -25,13 +25,13 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '18px 20px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -91,7 +91,7 @@ export default function PrintResolutionPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />인쇄 해상도 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -110,7 +110,7 @@ export default function PrintResolutionPage() {
 
       <PrintResolutionClient />
 
-      <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 14, padding: '18px 20px', marginTop: 16 }}>
+      <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '18px 20px', marginTop: 16 }}>
         <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>📐 계산 전제</p>
         <ul style={{ margin: 0, paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
           <li>결과는 <strong>이미지의 PPI</strong>입니다. 프린터 스펙의 DPI(잉크 점 밀도)와 다른 값이며, 1440dpi 프린터라고 1440ppi로 저장할 필요는 없습니다.</li>
@@ -144,7 +144,7 @@ export default function PrintResolutionPage() {
         {/* 용도별 권장 DPI + 거리 */}
         <div>
           <h2 style={sectionTitle}>👁️ 용도·보는 거리별 권장 DPI</h2>
-          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: '12px' }}>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -157,7 +157,7 @@ export default function PrintResolutionPage() {
               <tbody>
                 {DPI_ROWS.map((r, i) => (
                   <tr key={i}>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{r.dpi}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{r.dpi}</td>
                     <td style={td}>{r.use}</td>
                     <td style={{ ...td, color: 'var(--muted)' }}>{r.dist}</td>
                     <td style={{ ...td, color: 'var(--muted)', whiteSpace: 'normal' }}>{r.ex}</td>
@@ -174,7 +174,7 @@ export default function PrintResolutionPage() {
         {/* 규격별 300DPI 픽셀 */}
         <div>
           <h2 style={sectionTitle}>📄 규격별 300DPI 필요 해상도</h2>
-          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: '12px' }}>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -189,8 +189,8 @@ export default function PrintResolutionPage() {
                   <tr key={i}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.name}</td>
                     <td style={{ ...td, color: 'var(--muted)' }}>{r.cm}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.px300}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{r.mp}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)' }}>{r.px300}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{r.mp}</td>
                   </tr>
                 ))}
               </tbody>
@@ -207,7 +207,7 @@ export default function PrintResolutionPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
             카메라 스펙의 “2억 화소”와 실제 저장되는 픽셀은 다릅니다. 최신 폰은 여러 픽셀을 하나로 묶어 찍는 <strong style={{ color: 'var(--text)' }}>픽셀 비닝</strong>이 기본값이라, 갤럭시 S24 울트라는 200MP 센서로도 기본 12MP로 저장하고, 아이폰 16은 48MP 센서로 기본 24MP(5712×4284)를 저장합니다. 인쇄 가능 크기는 센서 화소가 아니라 이 <strong style={{ color: 'var(--text)' }}>저장 픽셀</strong> 기준으로 계산해야 합니다.
           </p>
-          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: '12px' }}>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -221,9 +221,9 @@ export default function PrintResolutionPage() {
               <tbody>
                 {PHONE_ROWS.map((r, i) => (
                   <tr key={i}>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{r.mp}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{r.mp}</td>
                     <td style={{ ...td, color: 'var(--muted)' }}>{r.who}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.px}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)' }}>{r.px}</td>
                     <td style={td}>{r.d300}</td>
                     <td style={{ ...td, color: 'var(--muted)' }}>{r.d150}</td>
                   </tr>
@@ -242,7 +242,7 @@ export default function PrintResolutionPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
             옛 인화 사진이나 필름을 스캔해 더 크게 다시 뽑을 때는 <strong style={{ color: 'var(--text)' }}>스캔 DPI = 출력 DPI × 확대율(목표 크기 ÷ 원본 크기)</strong>로 역산합니다. 원본을 키우는 만큼 원본에서 픽셀을 더 촘촘히 읽어야 하기 때문이에요. 예를 들어 4×6″ 사진을 A4로 키우면 긴 변 기준 약 1.95배 확대이므로, 300DPI 인쇄용으로는 300 × 1.95 ≈ 585, 즉 <strong style={{ color: 'var(--text)' }}>600DPI로 스캔</strong>하면 됩니다.
           </p>
-          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: '12px' }}>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -259,8 +259,8 @@ export default function PrintResolutionPage() {
                     <td style={{ ...td, fontWeight: 700 }}>{r.src}</td>
                     <td style={td}>{r.target}</td>
                     <td style={{ ...td, color: 'var(--muted)' }}>{r.ratio}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{r.need}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--accent)' }}>{r.set}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{r.need}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--accent)' }}>{r.set}</td>
                   </tr>
                 ))}
               </tbody>

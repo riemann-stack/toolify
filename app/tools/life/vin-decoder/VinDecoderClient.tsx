@@ -193,7 +193,7 @@ export default function VinDecoderClient() {
                         {r.clean.slice(sd.from, sd.to).split('').map((ch, i) => (
                           <span key={i}
                             className={`${styles.segChar} ${sd.cls}`}
-                            style={VIN_INVALID_LETTERS.includes(ch) ? { borderColor: '#DC2626', color: '#DC2626' } : undefined}>
+                            style={VIN_INVALID_LETTERS.includes(ch) ? { borderColor: 'var(--red-600)', color: 'var(--red-600)' } : undefined}>
                             {ch}
                           </span>
                         ))}
@@ -300,7 +300,7 @@ export default function VinDecoderClient() {
                   className={styles.recentClear}
                   onClick={saveCurrent}
                   style={{ textDecoration: 'none', display: 'inline-flex', alignItems: 'center', gap: 6, marginTop: 14,
-                    border: '1px solid var(--border)', borderRadius: 8, padding: '8px 12px', color: savedFlash ? '#059669' : 'var(--muted)' }}>
+                    border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '8px 12px', color: savedFlash ? 'var(--emerald-600)' : 'var(--muted)' }}>
                   {savedFlash ? '✓ 이 브라우저에 저장됨' : '최근 조회에 저장 (이 브라우저에만)'}
                 </button>
               </div>

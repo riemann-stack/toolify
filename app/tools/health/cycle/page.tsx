@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -24,7 +24,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
@@ -62,7 +62,7 @@ export default function CyclePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />생리주기·배란일 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -171,7 +171,7 @@ export default function CyclePage() {
           { name: '일반 대처', color: 'var(--cat-finance-ink)', items: '카페인·염분 ↓·수분 ↑·규칙 운동·충분한 수면·일정 여유' },
           { name: '🚨 심한 PMS (PMDD)', color: 'var(--danger)', items: '일상에 심각한 영향 → 산부인과·정신건강의학과 상담 권장' },
         ].map((b, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${b.color} 27%, transparent)`, borderRadius: '12px', padding: '14px 16px' }}>
+          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${b.color} 27%, transparent)`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px' }}>{b.name}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{b.items}</p>
           </div>
@@ -183,8 +183,8 @@ export default function CyclePage() {
 
       {/* 5. 산부인과 상담 신호 */}
       <h2 style={sectionTitle}>🏥 산부인과 상담 신호</h2>
-      <div style={{ background: 'rgba(220, 38, 38, 0.06)', border: '1px solid rgba(220, 38, 38, 0.3)', borderRadius: '12px', padding: '18px 22px' }}>
-        <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '10px' }}>다음 경우 산부인과 상담 권장</p>
+      <div style={{ background: 'rgba(220, 38, 38, 0.06)', border: '1px solid rgba(220, 38, 38, 0.3)', borderRadius: 'var(--radius-m)', padding: '18px 22px' }}>
+        <p style={{ fontSize: '13px', color: 'var(--red-600)', fontWeight: 700, marginBottom: '10px' }}>다음 경우 산부인과 상담 권장</p>
         <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: '20px', margin: 0 }}>
           <li>주기 변동폭 <strong>±8일 이상</strong> 지속 (PCOS·갑상선·스트레스 등)</li>
           <li><strong>부정출혈</strong> (생리 외 출혈, 관계 후 출혈)</li>
@@ -209,7 +209,7 @@ export default function CyclePage() {
       <div style={{
         background: 'rgba(217, 119, 6, 0.06)',
         border: '1px solid rgba(217, 119, 6, 0.25)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '18px 22px',
         fontSize: '14px',
         color: 'var(--text)',

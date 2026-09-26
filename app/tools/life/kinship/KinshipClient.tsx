@@ -300,7 +300,6 @@ function TrailTree({ trail, gender }: { trail: string[]; gender: Gender }) {
                 x={x(i) + BOX_W / 2} y={y(n.generation) + BOX_H / 2 + 4}
                 textAnchor="middle" fontSize={12} fontWeight={700}
                 fill={last ? '#ffffff' : 'var(--text)'}
-                fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
               >
                 {i === 0 ? '나' : last ? pick(n.call, gender).split(' ')[0].slice(0, 8) : n.label.slice(0, 8)}
               </text>

@@ -611,7 +611,7 @@ export default function SleepDebtClient() {
             ))}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
               <text key={t} x={PL - 6} y={PT + (1 - t) * plotH + 3}
-                fill="var(--muted)" fontSize="11" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                fill="var(--muted)" fontSize="11" textAnchor="end">
                 {(t * maxY).toFixed(0)}h
               </text>
             ))}
@@ -619,7 +619,7 @@ export default function SleepDebtClient() {
             <line x1={PL} x2={W - PR} y1={targetY} y2={targetY}
               stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.7" />
             <text x={W - PR - 4} y={targetY - 4}
-              fill="var(--accent-ink)" fontSize="11" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+              fill="var(--accent-ink)" fontSize="11" textAnchor="end">
               목표 {targetHours}h
             </text>
             {/* 막대 */}
@@ -644,7 +644,7 @@ export default function SleepDebtClient() {
                     fill={color} opacity="0.85" rx="2" />
                   {showBarValues && (
                     <text x={cx} y={y - 4} fill={color} fontSize="11"
-                      textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                      textAnchor="middle">
                       {d.hours.toFixed(1)}
                     </text>
                   )}
@@ -659,7 +659,7 @@ export default function SleepDebtClient() {
               const cx = PL + (i + 0.5) * barW
               return (
                 <text key={i} x={cx} y={H - PB + 16}
-                  fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                  fill="var(--muted)" fontSize="11" textAnchor="middle">
                   {d.date.slice(5)}
                 </text>
               )

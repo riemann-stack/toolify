@@ -31,7 +31,7 @@ export default function FryingPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />튀김 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -45,7 +45,7 @@ export default function FryingPage() {
 
         {/* ── 1. 기름 온도별 용도 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             기름 온도별 용도 완전 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '20px' }}>
@@ -57,13 +57,13 @@ export default function FryingPage() {
               { range: '190°C 이상', label: '초고온',  color: '#DC2626', desc: '오징어·새우 등 빠른 완성, 타기 쉬우니 주의' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${r.color}44`, borderLeft: `4px solid ${r.color}`, borderRadius: '10px', padding: '12px 16px', display: 'grid', gridTemplateColumns: '110px 80px 1fr', gap: '12px', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 800, color: r.color }}>{r.range}</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 800, color: r.color }}>{r.range}</span>
                 <span style={{ fontSize: '12px', color: 'var(--text)', fontWeight: 600 }}>{r.label}</span>
                 <span style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{r.desc}</span>
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '8px' }}>🥢 나무젓가락으로 온도 확인하는 법</p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: 20, margin: 0 }}>
               <li>기포 없음 → 150°C 이하</li>
@@ -76,7 +76,7 @@ export default function FryingPage() {
 
         {/* ── 2. 재료별 빠른 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             재료별 튀김 시간 빠른 참조표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '10px' }}>
@@ -104,9 +104,9 @@ export default function FryingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.a}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.b}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.a}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.b}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r.p}</td>
                   </tr>
                 ))}
@@ -117,7 +117,7 @@ export default function FryingPage() {
 
         {/* ── 3. 2차 튀김의 과학 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             2차 튀김의 과학
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -129,14 +129,14 @@ export default function FryingPage() {
               { n: '휴지', c: '#D97706', t: '온도 균일화', d: '2~3분 쉬어 내부 온도가 전체로 퍼짐. 증기가 빠지며 튀김옷이 마르기 시작.' },
               { n: '2차', c: '#0EA5E9', t: '크리스피 완성', d: '고온(180~190°C) 짧게. 표면 남은 수분 완전 제거 → 바삭함 극대화.' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, marginBottom: '4px' }}>{s.n}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 800, color: s.c, marginBottom: '4px' }}>{s.n}</p>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '6px' }}>{s.t}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{s.d}</p>
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: '#059669' }}>✅ 추천:</strong> 감자튀김·치킨·돈까스<br />
               <strong style={{ color: 'var(--accent)' }}>🔁 선택:</strong> 고구마·생선<br />
@@ -147,7 +147,7 @@ export default function FryingPage() {
 
         {/* ── 4. 냉동 재료 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             냉동 재료 튀김 완전 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -175,10 +175,10 @@ export default function FryingPage() {
 
         {/* ── 5. 에어프라이어 변환 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             에어프라이어 완전 변환 가이드
           </h2>
-          <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
+          <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 20px', marginBottom: '14px' }}>
             <p style={{ fontSize: '13px', color: '#0891B2', fontWeight: 700, marginBottom: '10px' }}>일반 변환 규칙</p>
             <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, paddingLeft: 20, margin: 0 }}>
               <li>온도: 기름 튀김 온도 <strong>− 10~20°C</strong></li>
@@ -206,9 +206,9 @@ export default function FryingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)' }}>{r.n}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.m}</td>
-                    <td style={{ padding: '9px 12px', color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.f}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.m}</td>
+                    <td style={{ padding: '9px 12px', color: '#059669', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.f}</td>
                   </tr>
                 ))}
               </tbody>
@@ -218,7 +218,7 @@ export default function FryingPage() {
 
         {/* ── 6. 겉바속촉 팁 10가지 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             겉바속촉을 위한 팁 10가지
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '8px' }}>
@@ -235,7 +235,7 @@ export default function FryingPage() {
               '먹기 직전 고온 30초 재가열',
             ].map((t, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', display: 'flex', gap: '10px', alignItems: 'center' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0, minWidth: 24 }}>{i + 1}</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0, minWidth: 24 }}>{i + 1}</span>
                 <span style={{ fontSize: '12px', color: 'var(--text)', lineHeight: 1.6 }}>{t}</span>
               </div>
             ))}
@@ -244,10 +244,10 @@ export default function FryingPage() {
 
         {/* ── 7. 식품 안전 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             식품 안전 주의사항
           </h2>
-          <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
+          <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 20px', marginBottom: '14px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, margin: 0 }}>
               본 가이드는 일반적인 참고용입니다. 조리 환경, 재료 크기, 냉동/냉장 보관 상태에 따라 실제 시간이 다를 수 있습니다. 육류와 냉동 재료는 반드시 내부 익힘 상태를 확인하세요.
             </p>
@@ -263,7 +263,7 @@ export default function FryingPage() {
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{s.n}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, margin: 0 }}>{s.t} 이상</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 800, color: s.c, margin: 0 }}>{s.t} 이상</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', margin: '2px 0 0' }}>중심온도 1분 이상</p>
               </div>
             ))}
@@ -281,7 +281,7 @@ export default function FryingPage() {
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${s.c}44`, borderRadius: '10px', padding: '12px 14px', textAlign: 'center' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{s.n}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: s.c, margin: 0 }}>{s.t}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 800, color: s.c, margin: 0 }}>{s.t}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', margin: '2px 0 0' }}>{s.f}{s.d ? ` ${s.d}` : ''}</p>
               </div>
             ))}
@@ -298,11 +298,11 @@ export default function FryingPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
             {FAQ_LD.map((faq, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '8px' }}>Q. {faq.q}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>A. {faq.a}</p>
               </div>
@@ -312,7 +312,7 @@ export default function FryingPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/recipe',  icon: '📐', name: '레시피 비율 계산기', desc: '튀김 반죽 비율 자동 계산' },
@@ -322,7 +322,7 @@ export default function FryingPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

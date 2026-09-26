@@ -20,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -30,7 +30,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
 }
 const cell: React.CSSProperties = {
@@ -52,7 +52,7 @@ const headCell: React.CSSProperties = {
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -85,7 +85,7 @@ export default function HolidayTablePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />명절 상차림 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -156,7 +156,7 @@ export default function HolidayTablePage() {
               { name: '홍동백서 (紅東白西)',  color: '#DC2626', desc: '동쪽에 붉은 과일(대추·사과), 서쪽에 흰 과일(배·곶감)' },
               { name: '조율이시 (棗栗梨柿)',  color: '#D97706', desc: '대추→밤→배→감(곶감) 순서로 좌→우 배치. 5열 과일 핵심' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: 12, padding: '12px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: 'var(--radius-m)', padding: '12px 16px' }}>
                 <p style={{ fontSize: 14, color: b.color, fontWeight: 700, marginBottom: 6 }}>{b.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
               </div>
@@ -174,7 +174,7 @@ export default function HolidayTablePage() {
         <section>
           <h2 style={sectionTitle}>명절별 필수 음식</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 15, color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>🐲 설날 (음력 1.1)</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
                 <li><strong style={{ color: 'var(--text)' }}>떡국</strong> 필수 — 흰떡 (장수·재산 상징)</li>
@@ -184,7 +184,7 @@ export default function HolidayTablePage() {
                 <li>식혜·청주·한과</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 15, color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>🌕 추석 (음력 8.15)</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
                 <li><strong style={{ color: 'var(--text)' }}>송편</strong> 필수 — 햇곡식의 의미</li>
@@ -194,7 +194,7 @@ export default function HolidayTablePage() {
                 <li>한과·식혜</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 15, color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>🕯️ 제사 (기일)</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', paddingLeft: 18, margin: 0, lineHeight: 1.85 }}>
                 <li><strong style={{ color: 'var(--text)' }}>메·갱</strong> (밥·국) 위(位)별 1세트</li>

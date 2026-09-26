@@ -19,7 +19,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -29,7 +29,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
 }
 const cell: React.CSSProperties = {
@@ -51,7 +51,7 @@ const headCell: React.CSSProperties = {
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -84,7 +84,7 @@ export default function KimjangPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />김장 양 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -174,9 +174,9 @@ export default function KimjangPage() {
               { region: '🍊 전남·경남', date: '12월 초~중', color: '#EA580C', tips: '늦김장. 양념 많고 진함' },
               { region: '🌊 제주', date: '12월 중', color: '#B885DA', tips: '겨울도 따뜻. 단기 보관용' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '4px' }}>{b.region}</p>
-                <p style={{ fontSize: '12px', color: 'var(--text)', fontWeight: 600, marginBottom: '4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{b.date}</p>
+                <p style={{ fontSize: '12px', color: 'var(--text)', fontWeight: 600, marginBottom: '4px', fontFamily: 'var(--font-sans)' }}>{b.date}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{b.tips}</p>
               </div>
             ))}

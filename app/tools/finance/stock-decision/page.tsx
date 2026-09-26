@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -24,14 +24,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -65,7 +65,7 @@ export default function StockDecisionPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />주식 매도·매수 심리 진단
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -123,12 +123,12 @@ export default function StockDecisionPage() {
         </p>
         <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
           {[
-            { color: '#059669', name: '🟢 비교적 이성적', desc: '본인 판단 신뢰. 다만 과신 위험 — 5초 더 생각.' },
+            { color: 'var(--emerald-600)', name: '🟢 비교적 이성적', desc: '본인 판단 신뢰. 다만 과신 위험 — 5초 더 생각.' },
             { color: 'var(--warning)', name: '🟡 균형 (보류 권장)', desc: '판단·감정 비슷. 1~2일 보류 후 재점검.' },
-            { color: '#EA580C', name: '🟠 감정 ↑ (신중)', desc: '분할 진행·소액 테스트로 영향 줄이기.' },
-            { color: '#DC2626', name: '🔴 강한 감정 신호', desc: '24~48시간 보류 강력 권장. 정말 같은 결정인지 재검토.' },
+            { color: 'var(--orange-600)', name: '🟠 감정 ↑ (신중)', desc: '분할 진행·소액 테스트로 영향 줄이기.' },
+            { color: 'var(--red-600)', name: '🔴 강한 감정 신호', desc: '24~48시간 보류 강력 권장. 정말 같은 결정인지 재검토.' },
           ].map((b, i) => (
-            <div key={i} style={{ background: 'var(--bg3)', border: `1px solid color-mix(in srgb, ${b.color} 33%, transparent)`, borderLeft: `3px solid ${b.color}`, borderRadius: '8px', padding: '10px 14px' }}>
+            <div key={i} style={{ background: 'var(--bg3)', border: `1px solid color-mix(in srgb, ${b.color} 33%, transparent)`, borderLeft: `3px solid ${b.color}`, borderRadius: 'var(--radius-s)', padding: '10px 14px' }}>
               <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '4px' }}>{b.name}</p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{b.desc}</p>
             </div>
@@ -196,7 +196,7 @@ export default function StockDecisionPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q2. 이 도구로 종목 추천도 받을 수 있나요?</summary>
         <div style={faqAnswer}>
-          <strong style={{ color: '#DC2626' }}>아니요 — 절대 X.</strong> 본 도구는 종목 정보 검색·DB·추천 기능을 제공하지 않습니다. 사용자가 입력한 종목명도 화면에만 표시되고 서버·localStorage 저장 X. 종목 정보는 <Link href="https://dart.fss.or.kr" target="_blank" style={{ color: 'var(--accent)' }}>DART 증권신고서</Link>·본인 거래 증권사 안내에서 직접 확인.
+          <strong style={{ color: 'var(--red-600)' }}>아니요 — 절대 X.</strong> 본 도구는 종목 정보 검색·DB·추천 기능을 제공하지 않습니다. 사용자가 입력한 종목명도 화면에만 표시되고 서버·localStorage 저장 X. 종목 정보는 <Link href="https://dart.fss.or.kr" target="_blank" style={{ color: 'var(--accent)' }}>DART 증권신고서</Link>·본인 거래 증권사 안내에서 직접 확인.
         </div>
       </details>
 

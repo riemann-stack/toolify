@@ -427,11 +427,11 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
   // 우주 1년 = 437.5억 = 1.0 (비교 max)
   // 인류 문명 12000년 / 인류 등장 30만 년 / 사용자 인생
   const cosmicItems = [
-    { name: '우주 138억 년',    sec: 365.25 * 24 * 3600,                    color: '#9B59B6' },
-    { name: '공룡 시대',         sec: (165_000_000 / 437.5),                color: '#EA580C' },
-    { name: '인류 등장 (30만 년)', sec: (300_000   / 437.5),                color: '#A16207' },
-    { name: '인류 문명 (12천 년)', sec: (12_000    / 437.5),                color: '#059669' },
-    { name: '내 인생',           sec: stats.cosmicSeconds,                  color: '#0D9488' },
+    { name: '우주 138억 년',    sec: 365.25 * 24 * 3600,                    color: 'var(--amethyst)' },
+    { name: '공룡 시대',         sec: (165_000_000 / 437.5),                color: 'var(--orange-600)' },
+    { name: '인류 등장 (30만 년)', sec: (300_000   / 437.5),                color: 'var(--yellow-700)' },
+    { name: '인류 문명 (12천 년)', sec: (12_000    / 437.5),                color: 'var(--emerald-600)' },
+    { name: '내 인생',           sec: stats.cosmicSeconds,                  color: 'var(--teal-600)' },
   ]
   const max = cosmicItems[0].sec
   const itemsWithPct = cosmicItems.map(it => ({
@@ -520,7 +520,7 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
           ))}
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-          우주 1년 환산 시, 당신의 인생은 <strong style={{ color: '#0D9488' }}>마지막 {stats.cosmicSeconds.toFixed(3)}초</strong> 동안에 해당합니다. 인류 문명 전체(12,000년)도 우주 시간으로 약 27.5초입니다.
+          우주 1년 환산 시, 당신의 인생은 <strong style={{ color: 'var(--teal-600)' }}>마지막 {stats.cosmicSeconds.toFixed(3)}초</strong> 동안에 해당합니다. 인류 문명 전체(12,000년)도 우주 시간으로 약 27.5초입니다.
         </p>
       </div>
     </>
@@ -656,10 +656,10 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
         <div className={s.card}>
           <label className={s.cardLabel}>한국 세대 분류</label>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-            <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>
               {generation.name}
             </span>
-            <span style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <span style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>
               {generation.range[0]}~{generation.range[1]}년생 · {generation.desc}
             </span>
           </div>
@@ -676,7 +676,7 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {traditionalToShow.map(n => (
               <div key={n.age} className={s.traditionalCard}
-                style={n.age === currentAge ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 3px rgba(14,165,233,0.10)' } : undefined}>
+                style={n.age === currentAge ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 3px color-mix(in srgb, var(--accent) 10%, transparent)' } : undefined}>
                 <div className={s.traditionalHanja}>{n.korean.split('·')[0]}</div>
                 <div className={s.traditionalName}>만 {n.age}세 {n.age === currentAge ? '· 현재' : ''}</div>
                 <div className={s.traditionalMeaning}>{n.meaning}</div>

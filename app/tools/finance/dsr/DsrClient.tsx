@@ -102,7 +102,7 @@ export default function DsrClient() {
   const dsrStatus = (v: number) => v <= dsrLimitN ? s.statusOk : v <= dsrLimitN + 5 ? s.statusWarn : s.statusOver
   const ltvStatus = r.ltv <= ltvLimitN ? s.statusOk : s.statusOver
 
-  const gaugeColor = (v: number) => v <= dsrLimitN ? '#059669' : v <= dsrLimitN + 5 ? '#D97706' : '#DC2626'
+  const gaugeColor = (v: number) => v <= dsrLimitN ? 'var(--emerald-600)' : v <= dsrLimitN + 5 ? 'var(--amber-600)' : 'var(--red-600)'
 
   return (
     <div className={s.wrap}>
@@ -272,7 +272,7 @@ export default function DsrClient() {
           <span className={s.cardHint}>한도 {fmtPct(ltvLimitN)}%</span>
         </div>
         <div className={s.gauge}>
-          <div className={s.gaugeFill} style={{ width: `${Math.min(100, r.ltv)}%`, background: r.ltv <= ltvLimitN ? '#059669' : '#DC2626' }} />
+          <div className={s.gaugeFill} style={{ width: `${Math.min(100, r.ltv)}%`, background: r.ltv <= ltvLimitN ? 'var(--emerald-600)' : 'var(--red-600)' }} />
           <div className={s.gaugeLimit} style={{ left: `${Math.min(100, ltvLimitN)}%` }} />
         </div>
         <div className={s.gaugeLabel}><span>현재 희망대출 LTV</span><span className={ltvStatus}>{fmtPct(r.ltv)}%</span></div>

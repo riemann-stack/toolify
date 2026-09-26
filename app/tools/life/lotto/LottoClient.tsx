@@ -485,7 +485,7 @@ function AnalyzeTab() {
 
           <div className={s.card}>
             <label className={s.cardLabel}>패턴 해석</label>
-            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif', marginBottom: 10 }}>
+            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'var(--font-sans)', marginBottom: 10 }}>
               {interpretAnalysis(analysis)}
             </p>
             <div className={s.warningBox}>
@@ -660,7 +660,7 @@ function JackpotTab() {
             value={startAgeStr}
             onChange={e => setStartAgeStr(e.target.value.replace(/[^\d]/g, '').slice(0, 3))}
             onBlur={() => setStartAgeStr(String(startAge))} />
-          <span style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center', fontFamily: 'Noto Sans KR, sans-serif' }}>
+          <span style={{ fontSize: 12, color: 'var(--muted)', alignSelf: 'center', fontFamily: 'var(--font-sans)' }}>
             결과에 &quot;{startAge + Math.round(avgYears)}세에 1등&quot; 형식으로 표시
           </span>
         </div>

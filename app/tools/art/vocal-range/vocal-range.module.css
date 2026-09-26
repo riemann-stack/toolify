@@ -4,13 +4,13 @@
 .disclaimer {
   background: rgba(147,51,234,0.06);
   border: 1px solid rgba(147,51,234,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #9333EA; }
+.disclaimer strong { color: var(--purple-600); }
 
 .warnBox {
   background: rgba(220,38,38,0.14);
@@ -20,9 +20,9 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.warnBox strong { color: #DC2626; }
+.warnBox strong { color: var(--red-600); }
 
 /* 탭 */
 .tabs {
@@ -31,33 +31,33 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 540px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveMeasure{ background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
-.tabActiveResult { background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
-.tabActiveLog    { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
+.tabActiveMeasure{ background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
+.tabActiveResult { background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
+.tabActiveLog    { background: rgba(155,89,182,0.10); color: var(--purple-600); font-weight: 700; }
 
 /* 카드 */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
 }
 .cardLabel {
@@ -74,14 +74,14 @@
 
 /* 시작 버튼 */
 .startBtn {
-  background: linear-gradient(135deg, #9333EA, #FF6BD9);
+  background: linear-gradient(135deg, var(--purple-600), #FF6BD9);
   border: none;
   color: #fff;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 24px;
   font-size: 15px;
   font-weight: 800;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   letter-spacing: 0.04em;
@@ -94,13 +94,13 @@
 
 .stopBtn {
   background: rgba(220,38,38,0.18);
-  border: 1px solid #DC2626;
-  color: #DC2626;
-  border-radius: 12px;
+  border: 1px solid var(--red-600);
+  color: var(--red-600);
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
 }@media (hover: hover) {
@@ -111,7 +111,7 @@
 .noteCard {
   background: linear-gradient(140deg, rgba(147,51,234,0.10), rgba(255,107,217,0.04));
   border: 1px solid rgba(147,51,234,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 32px 22px 26px;
   text-align: center;
 }
@@ -121,22 +121,22 @@
 }
 .noteCardIdle .noteName { color: var(--muted); }
 .noteName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(60px, 16vw, 110px);
   line-height: 1;
   letter-spacing: -3px;
-  color: #9333EA;
+  color: var(--purple-600);
   font-variant-numeric: tabular-nums;
 }
 .noteKorean {
   font-size: 14px;
   color: var(--muted);
   margin-top: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .noteFreq {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   color: var(--text);
@@ -147,11 +147,11 @@
   margin-top: 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.centsAccurate { color: #059669; }
+.centsAccurate { color: var(--emerald-600); }
 
 /* 볼륨 게이지 */
 .volumeWrap {
@@ -167,7 +167,7 @@
 }
 .volumeFill {
   height: 100%;
-  background: linear-gradient(to right, #059669, #A16207, #EA580C, #DC2626);
+  background: linear-gradient(to right, var(--emerald-600), var(--yellow-700), var(--orange-600), var(--red-600));
   transition: width 0.05s linear;
 }
 .volumeLabel {
@@ -175,21 +175,21 @@
   color: var(--muted);
   text-align: center;
   margin-top: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 피치 그래프 */
 .chartWrap {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px;
   height: 180px;
   position: relative;
 }
 .chartSvg { width: 100%; height: 100%; display: block; }
 .chartAxis {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
   fill: var(--muted);
   font-weight: 700;
@@ -210,14 +210,14 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-left: 3px solid #059669;
-  border-radius: 8px;
+  border-left: 3px solid var(--emerald-600);
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .stableNote {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
   font-size: 14px;
@@ -228,17 +228,17 @@
   color: var(--muted);
   font-weight: 400;
   margin-top: 2px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .stableDuration {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
   font-size: 12px;
 }
 .stableClarity {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: 11px;
@@ -250,11 +250,11 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-left: 4px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
 }
-.stepCardActive { border-left-color: #EA580C; background: rgba(234,88,12,0.14); }
-.stepCardDone   { border-left-color: #059669; opacity: 0.8; }
+.stepCardActive { border-left-color: var(--orange-600); background: rgba(234,88,12,0.14); }
+.stepCardDone   { border-left-color: var(--emerald-600); opacity: 0.8; }
 .stepHeader {
   display: flex;
   justify-content: space-between;
@@ -262,7 +262,7 @@
   margin-bottom: 6px;
 }
 .stepNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 12px;
   color: var(--muted);
@@ -272,22 +272,22 @@
 .stepStatus {
   font-size: 11px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.stepStatusActive { color: #EA580C; }
-.stepStatusDone   { color: #059669; }
+.stepStatusActive { color: var(--orange-600); }
+.stepStatusDone   { color: var(--emerald-600); }
 .stepTitle {
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .stepDesc {
   font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 8px;
 }
 .stepValue {
@@ -297,16 +297,16 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .stepValueLabel { font-size: 12px; color: var(--muted); }
 .stepValueNote {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
-  color: #EA580C;
+  color: var(--orange-600);
   font-size: 18px;
   font-variant-numeric: tabular-nums;
 }
@@ -315,7 +315,7 @@
 .hero {
   background: linear-gradient(140deg, rgba(161,98,7,0.18), rgba(147,51,234,0.05));
   border: 1px solid rgba(161,98,7,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 28px 22px;
   text-align: center;
 }
@@ -328,16 +328,16 @@
   margin-bottom: 8px;
 }
 .heroRange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(36px, 9vw, 56px);
   letter-spacing: -2px;
   line-height: 1.1;
-  color: #A16207;
+  color: var(--yellow-700);
   font-variant-numeric: tabular-nums;
 }
 .heroOctaves {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 16px;
   color: var(--text);
@@ -348,14 +348,14 @@
   font-size: 13px;
   color: var(--muted);
   margin-top: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .heroClass {
   display: inline-block;
   margin-top: 14px;
   padding: 7px 18px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 14px;
 }
@@ -364,7 +364,7 @@
 .pianoWrap {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px;
   overflow-x: auto;
   -webkit-overflow-scrolling: touch;
@@ -411,7 +411,7 @@
   left: 50%;
   transform: translateX(-50%);
   font-size: 9px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: #444;
   pointer-events: none;
@@ -422,7 +422,7 @@
   gap: 12px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 8px;
 }
 .pianoLegend i {
@@ -442,10 +442,10 @@
   gap: 10px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   align-items: center;
 }
 .songRow.headerRow {
@@ -457,7 +457,7 @@
 .songInfo { color: var(--text); font-weight: 600; }
 .songInfo small { display: block; font-size: 11px; color: var(--muted); margin-top: 2px; font-weight: 400; }
 .songRange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -465,27 +465,27 @@
   color: var(--muted);
 }
 .songShift {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 13px;
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
-.songShiftZero  { color: #059669; }
-.songShiftSmall { color: #A16207; }
-.songShiftLarge { color: #EA580C; }
+.songShiftZero  { color: var(--emerald-600); }
+.songShiftSmall { color: var(--yellow-700); }
+.songShiftLarge { color: var(--orange-600); }
 .songDifficulty {
   font-size: 11px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: center;
   border-radius: 4px;
   padding: 2px 6px;
 }
-.diffEasy { background: rgba(16,185,129,0.18); color: #059669; }
-.diffMid  { background: rgba(161,98,7,0.18);  color: #A16207; }
-.diffHard { background: rgba(234,88,12,0.18); color: #EA580C; }
-.diffVeryHard { background: rgba(220,38,38,0.18); color: #DC2626; }
+.diffEasy { background: rgba(16,185,129,0.18); color: var(--emerald-600); }
+.diffMid  { background: rgba(161,98,7,0.18);  color: var(--yellow-700); }
+.diffHard { background: rgba(234,88,12,0.18); color: var(--orange-600); }
+.diffVeryHard { background: rgba(220,38,38,0.18); color: var(--red-600); }
 
 /* 옵션 그리드 */
 .optionRow  { display: grid; grid-template-columns: repeat(3, 1fr); gap: 5px; }
@@ -493,11 +493,11 @@
 .optionBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }@media (hover: hover) {
@@ -509,11 +509,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -536,23 +536,23 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
 
 /* 가이드 */
 .guideBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.75;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.guideBox strong { color: #0891B2; }
+.guideBox strong { color: var(--cyan-600); }
 .guideBox ul { padding-left: 18px; margin: 6px 0 0; }
 .guideBox li { margin-bottom: 3px; }
 
@@ -572,10 +572,10 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .historyRow.headerRow {
   background: transparent; border: none;
@@ -584,18 +584,18 @@
   font-weight: 700; padding: 3px 12px;
 }
 .historyDate {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--muted);
   font-size: 11px;
 }
 .historyNote {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-.historyClass { color: #9333EA; font-size: 11px; font-weight: 700; }
+.historyClass { color: var(--purple-600); font-size: 11px; font-weight: 700; }
 .miniBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
@@ -603,9 +603,9 @@
   padding: 4px 9px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }
+.miniDanger { color: var(--red-600); border-color: rgba(220,38,38,0.30); }

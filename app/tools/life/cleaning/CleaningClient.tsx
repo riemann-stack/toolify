@@ -77,7 +77,7 @@ export default function CleaningClient() {
 
       {/* 응급 — 혼합 사고 시 */}
       <div className={s.safetyCard} style={{ background: 'rgba(234,88,12,0.06)', borderColor: 'rgba(234,88,12,0.35)' }}>
-        <div className={s.safetyHead} style={{ color: '#EA580C' }}>🆘 가스 흡입·혼합 사고 시</div>
+        <div className={s.safetyHead} style={{ color: 'var(--orange-600)' }}>🆘 가스 흡입·혼합 사고 시</div>
         <ul className={s.safetyList}>
           <li>즉시 그 자리를 벗어나 창문·문을 열고 신선한 공기를 마신다</li>
           <li>피부·눈에 닿았으면 흐르는 물로 <strong>15분 이상</strong> 씻는다</li>

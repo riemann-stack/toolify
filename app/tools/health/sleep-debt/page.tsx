@@ -20,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -30,7 +30,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
 }
 const cell: React.CSSProperties = {
@@ -64,7 +64,7 @@ export default function SleepDebtPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />수면 부채 트래커
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -160,8 +160,8 @@ export default function SleepDebtPage() {
               { hrs: '24시간 연속 각성 (급성 철야)', color: '#DC2626', desc: '혈중알코올 0.10 수준의 수행 저하 (Dawson & Reid 1997)' },
               { hrs: '짧은 수면 반복', color: '#FF3E3E', desc: '치매 관련 단백질(베타-아밀로이드) 축적과 연관 보고' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{b.hrs}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px', fontFamily: 'var(--font-sans)' }}>{b.hrs}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{b.desc}</p>
               </div>
             ))}
@@ -230,7 +230,7 @@ export default function SleepDebtPage() {
           <div style={{
             background: 'rgba(217, 119, 6, 0.06)',
             border: '1px solid rgba(217, 119, 6, 0.25)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 22px',
             fontSize: '14px',
             color: 'var(--text)',

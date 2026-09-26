@@ -17,7 +17,7 @@ const codeBox: React.CSSProperties = {
   border: '1px solid var(--border)',
   borderRadius: '10px',
   padding: '14px 16px',
-  fontFamily: "'Fira Code', 'Consolas', monospace",
+  fontFamily: 'var(--font-mono)',
   fontSize: '13px',
   color: 'var(--text)',
   lineHeight: 1.8,
@@ -54,7 +54,7 @@ export default function CssConverterPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />CSS 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -68,8 +68,8 @@ export default function CssConverterPage() {
 
         {/* 1. 핵심 공식 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>CSS 단위 핵심 공식 참조표</h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>CSS 단위 핵심 공식 참조표</h2>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -88,8 +88,8 @@ export default function CssConverterPage() {
                   ['px → vh',  '(px ÷ viewportHeight) × 100', '24px ÷ 900px ≈ 2.67vh'],
                 ].map((row, i, arr) => (
                   <tr key={i}>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace" }}>{row[1]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'var(--font-mono)' }}>{row[1]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -100,11 +100,11 @@ export default function CssConverterPage() {
 
         {/* 1.5 px → rem 조견표 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>px → rem 조견표 (root 16px)</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>px → rem 조견표 (root 16px)</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            아래 표는 root font-size 16px 기준의 <span style={{ fontFamily: "'Fira Code', monospace" }}>px ÷ 16</span> 산술입니다. 한 가지 주의 — <strong style={{ color: 'var(--text)' }}>16px은 CSS 표준이 정한 수치가 아닙니다</strong>. W3C 명세(CSS Values Level 4)는 rem을 &ldquo;루트 요소 font-size와 같다&rdquo;로만 정의하고 숫자를 정하지 않으며, MDN도 &ldquo;일반적인 브라우저 기본값(common browser default)이 16px이지만 사용자 설정으로 바뀔 수 있다&rdquo;고 서술합니다. rem을 쓰는 이유가 정확히 이 지점입니다 — 사용자가 브라우저 설정에서 기본 글꼴을 20px로 키우면 px로 고정한 텍스트는 그대로지만, rem으로 쓴 텍스트는 20 ÷ 16 = 1.25배로 함께 커져 사용자의 선택을 존중합니다.
+            아래 표는 root font-size 16px 기준의 <span style={{ fontFamily: 'var(--font-mono)' }}>px ÷ 16</span> 산술입니다. 한 가지 주의 — <strong style={{ color: 'var(--text)' }}>16px은 CSS 표준이 정한 수치가 아닙니다</strong>. W3C 명세(CSS Values Level 4)는 rem을 &ldquo;루트 요소 font-size와 같다&rdquo;로만 정의하고 숫자를 정하지 않으며, MDN도 &ldquo;일반적인 브라우저 기본값(common browser default)이 16px이지만 사용자 설정으로 바뀔 수 있다&rdquo;고 서술합니다. rem을 쓰는 이유가 정확히 이 지점입니다 — 사용자가 브라우저 설정에서 기본 글꼴을 20px로 키우면 px로 고정한 텍스트는 그대로지만, rem으로 쓴 텍스트는 20 ÷ 16 = 1.25배로 함께 커져 사용자의 선택을 존중합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -128,8 +128,8 @@ export default function CssConverterPage() {
                   ['48px', '3rem',      '히어로 타이틀'],
                 ].map((row, i, arr) => (
                   <tr key={i}>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace", fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace" }}>{row[1]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'var(--font-mono)' }}>{row[1]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -143,8 +143,8 @@ export default function CssConverterPage() {
 
         {/* 2. rem vs em */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>rem vs em 완전 비교</h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>rem vs em 완전 비교</h2>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -173,7 +173,7 @@ export default function CssConverterPage() {
 
         {/* 3. 62.5% 트릭의 함정 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>px→rem 62.5% 트릭(1rem = 10px)의 함정</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>px→rem 62.5% 트릭(1rem = 10px)의 함정</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             html에 <strong style={{ color: 'var(--text)' }}>font-size: 62.5%</strong>를 선언하면 브라우저 기본 16px × 0.625 = <strong style={{ color: 'var(--text)' }}>10px</strong>가 되어 1.6rem = 16px, 2.4rem = 24px처럼 암산이 쉬워집니다. 문제는 rem이 <strong style={{ color: 'var(--text)' }}>문서 전체에 적용되는 전역 기준</strong>이라는 점입니다. Shadow DOM 내부의 rem까지 예외 없이 바뀌므로, 1rem = 16px를 전제로 만들어진 서드파티 코드가 전부 62.5% 크기로 줄어듭니다.
           </p>
@@ -188,15 +188,15 @@ h1   { font-size: 3.2rem; }   /* 32px ✅ */
 .p-4 { padding: 1rem; }       /* Tailwind 4단위, 기대 16px → 10px ❌ */`}
           </div>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
-            타이포그래피·여백 기본값을 rem으로 정의한 Bootstrap 5, spacing 1단위 = 0.25rem인 Tailwind CSS, rem을 쓰는 임베드 위젯(댓글·결제창 등)이 대표적인 충돌 지점입니다. 게다가 이 트릭은 프로젝트 전체를 한 번에 바꾸는 일괄 전환만 가능해, 이미 rem이 섞인 코드베이스에 점진적으로 도입할 수 없습니다. 62.5%가 고정 <span style={{ fontFamily: "'Fira Code', monospace" }}>font-size: 10px</span> 선언보다 나은 점은 사용자의 브라우저 글꼴 크기 설정에 비례해 확대된다는 것 하나인데, 루트를 100%로 두어도 같은 이점을 얻습니다. 결론적으로 외부 CSS를 전부 통제할 수 없다면 루트를 100%(16px)로 유지하고 px ÷ 16 나눗셈은 변환기에 맡기는 편이 안전합니다 — 이 변환기의 root font-size 기본값이 16인 이유입니다.
+            타이포그래피·여백 기본값을 rem으로 정의한 Bootstrap 5, spacing 1단위 = 0.25rem인 Tailwind CSS, rem을 쓰는 임베드 위젯(댓글·결제창 등)이 대표적인 충돌 지점입니다. 게다가 이 트릭은 프로젝트 전체를 한 번에 바꾸는 일괄 전환만 가능해, 이미 rem이 섞인 코드베이스에 점진적으로 도입할 수 없습니다. 62.5%가 고정 <span style={{ fontFamily: 'var(--font-mono)' }}>font-size: 10px</span> 선언보다 나은 점은 사용자의 브라우저 글꼴 크기 설정에 비례해 확대된다는 것 하나인데, 루트를 100%로 두어도 같은 이점을 얻습니다. 결론적으로 외부 CSS를 전부 통제할 수 없다면 루트를 100%(16px)로 유지하고 px ÷ 16 나눗셈은 변환기에 맡기는 편이 안전합니다 — 이 변환기의 root font-size 기본값이 16인 이유입니다.
           </p>
         </div>
 
         {/* 3.5 Tailwind와 rem */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Tailwind와 rem — spacing scale·임의값</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Tailwind와 rem — spacing scale·임의값</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            Tailwind의 spacing 유틸리티는 rem 기반입니다. v3 공식 문서의 명문은 <strong style={{ color: 'var(--text)' }}>&ldquo;spacing 1단위 = 0.25rem, 일반적인 브라우저 기본값에서 4px&rdquo;</strong> — v4는 같은 결과를 테마 변수 <span style={{ fontFamily: "'Fira Code', monospace" }}>--spacing: 0.25rem</span>에 숫자를 곱하는 방식으로 만듭니다(2026-07 v3·v4 문서 기준). 단위가 rem이므로 위에서 본 &lsquo;사용자 글꼴 설정 존중&rsquo;이 유틸리티 전체에 자동으로 적용됩니다.
+            Tailwind의 spacing 유틸리티는 rem 기반입니다. v3 공식 문서의 명문은 <strong style={{ color: 'var(--text)' }}>&ldquo;spacing 1단위 = 0.25rem, 일반적인 브라우저 기본값에서 4px&rdquo;</strong> — v4는 같은 결과를 테마 변수 <span style={{ fontFamily: 'var(--font-mono)' }}>--spacing: 0.25rem</span>에 숫자를 곱하는 방식으로 만듭니다(2026-07 v3·v4 문서 기준). 단위가 rem이므로 위에서 본 &lsquo;사용자 글꼴 설정 존중&rsquo;이 유틸리티 전체에 자동으로 적용됩니다.
           </p>
           <div style={codeBox}>
 {`/* spacing: 1단위 = 0.25rem (root 16px일 때 4px) */
@@ -209,13 +209,13 @@ p-3 = 0.75rem = 12px      p-8 = 2rem   = 32px
 .p-4 { padding: calc(var(--spacing) * 4); }`}
           </div>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
-            스케일에 없는 값은 대괄호 <strong style={{ color: 'var(--text)' }}>임의값(arbitrary value)</strong> 문법으로 즉석 생성합니다. 공식 문서 예시는 <span style={{ fontFamily: "'Fira Code', monospace" }}>top-[117px]</span>·<span style={{ fontFamily: "'Fira Code', monospace" }}>text-[22px]</span>이고, <span style={{ fontFamily: "'Fira Code', monospace" }}>w-[13px]</span>처럼 어느 유틸리티에나 같은 문법이 통하며 <span style={{ fontFamily: "'Fira Code', monospace" }}>lg:top-[344px]</span>처럼 반응형·상태 수정자와도 결합됩니다. 다만 공식 문서가 임의값을 소개하는 맥락 자체가 &ldquo;배경 이미지를 딱 맞는 자리에 놓기 위해 top: 117px이 정말로 필요할 때&rdquo; — 즉 1회용 탈출구입니다. 같은 값이 여러 곳에서 반복된다면 임의값을 복붙하기보다 테마 변수로 등록해 일반 유틸리티처럼 쓰는 편이 유지보수에 낫습니다.
+            스케일에 없는 값은 대괄호 <strong style={{ color: 'var(--text)' }}>임의값(arbitrary value)</strong> 문법으로 즉석 생성합니다. 공식 문서 예시는 <span style={{ fontFamily: 'var(--font-mono)' }}>top-[117px]</span>·<span style={{ fontFamily: 'var(--font-mono)' }}>text-[22px]</span>이고, <span style={{ fontFamily: 'var(--font-mono)' }}>w-[13px]</span>처럼 어느 유틸리티에나 같은 문법이 통하며 <span style={{ fontFamily: 'var(--font-mono)' }}>lg:top-[344px]</span>처럼 반응형·상태 수정자와도 결합됩니다. 다만 공식 문서가 임의값을 소개하는 맥락 자체가 &ldquo;배경 이미지를 딱 맞는 자리에 놓기 위해 top: 117px이 정말로 필요할 때&rdquo; — 즉 1회용 탈출구입니다. 같은 값이 여러 곳에서 반복된다면 임의값을 복붙하기보다 테마 변수로 등록해 일반 유틸리티처럼 쓰는 편이 유지보수에 낫습니다.
           </p>
         </div>
 
         {/* 4. clamp() 가이드 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>clamp() 완전 가이드</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>clamp() 완전 가이드</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>clamp(최솟값, 선호값, 최댓값)</strong>은 뷰포트 크기에 따라 값을 부드럽게 변화시키면서도 안전한 상·하한을 보장합니다.
           </p>
@@ -232,20 +232,20 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
   → 그 사이:     부드럽게 변화`}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px' }}>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Chrome 79+</span>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Firefox 75+</span>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Safari 13.1+</span>
-            <span style={{ background: 'rgba(220,38,38,0.15)', color: '#DC2626', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>IE ❌</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Chrome 79+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Firefox 75+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Safari 13.1+</span>
+            <span style={{ background: 'rgba(220,38,38,0.15)', color: '#DC2626', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>IE ❌</span>
           </div>
         </div>
 
         {/* 4.5 타이포 스케일 실전 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>타이포 스케일 실전 — h1~캡션 clamp() 세트</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>타이포 스케일 실전 — h1~캡션 clamp() 세트</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             위 선형 보간 공식을 실제 타이포 단계에 적용한 세트입니다. 뷰포트 기준은 360~1440px — 이 페이지 clamp() 생성기의 기본값과 같아서, 같은 px를 입력하면 아래와 동일한 코드가 나옵니다. MDN 정의대로 <strong style={{ color: 'var(--text)' }}>clamp(MIN, VAL, MAX)는 max(MIN, min(VAL, MAX))로 해석</strong>되므로, 선호값(가운데 vw 식)이 어떤 값이 되어도 결과는 항상 MIN~MAX 사이로 잘립니다. 이 등가식을 그대로 계산해 보면, 실수로 MIN을 MAX보다 크게 지정했을 때 바깥쪽 max()가 마지막에 적용되어 MIN이 이긴다는 것도 도출됩니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -263,9 +263,9 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
                   ['캡션', '12 → 13px', 'clamp(0.75rem, 0.7292rem + 0.0926vw, 0.8125rem)'],
                 ].map((row, i, arr) => (
                   <tr key={i}>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, whiteSpace: 'nowrap' }}>{row[1]}</td>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace", fontSize: '12px', color: 'var(--muted)' }}>{row[2]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -278,11 +278,11 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 5. 100vh 문제와 dvh·svh·lvh */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>100vh 모바일 주소창 문제 — dvh·svh·lvh</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>100vh 모바일 주소창 문제 — dvh·svh·lvh</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             모바일 브라우저의 주소창은 스크롤에 따라 나타났다 사라지지만, 기존 <strong style={{ color: 'var(--text)' }}>100vh는 주소창이 접힌 가장 큰 화면 기준</strong>으로 계산되는 경우가 대부분입니다. 그래서 첫 화면에서 100vh 요소의 하단 — 고정 버튼·CTA — 이 주소창에 가려지는 문제가 생깁니다. CSS Values Level 4는 이를 해결하는 세 가지 뷰포트 높이 단위를 추가했습니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -298,7 +298,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
                   ['100dvh', '지금 실제로 보이는 높이(실시간 변동)', '풀스크린 모달·채팅 입력창 — 스크롤 중 리사이즈 주의'],
                 ].map((row, i, arr) => (
                   <tr key={i}>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace", fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'var(--font-mono)', fontWeight: 700, color: 'var(--accent)' }}>{row[0]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom }}>{row[1]}</td>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
@@ -314,17 +314,17 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 .hero { height: 100vh; height: 100dvh; }`}
           </div>
           <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px', marginTop: '12px' }}>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Chrome 108+</span>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Firefox 101+</span>
-            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>Safari 15.4+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Chrome 108+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Firefox 101+</span>
+            <span style={{ background: 'rgba(16,185,129,0.15)', color: '#059669', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '6px', padding: '3px 9px', fontSize: '11px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>Safari 15.4+</span>
           </div>
         </div>
 
         {/* 6. aspect-ratio vs padding-top */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>aspect-ratio vs padding-top trick</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>aspect-ratio vs padding-top trick</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>✨ 최신 방법 (aspect-ratio)</p>
               <div style={codeBox}>{`.box { aspect-ratio: 16 / 9; }`}</div>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
@@ -332,7 +332,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
                 <strong style={{ color: '#DC2626' }}>단점</strong>: IE 미지원
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>🛡️ 구형 방법 (padding-top)</p>
               <div style={codeBox}>{`.wrapper {
   position: relative;
@@ -352,7 +352,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 7. line-height unitless */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>line-height unitless 권장 이유</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>line-height unitless 권장 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             <strong style={{ color: 'var(--text)' }}>unitless</strong>(단위 없는) line-height는 자식 요소에 상속될 때 <strong style={{ color: 'var(--text)' }}>자식의 font-size</strong>로 재계산됩니다. 반면 em·%는 계산된 px값이 그대로 상속되어 의도와 달라질 수 있습니다.
           </p>
@@ -370,8 +370,8 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 8. Figma → CSS */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Figma → CSS 변환 치트시트</h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', overflow: 'hidden' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>Figma → CSS 변환 치트시트</h2>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -389,7 +389,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
                 ].map((row, i, arr) => (
                   <tr key={i}>
                     <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, color: 'var(--muted)' }}>{row[0]}</td>
-                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: "'Fira Code', monospace", color: 'var(--accent)' }}>{row[1]}</td>
+                    <td style={{ ...cell, borderBottom: i === arr.length - 1 ? 'none' : cell.borderBottom, fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}>{row[1]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -399,13 +399,13 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 9. FAQ */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -420,7 +420,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
 
         {/* 10. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/color',     emoji: '🎨', name: '색상 코드 변환기',   desc: 'HEX·RGB·HSL 변환' },
@@ -428,7 +428,7 @@ clamp(1rem, 0.6667rem + 1.4815vw, 2rem)
               { href: '/tools/dev/json',      emoji: '📋', name: 'JSON 포맷터',         desc: '정렬·압축·검증' },
               { href: '/tools/art/charcount', emoji: '🔡', name: '글자수 세기',         desc: '실시간 카운트' },
             ].map((t) => (
-              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '22px' }}>{t.emoji}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 500, marginBottom: '2px' }}>{t.name}</p>

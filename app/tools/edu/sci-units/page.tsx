@@ -20,14 +20,14 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
-const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+const h2: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
+const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }
 
 const FAQ_LD = [
               { q: '과학적 표기와 공학적 표기의 차이는?', a: '둘 다 가수 × 10ⁿ 형태지만, <strong>과학적 표기</strong>는 가수를 1 이상 10 미만으로 두고(예: 1.5×10⁻⁶), <strong>공학적 표기</strong>는 지수를 항상 3의 배수로 맞춥니다(예: 15×10⁻⁶ → 보통 1.5×10⁻⁶ µ 단위와 대응). 공학적 표기는 SI 접두어(k·M·µ·n)와 바로 짝지어집니다.' },
               { q: '옹스트롬(Å)과 나노미터(nm)는 어떻게 변환하나요?', a: '<strong>1 Å = 0.1 nm = 10⁻¹⁰ m</strong>입니다. 즉 10 Å = 1 nm. 결정학·반도체·분광학에서 원자 단위 길이를 표현할 때 Å를 쓰고, 빛 파장은 nm를 주로 씁니다(가시광선 약 380~750 nm = 3,800~7,500 Å).' },
               { q: 'eV를 줄(J)로 바꾸면?', a: '<strong>1 eV = 1.602176634 × 10⁻¹⁹ J</strong>입니다. 1 eV는 전자 하나가 1V 전위차를 지날 때 얻는 에너지로 정의됩니다. keV(10³)·MeV(10⁶)·GeV(10⁹)·TeV(10¹²)는 각각 X선·핵반응·입자가속기·LHC 스케일 에너지에 쓰입니다.' },
-              { q: '이 도구는 일반 단위 변환기와 무엇이 다른가요?', a: '일반 <a href="/tools/unit/converter" style="color:#0D9488;text-decoration:underline">단위 변환기</a>는 평·근·인치 같은 생활 단위 중심입니다. 본 도구는 <strong>지수 표기 변환 + 옹스트롬·광년·eV 같은 과학·천문 스케일 단위 + 물리 상수</strong>에 특화되어 있습니다.' },
+              { q: '이 도구는 일반 단위 변환기와 무엇이 다른가요?', a: '일반 <a href="/tools/unit/converter" style="color:var(--teal-600);text-decoration:underline">단위 변환기</a>는 평·근·인치 같은 생활 단위 중심입니다. 본 도구는 <strong>지수 표기 변환 + 옹스트롬·광년·eV 같은 과학·천문 스케일 단위 + 물리 상수</strong>에 특화되어 있습니다.' },
               { q: '물리 상수 값은 믿을 수 있나요?', a: 'CODATA 2022 권장값(NIST 공개, 2026년 6월 확인) 및 2019년 SI 재정의 기준입니다. c(빛의 속도)·h(플랑크)·e(기본 전하)·k_B(볼츠만)·N_A(아보가드로)는 <strong>정의 상수(정확값)</strong>이고, G(만유인력)·전자 질량 등은 측정값이라 불확도가 있습니다.' },
               { q: '파섹(pc)은 어떻게 정의되나요?', a: '<strong>1 AU(지구–태양 평균 거리)가 1초각(1″)으로 보이는 거리</strong>, 즉 연주시차가 1″인 별까지의 거리입니다. IAU 2015 결의 B2 기준으로 정확히 648,000/π AU이며, 약 3.0857×10¹⁶ m ≈ 3.26광년에 해당합니다. 기준이 되는 1 AU도 IAU 2012 결의 B2에서 정확히 149,597,870,700 m로 정의되어 있습니다.' },
               { q: '달톤(Da)은 어디에 쓰이는 단위인가요?', a: '<strong>탄소-12 원자 질량의 1/12</strong>로 정의되는 질량 단위로, 원자질량단위(u)와 같은 단위입니다(SI와 병용이 허용된 단위, BIPM SI 브로슈어 9판). 1 Da = 1.66053906892×10⁻²⁷ kg(CODATA 2022)입니다. 단백질·핵산 등 생체분자 질량을 <strong>kDa</strong>로 표기할 때 널리 쓰입니다 — 예: 몰질량 64,000 g/mol인 단백질은 64 kDa.' },
@@ -38,7 +38,7 @@ export default function SciUnitsPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />과학 단위 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -74,7 +74,7 @@ export default function SciUnitsPage() {
               <div key={i} style={{ ...card }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{x.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
-                <p style={{ fontSize: 13, color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
+                <p style={{ fontSize: 13, color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{x.e}</p>
               </div>
             ))}
           </div>
@@ -105,9 +105,9 @@ export default function SciUnitsPage() {
                   ['f', '펨토', '10⁻¹⁵', '1 fs = 10⁻¹⁵ s'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r[0]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r[0]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{r[1]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[2]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: 12 }}>{r[3]}</td>
                   </tr>
                 ))}
@@ -144,10 +144,10 @@ export default function SciUnitsPage() {
                   ['TB 테라', '10¹² B', 'TiB 테비', '2⁴⁰ ≈ 1.100×10¹² B', '+10.0%'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r[0]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r[0]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[1]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{r[2]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[3]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[3]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: 12 }}>{r[4]}</td>
                   </tr>
                 ))}
@@ -200,7 +200,7 @@ export default function SciUnitsPage() {
               { t: 'Da 달톤', d: '원자질량단위(u). 1 Da ≈ 1.661×10⁻²⁷ kg.' },
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#0D9488', marginBottom: 4 }}>{x.t}</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--teal-600)', marginBottom: 4 }}>{x.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{x.d}</p>
               </div>
             ))}
@@ -231,7 +231,7 @@ export default function SciUnitsPage() {
               <div key={i} style={{ ...card }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{x.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
-                <p style={{ fontSize: 13, color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
+                <p style={{ fontSize: 13, color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{x.e}</p>
               </div>
             ))}
           </div>
@@ -255,9 +255,9 @@ export default function SciUnitsPage() {
               <tbody>
                 {CONSTANTS.map((c, i) => (
                   <tr key={c.symbol} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{c.symbol}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{c.symbol}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{c.name}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{c.value}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{c.value}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: 12 }}>{c.unit}</td>
                   </tr>
                 ))}

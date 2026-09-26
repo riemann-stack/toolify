@@ -24,7 +24,7 @@ const Section = ({ children }: { children: React.ReactNode }) => (
 )
 
 const H2 = ({ children }: { children: React.ReactNode }) => (
-  <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '0' }}>
+  <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '0' }}>
     {children}
   </h2>
 )
@@ -80,7 +80,7 @@ export default function VatPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />부가세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -103,14 +103,14 @@ export default function VatPage() {
             계산기 상단의 <strong style={{ color: 'var(--accent)' }}>「부가세 역산」</strong> 모드를 선택하면 자동으로 계산됩니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>역산 공식 (부가세율 10% 기준)</p>
-              <div style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2.2 }}>
+              <div style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--text)', lineHeight: 2.2 }}>
                 <p>공급가액 = 공급대가(합계) ÷ <strong style={{ color: 'var(--accent)' }}>1.1</strong></p>
                 <p>부가세 &nbsp;&nbsp;= 공급대가(합계) − 공급가액</p>
               </div>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '8px' }}>📌 예시</p>
               <div style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.95 }}>
                 <p>영수증 합계 <strong style={{ color: 'var(--text)' }}>110,000원</strong></p>
@@ -158,7 +158,7 @@ export default function VatPage() {
           </div>
 
           {/* 간이과세 업종별 부가율 */}
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: '#0891B2', marginBottom: '10px' }}>간이과세자 업종별 부가가치율</p>
             <div style={{ overflowX: 'auto' }}>
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '12px' }}>
@@ -217,9 +217,9 @@ export default function VatPage() {
                 content: '공급가액 1,543,000원의 부가세는 154,300원이지만, 세금계산서 관행상 천 원 단위로 절사해 154,000원으로 발행하는 경우가 많습니다. 절사 옵션을 활용해 정확한 발행 금액을 미리 확인하세요.',
               },
             ].map((ex, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '8px' }}>
-                  <span style={{ fontSize: '11px', background: `${ex.tagColor}18`, border: `1px solid ${ex.tagColor}50`, color: ex.tagColor, borderRadius: '999px', padding: '2px 10px', whiteSpace: 'nowrap', flexShrink: 0 }}>{ex.tag}</span>
+                  <span style={{ fontSize: '11px', background: `${ex.tagColor}18`, border: `1px solid ${ex.tagColor}50`, color: ex.tagColor, borderRadius: 'var(--radius-pill)', padding: '2px 10px', whiteSpace: 'nowrap', flexShrink: 0 }}>{ex.tag}</span>
                   <span style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)' }}>{ex.title}</span>
                 </div>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>{ex.content}</p>
@@ -255,7 +255,7 @@ export default function VatPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{row[1]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -263,7 +263,7 @@ export default function VatPage() {
           </div>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-            <div style={{ background: 'rgba(8,145,178,0.04)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'rgba(8,145,178,0.04)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>3.3% 원천세</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>프리랜서 (사업자 등록 X) 적용</li>
@@ -272,7 +272,7 @@ export default function VatPage() {
                 <li>종합소득세 신고 시 정산</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>10% 부가세</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li>사업자 등록자 적용</li>
@@ -296,7 +296,7 @@ export default function VatPage() {
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.40)', borderRadius: 12, padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.40)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>✅ 부가세 별도 (권장)</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 6 }}>
                 &ldquo;100만원 부가세 별도&rdquo; → 110만원 청구
@@ -306,7 +306,7 @@ export default function VatPage() {
                 <strong style={{ color: 'var(--accent)' }}>본인 실수입: 1,000,000원</strong>
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>⚠️ 부가세 포함</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 6 }}>
                 &ldquo;100만원 부가세 포함&rdquo; → 100만원 청구
@@ -397,7 +397,7 @@ export default function VatPage() {
         <Section>
           <H2>📅 부가세 신고·납부 시기</H2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.20)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.20)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>일반과세자 (연 2회)</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li><strong style={{ color: 'var(--text)' }}>1월 1~25일</strong>: 전년 7~12월분 신고</li>
@@ -406,7 +406,7 @@ export default function VatPage() {
                 <li>예정고지 (4월·10월): 개인은 직전 과세기간(6개월) 납부세액의 1/2 고지</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.20)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.20)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 8 }}>간이과세자 (연 1회)</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, paddingLeft: 16, margin: 0 }}>
                 <li><strong style={{ color: 'var(--text)' }}>1월 1~25일</strong>: 전년 1~12월분 신고</li>
@@ -428,7 +428,7 @@ export default function VatPage() {
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {faq.q}
                 </summary>
@@ -473,7 +473,7 @@ export default function VatPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

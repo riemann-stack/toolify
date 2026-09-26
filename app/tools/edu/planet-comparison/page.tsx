@@ -42,7 +42,7 @@ export default function PlanetComparisonPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />행성 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -59,17 +59,17 @@ export default function PlanetComparisonPage() {
 
         {/* ── 1. 태양계 8개 행성 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             태양계 8개 행성 한눈에
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '지구형 행성',     c: '#0891B2', d: '수성·금성·지구·화성 — 작고 단단한 암석질 행성' },
-              { t: '거대 가스 행성',  c: '#EA580C', d: '목성·토성 — 수소·헬륨이 주성분, 표면 없음' },
-              { t: '거대 얼음 행성',  c: '#0D9488', d: '천왕성·해왕성 — 메탄·물·암모니아 얼음 풍부' },
+              { t: '지구형 행성',     c: 'var(--cyan-600)', d: '수성·금성·지구·화성 — 작고 단단한 암석질 행성' },
+              { t: '거대 가스 행성',  c: 'var(--orange-600)', d: '목성·토성 — 수소·헬륨이 주성분, 표면 없음' },
+              { t: '거대 얼음 행성',  c: 'var(--teal-600)', d: '천왕성·해왕성 — 메탄·물·암모니아 얼음 풍부' },
               { t: '왜소행성',        c: '#A8A29E', d: '명왕성은 2006년 IAU에서 왜소행성으로 재분류' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
@@ -79,7 +79,7 @@ export default function PlanetComparisonPage() {
 
         {/* ── 2. 몸무게 변화 원리 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             각 행성에서 몸무게 변화 원리
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -91,9 +91,9 @@ export default function PlanetComparisonPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -115,14 +115,14 @@ export default function PlanetComparisonPage() {
                 {[
                   { p: '수성·화성',           c: '#A8A29E', g: '0.378 · 0.377 g', w: '28.4 · 28.3 kg' },
                   { p: '금성·토성·천왕성',    c: '#FFC857', g: '0.90~0.92 g', w: '67.5~69 kg' },
-                  { p: '지구',                 c: '#0891B2', g: '1.00 g', w: '75.0 kg' },
+                  { p: '지구',                 c: 'var(--cyan-600)', g: '1.00 g', w: '75.0 kg' },
                   { p: '해왕성',               c: '#3E5BFF', g: '1.12 g', w: '84.0 kg' },
-                  { p: '목성',                 c: '#EA580C', g: '2.36 g', w: '177.0 kg' },
+                  { p: '목성',                 c: 'var(--orange-600)', g: '2.36 g', w: '177.0 kg' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.g}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.w}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.g}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.w}</td>
                   </tr>
                 ))}
               </tbody>
@@ -132,12 +132,12 @@ export default function PlanetComparisonPage() {
 
         {/* ── 3. 1년·1일 길이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             행성 1년·1일의 길이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, marginBottom: 8 }}>🌀 공전주기 (1년)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--teal-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--teal-600)', fontWeight: 700, marginBottom: 8 }}>🌀 공전주기 (1년)</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>태양을 한 바퀴 도는 시간</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>수성: 88일 (가장 짧음)</li>
@@ -148,77 +148,77 @@ export default function PlanetComparisonPage() {
                 <li>천왕성: 30,689일 (84년)</li>
                 <li>해왕성: 60,182일 (165년)</li>
               </ul>
-              <p style={{ fontSize: 12, color: '#0D9488', marginTop: 8, fontWeight: 700 }}>→ 해왕성에서 35년이면 지구에서 5,767년!</p>
+              <p style={{ fontSize: 12, color: 'var(--teal-600)', marginTop: 8, fontWeight: 700 }}>→ 해왕성에서 35년이면 지구에서 5,767년!</p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔄 자전주기 (1일)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--orange-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 8 }}>🔄 자전주기 (1일)</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>별을 기준으로 한 바퀴 자전하는 시간(항성일). 해가 다시 뜨기까지의 하루(태양일)와는 다를 수 있습니다.</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>목성: 9.93h (가장 짧음)</li>
                 <li>토성: 10.7h</li>
                 <li>해왕성: 16.11h</li>
-                <li>천왕성: 17.24h <span style={{ color: '#DC2626' }}>(역행)</span></li>
-                <li>화성: 24.6h <span style={{ color: '#0891B2' }}>(지구와 비슷!)</span></li>
+                <li>천왕성: 17.24h <span style={{ color: 'var(--red-600)' }}>(역행)</span></li>
+                <li>화성: 24.6h <span style={{ color: 'var(--cyan-600)' }}>(지구와 비슷!)</span></li>
                 <li>지구: 23.9h (태양일 24h)</li>
                 <li>수성: 1,408h (58.6일, 태양일은 176일)</li>
-                <li>금성: 5,833h (243일, <span style={{ color: '#DC2626' }}>역행</span>)</li>
+                <li>금성: 5,833h (243일, <span style={{ color: 'var(--red-600)' }}>역행</span>)</li>
               </ul>
             </div>
           </div>
           <div style={{
             background: 'rgba(155,89,182,0.05)',
             border: '1px solid rgba(155,89,182,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ✨ <strong style={{ color: '#9333EA' }}>특별한 점:</strong> 금성은 자전축이 거꾸로 (역행),
+            ✨ <strong style={{ color: 'var(--purple-600)' }}>특별한 점:</strong> 금성은 자전축이 거꾸로 (역행),
             천왕성은 자전축이 98° 기울어져 옆으로 굴러갑니다.
           </div>
         </div>
 
         {/* ── 4. 빛 도달 시간 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             빛이 행성까지 도달하는 시간
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
             marginBottom: 12,
           }}>
-            <span style={{ color: 'var(--muted)' }}>빛의 속도</span> = 약 <strong style={{ color: '#0D9488' }}>30만 km/초</strong>
+            <span style={{ color: 'var(--muted)' }}>빛의 속도</span> = 약 <strong style={{ color: 'var(--teal-600)' }}>30만 km/초</strong>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
             {[
               { p: '달',      t: '1.3초',  c: '#A8A29E' },
               { p: '수성·금성', t: '2~5분',   c: '#FFC857' },
-              { p: '화성',     t: '4~21분',  c: '#DC2626' },
-              { p: '목성',     t: '35분',    c: '#EA580C' },
-              { p: '토성',     t: '71분',    c: '#A16207' },
-              { p: '천왕성',   t: '2.5시간', c: '#0D9488' },
+              { p: '화성',     t: '4~21분',  c: 'var(--red-600)' },
+              { p: '목성',     t: '35분',    c: 'var(--orange-600)' },
+              { p: '토성',     t: '71분',    c: 'var(--yellow-700)' },
+              { p: '천왕성',   t: '2.5시간', c: 'var(--teal-600)' },
               { p: '해왕성',   t: '4시간',   c: '#3E5BFF' },
-              { p: '프록시마 센타우리', t: '4.2년', c: '#9B59B6' },
+              { p: '프록시마 센타우리', t: '4.2년', c: 'var(--amethyst)' },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${r.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 12, color: 'var(--muted)' }}>{r.p}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 16, color: r.c, marginTop: 2 }}>{r.t}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 16, color: r.c, marginTop: 2 }}>{r.t}</p>
               </div>
             ))}
           </div>
           <div style={{
             background: 'rgba(220,38,38,0.05)',
             border: '1px solid rgba(220,38,38,0.25)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
@@ -232,7 +232,7 @@ export default function PlanetComparisonPage() {
 
         {/* ── 5. 표면 온도 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             각 행성 표면 온도
           </h2>
           <div className="tableScroll">
@@ -248,17 +248,17 @@ export default function PlanetComparisonPage() {
                 {[
                   { p: '수성', c: '#A8A29E', r: '-173~427°C', avg: '167°C',  d: '극단적 변화 (대기 없음)' },
                   { p: '금성', c: '#FFC857', r: '464°C',       avg: '464°C', d: '가장 뜨거움 — 두꺼운 CO2 대기' },
-                  { p: '지구', c: '#0891B2', r: '-89~56.7°C',  avg: '15°C',  d: '생명체 거주 가능' },
-                  { p: '화성', c: '#DC2626', r: '-143~35°C',   avg: '-65°C', d: '추움' },
-                  { p: '목성', c: '#EA580C', r: '-110°C',       avg: '-110°C', d: '가스 행성 — 표면 없음' },
-                  { p: '토성', c: '#A16207', r: '-140°C',       avg: '-140°C', d: '가스 행성' },
-                  { p: '천왕성', c: '#0D9488', r: '-195°C',      avg: '-195°C', d: '최저 -224°C 관측' },
+                  { p: '지구', c: 'var(--cyan-600)', r: '-89~56.7°C',  avg: '15°C',  d: '생명체 거주 가능' },
+                  { p: '화성', c: 'var(--red-600)', r: '-143~35°C',   avg: '-65°C', d: '추움' },
+                  { p: '목성', c: 'var(--orange-600)', r: '-110°C',       avg: '-110°C', d: '가스 행성 — 표면 없음' },
+                  { p: '토성', c: 'var(--yellow-700)', r: '-140°C',       avg: '-140°C', d: '가스 행성' },
+                  { p: '천왕성', c: 'var(--teal-600)', r: '-195°C',      avg: '-195°C', d: '최저 -224°C 관측' },
                   { p: '해왕성', c: '#3E5BFF', r: '-200°C',      avg: '-200°C', d: '평균 기온이 가장 낮음' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.avg}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.avg}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.d}</td>
                   </tr>
                 ))}
@@ -272,19 +272,19 @@ export default function PlanetComparisonPage() {
 
         {/* ── 6. 행성 탐사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             행성 탐사 현황 (2026년)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '수성', d: '메신저호 2011~2015년 궤도 운용 후 종료 · 베피콜롬보 순항 중, 2026년 11월 궤도 진입 예정', c: '#A8A29E' },
               { t: '금성', d: '비너스 익스프레스 2014년 종료 · 아카츠키 2025년 9월 운용 종료 → 현재 금성 궤도에 가동 중인 탐사선 없음', c: '#FFC857' },
-              { t: '화성', d: '큐리오시티·퍼서비어런스 활동 중 (인저뉴어티 헬기는 2024년 1월 72회 비행 후 임무 종료)', c: '#DC2626' },
-              { t: '목성', d: '주노는 연장 임무가 2025년 9월까지로 공지돼 있고 이후 공식 종료 발표는 확인되지 않았습니다 · Europa Clipper 순항 중(2030년 도착)', c: '#EA580C' },
-              { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: '#A16207' },
-              { t: '천왕성·해왕성', d: '보이저 2호만 1986/1989년 근접 통과', c: '#0D9488' },
+              { t: '화성', d: '큐리오시티·퍼서비어런스 활동 중 (인저뉴어티 헬기는 2024년 1월 72회 비행 후 임무 종료)', c: 'var(--red-600)' },
+              { t: '목성', d: '주노는 연장 임무가 2025년 9월까지로 공지돼 있고 이후 공식 종료 발표는 확인되지 않았습니다 · Europa Clipper 순항 중(2030년 도착)', c: 'var(--orange-600)' },
+              { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: 'var(--yellow-700)' },
+              { t: '천왕성·해왕성', d: '보이저 2호만 1986/1989년 근접 통과', c: 'var(--teal-600)' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: c.c, fontWeight: 700, marginBottom: 4 }}>{c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{c.d}</p>
               </div>
@@ -293,7 +293,7 @@ export default function PlanetComparisonPage() {
           <div style={{
             background: 'rgba(13,148,136,0.05)',
             border: '1px solid rgba(13,148,136,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
@@ -309,13 +309,13 @@ export default function PlanetComparisonPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -330,7 +330,7 @@ export default function PlanetComparisonPage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -350,7 +350,7 @@ export default function PlanetComparisonPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

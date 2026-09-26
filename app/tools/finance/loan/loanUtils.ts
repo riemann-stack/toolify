@@ -501,19 +501,19 @@ export function calcDSR(input: DsrInput): DsrResult {
   const dsr = ((input.yearlyPayment + input.otherYearlyDebt) / input.annualIncome) * 100
   let riskLevel: DsrResult['riskLevel'] = 'safe'
   let riskLabel = '🟢 안전'
-  let riskColor = '#059669'
+  let riskColor = 'var(--emerald-600)'
   let description = '은행권 DSR 한도(40%) 내 안정 범위입니다.'
   if (dsr > 40) {
     riskLevel = 'over'; riskLabel = '🔴 한도 초과'
-    riskColor = '#DC2626'
+    riskColor = 'var(--red-600)'
     description = '은행권 DSR 한도 40%를 초과합니다. 대출 한도 제한 가능성이 매우 높습니다.'
   } else if (dsr > 35) {
     riskLevel = 'limit'; riskLabel = '🟠 한도 근접'
-    riskColor = '#EA580C'
+    riskColor = 'var(--orange-600)'
     description = 'DSR 한도(40%)에 근접합니다. 다른 대출 추가 시 한도 초과 가능.'
   } else if (dsr > 25) {
     riskLevel = 'caution'; riskLabel = '🟡 주의'
-    riskColor = '#A16207'
+    riskColor = 'var(--yellow-700)'
     description = '월 상환 부담이 있는 편입니다. 비상금·생활비 여유를 점검하세요.'
   }
   return { dsr: Math.round(dsr * 10) / 10, riskLevel, riskLabel, riskColor, description }

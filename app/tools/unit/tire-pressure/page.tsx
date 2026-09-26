@@ -60,7 +60,7 @@ export default function TirePressurePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />타이어 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -77,7 +77,7 @@ export default function TirePressurePage() {
 
         {/* ── 1. 국가별 공기압 단위 표기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             국가별 공기압 단위 표기
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -90,9 +90,9 @@ export default function TirePressurePage() {
               { flag: '🇪🇺', area: '유럽',              unit: 'bar',     ex: '2.2 bar (≈ 32 psi)' },
               { flag: '🇯🇵', area: '일본·과거 한국',    unit: 'kgf/cm²', ex: '2.25 kgf/cm² (≈ 32 psi)' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{c.flag} {c.area}</p>
-                <p style={{ fontSize: '13px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginBottom: '4px' }}>{c.unit}</p>
+                <p style={{ fontSize: '13px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, marginBottom: '4px' }}>{c.unit}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)' }}>{c.ex}</p>
               </div>
             ))}
@@ -104,7 +104,7 @@ export default function TirePressurePage() {
 
         {/* ── 2. 차종별 권장 공기압 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             차종별 권장 공기압 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -138,9 +138,9 @@ export default function TirePressurePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.c}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.k}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '11px' }}>{r.b}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.k}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontSize: '11px' }}>{r.b}</td>
                   </tr>
                 ))}
               </tbody>
@@ -155,12 +155,12 @@ export default function TirePressurePage() {
 
         {/* ── 3. 공기압 부족·과다의 영향 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             공기압 부족·과다의 영향 (연비·마모·안전)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'rgba(234,88,12,0.08)', border: '1px solid rgba(234,88,12,0.4)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '14px', color: '#EA580C', fontWeight: 800, marginBottom: '8px' }}>🔻 공기압 부족</p>
+            <div style={{ background: 'rgba(234,88,12,0.08)', border: '1px solid rgba(234,88,12,0.4)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '14px', color: 'var(--orange-600)', fontWeight: 800, marginBottom: '8px' }}>🔻 공기압 부족</p>
               <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: '4px', listStyle: 'none' }}>
                 <li>• <strong style={{ color: 'var(--text)' }}>연비 최대 약 3% 감소</strong> (10% 부족 시 — 자료별 0.7~3% 추정)</li>
                 <li>• 타이어 측면(숄더) 마모 가속</li>
@@ -169,8 +169,8 @@ export default function TirePressurePage() {
                 <li>• 타이어 발열 증가 → 수명 단축</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '14px', color: '#DC2626', fontWeight: 800, marginBottom: '8px' }}>🔺 공기압 과다</p>
+            <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '14px', color: 'var(--red-600)', fontWeight: 800, marginBottom: '8px' }}>🔺 공기압 과다</p>
               <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: '4px', listStyle: 'none' }}>
                 <li>• 승차감 저하 (노면 진동 직접 전달)</li>
                 <li>• 타이어 중앙 마모 가속</li>
@@ -189,7 +189,7 @@ export default function TirePressurePage() {
 
         {/* ── 4. 계절별 변화 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             계절별 공기압 변화 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -213,8 +213,8 @@ export default function TirePressurePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.s}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.t}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.t}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontSize: '11px' }}>{r.a}</td>
                   </tr>
                 ))}
@@ -228,7 +228,7 @@ export default function TirePressurePage() {
 
         {/* ── 5. 자전거 공기압 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자전거 공기압 (로드 / 그래블 / MTB)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -242,9 +242,9 @@ export default function TirePressurePage() {
               { type: '🛵 MTB (다운힐·튜브리스)', psi: '20~30 psi', desc: '튜브리스 시스템 한정. 일반 클린처는 펑크 위험.' },
               { type: '🚴‍♀️ 시티·하이브리드',    psi: '50~70 psi',  desc: '도심 주행. 너무 높으면 진동, 너무 낮으면 무거움.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{c.type}</p>
-                <p style={{ fontSize: '14px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, marginBottom: '4px' }}>{c.psi}</p>
+                <p style={{ fontSize: '14px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800, marginBottom: '4px' }}>{c.psi}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.desc}</p>
               </div>
             ))}
@@ -253,7 +253,7 @@ export default function TirePressurePage() {
 
         {/* ── 6. 자주 검색되는 변환 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 검색되는 변환
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -265,9 +265,9 @@ export default function TirePressurePage() {
               { q: '2.0 kgf/cm²는 psi?',     a: '약 28.5 psi', sub: '2.0 ÷ 0.0703069 = 28.45 psi' },
               { q: '100 psi (로드바이크)는 bar?', a: '약 6.89 bar', sub: '100 × 0.0689476 = 6.895 bar' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px', fontWeight: 600 }}>Q. {c.q}</p>
-                <p style={{ fontSize: '17px', color: 'var(--accent)', fontWeight: 800, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: '4px', letterSpacing: '-0.3px' }}>{c.a}</p>
+                <p style={{ fontSize: '17px', color: 'var(--accent)', fontWeight: 800, fontFamily: 'var(--font-sans)', marginBottom: '4px', letterSpacing: '-0.3px' }}>{c.a}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.sub}</p>
               </div>
             ))}
@@ -276,7 +276,7 @@ export default function TirePressurePage() {
 
         {/* ── 6b. 타이어 규격 해석 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             타이어 규격 보는 법 (예: 205/55R16)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -299,7 +299,7 @@ export default function TirePressurePage() {
                   { t: '16', m: '휠(림) 지름 (인치)', e: '16″ = 406.4mm' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.t}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.t}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)' }}>{r.m}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '11px' }}>{r.e}</td>
                   </tr>
@@ -316,7 +316,7 @@ export default function TirePressurePage() {
 
         {/* ── 6c. 교체 시기·마모·DOT ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             타이어 교체 시기 — 트레드 마모 · 주행거리 · DOT 제조주차
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '14px' }}>
@@ -325,15 +325,15 @@ export default function TirePressurePage() {
               { t: '📏 주행거리', v: '약 4~5만 km', d: '운전 습관·노면에 따라 차이. 5만 km 초과 시 마모·상태 집중 점검.' },
               { t: '📅 사용 연수', v: '6년 검토 · 10년 교체', d: '마모가 적어도 고무가 경화·균열. 제조 6년부터 검토, 10년이면 교체.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{c.t}</p>
                 <p style={{ fontSize: '14px', color: 'var(--accent)', fontWeight: 800, marginBottom: '4px' }}>{c.v}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.d}</p>
               </div>
             ))}
           </div>
-          <div style={{ background: 'rgba(8,145,178,0.10)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '14px 16px' }}>
-            <p style={{ fontSize: '13px', color: '#0891B2', fontWeight: 700, marginBottom: '8px' }}>🔢 DOT 제조주차 읽는 법</p>
+          <div style={{ background: 'color-mix(in srgb, var(--cyan-600) 10%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--cyan-600)', fontWeight: 700, marginBottom: '8px' }}>🔢 DOT 제조주차 읽는 법</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
               타이어 옆면 <strong style={{ color: 'var(--text)' }}>DOT</strong> 코드의 <strong style={{ color: 'var(--text)' }}>마지막 4자리</strong>가 제조 시기입니다.
               앞 2자리 = <strong style={{ color: 'var(--text)' }}>주차(week)</strong>, 뒤 2자리 = <strong style={{ color: 'var(--text)' }}>연도</strong>.
@@ -353,7 +353,7 @@ export default function TirePressurePage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -371,7 +371,7 @@ export default function TirePressurePage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

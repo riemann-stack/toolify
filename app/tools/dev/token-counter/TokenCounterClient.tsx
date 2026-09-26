@@ -239,7 +239,7 @@ export default function TokenCounterClient() {
                     <div className={s.ctxBarFill}
                       style={{
                         width: `${Math.min(100, ctxUsed * 100)}%`,
-                        background: ctxUsed > 0.9 ? '#DC2626' : ctxUsed > 0.5 ? '#D97706' : VENDOR_COLOR[m.vendor],
+                        background: ctxUsed > 0.9 ? 'var(--red-600)' : ctxUsed > 0.5 ? 'var(--amber-600)' : VENDOR_COLOR[m.vendor],
                       }} />
                   </div>
                   <div className={s.ctxLabel}>

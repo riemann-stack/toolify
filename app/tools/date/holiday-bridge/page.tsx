@@ -63,14 +63,14 @@ const FAQ_LD = [
   },
 ]
 
-const cardBg = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px' }
-const h2Style = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' } as const
+const cardBg = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)' }
+const h2Style = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' } as const
 
 export default function HolidayBridgePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />징검다리 연휴 플래너
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -260,7 +260,7 @@ export default function HolidayBridgePage() {
               <Link
                 key={i}
                 href={t.href}
-                style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', textDecoration: 'none' }}
+                style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}
               >
                 <p style={{ fontSize: '20px', marginBottom: '6px' }}>{t.icon}</p>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{t.name}</p>

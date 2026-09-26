@@ -719,7 +719,7 @@ export default function FightWeightClient() {
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 6 }}>
               {needToLose <= 0
                 ? (targetClass ? `이미 ${targetClass.name} 한도 이하입니다. 계체일까지 컨디션 유지에 집중하세요.` : '목표 체급을 선택하세요.')
-                : <>주당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{weeklyLossKg.toFixed(2)}kg</strong> 감량은 체중의 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{((weeklyLossKg / weight) * 100).toFixed(1)}%</strong> 입니다. 의학 가이드라인은 체중의 1%/주 이내를 권장합니다.</>}
+                : <>주당 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{weeklyLossKg.toFixed(2)}kg</strong> 감량은 체중의 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{((weeklyLossKg / weight) * 100).toFixed(1)}%</strong> 입니다. 의학 가이드라인은 체중의 1%/주 이내를 권장합니다.</>}
             </p>
           </div>
 

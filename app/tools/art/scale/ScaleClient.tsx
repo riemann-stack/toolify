@@ -608,7 +608,6 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, nameByPc, baseOctave, showI
           fill={textColor}
           fontSize="11"
           textAnchor="middle"
-          fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
           fontWeight={isInScale ? 800 : 500}
         >
           {showInterval && isInScale ? intervalMap[noteIdx] : (isInScale ? nameByPc[noteIdx] ?? noteName(noteIdx, acc) : noteName(noteIdx, acc))}
@@ -657,7 +656,6 @@ function PianoSVG({ scaleNotes, scale, rootKey, acc, nameByPc, baseOctave, showI
               fill={textColor}
               fontSize="9"
               textAnchor="middle"
-              fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
               fontWeight={isInScale ? 800 : 500}
             >
               {showInterval && isInScale ? intervalMap[bIdx] : (isInScale ? nameByPc[bIdx] ?? noteName(bIdx, acc) : noteName(bIdx, acc))}
@@ -787,7 +785,6 @@ function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval
                   fill="#0D0D0D"
                   fontSize="10"
                   textAnchor="middle"
-                  fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                   fontWeight="800"
                 >
                   {showInterval ? intervalLabel[noteIdx] : nameByPc[noteIdx] ?? noteName(noteIdx, acc)}
@@ -807,7 +804,6 @@ function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval
             fill="var(--muted)"
             fontSize="10"
             textAnchor="middle"
-            fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
           >
             {f}
           </text>
@@ -822,7 +818,6 @@ function FretboardSVG({ scaleNotes, rootKey, acc, nameByPc, tuning, showInterval
             fill="var(--muted)"
             fontSize="10"
             textAnchor="middle"
-            fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
             fontWeight="700"
           >
             {noteName(openNote, acc)}

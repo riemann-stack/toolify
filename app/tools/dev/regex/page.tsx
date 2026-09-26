@@ -21,7 +21,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -31,14 +31,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -85,7 +85,7 @@ export default function RegexPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />정규식 테스트기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -96,7 +96,7 @@ export default function RegexPage() {
       <div style={{
         background: 'rgba(255, 138, 62, 0.06)',
         border: '1px solid rgba(255, 138, 62, 0.40)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
@@ -175,8 +175,8 @@ export default function RegexPage() {
           그룹은 <strong>괄호 ()</strong>로 감싸 만듭니다. 매치된 부분을 따로 추출하거나 치환에 참조할 수 있어요.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 10, marginTop: 14 }}>
-          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #0EA5E9', borderRadius: 8, padding: '12px 16px' }}>
-            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#0EA5E9' }}>1. 인덱스 캡처 그룹 (...)</p>
+          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid var(--sky-500)', borderRadius: 'var(--radius-s)', padding: '12px 16px' }}>
+            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: 'var(--sky-500)' }}>1. 인덱스 캡처 그룹 (...)</p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               번호로 참조 (<code style={codeStyle}>$1</code>, <code style={codeStyle}>$2</code>, ...). 위치 순서대로 자동 번호.
             </p>
@@ -188,8 +188,8 @@ $2 = "example.com"
 치환 패턴 "$2/$1" → "example.com/hello"`}
             </pre>
           </div>
-          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #0D9488', borderRadius: 8, padding: '12px 16px' }}>
-            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#0D9488' }}>2. 이름 캡처 그룹 (?&lt;name&gt;...)</p>
+          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid var(--teal-600)', borderRadius: 'var(--radius-s)', padding: '12px 16px' }}>
+            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: 'var(--teal-600)' }}>2. 이름 캡처 그룹 (?&lt;name&gt;...)</p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               이름으로 참조 (<code style={codeStyle}>{`$<user>`}</code>). 가독성 ↑, ES2018+ 표준.
             </p>
@@ -200,8 +200,8 @@ groups.user   = "hello"
 groups.domain = "example.com"`}
             </pre>
           </div>
-          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #D97706', borderRadius: 8, padding: '12px 16px' }}>
-            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: '#D97706' }}>3. 비캡처 그룹 (?:...)</p>
+          <div style={{ background: 'var(--bg3)', borderLeft: '3px solid var(--amber-600)', borderRadius: 'var(--radius-s)', padding: '12px 16px' }}>
+            <p style={{ fontSize: 14, fontWeight: 700, margin: '0 0 6px', color: 'var(--amber-600)' }}>3. 비캡처 그룹 (?:...)</p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '0 0 6px', lineHeight: 1.7 }}>
               그룹화만 하고 캡처는 하지 않음. <strong>성능 ↑·번호 절약</strong>.
             </p>
@@ -238,7 +238,7 @@ $1 = "example" (도메인만 캡처)
                 ['y', 'Sticky',           'lastIndex 위치에서만 매치 시도',              '토큰화·파싱'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px' }}><code style={{ ...codeStyle, color: '#0EA5E9', fontWeight: 700 }}>{row[0]}</code></td>
+                  <td style={{ padding: '8px 10px' }}><code style={{ ...codeStyle, color: 'var(--sky-500)', fontWeight: 700 }}>{row[0]}</code></td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)' }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{row[3]}</td>
@@ -256,8 +256,8 @@ $1 = "example" (도메인만 캡처)
           잘못된 정규식은 <strong>지수적 시간 복잡도</strong>로 브라우저·서버를 멈출 수 있습니다.
           본 도구는 정규식을 별도 작업 스레드(Web Worker)에서 돌려 <strong>1초가 넘으면 자동 중단</strong>하고, 입력 100KB · 매치 1만 개로 제한합니다.
         </p>
-        <div style={{ background: 'rgba(219, 39, 119, 0.06)', border: '1px solid #DB2777', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
-          <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 8px' }}>🚨 위험 패턴 사례</p>
+        <div style={{ background: 'rgba(219, 39, 119, 0.06)', border: '1px solid var(--pink-600)', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
+          <p style={{ fontSize: 13, color: 'var(--pink-600)', fontWeight: 700, margin: '0 0 8px' }}>🚨 위험 패턴 사례</p>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
             <li><code style={codeStyle}>{`(a+)+$`}</code> + <code style={codeStyle}>aaaaaaaaaaaaa!</code> — 매치 시도 2^N</li>
             <li><code style={codeStyle}>{`(a|aa)+$`}</code> — 분기 백트래킹 폭발</li>
@@ -265,8 +265,8 @@ $1 = "example" (도메인만 캡처)
             <li><code style={codeStyle}>{`(\\w+\\s?)+$`}</code> — 긴 입력 시 멈춤</li>
           </ul>
         </div>
-        <div style={{ background: 'rgba(14, 165, 233, 0.06)', border: '1px solid #0EA5E9', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: '#0EA5E9', fontWeight: 700, margin: '0 0 8px' }}>✅ 안전한 대체 패턴</p>
+        <div style={{ background: 'color-mix(in srgb, var(--accent) 6%, transparent)', border: '1px solid var(--sky-500)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
+          <p style={{ fontSize: 13, color: 'var(--sky-500)', fontWeight: 700, margin: '0 0 8px' }}>✅ 안전한 대체 패턴</p>
           <ul style={{ margin: 0, paddingLeft: 20, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
             <li>중첩 양화 한정자 피하기 — <code style={codeStyle}>{`(a+)+`}</code> → <code style={codeStyle}>{`a+`}</code></li>
             <li>분기는 가능한 한 명확하게 — <code style={codeStyle}>{`(?:foo|bar)`}</code></li>
@@ -427,21 +427,21 @@ match.groups.day    = "15"
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/dev/hash" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/hash" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔒</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해시 생성기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             MD5·SHA·HMAC·파일 무결성
           </p>
         </Link>
-        <Link href="/tools/dev/base64" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/base64" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔐</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>Base64 인코더/디코더</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             텍스트·파일 ↔ Base64
           </p>
         </Link>
-        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📋</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>JSON 포맷터</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

@@ -9,7 +9,7 @@
   padding: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 .tab {
   padding: 11px 8px;
@@ -28,7 +28,7 @@
   .tab:hover { color: var(--text); }
 }
 .tabActive {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   color: var(--accent);
   font-weight: 700;
 }
@@ -40,7 +40,7 @@
   padding: 24px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
 }
 
 /* ══════════════════════════════════
@@ -81,14 +81,14 @@
   aspect-ratio: 5 / 7;
   background: var(--bg3);
   border: 2px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   cursor: pointer;
   transition: all 0.3s ease;
   font-family: inherit;
 }@media (hover: hover) {
   .door:not(:disabled):hover {
   transform: scale(1.05);
-  border-color: rgba(14, 165, 233, 0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 }
 .door:disabled { cursor: default; }
@@ -96,7 +96,7 @@
   position: absolute;
   top: 8px;
   left: 10px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--muted);
@@ -107,7 +107,7 @@
 }
 
 .doorSelected {
-  background: rgba(14,165,233,0.1);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
   border-color: var(--accent);
   transform: scale(1.03);
 }
@@ -115,18 +115,18 @@
 
 .doorOpened {
   background: rgba(234,88,12,0.14);
-  border-color: #EA580C;
+  border-color: var(--orange-600);
   opacity: 0.75;
   animation: shake 0.5s ease;
 }
 .doorWin {
   background: rgba(16,185,129,0.1);
-  border-color: #059669;
+  border-color: var(--emerald-600);
   animation: bounce 0.6s ease;
 }
 .doorLose {
   background: rgba(220,38,38,0.14);
-  border-color: #DC2626;
+  border-color: var(--red-600);
 }
 .doorCar {
   background: rgba(16,185,129,0.14);
@@ -158,21 +158,21 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   transition: all .15s;
   min-height: 48px;
 }@media (hover: hover) {
-  .decideSwitch:hover { transform: translateY(-1px); box-shadow: 0 4px 12px rgba(14,165,233,0.25); }
+  .decideSwitch:hover { transform: translateY(-1px); box-shadow: 0 4px 12px color-mix(in srgb, var(--accent) 25%, transparent); }
 }
 .decideStay {
   padding: 14px 16px;
   background: var(--bg3);
   color: var(--text);
   border: 2px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   font-size: 15px;
   font-weight: 700;
   cursor: pointer;
@@ -185,20 +185,20 @@
 /* 결과 */
 .resultCard {
   padding: 20px 24px;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   text-align: center;
 }
 .resultWin  { background: rgba(16,185,129,0.14);  border: 1px solid rgba(16,185,129,0.4); }
 .resultLose { background: rgba(234,88,12,0.14); border: 1px solid rgba(234,88,12,0.4); }
 .resultTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(20px, 5vw, 26px);
   font-weight: 800;
   margin: 0 0 8px;
   letter-spacing: -0.01em;
 }
-.resultWin  .resultTitle { color: #059669; }
-.resultLose .resultTitle { color: #EA580C; }
+.resultWin  .resultTitle { color: var(--emerald-600); }
+.resultLose .resultTitle { color: var(--orange-600); }
 .resultSub {
   font-size: 13px;
   color: var(--muted);
@@ -223,7 +223,7 @@
 .statsCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .statsHead {
@@ -233,7 +233,7 @@
   margin-bottom: 14px;
 }
 .statsTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -241,7 +241,7 @@
 }
 .statsTotal {
   margin-left: auto;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--accent);
@@ -250,12 +250,12 @@
   padding: 4px 10px;
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   color: var(--muted);
   font-size: 11px;
   cursor: pointer;
 }@media (hover: hover) {
-  .statsReset:hover { color: var(--text); border-color: #DC2626; }
+  .statsReset:hover { color: var(--text); border-color: var(--red-600); }
 }
 .statsGrid {
   display: flex;
@@ -273,17 +273,17 @@
   font-size: 12px;
 }
 .statsLabel { color: var(--text); font-weight: 600; }
-.statsDetail { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.statsDetail { color: var(--muted); font-family: var(--font-sans); }
 .statsBarBg {
   position: relative;
   height: 8px;
   background: var(--bg2);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 .statsBarFill {
   height: 100%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   transition: width .3s;
 }
 .statsTheoryMark {
@@ -298,7 +298,7 @@
   display: flex;
   justify-content: space-between;
   font-size: 11px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .statsRateVal { font-weight: 800; }
 .statsRateTheory { color: var(--muted); }
@@ -315,13 +315,13 @@
 .variantCard {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 12px; cursor: pointer; text-align: left; transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .variantCard:hover:not(:disabled) { border-color: var(--accent); }
 }
 .variantCard:disabled { opacity: 0.5; cursor: not-allowed; }
 .variantCardActive {
-  background: rgba(14,165,233,0.1) !important;
+  background: color-mix(in srgb, var(--accent) 10%, transparent) !important;
   border-color: var(--accent) !important;
 }
 .variantHead {
@@ -329,8 +329,8 @@
   font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 4px;
 }
 .variantTheory {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--accent);
-  background: rgba(14,165,233,0.14); padding: 2px 6px; border-radius: 4px;
+  font-family: var(--font-sans); font-size: 11px; color: var(--accent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent); padding: 2px 6px; border-radius: 4px;
   white-space: nowrap;
 }
 .variantDesc { font-size: 11px; color: var(--muted); line-height: 1.5; margin: 0; }
@@ -359,7 +359,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -371,7 +371,7 @@
 .nBtn_1000  { font-size: 15px; }
 .nBtn_10000 { font-size: 16px; }
 .nBtnActive {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: var(--accent);
   color: var(--accent);
 }
@@ -399,7 +399,7 @@
 }
 .segBtn:disabled { opacity: 0.5; cursor: not-allowed; }
 .segBtnActive {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -410,25 +410,25 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   font-size: 15px;
   font-weight: 800;
   cursor: pointer;
   transition: all .15s;
   min-height: 52px;
 }@media (hover: hover) {
-  .runBtn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px rgba(14,165,233,0.3); }
+  .runBtn:hover { transform: translateY(-1px); box-shadow: 0 4px 14px color-mix(in srgb, var(--accent) 30%, transparent); }
 }
 
 .progressBar {
   height: 6px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 .progressFill {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent) 0%, #059669 100%);
+  background: linear-gradient(90deg, var(--accent) 0%, var(--emerald-600) 100%);
   transition: width .05s linear;
 }
 
@@ -441,7 +441,7 @@
   padding: 18px 20px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   text-align: center;
 }
 .resLabel {
@@ -450,7 +450,7 @@
   margin: 0 0 6px;
 }
 .resRate {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 7vw, 40px);
   font-weight: 800;
   letter-spacing: -0.02em;
@@ -460,7 +460,7 @@
 .resDetail {
   font-size: 12px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   margin: 0 0 4px;
 }
 .resTheory {
@@ -485,12 +485,12 @@
 }
 .graph { width: 100%; height: auto; display: block; }
 .graphAxis {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
   fill: var(--muted);
 }
 .graphTag {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
 }
@@ -539,7 +539,7 @@
   padding: 11px 12px;
   text-align: center;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   border-bottom: 1px solid var(--border);
 }
@@ -549,7 +549,7 @@
   font-family: inherit !important;
 }
 .compAccent { color: var(--accent) !important; font-weight: 800 !important; }
-.compBlue   { color: #0891B2 !important; font-weight: 800 !important; }
+.compBlue   { color: var(--cyan-600) !important; font-weight: 800 !important; }
 
 .interpret {
   padding: 14px 18px;
@@ -585,13 +585,13 @@
   padding: 22px 22px 22px 28px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 .whyNum {
   position: absolute;
   top: 18px;
   left: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 800;
   color: #ffffff;
@@ -605,7 +605,7 @@
   margin: 0;
 }
 .whyTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 17px;
   font-weight: 800;
   color: var(--text);
@@ -621,11 +621,11 @@
 }
 .whyBody strong { color: var(--text); }
 .hi  { color: var(--accent) !important; }
-.hi2 { color: #EA580C !important; }
+.hi2 { color: var(--orange-600) !important; }
 .whyConclusion {
   padding: 12px 16px;
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.25);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
   border-radius: 10px;
   font-size: 13px;
   color: var(--text);
@@ -653,7 +653,7 @@
 }
 .pie { width: 90px; height: 90px; }
 .pieLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   margin: 4px 0 0;
@@ -690,7 +690,7 @@
   align-items: center;
 }
 .branchProb {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   opacity: 0.7;
 }
@@ -711,7 +711,7 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Inter', 'Courier New', monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   text-align: center;
@@ -750,8 +750,8 @@
   gap: 2px;
   padding: 12px;
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-m);
   margin-bottom: 14px;
 }
 .hundredCell {
@@ -768,14 +768,14 @@
 }
 .hundredPick {
   opacity: 1;
-  background: rgba(14,165,233,0.2);
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
   border: 1.5px solid var(--accent);
   font-size: 12px;
 }
 .hundredSwitch {
   opacity: 1;
-  background: rgba(8,145,178,0.2);
-  border: 1.5px solid #0891B2;
+  background: color-mix(in srgb, var(--cyan-600) 20%, transparent);
+  border: 1.5px solid var(--cyan-600);
   font-size: 12px;
 }
 
@@ -800,7 +800,7 @@
   padding: 10px 12px;
   text-align: center;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   border-bottom: 1px solid var(--border);
 }

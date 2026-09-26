@@ -827,7 +827,7 @@ function ColorWheel({ selectedIdx, onSelect }: { selectedIdx: number; onSelect: 
       })}
       {/* 중앙에 선택 색 표시 */}
       <circle cx={cx} cy={cy} r={rInner - 4} fill={COLOR_WHEEL_12[selectedIdx].hex} stroke="var(--bg)" strokeWidth={2} />
-      <text x={cx} y={cy + 4} textAnchor="middle" fill={wheelLabelInk(COLOR_WHEEL_12[selectedIdx].hex)} fontSize={12} fontWeight={700} fontFamily="Noto Sans KR, sans-serif">
+      <text x={cx} y={cy + 4} textAnchor="middle" fill={wheelLabelInk(COLOR_WHEEL_12[selectedIdx].hex)} fontSize={12} fontWeight={700}>
         {COLOR_WHEEL_12[selectedIdx].name}
       </text>
     </svg>

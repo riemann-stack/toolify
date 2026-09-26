@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -102,7 +102,7 @@ export default function LlmVramPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />로컬 LLM VRAM 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -127,15 +127,15 @@ export default function LlmVramPage() {
         <section>
           <h2 style={sectionTitle}>필요 VRAM은 이렇게 계산해요</h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1, overflowX: 'auto',
           }}>
             <div><span style={{ color: 'var(--muted)' }}>가중치</span> = 파라미터 수 × 실효 bit ÷ 8</div>
             <div><span style={{ color: 'var(--muted)' }}>KV 캐시</span> = 2 × 레이어 × KV헤드 × head_dim × 컨텍스트 × 2B</div>
             <div><span style={{ color: 'var(--muted)' }}>총 필요</span> = 가중치 + KV 캐시 + 오버헤드(1~2GB 관행)</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>검산 앵커:</strong> Llama 3.1 8B Q4_K_M = 8.03B × 4.8944 ÷ 8 = <strong style={{ color: 'var(--accent)' }}>4.91GB</strong> (실제 파일 4.92GB, 오차 0.2%) ·
             KV는 토큰당 128KiB → 32K 컨텍스트에서 4.3GB. 최신 모델은 GQA 덕분에 KV헤드가 8개 수준이라 KV 캐시가 구세대(MHA)보다 4배 이상 작아요.
           </div>
@@ -164,10 +164,10 @@ export default function LlmVramPage() {
                   ['F16', '16.0', '14.96GB', '141GB+', '원본'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: r[0] === 'Q4_K_M' ? 'color-mix(in srgb, var(--accent) 6%, transparent)' : i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{r[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[2]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[3]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r[3]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[4]}</td>
                   </tr>
                 ))}
@@ -202,12 +202,12 @@ export default function LlmVramPage() {
               <tbody>
                 {GPU_MATRIX.map((row, i) => (
                   <tr key={row.gpu} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <th scope="row" style={{ padding: '9px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 700, fontSize: 12, fontFamily: 'Inter, sans-serif' }}>{row.gpu}</th>
+                    <th scope="row" style={{ padding: '9px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 700, fontSize: 12, fontFamily: 'var(--font-sans)' }}>{row.gpu}</th>
                     {row.cells.map((c, j) => (
                       <td key={j} style={{ padding: '9px 10px', verticalAlign: 'top' }}>
                         {c ? (
                           <>
-                            <span style={{ color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{c[0]}{c[2] ? '†' : ''}</span>
+                            <span style={{ color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{c[0]}{c[2] ? '†' : ''}</span>
                             <br />
                             <span style={{ color: 'var(--muted)', fontSize: 11 }}>{c[1]}</span>
                           </>
@@ -226,7 +226,7 @@ export default function LlmVramPage() {
             <strong style={{ color: 'var(--text)' }}> †</strong> 는 같은 GiB 환산 기준으로 90%를 넘겨 위 계산기가 <strong style={{ color: 'var(--warning)' }}>&lsquo;빠듯&rsquo;</strong>으로 판정하는 조합이에요.
             Mac은 Metal 기본 상한(통합메모리 36GB 이하 약 2/3, 그보다 크면 약 75%)을 가용 용량으로 잡았고, 총량에는 오버헤드 2.0GB가 포함돼 있습니다(공식 수치가 아닌 커뮤니티 관행치).
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>읽는 법:</strong> <strong style={{ color: 'var(--accent-ink)' }}>24GB가 분수령</strong>입니다 — 8B는 F16 원본, 14B는 Q8_0, 24B·27B는 Q5~Q6까지 올라가요.
             16GB에서는 24B가 Q3_K_M, 27B가 Q2_K로 내려가 품질 타협이 시작되고, 32B를 Q6_K로 쓰려면 32GB가 필요합니다.
             70B는 Mac 64GB(가용 48GiB≈51.5GB)의 Q3_K_M이 표에서 유일한 통과 조합이에요.
@@ -255,17 +255,17 @@ export default function LlmVramPage() {
               <tbody>
                 {CTX_ROWS.map((r, i) => (
                   <tr key={r[0]} style={{ borderBottom: '1px solid var(--border)', background: i === CTX_ROWS.length - 1 ? 'color-mix(in srgb, var(--warning) 8%, transparent)' : i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{r[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{r[2]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'Inter, sans-serif' }}>{r[3]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r[3]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <h3 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 16, fontWeight: 700, margin: '28px 0 10px' }}>
+          <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: 16, fontWeight: 700, margin: '28px 0 10px' }}>
             Q4_K_M 기준 모델별 소요량 — 가중치 + KV + 오버헤드
           </h3>
           <div style={{ overflowX: 'auto' }}>
@@ -284,18 +284,18 @@ export default function LlmVramPage() {
               <tbody>
                 {Q4_ROWS.map((r, i) => (
                   <tr key={r[0]} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, fontSize: 12, fontFamily: 'Inter, sans-serif' }}>{r[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{r[2]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'Inter, sans-serif' }}>{r[3]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'Inter, sans-serif' }}>{r[4]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700, fontSize: 12, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r[3]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[4]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 16, fontSize: 13, color: 'var(--muted)', lineHeight: 1.9 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 16, fontSize: 13, color: 'var(--muted)', lineHeight: 1.9 }}>
             📌 <strong style={{ color: 'var(--text)' }}>실전 결론 — 128K는 가중치보다 캐시가 큰 영역:</strong> Llama 3.1 8B는 Q4_K_M 가중치가 4.9GB뿐이지만,
             컨텍스트를 128K까지 열면 KV 캐시만 <strong style={{ color: 'var(--danger)' }}>17.18GB</strong>로 불어나 총 24.1GB — 총량의 71%가 캐시입니다.
             즉 <strong style={{ color: 'var(--text)' }}>128K 컨텍스트는 8B 모델도 24GB급 카드가 필요</strong>합니다. 반대로 8K로 제한하면 같은 모델이 8.0GB로 끝나요.
@@ -313,7 +313,7 @@ export default function LlmVramPage() {
               { t: '2️⃣ 컨텍스트 줄이기', d: 'KV 캐시는 컨텍스트에 정비례합니다. 128K를 다 쓸 일이 없다면 8~16K로 제한하는 것만으로 수 GB가 절약돼요.' },
               { t: '3️⃣ 양자화 한 단계 아래로', d: 'Q4_K_M→Q3_K_M은 8B 기준 약 0.9GB 절약. 품질 타협이 시작되는 지점이라 마지막 카드로 쓰세요.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
@@ -331,7 +331,7 @@ export default function LlmVramPage() {
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>

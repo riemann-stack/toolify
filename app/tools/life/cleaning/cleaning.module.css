@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -21,15 +21,15 @@
 .safetyCard {
   background: rgba(220,38,38,0.06);
   border: 1px solid rgba(220,38,38,0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
 }
-.safetyHead { font-size: 14px; font-weight: 800; color: #DC2626; margin-bottom: 10px; }
+.safetyHead { font-size: 14px; font-weight: 800; color: var(--red-600); margin-bottom: 10px; }
 .safetyList { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 7px; }
 .safetyList li { font-size: 13px; line-height: 1.6; color: var(--text); }
 .safetyList li strong { color: var(--text); }
-.riskDanger::marker { color: #DC2626; }
-.riskCaution::marker { color: #EA580C; }
+.riskDanger::marker { color: var(--red-600); }
+.riskCaution::marker { color: var(--orange-600); }
 
 /* ── 상황 그리드 ── */
 .sitGrid {
@@ -49,7 +49,7 @@
   border-radius: 10px;
   padding: 11px 13px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
 }
 @media (hover: hover) { .sitBtn:hover { border-color: var(--accent); } }
@@ -68,11 +68,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -83,21 +83,21 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 7px 13px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .presetActive { background: var(--accent-strong); color: #fff; border-color: var(--accent); }
 
 /* ── 결과 ── */
 .result {
-  background: linear-gradient(135deg, rgba(8,145,178,0.08) 0%, rgba(5,150,105,0.05) 100%);
-  border: 1px solid rgba(8,145,178,0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan-600) 8%, transparent) 0%, rgba(5,150,105,0.05) 100%);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 20px 22px;
 }
 .resultHead {
@@ -114,7 +114,7 @@
 .recipeBox {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 18px;
   margin-bottom: 14px;
 }
@@ -124,12 +124,12 @@
   font-weight: 800;
   color: #fff;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-bottom: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .recipeMain { font-size: 16px; color: var(--text); line-height: 1.6; }
-.recipeMain strong { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.recipeMain strong { font-family: var(--font-sans); font-weight: 800; }
 .recipeSub { font-size: 13px; color: var(--muted); margin-top: 6px; }
 
 .steps {
@@ -154,7 +154,7 @@
   color: var(--text);
   line-height: 1.6;
 }
-.neverBox strong { color: #DC2626; }
+.neverBox strong { color: var(--red-600); }
 
 /* ── 세제 가이드 ── */
 .agentList { display: flex; flex-direction: column; gap: 12px; }

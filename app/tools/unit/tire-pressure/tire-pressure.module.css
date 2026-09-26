@@ -5,11 +5,11 @@
 .tabs {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tab {
   padding: 12px 6px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
@@ -19,7 +19,7 @@
 /* ── 카드 ── */
 .card {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
 }
 .cardLabel {
   display: block; font-size: 11px; color: var(--muted);
@@ -35,7 +35,7 @@
   padding: 12px 14px;
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 18px; font-weight: 700;
   color: var(--text); outline: none;
   transition: border 0.15s;
   letter-spacing: -0.5px;
@@ -47,7 +47,7 @@
   padding: 12px 10px;
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 600;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 600;
   color: var(--accent); outline: none; cursor: pointer;
   transition: border 0.15s;
 }
@@ -58,16 +58,16 @@
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
 }
 .vehicleBtn {
-  padding: 10px 6px; border-radius: 8px; border: 1px solid var(--border);
+  padding: 10px 6px; border-radius: var(--radius-s); border: 1px solid var(--border);
   background: var(--bg3); color: var(--muted);
-  font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; font-family: var(--font-sans);
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .vehicleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .vehicleBtnActive {
   background: var(--accent-dim) !important;
-  border-color: rgba(14,165,233,0.5) !important;
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent) !important;
   color: var(--accent) !important;
   font-weight: 700 !important;
 }
@@ -78,21 +78,21 @@
   margin-top: 12px;
 }
 .presetBtn {
-  padding: 6px 12px; border-radius: 999px;
+  padding: 6px 12px; border-radius: var(--radius-pill);
   background: var(--bg3); border: 1px solid var(--border);
   color: var(--muted); font-size: 12px; cursor: pointer;
   transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .presetBtn:hover {
-  color: var(--accent); border-color: rgba(14,165,233,0.4);
+  color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 }
 
 /* ── 결과 표 ── */
 .resultCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; overflow: hidden;
+  border-radius: var(--radius-card); overflow: hidden;
 }
 .resultHeader {
   padding: 14px 18px; border-bottom: 1px solid var(--border);
@@ -103,7 +103,7 @@
   text-transform: uppercase; margin-bottom: 4px;
 }
 .resultHeaderValue {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 22px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.5px;
 }
 
@@ -119,18 +119,18 @@
   .resultRow:hover { background: var(--bg3); }
 }
 .resultRowHighlight {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .resultLabel {
   font-size: 13px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  font-family: var(--font-sans); font-weight: 600;
 }
 .resultLabelSub {
   font-size: 10px; color: var(--muted);
   opacity: 0.75; margin-top: 2px;
 }
 .resultValue {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 16px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 16px;
   color: var(--text); text-align: right;
   letter-spacing: -0.3px; word-break: break-all;
 }
@@ -139,16 +139,16 @@
 }
 .copyBtn {
   background: transparent; border: 1px solid var(--border);
-  border-radius: 8px; padding: 6px 10px;
+  border-radius: var(--radius-s); padding: 6px 10px;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
-  font-size: 11px; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 11px; font-family: var(--font-sans);
   flex-shrink: 0; min-width: 50px;
 }@media (hover: hover) {
-  .copyBtn:hover { color: var(--accent); border-color: rgba(14,165,233,0.4); }
+  .copyBtn:hover { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 }
 .copyBtnDone {
   color: var(--accent) !important;
-  border-color: rgba(14,165,233,0.4) !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important;
 }
 
 /* ── 입력 그리드 (권장/현재) ── */
@@ -168,17 +168,17 @@
 }
 .dualField {
   flex: 1; background: transparent; border: none; outline: none;
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 18px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 18px;
   color: var(--text); padding: 0; min-width: 0;
 }
 .dualUnit {
   font-size: 12px; color: var(--accent); font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 상태 박스 ── */
 .statusCard {
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
   display: flex; flex-direction: column; gap: 8px;
   border: 1px solid var(--border);
 }
@@ -187,9 +187,9 @@
 .statusAlert { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.4); }
 .statusEmpty { background: var(--bg3); }
 
-.statusOk    .statusTitle { color: #059669; }
-.statusWarn  .statusTitle { color: #EA580C; }
-.statusAlert .statusTitle { color: #DC2626; }
+.statusOk    .statusTitle { color: var(--emerald-600); }
+.statusWarn  .statusTitle { color: var(--orange-600); }
+.statusAlert .statusTitle { color: var(--red-600); }
 .statusEmpty .statusTitle { color: var(--muted); }
 
 .statusTitle { font-size: 16px; font-weight: 800; }
@@ -202,7 +202,7 @@
 }
 .statusDiffLabel { font-size: 10px; color: var(--muted); }
 .statusDiffValue {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 16px;
   color: var(--text); letter-spacing: -0.3px;
 }
 
@@ -217,8 +217,8 @@
 .impactTitle {
   font-size: 13px; font-weight: 700; margin-bottom: 8px;
 }
-.impactTitleLow  { color: #EA580C; }
-.impactTitleHigh { color: #DC2626; }
+.impactTitleLow  { color: var(--orange-600); }
+.impactTitleHigh { color: var(--red-600); }
 .impactList {
   display: flex; flex-direction: column; gap: 4px;
   font-size: 12px; color: var(--muted); line-height: 1.6;
@@ -231,7 +231,7 @@
 .refTable {
   width: 100%; border-collapse: collapse; font-size: 12px;
   background: var(--bg2);
-  border-radius: 12px; overflow: hidden;
+  border-radius: var(--radius-m); overflow: hidden;
   border: 1px solid var(--border);
 }
 .refTable th {
@@ -243,7 +243,7 @@
 }
 .refTable td {
   padding: 10px 8px; text-align: left;
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
+  font-family: var(--font-sans); font-weight: 600;
   color: var(--text);
   border-bottom: 1px solid var(--border);
 }
@@ -251,19 +251,19 @@
   .refTable tr:hover { background: var(--bg3); }
 }
 .refTable .refLabel {
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  font-family: var(--font-sans); font-weight: 600;
   color: var(--text);
 }
 .refTable .refValue { color: var(--accent); font-weight: 700; }
 
 /* ── 계절 안내 박스 ── */
 .seasonBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.25);
-  border-radius: 12px; padding: 14px 16px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
+  border-radius: var(--radius-m); padding: 14px 16px;
 }
 .seasonTitle {
-  font-size: 13px; color: #0891B2; font-weight: 700;
+  font-size: 13px; color: var(--cyan-600); font-weight: 700;
   margin-bottom: 8px;
 }
 .seasonList {

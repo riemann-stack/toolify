@@ -598,7 +598,7 @@ function FlightTimelineV2({ flightHours, takeoffLocalH, sleepWindows }: {
     <div>
       <div className={s.timeline}>
         {/* 비행 중 깨어있기(기본 색) */}
-        <div className={s.timelineSeg} style={{ left: '0%', width: '100%', background: 'rgba(14,165,233,0.18)' }} />
+        <div className={s.timelineSeg} style={{ left: '0%', width: '100%', background: 'color-mix(in srgb, var(--accent) 18%, transparent)' }} />
         {/* 수면 권장 구간 */}
         {sleepWindows.map((w, i) => {
           const left = (w.start / flightHours) * 100
@@ -614,8 +614,8 @@ function FlightTimelineV2({ flightHours, takeoffLocalH, sleepWindows }: {
         <span>도착<br/><small>{formatHours((takeoffLocalH + flightHours) % 24)}</small></span>
       </div>
       <div className={s.legendRow}>
-        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(8,145,178,0.6)' }} />수면 권장 (현지 22~06시)</div>
-        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'rgba(14,165,233,0.45)' }} />깨어있기</div>
+        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'color-mix(in srgb, var(--cyan-600) 60%, transparent)' }} />수면 권장 (현지 22~06시)</div>
+        <div className={s.legendItem}><span className={s.legendSwatch} style={{ background: 'color-mix(in srgb, var(--accent) 45%, transparent)' }} />깨어있기</div>
       </div>
     </div>
   )

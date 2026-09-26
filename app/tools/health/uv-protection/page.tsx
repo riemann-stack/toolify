@@ -63,7 +63,7 @@ export default function UvProtectionPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         건강·웰빙
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />자외선 지수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -82,15 +82,15 @@ export default function UvProtectionPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             UV 지수와 화상 위험 시간 계산 원리
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -99,15 +99,15 @@ export default function UvProtectionPage() {
             <div><span style={{ color: 'var(--muted)' }}>MED 기반</span> = MED(J/m²) ÷ (UV 지수 × 0.025 × 60)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ MED: 피부에 첫 발적을 유발하는 최소 자외선 양</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> UV 지수 6, 피부 타입 III(한국인 평균) →
-            화상 위험 추정 시간 약 <strong style={{ color: '#0891B2' }}>33분 (무보호)</strong>
+            화상 위험 추정 시간 약 <strong style={{ color: 'var(--cyan-600)' }}>33분 (무보호)</strong>
           </div>
         </div>
 
         {/* ── 2. Fitzpatrick 피부 타입 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             Fitzpatrick 피부 타입
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 12, lineHeight: 1.8 }}>
@@ -133,10 +133,10 @@ export default function UvProtectionPage() {
                 ].map((r, i) => {
                   const isCommon = r.t === '타입 III' || r.t === '타입 IV'
                   return (
-                    <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: isCommon ? 'rgba(8,145,178,0.06)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
-                      <td style={{ padding: '10px 12px', color: isCommon ? '#0891B2' : 'var(--accent)', fontWeight: 700 }}>{r.t}</td>
+                    <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: isCommon ? 'color-mix(in srgb, var(--cyan-600) 6%, transparent)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
+                      <td style={{ padding: '10px 12px', color: isCommon ? 'var(--cyan-600)' : 'var(--accent)', fontWeight: 700 }}>{r.t}</td>
                       <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.d}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
                       <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.b}</td>
                     </tr>
                   )
@@ -151,22 +151,22 @@ export default function UvProtectionPage() {
 
         {/* ── 3. UV 5단계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             UV 지수 5단계 (한국 기상청 기준)
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
             {[
-              { r: '0~2',  l: '낮음',     c: '#059669', w: 16,  d: '특별한 보호 불필요' },
-              { r: '3~5',  l: '보통',     c: '#A16207', w: 40,  d: '오전 10~오후 4시 차단제 권장' },
-              { r: '6~7',  l: '높음',     c: '#EA580C', w: 56,  d: '차단제·모자·긴 옷 필수' },
-              { r: '8~10', l: '매우 높음', c: '#DC2626', w: 80,  d: '오전 10~오후 4시 야외 자제' },
-              { r: '11+',  l: '위험',     c: '#9B59B6', w: 100, d: '가능한 외출 자제' },
+              { r: '0~2',  l: '낮음',     c: 'var(--emerald-600)', w: 16,  d: '특별한 보호 불필요' },
+              { r: '3~5',  l: '보통',     c: 'var(--yellow-700)', w: 40,  d: '오전 10~오후 4시 차단제 권장' },
+              { r: '6~7',  l: '높음',     c: 'var(--orange-600)', w: 56,  d: '차단제·모자·긴 옷 필수' },
+              { r: '8~10', l: '매우 높음', c: 'var(--red-600)', w: 80,  d: '오전 10~오후 4시 야외 자제' },
+              { r: '11+',  l: '위험',     c: 'var(--amethyst)', w: 100, d: '가능한 외출 자제' },
             ].map((g, i) => (
               <div key={i}>
                 <div style={{ display: 'grid', gridTemplateColumns: '76px 1fr', gap: 10, alignItems: 'center' }}>
                   <div style={{ lineHeight: 1.25 }}>
                     <div style={{ fontSize: 13, fontWeight: 700, color: g.c, whiteSpace: 'nowrap' }}>{g.l}</div>
-                    <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>UV {g.r}</div>
+                    <div style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>UV {g.r}</div>
                   </div>
                   <div style={{ height: 16, background: 'var(--bg3)', borderRadius: 99, overflow: 'hidden' }}>
                     <div style={{ height: '100%', width: `${g.w}%`, background: g.c, borderRadius: 99 }} />
@@ -176,14 +176,14 @@ export default function UvProtectionPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📅 <strong style={{ color: 'var(--text)' }}>한국 계절별 평균:</strong>
-            봄(3~5월) 5~8 · 여름(6~8월) <strong style={{ color: '#DC2626' }}>8~11</strong> · 가을(9~11월) 4~7 · 겨울(12~2월) 1~4
+            봄(3~5월) 5~8 · 여름(6~8월) <strong style={{ color: 'var(--red-600)' }}>8~11</strong> · 가을(9~11월) 4~7 · 겨울(12~2월) 1~4
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 10, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 10, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📡 <strong style={{ color: 'var(--text)' }}>오늘 자외선지수 확인 방법:</strong>{' '}
             기상청 날씨누리의{' '}
-            <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>생활기상지수(자외선지수)</a>
+            <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--cyan-600)', textDecoration: 'underline' }}>생활기상지수(자외선지수)</a>
             {' '}페이지에서 읍면동(도로명) 단위로 조회할 수 있습니다. 자외선지수는 <strong style={{ color: 'var(--text)' }}>3시간 단위</strong> 예측값(해당 시간대 최대값)으로
             오늘~글피까지 제공되며, 낮음~위험 <strong style={{ color: 'var(--text)' }}>5단계</strong>와 단계별 대응요령을 함께 안내합니다. <span style={{ fontSize: 11 }}>(2026년 6월 기준)</span>
           </div>
@@ -191,7 +191,7 @@ export default function UvProtectionPage() {
 
         {/* ── 4. SPF 차단율 진실 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             SPF 차단율 진실
           </h2>
           <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', tableLayout: 'fixed' }}>
@@ -204,22 +204,22 @@ export default function UvProtectionPage() {
             </thead>
             <tbody>
               {[
-                { s: '없음',    b: '0%',    p: '100%', c: '#DC2626' },
-                { s: 'SPF 15',  b: '93.3%', p: '6.7%', c: '#A16207' },
+                { s: '없음',    b: '0%',    p: '100%', c: 'var(--red-600)' },
+                { s: 'SPF 15',  b: '93.3%', p: '6.7%', c: 'var(--yellow-700)' },
                 { s: 'SPF 30',  b: '96.7%', p: '3.3%', c: 'var(--accent)' },
-                { s: 'SPF 50',  b: '98.0%', p: '2.0%', c: '#059669' },
-                { s: 'SPF 70+', b: '98.6%', p: '1.4%', c: '#9B59B6' },
+                { s: 'SPF 50',  b: '98.0%', p: '2.0%', c: 'var(--emerald-600)' },
+                { s: 'SPF 70+', b: '98.6%', p: '1.4%', c: 'var(--amethyst)' },
               ].map((r, i) => (
                 <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: r.s === 'SPF 50' ? 'rgba(16,185,129,0.06)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
                   <td style={{ padding: '10px 8px', color: r.c, fontWeight: 700 }}>{r.s}</td>
-                  <td style={{ padding: '10px 8px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
-                  <td style={{ padding: '10px 8px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{r.p}</td>
+                  <td style={{ padding: '10px 8px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.b}</td>
+                  <td style={{ padding: '10px 8px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{r.p}</td>
                 </tr>
               ))}
             </tbody>
           </table>
-          <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-            ⚠️ <strong style={{ color: '#EA580C' }}>SPF가 2배라고 보호 시간이 2배 늘어나는 것이 아닙니다.</strong>
+          <div style={{ background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
+            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>SPF가 2배라고 보호 시간이 2배 늘어나는 것이 아닙니다.</strong>
             SPF 30과 50의 차단율 차이는 <strong>1.3%p</strong>에 불과합니다. 라벨 SPF 50을 사용해도 <strong>실제 도포 시 효과는 SPF 25 정도</strong>이며,
             <strong> 충분한 도포량과 2시간마다의 재도포</strong>가 SPF 등급보다 훨씬 중요합니다.
           </div>
@@ -227,21 +227,21 @@ export default function UvProtectionPage() {
 
         {/* ── 5. 환경별 자외선 보정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             환경별 자외선 보정
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '🏖️ 해변·수영장', m: '× 1.5',  c: '#0891B2', d: '모래(최대 약 15%)·물거품(약 25%) 반사 + 긴 노출을 보수적으로 반영' },
-              { t: '⛷️ 눈·스키',     m: '× 1.8',  c: '#DC2626', d: '신선한 눈 반사 80% — 가장 강력' },
-              { t: '⛰️ 등산·고지대', m: '+12%/km', c: '#EA580C', d: '해발 2km: +24%, 3km: +36% (고도 미입력·1.7km 미만은 +20% 가정)' },
-              { t: '🚤 수상 스포츠', m: '× 1.5',  c: '#0891B2', d: '물 반사 + 그늘 없는 긴 노출을 보수적으로 반영' },
-              { t: '🚗 운전·실내',   m: '× 0.5',  c: '#9B59B6', d: 'UVB 95% 차단, UVA 50% 통과' },
+              { t: '🏖️ 해변·수영장', m: '× 1.5',  c: 'var(--cyan-600)', d: '모래(최대 약 15%)·물거품(약 25%) 반사 + 긴 노출을 보수적으로 반영' },
+              { t: '⛷️ 눈·스키',     m: '× 1.8',  c: 'var(--red-600)', d: '신선한 눈 반사 80% — 가장 강력' },
+              { t: '⛰️ 등산·고지대', m: '+12%/km', c: 'var(--orange-600)', d: '해발 2km: +24%, 3km: +36% (고도 미입력·1.7km 미만은 +20% 가정)' },
+              { t: '🚤 수상 스포츠', m: '× 1.5',  c: 'var(--cyan-600)', d: '물 반사 + 그늘 없는 긴 노출을 보수적으로 반영' },
+              { t: '🚗 운전·실내',   m: '× 0.5',  c: 'var(--amethyst)', d: 'UVB 95% 차단, UVA 50% 통과' },
               { t: '☁️ 구름 (도구 보정)', m: '최대 −30%', c: '#A8A29E', d: '얇은 구름은 거의 영향 없음 · 두꺼운 먹구름은 실제로 더 많이 줄 수 있으나 보수적으로 제한' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 16, color: 'var(--text)', marginBottom: 4 }}>{g.m}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 16, color: 'var(--text)', marginBottom: 4 }}>{g.m}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.65 }}>{g.d}</p>
               </div>
             ))}
@@ -250,7 +250,7 @@ export default function UvProtectionPage() {
 
         {/* ── 6. 차단제 사용 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자외선 차단제 사용 가이드 (WHO·EPA 권장)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -260,8 +260,8 @@ export default function UvProtectionPage() {
               { t: '🔄 재도포', items: ['일반: 2시간마다', '수영·땀: 즉시 또는 1시간마다', '옷·수건 마찰 후'] },
               { t: '📦 보관', items: ['개봉 후 12개월', '변색·분리·이상한 냄새 시 폐기', '차량·뜨거운 곳 보관 X'] },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 8, fontFamily: '"Noto Sans KR", sans-serif' }}>{c.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 8, fontFamily: 'var(--font-sans)' }}>{c.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                   {c.items.map((it, j) => (<li key={j}>{it}</li>))}
                 </ul>
@@ -272,20 +272,20 @@ export default function UvProtectionPage() {
 
         {/* ── 7. 자외선과 피부 건강 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자외선과 피부 건강
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #A16207', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#A16207', fontWeight: 700, marginBottom: 8 }}>⏱️ 단기 영향</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--yellow-700)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--yellow-700)', fontWeight: 700, marginBottom: 8 }}>⏱️ 단기 영향</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>일광화상 (홍반·통증·물집)</li>
                 <li>일사병</li>
                 <li>안구 손상 (각막염·백내장)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #DC2626', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>⚠️ 장기 영향</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--red-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--red-600)', fontWeight: 700, marginBottom: 8 }}>⚠️ 장기 영향</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>피부 노화 (주름·기미·탄력 저하)</li>
                 <li>피부암 (기저세포암·편평세포암·흑색종)</li>
@@ -294,30 +294,30 @@ export default function UvProtectionPage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(8,145,178,0.05)',
-            border: '1px solid rgba(8,145,178,0.25)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--cyan-600) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🇰🇷 <strong style={{ color: '#0891B2' }}>참고 통계:</strong> 피부암 발생률 매년 5~6% 증가(대한피부과학회) ·
+            🇰🇷 <strong style={{ color: 'var(--cyan-600)' }}>참고 통계:</strong> 피부암 발생률 매년 5~6% 증가(대한피부과학회) ·
             피부 노화의 약 80%가 자외선(광노화)에 기인한다는 피부과 일반 인용치 · 일광화상 1회로도 흑색종 위험 증가
             <br /><span style={{ fontSize: 11 }}>※ 위 수치는 인용·추정치이며, 정확한 값은 아래 「공식 자료 출처」를 확인하세요.</span>
           </div>
           <div style={{
             background: 'rgba(16,185,129,0.05)',
             border: '1px solid rgba(16,185,129,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 10,
             lineHeight: 1.85,
           }}>
-            ✅ <strong style={{ color: '#059669' }}>예방 4가지 핵심:</strong>
+            ✅ <strong style={{ color: 'var(--emerald-600)' }}>예방 4가지 핵심:</strong>
             ① 그늘 활용(오전 10~오후 4시) ② 옷·모자·선글라스 ③ SPF 30+ 차단제 ④ 정기 피부 검진(연 1회)
           </div>
         </div>
@@ -332,7 +332,7 @@ export default function UvProtectionPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -352,7 +352,7 @@ export default function UvProtectionPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -367,21 +367,21 @@ export default function UvProtectionPage() {
 
         {/* ── 10. 공식 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             공식 자료 출처
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
-              <li>미국 EPA UV Index Scale: <a href="https://www.epa.gov/sunsafety/uv-index-scale-0" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>epa.gov/sunsafety</a></li>
-              <li>WHO Ultraviolet (UV) radiation: <a href="https://www.who.int/health-topics/ultraviolet-radiation" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>who.int</a></li>
-              <li>FDA Sunscreen·SPF 안내: <a href="https://www.fda.gov/drugs/understanding-over-counter-medicines/sunscreen-how-help-protect-your-skin-sun" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>fda.gov</a></li>
-              <li>한국 기상청 생활기상지수(자외선): <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>weather.go.kr</a></li>
-              <li>대한피부과학회: <a href="https://www.derma.or.kr" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>derma.or.kr</a></li>
+              <li>미국 EPA UV Index Scale: <a href="https://www.epa.gov/sunsafety/uv-index-scale-0" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--cyan-600)', textDecoration: 'underline' }}>epa.gov/sunsafety</a></li>
+              <li>WHO Ultraviolet (UV) radiation: <a href="https://www.who.int/health-topics/ultraviolet-radiation" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--cyan-600)', textDecoration: 'underline' }}>who.int</a></li>
+              <li>FDA Sunscreen·SPF 안내: <a href="https://www.fda.gov/drugs/understanding-over-counter-medicines/sunscreen-how-help-protect-your-skin-sun" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--cyan-600)', textDecoration: 'underline' }}>fda.gov</a></li>
+              <li>한국 기상청 생활기상지수(자외선): <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--cyan-600)', textDecoration: 'underline' }}>weather.go.kr</a></li>
+              <li>대한피부과학회: <a href="https://www.derma.or.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--cyan-600)', textDecoration: 'underline' }}>derma.or.kr</a></li>
             </ul>
             <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
               본 도구는 <strong style={{ color: 'var(--text)' }}>의학적 진단·치료 목적이 아닙니다.</strong>
               일광화상 또는 피부 이상 증상이 있다면 즉시 피부과 전문의 상담을 받으세요.
-              표시된 시간은 <strong style={{ color: '#EA580C' }}>참고 추정치</strong>이며 실제 안전을 보장하지 않습니다.
+              표시된 시간은 <strong style={{ color: 'var(--orange-600)' }}>참고 추정치</strong>이며 실제 안전을 보장하지 않습니다.
             </p>
           </div>
         </div>

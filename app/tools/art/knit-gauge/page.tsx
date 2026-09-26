@@ -21,7 +21,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -31,14 +31,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -80,7 +80,7 @@ export default function KnitGaugePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 디자인·미술
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />뜨개질 게이지 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -101,7 +101,7 @@ export default function KnitGaugePage() {
       <div style={{
         background: 'rgba(255, 138, 62, 0.06)',
         border: '1px solid rgba(255, 138, 62, 0.40)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
@@ -193,11 +193,11 @@ export default function KnitGaugePage() {
                 ['7', 'Jumbo',       'Jumbo, Roving',                      '6코 이하', '12.75 이상'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: 'var(--cat-art)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--cat-art)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[3]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[4]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[4]}</td>
                 </tr>
               ))}
             </tbody>
@@ -263,10 +263,10 @@ export default function KnitGaugePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[2]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[3]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[4]}</td>
                 </tr>
               ))}
             </tbody>
@@ -294,10 +294,10 @@ export default function KnitGaugePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[2]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[3]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[4]}</td>
                 </tr>
               ))}
             </tbody>
@@ -325,10 +325,10 @@ export default function KnitGaugePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '6px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[1]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[3]}</td>
-                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[4]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[1]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[2]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[3]}</td>
+                  <td style={{ padding: '6px 8px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[4]}</td>
                 </tr>
               ))}
             </tbody>
@@ -370,7 +370,7 @@ export default function KnitGaugePage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--cat-art)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--cat-art)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{row[2]}</td>
                 </tr>
               ))}
@@ -441,7 +441,7 @@ export default function KnitGaugePage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -479,7 +479,7 @@ export default function KnitGaugePage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   {row.slice(1).map((v, k) => (
-                    <td key={k} style={{ padding: '8px 10px', color: v === '—' ? 'var(--muted)' : 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{v}</td>
+                    <td key={k} style={{ padding: '8px 10px', color: v === '—' ? 'var(--muted)' : 'var(--text)', fontFamily: 'var(--font-sans)' }}>{v}</td>
                   ))}
                 </tr>
               ))}
@@ -658,21 +658,21 @@ export default function KnitGaugePage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/art/paint-mix" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/art/paint-mix" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🎨</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>물감·잉크 혼합 비율</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             색 시뮬레이터 + 컬러 매칭
           </p>
         </Link>
-        <Link href="/tools/unit/converter" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/unit/converter" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📐</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>단위 변환기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             cm·인치·g·온스 환산
           </p>
         </Link>
-        <Link href="/tools/art/golden-ratio" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/art/golden-ratio" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🌀</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>황금 비율 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

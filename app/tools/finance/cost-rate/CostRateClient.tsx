@@ -27,12 +27,12 @@ interface Ingredient {
 
 /* breakdown 색상 팔레트 */
 const C = {
-  ingredient: '#EA580C',
-  packaging:  '#A16207',
-  commission: '#DC2626',
-  delivery:   '#9B59B6',
-  ad:         '#0891B2',
-  margin:     '#0EA5E9',
+  ingredient: 'var(--orange-600)',
+  packaging:  'var(--yellow-700)',
+  commission: 'var(--red-600)',
+  delivery:   'var(--amethyst)',
+  ad:         'var(--cyan-600)',
+  margin:     'var(--sky-500)',
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -533,7 +533,7 @@ export default function CostRateClient() {
         <>
           <div className={styles.hero} role="status">
             <p className={styles.heroLead}>
-              <strong style={{ color: 'var(--text)' }}>{menuName}</strong>의 기본 원가율은 <strong style={{ color: '#0891B2' }}>{basicCostRate.toFixed(1)}%</strong>입니다.{useDelivery && <> 배달 수수료·포장비를 반영하면 <strong style={{ color: 'var(--accent)' }}>{realCostRate.toFixed(1)}%</strong>까지 올라갑니다.</>}
+              <strong style={{ color: 'var(--text)' }}>{menuName}</strong>의 기본 원가율은 <strong style={{ color: 'var(--cyan-600)' }}>{basicCostRate.toFixed(1)}%</strong>입니다.{useDelivery && <> 배달 수수료·포장비를 반영하면 <strong style={{ color: 'var(--accent)' }}>{realCostRate.toFixed(1)}%</strong>까지 올라갑니다.</>}
             </p>
             <div className={styles.heroDual}>
               <div>
@@ -770,7 +770,7 @@ export default function CostRateClient() {
               <span className={styles.unit}>원</span>
             </div>
             <div style={{ height: 8 }} />
-            <p style={{ fontSize: 12, color: 'var(--muted)' }}>월 고정비 합계 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtKRW(fixedCosts)}</strong></p>
+            <p style={{ fontSize: 12, color: 'var(--muted)' }}>월 고정비 합계 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{fmtKRW(fixedCosts)}</strong></p>
           </div>
 
           <div className={styles.kpiGrid}>
@@ -797,8 +797,8 @@ export default function CostRateClient() {
                   영업일 <strong>{businessDays}일</strong> 기준 → 일 평균 <strong>{monthlyMenuStats.breakEvenDaily}개</strong> 이상 판매 필요.<br />
                   현재 일 평균 주문 <strong>{monthlyMenuStats.dailyOrders}개</strong> →{' '}
                   {monthlyMenuStats.dailyOrders >= monthlyMenuStats.breakEvenDaily
-                    ? <span style={{ color: '#059669' }}>✅ 손익분기 통과</span>
-                    : <span style={{ color: '#DC2626' }}>❌ 손익분기까지 일 {monthlyMenuStats.breakEvenDaily - monthlyMenuStats.dailyOrders}개 부족</span>}
+                    ? <span style={{ color: 'var(--emerald-600)' }}>✅ 손익분기 통과</span>
+                    : <span style={{ color: 'var(--red-600)' }}>❌ 손익분기까지 일 {monthlyMenuStats.breakEvenDaily - monthlyMenuStats.dailyOrders}개 부족</span>}
                 </p>
               </>
             ) : (
@@ -820,7 +820,7 @@ export default function CostRateClient() {
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 {monthlyMenuStats.targetExtraItems === 0
                   ? <>✅ 이미 목표 영업이익 <strong style={{ color: 'var(--accent)' }}>{fmtKRW(parseComma(targetProfitStr))}</strong>를 달성하고 있습니다.</>
-                  : <>월 목표 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtKRW(parseComma(targetProfitStr))}</strong> 달성을 위해 추가로 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraItems}개</strong> (일 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraDaily}개</strong>) 더 판매가 필요합니다.</>}
+                  : <>월 목표 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{fmtKRW(parseComma(targetProfitStr))}</strong> 달성을 위해 추가로 월 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{monthlyMenuStats.targetExtraItems}개</strong> (일 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{monthlyMenuStats.targetExtraDaily}개</strong>) 더 판매가 필요합니다.</>}
               </p>
             ) : (
               <p style={{ fontSize: 13, color: 'var(--muted)' }}>메뉴 데이터를 먼저 입력해주세요.</p>

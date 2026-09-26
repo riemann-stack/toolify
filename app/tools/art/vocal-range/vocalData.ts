@@ -28,13 +28,13 @@ const mk = (id: string, name: string, shortName: string, low: string, high: stri
 })
 
 export const VOCAL_RANGES: VocalRange[] = [
-  mk('bass',         '베이스',     'Bass',   'E2', 'E4', '남성 가장 낮은 음역',   '고우림·연광철', '#0891B2', 'male'),
-  mk('baritone',     '바리톤',     'Baritone', 'G2', 'G4', '남성 중간 음역',         '성시경·박효신', '#059669', 'male'),
-  mk('tenor',        '테너',       'Tenor',   'C3', 'C5', '남성 높은 음역',          '이수·휘성',     '#A16207', 'male'),
-  mk('countertenor', '카운터테너', 'Countertenor', 'E3', 'E5', '남성 매우 높은 음역', '이동규·최성훈',  '#EA580C', 'male'),
-  mk('contralto',    '콘트랄토',   'Contralto', 'F3', 'F5', '여성 가장 낮은 음역',   '이은미',         '#9333EA', 'female'),
-  mk('alto',         '알토',       'Alto',     'G3', 'G5', '여성 중간 음역 (합창 파트 관행 값)', '—',  '#DB2777', 'female'),
-  mk('mezzo',        '메조소프라노', 'Mezzo',   'A3', 'A5', '여성 중상 음역',         '백지영·이하이',   '#DC2626', 'female'),
+  mk('bass',         '베이스',     'Bass',   'E2', 'E4', '남성 가장 낮은 음역',   '고우림·연광철', 'var(--cyan-600)', 'male'),
+  mk('baritone',     '바리톤',     'Baritone', 'G2', 'G4', '남성 중간 음역',         '성시경·박효신', 'var(--emerald-600)', 'male'),
+  mk('tenor',        '테너',       'Tenor',   'C3', 'C5', '남성 높은 음역',          '이수·휘성',     'var(--yellow-700)', 'male'),
+  mk('countertenor', '카운터테너', 'Countertenor', 'E3', 'E5', '남성 매우 높은 음역', '이동규·최성훈',  'var(--orange-600)', 'male'),
+  mk('contralto',    '콘트랄토',   'Contralto', 'F3', 'F5', '여성 가장 낮은 음역',   '이은미',         'var(--purple-600)', 'female'),
+  mk('alto',         '알토',       'Alto',     'G3', 'G5', '여성 중간 음역 (합창 파트 관행 값)', '—',  'var(--pink-600)', 'female'),
+  mk('mezzo',        '메조소프라노', 'Mezzo',   'A3', 'A5', '여성 중상 음역',         '백지영·이하이',   'var(--red-600)', 'female'),
   mk('soprano',      '소프라노',   'Soprano', 'C4', 'C6', '여성 높은 음역',          '아이유·박정현',   '#FFB347', 'female'),
 ]
 

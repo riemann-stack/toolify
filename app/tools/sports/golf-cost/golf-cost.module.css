@@ -5,22 +5,22 @@
 .tabs3 {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 4px;
+  border-radius: var(--radius-m); padding: 4px;
 }
 .tabBtn {
-  padding: 10px 4px; border-radius: 8px; border: none;
-  font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  padding: 10px 4px; border-radius: var(--radius-s); border: none;
+  font-size: 12px; font-family: var(--font-sans); font-weight: 600;
   color: var(--muted); background: transparent; cursor: pointer;
   transition: all 0.15s; min-height: 44px;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
+.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 
 /* ── 더치페이/저장 연결 카드 ── */
 .crossLinkCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 14px 16px;
+  border-radius: var(--radius-card); padding: 14px 16px;
   display: flex; flex-direction: column; gap: 12px;
 }
 .crossLinkBtn {
@@ -41,21 +41,21 @@
   flex: 1; min-height: 44px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 14px; font-size: 14px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; outline: none;
+  font-family: var(--font-sans); outline: none;
   box-sizing: border-box;
 }
-.courseSaveInput:focus { border-color: rgba(14,165,233,0.5); }
+.courseSaveInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .courseSaveBtn {
   background: var(--accent-strong); color: #ffffff; border: none;
   padding: 10px 16px; border-radius: 10px;
-  font-size: 13px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; font-weight: 700; font-family: var(--font-sans);
   cursor: pointer; transition: opacity 0.15s; min-height: 44px;
   white-space: nowrap;
 }@media (hover: hover) {
   .courseSaveBtn:hover { opacity: 0.88; }
 }
 .courseSaveBtn:disabled { opacity: 0.5; cursor: not-allowed; }
-.courseSaveBtn.copied { background: #059669; }
+.courseSaveBtn.copied { background: var(--emerald-600); }
 
 /* ── 골프장 목록 ── */
 .courseList { display: flex; flex-direction: column; gap: 8px; }
@@ -69,24 +69,24 @@
 .courseMeta { font-size: 12px; color: var(--muted); line-height: 1.5; }
 .courseActions { display: flex; gap: 6px; flex-shrink: 0; }
 .courseApplyBtn {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-s);
   padding: 8px 12px; font-size: 12px; color: var(--accent); font-weight: 600;
-  cursor: pointer; transition: all 0.15s; font-family: 'Noto Sans KR', sans-serif;
+  cursor: pointer; transition: all 0.15s; font-family: var(--font-sans);
 }@media (hover: hover) {
   .courseApplyBtn:hover { border-color: var(--accent); }
 }
 .courseDelBtn {
-  background: transparent; border: 1px solid var(--border); border-radius: 8px;
+  background: transparent; border: 1px solid var(--border); border-radius: var(--radius-s);
   width: 32px; height: 32px; font-size: 16px; color: var(--muted);
   cursor: pointer; display: flex; align-items: center; justify-content: center;
 }@media (hover: hover) {
-  .courseDelBtn:hover { color: #DC2626; border-color: #DC2626; }
+  .courseDelBtn:hover { color: var(--red-600); border-color: var(--red-600); }
 }
 
 /* ── 빈 상태 ── */
 .empty {
   padding: 20px; text-align: center; font-size: 13px; color: var(--muted);
-  background: var(--bg2); border: 1px dashed var(--border); border-radius: 12px;
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius-m);
   line-height: 1.7;
 }
 .empty strong { display: block; color: var(--text); margin-bottom: 6px; font-size: 14px; }
@@ -94,9 +94,9 @@
 /* ── 경고 카드 (회원권 체크리스트) ── */
 .warnCard {
   background: rgba(234,88,12,0.14); border: 1px solid rgba(234,88,12,0.3);
-  border-radius: 12px; padding: 14px 18px;
+  border-radius: var(--radius-m); padding: 14px 18px;
 }
-.warnTitle { font-size: 13px; font-weight: 700; color: #EA580C; margin: 0 0 8px; }
+.warnTitle { font-size: 13px; font-weight: 700; color: var(--orange-600); margin: 0 0 8px; }
 .warnList {
   margin: 0; padding-left: 18px;
   font-size: 13px; color: var(--text); line-height: 1.85;
@@ -116,7 +116,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -148,7 +148,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -156,8 +156,8 @@
 }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
 .numInput:focus {
-  border-color: rgba(14,165,233,0.5);
-  box-shadow: 0 0 0 3px rgba(14,165,233,0.14);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .numInput::-webkit-outer-spin-button,
 .numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
@@ -173,7 +173,7 @@
 .liveHint {
   font-size: 12px;
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   margin-top: 8px;
 }
@@ -209,7 +209,7 @@
   padding: 12px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -218,15 +218,15 @@
   .courseBtn:hover { color: var(--text); }
 }
 .coursePubWeek { border-color: rgba(16,185,129,0.4); }
-.coursePubEnd { border-color: rgba(14,165,233,0.4); }
-.courseSemi { border-color: rgba(8,145,178,0.4); }
+.coursePubEnd { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.courseSemi { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .coursePriv { border-color: rgba(161,98,7,0.4); }
 .courseCustom { border-color: var(--border); border-style: dashed; }
 
-.coursePubWeek.courseActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.coursePubWeek.courseActive { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
 .coursePubEnd.courseActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.courseSemi.courseActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
-.coursePriv.courseActive { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 700; }
+.courseSemi.courseActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
+.coursePriv.courseActive { background: rgba(161,98,7,0.18); color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
 .courseCustom.courseActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); border-style: solid; font-weight: 700; }
 
 /* ── 인원 pill ── */
@@ -242,7 +242,7 @@
   padding: 12px 10px;
   font-size: 14px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -270,7 +270,7 @@
   padding: 12px 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -299,18 +299,18 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.pillActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4); color: var(--accent); }
+.pillActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); }
 
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.35);
-  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
@@ -321,7 +321,7 @@
   margin-bottom: 10px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(36px, 7vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -363,7 +363,7 @@
   color: var(--text);
 }
 .breakdownTable td.numCell {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   text-align: right;
 }
@@ -379,15 +379,15 @@
 
 /* 안내 카드 */
 .infoCard {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.2);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent);
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.infoCard strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.infoCard strong { color: var(--accent); font-family: var(--font-sans); }
 
 /* 슬라이더 */
 .sliderWrap {
@@ -402,7 +402,7 @@
   appearance: none;
   height: 6px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   outline: none;
 }
 .slider::-webkit-slider-thumb {
@@ -425,7 +425,7 @@
   box-shadow: 0 0 0 4px var(--accent-dim);
 }
 .sliderValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 16px;
   color: var(--accent);
@@ -447,7 +447,7 @@
   padding: 14px 16px;
 }
 .forecastLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 6px; }
-.forecastVal { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
+.forecastVal { font-family: var(--font-sans); font-size: 22px; font-weight: 800; color: var(--accent); letter-spacing: -0.5px; }
 .forecastSub { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 /* 참여자별 정산 */
@@ -464,10 +464,10 @@
 .smallNum {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 10px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -480,10 +480,10 @@
 .smallText {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 10px;
   font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   outline: none;
   width: 100%;
@@ -491,7 +491,7 @@
   min-width: 0;
 }
 .playerFinal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   color: var(--accent);
@@ -508,7 +508,7 @@
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
@@ -519,7 +519,7 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 12px;
   color: var(--muted);
@@ -533,7 +533,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   outline: none;
   width: 100%;
@@ -553,7 +553,7 @@
   width: 44px;
   height: 24px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   cursor: pointer;
   transition: background 0.2s;
   flex-shrink: 0;
@@ -594,12 +594,12 @@
 }
 .bettingSum {
   font-size: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   margin-top: 8px;
   padding: 8px 10px;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   text-align: right;
 }
 .bettingSumOk { color: var(--success); }

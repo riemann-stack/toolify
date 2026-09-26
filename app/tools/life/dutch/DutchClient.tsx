@@ -437,7 +437,7 @@ export default function DutchClient() {
                   <div className={styles.detailRow}><span>인원</span><span>{sPeople}명</span></div>
                   <div className={styles.detailRow}><span>정확한 1인당</span><span>{simpleResult.exactPerPerson.toFixed(2)}원</span></div>
                   <div className={`${styles.detailRow} ${styles.detailRowAccent}`}><span>1인당 (절삭 후)</span><span>{fmt(simpleResult.perPerson)}원</span></div>
-                  <div className={styles.detailRow}><span>잔여 처리</span><span style={{ fontFamily: "'Noto Sans KR', sans-serif", color: 'var(--text)' }}>{REMAINDER_OPTIONS.find(o => o.id === sRemainder)?.name}</span></div>
+                  <div className={styles.detailRow}><span>잔여 처리</span><span style={{ fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{REMAINDER_OPTIONS.find(o => o.id === sRemainder)?.name}</span></div>
                 </div>
               </div>
 
@@ -500,7 +500,7 @@ export default function DutchClient() {
 
             <div className={styles.card}>
               <label className={styles.cardLabel}>음주자</label>
-              <Stepper value={dDrinkers} onChange={setDDrinkers} min={0} max={dPeople} color="#EA580C" ariaLabel="음주자 수" />
+              <Stepper value={dDrinkers} onChange={setDDrinkers} min={0} max={dPeople} color="var(--orange-600)" ariaLabel="음주자 수" />
             </div>
           </div>
 
@@ -530,7 +530,7 @@ export default function DutchClient() {
                   </div>
                 </div>
                 <div className={styles.heroSub}>
-                  음주자가 1인당 <strong style={{ color: '#EA580C' }}>{fmt(drinkResult.drinkerAmount - drinkResult.nonDrinkerAmount)}원</strong> 더 부담
+                  음주자가 1인당 <strong style={{ color: 'var(--orange-600)' }}>{fmt(drinkResult.drinkerAmount - drinkResult.nonDrinkerAmount)}원</strong> 더 부담
                 </div>
               </div>
 
@@ -558,7 +558,7 @@ export default function DutchClient() {
                   {Math.round(drinkResult.remainder) !== 0 && (
                     <div className={styles.detailRow}>
                       <span>입력 총액 대비</span>
-                      <span style={{ color: drinkResult.remainder > 0 ? '#EA580C' : '#DC2626' }}>
+                      <span style={{ color: drinkResult.remainder > 0 ? 'var(--orange-600)' : 'var(--red-600)' }}>
                         {drinkResult.remainder > 0 ? '+' : '−'}{fmt(Math.abs(drinkResult.remainder))}원
                       </span>
                     </div>
@@ -801,7 +801,7 @@ export default function DutchClient() {
             <>
               <div className={styles.hero} role="status" aria-live="polite">
                 <div className={styles.heroLabel}>{prepaidResult.minimal ? '최소 송금 횟수' : '필요 송금 횟수 (근사)'}</div>
-                <div className={styles.heroNum} style={{ color: '#A16207' }}>
+                <div className={styles.heroNum} style={{ color: 'var(--yellow-700)' }}>
                   {prepaidResult.transferCount}<span className={styles.heroNumUnit}>건</span>
                 </div>
                 <div className={styles.heroSub}>

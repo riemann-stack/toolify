@@ -875,7 +875,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
                     <td style={{
                       textAlign: 'right',
                       color: c.tone === 'pos' ? 'var(--success)' : c.tone === 'neg' ? 'var(--danger)' : 'var(--muted)',
-                      fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700,
+                      fontFamily: 'var(--font-sans)', fontWeight: 700,
                     }}>
                       {c.impact > 0 ? '+' : ''}{showDist(c.impact, unit)}{unit}
                     </td>
@@ -886,7 +886,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
                   <td style={{
                     textAlign: 'right',
                     color: result.totalImpact >= 0 ? 'var(--success)' : 'var(--danger)',
-                    fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 14,
+                    fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 14,
                   }}>
                     {result.totalImpact >= 0 ? '+' : ''}{showDist(result.totalImpact, unit)}{unit}
                   </td>
@@ -1053,7 +1053,7 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <span className={s.cardLabel} style={{ marginBottom: 0 }}>최근 기록 (최대 1년 보관)</span>
             <button type="button" onClick={handleClearAll}
-              style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, padding: '4px 10px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
+              style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '4px 10px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
               전체 삭제
             </button>
           </div>
@@ -1071,7 +1071,7 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
               <tbody>
                 {records.slice(0, 30).map(r => (
                   <tr key={r.id}>
-                    <td className={s.tdMuted} style={{ fontSize: 12, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.date}</td>
+                    <td className={s.tdMuted} style={{ fontSize: 12, fontFamily: 'var(--font-sans)' }}>{r.date}</td>
                     <td style={{ fontSize: 12, color: 'var(--muted)' }}>{LOCATION_LABEL[r.location]}</td>
                     <td className={s.tdNum}>{r.driver ? `${showDist(r.driver, unit)}${unit}` : '—'}</td>
                     <td className={s.tdNum}>{r.iron7 ? `${showDist(r.iron7, unit)}${unit}` : '—'}</td>

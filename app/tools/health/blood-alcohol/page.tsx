@@ -33,7 +33,7 @@ const BAC_REVOKE = BAC_THRESHOLDS.REVOKE             // 0.08
 const BAC_AGGRAVATED = BAC_THRESHOLDS.AGGRAVATED     // 0.2
 const exPeak = (grams: number) => calcPeakBAC({ weightKg: EX_WEIGHT, sex: 'male', alcoholGrams: grams, foodMultiplier: 1 })
 const bacColor = (bac: number) =>
-  bac < BAC_SUSPEND ? '#059669' : bac < 0.05 ? '#A16207' : bac < BAC_REVOKE ? '#EA580C' : bac < 0.15 ? '#DC2626' : '#B91C1C'
+  bac < BAC_SUSPEND ? 'var(--emerald-600)' : bac < 0.05 ? 'var(--yellow-700)' : bac < BAC_REVOKE ? 'var(--orange-600)' : bac < 0.15 ? 'var(--red-600)' : '#B91C1C'
 const BAC_EXAMPLES = [
   { label: '소주 1잔 (50ml)', ml: 50, abv: 16 },
   { label: '소주 반병 (180ml)', ml: 180, abv: 16 },
@@ -97,7 +97,7 @@ export default function BloodAlcoholPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />혈중알코올 잔존량 추정기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -113,21 +113,21 @@ export default function BloodAlcoholPage() {
 
         {/* ── 1. Widmark 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             Widmark 공식
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '10px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Blood Alcohol Concentration</p>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6, marginBottom: '12px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6, marginBottom: '12px' }}>
               BAC(g/dL) = 알코올(g) ÷ (체중(kg) × r × 10)
             </p>
             <ul style={{ paddingLeft: '18px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
-              <li>남성 체수분비율 <strong style={{ color: '#0891B2' }}>r = 0.68</strong></li>
-              <li>여성 체수분비율 <strong style={{ color: '#DB2777' }}>r = 0.55</strong></li>
+              <li>남성 체수분비율 <strong style={{ color: 'var(--cyan-600)' }}>r = 0.68</strong></li>
+              <li>여성 체수분비율 <strong style={{ color: 'var(--pink-600)' }}>r = 0.55</strong></li>
               <li>알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7894 (에탄올 밀도)</li>
               <li>감소율: 시간당 <strong style={{ color: 'var(--text)' }}>약 0.015 g/dL</strong> (표준, 개인차 있음)</li>
             </ul>
-            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', marginTop: '14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px', marginTop: '14px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
               <span style={{ color: 'var(--muted)' }}>예시</span> 70kg 남성이 소주 1병(360ml × 16%) 음주 시<br/>
               알코올 = 360 × 0.16 × 0.7894 ≈ <strong>45.5g</strong><br/>
               최고 BAC = 45.5 ÷ (70 × 0.68 × 10) ≈ <strong style={{ color: 'var(--accent)' }}>0.096 g/dL</strong>
@@ -137,7 +137,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 2. 음주운전 처벌 기준표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             음주운전 처벌 기준 (현행 · {fmtLawDate(DRUNK_DRIVING_LAW_SINCE, 'ym')}~)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -150,9 +150,9 @@ export default function BloodAlcoholPage() {
                 </tr>
               </thead>
               <tbody>
-                {DRUNK_DRIVING_PENALTIES.map((p, i) => [p.bac, p.license, p.penalty, ['#EA580C', '#DC2626', '#B91C1C', '#B91C1C'][i]]).map(([bac, level, desc, color], i) => (
+                {DRUNK_DRIVING_PENALTIES.map((p, i) => [p.bac, p.license, p.penalty, ['var(--orange-600)', 'var(--red-600)', '#B91C1C', '#B91C1C'][i]]).map(([bac, level, desc, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{bac}</td>
+                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{bac}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: color as string, fontWeight: 600 }}>{level}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{desc}</td>
                   </tr>
@@ -161,13 +161,13 @@ export default function BloodAlcoholPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            ※ 도로교통법 제148조의2 기준({fmtLawDate(DRUNK_DRIVING_LAW_SINCE, 'ym')} BAC 기준 0.05→0.03 강화). {DRUNK_DRIVING_REPEAT_WINDOW_YEARS}년 안에 다시 위반하면 가중처벌됩니다({REPEAT_TEXT}). 면허 결격기간은 BAC가 아니라 위반 횟수와 사고 여부로 정해집니다(제82조: {DQ_TEXT}). 음주운전으로 사람을 숨지게 하면 <strong style={{ color: '#DC2626' }}>무기징역까지 가능</strong>합니다. 세부 처분은 사안에 따라 달라질 수 있어 공식 기준을 확인하세요.
+            ※ 도로교통법 제148조의2 기준({fmtLawDate(DRUNK_DRIVING_LAW_SINCE, 'ym')} BAC 기준 0.05→0.03 강화). {DRUNK_DRIVING_REPEAT_WINDOW_YEARS}년 안에 다시 위반하면 가중처벌됩니다({REPEAT_TEXT}). 면허 결격기간은 BAC가 아니라 위반 횟수와 사고 여부로 정해집니다(제82조: {DQ_TEXT}). 음주운전으로 사람을 숨지게 하면 <strong style={{ color: 'var(--red-600)' }}>무기징역까지 가능</strong>합니다. 세부 처분은 사안에 따라 달라질 수 있어 공식 기준을 확인하세요.
           </p>
         </div>
 
         {/* ── 3. 음주량별 BAC 예시 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
             음주량별 BAC 예시
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '16px', lineHeight: 1.6 }}>
@@ -187,9 +187,9 @@ export default function BloodAlcoholPage() {
                 {BAC_EXAMPLES.map(([drink, alc, bac, clear, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{drink}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{alc}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: color as string, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{bac}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{clear}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{alc}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: color as string, fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{bac}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{clear}</td>
                   </tr>
                 ))}
               </tbody>
@@ -199,7 +199,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 4. 알코올 분해 영향 요인 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🧬 알코올 분해에 영향을 주는 요인
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -213,7 +213,7 @@ export default function BloodAlcoholPage() {
               { icon: '🫧', title: '탄산 음료 혼합', desc: '탄산이 위 배출을 촉진해 알코올 흡수 속도가 증가할 수 있습니다.' },
               { icon: '🧬', title: '유전적 체질', desc: 'ALDH2 유전자 변이(아시아인 약 40%)는 알코올 분해를 저하시킵니다.' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '18px', marginBottom: '6px' }}>{item.icon}</p>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>{item.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{item.desc}</p>
@@ -224,7 +224,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 5. 다음날 아침 운전 — 한국 단속 최다 케이스 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🌅 다음날 아침에도 알코올이 남는 이유
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -232,24 +232,24 @@ export default function BloodAlcoholPage() {
             「잠 자고 일어났으니 깼겠지」는 잘못된 통념입니다. 잠을 자도 알코올 분해 속도는 그대로이기 때문입니다.
             본 도구의 「🌅 다음날 아침」 탭에서 원하는 시각의 잔존량을 추정해 볼 수 있습니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '16px 18px' }}>
-            <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 10 }}>📌 예시: 70kg 남성, 식후, 소주 2병 (약 {Math.round(EX2_GRAMS)}g), 음주 종료 자정(00:00)</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+            <p style={{ fontSize: 13, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 10 }}>📌 예시: 70kg 남성, 식후, 소주 2병 (약 {Math.round(EX2_GRAMS)}g), 음주 종료 자정(00:00)</p>
             <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
-              <li>최고 BAC: <strong style={{ color: '#DC2626' }}>{EX2.toFixed(3)}</strong> (면허취소 수준)</li>
+              <li>최고 BAC: <strong style={{ color: 'var(--red-600)' }}>{EX2.toFixed(3)}</strong> (면허취소 수준)</li>
               <li>면허취소 기준(0.08) 미만 추정: 익일 <strong>{fmtTimeMin((EX2 - BAC_REVOKE) / EX_DECAY * 60)}</strong></li>
               <li>면허정지 기준(0.03) 미만 추정: 익일 <strong>{fmtTimeMin((EX2 - BAC_SUSPEND) / EX_DECAY * 60)}</strong></li>
               <li>알코올 잔존 추정 종료: 익일 <strong>{fmtTimeMin(EX2 / EX_DECAY * 60)}</strong></li>
-              <li>익일 08:00 BAC: <strong style={{ color: '#DC2626' }}>약 {EX2_AT8.toFixed(3)}</strong> (면허정지 기준 0.03의 2배 이상 — 출근길 단속 시 면허정지·형사처벌 수준)</li>
+              <li>익일 08:00 BAC: <strong style={{ color: 'var(--red-600)' }}>약 {EX2_AT8.toFixed(3)}</strong> (면허정지 기준 0.03의 2배 이상 — 출근길 단속 시 면허정지·형사처벌 수준)</li>
             </ul>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-            ⚠️ 0.03 미만이라도 측정 시 양성 → 단속 가능. <strong style={{ color: '#DC2626' }}>계산값과 관계없이 음주 후 운전은 금지</strong>입니다.
+            ⚠️ 0.03 미만이라도 측정 시 양성 → 단속 가능. <strong style={{ color: 'var(--red-600)' }}>계산값과 관계없이 음주 후 운전은 금지</strong>입니다.
           </p>
         </div>
 
         {/* ── 6. 여러 자리 음주 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🔢 1차·2차·3차 누적 음주 위험
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -261,17 +261,17 @@ export default function BloodAlcoholPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>자리</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>음주</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontWeight: 700 }}>알코올</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--red-600)', fontWeight: 700 }}>알코올</th>
                 </tr>
               </thead>
               <tbody>
                 {CUMUL_ROWS.map(r => (
-                  <tr key={r.label}><td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.label}</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.drinks}</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>약 {Math.round(r.grams)}g</td></tr>
+                  <tr key={r.label}><td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.label}</td><td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.drinks}</td><td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>약 {Math.round(r.grams)}g</td></tr>
                 ))}
                 <tr style={{ background: 'rgba(220,38,38,0.06)' }}>
-                  <td style={{ padding: '10px 12px', color: '#DC2626', fontWeight: 700 }}>합계</td>
+                  <td style={{ padding: '10px 12px', color: 'var(--red-600)', fontWeight: 700 }}>합계</td>
                   <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>표준잔 약 {CUMUL_STD}잔 (WHO 과음 기준 60g의 약 {CUMUL_WHO_RATIO}배)</td>
-                  <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>약 {CUMUL_TOTAL_G}g</td>
+                  <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--red-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>약 {CUMUL_TOTAL_G}g</td>
                 </tr>
               </tbody>
             </table>
@@ -283,11 +283,11 @@ export default function BloodAlcoholPage() {
 
         {/* ── 7. ALDH2 결손 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🧬 ALDH2 결손 — 한국인 30~40%
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '16px 18px' }}>
-            <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, marginBottom: 8 }}>알코올 분해 효소 변이 (Asian flush)</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+            <p style={{ fontSize: 14, color: 'var(--purple-600)', fontWeight: 700, marginBottom: 8 }}>알코올 분해 효소 변이 (Asian flush)</p>
             <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
               <li>아세트알데히드(1급 발암물질) 분해가 느려 체내 축적 ↑</li>
               <li>에탄올 분해도 다소 느릴 수 있음 (개인차 큼)</li>
@@ -295,7 +295,7 @@ export default function BloodAlcoholPage() {
               <li>간암·구강암 위험 ↑</li>
             </ul>
             <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, marginTop: 12 }}>
-              <strong style={{ color: '#9333EA' }}>특징:</strong> 술 마시면 얼굴 빨개짐 / 심박수 빠르게 ↑ / 두통·구역질 빨리.
+              <strong style={{ color: 'var(--purple-600)' }}>특징:</strong> 술 마시면 얼굴 빨개짐 / 심박수 빠르게 ↑ / 두통·구역질 빨리.
               본인이 술에 약한 편이라면 본 도구의 「분해 속도」를 「느림」 또는 「매우 느림」으로 설정 권장.
             </p>
           </div>
@@ -303,11 +303,11 @@ export default function BloodAlcoholPage() {
 
         {/* ── 8. 자전거·전동킥보드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🚲 자전거·전동킥보드 음주운전
           </h2>
-          <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-            <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>⚠️ 「자전거니까 괜찮아」 잘못된 통념</p>
+          <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+            <p style={{ fontSize: 13, color: 'var(--red-600)', fontWeight: 700, marginBottom: 8 }}>⚠️ 「자전거니까 괜찮아」 잘못된 통념</p>
             <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
               <li>자전거 음주운전 (BAC 0.03+): 범칙금 {fmtManwonWon(BIKE.fine)}, 측정 불응 {fmtManwonWon(BIKE.refusal)} ({fmtLawDate(BIKE.since)} 시행)</li>
               <li>전동킥보드 등 개인형 이동장치: 범칙금 {fmtManwonWon(PM.fine)}, 측정 불응 {fmtManwonWon(PM.refusal)} ({fmtLawDate(PM.since)} 시행) + 운전면허 정지(0.03+)·취소(0.08+)</li>
@@ -319,7 +319,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 9. 약물 + 알코올 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             💊 약물 + 알코올 위험
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -327,16 +327,16 @@ export default function BloodAlcoholPage() {
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>약물</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: '#DC2626', fontWeight: 700 }}>위험</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--red-600)', fontWeight: 700 }}>위험</th>
                 </tr>
               </thead>
               <tbody>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>수면제 + 알코올</td><td style={{ padding: '10px 12px', color: '#DC2626' }}>호흡 억제 → <strong>사망 가능성</strong></td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>진통제 (타이레놀)</td><td style={{ padding: '10px 12px', color: '#DC2626' }}>간 손상 (아세트아미노펜)</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>항우울제</td><td style={{ padding: '10px 12px', color: '#DC2626' }}>부작용 증폭·과다 진정</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>혈압약</td><td style={{ padding: '10px 12px', color: '#DC2626' }}>저혈압 쇼크 위험</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>당뇨약</td><td style={{ padding: '10px 12px', color: '#DC2626' }}>저혈당 쇼크 위험</td></tr>
-                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>항알레르기·항생제</td><td style={{ padding: '10px 12px', color: '#EA580C' }}>졸음·진정 효과 증폭 / 일부 항생제 디설피람 반응</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>수면제 + 알코올</td><td style={{ padding: '10px 12px', color: 'var(--red-600)' }}>호흡 억제 → <strong>사망 가능성</strong></td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>진통제 (타이레놀)</td><td style={{ padding: '10px 12px', color: 'var(--red-600)' }}>간 손상 (아세트아미노펜)</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>항우울제</td><td style={{ padding: '10px 12px', color: 'var(--red-600)' }}>부작용 증폭·과다 진정</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>혈압약</td><td style={{ padding: '10px 12px', color: 'var(--red-600)' }}>저혈압 쇼크 위험</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>당뇨약</td><td style={{ padding: '10px 12px', color: 'var(--red-600)' }}>저혈당 쇼크 위험</td></tr>
+                <tr><td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>항알레르기·항생제</td><td style={{ padding: '10px 12px', color: 'var(--orange-600)' }}>졸음·진정 효과 증폭 / 일부 항생제 디설피람 반응</td></tr>
               </tbody>
             </table>
           </div>
@@ -351,8 +351,8 @@ export default function BloodAlcoholPage() {
         </div>
 
         {/* ── 11. 안전 귀가 (강화) ── */}
-        <div style={{ background: 'rgba(8,145,178,0.07)', border: '1px solid rgba(8,145,178,0.3)', borderRadius: '14px', padding: '20px 22px' }}>
-          <p style={{ fontSize: '16px', fontWeight: 700, color: '#0891B2', marginBottom: '12px' }}>
+        <div style={{ background: 'color-mix(in srgb, var(--cyan-600) 7%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
+          <p style={{ fontSize: '16px', fontWeight: 700, color: 'var(--cyan-600)', marginBottom: '12px' }}>
             🚕 음주 후 운전은 절대 안 됩니다
           </p>
           <ul style={{ paddingLeft: '18px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
@@ -361,7 +361,7 @@ export default function BloodAlcoholPage() {
             <li><strong style={{ color: 'var(--text)' }}>응급</strong>: 119</li>
             <li><strong style={{ color: 'var(--text)' }}>정신건강 위기상담 (음주 문제 포함)</strong>: 1577-0199</li>
           </ul>
-          <p style={{ fontSize: '13px', color: '#0891B2', lineHeight: 1.7, fontWeight: 600 }}>
+          <p style={{ fontSize: '13px', color: 'var(--cyan-600)', lineHeight: 1.7, fontWeight: 600 }}>
             💡 가장 안전한 방법은 <strong>술자리 시작 전에 미리 대리운전을 예약</strong>하거나 아예 차를 두고 가는 것입니다.
             자가용·자전거·전동킥보드 모두 음주 후 운전 절대 X.
           </p>
@@ -371,13 +371,13 @@ export default function BloodAlcoholPage() {
         <div style={{
           background: 'rgba(220, 38, 38, 0.06)',
           border: '2px solid rgba(220, 38, 38, 0.40)',
-          borderRadius: '12px',
+          borderRadius: 'var(--radius-m)',
           padding: '18px 20px',
           fontSize: '13px',
           color: 'var(--muted)',
           lineHeight: 1.85,
         }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 음주운전 처벌·위험 정리</p>
+          <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--red-600)', marginBottom: 10 }}>⚖️ 음주운전 처벌·위험 정리</p>
           <p style={{ marginBottom: 8 }}>
             본 도구는 체내 알코올 잔존량을 <strong style={{ color: 'var(--text)' }}>참고용으로 추정</strong>할 뿐이며, 법적 판단 근거가 되지 않습니다. 다음을 꼭 기억하세요.
           </p>
@@ -385,7 +385,7 @@ export default function BloodAlcoholPage() {
             <li>±20~30% 오차 가능 (Widmark 공식 한계)</li>
             <li>음주 측정기 결과와 다를 수 있음</li>
             <li>「0.03 미만 = 안 마신 것」 X</li>
-            <li><strong style={{ color: '#DC2626' }}>BAC가 낮게 추정되더라도 음주 후 운전은 금지</strong></li>
+            <li><strong style={{ color: 'var(--red-600)' }}>BAC가 낮게 추정되더라도 음주 후 운전은 금지</strong></li>
             <li>음주 후 운전 절대 X (자가용·자전거·전동킥보드 모두)</li>
             <li>다음날 아침에도 BAC 남아 있을 수 있음</li>
           </ul>
@@ -397,7 +397,7 @@ export default function BloodAlcoholPage() {
             <li>사망사고 시 무기징역까지</li>
           </ul>
           <p style={{ color: 'var(--text)', fontWeight: 700, fontSize: 13.5 }}>
-            본인과 타인의 생명을 지키는 가장 안전한 방법: <strong style={{ color: '#DC2626' }}>음주 후에는 절대 운전하지 마세요.</strong>
+            본인과 타인의 생명을 지키는 가장 안전한 방법: <strong style={{ color: 'var(--red-600)' }}>음주 후에는 절대 운전하지 마세요.</strong>
           </p>
           <p style={{ marginTop: 10, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
             <strong style={{ color: 'var(--text)' }}>주요 근거</strong> — 음주운전 처벌 기준: 도로교통공단·경찰청·찾기쉬운 생활법령정보 / 표준잔·위험 음주: NIAAA·WHO / 아세트알데히드·ALDH2·음주 암 위험: 국가암정보센터·WHO IARC. 법령·의학 기준은 개정될 수 있으니 공식 출처를 확인하세요.
@@ -406,7 +406,7 @@ export default function BloodAlcoholPage() {
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/alcohol',  icon: '🍺', name: '알코올 도수 계산기', desc: '혼합 음료 도수·표준 음주량' },
@@ -417,7 +417,7 @@ export default function BloodAlcoholPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

@@ -256,7 +256,7 @@ function GiftTab(p: GiftTabProps) {
         <div className={s.helperText}>
           공제 한도: <strong style={{ color: 'var(--text)' }}>{formatShortKRW(getDeduction(p.relation))}</strong> (10년간 합산)
           {RELATIONS.find(r => r.key === p.relation)?.note && (
-            <span style={{ color: '#EA580C', marginLeft: 8 }}>· {RELATIONS.find(r => r.key === p.relation)?.note}</span>
+            <span style={{ color: 'var(--orange-600)', marginLeft: 8 }}>· {RELATIONS.find(r => r.key === p.relation)?.note}</span>
           )}
         </div>
       </div>
@@ -279,12 +279,12 @@ function GiftTab(p: GiftTabProps) {
         <div className={s.heroNum}>{formatShortKRW(result.finalTax)}</div>
         <div className={s.heroSub}>= {formatKRW(result.finalTax)}</div>
         {result.isSkipGeneration && result.surchargeAmount && result.surchargeAmount > 0 && (
-          <div className={s.heroSubAccent} style={{ color: '#EA580C' }}>
+          <div className={s.heroSubAccent} style={{ color: 'var(--orange-600)' }}>
             ⚠️ 세대생략 가산 30% (+{formatShortKRW(result.surchargeAmount)})
           </div>
         )}
         {result.finalTax === 0 && (
-          <div className={s.heroSubAccent} style={{ color: '#059669' }}>✅ 공제 한도 내 — 증여세 부담 없음</div>
+          <div className={s.heroSubAccent} style={{ color: 'var(--emerald-600)' }}>✅ 공제 한도 내 — 증여세 부담 없음</div>
         )}
       </div>
 
@@ -433,7 +433,7 @@ function GiftTab(p: GiftTabProps) {
                   </div>
                   <div className={s.metric}>
                     <div className={s.metricLabel}>양도세 (별도)</div>
-                    <div className={s.metricValue} style={{ color: '#DC2626', fontSize: 14 }}>본 도구 미반영</div>
+                    <div className={s.metricValue} style={{ color: 'var(--red-600)', fontSize: 14 }}>본 도구 미반영</div>
                   </div>
                 </div>
 
@@ -644,7 +644,7 @@ function InheritTab(p: InheritTabProps) {
         <div className={s.heroNum}>{formatShortKRW(result.finalTax)}</div>
         <div className={s.heroSub}>= {formatKRW(result.finalTax)}</div>
         {result.finalTax === 0 && (
-          <div className={s.heroSubAccent} style={{ color: '#059669' }}>✅ 공제 한도 내 — 상속세 부담 없음</div>
+          <div className={s.heroSubAccent} style={{ color: 'var(--emerald-600)' }}>✅ 공제 한도 내 — 상속세 부담 없음</div>
         )}
         {result.spouseSole && (
           <div className={s.heroSub}>배우자 단독상속 — 일괄공제 5억 대신 기초공제 2억 적용 (상증법 §21②)</div>
@@ -669,7 +669,7 @@ function InheritTab(p: InheritTabProps) {
                   <span>{row.actualShare === 0 ? '0원 (포기)' : formatShortKRW(row.actualShare)}{isOptimal && ' ★'}</span>
                   <span>{formatShortKRW(row.appliedDeduction)}</span>
                   <span>{formatShortKRW(row.taxableBase)}</span>
-                  <span style={{ color: row.inheritanceTax === 0 ? '#059669' : 'var(--text)' }}>
+                  <span style={{ color: row.inheritanceTax === 0 ? 'var(--emerald-600)' : 'var(--text)' }}>
                     {formatShortKRW(row.inheritanceTax)}
                   </span>
                 </div>
@@ -906,8 +906,8 @@ function HeirsTab(p: HeirsTabProps) {
                           })} />%
                       </td>
                       <td style={{ color: 'var(--accent)' }}>{formatShortKRW(h.actualAmount)}</td>
-                      <td style={{ color: '#DC2626' }}>−{formatShortKRW(h.taxBurden)}</td>
-                      <td style={{ color: '#059669' }}>{formatShortKRW(h.afterTax)}</td>
+                      <td style={{ color: 'var(--red-600)' }}>−{formatShortKRW(h.taxBurden)}</td>
+                      <td style={{ color: 'var(--emerald-600)' }}>{formatShortKRW(h.afterTax)}</td>
                     </tr>
                   ))}
                   <tr className={s.totalRow}>
@@ -952,7 +952,7 @@ function HeirsTab(p: HeirsTabProps) {
                         <td>{h.name}</td>
                         <td>{(h.legalReserveRatio * 100).toFixed(1)}%</td>
                         <td>{formatShortKRW(h.legalReserveAmount)}</td>
-                        <td style={{ color: violated ? '#DC2626' : '#059669' }}>
+                        <td style={{ color: violated ? 'var(--red-600)' : 'var(--emerald-600)' }}>
                           {violated ? '⚠️ 침해 가능' : '✅ 안전'}
                         </td>
                       </tr>
@@ -1095,9 +1095,9 @@ function SplitTab(p: SplitTabProps) {
                 return (
                   <tr key={i} className={isBest ? s.totalRow : ''}>
                     <td>{sc.label}{isBest && ' ★ 최적'}<div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{sc.description}</div></td>
-                    <td style={{ color: sc.totalTax === 0 ? '#059669' : 'var(--text)' }}>{formatShortKRW(sc.totalTax)}</td>
+                    <td style={{ color: sc.totalTax === 0 ? 'var(--emerald-600)' : 'var(--text)' }}>{formatShortKRW(sc.totalTax)}</td>
                     <td>{formatShortKRW(sc.perPerson)}</td>
-                    <td style={{ color: '#059669' }}>{formatShortKRW(total - sc.totalTax)}</td>
+                    <td style={{ color: 'var(--emerald-600)' }}>{formatShortKRW(total - sc.totalTax)}</td>
                   </tr>
                 )
               })}
@@ -1184,7 +1184,7 @@ function CompareTab(p: CompareTabProps) {
       <div className={s.explainCard}>
         💡 <strong>같은 금액을 지금 증여 vs 나중에 상속할 때의 단순 비교</strong>.{' '}
         증여 금액 <strong style={{ color: 'var(--accent)' }}>{formatShortKRW(p.giftAmount)}</strong>를{' '}
-        지금 <strong style={{ color: '#0891B2' }}>증여</strong>할 때 vs 같은 금액을 나중에 <strong style={{ color: '#EA580C' }}>상속</strong>할 때.
+        지금 <strong style={{ color: 'var(--cyan-600)' }}>증여</strong>할 때 vs 같은 금액을 나중에 <strong style={{ color: 'var(--orange-600)' }}>상속</strong>할 때.
         <div style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.6 }}>
           ※ 「증여세 계산」 탭의 금액·관계·기존 증여액, 「상속세 계산」 탭의 배우자·자녀 구성만 반영합니다.
           상속 탭의 채무·장례비·금융재산·동거주택·배우자 실제 상속분 등 세부 공제는 이 비교에 반영되지 않습니다.
@@ -1240,7 +1240,7 @@ function CompareTab(p: CompareTabProps) {
               {TAX_BRACKETS.map((b, i) => (
                 <tr key={i}>
                   <td>{i === 0 ? '1억 이하' : i === TAX_BRACKETS.length - 1 ? '30억 초과' : `${formatShortKRW(b.min)} 초과 ~ ${formatShortKRW(b.max)} 이하`}</td>
-                  <td style={{ color: b.rate >= 0.4 ? '#DC2626' : b.rate >= 0.3 ? '#EA580C' : 'var(--text)' }}>
+                  <td style={{ color: b.rate >= 0.4 ? 'var(--red-600)' : b.rate >= 0.3 ? 'var(--orange-600)' : 'var(--text)' }}>
                     {(b.rate * 100).toFixed(0)}%
                   </td>
                   <td>{formatShortKRW(b.deduction)}</td>

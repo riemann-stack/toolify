@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -65,7 +65,7 @@ export default function HeightRankPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />키 백분위 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -90,8 +90,8 @@ export default function HeightRankPage() {
         <section>
           <h2 style={sectionTitle}>백분위 계산 방식</h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>z 점수</span> = (내 키 − 연령대 평균) ÷ 표준편차</div>
@@ -129,9 +129,9 @@ export default function HeightRankPage() {
                 ].map(([label, m, f], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{label}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{(m as number).toFixed(1)}cm</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{(f as number).toFixed(1)}cm</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'Inter, sans-serif' }}>{((m as number) - (f as number)).toFixed(1)}cm</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{(m as number).toFixed(1)}cm</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{(f as number).toFixed(1)}cm</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{((m as number) - (f as number)).toFixed(1)}cm</td>
                   </tr>
                 ))}
               </tbody>
@@ -167,9 +167,9 @@ export default function HeightRankPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{row[2]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'Inter, sans-serif' }}>{row[3]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -197,7 +197,7 @@ export default function HeightRankPage() {
             어떤 지표를 어떤 기간으로 보느냐에 따라 답이 갈리기 때문입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--warning)', marginBottom: 8 }}>더 이상 안 큰다는 근거</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <li>Moon 2011(Korean J Pediatr): 20세 최종 신장이 1965년 남 168.9cm → 1997년 173.4cm → 2005년 174.3cm로 커졌지만, 2005년과 2010년 사이에는 차이가 없었다고 보고.</li>
@@ -205,7 +205,7 @@ export default function HeightRankPage() {
                 <li>병무청 병역판정검사 평균 신장은 2023년 174.4cm·2024년 174.5cm·2025년 174.4cm로 최근 3년 평탄. 수검자의 약 95%가 19세(2025년 211,476/222,425명)라 19세 남성 전수급 지표입니다.</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--success)', marginBottom: 8 }}>아직 큰다는 근거</p>
               <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, paddingLeft: 18, display: 'flex', flexDirection: 'column', gap: 6 }}>
                 <li>국가기술표준원 8차 조사 보도자료(2022. 3.)는 &lsquo;2000년대 이후로도 평균 키가 지속적으로 증가&rsquo;라고 공식 서술(1차 대비 남 +6.4cm·여 +5.3cm).</li>
@@ -234,8 +234,8 @@ export default function HeightRankPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -250,7 +250,7 @@ export default function HeightRankPage() {
             청년의 최종 신장으로 좁히면 최근 구간은 평탄에 가깝습니다. 두 서술은 모순이 아니라 서로 다른 것을 재고 있는 셈이에요.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 14 }}>
             <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>20대 174.99cm vs 전체 172.5cm — 왜 다를까</p>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
               같은 8차 조사인데 숫자가 다른 건 모집단이 다르기 때문입니다. 남성 172.5cm(여성 159.6cm)는 20~69세를 모두 담은 값이라
@@ -269,7 +269,7 @@ export default function HeightRankPage() {
               { t: '📊 1cm의 무게', d: '중앙값 근처에서는 1cm가 백분위 약 7~9%p를 좌우해요. 아침(이완)과 저녁(압축)의 1~2cm 차이만으로도 순위가 꽤 달라집니다.' },
               { t: '🔭 극단은 조심', d: '정규 모델은 상·하위 0.1% 밖 극단 구간에서 오차가 커져요. 그래서 이 계산기는 극단값을 "0.1% 이내"로만 표시합니다.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
@@ -287,7 +287,7 @@ export default function HeightRankPage() {
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>

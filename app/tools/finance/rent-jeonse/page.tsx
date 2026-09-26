@@ -29,7 +29,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -84,7 +84,7 @@ export default function RentJeonsePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />월세·전세 비교 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -157,8 +157,8 @@ export default function RentJeonsePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{prod}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{target}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{limit}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{rate}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{limit}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{rate}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{feat}</td>
                   </tr>
                 ))}
@@ -181,7 +181,7 @@ export default function RentJeonsePage() {
               { title: '④ 임차권등기명령', desc: '계약 만료 후 보증금을 돌려받지 못하고 이사해야 할 때 임차권을 등기로 등록 → 우선변제권 유지.' },
             ].map((law, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 700, color: 'var(--accent)', margin: '0 0 6px', fontSize: '14px' }}>{law.title}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--accent)', margin: '0 0 6px', fontSize: '14px' }}>{law.title}</p>
                 <p style={faqAnswer}>{law.desc}</p>
               </div>
             ))}
@@ -215,10 +215,10 @@ export default function RentJeonsePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '단기 거주 (1~2년)', d: '월세 유리 가능', desc: '전세대출 수수료·이사비 회수 어려움 + 보증금 운용 기회 ↑', c: '#DC2626' },
-              { t: '중기 거주 (3~5년)', d: '손익분기점 ≈ 24~36개월', desc: '대출금리·전환율·세액공제 자격에 따라 결정', c: '#D97706' },
-              { t: '장기 거주 (5년+)', d: '전세 유리 경향', desc: '월세 누적이 보증금 이자 + 기회비용을 초과', c: '#0891B2' },
-              { t: '반전세 우위 구간', d: '전세 한도 부족 또는 보증금 분산', desc: '전환율 &lt; 대출금리일 때 월세 분할이 합리적', c: '#0EA5E9' },
+              { t: '단기 거주 (1~2년)', d: '월세 유리 가능', desc: '전세대출 수수료·이사비 회수 어려움 + 보증금 운용 기회 ↑', c: 'var(--red-600)' },
+              { t: '중기 거주 (3~5년)', d: '손익분기점 ≈ 24~36개월', desc: '대출금리·전환율·세액공제 자격에 따라 결정', c: 'var(--amber-600)' },
+              { t: '장기 거주 (5년+)', d: '전세 유리 경향', desc: '월세 누적이 보증금 이자 + 기회비용을 초과', c: 'var(--cyan-600)' },
+              { t: '반전세 우위 구간', d: '전세 한도 부족 또는 보증금 분산', desc: '전환율 &lt; 대출금리일 때 월세 분할이 합리적', c: 'var(--sky-500)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -235,7 +235,7 @@ export default function RentJeonsePage() {
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -272,7 +272,7 @@ export default function RentJeonsePage() {
               { href: '/tools/finance/freelance-tax', icon: '🧾', name: '프리랜서 종합소득세',     desc: '사업소득자 월세 세액공제' },
               { href: '/tools/finance/salary',        icon: '💰', name: '연봉 실수령액 계산기',    desc: '월급·세후로 임대료 부담 판단' },
             ].map((tool, i) => (
-              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
+              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
                   <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>

@@ -60,7 +60,7 @@ export default function ZodiacPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />띠·별자리 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -74,7 +74,7 @@ export default function ZodiacPage() {
 
         {/* ── 12간지 순서 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>12간지 순서와 해당 연도</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>12간지 순서와 해당 연도</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -113,7 +113,7 @@ export default function ZodiacPage() {
 
         {/* ── 별자리 날짜표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>별자리 날짜표</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>별자리 날짜표</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
@@ -154,7 +154,7 @@ export default function ZodiacPage() {
 
         {/* ── 섹션 A: 60갑자 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
             60갑자 (干支) 표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
@@ -175,12 +175,12 @@ export default function ZodiacPage() {
               <div key={g.year} style={{
                 background: 'var(--bg2)',
                 border: '1px solid var(--border)',
-                borderRadius: '8px',
+                borderRadius: 'var(--radius-s)',
                 padding: '8px 10px',
                 fontSize: '12px',
                 lineHeight: 1.5,
               }}>
-                <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)', fontWeight: 700, fontSize: '15px' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', color: 'var(--accent)', fontWeight: 700, fontSize: '15px' }}>
                   {g.hanja}
                 </div>
                 <div style={{ color: 'var(--muted)', fontSize: '11px' }}>
@@ -196,12 +196,12 @@ export default function ZodiacPage() {
               <div key={g.year} style={{
                 background: 'var(--bg2)',
                 border: '1px solid var(--border)',
-                borderRadius: '8px',
+                borderRadius: 'var(--radius-s)',
                 padding: '8px 10px',
                 fontSize: '12px',
                 lineHeight: 1.5,
               }}>
-                <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)', fontWeight: 700, fontSize: '15px' }}>
+                <div style={{ fontFamily: 'var(--font-sans)', color: 'var(--accent)', fontWeight: 700, fontSize: '15px' }}>
                   {g.hanja}
                 </div>
                 <div style={{ color: 'var(--muted)', fontSize: '11px' }}>
@@ -216,7 +216,7 @@ export default function ZodiacPage() {
 
         {/* ── 섹션 B: 띠별 성격·궁합 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             띠별 성격 및 궁합 요약표
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -257,7 +257,7 @@ export default function ZodiacPage() {
 
         {/* ── 섹션 C: 별자리 원소별 특징 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             별자리 원소별 특징
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -271,7 +271,7 @@ export default function ZodiacPage() {
                 background: 'var(--bg2)',
                 border: `1px solid ${e.c}44`,
                 borderLeft: `3px solid ${e.c}`,
-                borderRadius: '12px',
+                borderRadius: 'var(--radius-m)',
                 padding: '14px 16px',
               }}>
                 <p style={{ fontSize: '14px', color: e.c, fontWeight: 700, marginBottom: '6px' }}>{e.el}</p>
@@ -284,7 +284,7 @@ export default function ZodiacPage() {
 
         {/* ── 두 사람 궁합 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             💕 두 사람 궁합 가이드 (재미용)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
@@ -292,7 +292,7 @@ export default function ZodiacPage() {
             본 도구의 「두 사람 궁합」 탭에서 자동 계산.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 8 }}>🟢 삼합 (5점) — 환상적 시너지</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>신자진: 원숭이·쥐·용</li>
@@ -301,7 +301,7 @@ export default function ZodiacPage() {
                 <li>해묘미: 돼지·토끼·양</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(14,165,233,0.04)', border: '1px solid rgba(14,165,233,0.30)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'rgba(14,165,233,0.04)', border: '1px solid rgba(14,165,233,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🟡 육합 (4점) — 안정적</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>자축: 쥐·소</li>
@@ -312,7 +312,7 @@ export default function ZodiacPage() {
                 <li>오미: 말·양</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>🔴 충 (1점) — 충돌·도전</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>자오: 쥐·말</li>
@@ -332,7 +332,7 @@ export default function ZodiacPage() {
 
         {/* ── 별자리 원소 시너지 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             🌬️ 별자리 4원소 궁합
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -354,7 +354,7 @@ export default function ZodiacPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: row[3] as string, fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: row[3] as string, fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -368,7 +368,7 @@ export default function ZodiacPage() {
 
         {/* ── 탄생석·탄생화·탄생색 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             ✨ 월별 탄생석·탄생화·탄생색
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -413,10 +413,10 @@ export default function ZodiacPage() {
 
         {/* ── 양력 vs 음력 띠 차이 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📅 양력 vs 음력 띠 차이
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '16px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
             <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
               <li>한국에서는 일반적으로 <strong>양력 1월 1일</strong>을 기준으로 띠를 사용</li>
               <li>전통 사주명리는 <strong>음력 설날 (양력 1월 21일~2월 20일 사이)</strong>을 기준</li>
@@ -434,11 +434,11 @@ export default function ZodiacPage() {
 
         {/* ── FAQ (accordion - salary style) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {faq.q}
                 </summary>
@@ -478,7 +478,7 @@ export default function ZodiacPage() {
 
         {/* ── 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/age',          icon: '🎂', name: '만 나이 계산기',            desc: '법 개정 기준 만 나이' },
@@ -489,7 +489,7 @@ export default function ZodiacPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '20px' }}>{t.icon}</span>
                 <div>

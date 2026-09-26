@@ -42,7 +42,7 @@ export default function BakerPercentPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         요리·식품
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />베이커 퍼센트 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -59,15 +59,15 @@ export default function BakerPercentPage() {
 
         {/* ── 1. 베이커 퍼센트란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             베이커 퍼센트(Baker&apos;s Percentage)란?
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -75,7 +75,7 @@ export default function BakerPercentPage() {
             <div><span style={{ color: 'var(--muted)' }}>베이커 %</span> = (재료 무게 ÷ 밀가루 무게) × 100</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 밀가루를 항상 100%로 두고 다른 재료의 비율을 표시</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>장점:</strong>
             <ul style={{ paddingLeft: 20, margin: '6px 0 0' }}>
               <li>레시피 스케일 변경이 쉬움 (반죽량 조절만으로 재료 자동 비례)</li>
@@ -87,7 +87,7 @@ export default function BakerPercentPage() {
 
         {/* ── 2. 빵 종류별 표준 배합 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             빵 종류별 표준 배합비 (참고용)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -112,9 +112,9 @@ export default function BakerPercentPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.y}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.y}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.f}</td>
                   </tr>
                 ))}
@@ -128,15 +128,15 @@ export default function BakerPercentPage() {
 
         {/* ── 3. 수분율 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             수분율(Hydration) 가이드
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
@@ -146,49 +146,49 @@ export default function BakerPercentPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { r: '50~60%', t: '저수분',     c: '#059669', d: '베이글·비스킷·페이스트리. 다루기 쉬움.' },
+              { r: '50~60%', t: '저수분',     c: 'var(--emerald-600)', d: '베이글·비스킷·페이스트리. 다루기 쉬움.' },
               { r: '60~70%', t: '표준',       c: 'var(--accent)', d: '식빵·단과자빵·일반 발효빵.' },
-              { r: '70~80%', t: '고수분',     c: '#EA580C', d: '치아바타·캄파뉴·일부 사워도우. 큰 기공.' },
-              { r: '80%+',   t: '매우 고수분', c: '#DC2626', d: '포카치아·하이드라 사워도우. 다루기 어려움.' },
+              { r: '70~80%', t: '고수분',     c: 'var(--orange-600)', d: '치아바타·캄파뉴·일부 사워도우. 큰 기공.' },
+              { r: '80%+',   t: '매우 고수분', c: 'var(--red-600)', d: '포카치아·하이드라 사워도우. 다루기 어려움.' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, color: g.c, fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: 4 }}>{g.r}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, color: g.c, fontWeight: 700, fontFamily: 'var(--font-sans)', marginBottom: 4 }}>{g.r}</p>
                 <p style={{ fontSize: 12, color: 'var(--text)', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
             ))}
           </div>
           <div style={{
-            background: 'rgba(8,145,178,0.05)',
-            border: '1px solid rgba(8,145,178,0.30)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--cyan-600) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            💡 고수분일수록 <strong style={{ color: '#0891B2' }}>큰 기공·촉촉한 식감</strong>이지만,
+            💡 고수분일수록 <strong style={{ color: 'var(--cyan-600)' }}>큰 기공·촉촉한 식감</strong>이지만,
             반죽이 끈적해 다루기 어려워지고 발효 시간이 길어질 수 있습니다.
           </div>
         </div>
 
         {/* ── 4. 소금·이스트 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             소금·이스트 비율 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FFD93E', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#D97706', fontWeight: 700, marginBottom: 8 }}>🧂 소금 (밀가루 대비)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #FFD93E', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--amber-600)', fontWeight: 700, marginBottom: 8 }}>🧂 소금 (밀가루 대비)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li><strong>1.8~2.2%</strong>: 일반적인 제빵 범위</li>
                 <li>1% 이하: 맛 밋밋, 발효 조절 어려움</li>
                 <li>3% 이상: 짠맛 강함, 이스트 활동 억제</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #9B59B6', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, marginBottom: 8 }}>🧫 이스트 (인스턴트 드라이 기준)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--amethyst)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--purple-600)', fontWeight: 700, marginBottom: 8 }}>🧫 이스트 (인스턴트 드라이 기준)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>0.3~0.5%: 장시간 저온발효 (12시간+)</li>
                 <li><strong>0.5~1%</strong>: 일반 표준</li>
@@ -201,7 +201,7 @@ export default function BakerPercentPage() {
 
         {/* ── 5. 이스트 변환표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             이스트 종류 변환표 (인스턴트 드라이 기준)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -221,9 +221,9 @@ export default function BakerPercentPage() {
                   { t: '천연발효종 (르방)', r: '별도 계산', v: '약 100~150g' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#9333EA', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.v}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--purple-600)', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.v}</td>
                   </tr>
                 ))}
               </tbody>
@@ -236,7 +236,7 @@ export default function BakerPercentPage() {
 
         {/* ── 6. 르방·프리퍼먼트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             르방·프리퍼먼트 활용
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -246,16 +246,16 @@ export default function BakerPercentPage() {
               { n: '비가 (Biga)',     d: '50~60% 수분율 · 단단한 형태' },
               { n: '스펀지 (Sponge·중종)', d: '50~60% 수분율 · 짧은 발효' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>{c.n}</p>
+              <div key={i} style={{ background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--purple-600)', fontWeight: 700, marginBottom: 6 }}>{c.n}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}
           </div>
           <div style={{
-            background: 'rgba(14,165,233,0.05)',
-            border: '1px solid rgba(14,165,233,0.30)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--accent) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
@@ -269,7 +269,7 @@ export default function BakerPercentPage() {
 
         {/* ── 7. 활용 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             베이커 퍼센트 활용 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -279,7 +279,7 @@ export default function BakerPercentPage() {
               { t: '🧪 배합 실험',          d: '수분율 5% 단위 조정, 소금·이스트 미세 조정으로 자신만의 레시피 찾기' },
               { t: '⭐ 즐겨찾기 저장',      d: '본 계산기에서 최대 20개 레시피 저장 가능 (브라우저 localStorage)' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
@@ -292,13 +292,13 @@ export default function BakerPercentPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -313,7 +313,7 @@ export default function BakerPercentPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -333,7 +333,7 @@ export default function BakerPercentPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

@@ -37,7 +37,7 @@ const BASE: Record<LiftKey, number[]> = {
 
 /* 레벨명 — index 0 = 초보 미만(입문) */
 const LEVELS = ['입문', '초보', '중급', '상급', '엘리트']
-const LEVEL_COLORS = ['var(--muted)', '#059669', '#0EA5E9', '#EA580C', '#DC2626']
+const LEVEL_COLORS = ['var(--muted)', 'var(--emerald-600)', 'var(--sky-500)', 'var(--orange-600)', 'var(--red-600)']
 
 /* ─────────────────────────────────────────────────────────
  * 헬퍼

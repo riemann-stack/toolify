@@ -337,7 +337,7 @@ export default function CardInstallmentClient() {
         {tableRows.map((r, i) => {
           const cx = padL + (innerW / tableRows.length) * (i + 0.5)
           return (
-            <text key={`l-${i}`} x={cx} y={H - 8} fontSize="9" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+            <text key={`l-${i}`} x={cx} y={H - 8} fontSize="9" fill="var(--muted)" textAnchor="middle" fontWeight={700}>
               {r.months}
             </text>
           )
@@ -767,7 +767,7 @@ export default function CardInstallmentClient() {
                 <div className={s.compareDetail}>
                   초기 부담: 0원<br />
                   월 부담: 1회차 <strong>{fmtKRW(cmpCalc.paid.monthlyPayment)}</strong> → 마지막 {fmtKRW(cmpCalc.paid.lastPayment)}<br />
-                  총 이자: <strong style={{ color: '#DC2626' }}>+{fmtKRW(cmpCalc.paid.totalInterest)}</strong>
+                  총 이자: <strong style={{ color: 'var(--red-600)' }}>+{fmtKRW(cmpCalc.paid.totalInterest)}</strong>
                 </div>
               </div>
             </div>
@@ -933,7 +933,7 @@ export default function CardInstallmentClient() {
               </div>
               <div className={s.graphWrap}>{graph}</div>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7, textAlign: 'center' }}>
-                개월이 길수록 <strong style={{ color: 'var(--text)' }}>월 부담은 줄지만</strong>, <strong style={{ color: '#DC2626' }}>총 이자는 급증</strong>합니다.
+                개월이 길수록 <strong style={{ color: 'var(--text)' }}>월 부담은 줄지만</strong>, <strong style={{ color: 'var(--red-600)' }}>총 이자는 급증</strong>합니다.
               </p>
             </div>
           )}

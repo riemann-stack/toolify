@@ -4,7 +4,7 @@
 /* ── 카테고리 탭 (2단 그리드) ── */
 .categoryGroup {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 8px;
+  border-radius: var(--radius-card); padding: 8px;
   display: flex; flex-direction: column; gap: 6px;
 }
 .categoryRow {
@@ -20,9 +20,9 @@
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
 }
 .tab {
-  padding: 10px 6px; border-radius: 8px; border: 1px solid var(--border);
+  padding: 10px 6px; border-radius: var(--radius-s); border: 1px solid var(--border);
   background: var(--bg3);
-  font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 12px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
   text-align: center;
 }@media (hover: hover) {
@@ -30,27 +30,27 @@
 }
 .tabActive {
   background: var(--accent-dim) !important;
-  border-color: rgba(14,165,233,0.4) !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important;
   color: var(--accent) !important;
   font-weight: 600 !important;
 }
 .tabActiveBlue {
-  background: rgba(8,145,178,0.1) !important;
-  border-color: rgba(8,145,178,0.4) !important;
-  color: #0891B2 !important;
+  background: color-mix(in srgb, var(--cyan-600) 10%, transparent) !important;
+  border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent) !important;
+  color: var(--cyan-600) !important;
   font-weight: 600 !important;
 }
 .tabActivePink {
   background: rgba(255,102,178,0.1) !important;
   border-color: rgba(255,102,178,0.4) !important;
-  color: #DB2777 !important;
+  color: var(--pink-600) !important;
   font-weight: 600 !important;
 }
 
 /* ── 카드 공통 ── */
 .card {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
 }
 .cardLabel {
   display: block; font-size: 11px; color: var(--muted);
@@ -67,7 +67,7 @@
   padding: 8px; border-radius: 7px; border: none;
   background: transparent; color: var(--muted);
   font-size: 12px; cursor: pointer; transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .genderBtn:hover { color: var(--text); }
 }
@@ -80,7 +80,7 @@
 /* ── 측정값 입력 ── */
 .measureCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
 }
 .measureRow {
   display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 10px;
@@ -100,7 +100,7 @@
   padding: 11px 50px 11px 14px;
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 16px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 16px; font-weight: 700;
   color: var(--text); outline: none;
   transition: border 0.15s;
 }
@@ -114,14 +114,14 @@
 /* 추천 결과 박스 */
 .recommend {
   margin-top: 12px;
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.25);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
   border-radius: 10px; padding: 12px 16px;
   display: flex; align-items: center; gap: 12px; flex-wrap: wrap;
 }
 .recommendLabel { font-size: 11px; color: var(--accent); font-weight: 700; }
 .recommendValue {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 18px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.5px;
 }
 .recommendMeta {
@@ -146,7 +146,7 @@
 /* ── 검색 (표 필터) ── */
 .searchBox {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 12px 14px;
+  border-radius: var(--radius-m); padding: 12px 14px;
 }
 .searchBoxLabel {
   display: block; font-size: 11px; color: var(--muted);
@@ -160,13 +160,13 @@
 .searchInput {
   width: 100%;
   background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 10px 36px 10px 36px;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-s); padding: 10px 36px 10px 36px;
+  font-size: 13px; font-family: var(--font-sans);
   color: var(--text); outline: none; box-sizing: border-box;
   transition: border 0.15s;
 }
 .searchInput::placeholder { color: var(--muted); }
-.searchInput:focus { border-color: rgba(14,165,233,0.5); }
+.searchInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .searchClear {
   position: absolute; right: 8px; top: 50%; transform: translateY(-50%);
   width: 22px; height: 22px; border: none; background: var(--border);
@@ -176,11 +176,11 @@
 @media (hover: hover) { .searchClear:hover { background: var(--border-hover); } }
 
 /* ── 테이블 ── */
-.tableWrap { overflow-x: auto; border-radius: 12px; }
+.tableWrap { overflow-x: auto; border-radius: var(--radius-m); }
 .table {
   width: 100%; border-collapse: collapse; font-size: 13px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 12px; overflow: hidden;
+  border-radius: var(--radius-m); overflow: hidden;
 }
 .th {
   padding: 10px 12px; text-align: center;
@@ -193,27 +193,27 @@
   .tr:hover { background: var(--bg3); }
 }
 .trHighlight {
-  background: rgba(14,165,233,0.1) !important;
-  outline: 1px solid rgba(14,165,233,0.3);
+  background: color-mix(in srgb, var(--accent) 10%, transparent) !important;
+  outline: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
 }
 .td {
   padding: 10px 12px; text-align: center;
   color: var(--text); border-bottom: 1px solid var(--border);
-  white-space: nowrap; font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
+  white-space: nowrap; font-family: var(--font-sans); font-weight: 600;
 }
-.tdLabel { font-family: 'Noto Sans KR', sans-serif; font-weight: 500; }
+.tdLabel { font-family: var(--font-sans); font-weight: 500; }
 .tr:last-child .td { border-bottom: none; }
 .tdAccent { color: var(--accent); font-weight: 800; }
 .tdMuted { color: var(--muted); font-size: 11px; }
 
 /* ── 안내 박스 ── */
 .infoBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.25);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
   border-radius: 10px; padding: 10px 14px;
   font-size: 12px; color: var(--muted); line-height: 1.7;
 }
-.infoBox strong { color: #0891B2; }
+.infoBox strong { color: var(--cyan-600); }
 
 /* ── 모바일 ── */
 @media (max-width: 600px) {

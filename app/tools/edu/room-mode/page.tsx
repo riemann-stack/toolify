@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,14 +23,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -70,7 +70,7 @@ export default function RoomModePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />룸 모드 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -110,7 +110,7 @@ export default function RoomModePage() {
           {[
             { t: '🔴 축방향 (Axial)', d: '한 축의 평행 벽 2개 사이. 가장 강한 모드. 분석 범위(최대 300Hz) 안의 차수를 모두 계산.', c: '#BE185D' },
             { t: '🟡 접선 (Tangential)', d: '4개 벽 사이. 중간 강도 — 진폭 기준 축방향의 약 70%(−3dB).', c: '#B45309' },
-            { t: '🟢 사선 (Oblique)', d: '6개 벽 모두 사이. 가장 약한 모드 — 진폭 기준 축방향의 약 50%(−6dB).', c: '#0F766E' },
+            { t: '🟢 사선 (Oblique)', d: '6개 벽 모두 사이. 가장 약한 모드 — 진폭 기준 축방향의 약 50%(−6dB).', c: 'var(--teal-700)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -119,10 +119,10 @@ export default function RoomModePage() {
           ))}
         </div>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', lineHeight: 1.9 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'var(--font-sans)', lineHeight: 1.9 }}>
             <strong style={{ color: 'var(--accent-ink)' }}>Rayleigh 공식</strong>:<br />
             f(p,q,r) = (c/2) × √[(p/L)² + (q/W)² + (r/H)²]<br />
-            <span style={{ fontFamily: 'Noto Sans KR, sans-serif', fontSize: 12, color: 'var(--muted)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--muted)' }}>
               c = 음속 (343 m/s @ 20°C), p·q·r = 0,1,2... (모드 차수)
             </span>
           </p>
@@ -137,9 +137,9 @@ export default function RoomModePage() {
           이 주파수 미만에서는 룸 모드가 음향을 좌우하므로 <strong>베이스 트랩이 가장 효과적</strong>이에요.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', lineHeight: 1.9 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'var(--font-sans)', lineHeight: 1.9 }}>
             fs = 2000 × √(RT60 / V)<br />
-            <span style={{ fontFamily: 'Noto Sans KR, sans-serif', fontSize: 12, color: 'var(--muted)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--muted)' }}>
               RT60 = 잔향시간 (일반 거실 0.4초), V = 방 체적 (m³)
             </span>
           </p>
@@ -187,7 +187,7 @@ export default function RoomModePage() {
             { t: '코너 트랩', d: '가장 강력. 모든 축 모드 압력 최대 지점이 코너. 80Hz~ 효과(깊을수록 더 낮게).', c: '#BE185D' },
             { t: '벽 트랩', d: '1차 반사 지점에 부착. 125Hz~ 중·고음 흡수(200mm급이면 ~100Hz).', c: '#B45309' },
             { t: '멤브레인 트랩', d: '저주파 전용. 40Hz~ 특정 대역 흡수(40Hz급은 250mm급 깊이).', c: '#0E7490' },
-            { t: '헬름홀츠', d: '특정 주파수 정확 흡수. 30Hz~ 튜닝 가능.', c: '#0F766E' },
+            { t: '헬름홀츠', d: '특정 주파수 정확 흡수. 30Hz~ 튜닝 가능.', c: 'var(--teal-700)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -316,21 +316,21 @@ export default function RoomModePage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/edu/sound-speed" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/edu/sound-speed" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔊</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>음속 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             천둥·번개 거리·반향·RT60
           </p>
         </Link>
-        <Link href="/tools/interior/lighting" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/interior/lighting" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💡</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>조명 밝기 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             공간별 권장 루멘
           </p>
         </Link>
-        <Link href="/tools/interior/wire" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/interior/wire" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>⚡</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>전선 굵기·허용전류</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

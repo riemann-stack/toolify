@@ -42,7 +42,7 @@ export default function AcCapacityPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />에어컨 평형 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -59,15 +59,15 @@ export default function AcCapacityPage() {
 
         {/* ── 1. 계산 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             에어컨 평형 계산 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -76,7 +76,7 @@ export default function AcCapacityPage() {
             <div><span style={{ color: 'var(--muted)' }}>추천 평형</span> = 냉방 부하 ÷ 407W (1평형 정격 냉방능력)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 한국 1평형(냉방면적) ≈ 407W ≈ 1,389 BTU/h ≈ 0.41 kW — KS C 9306 부속서 D(123 W/㎡)</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 거실 16.5㎡, 남향 8층, 일반 단열, 4명 + TV·PC<br />
             • 기본: 16.5 × 123 = <strong>2,030W</strong><br />
             • 보정: 거실(1.05) × 남향(1.15) × 중층(1.05) = <strong>1.27배</strong><br />
@@ -87,7 +87,7 @@ export default function AcCapacityPage() {
 
         {/* ── 2. 한국 평형 표준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 에어컨 평형 표준 (시판 모델)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -110,8 +110,8 @@ export default function AcCapacityPage() {
                   { p: '22~36평형', k: '9.0~14.7 kW', u: '매장·상가·사무실' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.k}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
                 ))}
@@ -122,7 +122,7 @@ export default function AcCapacityPage() {
 
         {/* ── 3. 평형 보정 계수 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎯 평형 보정 계수 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -132,33 +132,33 @@ export default function AcCapacityPage() {
                 ['동·서향', '+10%'],
                 ['북향 (햇빛 약함)', '-5%'],
               ]},
-              { t: '🏢 층수', c: '#0891B2', items: [
+              { t: '🏢 층수', c: 'var(--cyan-600)', items: [
                 ['저층 (1~3층)', '표준'],
                 ['중층 (4~10층)', '+5%'],
                 ['고층 (11층+)', '+10%'],
                 ['최상층 (옥상 직접)', '+20%'],
                 ['반지하', '-10%'],
               ]},
-              { t: '🧱 단열', c: '#9B59B6', items: [
+              { t: '🧱 단열', c: 'var(--amethyst)', items: [
                 ['신축 (5년 이내)', '-5%'],
                 ['일반 (10년+)', '표준'],
                 ['노후 (20년+)', '+15%'],
                 ['베란다 확장', '+10%'],
                 ['통유리', '+20%'],
               ]},
-              { t: '📏 천장 높이', c: '#EA580C', items: [
+              { t: '📏 천장 높이', c: 'var(--orange-600)', items: [
                 ['2.4m 표준', '×1.0'],
                 ['2.9m (+0.5m)', '+12.5%'],
                 ['3.4m (+1m)', '+25%'],
               ]},
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   {g.items.map(([k, v], j) => (
                     <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)' }}>
                       <span>{k}</span>
-                      <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{v}</span>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{v}</span>
                     </div>
                   ))}
                 </div>
@@ -169,13 +169,13 @@ export default function AcCapacityPage() {
 
         {/* ── 4. BTU·W·평형 환산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🌐 BTU·W·평형 환산 가이드
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
             fontSize: '14px',
             color: 'var(--text)',
@@ -197,20 +197,20 @@ export default function AcCapacityPage() {
 
         {/* ── 5. 평형이 너무 크거나 작으면 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚖️ 평형이 너무 크거나 작으면 안 좋은 이유
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔻 너무 작은 평형</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--orange-600)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 8 }}>🔻 너무 작은 평형</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>충분히 시원해지지 않음</li>
                 <li>풀가동으로 전기료 ↑</li>
                 <li>압축기 과부하로 수명 ↓</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #DC2626', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>🔺 너무 큰 평형</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--red-600)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: 'var(--red-600)', fontWeight: 700, marginBottom: 8 }}>🔺 너무 큰 평형</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>단가 비쌈</li>
                 <li>빠르게 시원해지지만 자주 꺼짐</li>
@@ -220,9 +220,9 @@ export default function AcCapacityPage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(14,165,233,0.05)',
-            border: '1px solid rgba(14,165,233,0.3)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--accent) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
@@ -235,11 +235,11 @@ export default function AcCapacityPage() {
 
         {/* ── 6. 인버터 vs 정속형 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚡ 인버터 vs 정속형 — 어떤 걸 골라야 할까?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>✅ 인버터 에어컨</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>압축기 회전수 조절 → 부드러운 운전</li>
@@ -249,8 +249,8 @@ export default function AcCapacityPage() {
                 <li><strong>거실·장시간 사용·여름 내내 가동</strong> 추천</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #DC2626', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>정속형 에어컨</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--red-600)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: 'var(--red-600)', fontWeight: 700, marginBottom: 8 }}>정속형 에어컨</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>압축기 ON/OFF만 가능</li>
                 <li>설정 온도 도달 시 꺼졌다 켜졌다</li>
@@ -264,17 +264,17 @@ export default function AcCapacityPage() {
 
         {/* ── 7. 언제, 몇 도로 틀까 (사용 가이드) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🌡️ 에어컨 언제, 몇 도로 틀까? — 사용 가이드
           </h2>
 
           {/* 권장 설정 온도 — 강조 */}
           <div style={{
-            background: 'rgba(14,165,233,0.07)', border: '1px solid rgba(14,165,233,0.3)',
-            borderRadius: 14, padding: '18px 20px', marginBottom: 12, textAlign: 'center',
+            background: 'color-mix(in srgb, var(--accent) 7%, transparent)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+            borderRadius: 'var(--radius-card)', padding: '18px 20px', marginBottom: 12, textAlign: 'center',
           }}>
             <p style={{ fontSize: 13, color: 'var(--muted)', margin: '0 0 4px' }}>권장 실내 설정 온도</p>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px,7vw,40px)', fontWeight: 800, color: 'var(--accent)', margin: 0, letterSpacing: '-0.02em' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px,7vw,40px)', fontWeight: 800, color: 'var(--accent)', margin: 0, letterSpacing: '-0.02em' }}>
               26 ~ 28°C
             </p>
             <p style={{ fontSize: 13, color: 'var(--text)', margin: '6px 0 0', lineHeight: 1.6 }}>
@@ -322,7 +322,7 @@ export default function AcCapacityPage() {
                 ],
               },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>{b.t}</p>
                 <ul style={{ margin: 0, paddingLeft: 16, fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
                   {b.items.map((it, j) => <li key={j}>{it}</li>)}
@@ -333,10 +333,10 @@ export default function AcCapacityPage() {
 
           <div style={{
             background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)',
+            borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)',
             marginTop: 12, lineHeight: 1.75,
           }}>
-            ⚠️ <strong style={{ color: '#EA580C' }}>냉방병 주의</strong> — 실내외 온도차가 8°C 넘게 큰 곳을 자주 드나들면 자율신경이 피로해져 두통·피로·소화불량이 생깁니다. 온도차를 5~8°C로 유지하고 2시간마다 환기하세요. 폭염(외기 35°C↑)에는 평형도 한 단계 크게 잡는 것이 좋습니다.
+            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>냉방병 주의</strong> — 실내외 온도차가 8°C 넘게 큰 곳을 자주 드나들면 자율신경이 피로해져 두통·피로·소화불량이 생깁니다. 온도차를 5~8°C로 유지하고 2시간마다 환기하세요. 폭염(외기 35°C↑)에는 평형도 한 단계 크게 잡는 것이 좋습니다.
           </div>
         </div>
 
@@ -350,7 +350,7 @@ export default function AcCapacityPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -370,7 +370,7 @@ export default function AcCapacityPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

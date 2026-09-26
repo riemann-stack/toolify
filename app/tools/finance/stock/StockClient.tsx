@@ -259,17 +259,17 @@ export default function StockClient() {
           <>
             <circle cx={xs(curIdx)} cy={ys(curPoint.newAvg)} r="6" fill="var(--accent)" stroke="var(--bg)" strokeWidth="2" />
             <text x={xs(curIdx)} y={ys(curPoint.newAvg) - 12} textAnchor="middle" fill="var(--accent)"
-              fontSize="11" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
+              fontSize="11" fontWeight="800">
               {fmtPrice(curPoint.newAvg)}
             </text>
           </>
         )}
         {/* x축 레이블 */}
-        <text x={P} y={H - 8} fill="var(--muted)" fontSize="10" fontFamily="Noto Sans KR, sans-serif">0</text>
-        <text x={W / 2} y={H - 8} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="Noto Sans KR, sans-serif">
+        <text x={P} y={H - 8} fill="var(--muted)" fontSize="10">0</text>
+        <text x={W / 2} y={H - 8} textAnchor="middle" fill="var(--muted)" fontSize="10">
           {formatEok(slidMaxWon / 2)}
         </text>
-        <text x={W - P} y={H - 8} textAnchor="end" fill="var(--muted)" fontSize="10" fontFamily="Noto Sans KR, sans-serif">
+        <text x={W - P} y={H - 8} textAnchor="end" fill="var(--muted)" fontSize="10">
           {formatEok(slidMaxWon)}
         </text>
       </svg>
@@ -304,8 +304,7 @@ export default function StockClient() {
           <g key={i}>
             <circle cx={xs(i)} cy={ys(d.price)} r="4" fill="#0891B2" />
             <circle cx={xs(i)} cy={ys(d.cumulativeAvg)} r="5" fill="var(--accent)" stroke="var(--bg)" strokeWidth="1.5" />
-            <text x={xs(i)} y={H - 8} textAnchor="middle" fill="var(--muted)" fontSize="10"
-              fontFamily="Noto Sans KR, sans-serif">{i === 0 ? '초기' : `${i}차`}</text>
+            <text x={xs(i)} y={H - 8} textAnchor="middle" fill="var(--muted)" fontSize="10">{i === 0 ? '초기' : `${i}차`}</text>
           </g>
         ))}
       </svg>
@@ -341,7 +340,7 @@ export default function StockClient() {
               fill={r.roi >= 0 ? '#059669' : '#DC2626'} />
             {(r.delta === 0 || r.delta === RECOVERY_DELTAS[RECOVERY_DELTAS.length - 1]) && (
               <text x={xs(i)} y={H - 8} textAnchor="middle" fill="var(--muted)"
-                fontSize="10" fontFamily="Noto Sans KR, sans-serif">
+                fontSize="10">
                 {r.delta > 0 ? `+${r.delta}%` : `${r.delta}%`}
               </text>
             )}
@@ -1160,7 +1159,7 @@ export default function StockClient() {
           )}
 
           <div className={styles.decisionBox}>
-            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, fontFamily: 'Noto Sans KR, sans-serif' }}>손절 vs 물타기 결정 가이드</h3>
+            <h3 style={{ fontSize: 14, fontWeight: 700, marginBottom: 12, fontFamily: 'var(--font-sans)' }}>손절 vs 물타기 결정 가이드</h3>
             <div className={styles.decisionList}>
               <div>
                 <h4 style={{ color: '#DC2626' }}>❌ 손절 검토 신호</h4>

@@ -178,7 +178,7 @@ export default function HistoricalMoneyClient() {
               ))}
             </div>
             {(pastYear === 1953 || pastYear === 1962) && (
-              <p style={{ fontSize: 12, color: '#D97706', lineHeight: 1.55, margin: '8px 0 0' }}>
+              <p style={{ fontSize: 12, color: 'var(--amber-600)', lineHeight: 1.55, margin: '8px 0 0' }}>
                 {pastYear === 1953
                   ? '⚠️ 1953년은 2월 15일 화폐개혁(100圓=1환) 이후 「환」 기준으로 계산됩니다. 개혁 전(1~2월) 圓 금액이라면 1952년을 선택하세요.'
                   : '⚠️ 1962년은 6월 10일 화폐개혁(10환=1원) 이후 「원」 기준으로 계산됩니다. 개혁 전(1~6월) 환 금액이라면 1961년을 선택하세요.'}
@@ -312,7 +312,7 @@ export default function HistoricalMoneyClient() {
                   <div>
                     <div className={s.priceYear}>{lastYear}년</div>
                     <div className={s.priceVal}>{fmtRaw(lastPrice)}<small>원</small></div>
-                    <div className={s.priceConv} style={{ color: realChange > 1.5 ? '#DC2626' : realChange < 0.7 ? '#059669' : 'var(--muted)' }}>
+                    <div className={s.priceConv} style={{ color: realChange > 1.5 ? 'var(--red-600)' : realChange < 0.7 ? 'var(--emerald-600)' : 'var(--muted)' }}>
                       실질 {realChange > 1 ? '+' : ''}{((realChange - 1) * 100).toFixed(0)}%
                     </div>
                   </div>

@@ -59,7 +59,7 @@ export default function CardInstallmentPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />카드 할부 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -78,15 +78,15 @@ export default function CardInstallmentPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             카드 할부 계산 핵심 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -97,18 +97,18 @@ export default function CardInstallmentPage() {
             <div><span style={{ color: 'var(--muted)' }}>총 수수료</span> = 원금 × 월이자율 × (개월수 + 1) ÷ 2</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 원금균등 분할 + 잔액 기준 수수료 (국내 카드사 할부 수수료 산식)</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 100만원 / 12개월 / 연 19.9%<br />
             • 월 이자율 = 19.9 ÷ 12 ÷ 100 = <strong>1.658%</strong><br />
             • 1회차 납부액 ≈ <strong>99,917원</strong> (원금 83,333 + 수수료 16,583) → 마지막 회차 ≈ 84,715원<br />
             • 총 납부액 ≈ <strong>1,107,792원</strong><br />
-            • 총 수수료 ≈ <strong style={{ color: '#DC2626' }}>107,792원</strong> (원금의 10.8%)
+            • 총 수수료 ≈ <strong style={{ color: 'var(--red-600)' }}>107,792원</strong> (원금의 10.8%)
           </div>
         </div>
 
         {/* ── 2. 할부 수수료율 구조 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             할부 수수료율은 어떻게 정해지나
           </h2>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
@@ -134,8 +134,8 @@ export default function CardInstallmentPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 6px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.c}</td>
-                    <td style={{ padding: '9px 6px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.g}</td>
-                    <td style={{ padding: '9px 6px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.p}</td>
+                    <td style={{ padding: '9px 6px', textAlign: 'right', color: 'var(--red-600)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.g}</td>
+                    <td style={{ padding: '9px 6px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.p}</td>
                   </tr>
                 ))}
               </tbody>
@@ -149,16 +149,16 @@ export default function CardInstallmentPage() {
 
         {/* ── 3. 무이자 vs 유이자 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             무이자 할부 vs 유이자 할부
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '🟢 무이자 할부', c: '#059669', items: ['이자 0원', '카드사·가맹점이 부담', '가전·가구·여행 시즌 자주 제공', '보통 2~12개월 (24개월까지)', '사용자에게 가장 유리'] },
-              { t: '🟡 부분 무이자', c: '#A16207', items: ['일부 회차만 무이자', '예: 10개월 중 1~3회차 고객부담', '앞 회차 수수료만 내고 뒤 회차는 면제', '긴 무이자 광고 상당수가 부분 무이자'] },
-              { t: '🔴 유이자 할부', c: '#DC2626', items: ['연 14~20% 수수료', '시중 대출 금리보다 높음', '24개월+ 시 원금의 20% 이자', '가능하면 피하기'] },
+              { t: '🟢 무이자 할부', c: 'var(--emerald-600)', items: ['이자 0원', '카드사·가맹점이 부담', '가전·가구·여행 시즌 자주 제공', '보통 2~12개월 (24개월까지)', '사용자에게 가장 유리'] },
+              { t: '🟡 부분 무이자', c: 'var(--yellow-700)', items: ['일부 회차만 무이자', '예: 10개월 중 1~3회차 고객부담', '앞 회차 수수료만 내고 뒤 회차는 면제', '긴 무이자 광고 상당수가 부분 무이자'] },
+              { t: '🔴 유이자 할부', c: 'var(--red-600)', items: ['연 14~20% 수수료', '시중 대출 금리보다 높음', '24개월+ 시 원금의 20% 이자', '가능하면 피하기'] },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => (<li key={j}>{it}</li>))}
@@ -170,11 +170,11 @@ export default function CardInstallmentPage() {
 
         {/* ── 4. 일시불 vs 무이자 결정 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             일시불 할인 vs 무이자 할부
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>✅ 일시불 할인 우세</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>할인율 <strong>5% 이상</strong></li>
@@ -183,8 +183,8 @@ export default function CardInstallmentPage() {
                 <li>캐시백 카드 추가 활용 시</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 무이자 할부 우세</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--emerald-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--emerald-600)', fontWeight: 700, marginBottom: 8 }}>✅ 무이자 할부 우세</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>일시불 할인 없음 또는 1~3% 미만</li>
                 <li>무이자 <strong>12개월 이상</strong> 가능</li>
@@ -194,23 +194,23 @@ export default function CardInstallmentPage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(8,145,178,0.05)',
-            border: '1px solid rgba(8,145,178,0.3)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--cyan-600) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            💡 <strong style={{ color: '#0891B2' }}>계산 팁:</strong> 일시불 할인 5% &gt; 무이자 12개월 + 파킹통장 운용 (대부분 경우).
+            💡 <strong style={{ color: 'var(--cyan-600)' }}>계산 팁:</strong> 일시불 할인 5% &gt; 무이자 12개월 + 파킹통장 운용 (대부분 경우).
             일시불 할인 3% 이하 &lt; 무이자 12개월 + 파킹통장 운용.
           </div>
         </div>
 
         {/* ── 5. 무이자 함정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚠️ 무이자 할부의 숨은 함정
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -220,8 +220,8 @@ export default function CardInstallmentPage() {
               { t: '가맹점 부담 무이자', d: '일시불보다 가격이 더 높게 책정된 경우 있음. 일시불 할인 가능 여부 먼저 문의' },
               { t: '카드 등급별 차이', d: 'VIP·우수 회원은 더 긴 무이자 가능. 일반 회원은 6개월 한정인 경우 다수' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
+              <div key={i} style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--red-600)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}
@@ -230,16 +230,16 @@ export default function CardInstallmentPage() {
 
         {/* ── 6. 권장 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             할부 개월수 권장 가이드 (구매금액별)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '100만원 이하', c: '#059669', d: '일시불 권장 (현금 여유 시) · 무이자 6개월 권장 (현금 분산 시)' },
+              { t: '100만원 이하', c: 'var(--emerald-600)', d: '일시불 권장 (현금 여유 시) · 무이자 6개월 권장 (현금 분산 시)' },
               { t: '100~300만원',  c: 'var(--accent)', d: '무이자 12개월 권장 · 유이자 시 6개월 이내' },
-              { t: '300만원 초과', c: '#EA580C', d: '무이자 12~24개월 우선 · 유이자 회피 · 일시불 + 캐시백 병행' },
+              { t: '300만원 초과', c: 'var(--orange-600)', d: '무이자 12~24개월 우선 · 유이자 회피 · 일시불 + 캐시백 병행' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: c.c, fontWeight: 700, marginBottom: 8 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>{c.d}</p>
               </div>
@@ -248,21 +248,21 @@ export default function CardInstallmentPage() {
           <div style={{
             background: 'rgba(220,38,38,0.05)',
             border: '1px solid rgba(220,38,38,0.25)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#DC2626' }}>위험 신호:</strong> 24개월 이상 유이자 할부는 총 이자가 원금의 <strong>20%+</strong>,
+            ⚠️ <strong style={{ color: 'var(--red-600)' }}>위험 신호:</strong> 24개월 이상 유이자 할부는 총 이자가 원금의 <strong>20%+</strong>,
             36개월은 <strong>30%+</strong>. 가급적 단축하거나 일시불을 고려하세요.
           </div>
         </div>
 
         {/* ── 7. 카드 포인트·캐시백 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             카드 포인트·캐시백 활용 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -272,16 +272,16 @@ export default function CardInstallmentPage() {
               { t: '🍽️ 외식·쇼핑',   d: '시즌별 무이자 + 포인트 적립 동시 활용. 백화점 카드 5% 적립 + 포인트로 결제.' },
               { t: '✈️ 해외 직구',   d: '해외 결제 캐시백 카드 (수수료 면제). 카드사별 1~3% 수수료 차이.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}
           </div>
           <div style={{
-            background: 'rgba(14,165,233,0.05)',
-            border: '1px solid rgba(14,165,233,0.3)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--accent) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
@@ -298,13 +298,13 @@ export default function CardInstallmentPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -319,7 +319,7 @@ export default function CardInstallmentPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -339,7 +339,7 @@ export default function CardInstallmentPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

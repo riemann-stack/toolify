@@ -36,7 +36,7 @@ const headCell: React.CSSProperties = {
   background: 'var(--bg3)',
 }
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -46,7 +46,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
@@ -106,7 +106,7 @@ export default function InheritancePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />상속·증여세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -170,11 +170,11 @@ export default function InheritancePage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>1억원 이하</td><td style={cell}><strong style={{ color: '#059669' }}>10%</strong></td><td style={cell}>-</td></tr>
-            <tr><td style={cell}>1억 초과 ~ 5억 이하</td><td style={cell}><strong style={{ color: '#0EA5E9' }}>20%</strong></td><td style={cell}>1천만원</td></tr>
-            <tr><td style={cell}>5억 초과 ~ 10억 이하</td><td style={cell}><strong style={{ color: '#D97706' }}>30%</strong></td><td style={cell}>6천만원</td></tr>
-            <tr><td style={cell}>10억 초과 ~ 30억 이하</td><td style={cell}><strong style={{ color: '#EA580C' }}>40%</strong></td><td style={cell}>1억 6천만원</td></tr>
-            <tr><td style={cell}>30억 초과</td><td style={cell}><strong style={{ color: '#DC2626' }}>50%</strong></td><td style={cell}>4억 6천만원</td></tr>
+            <tr><td style={cell}>1억원 이하</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>10%</strong></td><td style={cell}>-</td></tr>
+            <tr><td style={cell}>1억 초과 ~ 5억 이하</td><td style={cell}><strong style={{ color: 'var(--sky-500)' }}>20%</strong></td><td style={cell}>1천만원</td></tr>
+            <tr><td style={cell}>5억 초과 ~ 10억 이하</td><td style={cell}><strong style={{ color: 'var(--amber-600)' }}>30%</strong></td><td style={cell}>6천만원</td></tr>
+            <tr><td style={cell}>10억 초과 ~ 30억 이하</td><td style={cell}><strong style={{ color: 'var(--orange-600)' }}>40%</strong></td><td style={cell}>1억 6천만원</td></tr>
+            <tr><td style={cell}>30억 초과</td><td style={cell}><strong style={{ color: 'var(--red-600)' }}>50%</strong></td><td style={cell}>4억 6천만원</td></tr>
           </tbody>
         </table>
       </div>
@@ -220,7 +220,7 @@ export default function InheritancePage() {
         </table>
       </div>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
-        ※ 협의 분할 시 법정 비율과 다르게 나눌 수 있습니다. 다만 <strong style={{ color: '#EA580C' }}>유류분 (법정상속분 × 1/2)</strong> 침해 시 분쟁 가능.
+        ※ 협의 분할 시 법정 비율과 다르게 나눌 수 있습니다. 다만 <strong style={{ color: 'var(--orange-600)' }}>유류분 (법정상속분 × 1/2)</strong> 침해 시 분쟁 가능.
       </p>
 
       {/* 5. 배우자 상속공제 정량 가이드 (NEW) */}
@@ -281,20 +281,20 @@ export default function InheritancePage() {
 
       {/* 7. 사전증여 합산 주의 (NEW) */}
       <h2 style={sectionTitle}>⚠️ 사전증여 합산 — 사망 직전 증여는 효과 X</h2>
-      <div style={{ ...card, borderTop: '3px solid #DC2626' }}>
+      <div style={{ ...card, borderTop: '3px solid var(--red-600)' }}>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
           <li><strong>사망 10년 이내 상속인 증여</strong>는 상속세에 자동 합산</li>
           <li><strong>사망 5년 이내 비상속인 증여</strong>도 합산 (예: 손자녀, 며느리)</li>
           <li>사망 11년 전 증여는 상속세 미합산 → 절세 효과</li>
-          <li>증여세 절세는 <strong style={{ color: '#DC2626' }}>건강한 시기에 미리 시작</strong>해야 효과</li>
+          <li>증여세 절세는 <strong style={{ color: 'var(--red-600)' }}>건강한 시기에 미리 시작</strong>해야 효과</li>
         </ul>
       </div>
 
       {/* 8. 신고 기한 (NEW) */}
       <h2 style={sectionTitle}>📆 상속·증여세 신고 기한</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
-        <div style={{ ...card, borderTop: '3px solid #EA580C', marginBottom: 0 }}>
-          <p style={{ fontSize: 14, fontWeight: 700, color: '#EA580C', marginBottom: 8 }}>🏛️ 상속세</p>
+        <div style={{ ...card, borderTop: '3px solid var(--orange-600)', marginBottom: 0 }}>
+          <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--orange-600)', marginBottom: 8 }}>🏛️ 상속세</p>
           <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, lineHeight: 1.85, color: 'var(--text)' }}>
             <li>사망일 후 <strong>6개월 이내</strong> 신고·납부</li>
             <li>재외동포는 9개월</li>
@@ -313,7 +313,7 @@ export default function InheritancePage() {
 
       {/* 9. 부동산 증여 시 주의사항 */}
       <h2 style={sectionTitle}>🏠 부동산 증여 시 주의사항</h2>
-      <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
+      <div style={{ ...card, borderTop: '3px solid var(--orange-600)' }}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginBottom: 10 }}>
           부동산 증여는 <strong>증여세 외에 다음이 모두 별도 발생</strong>합니다:
         </p>
@@ -325,7 +325,7 @@ export default function InheritancePage() {
           <li><strong>시가 vs 공시가격</strong> — 원칙은 시가, 시가 산정 어려우면 공시가</li>
         </ul>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
-          본 도구는 <strong style={{ color: '#EA580C' }}>증여세·취득세만 단순 추정</strong>합니다.
+          본 도구는 <strong style={{ color: 'var(--orange-600)' }}>증여세·취득세만 단순 추정</strong>합니다.
           부동산 증여 1건 자문료 50~100만원이지만, 잘못된 신고 시 가산세·과태료가 훨씬 큽니다.
           부담부증여는 양도세까지 얽혀 가장 복잡한 세무 영역 — 반드시 세무사·변호사 상담 후 진행 권장.
         </p>
@@ -333,16 +333,16 @@ export default function InheritancePage() {
 
       {/* 10. 상속 vs 증여 선택 기준 (기존 SEO 보존) */}
       <h2 style={sectionTitle}>⚖️ 상속세 vs 증여세 선택 기준 (참고용)</h2>
-      <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: '#EA580C' }}>📌 상속이 유리할 수 있는 경우</h3>
+      <div style={{ ...card, borderTop: '3px solid var(--orange-600)' }}>
+        <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: 'var(--orange-600)' }}>📌 상속이 유리할 수 있는 경우</h3>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
           <li>배우자가 있어 대규모 배우자 공제(최대 30억) 적용이 가능한 경우</li>
           <li>총 재산이 5억 이하 (일괄공제 범위 내)인 경우</li>
           <li>사전 증여 없이 상속인이 많아 인적공제·일괄공제 효과가 큰 경우</li>
         </ul>
       </div>
-      <div style={{ ...card, borderTop: '3px solid #0891B2' }}>
-        <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: '#0891B2' }}>📌 증여가 유리할 수 있는 경우</h3>
+      <div style={{ ...card, borderTop: '3px solid var(--cyan-600)' }}>
+        <h3 style={{ fontSize: '15px', fontWeight: 700, marginBottom: '10px', color: 'var(--cyan-600)' }}>📌 증여가 유리할 수 있는 경우</h3>
         <ul style={{ paddingLeft: '20px', margin: 0, fontSize: '14px', lineHeight: 1.9, color: 'var(--text)' }}>
           <li>재산이 향후 크게 증가할 것으로 예상될 때 미리 이전</li>
           <li>자녀가 여럿이어서 분산 효과가 큰 경우</li>
@@ -358,7 +358,7 @@ export default function InheritancePage() {
       <FaqJsonLd items={FAQ_LD} />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
         {FAQ_LD.map((faq, i) => (
-          <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+          <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
             <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
               Q{i + 1}. {faq.q}
             </summary>

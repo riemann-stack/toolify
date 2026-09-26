@@ -55,7 +55,7 @@ export default function TimezonePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />시간대(타임존) 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -70,7 +70,7 @@ export default function TimezonePage() {
 
         {/* 1. 사용법 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이렇게 쓰세요</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>이렇게 쓰세요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { n: '1', t: '기준 도시 선택', d: '회의를 잡고 싶은 본인 위치 (보통 🇰🇷 서울)' },
@@ -78,9 +78,9 @@ export default function TimezonePage() {
               { n: '3', t: '도시 추가', d: '뉴욕·런던·LA·시드니 등 ＋ 버튼으로 추가' },
               { n: '4', t: '회의 슬롯 확인', d: '24시간 막대그래프와 베스트 슬롯 3개 자동' },
             ].map((s) => (
-              <div key={s.n} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={s.n} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                  <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent-strong)', color: '#fff', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{s.n}</span>
+                  <span style={{ width: '24px', height: '24px', borderRadius: '50%', background: 'var(--accent-strong)', color: '#fff', fontFamily: 'var(--font-sans)', fontSize: '12px', fontWeight: 800, display: 'inline-flex', alignItems: 'center', justifyContent: 'center' }}>{s.n}</span>
                   <strong style={{ fontSize: '14px', color: 'var(--text)' }}>{s.t}</strong>
                 </div>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{s.d}</p>
@@ -91,7 +91,7 @@ export default function TimezonePage() {
 
         {/* 2. DST 설명 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>DST(서머타임) — 시기에 따라 시차가 바뀌는 이유</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>DST(서머타임) — 시기에 따라 시차가 바뀌는 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             북미·유럽·호주 등 많은 국가는 <strong style={{ color: 'var(--text)' }}>여름철에 시계를 1시간 앞당기는 일광절약제(Daylight Saving Time)</strong>를 시행합니다.
             그래서 같은 서울→뉴욕이라도 <strong style={{ color: 'var(--accent)' }}>겨울엔 14시간 차이, 여름엔 13시간 차이</strong>가 납니다.
@@ -119,7 +119,7 @@ export default function TimezonePage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -129,7 +129,7 @@ export default function TimezonePage() {
 
         {/* 3. 특수 오프셋 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>30분·45분 단위 시간대 — 인도·이란·네팔</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>30분·45분 단위 시간대 — 인도·이란·네팔</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             대부분의 시간대는 UTC에서 1시간 단위로 차이가 나지만, 일부 국가는 <strong style={{ color: 'var(--text)' }}>30분·45분 단위</strong>의 독특한 오프셋을 사용합니다.
             본 도구는 이 비표준 오프셋도 정확히 처리하며, 아래 여섯 지역 모두 위 도시 목록(＋ 도시 추가)에서 직접 선택할 수 있습니다.
@@ -143,11 +143,11 @@ export default function TimezonePage() {
               { flag: '🇲🇲', name: '미얀마 (양곤)',       off: 'UTC+6:30', note: '인도(+5:30)와 태국(+7:00) 중간.' },
               { flag: '🇨🇦', name: '뉴펀들랜드 (캐나다)', off: 'UTC-3:30', note: '캐나다 동쪽 끝. 표준시 −3:30, 3~11월 서머타임(NDT)엔 −2:30.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: '8px', marginBottom: '4px' }}>
                   <span style={{ fontSize: '18px' }}>{c.flag}</span>
                   <strong style={{ fontSize: '14px', color: 'var(--text)' }}>{c.name}</strong>
-                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginLeft: 'auto' }}>{c.off}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginLeft: 'auto' }}>{c.off}</span>
                 </div>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.note}</p>
               </div>
@@ -157,7 +157,7 @@ export default function TimezonePage() {
 
         {/* 4. 시간대 vs 시간차 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>UTC·GMT·KST — 약어 정리</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>UTC·GMT·KST — 약어 정리</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { abbr: 'UTC', name: '협정 세계시', desc: '국제 표준시. 모든 시간대의 기준점. 1972년부터 GMT를 대체.' },
@@ -170,8 +170,8 @@ export default function TimezonePage() {
               { abbr: 'IST', name: '인도 표준시', desc: 'UTC+5:30. 이스라엘 표준시(UTC+2)·아일랜드 표준시(여름 UTC+1)와 약어가 같으니 주의.' },
               { abbr: 'AEST/AEDT', name: '호주 동부 표준시/일광절약시', desc: '시드니·멜버른. AEST=UTC+10(겨울), AEDT=UTC+11(여름).' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
-                <code style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--accent)', fontWeight: 800, background: 'var(--accent-dim)', padding: '3px 9px', borderRadius: '6px', minWidth: '70px', textAlign: 'center' }}>{item.abbr}</code>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', display: 'flex', alignItems: 'flex-start', gap: '12px', flexWrap: 'wrap' }}>
+                <code style={{ fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--accent)', fontWeight: 800, background: 'var(--accent-dim)', padding: '3px 9px', borderRadius: '6px', minWidth: '70px', textAlign: 'center' }}>{item.abbr}</code>
                 <div style={{ flex: 1, minWidth: 0 }}>
                   <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '3px' }}>{item.name}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
@@ -183,10 +183,10 @@ export default function TimezonePage() {
 
         {/* 5. 회의 잡기 팁 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>국제 회의 잡기 — 실전 팁</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>국제 회의 잡기 — 실전 팁</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '10px' }}>✅ 권장</p>
+            <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--emerald-600)', marginBottom: '10px' }}>✅ 권장</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '한·미·유럽 회의: 한국 오후 9~10시 = 미동부 오전 8~9시 = 유럽 오후 2~3시',
@@ -197,8 +197,8 @@ export default function TimezonePage() {
                 ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>• {t}</li>)}
               </ul>
             </div>
-            <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#DC2626', marginBottom: '10px' }}>⚠️ 주의</p>
+            <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--red-600)', marginBottom: '10px' }}>⚠️ 주의</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '미국은 "EST/PST" 약어가 DST 시기에도 관용적으로 쓰임 — 실제론 EDT/PDT',
@@ -218,7 +218,7 @@ export default function TimezonePage() {
 
         {/* 7. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/date/jet-lag',     emoji: '✈️', name: '시차 적응 계산기',  desc: '여행 전·중·후 수면 일정' },
@@ -226,7 +226,7 @@ export default function TimezonePage() {
               { href: '/tools/date/dday',        emoji: '📅', name: 'D-Day 계산기',     desc: '회의 D-day·기간 계산' },
               { href: '/tools/date/age',         emoji: '🎂', name: '나이 계산기',       desc: '여권·만 나이 확인용' },
             ].map((t) => (
-              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '22px' }}>{t.emoji}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 500, marginBottom: '2px' }}>{t.name}</p>

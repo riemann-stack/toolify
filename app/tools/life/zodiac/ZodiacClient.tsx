@@ -201,7 +201,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
             </div>
             <div style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
               💡 <strong style={{ color: 'var(--text)' }}>음력 생년월일</strong>이라면{' '}
-              <Link href="/tools/date/lunar" style={{ color: '#0891B2', textDecoration: 'underline' }}>양력 음력 변환기</Link>로
+              <Link href="/tools/date/lunar" style={{ color: 'var(--cyan-600)', textDecoration: 'underline' }}>양력 음력 변환기</Link>로
               먼저 양력 변환 후 입력하세요. 음력 설날 전후 출생자는 띠가 1년 차이날 수 있습니다.
             </div>
           </div>
@@ -260,7 +260,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <div className={styles.lunarCaveat}>
                   📅 <strong>1~2월 출생</strong> — 음력 설(보통 1/21~2/20)이나 입춘(2/4경) <strong>이전</strong> 출생이라면
                   전통적으로 <strong>{profile.prevChinese.emoji} {profile.prevChinese.name}띠 · {profile.prevGanji.hanja}({profile.prevGanji.hangul})</strong>(전년 기준)일 수 있습니다.
-                  정확히는 <Link href="/tools/date/lunar" style={{ color: '#A16207', textDecoration: 'underline' }}>음력 변환기</Link>로 확인하세요.
+                  정확히는 <Link href="/tools/date/lunar" style={{ color: 'var(--yellow-700)', textDecoration: 'underline' }}>음력 변환기</Link>로 확인하세요.
                 </div>
               )}
 
@@ -282,11 +282,11 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                 <label className={styles.cardLabel}>{profile.star.emoji} {profile.star.name} — 강점·주의점</label>
                 <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 6 }}>
                   <div style={{ background: 'rgba(16,185,129,0.04)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 10, padding: '10px 12px' }}>
-                    <p style={{ fontSize: 12, color: '#059669', fontWeight: 700, marginBottom: 4 }}>💪 강점</p>
+                    <p style={{ fontSize: 12, color: 'var(--emerald-600)', fontWeight: 700, marginBottom: 4 }}>💪 강점</p>
                     <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.strengths.join(' · ')}</p>
                   </div>
                   <div style={{ background: 'rgba(234,88,12,0.04)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 10, padding: '10px 12px' }}>
-                    <p style={{ fontSize: 12, color: '#EA580C', fontWeight: 700, marginBottom: 4 }}>⚠️ 주의점</p>
+                    <p style={{ fontSize: 12, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 4 }}>⚠️ 주의점</p>
                     <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{profile.star.cautions.join(' · ')}</p>
                   </div>
                 </div>
@@ -334,7 +334,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
             </>
           ) : profileFuture ? (
             <div className={styles.empty}>
-              <strong style={{ color: '#EA580C' }}>⚠️ 미래 날짜는 입력할 수 없습니다.</strong>
+              <strong style={{ color: 'var(--orange-600)' }}>⚠️ 미래 날짜는 입력할 수 없습니다.</strong>
               <div style={{ marginTop: 4 }}>오늘 이전의 생년월일을 선택하세요.</div>
             </div>
           ) : (
@@ -425,7 +425,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
               }`} role="status" aria-live="polite">
                 <div className={styles.compatScoreLabel}>종합 궁합 (재미용)</div>
                 <div className={styles.compatScoreNum}
-                  style={{ color: compatResult.overall >= 4 ? '#059669' : compatResult.overall >= 3 ? '#A16207' : '#DC2626' }}>
+                  style={{ color: compatResult.overall >= 4 ? 'var(--emerald-600)' : compatResult.overall >= 3 ? 'var(--yellow-700)' : 'var(--red-600)' }}>
                   {compatResult.overall.toFixed(1)} / 5.0
                 </div>
                 <div className={styles.starRow} role="img" aria-label={`5점 만점에 ${compatResult.overall.toFixed(1)}점`}>
@@ -575,7 +575,7 @@ youtil.kr/tools/life/zodiac (재미용 도구)`
                               const aZ = getZodiacByYear(a.year)
                               const bZ = getZodiacByYear(b.year)
                               const ev = evalZodiacPair(aZ.name, bZ.name)
-                              const color = ev.score >= 4 ? '#059669' : ev.score === 3 ? '#A16207' : '#DC2626'
+                              const color = ev.score >= 4 ? 'var(--emerald-600)' : ev.score === 3 ? 'var(--yellow-700)' : 'var(--red-600)'
                               const icon = ev.score >= 4 ? '🟢' : ev.score === 3 ? '🟡' : '🔴'
                               return (
                                 <td key={b.id} style={{ color, fontSize: 11 }}>

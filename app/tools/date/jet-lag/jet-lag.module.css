@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -17,7 +17,7 @@
   margin-bottom: 14px;
 }
 .cardTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -66,7 +66,7 @@
   border-radius: 10px;
   padding: 12px 36px 12px 14px;
   font-size: 16px;  /* iOS Safari 포커스 자동 확대 방지 (<16px) */
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   cursor: pointer;
@@ -75,7 +75,7 @@
   box-sizing: border-box;
   min-width: 0;
 }
-.select:focus { border-color: rgba(14,165,233,0.5); }
+.select:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .select option { background: var(--bg2); color: var(--text); }
 .selectArrow {
   position: absolute;
@@ -93,13 +93,13 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;  /* iOS Safari 포커스 자동 확대 방지 (<16px) */
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   box-sizing: border-box;
   min-width: 0;
   outline: none;
 }
-.input:focus { border-color: rgba(14,165,233,0.5); }
+.input:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 
 /* ── 탭 ── */
 .tabs {
@@ -116,11 +116,11 @@
   border: none;
   padding: 10px 12px;
   min-height: 44px; /* 터치 타깃 최소 크기 */
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   transition: all 0.15s;
   font-weight: 500;
 }@media (hover: hover) {
@@ -136,12 +136,12 @@
 .hero {
   background: var(--bg2);
   border: 1.5px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 26px;
   text-align: center;
 }
 .heroEast { border-color: rgba(234,88,12,0.35); }
-.heroWest { border-color: rgba(8,145,178,0.35); }
+.heroWest { border-color: color-mix(in srgb, var(--cyan-600) 35%, transparent); }
 .heroNone { border-color: rgba(16,185,129,0.35); }
 .heroLead {
   font-size: 11px;
@@ -151,7 +151,7 @@
   margin-bottom: 8px;
 }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 64px;
   font-weight: 800;
   color: var(--accent);
@@ -165,22 +165,22 @@
   font-size: 12px;
   font-weight: 700;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin: 10px 0;
 }
 .dirEast {
   background: rgba(234,88,12,0.15);
-  color: #EA580C;
+  color: var(--orange-600);
   border: 1px solid rgba(234,88,12,0.3);
 }
 .dirWest {
-  background: rgba(8,145,178,0.15);
-  color: #0891B2;
-  border: 1px solid rgba(8,145,178,0.3);
+  background: color-mix(in srgb, var(--cyan-600) 15%, transparent);
+  color: var(--cyan-600);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
 }
 .dirNone {
   background: rgba(16,185,129,0.15);
-  color: #059669;
+  color: var(--emerald-600);
   border: 1px solid rgba(16,185,129,0.3);
 }
 .heroDesc {
@@ -213,15 +213,15 @@
   color: var(--text);
 }
 .tableRowTarget {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .tableRowTarget td {
   color: var(--accent);
   font-weight: 700;
 }
-.adjEarlier { color: #0891B2; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.adjLater { color: #EA580C; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.adjZero { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.adjEarlier { color: var(--cyan-600); font-family: var(--font-sans); font-weight: 700; }
+.adjLater { color: var(--orange-600); font-family: var(--font-sans); font-weight: 700; }
+.adjZero { color: var(--muted); font-family: var(--font-sans); }
 
 /* ── 24시간 타임라인 ── */
 .timeline {
@@ -230,7 +230,7 @@
   height: 48px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   overflow: hidden;
   margin-top: 4px;
 }
@@ -247,7 +247,7 @@
   white-space: nowrap;
   overflow: hidden;
 }
-.segSleep  { background: rgba(8,145,178,0.6); }
+.segSleep  { background: color-mix(in srgb, var(--cyan-600) 60%, transparent); }
 .segWarn   { background: rgba(234,88,12,0.55); }
 .segLight  { background: rgba(255,213,62,0.45); color: #ffffff; }
 .nowCursor {
@@ -272,7 +272,7 @@
   display: flex;
   justify-content: space-between;
   margin-top: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
   color: var(--muted);
 }
@@ -318,7 +318,7 @@
   margin-bottom: 4px;
 }
 .flightBoxValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -327,7 +327,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-top: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 공통 입력 카드 하단 힌트 ── */
@@ -337,12 +337,12 @@
   margin: 12px 0 0;
   padding: 8px 12px;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   border-left: 3px solid var(--accent);
 }
 .hintText strong {
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-left: 4px;
 }
@@ -382,23 +382,23 @@
 .napCard {
   background: var(--bg2);
   border: 1.5px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
 }
-.napOk { border-color: #059669; }
-.napWarn { border-color: #EA580C; }
-.napNo { border-color: #DC2626; }
+.napOk { border-color: var(--emerald-600); }
+.napWarn { border-color: var(--orange-600); }
+.napNo { border-color: var(--red-600); }
 .napStatus {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
   margin-bottom: 8px;
 }
-.napOk   .napStatus { color: #059669; }
-.napWarn .napStatus { color: #EA580C; }
-.napNo   .napStatus { color: #DC2626; }
+.napOk   .napStatus { color: var(--emerald-600); }
+.napWarn .napStatus { color: var(--orange-600); }
+.napNo   .napStatus { color: var(--red-600); }
 .napBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 32px;
   font-weight: 700;
   color: var(--accent);
@@ -408,15 +408,15 @@
 
 /* ── 멜라토닌/팁 인포 카드 ── */
 .infoCard {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.2);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent);
+  border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 .infoCard .infoHead {
   font-size: 12px;
   font-weight: 700;
-  color: #0891B2;
+  color: var(--cyan-600);
   margin-bottom: 10px;
   letter-spacing: 0.04em;
 }
@@ -427,7 +427,7 @@
 .warnCard {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.25);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 14px 18px;
   font-size: 12px;
   color: var(--muted);
@@ -438,7 +438,7 @@
 .adaptCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
 }
 /* ── 진행바 (글자 겹침 방지) — 마커는 점만, 라벨은 별도 행 ── */
@@ -449,7 +449,7 @@
   position: relative;
   height: 14px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: visible;
 }
 .progressBarTrack .progressBarFill {
@@ -457,8 +457,8 @@
   left: 0; top: 0;
   height: 100%;
   width: 100%;
-  background: linear-gradient(90deg, rgba(234,88,12,0.6), rgba(14,165,233,0.8));
-  border-radius: 999px;
+  background: linear-gradient(90deg, rgba(234,88,12,0.6), color-mix(in srgb, var(--accent) 80%, transparent));
+  border-radius: var(--radius-pill);
 }
 .progressMarkDot {
   position: absolute;
@@ -476,14 +476,14 @@
   top: -3px;
   bottom: -3px;
   width: 2px;
-  background: #DC2626;
+  background: var(--red-600);
   transform: translateX(-50%);
   z-index: 3;
 }
 .progressLabels {
   display: flex;
   justify-content: space-between;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--muted);
   margin-top: 8px;
@@ -513,7 +513,7 @@
   margin-bottom: 4px;
 }
 .adaptStatValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -538,7 +538,7 @@
 }
 .scheduleTable td { color: var(--text); }
 .scheduleDay {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
 }
@@ -551,7 +551,7 @@
   color: var(--muted);
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 .disclaimer {

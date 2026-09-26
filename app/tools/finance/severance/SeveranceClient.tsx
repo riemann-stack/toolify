@@ -215,7 +215,7 @@ export default function SeveranceClient() {
           style={{
             marginTop: 10, padding: '8px 16px', fontSize: 13, fontWeight: 600,
             background: 'var(--bg3)', color: 'var(--text)', border: '1px solid var(--border)',
-            borderRadius: 8, cursor: 'pointer',
+            borderRadius: 'var(--radius-s)', cursor: 'pointer',
           }}
         >
           입력값 초기화
@@ -554,7 +554,7 @@ export default function SeveranceClient() {
                   <div key={m.years} className={s.milestoneCard}>
                     <p className={s.milestoneYear}>{m.years}년</p>
                     <p className={s.milestoneDate}>{fmtDate(m.target)}</p>
-                    <p className={s.milestoneOffset} style={{ color: m.offset > 0 ? '#EA580C' : 'var(--accent)' }}>
+                    <p className={s.milestoneOffset} style={{ color: m.offset > 0 ? 'var(--orange-600)' : 'var(--accent)' }}>
                       {m.offset > 0 ? `${m.offset}일 더 근무 필요` : m.offset === 0 ? '✅ 도달' : `이미 ${-m.offset}일 초과`}
                     </p>
                   </div>
@@ -587,7 +587,7 @@ export default function SeveranceClient() {
                         <td>{fmtDate(addDays(endDate, off))}</td>
                         <td className={s.cellMono}>{target.days}일</td>
                         <td className={`${s.cellMono} ${off === 0 ? s.cellAccent : ''}`}>{target.severance > 0 ? fmtMan(target.severance) : '—'}</td>
-                        <td className={s.cellMono} style={{ color: diff > 0 ? 'var(--accent)' : diff < 0 ? '#DB2777' : 'var(--muted)' }}>
+                        <td className={s.cellMono} style={{ color: diff > 0 ? 'var(--accent)' : diff < 0 ? 'var(--pink-600)' : 'var(--muted)' }}>
                           {off === 0 ? '기준' : (diff > 0 ? '+' : '') + fmtMan(diff)}
                         </td>
                       </tr>
@@ -685,9 +685,9 @@ export default function SeveranceClient() {
             <span className={s.cardLabel}>입금·공제 구성</span>
             <DonutChart
               data={[
-                { id: 'sev',    label: '퇴직금 실수령', value: tax.netSeverance, color: '#0D9488' },
-                { id: 'sal',    label: '마지막 월급',   value: lastSalaryN, color: '#0891B2' },
-                { id: 'leave',  label: '연차수당',     value: extraLeaveN, color: '#D97706' },
+                { id: 'sev',    label: '퇴직금 실수령', value: tax.netSeverance, color: 'var(--teal-600)' },
+                { id: 'sal',    label: '마지막 월급',   value: lastSalaryN, color: 'var(--cyan-600)' },
+                { id: 'leave',  label: '연차수당',     value: extraLeaveN, color: 'var(--amber-600)' },
               ].filter((d) => d.value > 0)}
               total={tax.netSeverance + lastSalaryN + extraLeaveN}
             />
@@ -695,12 +695,12 @@ export default function SeveranceClient() {
               <table className={s.detailTable}>
                 <tbody>
                   <tr><td>퇴직금 (세전)</td><td className={s.cellMono}>{fmtMan(displaySev)}</td></tr>
-                  <tr><td>퇴직소득세 + 지방소득세</td><td className={s.cellMono} style={{ color: '#DB2777' }}>−{fmtMan(tax.totalTax)}</td></tr>
+                  <tr><td>퇴직소득세 + 지방소득세</td><td className={s.cellMono} style={{ color: 'var(--pink-600)' }}>−{fmtMan(tax.totalTax)}</td></tr>
                   <tr><td>퇴직금 실수령</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(tax.netSeverance)}</td></tr>
                   <tr><td>마지막 월급</td><td className={s.cellMono}>{fmtMan(lastSalaryN)}</td></tr>
                   <tr><td>미사용 연차수당</td><td className={s.cellMono}>{fmtMan(extraLeaveN)}</td></tr>
-                  {insN !== 0 && <tr><td>4대보험 정산</td><td className={s.cellMono} style={{ color: insN > 0 ? '#DB2777' : 'var(--accent)' }}>{insN > 0 ? '−' : '+'}{fmtMan(Math.abs(insN))}</td></tr>}
-                  {othN > 0 && <tr><td>기타 공제</td><td className={s.cellMono} style={{ color: '#DB2777' }}>−{fmtMan(othN)}</td></tr>}
+                  {insN !== 0 && <tr><td>4대보험 정산</td><td className={s.cellMono} style={{ color: insN > 0 ? 'var(--pink-600)' : 'var(--accent)' }}>{insN > 0 ? '−' : '+'}{fmtMan(Math.abs(insN))}</td></tr>}
+                  {othN > 0 && <tr><td>기타 공제</td><td className={s.cellMono} style={{ color: 'var(--pink-600)' }}>−{fmtMan(othN)}</td></tr>}
                   <tr className={s.cellTotal}>
                     <td><strong>총 입금 예상</strong></td>
                     <td className={`${s.cellMono} ${s.cellAccent}`}><strong>{fmtMan(totalDeposit)}</strong></td>
@@ -738,9 +738,9 @@ export default function SeveranceClient() {
 function SeveranceBarChart({ pre, tax, net }: { pre: number; tax: number; net: number }) {
   const maxVal = Math.max(pre, 1)
   const items = [
-    { label: '세전 퇴직금', value: pre, color: '#0891B2' },
-    { label: '세금 (퇴직+지방)', value: tax, color: '#DB2777' },
-    { label: '실수령액', value: net, color: '#0D9488' },
+    { label: '세전 퇴직금', value: pre, color: 'var(--cyan-600)' },
+    { label: '세금 (퇴직+지방)', value: tax, color: 'var(--pink-600)' },
+    { label: '실수령액', value: net, color: 'var(--teal-600)' },
   ]
   return (
     <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -760,7 +760,7 @@ function SeveranceBarChart({ pre, tax, net }: { pre: number; tax: number; net: n
                 justifyContent: 'flex-end',
                 padding: '0 8px',
               }}>
-                <span style={{ fontSize: 12, fontWeight: 800, color: '#0D0D0D', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtMan(it.value)}</span>
+                <span style={{ fontSize: 12, fontWeight: 800, color: '#0D0D0D', fontFamily: 'var(--font-sans)' }}>{fmtMan(it.value)}</span>
               </div>
             </div>
           </div>
@@ -796,7 +796,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
   const highlightP = points.find((p) => p.offset === highlight)
 
   return (
-    <div className="card" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 14, padding: '20px 22px' }}>
+    <div className="card" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
       <span style={{ display: 'block', fontSize: 11, color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.06em', marginBottom: 14 }}>
         퇴사일 변화 → 퇴직금 변화
       </span>
@@ -812,7 +812,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
             return (
               <g key={off}>
                 <line x1={xScale(off)} y1={H - padB - 2} x2={xScale(off)} y2={H - padB + 4} stroke="var(--muted)" strokeWidth="0.8" />
-                <text x={xScale(off)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                <text x={xScale(off)} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle">
                   {off > 0 ? `+${off}` : off}일
                 </text>
               </g>
@@ -830,8 +830,8 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
           {/* 강조 점 */}
           {highlightP && highlightP.severance > 0 && (
             <g>
-              <circle cx={xScale(highlightP.offset)} cy={yScale(highlightP.severance)} r={6} fill="#DB2777" stroke="#000" strokeWidth="1" />
-              <text x={xScale(highlightP.offset)} y={yScale(highlightP.severance) - 12} fill="#DB2777" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
+              <circle cx={xScale(highlightP.offset)} cy={yScale(highlightP.severance)} r={6} fill="var(--pink-600)" stroke="#000" strokeWidth="1" />
+              <text x={xScale(highlightP.offset)} y={yScale(highlightP.severance) - 12} fill="var(--pink-600)" fontSize="11" textAnchor="middle" fontWeight="700">
                 {fmtMan(highlightP.severance)}
               </text>
             </g>
@@ -839,7 +839,7 @@ function SimChart({ points, highlight }: { points: { offset: number; days: numbe
 
           {/* Y축 값 (3개) */}
           {sevs.length > 0 && [minSev, (minSev + maxSev) / 2, maxSev].map((v, i) => (
-            <text key={i} x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="9" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmtMan(v)}</text>
+            <text key={i} x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="9" textAnchor="end">{fmtMan(v)}</text>
           ))}
         </svg>
       </div>
@@ -885,8 +885,8 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
           return <path key={d.id} d={describeArc(startAngle, endAngle)} fill={d.color} opacity={0.85} />
         })}
         <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>총 입금</text>
-        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
+        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle">총 입금</text>
+        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontWeight="800">
           {fmtMan(total)}
         </text>
       </svg>
@@ -895,7 +895,7 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
           <div key={d.id} style={{ display: 'grid', gridTemplateColumns: '14px 1fr auto', alignItems: 'center', gap: 8, fontSize: 12 }}>
             <span style={{ width: 12, height: 12, borderRadius: 3, background: d.color }} />
             <span style={{ color: 'var(--text)', fontWeight: 600 }}>{d.label}</span>
-            <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)', fontWeight: 700 }}>{fmtMan(d.value)}</span>
+            <span style={{ fontFamily: 'var(--font-sans)', color: 'var(--muted)', fontWeight: 700 }}>{fmtMan(d.value)}</span>
           </div>
         ))}
       </div>

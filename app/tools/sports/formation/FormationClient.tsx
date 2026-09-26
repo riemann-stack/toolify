@@ -440,7 +440,7 @@ export default function FormationClient() {
                   fill={teamColor} stroke="#fff" strokeWidth="4"
                   opacity="0.95" />
                 <text x={pos.x} y={pos.y + 14} textAnchor="middle"
-                  fill="#fff" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
+                  fill="#fff"
                   fontSize="42" fontWeight="800"
                   style={{ pointerEvents: 'none' }}>
                   {p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}
@@ -454,7 +454,7 @@ export default function FormationClient() {
                       fill="rgba(0,0,0,0.78)"
                     />
                     <text x={pos.x} y={cardY + 26} textAnchor="middle"
-                      fill="#fff" fontFamily="Noto Sans KR, sans-serif"
+                      fill="#fff"
                       fontSize={nameFont} fontWeight="700">
                       {dispName}
                     </text>
@@ -463,7 +463,7 @@ export default function FormationClient() {
                 {/* 포지션 라벨 */}
                 {showLabels && (
                   <text x={pos.x} y={pos.y - 58} textAnchor="middle"
-                    fill="#fff" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
+                    fill="#fff"
                     fontSize="22" fontWeight="800"
                     opacity="0.92"
                     style={{ pointerEvents: 'none' }}>
@@ -500,7 +500,7 @@ export default function FormationClient() {
                   stroke="#fff" strokeWidth="8" strokeLinecap="round" fill="none" opacity="0.85" />
                 {/* 텍스트 */}
                 <text x={arrowX} y={labelY} fill="#fff" fontSize="28" fontWeight="800"
-                  textAnchor="middle" fontFamily="Noto Sans KR, sans-serif"
+                  textAnchor="middle"
                   style={{ paintOrder: 'stroke', stroke: 'rgba(0,0,0,0.5)', strokeWidth: 3 } as React.CSSProperties}>
                   공격
                 </text>

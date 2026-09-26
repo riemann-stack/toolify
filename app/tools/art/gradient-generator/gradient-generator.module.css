@@ -13,7 +13,7 @@
   padding: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 .tab {
   padding: 10px 12px;
@@ -26,7 +26,7 @@
   cursor: pointer;
   transition: all .15s;
   white-space: nowrap;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
@@ -43,7 +43,7 @@
   padding: 24px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
 }
 
 .label {
@@ -69,7 +69,7 @@
   background: var(--bg3);
   padding: 2px 6px;
   border-radius: 4px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
 }
 
@@ -78,7 +78,7 @@
   position: relative;
   width: 100%;
   height: 240px;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   border: 1px solid var(--border);
   background-size: cover;
   background-position: center;
@@ -89,11 +89,11 @@
   right: 12px;
   background: rgba(0,0,0,.5);
   color: #fff;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   letter-spacing: 0.06em;
   backdrop-filter: blur(8px);
 }
@@ -110,7 +110,7 @@
 .spaceCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 8px;
   cursor: pointer;
   transition: all .15s;
@@ -128,12 +128,12 @@
 .spaceCardSwatch {
   width: 100%;
   height: 60px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background-size: cover;
   background-position: center;
 }
 .spaceCardLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 14px;
   color: var(--text);
@@ -162,7 +162,7 @@
   font-weight: 500;
   cursor: pointer;
   transition: all .15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .typeBtn:hover { color: var(--text); }
 }
@@ -192,7 +192,7 @@
 }
 .sliderRow label strong {
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
 }
@@ -236,14 +236,14 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
   min-height: 36px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -265,7 +265,7 @@
   padding: 10px 12px;
 }
 .meshCornerLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--muted);
   font-size: 12px;
@@ -286,12 +286,12 @@
 .smallBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .smallBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -300,7 +300,7 @@
   position: relative;
   width: 100%;
   height: 48px;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   border: 1px solid var(--border);
   background-size: cover;
   cursor: crosshair;
@@ -354,7 +354,7 @@
   width: 36px;
   height: 36px;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   cursor: pointer;
   background: transparent;
   padding: 2px;
@@ -368,8 +368,8 @@
   padding: 8px 10px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'JetBrains Mono', monospace;
+  border-radius: var(--radius-s);
+  font-family: var(--font-mono);
   font-size: 13px;
   font-weight: 600;
   color: var(--text);
@@ -382,8 +382,8 @@
   padding: 8px 10px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -403,7 +403,7 @@
 .removeBtn {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   width: 32px;
   height: 32px;
   color: var(--muted);
@@ -425,7 +425,7 @@
   padding: 20px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   min-height: 180px;
   display: flex;
   align-items: center;
@@ -435,13 +435,13 @@
   width: 100%;
   max-width: 340px;
   padding: 32px 24px;
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   background-size: cover;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0,0,0,.4);
 }
 .previewCard h3 {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   margin: 0 0 8px;
   font-weight: 800;
@@ -453,7 +453,7 @@
   padding: 12px 24px;
   border-radius: 10px;
   border: none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: #fff;
@@ -465,21 +465,21 @@
 .previewHero {
   width: 100%;
   padding: 40px 28px;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   background-size: cover;
   color: #fff;
   text-shadow: 0 1px 3px rgba(0,0,0,.4);
   text-align: left;
 }
 .previewHeroEyebrow {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   letter-spacing: 0.12em;
   margin: 0 0 8px;
   opacity: 0.85;
 }
 .previewHero h2 {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(20px, 4vw, 28px);
   font-weight: 800;
   margin: 0 0 8px;
@@ -488,7 +488,7 @@
 
 .previewTextWrap { display: flex; flex-direction: column; gap: 12px; align-items: center; }
 .previewText {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   margin: 0;
   background-size: cover;
@@ -524,8 +524,8 @@
   padding: 6px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 700;
   color: var(--muted);
@@ -559,13 +559,13 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   z-index: 1;
 }@media (hover: hover) {
   .copyBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
 .codePre {
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 12px;
   line-height: 1.6;
   color: #C8FF9E;
@@ -578,7 +578,7 @@
 .optionCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
 }
 .gapTitle {
@@ -586,7 +586,7 @@
   color: var(--text);
   font-weight: 700;
   margin: 0 0 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .exportRow {
   display: flex;
@@ -598,11 +598,11 @@
 .select {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
   min-height: 40px;
@@ -627,12 +627,12 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 18px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 40px;
 }@media (hover: hover) {
   .primaryBtn:hover { opacity: 0.92; }
@@ -642,12 +642,12 @@
   background: var(--bg3);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 16px;
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 40px;
 }@media (hover: hover) {
   .secondaryBtn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
@@ -666,7 +666,7 @@
   width: 100%;
   height: 100%;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background-size: cover;
   background-position: center;
   cursor: pointer;
@@ -707,7 +707,7 @@
 .contrastCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   text-align: center;
 }
@@ -719,7 +719,7 @@
   text-transform: uppercase;
 }
 .contrastRatio {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 800;
   color: var(--text);
@@ -729,11 +729,11 @@
 .contrastGrade {
   display: inline-block;
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 11px;
   font-weight: 700;
   margin: 0 0 6px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .contrastGrade[data-grade="aaa"] { background: rgba(16, 185, 129, 0.15); color: #059669; }
 .contrastGrade[data-grade="aa"]  { background: rgba(14, 165, 233, 0.15); color: var(--accent); }
@@ -744,12 +744,12 @@
   margin-top: 12px;
   padding: 10px 14px;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 12px;
   color: var(--text);
   line-height: 1.7;
 }
-.contrastTip code { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+.contrastTip code { font-family: var(--font-mono); font-size: 11px; }
 
 /* 색맹 카드 */
 .cbGrid {
@@ -763,13 +763,13 @@
 .cbCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 10px;
 }
 .cbSwatch {
   width: 100%;
   height: 80px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background-size: cover;
   margin-bottom: 8px;
 }
@@ -787,7 +787,7 @@
 .fileInput {
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   max-width: 100%; /* 320px에서 intrinsic 폭(≈300px) 오버플로 방지 */
   min-width: 0;
 }
@@ -801,12 +801,12 @@
   flex: 1;
   min-width: 80px;
   height: 60px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   display: flex;
   align-items: flex-end;
   justify-content: center;
   padding: 4px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 10px;
   color: rgba(255,255,255,.85);
   text-shadow: 0 1px 2px rgba(0,0,0,.6);
@@ -828,7 +828,7 @@
 .suggestCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 8px;
   display: flex;
   flex-direction: column;
@@ -842,14 +842,14 @@
 .suggestSwatch {
   width: 100%;
   height: 50px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background-size: cover;
 }
 .suggestLabel {
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .suggestDesc {
   font-size: 11px;
@@ -863,7 +863,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0 0 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .presetCatBlock { margin-bottom: 18px; }
 .presetCatLabel {
@@ -903,7 +903,7 @@
   font-size: 12px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -914,7 +914,7 @@
 .disclaimer {
   background: rgba(14, 165, 233, 0.04);
   border: 1px solid rgba(14, 165, 233, 0.18);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -924,7 +924,7 @@
   display: block;
   color: var(--accent);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

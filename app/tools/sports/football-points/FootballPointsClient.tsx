@@ -479,7 +479,7 @@ export default function FootballPointsClient() {
         </div>
 
         {stats.played > totalGames && (
-          <div role="alert" style={{ marginTop: 12, padding: '10px 12px', background: 'rgba(234,88,12,0.08)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: 8, fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
+          <div role="alert" style={{ marginTop: 12, padding: '10px 12px', background: 'rgba(234,88,12,0.08)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: 'var(--radius-s)', fontSize: 12, color: 'var(--text)', lineHeight: 1.6 }}>
             ⚠️ 치른 경기 <strong>{stats.played}</strong>경기가 시즌 총 <strong>{totalGames}</strong>경기를 초과합니다. 승·무·패 또는 리그(총 경기 수)를 확인하세요.
           </div>
         )}
@@ -699,7 +699,7 @@ export default function FootballPointsClient() {
                 </div>
                 <div style={{ textAlign: 'right' }}>
                   <span className={styles.simHint}>목표 {target}점</span>
-                  <p style={{ fontSize: 13, color: simReachedTarget ? 'var(--success)' : 'var(--danger)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>
+                  <p style={{ fontSize: 13, color: simReachedTarget ? 'var(--success)' : 'var(--danger)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
                     {simReachedTarget ? `✅ 도달 (+${simPoints - target})` : `❌ 미달 (${simPoints - target})`}
                   </p>
                 </div>

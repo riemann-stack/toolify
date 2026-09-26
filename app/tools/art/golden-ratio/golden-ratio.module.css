@@ -5,31 +5,31 @@
 .tabs {
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tab {
   padding: 11px 8px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 공통 카드 ── */
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; box-sizing: border-box; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px 22px; box-sizing: border-box; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
 
 /* ── 파이 배지 ── */
 .phiBadge {
   display: flex; align-items: center; justify-content: space-between;
   gap: 12px; background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 14px 20px; flex-wrap: wrap;
+  border-radius: var(--radius-card); padding: 14px 20px; flex-wrap: wrap;
 }
 .phiBadgeLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; }
-.phiBadgeValue { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; overflow-wrap: anywhere; }
+.phiBadgeValue { font-family: var(--font-sans); font-size: 18px; font-weight: 700; color: var(--accent); letter-spacing: 0.02em; overflow-wrap: anywhere; }
 
 /* ── 입력 필드 ── */
 .inputGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
@@ -40,12 +40,12 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 0 12px; transition: border-color 0.2s;
 }
-.inputRow:focus-within { border-color: rgba(14,165,233,0.5); }
+.inputRow:focus-within { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .inputRow:has(input:disabled) { opacity: 0.55; background: var(--bg2); }
 .numInput {
   flex: 1; min-width: 0; width: 100%;
   background: transparent; border: none;
-  padding: 11px 0; font-size: 20px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  padding: 11px 0; font-size: 20px; font-family: var(--font-sans); font-weight: 700;
   color: var(--text); outline: none;
   -moz-appearance: textfield; appearance: textfield;
 }
@@ -57,21 +57,21 @@
 /* ── 선택형 (셀렉트/라디오) ── */
 .selectRow { display: flex; gap: 6px; flex-wrap: wrap; }
 .selectBtn {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s);
   padding: 6px 12px; font-size: 12px; color: var(--muted);
-  cursor: pointer; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  cursor: pointer; font-family: var(--font-sans); font-weight: 700;
   transition: all 0.15s;
 }@media (hover: hover) {
   .selectBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.selectBtnActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
+.selectBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
 
 /* ── 프리셋 ── */
 .presetRow { display: flex; gap: 6px; flex-wrap: wrap; }
 .presetBtn {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 20px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-lg);
   padding: 6px 14px; font-size: 12px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.15s;
 }@media (hover: hover) {
   .presetBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -79,47 +79,47 @@
 /* ── 기준 선택 (A/B/T) ── */
 .modeTabs { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px; margin-bottom: 12px; }
 .modeTab {
-  padding: 9px 6px; border-radius: 8px; border: 1px solid var(--border); background: var(--bg3);
-  font-size: 12px; color: var(--muted); cursor: pointer; font-family: 'Noto Sans KR', sans-serif;
+  padding: 9px 6px; border-radius: var(--radius-s); border: 1px solid var(--border); background: var(--bg3);
+  font-size: 12px; color: var(--muted); cursor: pointer; font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .modeTab:hover { color: var(--text); }
 }
-.modeTabActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
+.modeTabActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
 
 /* ── 결과 카드 ── */
 .resultCard {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px; padding: 20px 22px; animation: fadeUp 0.25s ease;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card); padding: 20px 22px; animation: fadeUp 0.25s ease;
 }
 .heroRow { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: center; gap: 16px; margin-bottom: 16px; }
 .heroBlock { text-align: center; min-width: 0; }
 .heroLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-.heroNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(22px, 5.5vw, 38px); font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px; overflow-wrap: anywhere; word-break: break-word; }
+.heroNum { font-family: var(--font-sans); font-size: clamp(22px, 5.5vw, 38px); font-weight: 800; color: var(--accent); line-height: 1; letter-spacing: -1px; overflow-wrap: anywhere; word-break: break-word; }
 .heroUnit { font-size: 15px; font-weight: 400; margin-left: 3px; color: var(--muted); }
 .heroDivider { width: 1px; height: 56px; background: var(--border); }
 
 .infoGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 12px; }
 .infoItem { background: var(--bg3); border: 1px solid var(--border); border-radius: 10px; padding: 12px; text-align: center; }
-.infoNum { font-family: 'Inter', system-ui, sans-serif; font-size: 20px; font-weight: 700; color: var(--text); }
+.infoNum { font-family: var(--font-sans); font-size: 20px; font-weight: 700; color: var(--text); }
 .infoLabel { font-size: 11px; color: var(--muted); margin-top: 3px; }
 
 .copyBtn {
   width: 100%; background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px; padding: 10px; font-size: 13px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.15s;
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtnDone { border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
+.copyBtnDone { border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
 
 /* ── 비율 뱃지 ── */
 .ratioBadge {
   display: inline-flex; align-items: center; gap: 6px;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
-  padding: 5px 10px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px; color: var(--text);
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s);
+  padding: 5px 10px; font-family: var(--font-sans); font-weight: 700; font-size: 14px; color: var(--text);
 }
-.ratioBadgeAccent { color: var(--accent); border-color: rgba(14,165,233,0.3); }
+.ratioBadgeAccent { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
 
 /* ── 차이(%) 표시 ── */
 .diffRow {
@@ -128,7 +128,7 @@
   border-radius: 10px; margin-top: 10px;
 }
 .diffLabel { font-size: 12px; color: var(--muted); }
-.diffValue { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 18px; color: var(--text); }
+.diffValue { font-family: var(--font-sans); font-weight: 700; font-size: 18px; color: var(--text); }
 .diffValueGood { color: var(--accent); }
 
 .suggestList { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
@@ -138,10 +138,10 @@
   border-radius: 10px; font-size: 13px;
 }
 .suggestLabel { color: var(--muted); font-size: 12px; }
-.suggestNum { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 15px; color: var(--accent); }
+.suggestNum { font-family: var(--font-sans); font-weight: 700; font-size: 15px; color: var(--accent); }
 
 /* ── SVG 나선 ── */
-.spiralCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px; }
+.spiralCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px; }
 .spiralControls {
   display: flex; gap: 10px; margin-bottom: 14px; flex-wrap: wrap;
   align-items: center; justify-content: space-between;
@@ -158,18 +158,18 @@
 .spiralLightBg { --spiral-bg: #F0EFE8; }
 
 .downloadBtn {
-  background: var(--accent-dim); border: 1px solid rgba(14,165,233,0.4); border-radius: 10px;
+  background: var(--accent-dim); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); border-radius: 10px;
   padding: 9px 16px; font-size: 13px; color: var(--accent);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  cursor: pointer; font-family: var(--font-sans); font-weight: 500;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .downloadBtn:hover { background: rgba(14,165,233,0.22); }
+  .downloadBtn:hover { background: color-mix(in srgb, var(--accent) 22%, transparent); }
 }
 
 /* ── 공통 ── */
 .empty {
   padding: 32px; text-align: center; font-size: 14px; color: var(--muted);
-  background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius-card);
 }
 .stdNote { font-size: 11px; color: var(--muted); text-align: center; line-height: 1.6; margin-top: 8px; }
 
@@ -183,7 +183,7 @@
 .miniRectSvg { max-width: 100%; height: auto; display: block; }
 
 /* ── 비율 비교 시각화 ── */
-.compareCard { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+.compareCard { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px 20px; }
 .compareLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 4px; }
 .compareDesc { font-size: 12px; color: var(--muted); margin-bottom: 14px; line-height: 1.6; }
 .compareList { display: flex; flex-direction: column; gap: 10px; }
@@ -191,7 +191,7 @@
 .compareName { font-size: 12px; color: var(--text); font-weight: 600; }
 .compareNameSub { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.3; }
 .compareBar { height: 32px; background: var(--bg3); border: 1px solid var(--border); border-radius: 4px; transition: width 0.3s; }
-.compareValue { font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; color: var(--accent); min-width: 56px; text-align: right; }
+.compareValue { font-family: var(--font-sans); font-size: 13px; font-weight: 700; color: var(--accent); min-width: 56px; text-align: right; }
 
 @media (max-width: 500px) {
   .compareRow { grid-template-columns: 80px 1fr auto; gap: 8px; }

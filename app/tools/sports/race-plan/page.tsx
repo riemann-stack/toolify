@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px', fontWeight: 700, marginBottom: '14px',
 }
 
@@ -43,7 +43,7 @@ export default function RacePlanPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />레이스 페이스 플래너
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -65,8 +65,8 @@ export default function RacePlanPage() {
               { n: '②', t: '전략으로 자동 분배', d: '균등·네거티브·포지티브 중 하나를 누르면 구간별 페이스가 자동으로 채워집니다. 이후 특정 구간만 직접 조정 가능.' },
               { n: '③', t: '(선택) 코스 고도 입력', d: '언덕이 있는 코스라면 각 km 고도를 넣어 경사·상승/하강을 반영하고, 자동 보정으로 언덕 페이스를 추정합니다.' },
             ].map((x, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{x.n}</span>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{x.n}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '3px' }}>{x.t}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
@@ -85,7 +85,7 @@ export default function RacePlanPage() {
               { t: '네거티브 (권장)', c: '#059669', d: '후반을 앞보다 빠르게. 초반을 아껴 후반 가속 — 대부분의 PB가 이 방식. 기록 도전에 가장 유리.' },
               { t: '포지티브', c: '#EA580C', d: '초반을 빠르게. 컨디션이 좋거나 내리막 시작 코스에 한정. 후반 급감속(벽) 위험이 커 일반적으로 비권장.' },
             ].map((x, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${x.c}55`, borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${x.c}55`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: x.c, marginBottom: '6px' }}>{x.t}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
               </div>
@@ -99,12 +99,12 @@ export default function RacePlanPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             언덕은 페이스에 직접적인 영향을 줍니다. 본 도구는 각 구간의 경사를 추정해 페이스를 가감합니다 — <strong style={{ color: 'var(--text)' }}>오르막 1%당 약 +12초/km, 내리막 1%당 약 −6초/km</strong>(흔한 코칭 경험칙 + Strava GAP·Minetti 경사 비용 곡선을 단순화한 추정치).
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
               ⚠️ <strong>추정의 한계</strong> — 실제 언덕 손실/이득은 경사가 이어지는 길이, 노면(트레일·아스팔트), 개인 능력, 누적 피로에 따라 크게 달라집니다. 가파른 내리막은 오히려 근육 손상으로 이득이 줄거나 손해가 되기도 합니다. <strong>자동 보정은 출발점일 뿐</strong>, 코스를 잘 안다면 구간을 직접 조정하세요.
             </p>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginTop: '10px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: '10px' }}>
             <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>실전 예 — 춘천마라톤 코스 고도 읽기</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               춘천마라톤 공식 홈페이지에 게시된 코스도·고저도를 판독하면 출발·골인 지점이 약 78~80m, 최고점이 약 29km 지점(춘천댐 인근) 약 115m로 전체 고도 변동 폭은 약 40m 이내이며, 약 34km부터는 약 80m대 평탄 구간입니다(2026년 7월 확인 · 수치 라벨이 없는 공식 코스도 판독 기준 근사치 — 참가 연도의 공식 코스 안내로 확인 필요). 이런 코스의 km별 고도를 [코스 고도 입력]에 넣으면 최고점으로 이어지는 오르막 구간의 페이스는 자동으로 늦춰지고 후반 평탄 구간에서 기준 페이스로 회복하는 계획이 만들어집니다 — 예컨대 1km 동안 고도가 10m 오르면 경사 +1%로 인식되어 그 구간에 약 +12초/km가 더해지는 식입니다.
@@ -139,10 +139,10 @@ export default function RacePlanPage() {
               <tbody>
                 {PACE_TABLE.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.full}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{fmtPace(r.fullPace)}/km</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.half}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{fmtPace(r.halfPace)}/km</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.full}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{fmtPace(r.fullPace)}/km</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.half}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{fmtPace(r.halfPace)}/km</td>
                   </tr>
                 ))}
               </tbody>
@@ -165,8 +165,8 @@ export default function RacePlanPage() {
               { n: '②', t: '종이 띠에 옮겨 적고 손목에 고정', d: '복사한 통과 타임을 손목 둘레 길이의 종이 띠에 크게 옮겨 적고 테이프로 감아 고정합니다. 비 예보가 있으면 투명 테이프로 전체를 덮어 번짐을 막으세요.' },
               { n: '③', t: 'GPS 시계 랩 알림과 병행', d: '시계에 1km 자동 랩과 목표 페이스 범위 알림을 함께 설정하고, 구간마다 페이스가 다른 전략이라면 밴드의 누적 통과 타임과 시계 랩을 교차 확인하는 방식이 안전합니다.' },
             ].map((x, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{x.n}</span>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{x.n}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '3px' }}>{x.t}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{x.d}</p>
@@ -182,7 +182,7 @@ export default function RacePlanPage() {
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((item, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {item.q}
                 </summary>
@@ -194,7 +194,7 @@ export default function RacePlanPage() {
         </section>
 
         {/* 면책 */}
-        <div style={{ background: 'var(--bg2)', border: '1px dashed var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+        <div style={{ background: 'var(--bg2)', border: '1px dashed var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>
             본 도구의 결과는 <strong style={{ color: 'var(--text)' }}>참고용 추정</strong>입니다. 실제 기록은 컨디션·기온·습도·코스·보급·페이싱 실행력에 따라 달라지며, 고도 보정은 단순화한 모델입니다. 무리한 페이스는 부상·탈진 위험이 있으니 본인 수준에 맞게 계획하세요.
           </p>
@@ -210,7 +210,7 @@ export default function RacePlanPage() {
               { href: '/tools/sports/buildup',        emoji: '📈', name: '러닝 빌드업 계산기', desc: '프로그레시브 훈련 페이스표' },
               { href: '/tools/sports/vo2max',         emoji: '🫁', name: 'VO₂ Max 계산기',     desc: '심폐 체력·훈련 페이스 추정' },
             ].map((t) => (
-              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '22px' }}>{t.emoji}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 500, marginBottom: '2px' }}>{t.name}</p>

@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,7 +23,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
@@ -46,7 +46,7 @@ const headCell: React.CSSProperties = {
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -83,7 +83,7 @@ export default function NutsPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />견과류 섭취량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -124,9 +124,9 @@ export default function NutsPage() {
             ].map((r, i) => (
               <tr key={i}>
                 <td style={{ ...cell, fontWeight: 500 }}>{r.n}</td>
-                <td style={{ ...cell, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.s}</td>
-                <td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.c}</td>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
+                <td style={{ ...cell, color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.s}</td>
+                <td style={{ ...cell, fontFamily: 'var(--font-sans)' }}>{r.c}</td>
+                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.k}</td>
                 <td style={cell}>{r.v}</td>
               </tr>
             ))}
@@ -139,7 +139,7 @@ export default function NutsPage() {
 
       {/* 2. 브라질너트 셀레늄 */}
       <h2 style={sectionTitle}>🚨 브라질너트 셀레늄 주의</h2>
-      <div style={{ background: 'rgba(255,50,50,0.06)', border: '2px solid rgba(255,80,80,0.4)', borderRadius: '12px', padding: '16px 20px', marginBottom: '14px' }}>
+      <div style={{ background: 'rgba(255,50,50,0.06)', border: '2px solid rgba(255,80,80,0.4)', borderRadius: 'var(--radius-m)', padding: '16px 20px', marginBottom: '14px' }}>
         <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>
           브라질너트 1알(약 4~5g) = 셀레늄 평균 약 70~100μg (개체 편차 큼)
         </p>
@@ -200,7 +200,7 @@ export default function NutsPage() {
           { group: '콩과 (Legume)', color: '#0891B2', list: '땅콩', note: '식물학적으로 견과류 X — 별도 알레르기 그룹. 한국 영유아 알레르기 흔함.' },
           { group: '씨앗류 (Seeds)', color: '#0EA5E9', list: '해바라기씨 · 호박씨', note: '핵과류 알레르기와 별개. 단, 가공 시 교차 오염 가능.' },
         ].map((g, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
+          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
             <p style={{ fontSize: '13px', color: g.color, fontWeight: 700, marginBottom: '6px' }}>{g.group}</p>
             <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '6px', lineHeight: 1.6 }}>{g.list}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{g.note}</p>
@@ -315,7 +315,7 @@ export default function NutsPage() {
               <tr key={i}>
                 <td style={cell}>{r.m}</td>
                 <td style={{ ...cell, color: 'var(--muted)' }}>{r.p}</td>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
+                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.t}</td>
               </tr>
             ))}
           </tbody>
@@ -423,7 +423,7 @@ export default function NutsPage() {
       <div style={{
         background: 'rgba(217, 119, 6, 0.06)',
         border: '1px solid rgba(217, 119, 6, 0.25)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '18px 22px',
         fontSize: '14px',
         color: 'var(--text)',

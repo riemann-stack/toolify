@@ -322,7 +322,7 @@ export default function UnitPriceClient() {
                 return (
                   <p key={c.product.id} className={s.effectiveItem}>
                     <strong>{c.product.id} {c.product.name || '상품'}</strong> ({c.pct}% 사용 시) →
-                    실질 <strong style={{ color: '#EA580C' }}>{fmt1(c.effectiveUnitPrice)}원/{baseUnitLabel}</strong>
+                    실질 <strong style={{ color: 'var(--orange-600)' }}>{fmt1(c.effectiveUnitPrice)}원/{baseUnitLabel}</strong>
                     <span style={{ color: 'var(--muted)' }}> (표시 단가의 {fmt1(100 / c.pct)}배)</span>
                   </p>
                 )

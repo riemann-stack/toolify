@@ -167,7 +167,7 @@ export default function CustomsClient() {
                 >
                   <span className={s.itemEmoji} aria-hidden="true">{it.emoji}</span>
                   <span className={s.itemLabel}>{it.shortLabel}</span>
-                  <span className={s.itemRate} style={{ color: it.dutyRate === 0 ? '#0D9488' : 'var(--accent)' }}>
+                  <span className={s.itemRate} style={{ color: it.dutyRate === 0 ? 'var(--teal-600)' : 'var(--accent)' }}>
                     {it.dutyRate}%{it.dutyRate === 0 && ' ⭐'}
                   </span>
                 </button>
@@ -241,7 +241,7 @@ export default function CustomsClient() {
             <p className={s.heroLabel}>
               {country.flag} {country.shortName} · {item.emoji} {item.label}
             </p>
-            <p className={s.heroValue} style={{ color: result.isDutyFree ? '#0D9488' : '#DB2777' }}>
+            <p className={s.heroValue} style={{ color: result.isDutyFree ? 'var(--teal-600)' : 'var(--pink-600)' }}>
               {result.isDutyFree ? '✅ 면세' : '❌ 과세'}
             </p>
             <p className={s.heroSub}>
@@ -251,10 +251,10 @@ export default function CustomsClient() {
               {result.isDutyFree
                 ? <>면세 한도 <strong>${result.dutyFreeLimit}</strong>까지 여유 <strong style={{ color: 'var(--accent)' }}>${Math.max(0, result.dutyFreeLimit - result.productUsd).toFixed(2)}</strong></>
                 : usage === 'business'
-                  ? <>🏢 사업자 직구 — 면세 한도 적용 <strong style={{ color: '#DB2777' }}>X</strong></>
+                  ? <>🏢 사업자 직구 — 면세 한도 적용 <strong style={{ color: 'var(--pink-600)' }}>X</strong></>
                   : item.dutyFreeExcluded
-                    ? <>🍷 소액면세 배제 품목 — 한도와 <strong style={{ color: '#DB2777' }}>무관하게 과세</strong></>
-                    : <>면세 한도 <strong>${result.dutyFreeLimit}</strong> 초과 <strong style={{ color: '#DB2777' }}>${(result.productUsd - result.dutyFreeLimit).toFixed(2)}</strong></>
+                    ? <>🍷 소액면세 배제 품목 — 한도와 <strong style={{ color: 'var(--pink-600)' }}>무관하게 과세</strong></>
+                    : <>면세 한도 <strong>${result.dutyFreeLimit}</strong> 초과 <strong style={{ color: 'var(--pink-600)' }}>${(result.productUsd - result.dutyFreeLimit).toFixed(2)}</strong></>
               }
             </p>
           </div>
@@ -275,7 +275,7 @@ export default function CustomsClient() {
               <strong>{fmtKrw(result.finalKrw)}</strong>
             </p>
             <p className={s.heroSub}>
-              간이 예상세액 <strong style={{ color: result.totalTax > 0 ? '#DB2777' : 'var(--accent)' }}>
+              간이 예상세액 <strong style={{ color: result.totalTax > 0 ? 'var(--pink-600)' : 'var(--accent)' }}>
                 {result.totalTax > 0 ? `+${fmtKrw(result.totalTax)}` : '0원'}
               </strong>
               <br /><span style={{ fontSize: 12 }}>※ HS코드·원산지·FTA·개별 규정 미반영 <strong>간이 예상치</strong>입니다. 통관 수수료·국내 판매가 비교는 품목·브랜드 편차가 커 제공하지 않아요. 정확한 세액은 <strong>관세청 예상세액 조회</strong>로 확인하세요.</span>
@@ -374,7 +374,7 @@ export default function CustomsClient() {
                       style={{ cursor: 'pointer' }}
                     >
                       <td>{it.emoji} {it.label}</td>
-                      <td className={s.cellMono} style={{ color: it.dutyRate === 0 ? '#0D9488' : it.dutyRate >= 15 ? '#DB2777' : 'var(--accent)' }}>
+                      <td className={s.cellMono} style={{ color: it.dutyRate === 0 ? 'var(--teal-600)' : it.dutyRate >= 15 ? 'var(--pink-600)' : 'var(--accent)' }}>
                         {it.dutyRate}%{it.dutyRate === 0 && ' ⭐'}
                       </td>
                       <td className={s.cellMono}>{it.isListed ? '✅' : '❌'}</td>
@@ -482,7 +482,7 @@ export default function CustomsClient() {
                     <span>{item.emoji} {item.shortLabel}</span>
                     <span>{fmtCurrency(sc.productPrice + sc.shippingFee, country.currencyUnit, 0)}</span>
                   </div>
-                  <p className={s.scenarioResult} style={{ color: r.isDutyFree ? '#0D9488' : '#DB2777' }}>
+                  <p className={s.scenarioResult} style={{ color: r.isDutyFree ? 'var(--teal-600)' : 'var(--pink-600)' }}>
                     {r.isDutyFree ? '✅ 면세' : `❌ 과세 +${fmtKrw(r.totalTax)}`} → {fmtKrw(r.finalKrw)}
                   </p>
                   <div className={s.scenarioNotes}>

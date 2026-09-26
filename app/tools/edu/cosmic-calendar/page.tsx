@@ -15,8 +15,8 @@ const TABLE_IDS = ['bigbang', 'firstGalaxies', 'milkyWay', 'solarSystem', 'earth
     이 기준 연도는 날짜 계산에만 쓰이고 표시에는 나오지 않는다(억 단위에서는 차이가 없다). */
 const TABLE_REF_YEAR = 2026
 const CAT_COLOR: Record<CatKey, string> = {
-  cosmic: '#9B59B6', solar: '#A16207', earth: '#0891B2',
-  life: '#059669', human: '#EA580C', civilization: '#DC2626', now: '#0D9488',
+  cosmic: 'var(--amethyst)', solar: 'var(--yellow-700)', earth: 'var(--cyan-600)',
+  life: 'var(--emerald-600)', human: 'var(--orange-600)', civilization: 'var(--red-600)', now: 'var(--teal-600)',
 }
 
 export const metadata = buildMetadata({
@@ -60,7 +60,7 @@ export default function CosmicCalendarPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />코스믹 캘린더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -87,20 +87,20 @@ export default function CosmicCalendarPage() {
 
         {/* ── 1. 코스믹 캘린더란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             코스믹 캘린더란?
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            <strong style={{ color: 'var(--text)' }}>코스믹 캘린더(Cosmic Calendar)</strong>는 천문학자 <strong style={{ color: '#9333EA' }}>칼 세이건</strong>이 그의 책
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+            <strong style={{ color: 'var(--text)' }}>코스믹 캘린더(Cosmic Calendar)</strong>는 천문학자 <strong style={{ color: 'var(--purple-600)' }}>칼 세이건</strong>이 그의 책
             &ldquo;에덴의 용(The Dragons of Eden, 1977)&rdquo;에서 제안한 개념입니다.
             138억 년의 우주 역사를 1년(365일)으로 압축해, 인간이 직관적으로 이해하기 어려운 우주의 시간 스케일을 체감하게 합니다.
           </div>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -109,14 +109,14 @@ export default function CosmicCalendarPage() {
             <div><span style={{ color: 'var(--muted)' }}>1년</span> = 138억 년</div>
             <div><span style={{ color: 'var(--muted)' }}>1일</span> ≈ 3,777만 년</div>
             <div><span style={{ color: 'var(--muted)' }}>1시간</span> ≈ 157만 년</div>
-            <div><span style={{ color: 'var(--muted)' }}>1분</span> ≈ <strong style={{ color: '#0D9488' }}>26,200년</strong></div>
-            <div><span style={{ color: 'var(--muted)' }}>1초</span> ≈ <strong style={{ color: '#0D9488' }}>437년</strong></div>
+            <div><span style={{ color: 'var(--muted)' }}>1분</span> ≈ <strong style={{ color: 'var(--teal-600)' }}>26,200년</strong></div>
+            <div><span style={{ color: 'var(--muted)' }}>1초</span> ≈ <strong style={{ color: 'var(--teal-600)' }}>437년</strong></div>
           </div>
         </div>
 
         {/* ── 2. 주요 사건 요약 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             우주 달력의 주요 사건 (요약)
           </h2>
           <div className="tableScroll">
@@ -142,12 +142,12 @@ export default function CosmicCalendarPage() {
                   }
                 }).map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>
                       <span style={{ display: 'inline-block', width: 8, height: 8, borderRadius: '50%', background: r.c, marginRight: 8, verticalAlign: 'middle' }} />
                       {r.e}
                     </td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{r.r}</td>
                   </tr>
                 ))}
               </tbody>
@@ -157,24 +157,24 @@ export default function CosmicCalendarPage() {
 
         {/* ── 3. 12월 31일 충격 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             12월 31일 - 인류 등장
           </h2>
           <div style={{
             background: 'rgba(220,38,38,0.05)',
             border: '1px solid rgba(220,38,38,0.30)',
-            borderRadius: 14,
+            borderRadius: 'var(--radius-card)',
             padding: '18px 22px',
             fontSize: 13,
             color: 'var(--text)',
             lineHeight: 2,
           }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
-              <li>인류는 우주 달력의 마지막 <strong style={{ color: '#DC2626' }}>1시간 36분</strong>에 등장했습니다.</li>
-              <li>현생 인류(호모 사피엔스)는 마지막 <strong style={{ color: '#DC2626' }}>12분</strong>.</li>
-              <li>문자가 발명된 후 모든 인류 역사는 마지막 <strong style={{ color: '#DC2626' }}>약 12초</strong>.</li>
-              <li>산업혁명 이후는 <strong style={{ color: '#DC2626' }}>0.6초</strong>.</li>
-              <li>인터넷 시대는 <strong style={{ color: '#DC2626' }}>0.07초</strong>.</li>
+              <li>인류는 우주 달력의 마지막 <strong style={{ color: 'var(--red-600)' }}>1시간 36분</strong>에 등장했습니다.</li>
+              <li>현생 인류(호모 사피엔스)는 마지막 <strong style={{ color: 'var(--red-600)' }}>12분</strong>.</li>
+              <li>문자가 발명된 후 모든 인류 역사는 마지막 <strong style={{ color: 'var(--red-600)' }}>약 12초</strong>.</li>
+              <li>산업혁명 이후는 <strong style={{ color: 'var(--red-600)' }}>0.6초</strong>.</li>
+              <li>인터넷 시대는 <strong style={{ color: 'var(--red-600)' }}>0.07초</strong>.</li>
             </ul>
             <p style={{ marginTop: 12, fontSize: 13, color: 'var(--muted)', fontStyle: 'italic' }}>
               인류의 모든 문명·과학·예술은 우주 1년 중 마지막 30초에 만들어졌습니다.
@@ -184,16 +184,16 @@ export default function CosmicCalendarPage() {
 
         {/* ── 4. 압축 단위 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             우주 1년 vs 24시간 vs 1km 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '🗓️ 1년 압축',       c: '#9B59B6', items: ['인류 등장(현생 인류): 23:48', '인류 문명(농업): 마지막 27.5초', '문자 이후: 마지막 약 12초'] },
-              { t: '🕐 24시간 압축',    c: '#0D9488', items: ['인류 등장(현생 인류): 23:59:58', '인류 문명(농업): 0.075초', '산업혁명: 0.0016초'] },
-              { t: '📐 1km 압축',       c: '#A16207', items: ['1m = 1,380만 년', '인류 등장: 999.978m', '인류 문명: 마지막 0.9mm'] },
+              { t: '🗓️ 1년 압축',       c: 'var(--amethyst)', items: ['인류 등장(현생 인류): 23:48', '인류 문명(농업): 마지막 27.5초', '문자 이후: 마지막 약 12초'] },
+              { t: '🕐 24시간 압축',    c: 'var(--teal-600)', items: ['인류 등장(현생 인류): 23:59:58', '인류 문명(농업): 0.075초', '산업혁명: 0.0016초'] },
+              { t: '📐 1km 압축',       c: 'var(--yellow-700)', items: ['1m = 1,380만 년', '인류 등장: 999.978m', '인류 문명: 마지막 0.9mm'] },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => (<li key={j}>{it}</li>))}
@@ -205,18 +205,18 @@ export default function CosmicCalendarPage() {
 
         {/* ── 5. 138억 년 핵심 시기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             핵심 사건
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '초기 우주 (1월~3월)',        c: '#9B59B6', d: '빅뱅, 원자 형성, 최초의 별·은하 등장' },
-              { t: '별·행성의 시대 (3월~8월)',    c: '#A16207', d: '별이 폭발하며 무거운 원소 생성, 우주의 화학적 다양성 확대' },
-              { t: '태양계와 지구 (9월)',         c: '#0891B2', d: '태양 형성, 지구·달 형성, 생명이 등장' },
-              { t: '생명의 진화 (10월~12월)',     c: '#059669', d: '단세포 → 다세포 → 동식물, 캄브리아기 폭발 → 공룡 → 포유류' },
-              { t: '인류의 등장 (12월 31일)',     c: '#DC2626', d: '단 하루 안에 모든 인류 진화·문명 발생' },
+              { t: '초기 우주 (1월~3월)',        c: 'var(--amethyst)', d: '빅뱅, 원자 형성, 최초의 별·은하 등장' },
+              { t: '별·행성의 시대 (3월~8월)',    c: 'var(--yellow-700)', d: '별이 폭발하며 무거운 원소 생성, 우주의 화학적 다양성 확대' },
+              { t: '태양계와 지구 (9월)',         c: 'var(--cyan-600)', d: '태양 형성, 지구·달 형성, 생명이 등장' },
+              { t: '생명의 진화 (10월~12월)',     c: 'var(--emerald-600)', d: '단세포 → 다세포 → 동식물, 캄브리아기 폭발 → 공룡 → 포유류' },
+              { t: '인류의 등장 (12월 31일)',     c: 'var(--red-600)', d: '단 하루 안에 모든 인류 진화·문명 발생' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
@@ -226,16 +226,16 @@ export default function CosmicCalendarPage() {
 
         {/* ── 6. 칼 세이건 관점 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             칼 세이건의 코스믹 관점
           </h2>
           <div style={{
             background: 'rgba(155,89,182,0.06)',
-            borderLeft: '4px solid #9B59B6',
-            borderRadius: 8,
+            borderLeft: '4px solid var(--amethyst)',
+            borderRadius: 'var(--radius-s)',
             padding: '16px 20px',
             fontStyle: 'italic',
-            fontFamily: '"Noto Sans KR", sans-serif',
+            fontFamily: 'var(--font-sans)',
             color: 'var(--text)',
             fontSize: 14,
             lineHeight: 1.85,
@@ -244,7 +244,7 @@ export default function CosmicCalendarPage() {
             <br /><br />
             &ldquo;우리 모두는 별의 자녀다. 별의 잔해로 만들어진 존재다.&rdquo;
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
             칼 세이건은 코스믹 캘린더를 통해 두 가지 메시지를 전했습니다:
             <ul style={{ paddingLeft: 22, margin: '8px 0 0', color: 'var(--muted)' }}>
               <li><strong style={{ color: 'var(--text)' }}>인류의 짧음에 대한 겸손</strong> — 우주 시간에서 문자 이후 모든 역사는 마지막 약 12초</li>
@@ -255,7 +255,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 7. 우주 시간 이해의 의미 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             우주 시간 이해의 의미
           </h2>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 16 }}>
@@ -269,8 +269,8 @@ export default function CosmicCalendarPage() {
               { t: '우주가 스스로를 보는 눈', d: '138억 년 만에 처음으로 물질이 의식을 갖고 자신의 기원을 묻기 시작했습니다. 그 드문 능력이 바로 지금의 인간입니다.' },
               { t: '남은 찰나에 대한 책임', d: '모든 인류 역사가 마지막 몇 초라면, 우리가 지구에 남기는 흔적(기후·생태)은 그 찰나가 다음 세대에게 보내는 신호입니다.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--teal-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, color: 'var(--teal-600)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>{c.d}</p>
               </div>
             ))}
@@ -282,13 +282,13 @@ export default function CosmicCalendarPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -303,7 +303,7 @@ export default function CosmicCalendarPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -323,7 +323,7 @@ export default function CosmicCalendarPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -338,10 +338,10 @@ export default function CosmicCalendarPage() {
 
         {/* ── 10. 참고 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             참고 자료
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li>칼 세이건, &ldquo;에덴의 용&rdquo;(The Dragons of Eden), 1977</li>
               <li>칼 세이건, &ldquo;코스모스&rdquo;(Cosmos), 1980 다큐멘터리</li>

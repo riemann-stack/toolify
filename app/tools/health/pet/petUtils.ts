@@ -222,19 +222,19 @@ export function evaluateBody(
   // 성장기(1세 미만, 대형견은 18개월 미만)는 성견·성묘 체중 범위를 적용하지 않는다
   const growthEnd = species === 'dog' && size === 'large' ? 1.5 : 1
   if (ageYears < growthEnd) {
-    return { status: 'growing', label: '성장기', color: '#0891B2',
+    return { status: 'growing', label: '성장기', color: 'var(--cyan-600)',
       message: `성장기에는 ${species === 'dog' ? '성견' : '성묘'} 체중 기준을 적용하지 않습니다. 월령별 성장 곡선과 체형(BCS)은 수의사와 함께 확인하세요.` }
   }
 
   if (species === 'cat') {
-    if (weight < 3.0)  return { status: 'underweight', label: '저체중', color: '#0891B2',
+    if (weight < 3.0)  return { status: 'underweight', label: '저체중', color: 'var(--cyan-600)',
       message: '평균보다 가벼운 편입니다. 식욕·활동·치아 점검을 권장합니다.' }
-    if (weight <= 5.5) return { status: 'ideal',       label: '적정 체중', color: '#059669',
+    if (weight <= 5.5) return { status: 'ideal',       label: '적정 체중', color: 'var(--emerald-600)',
       message: '일반적인 고양이 정상 체중 범위입니다 (3.0~5.5kg).',
       range: { min: 3.0, max: 5.5, sizeName: '고양이' } }
-    if (weight <= 7.0) return { status: 'overweight',  label: '과체중', color: '#A16207',
+    if (weight <= 7.0) return { status: 'overweight',  label: '과체중', color: 'var(--yellow-700)',
       message: '관절·심장 부담이 늘어납니다. 사료량 10~15% 감량 + 놀이 시간 ↑ 권장.' }
-    return                     { status: 'obese',       label: '비만', color: '#DC2626',
+    return                     { status: 'obese',       label: '비만', color: 'var(--red-600)',
       message: '비만은 당뇨·관절염 위험이 큽니다. 수의사 상담 후 감량 계획을 권장합니다.' }
   }
 
@@ -247,18 +247,18 @@ export function evaluateBody(
   const r = { min: range.min, max: range.max, sizeName: range.name }
 
   if (weight < range.min)
-    return { status: 'underweight', label: '저체중', color: '#0891B2',
+    return { status: 'underweight', label: '저체중', color: 'var(--cyan-600)',
       message: `${range.name} 정상 범위(${range.min}~${range.max}kg)보다 가볍습니다. 영양·기생충·치아 점검을 권장합니다.`,
       range: r }
   if (weight <= range.max)
-    return { status: 'ideal', label: '적정 체중', color: '#059669',
+    return { status: 'ideal', label: '적정 체중', color: 'var(--emerald-600)',
       message: `${range.name} 정상 체중 범위입니다 (${range.min}~${range.max}kg).`,
       range: r }
   if (weight <= range.max * 1.25)
-    return { status: 'overweight', label: '과체중', color: '#A16207',
+    return { status: 'overweight', label: '과체중', color: 'var(--yellow-700)',
       message: `${range.name} 정상 범위(${range.min}~${range.max}kg)를 초과했습니다. 사료량 10~15% 감량을 권장합니다.`,
       range: r }
-  return     { status: 'obese', label: '비만', color: '#DC2626',
+  return     { status: 'obese', label: '비만', color: 'var(--red-600)',
       message: '비만견은 수명 1.5~2년 단축 보고가 있습니다. 수의사 감량 계획을 권장합니다.',
       range: r }
 }

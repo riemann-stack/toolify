@@ -53,7 +53,7 @@ export default function BatteryPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />배터리 용량 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -80,20 +80,20 @@ export default function BatteryPage() {
 
         {/* ── 1. mAh와 Wh의 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             mAh와 Wh의 차이 — 왜 Wh로 환산해야 하나?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
             보조배터리에 보통 적혀 있는 <strong style={{ color: 'var(--text)' }}>mAh(밀리암페어시)</strong>는 <strong style={{ color: 'var(--text)' }}>전류 × 시간</strong>을 나타내는 단위로, 같은 전압에서만 비교가 됩니다. 반면 <strong style={{ color: 'var(--accent)' }}>Wh(와트시)</strong>는 <strong style={{ color: 'var(--text)' }}>전압 × 전류 × 시간</strong>으로, 전압이 달라도 동일한 “에너지의 양”을 비교할 수 있는 절대적 단위입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
               <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px', fontWeight: 600 }}>mAh (밀리암페어시)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>
                 전류량 × 시간. <strong>전압이 다르면 직접 비교 불가</strong>. 예) 3.7V 10,000mAh와 5V 10,000mAh는 다른 에너지.
               </p>
             </div>
-            <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '12px 14px' }}>
+            <div style={{ background: 'color-mix(in srgb, var(--accent) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', marginBottom: '4px', fontWeight: 700 }}>Wh (와트시)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>
                 전압 × 전류 × 시간 = <strong>실제 에너지량</strong>. 항공 규정·노트북·전기차 모두 Wh 기준.
@@ -107,11 +107,11 @@ export default function BatteryPage() {
 
         {/* ── 2. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             핵심 공식
           </h2>
-          <div style={{ background: 'rgba(14,165,233,0.05)', border: '1px solid rgba(14,165,233,0.3)', borderRadius: '12px', padding: '20px', textAlign: 'center' }}>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px', marginBottom: '6px' }}>
+          <div style={{ background: 'color-mix(in srgb, var(--accent) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '20px', textAlign: 'center' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.5px', marginBottom: '6px' }}>
               Wh = (<span style={{ color: 'var(--accent)' }}>mAh</span> × <span style={{ color: 'var(--accent)' }}>V</span>) ÷ 1000
             </p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -126,8 +126,8 @@ export default function BatteryPage() {
               { ex: '5,000mAh × 5V',     res: '25 Wh' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 12px' }}>
-                <p style={{ fontSize: '12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{c.ex}</p>
-                <p style={{ fontSize: '15px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, marginTop: '2px' }}>= {c.res}</p>
+                <p style={{ fontSize: '12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{c.ex}</p>
+                <p style={{ fontSize: '15px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800, marginTop: '2px' }}>= {c.res}</p>
               </div>
             ))}
           </div>
@@ -135,7 +135,7 @@ export default function BatteryPage() {
 
         {/* ── 3. 인기 보조배터리 모델별 Wh 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             인기 보조배터리 모델별 Wh 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -152,20 +152,20 @@ export default function BatteryPage() {
               </thead>
               <tbody>
                 {[
-                  { n: 'Anker PowerCore 10000',   m: '10,000', w: '37',    s: '✅', c: '#059669' },
-                  { n: 'Anker PowerCore 20100',   m: '20,100', w: '74.4',  s: '✅', c: '#059669' },
-                  { n: 'Anker PowerCore 26800',   m: '26,800', w: '99.2',  s: '✅', c: '#059669' },
-                  { n: '샤오미 Mi 10000mAh',      m: '10,000', w: '37',    s: '✅', c: '#059669' },
-                  { n: '샤오미 Mi 20000mAh',      m: '20,000', w: '74',    s: '✅', c: '#059669' },
-                  { n: 'RAVPower 26800',          m: '26,800', w: '99.2',  s: '✅', c: '#059669' },
-                  { n: 'Anker 737 (PowerCore 24K)',m: '24,000', w: '88.8',  s: '✅', c: '#059669' },
-                  { n: 'Zendure SuperTank',       m: '27,000', w: '99.9',  s: '✅ 한계', c: '#059669' },
-                  { n: 'EcoFlow RIVER 2 (파워스테이션)', m: '—', w: '256',   s: '❌', c: '#DC2626' },
+                  { n: 'Anker PowerCore 10000',   m: '10,000', w: '37',    s: '✅', c: 'var(--emerald-600)' },
+                  { n: 'Anker PowerCore 20100',   m: '20,100', w: '74.4',  s: '✅', c: 'var(--emerald-600)' },
+                  { n: 'Anker PowerCore 26800',   m: '26,800', w: '99.2',  s: '✅', c: 'var(--emerald-600)' },
+                  { n: '샤오미 Mi 10000mAh',      m: '10,000', w: '37',    s: '✅', c: 'var(--emerald-600)' },
+                  { n: '샤오미 Mi 20000mAh',      m: '20,000', w: '74',    s: '✅', c: 'var(--emerald-600)' },
+                  { n: 'RAVPower 26800',          m: '26,800', w: '99.2',  s: '✅', c: 'var(--emerald-600)' },
+                  { n: 'Anker 737 (PowerCore 24K)',m: '24,000', w: '88.8',  s: '✅', c: 'var(--emerald-600)' },
+                  { n: 'Zendure SuperTank',       m: '27,000', w: '99.9',  s: '✅ 한계', c: 'var(--emerald-600)' },
+                  { n: 'EcoFlow RIVER 2 (파워스테이션)', m: '—', w: '256',   s: '❌', c: 'var(--red-600)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.w}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.m}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.w}</td>
                     <td style={{ padding: '9px 10px', color: r.c, fontWeight: 700 }}>{r.s}</td>
                   </tr>
                 ))}
@@ -176,7 +176,7 @@ export default function BatteryPage() {
 
         {/* ── 4. 항공사별 보조배터리 정책 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             항공사별 보조배터리 정책
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -191,9 +191,9 @@ export default function BatteryPage() {
               { air: '🇯🇵 일본항공 (JL)',     limit: '160Wh 이하 (160Wh 초과 불가)',    note: '훼손·부풀어 오른 배터리는 반입 거부.' },
               { air: '🇸🇬 싱가포르항공 (SQ)', limit: '100Wh 이하 자유 / 100~160Wh 2개', note: '온라인 사전 신고 권장.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>{c.air}</p>
-                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginBottom: '4px' }}>{c.limit}</p>
+                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, marginBottom: '4px' }}>{c.limit}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.note}</p>
               </div>
             ))}
@@ -212,7 +212,7 @@ export default function BatteryPage() {
 
         {/* ── 4-1. 2025~2026년 달라진 한국 기내 보조배터리 규정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             2025~2026년 달라진 한국 기내 보조배터리 규정
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -236,8 +236,8 @@ export default function BatteryPage() {
                 body: '한국 제안으로 개정된 ICAO 국제기준(2026-03-27 이사회 최종 승인)에 따라 보조배터리(파워뱅크)는 1인당 최대 2개(160Wh 이하, 100~160Wh는 항공사 승인 필요)까지만 기내 반입 가능. 보조배터리 자체 충전은 물론, 보조배터리로 다른 기기를 충전하는 기내 사용도 전면 금지.',
               },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginBottom: '4px' }}>{c.d}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, marginBottom: '4px' }}>{c.d}</p>
                 <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>{c.t}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7 }}>{c.body}</p>
               </div>
@@ -253,7 +253,7 @@ export default function BatteryPage() {
 
         {/* ── 5. 자주 검색되는 사례 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 검색되는 사례
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -265,9 +265,9 @@ export default function BatteryPage() {
               { q: '50,000mAh 비행기 반입?',        a: '185 Wh — 불가 ❌', sub: '160Wh 초과로 일반 항공기 반입 불가' },
               { q: '27,000mAh가 한계인 이유?',      a: '99.9 Wh',         sub: '3.7V 기준 27,000mAh = 99.9Wh로 100Wh 직전. 더 큰 용량은 사전 승인 필요' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px', fontWeight: 600 }}>Q. {c.q}</p>
-                <p style={{ fontSize: '17px', color: 'var(--accent)', fontWeight: 800, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: '4px', letterSpacing: '-0.3px' }}>{c.a}</p>
+                <p style={{ fontSize: '17px', color: 'var(--accent)', fontWeight: 800, fontFamily: 'var(--font-sans)', marginBottom: '4px', letterSpacing: '-0.3px' }}>{c.a}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.sub}</p>
               </div>
             ))}
@@ -284,7 +284,7 @@ export default function BatteryPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -302,7 +302,7 @@ export default function BatteryPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

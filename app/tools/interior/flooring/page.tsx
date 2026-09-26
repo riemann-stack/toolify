@@ -42,7 +42,7 @@ export default function FlooringPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />바닥재 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -59,7 +59,7 @@ export default function FlooringPage() {
 
         {/* ── 1. 바닥재 종류별 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             바닥재 종류별 비교
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -82,7 +82,7 @@ export default function FlooringPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontSize: 12 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontSize: 12 }}>{r.w}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
@@ -98,7 +98,7 @@ export default function FlooringPage() {
 
         {/* ── 2. 한국 시판 박스 면적 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 시판 박스 면적 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -108,39 +108,39 @@ export default function FlooringPage() {
                 ['두께', '8~12mm'],
                 ['1박스 ≈', '0.73평'],
               ]},
-              { t: '강마루', c: '#A16207', items: [
+              { t: '강마루', c: 'var(--yellow-700)', items: [
                 ['일반 박스', '약 2.6 ㎡'],
                 ['두께', '7~9mm'],
                 ['1박스 ≈', '0.79평'],
               ]},
-              { t: '원목마루', c: '#9B59B6', items: [
+              { t: '원목마루', c: 'var(--amethyst)', items: [
                 ['일반 박스', '약 2.0 ㎡'],
                 ['두께', '14~21mm'],
                 ['1박스 ≈', '0.61평'],
               ]},
-              { t: '데코타일', c: '#0891B2', items: [
+              { t: '데코타일', c: 'var(--cyan-600)', items: [
                 ['일반 박스', '약 3.3 ㎡'],
                 ['두께', '3~5mm'],
                 ['1박스 ≈', '1평'],
               ]},
-              { t: '장판 (롤)', c: '#059669', items: [
+              { t: '장판 (롤)', c: 'var(--emerald-600)', items: [
                 ['폭', '1.8m / 2.0m'],
                 ['길이', '미터 단위 절단'],
                 ['두께', '1.8~4.5mm'],
               ]},
-              { t: '도기 타일', c: '#DC2626', items: [
+              { t: '도기 타일', c: 'var(--red-600)', items: [
                 ['주력 사이즈', '60×60cm'],
                 ['1장 면적', '0.36 ㎡'],
                 ['1평 ≈', '약 9.2장'],
               ]},
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
                   {g.items.map(([k, v], j) => (
                     <div key={j} style={{ display: 'flex', justifyContent: 'space-between', fontSize: 12, color: 'var(--muted)' }}>
                       <span>{k}</span>
-                      <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{v}</span>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{v}</span>
                     </div>
                   ))}
                 </div>
@@ -151,15 +151,15 @@ export default function FlooringPage() {
 
         {/* ── 3. 시공 방식별 로스율 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             시공 방식별 로스율 (여유분)
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -169,14 +169,14 @@ export default function FlooringPage() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px', marginTop: 12 }}>
             {[
-              { t: '평행 시공',   c: '#059669',     v: '+0%', d: '벽과 평행하게 일자' },
+              { t: '평행 시공',   c: 'var(--emerald-600)',     v: '+0%', d: '벽과 평행하게 일자' },
               { t: '대각선 시공', c: 'var(--accent)', v: '+5%', d: '45° 기울여 시공' },
-              { t: '헤링본',     c: '#EA580C',     v: '+10%', d: 'V자 반복 패턴' },
-              { t: '쉐브론',     c: '#DC2626',     v: '+15%', d: '대칭 V자 패턴' },
+              { t: '헤링본',     c: 'var(--orange-600)',     v: '+10%', d: 'V자 반복 패턴' },
+              { t: '쉐브론',     c: 'var(--red-600)',     v: '+15%', d: '대칭 V자 패턴' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${m.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${m.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: m.c, fontWeight: 700, marginBottom: 4 }}>{m.t}</p>
-                <p style={{ fontSize: 22, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, color: 'var(--text)', marginBottom: 4 }}>{m.v}</p>
+                <p style={{ fontSize: 22, fontFamily: 'var(--font-sans)', fontWeight: 800, color: 'var(--text)', marginBottom: 4 }}>{m.v}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)' }}>{m.d}</p>
               </div>
             ))}
@@ -185,7 +185,7 @@ export default function FlooringPage() {
 
         {/* ── 4. 평수별 박스 수 빠른 참조 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             평수별 박스 수 빠른 참조 (평행 시공 +10% 기준)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -209,12 +209,12 @@ export default function FlooringPage() {
                   { p: '35평', m: 115.7, s: 54, k: 49, o: 64, d: 39 },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.m}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.s}박스</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.k}박스</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.o}박스</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.d}박스</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.m}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.s}박스</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.k}박스</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.o}박스</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.d}박스</td>
                   </tr>
                 ))}
               </tbody>
@@ -227,11 +227,11 @@ export default function FlooringPage() {
 
         {/* ── 5. 셀프 vs 전문 시공 비용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             셀프 vs 전문 시공 비용 비교 (15평 강화마루 기준)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🛠️ 셀프 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>자재비 (23박스 × 2.4㎡ × 28,000원): <strong>약 155만원</strong></li>
@@ -241,44 +241,44 @@ export default function FlooringPage() {
                 <li style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>※ 작업 시간: 2~3일</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>👷 전문 시공</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--orange-600)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 8 }}>👷 전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>자재비: <strong>약 155만원</strong></li>
                 <li>인건비 (㎡당 1.5만원): <strong>약 75만원</strong></li>
                 <li>철거·정리: <strong>약 20만원</strong></li>
-                <li style={{ color: '#EA580C', fontWeight: 700, marginTop: 4 }}>총: 약 250만원</li>
+                <li style={{ color: 'var(--orange-600)', fontWeight: 700, marginTop: 4 }}>총: 약 250만원</li>
                 <li style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>※ 작업 시간: 1일 (헤링본 +50%)</li>
               </ul>
             </div>
           </div>
           <div style={{
-            background: 'rgba(14,165,233,0.05)',
-            border: '1px solid rgba(14,165,233,0.3)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--accent) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            ✅ <strong style={{ color: 'var(--accent)' }}>장판·데코타일은 셀프 도전 가능</strong>, 강마루·원목마루는 단차·접착 난이도 높아 <strong style={{ color: '#EA580C' }}>전문 시공 권장</strong>
+            ✅ <strong style={{ color: 'var(--accent)' }}>장판·데코타일은 셀프 도전 가능</strong>, 강마루·원목마루는 단차·접착 난이도 높아 <strong style={{ color: 'var(--orange-600)' }}>전문 시공 권장</strong>
           </div>
         </div>
 
         {/* ── 6. 바닥재 선택 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             바닥재 선택 가이드 (예산·내구성·디자인)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { t: '💸 예산형 (~평당 5만원)', c: '#059669', items: ['장판 (PVC)', '저가 데코타일', '전세·임대·1~2년 거주'] },
+              { t: '💸 예산형 (~평당 5만원)', c: 'var(--emerald-600)', items: ['장판 (PVC)', '저가 데코타일', '전세·임대·1~2년 거주'] },
               { t: '⚖️ 표준 (평당 8~15만원)', c: 'var(--accent)', items: ['강화마루', '강마루', '아파트 표준 선택'] },
-              { t: '✨ 프리미엄 (평당 20만원~)', c: '#9B59B6', items: ['원목마루', '대형 포세린 타일', '신축·자가·장기 거주'] },
-              { t: '💧 방수 필수 공간', c: '#0891B2', items: ['도기/자기 타일', '데코타일 (LVT)', '욕실·주방·발코니'] },
+              { t: '✨ 프리미엄 (평당 20만원~)', c: 'var(--amethyst)', items: ['원목마루', '대형 포세린 타일', '신축·자가·장기 거주'] },
+              { t: '💧 방수 필수 공간', c: 'var(--cyan-600)', items: ['도기/자기 타일', '데코타일 (LVT)', '욕실·주방·발코니'] },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                   {g.items.map((v, j) => (<li key={j}>{v}</li>))}
@@ -290,7 +290,7 @@ export default function FlooringPage() {
 
         {/* ── 7. 시공 시 주의사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             시공 시 주의사항
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -302,7 +302,7 @@ export default function FlooringPage() {
               { t: '🌬️ 환기', d: '본드·실리콘 시공 후 24시간 환기 필수. 새집증후군 예방.' },
               { t: '✂️ 여유분 보관', d: '동일 로트(LOT) 자재 1박스는 보수용으로 남겨두세요. 추후 부분 교체 시 색·결 차이 방지.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
@@ -320,7 +320,7 @@ export default function FlooringPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -340,7 +340,7 @@ export default function FlooringPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

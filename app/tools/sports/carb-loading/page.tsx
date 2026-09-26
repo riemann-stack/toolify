@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -66,7 +66,7 @@ export default function CarbLoadingPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />카보로딩 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -94,8 +94,8 @@ export default function CarbLoadingPage() {
             우리 몸은 탄수화물을 <strong style={{ color: 'var(--text)' }}>글리코겐</strong> 형태로 근육과 간에 저장합니다. 하지만 저장량은 한정돼 있어, 마라톤처럼 오래 달리면 대개 <strong style={{ color: 'var(--text)' }}>30km 안팎에서 바닥</strong>나며 이때 몸이 급격히 무거워지는 &lsquo;벽&rsquo;을 만납니다. 대회 전 며칠간 탄수화물을 늘리고 운동량을 줄이면 이 저장고를 평소보다 크게 채워, 벽에 부딪히는 시점을 뒤로 미룰 수 있습니다.
           </p>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>하루 목표(g)</span> = 체중(kg) × 탄수화물 계수(g/kg)</div>
@@ -124,7 +124,7 @@ export default function CarbLoadingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[3]}</td>
                   </tr>
@@ -161,7 +161,7 @@ export default function CarbLoadingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
                 ))}
@@ -171,7 +171,7 @@ export default function CarbLoadingPage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
             같은 표의 하루 필요량은 훈련 강도에 따라 저강도 3~5, 중강도(약 1시간/일) 5~7, 지구성 프로그램(1~3시간/일) 6~10, 극단적 훈련량(4~5시간/일 초과) 8~12 g/kg/일입니다. 카보로딩의 10~12 g/kg는 훈련량이 가장 많은 선수의 평상시 상한과 맞먹는 양인 셈입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 14 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>이 계산기의 값은 표의 어디에 해당하나</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>
               &lsquo;90분 넘게 걸리는 경기&rsquo;를 골랐을 때 나오는 <strong style={{ color: 'var(--text)' }}>10~12 g/kg</strong>는 표의 카보로딩 행 그대로입니다. 60~90분·60분 이내 경기에 쓰는 8~10·7~8 g/kg는 90분 미만 경기의 <strong style={{ color: 'var(--text)' }}>7~12 g/kg</strong> 범위 안에서 잡은 값으로, 지침상 상한은 12 g/kg입니다. 결과 카드의 &lsquo;대회 아침 체중×1~4g&rsquo;은 경기 전 식사 행(60분 초과 운동, 시작 1~4시간 전)에 해당합니다. 다만 <strong style={{ color: 'var(--text)' }}>경기 중 섭취는 이 계산기가 다루지 않으므로</strong> 위 표의 시간당 g을 따로 챙겨야 합니다 — 상한 90 g/h는 IOC 스포츠영양 합의문(2010)도 &lsquo;약 3시간을 넘는 경기&rsquo;의 목표치로 동일하게 제시하며, 장에서 흡수를 견디도록 훈련 때 미리 연습하라고 못 박습니다.
@@ -217,7 +217,7 @@ export default function CarbLoadingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
                 ))}
@@ -233,7 +233,7 @@ export default function CarbLoadingPage() {
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, margin: '16px 0 0' }}>
             보건복지부·한국영양학회의 2020 한국인 영양소 섭취기준은 곡류군 1인 1회 분량을 <strong style={{ color: 'var(--text)' }}>밥 210 g</strong>으로 잡습니다. 성분표 값으로 환산하면 밥 한 공기가 탄수화물 약 <strong style={{ color: 'var(--text)' }}>66.6 g</strong>(31.71×2.1로 계산한 값이며 성분표 수록값은 아님). 체중 70 kg이 카보로딩 하한 10 g/kg, 즉 하루 700 g을 흰밥만으로 채우려면 약 10.5공기가 필요하다는 뜻입니다. 그래서 같은 100 g에 흰밥의 약 1.5~1.7배가 들어가는 <strong style={{ color: 'var(--text)' }}>떡</strong>이나 꿀처럼 부피 대비 밀도가 높은 급원을 섞고, 끼니 사이 간식으로 나눠 넣는 것이 실전 요령입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 14 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>에너지젤 1회분 (제조사 공식 표기)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>
               Maurten GEL 100 = 사셰당 <strong style={{ color: 'var(--text)' }}>25 g</strong>(과당:포도당 0.8:1, 약 100 kcal) · SiS GO Isotonic 60 mL = <strong style={{ color: 'var(--text)' }}>22 g</strong> · GU Original = <strong style={{ color: 'var(--text)' }}>21~23 g</strong>(1개 100 kcal, 맛에 따라 차이). 시간당 90 g을 젤로만 채운다면 22 g 제품 기준 약 4개가 필요하다는 계산이 나오고, SiS도 &lsquo;종목·강도에 따라 시간당 1~3개로 60~90 g 목표&rsquo;라고 안내합니다. GU는 1~2시간 운동에서 20~30분마다 1개를 수분과 함께 섭취하도록 권합니다.
@@ -251,7 +251,7 @@ export default function CarbLoadingPage() {
               { t: '식이섬유 과다', d: '현미·잡곡·생채소는 화장실 문제. 로딩 땐 흰쌀·정제 탄수화물.' },
               { t: '운동을 그대로', d: '로딩 기간에 훈련량 안 줄이면 채운 글리코겐을 다 써버림.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>❌ {c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.d}</p>
               </div>
@@ -281,7 +281,7 @@ export default function CarbLoadingPage() {
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>

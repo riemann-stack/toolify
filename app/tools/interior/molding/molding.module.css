@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,17 +20,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -47,7 +47,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -76,7 +76,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 입력 모드 토글 (3개) ── */
@@ -93,18 +93,18 @@
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modePyung    { border-color: rgba(14,165,233,0.40); }
-.modeMeter    { border-color: rgba(8,145,178,0.40); }
+.modePyung    { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.modeMeter    { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .modePerimeter{ border-color: rgba(234,88,12,0.40); }
 .modePyung.modeActive    { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.modeMeter.modeActive    { background: rgba(8,145,178,0.18); color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
-.modePerimeter.modeActive{ background: rgba(234,88,12,0.18); color: #EA580C;       border-color: #EA580C;     font-weight: 700; }
+.modeMeter.modeActive    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600);       border-color: var(--cyan-600);     font-weight: 700; }
+.modePerimeter.modeActive{ background: rgba(234,88,12,0.18); color: var(--orange-600);       border-color: var(--orange-600);     font-weight: 700; }
 
 .pyungSelect {
   width: 100%;
@@ -113,7 +113,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -136,7 +136,7 @@
   gap: 8px;
   align-items: center;
 }
-.dimSep { color: var(--muted); font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: center; }
+.dimSep { color: var(--muted); font-size: 18px; font-family: var(--font-sans); font-weight: 700; text-align: center; }
 
 .bigInput {
   width: 100%;
@@ -145,7 +145,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -164,7 +164,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -176,12 +176,12 @@
 .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
 
 .inputRow { display: flex; align-items: center; gap: 10px; }
-.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: var(--font-sans); }
 .areaShow {
   font-size: 13px;
   color: var(--accent);
   margin-top: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -197,11 +197,11 @@
 .typeCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 14px;
   cursor: pointer;
   transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   display: flex;
   align-items: center;
   gap: 10px;
@@ -227,22 +227,22 @@
 .typeName { font-size: 13px; font-weight: 700; color: var(--text); }
 .typeDesc { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-.tCeiling     { border-color: rgba(14,165,233,0.40); }
+.tCeiling     { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .tBaseboard   { border-color: rgba(234,88,12,0.40); }
 .tBelt        { border-color: rgba(155,89,182,0.40); }
-.tDoor        { border-color: rgba(8,145,178,0.40); }
+.tDoor        { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .tCeiling.tActive    { background: var(--accent-dim);     border-color: var(--accent); }
-.tBaseboard.tActive  { background: rgba(234,88,12,0.18); border-color: #EA580C; }
-.tBelt.tActive       { background: rgba(155,89,182,0.10); border-color: #9B59B6; }
-.tDoor.tActive       { background: rgba(8,145,178,0.18); border-color: #0891B2; }
+.tBaseboard.tActive  { background: rgba(234,88,12,0.18); border-color: var(--orange-600); }
+.tBelt.tActive       { background: rgba(155,89,182,0.10); border-color: var(--amethyst); }
+.tDoor.tActive       { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); border-color: var(--cyan-600); }
 .tCeiling.tActive .typeCheckbox    { background: var(--accent); color: #000; border-color: var(--accent); }
-.tBaseboard.tActive .typeCheckbox  { background: #EA580C;     color: #000; border-color: #EA580C; }
-.tBelt.tActive .typeCheckbox       { background: #9B59B6;     color: #fff; border-color: #9B59B6; }
-.tDoor.tActive .typeCheckbox       { background: #0891B2;     color: #000; border-color: #0891B2; }
+.tBaseboard.tActive .typeCheckbox  { background: var(--orange-600);     color: #000; border-color: var(--orange-600); }
+.tBelt.tActive .typeCheckbox       { background: var(--amethyst);     color: #fff; border-color: var(--amethyst); }
+.tDoor.tActive .typeCheckbox       { background: var(--cyan-600);     color: #000; border-color: var(--cyan-600); }
 .tCeiling.tActive .typeName    { color: var(--accent); }
-.tBaseboard.tActive .typeName  { color: #EA580C; }
-.tBelt.tActive .typeName       { color: #9333EA; }
-.tDoor.tActive .typeName       { color: #0891B2; }
+.tBaseboard.tActive .typeName  { color: var(--orange-600); }
+.tBelt.tActive .typeName       { color: var(--purple-600); }
+.tDoor.tActive .typeName       { color: var(--cyan-600); }
 
 /* ── 문 제외 옵션 ── */
 .doorOption {
@@ -259,7 +259,7 @@
   cursor: pointer;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .doorOptionInputs {
@@ -284,12 +284,12 @@
 .matCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 12px;
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .matCard:hover { border-color: var(--border-hover); }
 }
@@ -297,7 +297,7 @@
 .matPrice {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   margin-top: 2px;
 }
@@ -307,20 +307,20 @@
 .matMdf       { border-color: var(--accent); }
 .matWood      { border-color: rgba(155,89,182,0.40); }
 .matGypsum    { border-color: rgba(161,98,7,0.40); }
-.matStyrene   { border-color: rgba(8,145,178,0.40); }
+.matStyrene   { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .matCustom    { border-color: var(--border); }
 
-.matPvc.matActive       { background: rgba(16,185,129,0.18); border-color: #059669; }
+.matPvc.matActive       { background: rgba(16,185,129,0.18); border-color: var(--emerald-600); }
 .matMdf.matActive       { background: var(--accent-dim);     border-color: var(--accent); }
-.matWood.matActive      { background: rgba(155,89,182,0.12); border-color: #9B59B6; }
-.matGypsum.matActive    { background: rgba(161,98,7,0.18);  border-color: #A16207; }
-.matStyrene.matActive   { background: rgba(8,145,178,0.18); border-color: #0891B2; }
+.matWood.matActive      { background: rgba(155,89,182,0.12); border-color: var(--amethyst); }
+.matGypsum.matActive    { background: rgba(161,98,7,0.18);  border-color: var(--yellow-700); }
+.matStyrene.matActive   { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); border-color: var(--cyan-600); }
 .matCustom.matActive    { background: var(--accent-dim);     border-color: var(--accent); }
-.matPvc.matActive .matName       { color: #059669; }
+.matPvc.matActive .matName       { color: var(--emerald-600); }
 .matMdf.matActive .matName       { color: var(--accent); }
-.matWood.matActive .matName      { color: #9333EA; }
-.matGypsum.matActive .matName    { color: #A16207; }
-.matStyrene.matActive .matName   { color: #0891B2; }
+.matWood.matActive .matName      { color: var(--purple-600); }
+.matGypsum.matActive .matName    { color: var(--yellow-700); }
+.matStyrene.matActive .matName   { color: var(--cyan-600); }
 .matCustom.matActive .matName    { color: var(--accent); }
 
 .customPriceRow {
@@ -343,14 +343,14 @@
   padding: 12px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }@media (hover: hover) {
   .unitLenBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.unitLenBtn small { display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 2px; color: var(--text); }
+.unitLenBtn small { display: block; font-family: var(--font-sans); font-weight: 800; font-size: 16px; margin-bottom: 2px; color: var(--text); }
 .unitLenActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
 .unitLenActive small { color: var(--accent); }
 
@@ -371,42 +371,42 @@
   padding: 12px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }
-.lossBtn small { display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 2px; }@media (hover: hover) {
+.lossBtn small { display: block; font-family: var(--font-sans); font-weight: 800; font-size: 16px; margin-bottom: 2px; }@media (hover: hover) {
   .lossBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .lossSafe { border-color: rgba(16,185,129,0.40); }
-.lossStd  { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.lossStd  { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .lossWarn { border-color: rgba(234,88,12,0.40); }
-.lossSafe.lossActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.lossSafe.lossActive { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
 .lossStd.lossActive  { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.lossWarn.lossActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.lossWarn.lossActive { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
   border: 1px solid rgba(234,88,12,0.40);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: var(--font-sans); }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: var(--font-sans); color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -433,17 +433,17 @@
   font-weight: 600;
 }
 .analysisTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
 }
 .analysisTable td:first-child { color: var(--text); font-weight: 600; }
-.analysisTable .lossCell { color: #0891B2; }
+.analysisTable .lossCell { color: var(--cyan-600); }
 .analysisTable .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
 }
 .analysisTable .totalRow td:first-child { color: var(--accent); }
@@ -451,9 +451,9 @@
 
 /* ── 비용 카드 ── */
 .costCard {
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .costRow {
@@ -468,14 +468,14 @@
 .costRow:last-child { border-bottom: none; }
 .costRow.totalCost {
   border-bottom: none;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   margin-top: 6px;
   padding-top: 12px;
   font-size: 14px;
 }
 .costRow strong {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .costRow.totalCost strong { color: var(--accent); font-size: 18px; }
@@ -487,17 +487,17 @@
   margin-top: 12px;
 }
 .costSplit > div {
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 14px;
   text-align: center;
 }
-.costSplitSelf { background: rgba(14,165,233,0.14); border: 1px solid rgba(14,165,233,0.30); }
-.costSplitPro  { background: rgba(8,145,178,0.14); border: 1px solid rgba(8,145,178,0.30); }
+.costSplitSelf { background: color-mix(in srgb, var(--accent) 14%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
+.costSplitPro  { background: color-mix(in srgb, var(--cyan-600) 14%, transparent); border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent); }
 .costSplit p:first-child { font-size: 11px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.06em; }
 .costSplitSelf p:first-child { color: var(--accent); }
-.costSplitPro  p:first-child { color: #0891B2; }
+.costSplitPro  p:first-child { color: var(--cyan-600); }
 .costSplit p:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
   color: var(--text);
@@ -508,7 +508,7 @@
   display: flex;
   justify-content: center;
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 18px;
 }
 .floorPlanSvg {
@@ -521,13 +521,13 @@
 .cornerNote {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.cornerNote strong { color: #EA580C; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.cornerNote strong { color: var(--orange-600); font-family: var(--font-sans); font-weight: 800; }
 
 /* ── 빠른 참조표 ── */
 .refTable {
@@ -551,10 +551,10 @@
 .refTable td:first-child {
   color: var(--text);
   font-weight: 700;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .refTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
@@ -564,11 +564,11 @@
 .guideCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .guideCardTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 15px;
   color: var(--accent);
@@ -592,7 +592,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .guideRowTitle {
   font-size: 13px;
@@ -606,7 +606,7 @@
   line-height: 1.7;
 }
 .guideRowSpec {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   font-size: 13px;
@@ -617,11 +617,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;

@@ -332,7 +332,6 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
                 x={i * whiteW + whiteW/2}
                 y={whiteH - 14}
                 fontSize={11}
-                fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                 fontWeight={700}
                 fill={fromHit || toHit ? '#ffffff' : '#555'}
                 textAnchor="middle"
@@ -367,7 +366,6 @@ function PianoKeyboard({ highlightFrom, highlightTo }: { highlightFrom: Note; hi
                 x={cx + blackW/2}
                 y={blackH - 8}
                 fontSize={9}
-                fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                 fontWeight={700}
                 fill={fromHit || toHit ? '#ffffff' : '#777'}
                 textAnchor="middle"

@@ -119,11 +119,11 @@ function getSplits(distanceKm: number): SplitRow[] {
 // 한국 인기 마라톤 목표 페이스 (풀 42.195km 기준, 본문 표와 일치)
 // '서브'(미만) 목표이므로 floor(목표초 / 42.195) — 반올림하면 4:16×42.195 = 3:00:02처럼 목표를 넘는다
 const QUICK_PACES = [
-  { mm: 4, ss: 15, label: '서브3',    color: '#DC2626' },
-  { mm: 4, ss: 58, label: '서브3:30', color: '#EA580C' },
-  { mm: 5, ss: 41, label: '서브4',    color: '#A16207' },
-  { mm: 6, ss: 23, label: '서브4:30', color: '#0891B2' },
-  { mm: 7, ss: 6,  label: '서브5',    color: '#059669' },
+  { mm: 4, ss: 15, label: '서브3',    color: 'var(--red-600)' },
+  { mm: 4, ss: 58, label: '서브3:30', color: 'var(--orange-600)' },
+  { mm: 5, ss: 41, label: '서브4',    color: 'var(--yellow-700)' },
+  { mm: 6, ss: 23, label: '서브4:30', color: 'var(--cyan-600)' },
+  { mm: 7, ss: 6,  label: '서브5',    color: 'var(--emerald-600)' },
 ]
 
 const isPresetKm = (km: number) => DISTANCES.some(d => d.km === km)
@@ -464,12 +464,12 @@ export default function PaceClient() {
                   <div className={styles.negGrid}>
                     <div className={styles.negBox}>
                       <span className={styles.negBoxLabel}>전반 (0~{negativeSplit.halfKm.toFixed(1)}km)</span>
-                      <span className={styles.negBoxVal} style={{ color: '#0891B2' }}>{negativeSplit.front}/km</span>
+                      <span className={styles.negBoxVal} style={{ color: 'var(--cyan-600)' }}>{negativeSplit.front}/km</span>
                       <span className={styles.negBoxSub}>1.5초 느슨하게</span>
                     </div>
                     <div className={styles.negBox}>
                       <span className={styles.negBoxLabel}>후반 ({negativeSplit.halfKm.toFixed(1)}~{dist}km)</span>
-                      <span className={styles.negBoxVal} style={{ color: '#EA580C' }}>{negativeSplit.back}/km</span>
+                      <span className={styles.negBoxVal} style={{ color: 'var(--orange-600)' }}>{negativeSplit.back}/km</span>
                       <span className={styles.negBoxSub}>1.5초 빠르게</span>
                     </div>
                   </div>

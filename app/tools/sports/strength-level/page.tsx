@@ -31,7 +31,7 @@ const headCell: React.CSSProperties = {
   background: 'var(--bg3)',
 }
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -41,14 +41,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -86,7 +86,7 @@ export default function StrengthLevelPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />파워리프팅 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -203,10 +203,10 @@ export default function StrengthLevelPage() {
           </thead>
           <tbody>
             <tr><td style={cell}><strong style={{ color: 'var(--muted)' }}>~200</strong></td><td style={cell}>입문~초급 — 기본기 다지는 단계</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#0EA5E9' }}>200~300</strong></td><td style={cell}>중급 — 꾸준히 훈련한 일반 헬스인</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#EA580C' }}>300~400</strong></td><td style={cell}>상급 — 상위권 동호인</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#DC2626' }}>400~500</strong></td><td style={cell}>매우 우수 — 지역 대회 입상권</td></tr>
-            <tr><td style={cell}><strong style={{ color: '#9333EA' }}>500+</strong></td><td style={cell}>엘리트급 — 전국·국제 수준</td></tr>
+            <tr><td style={cell}><strong style={{ color: 'var(--sky-500)' }}>200~300</strong></td><td style={cell}>중급 — 꾸준히 훈련한 일반 헬스인</td></tr>
+            <tr><td style={cell}><strong style={{ color: 'var(--orange-600)' }}>300~400</strong></td><td style={cell}>상급 — 상위권 동호인</td></tr>
+            <tr><td style={cell}><strong style={{ color: 'var(--red-600)' }}>400~500</strong></td><td style={cell}>매우 우수 — 지역 대회 입상권</td></tr>
+            <tr><td style={cell}><strong style={{ color: 'var(--purple-600)' }}>500+</strong></td><td style={cell}>엘리트급 — 전국·국제 수준</td></tr>
           </tbody>
         </table>
         </div>
@@ -257,19 +257,19 @@ export default function StrengthLevelPage() {
       <div style={{
         background: 'rgba(220, 38, 38, 0.06)',
         border: '1px solid rgba(220, 38, 38, 0.25)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '18px 22px',
         fontSize: '14px',
         color: 'var(--text)',
         lineHeight: 1.8,
       }}>
         <ul style={{ paddingLeft: '20px', margin: 0 }}>
-          <li><strong style={{ color: '#DC2626' }}>실제 1RM 시도는 신중히</strong> — 워밍업 후, 스포터·세이프티를 확보하고 시도하세요. 초보자는 추정값 사용을 권장합니다.</li>
-          <li><strong style={{ color: '#DC2626' }}>레벨에 집착하지 마세요</strong> — 본 평가는 참고용이며, 체급·골격·종목 특성에 따라 개인차가 큽니다.</li>
-          <li><strong style={{ color: '#DC2626' }}>통증은 즉시 중단</strong> — 관절·허리 통증은 부상 신호입니다. 지속되면 정형외과·스포츠의학과(KASEM 등) 전문의와 상담하세요.</li>
-          <li><strong style={{ color: '#DC2626' }}>95%+·대회 시도는 스포터·세이프티 필수</strong> — 오프너부터 무리하지 말고, 폼이 무너지면 중량을 내리세요.</li>
-          <li><strong style={{ color: '#DC2626' }}>도핑 금지</strong> — 파워리프팅 도핑 검사는 엄격합니다. 한국도핑방지위원회(KADA) 금지목록을 확인하고 약물·성분을 점검하세요.</li>
-          <li><strong style={{ color: '#DC2626' }}>무리한 체급 감량 금지</strong> — 급격한 단기 감량은 건강·기록 모두에 해롭습니다. 점수는 체중 보정되니 안전을 우선하세요.</li>
+          <li><strong style={{ color: 'var(--red-600)' }}>실제 1RM 시도는 신중히</strong> — 워밍업 후, 스포터·세이프티를 확보하고 시도하세요. 초보자는 추정값 사용을 권장합니다.</li>
+          <li><strong style={{ color: 'var(--red-600)' }}>레벨에 집착하지 마세요</strong> — 본 평가는 참고용이며, 체급·골격·종목 특성에 따라 개인차가 큽니다.</li>
+          <li><strong style={{ color: 'var(--red-600)' }}>통증은 즉시 중단</strong> — 관절·허리 통증은 부상 신호입니다. 지속되면 정형외과·스포츠의학과(KASEM 등) 전문의와 상담하세요.</li>
+          <li><strong style={{ color: 'var(--red-600)' }}>95%+·대회 시도는 스포터·세이프티 필수</strong> — 오프너부터 무리하지 말고, 폼이 무너지면 중량을 내리세요.</li>
+          <li><strong style={{ color: 'var(--red-600)' }}>도핑 금지</strong> — 파워리프팅 도핑 검사는 엄격합니다. 한국도핑방지위원회(KADA) 금지목록을 확인하고 약물·성분을 점검하세요.</li>
+          <li><strong style={{ color: 'var(--red-600)' }}>무리한 체급 감량 금지</strong> — 급격한 단기 감량은 건강·기록 모두에 해롭습니다. 점수는 체중 보정되니 안전을 우선하세요.</li>
         </ul>
         <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', marginBottom: 0, lineHeight: 1.7 }}>
           본 도구는 <strong>참고용 시뮬레이션</strong>이며 의학적·코칭 조언이 아닙니다. 레벨 기준·점수는 공개된 표준치를 근사한 추정값으로, 실제 대회 기록과 차이가 있을 수 있습니다.

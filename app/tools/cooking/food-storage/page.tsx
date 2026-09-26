@@ -37,7 +37,7 @@ const FAQ_LD = [
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -61,7 +61,7 @@ export default function FoodStoragePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>요리·식품</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />식재료 보관 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
@@ -91,7 +91,7 @@ export default function FoodStoragePage() {
 
         {/* ── 1. 빠른 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
             자주 검색되는 식재료 보관 기간 빠른 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
@@ -122,8 +122,8 @@ export default function FoodStoragePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r.s}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.f}</td>
-                    <td style={{ padding: '9px 10px', color: '#B885DA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.z}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.f}</td>
+                    <td style={{ padding: '9px 10px', color: '#B885DA', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.z}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '11px' }}>{r.m}</td>
                   </tr>
                 ))}
@@ -134,7 +134,7 @@ export default function FoodStoragePage() {
 
         {/* ── 2. 보관 방식별 핵심 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             보관 방식별 핵심 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
@@ -171,13 +171,13 @@ export default function FoodStoragePage() {
                 background: 'var(--bg2)',
                 border: `1px solid ${g.c}44`,
                 borderLeft: `3px solid ${g.c}`,
-                borderRadius: '12px',
+                borderRadius: 'var(--radius-m)',
                 padding: '16px 20px',
               }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '4px' }}>
                   <span style={{ fontSize: '20px' }}>{g.icon}</span>
                   <span style={{ fontSize: '15px', color: g.c, fontWeight: 700 }}>{g.name}</span>
-                  <span style={{ fontSize: '12px', color: 'var(--muted)', marginLeft: 'auto', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.temp}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--muted)', marginLeft: 'auto', fontFamily: 'var(--font-sans)' }}>{g.temp}</span>
                 </div>
                 <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 20, margin: '6px 0 0' }}>
                   {g.tips.map((t, j) => <li key={j}>{t}</li>)}
@@ -189,7 +189,7 @@ export default function FoodStoragePage() {
 
         {/* ── 3. 냉장 → 냉동 전환 권장 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
             냉장 → 냉동 전환 권장 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
@@ -216,14 +216,14 @@ export default function FoodStoragePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', color: '#B885DA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', color: '#B885DA', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.b}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'rgba(184,133,218,0.06)', border: '1px solid rgba(184,133,218,0.25)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'rgba(184,133,218,0.06)', border: '1px solid rgba(184,133,218,0.25)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: '#B885DA', fontWeight: 700, marginBottom: '6px' }}>💡 냉동 잘하는 법</p>
             <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 20, margin: 0 }}>
               <li>1회 사용 분량으로 <strong style={{ color: 'var(--text)' }}>소분 냉동</strong> — 해동·재냉동 사이클을 차단</li>
@@ -235,7 +235,7 @@ export default function FoodStoragePage() {
 
         {/* ── 4. 위험 신호 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
             위험 신호 — 절대 먹지 말아야 할 식재료
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
@@ -267,7 +267,7 @@ export default function FoodStoragePage() {
             marginTop: '14px',
             background: 'rgba(220,38,38,0.06)',
             border: '1px solid rgba(220,38,38,0.25)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
           }}>
             <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '6px' }}>🚫 위험 온도대 (4~60°C)</p>
@@ -279,7 +279,7 @@ export default function FoodStoragePage() {
 
         {/* ── 5. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
           <FaqJsonLd items={FAQ_LD} />
           {FAQ_LD.map((faq, i) => (
             <details key={i} style={faqDetails}>
@@ -290,7 +290,7 @@ export default function FoodStoragePage() {
         </div>
 
         {/* ── 5.5 참고 기준·출처 ── */}
-        <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 12, padding: '18px 20px' }}>
+        <div style={{ background: 'rgba(220,38,38,0.04)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
           <p style={{ fontSize: 14, fontWeight: 700, color: '#DC2626', marginBottom: 10 }}>⚖️ 참고 기준·출처</p>
           <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, marginBottom: 8 }}>
             본 계산기의 보관 기간은 <strong style={{ color: 'var(--text)' }}>일반 정보 제공용 참고값</strong>입니다. 식품 안전 진단·판정 도구가 아닙니다.
@@ -310,7 +310,7 @@ export default function FoodStoragePage() {
 
         {/* ── 6. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/cooking/thawing', icon: '🧊', name: '해동 시간 계산기',  desc: '고기 해동 시간·안전 가이드' },
@@ -321,7 +321,7 @@ export default function FoodStoragePage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

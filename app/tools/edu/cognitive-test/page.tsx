@@ -42,7 +42,7 @@ export default function CognitiveTestPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />인지 능력 테스트
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -58,7 +58,7 @@ export default function CognitiveTestPage() {
 
         {/* ── 1. 인지 능력 테스트란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             인지 능력 테스트란?
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -67,11 +67,11 @@ export default function CognitiveTestPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '🚀 반응 속도', c: '#0D9488', d: '시각 자극에 대한 단순 반응 시간 측정 (Simple Reaction Time)' },
+              { t: '🚀 반응 속도', c: 'var(--teal-600)', d: '시각 자극에 대한 단순 반응 시간 측정 (Simple Reaction Time)' },
               { t: '🎨 스트룹 효과', c: 'var(--accent)', d: '글자 의미와 색상이 충돌할 때 발생하는 인지 간섭 (Stroop Effect, 1935)' },
-              { t: '🔄 이중 과제', c: '#EA580C', d: '두 작업 동시 수행 시 성능 저하 정도 (Dual-Task Interference)' },
+              { t: '🔄 이중 과제', c: 'var(--orange-600)', d: '두 작업 동시 수행 시 성능 저하 정도 (Dual-Task Interference)' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
@@ -80,21 +80,21 @@ export default function CognitiveTestPage() {
           <div style={{
             background: 'rgba(234,88,12,0.06)',
             border: '1px solid rgba(234,88,12,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#EA580C' }}>본 도구는 의학·임상 진단이 아닌 교육·게임 목적입니다.</strong>
+            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>본 도구는 의학·임상 진단이 아닌 교육·게임 목적입니다.</strong>
             결과로 자가 진단하지 마세요.
           </div>
         </div>
 
         {/* ── 2. 반응 속도 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             반응 속도 (Reaction Time)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -112,22 +112,22 @@ export default function CognitiveTestPage() {
               </thead>
               <tbody>
                 {[
-                  { e: '🚀 매우 빠름', r: '~ 200ms', n: '최상위 (프로 게이머·F1 드라이버)', c: '#0D9488' },
-                  { e: '✨ 빠름',       r: '201~250ms', n: '상위', c: '#059669' },
+                  { e: '🚀 매우 빠름', r: '~ 200ms', n: '최상위 (프로 게이머·F1 드라이버)', c: 'var(--teal-600)' },
+                  { e: '✨ 빠름',       r: '201~250ms', n: '상위', c: 'var(--emerald-600)' },
                   { e: '⭐ 평균',       r: '251~300ms', n: '일반 성인', c: 'var(--accent)' },
-                  { e: '👍 평균 이하',   r: '301~350ms', n: '일상에 무리 없음', c: '#A16207' },
-                  { e: '🐢 느림',       r: '351ms+',   n: '피로·집중 부족·고령일 가능성', c: '#EA580C' },
+                  { e: '👍 평균 이하',   r: '301~350ms', n: '일상에 무리 없음', c: 'var(--yellow-700)' },
+                  { e: '🐢 느림',       r: '351ms+',   n: '피로·집중 부족·고령일 가능성', c: 'var(--orange-600)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.e}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.n}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             🎯 <strong style={{ color: 'var(--text)' }}>영향 요소:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li>수면·피로·카페인 섭취</li>
@@ -140,21 +140,21 @@ export default function CognitiveTestPage() {
 
         {/* ── 3. 스트룹 효과 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             스트룹 효과 (Stroop Effect)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             1935년 미국 심리학자 <strong style={{ color: 'var(--text)' }}>J. Ridley Stroop</strong>이 발견한 인지 간섭 현상입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>일치 (Congruent) — 빠름</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <strong style={{ color: '#FF4444' }}>빨강</strong>이 빨간색으로 표시 → 글자 의미와 색상이 일치 → 자동 처리와 통제 처리가 동일 답
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>불일치 (Incongruent) — 느림</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--orange-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 8 }}>불일치 (Incongruent) — 느림</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <strong style={{ color: '#3E5BFF' }}>빨강</strong>(파란색 표시) → 글자 의미와 색상이 충돌 → 통제 처리가 자동 처리에 간섭받음
               </p>
@@ -163,7 +163,7 @@ export default function CognitiveTestPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
             marginTop: 12,
             fontSize: 13,
@@ -178,21 +178,21 @@ export default function CognitiveTestPage() {
               <li><strong style={{ color: 'var(--text)' }}>간섭 시간</strong> = 불일치 평균 - 일치 평균 (일반 성인 150~400ms)</li>
             </ul>
           </div>
-          <div style={{ background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-            🔬 <strong style={{ color: '#9333EA' }}>활용 분야:</strong> 임상 신경심리 검사 (전두엽 기능) · ADHD·인지 장애 연구 ·
+          <div style={{ background: 'rgba(155,89,182,0.06)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
+            🔬 <strong style={{ color: 'var(--purple-600)' }}>활용 분야:</strong> 임상 신경심리 검사 (전두엽 기능) · ADHD·인지 장애 연구 ·
             거짓말 탐지 · 스포츠 인지 훈련
           </div>
         </div>
 
         {/* ── 4. 이중 과제 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             이중 과제 간섭 (Dual-Task Interference)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             두 작업을 동시에 할 때 성능이 떨어지는 현상입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             <strong style={{ color: 'var(--text)' }}>원리:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li>인지 자원은 한정됨</li>
@@ -202,15 +202,15 @@ export default function CognitiveTestPage() {
           </div>
           <div style={{
             background: 'rgba(13,148,136,0.06)',
-            border: '1px solid #0D9488',
-            borderRadius: 12,
+            border: '1px solid var(--teal-600)',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🧠 <strong style={{ color: '#0D9488' }}>&ldquo;진정한 멀티태스킹은 가능한가?&rdquo;</strong>
+            🧠 <strong style={{ color: 'var(--teal-600)' }}>&ldquo;진정한 멀티태스킹은 가능한가?&rdquo;</strong>
             <br />인지 심리학 연구 결과: 사실상 불가능합니다.
             <ul style={{ paddingLeft: 22, marginTop: 6, color: 'var(--muted)' }}>
               <li>뇌는 빠르게 작업 전환 (Task Switching)</li>
@@ -223,12 +223,12 @@ export default function CognitiveTestPage() {
 
         {/* ── 5. 측정의 한계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚠️ 정확한 측정의 한계
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #DC2626', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#DC2626', fontWeight: 700, marginBottom: 8 }}>웹 환경 한계</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--red-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--red-600)', fontWeight: 700, marginBottom: 8 }}>웹 환경 한계</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>모니터 주사율 (60Hz=16ms, 144Hz=7ms 오차)</li>
                 <li>브라우저 이벤트 큐 지연 (5~20ms)</li>
@@ -236,16 +236,16 @@ export default function CognitiveTestPage() {
                 <li>디바이스 성능 차이</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, marginBottom: 8 }}>임상 vs 본 도구</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--teal-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--teal-600)', fontWeight: 700, marginBottom: 8 }}>임상 vs 본 도구</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>임상: 통제된 환경, 정밀 장비, 반복 측정</li>
                 <li>본 도구: 일반 환경, 게임형 참고</li>
               </ul>
             </div>
           </div>
-          <div style={{ background: 'var(--bg3)', borderLeft: '4px solid #0D9488', borderRadius: 8, padding: '14px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-            <strong style={{ color: '#0D9488' }}>본 결과 활용 방법:</strong>
+          <div style={{ background: 'var(--bg3)', borderLeft: '4px solid var(--teal-600)', borderRadius: 'var(--radius-s)', padding: '14px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
+            <strong style={{ color: 'var(--teal-600)' }}>본 결과 활용 방법:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6, color: 'var(--muted)' }}>
               <li>✅ 자기 비교 (어제 vs 오늘) 참고용</li>
               <li>✅ 친구·가족 간 게임 비교</li>
@@ -257,7 +257,7 @@ export default function CognitiveTestPage() {
 
         {/* ── 6. 인지 처리 속도와 일상 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             인지 처리 속도와 일상
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -268,7 +268,7 @@ export default function CognitiveTestPage() {
               { t: '📚 학습',     d: '시험 시간 관리·문제 풀이' },
               { t: '💼 업무',     d: '일상 작업 효율' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
@@ -277,14 +277,14 @@ export default function CognitiveTestPage() {
           <div style={{
             background: 'rgba(16,185,129,0.05)',
             border: '1px solid rgba(16,185,129,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ✅ <strong style={{ color: '#059669' }}>인지 처리 속도 향상 (일반론):</strong>
+            ✅ <strong style={{ color: 'var(--emerald-600)' }}>인지 처리 속도 향상 (일반론):</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6, color: 'var(--muted)' }}>
               <li>충분한 수면 (7~9시간)</li>
               <li>규칙적 운동 (특히 유산소)</li>
@@ -292,7 +292,7 @@ export default function CognitiveTestPage() {
               <li>균형 잡힌 식단 (특히 오메가-3)</li>
               <li>두뇌 게임 (단, 효과는 게임에 한정)</li>
             </ul>
-            <p style={{ marginTop: 8, fontSize: 12, color: '#DC2626' }}>
+            <p style={{ marginTop: 8, fontSize: 12, color: 'var(--red-600)' }}>
               ⚠️ 약물·보충제로 인지 능력을 향상시키려는 시도는 의학 전문가 상담 없이 권장되지 않습니다.
             </p>
           </div>
@@ -300,7 +300,7 @@ export default function CognitiveTestPage() {
 
         {/* ── 7. 본 도구 활용 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             본 도구 활용 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -308,8 +308,8 @@ export default function CognitiveTestPage() {
               { t: '🎯 정확한 측정을 위해', items: ['데스크탑·키보드·마우스 권장 (터치 지연 X)', '조용한 환경', '충분한 휴식 후', '같은 시간대 반복 측정', '첫 측정은 익숙해진 후 (warm-up)'] },
               { t: '📊 결과 해석', items: ['단일 결과가 아닌 트렌드 보기', '자기 평소 결과와 비교', '친구·가족과 게임으로 즐기기', '의학 진단으로 오용 금지'] },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, color: 'var(--teal-600)', fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => <li key={j}>{it}</li>)}
                 </ul>
@@ -322,13 +322,13 @@ export default function CognitiveTestPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -343,7 +343,7 @@ export default function CognitiveTestPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -363,7 +363,7 @@ export default function CognitiveTestPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -378,10 +378,10 @@ export default function CognitiveTestPage() {
 
         {/* ── 10. 참고 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             참고 자료
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li>Stroop, J.R. (1935). Studies of interference in serial verbal reactions. <em>Journal of Experimental Psychology</em>, 18(6).</li>
               <li>Pashler, H. (1994). Dual-task interference in simple tasks: Data and theory. <em>Psychological Bulletin</em>, 116(2).</li>

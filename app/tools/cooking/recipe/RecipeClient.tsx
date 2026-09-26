@@ -292,7 +292,7 @@ function ScaleTab() {
 
         {/* 양념 자동 인식 안내 */}
         {ingredients.some(i => isSeasoning(i.name)) && (
-          <p style={{ fontSize: 12, color: '#EA580C', marginTop: 8, lineHeight: 1.6, fontFamily: 'Noto Sans KR, sans-serif' }}>
+          <p style={{ fontSize: 12, color: 'var(--orange-600)', marginTop: 8, lineHeight: 1.6, fontFamily: 'var(--font-sans)' }}>
             🌶️ 양념·향신료가 자동 감지되었습니다. &quot;양념 자동 보정&quot;이 활성화된 경우 인분 늘릴 때 보정값이 적용됩니다.
           </p>
         )}
@@ -487,7 +487,7 @@ function ConvertTab() {
               })}
             </div>
           ) : (
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, fontFamily: 'Noto Sans KR, sans-serif', margin: 0 }}>
+            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, fontFamily: 'var(--font-sans)', margin: 0 }}>
               {isCountUnit
                 ? <>⚠️ <strong style={{ color: 'var(--text)' }}>개·반 개·쪽·단</strong> 같은 개수 단위는 무게·부피로 변환할 수 없습니다. <strong style={{ color: 'var(--text)' }}>g·ml·컵·큰술</strong> 등으로 입력해 주세요.</>
                 : <>변환할 수 있는 결과가 없습니다. 재료명·양·단위를 확인해 주세요.</>}
@@ -521,7 +521,7 @@ function ConvertTab() {
       {/* 단위 정보 */}
       <div className={s.card}>
         <label className={s.cardLabel}>단위 정보</label>
-        <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0, fontFamily: 'Noto Sans KR, sans-serif' }}>
+        <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0, fontFamily: 'var(--font-sans)' }}>
           <li>· <strong style={{ color: 'var(--text)' }}>한국 1컵</strong> = 200ml (계량컵 표준)</li>
           <li>· <strong style={{ color: 'var(--text)' }}>미국 1컵</strong> = 240ml</li>
           <li>· <strong style={{ color: 'var(--text)' }}>1큰술 (Tbsp)</strong> = 15ml</li>

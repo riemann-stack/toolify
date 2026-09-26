@@ -5,9 +5,9 @@
 export type Phase = 'focus' | 'short' | 'long'
 
 export const PHASES: Record<Phase, { label: string; color: string; defaultMin: number }> = {
-  focus: { label: '집중',     color: '#0EA5E9', defaultMin: 25 },
-  short: { label: '짧은 휴식', color: '#0891B2', defaultMin: 5  },
-  long:  { label: '긴 휴식',  color: '#EA580C', defaultMin: 15 },
+  focus: { label: '집중',     color: 'var(--sky-500)', defaultMin: 25 },
+  short: { label: '짧은 휴식', color: 'var(--cyan-600)', defaultMin: 5  },
+  long:  { label: '긴 휴식',  color: 'var(--orange-600)', defaultMin: 15 },
 }
 
 // ─────────────────────────────────────────────────────────────

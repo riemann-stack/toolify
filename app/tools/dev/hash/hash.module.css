@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -24,7 +24,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -34,18 +34,18 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: #0EA5E9; color: #ffffff; }
+.tabActive { background: var(--sky-500); color: #ffffff; }
 
 /* textarea / input */
 .textarea {
@@ -53,9 +53,9 @@
   min-height: 100px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 14px;
   color: var(--text);
   outline: none;
@@ -63,27 +63,27 @@
   box-sizing: border-box;
   line-height: 1.5;
 }
-.textarea:focus { border-color: #0EA5E9; }
+.textarea:focus { border-color: var(--sky-500); }
 .input {
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 14px;
   color: var(--text);
   outline: none;
   box-sizing: border-box;
   min-height: 44px;
 }
-.input:focus { border-color: #0EA5E9; }
+.input:focus { border-color: var(--sky-500); }
 .select {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   font-size: 14px;
   color: var(--text);
@@ -105,7 +105,7 @@
 }
 .statRow strong {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-left: 4px;
 }
@@ -139,16 +139,16 @@
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   min-height: 32px;
 }@media (hover: hover) {
-  .optBtn:hover { color: var(--text); border-color: #0EA5E9; }
+  .optBtn:hover { color: var(--text); border-color: var(--sky-500); }
 }
 .optBtnActive {
-  background: #0EA5E9;
+  background: var(--sky-500);
   color: #ffffff;
-  border-color: #0EA5E9;
+  border-color: var(--sky-500);
 }
 
 .smBtn {
@@ -161,12 +161,12 @@
   font-size: 12px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   min-height: 30px;
   white-space: nowrap;
 }@media (hover: hover) {
-  .smBtn:hover { color: #0EA5E9; border-color: #0EA5E9; }
+  .smBtn:hover { color: var(--sky-500); border-color: var(--sky-500); }
 }
 .smBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -174,11 +174,11 @@
 .resultCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 18px;
 }
-.cardSafe { border-left: 3px solid #0D9488; }
-.cardIntegrity { border-left: 3px solid #D97706; }
+.cardSafe { border-left: 3px solid var(--teal-600); }
+.cardIntegrity { border-left: 3px solid var(--amber-600); }
 
 .resultHeader {
   display: flex;
@@ -195,7 +195,7 @@
   flex-wrap: wrap;
 }
 .algName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
   color: var(--text);
@@ -206,7 +206,7 @@
   padding: 2px 8px;
   border-radius: 4px;
   font-size: 11px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .algSafetyBadge {
@@ -219,7 +219,7 @@
   background: var(--bg3);
   border-radius: 6px;
   padding: 10px 14px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 13px;
   color: var(--text);
   word-break: break-all;
@@ -236,8 +236,8 @@
 /* 영웅 카드 (HMAC) */
 .heroCard {
   background: linear-gradient(135deg, var(--bg2), var(--bg3));
-  border: 1px solid #0EA5E9;
-  border-radius: 14px;
+  border: 1px solid var(--sky-500);
+  border-radius: var(--radius-card);
   padding: 22px;
   display: grid;
   grid-template-columns: 1fr auto;
@@ -258,10 +258,10 @@
 }
 .heroHash {
   display: block;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 14px;
   font-weight: 700;
-  color: #0EA5E9;
+  color: var(--sky-500);
   word-break: break-all;
   background: var(--bg3);
   padding: 10px 14px;
@@ -277,15 +277,15 @@
 .copyBigBtn {
   appearance: none;
   -webkit-appearance: none;
-  background: #0EA5E9;
+  background: var(--sky-500);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 14px 20px;
   font-size: 13px;
   font-weight: 700;
   color: #ffffff;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 48px;
   white-space: nowrap;
 }@media (hover: hover) {
@@ -295,7 +295,7 @@
 .primaryBtn {
   appearance: none;
   -webkit-appearance: none;
-  background: #0EA5E9;
+  background: var(--sky-500);
   border: none;
   border-radius: 10px;
   padding: 14px 18px;
@@ -303,7 +303,7 @@
   font-weight: 700;
   color: #ffffff;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   width: 100%;
   margin-top: 14px;
   min-height: 48px;
@@ -323,12 +323,12 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   min-height: 56px;
   display: flex;
@@ -337,16 +337,16 @@
   gap: 4px;
   text-align: left;
 }@media (hover: hover) {
-  .algBtn:hover { border-color: #0EA5E9; }
+  .algBtn:hover { border-color: var(--sky-500); }
 }
 .algBtnActive {
-  background: #0EA5E9;
+  background: var(--sky-500);
   color: #ffffff;
-  border-color: #0EA5E9;
+  border-color: var(--sky-500);
 }
 .algBtnBadge {
   font-size: 11px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   opacity: 0.85;
 }
@@ -364,16 +364,16 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }@media (hover: hover) {
-  .presetCard:hover { border-color: #0EA5E9; background: var(--bg2); }
+  .presetCard:hover { border-color: var(--sky-500); background: var(--bg2); }
 }
 .presetTitle {
   font-size: 14px;
@@ -383,9 +383,9 @@
 }
 .presetSpec {
   font-size: 12px;
-  color: #0EA5E9;
+  color: var(--sky-500);
   margin: 0 0 6px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .presetHeader {
@@ -397,7 +397,7 @@
   color: var(--text);
 }
 .presetHeader code {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   word-break: break-all;
 }
 .presetDesc {
@@ -417,7 +417,7 @@
 /* 파일 드롭존 */
 .dropZone {
   border: 2px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 40px 20px;
   text-align: center;
   background: var(--bg2);
@@ -425,8 +425,8 @@
   transition: all 0.2s;
 }@media (hover: hover) {
   .dropZone:hover, .dropZoneActive {
-  border-color: #0EA5E9;
-  background: rgba(14, 165, 233, 0.04);
+  border-color: var(--sky-500);
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
 }
 }
 .dropZoneIcon {
@@ -458,7 +458,7 @@
 .fileCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
 }
 .fileHeader {
@@ -492,7 +492,7 @@
 }
 .progressBar {
   height: 100%;
-  background: linear-gradient(90deg, #0EA5E9, #0D9488);
+  background: linear-gradient(90deg, var(--sky-500), var(--teal-600));
   transition: width 0.2s ease;
 }
 .progressText {
@@ -507,12 +507,12 @@
   font-size: 11px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   margin: 0;
 }
 
 .verifyBox {
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
   font-weight: 600;
@@ -520,13 +520,13 @@
 }
 .verifyOk {
   background: rgba(13, 148, 136, 0.10);
-  border: 1px solid #0D9488;
-  color: #0D9488;
+  border: 1px solid var(--teal-600);
+  color: var(--teal-600);
 }
 .verifyFail {
   background: rgba(219, 39, 119, 0.10);
-  border: 1px solid #DB2777;
-  color: #DB2777;
+  border: 1px solid var(--pink-600);
+  color: var(--pink-600);
 }
 
 /* 작은 해시 표 */
@@ -553,7 +553,7 @@
   border-radius: 4px;
   padding: 3px 6px;
   font-size: 11px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .algBits {
   color: var(--muted);
@@ -561,7 +561,7 @@
   font-weight: 600;
 }
 .hashCode {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 11px;
   color: var(--text);
   word-break: break-all;
@@ -575,7 +575,7 @@
 .emptyState {
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 24px;
   text-align: center;
   color: var(--muted);
@@ -593,7 +593,7 @@
 .warnText {
   background: rgba(255, 138, 62, 0.06);
   border: 1px solid rgba(255, 138, 62, 0.40);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
   color: var(--text);
@@ -627,13 +627,13 @@
 }
 .compareTable tr:last-child td { border-bottom: none; }
 .compareTable code {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 12px;
   background: var(--bg3);
   padding: 2px 5px;
   border-radius: 3px;
 }
-.mono { font-family: 'Inter', 'SF Mono', Consolas, monospace; font-weight: 700; }
+.mono { font-family: var(--font-num); font-weight: 700; }
 .miniBadge {
   font-size: 12px;
   font-weight: 600;
@@ -642,13 +642,13 @@
 
 .dangerBox {
   background: rgba(219, 39, 119, 0.06);
-  border: 2px solid #DB2777;
-  border-radius: 14px;
+  border: 2px solid var(--pink-600);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .dangerTitle {
   font-size: 16px;
-  color: #DB2777;
+  color: var(--pink-600);
   font-weight: 800;
   margin: 0 0 10px;
 }
@@ -674,9 +674,9 @@
 .codeBlock {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 14px 16px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 12px;
   color: var(--text);
   overflow-x: auto;

@@ -16,7 +16,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -24,7 +24,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '18px 20px',
 }
 
@@ -62,7 +62,7 @@ export default function GiftMoneyPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />축의금·부의금 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -80,7 +80,7 @@ export default function GiftMoneyPage() {
         {/* 시세표 */}
         <div>
           <h2 style={sectionTitle}>💸 관계별 경조사비 시세 (참고)</h2>
-          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: '12px' }}>
+          <div style={{ overflowX: 'auto', WebkitOverflowScrolling: 'touch', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse' }}>
               <thead>
                 <tr>
@@ -93,8 +93,8 @@ export default function GiftMoneyPage() {
                 {RATE_ROWS.map((r, i) => (
                   <tr key={i}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.rel}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.wed}</td>
-                    <td style={{ ...td, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{r.fun}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)' }}>{r.wed}</td>
+                    <td style={{ ...td, fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{r.fun}</td>
                   </tr>
                 ))}
               </tbody>
@@ -129,16 +129,16 @@ export default function GiftMoneyPage() {
         <div>
           <h2 style={sectionTitle}>🔢 금액 관례 — 홀수와 금기 숫자</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-            <div style={{ ...card, borderTop: '3px solid #059669' }}>
-              <p style={{ fontSize: '13px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>✓ 무난한 금액</p>
+            <div style={{ ...card, borderTop: '3px solid var(--emerald-600)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--emerald-600)', fontWeight: 700, marginBottom: '8px' }}>✓ 무난한 금액</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li><strong>3·5·7만원</strong> — 홀수(양)라 길하게 봄</li>
                 <li><strong>10만원</strong> — 꽉 찬 수, 가장 흔한 기준</li>
                 <li><strong>15·20·30·50·100만원</strong> — 큰 단위는 무방</li>
               </ul>
             </div>
-            <div style={{ ...card, borderTop: '3px solid #DC2626' }}>
-              <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>✗ 피하는 금액</p>
+            <div style={{ ...card, borderTop: '3px solid var(--red-600)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--red-600)', fontWeight: 700, marginBottom: '8px' }}>✗ 피하는 금액</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li><strong>4만원</strong> — 한자 ‘죽을 사(死)’ 연상</li>
                 <li><strong>9만원</strong> — ‘아홉수’라 꺼림</li>

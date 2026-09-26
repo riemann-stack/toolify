@@ -28,7 +28,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -43,7 +43,7 @@ const faqAnswer: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '16px 20px',
 }
 
@@ -66,7 +66,7 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: '야간 산행은 얼마나 더 걸리나?',
-    a: '일반적으로 <strong style="color:var(--text)">+30%</strong>. 헤드랜턴으로도 시야가 제한되어 길 찾기·균형 잡기·돌멩이 회피가 모두 느려집니다.<br/><br/>또한 <strong style="color:#DC2626">위험도가 압도적으로 높음</strong>:<ul style="padding-left:20px;margin:8px 0"><li>길 잃을 확률 ↑↑</li><li>저체온증 위험 (산은 해 진 뒤 급격히 냉각)</li><li>구조 요청 시 발견 어려움</li></ul>야간 산행은 <strong style="color:var(--text)">경험자만</strong>. 초보는 일몰 1시간 전 하산 필수.',
+    a: '일반적으로 <strong style="color:var(--text)">+30%</strong>. 헤드랜턴으로도 시야가 제한되어 길 찾기·균형 잡기·돌멩이 회피가 모두 느려집니다.<br/><br/>또한 <strong style="color:var(--red-600)">위험도가 압도적으로 높음</strong>:<ul style="padding-left:20px;margin:8px 0"><li>길 잃을 확률 ↑↑</li><li>저체온증 위험 (산은 해 진 뒤 급격히 냉각)</li><li>구조 요청 시 발견 어려움</li></ul>야간 산행은 <strong style="color:var(--text)">경험자만</strong>. 초보는 일몰 1시간 전 하산 필수.',
   },
   {
     q: '어린이·노약자 동반 시 보정은?',
@@ -74,11 +74,11 @@ const FAQ: { q: string; a: string }[] = [
   },
   {
     q: '겨울 산행 추가 시간은?',
-    a: '<strong style="color:var(--text)">+20~30%</strong>. 변수가 많아 가장 보수적으로 잡아야 함.<ul style="padding-left:20px;margin:8px 0"><li>아이젠·스패츠 착용 필요 → 페이스 ↓</li><li>눈길 미끄럼 → 균형 잡기 시간 ↑</li><li>적설 시 발 빠짐 (러셀 필요)</li><li>방한복 + 보온병 → 배낭 무게 ↑</li><li>해 짧음 → 12월 서울 일몰 약 17:15 (산속은 더 일찍 어두워짐)</li></ul>본 도구는 겨울 조건에 ×1.20을 적용합니다. 적설이 많거나 러셀이 필요하면 여유를 더 두고, 일몰 시각 1시간 앞당김 + 동계 장비 필수. <strong style="color:#DC2626">경험 없는 초보는 동계 산행 자제 권장.</strong>',
+    a: '<strong style="color:var(--text)">+20~30%</strong>. 변수가 많아 가장 보수적으로 잡아야 함.<ul style="padding-left:20px;margin:8px 0"><li>아이젠·스패츠 착용 필요 → 페이스 ↓</li><li>눈길 미끄럼 → 균형 잡기 시간 ↑</li><li>적설 시 발 빠짐 (러셀 필요)</li><li>방한복 + 보온병 → 배낭 무게 ↑</li><li>해 짧음 → 12월 서울 일몰 약 17:15 (산속은 더 일찍 어두워짐)</li></ul>본 도구는 겨울 조건에 ×1.20을 적용합니다. 적설이 많거나 러셀이 필요하면 여유를 더 두고, 일몰 시각 1시간 앞당김 + 동계 장비 필수. <strong style="color:var(--red-600)">경험 없는 초보는 동계 산행 자제 권장.</strong>',
   },
   {
     q: '회귀 시간(턴어라운드)이란?',
-    a: '<strong style="color:var(--text)">“정상 도달 못 하면 하산해야 하는 시점”</strong>. 산악 등반의 핵심 안전 개념.<br/><br/>예: 일몰 18:30 → 하산 완료 목표 17:30 → 하산에 2시간 걸리는 코스(왕복 약 4시간)라면 정상 도달 마감은 15:30. 15:30까지 정상에 도달 못 하면 그 자리에서 회귀해야 일몰 전 하산 가능.<br/><br/>본 도구는 입력값 기준 자동 계산:<ul style="padding-left:20px;margin:8px 0"><li>✓ <strong style="color:#059669">안전</strong>: 일몰 1시간 전 도착</li><li>⚠️ <strong style="color:#D97706">주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li><li>🚨 <strong style="color:#DC2626">위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li></ul>',
+    a: '<strong style="color:var(--text)">“정상 도달 못 하면 하산해야 하는 시점”</strong>. 산악 등반의 핵심 안전 개념.<br/><br/>예: 일몰 18:30 → 하산 완료 목표 17:30 → 하산에 2시간 걸리는 코스(왕복 약 4시간)라면 정상 도달 마감은 15:30. 15:30까지 정상에 도달 못 하면 그 자리에서 회귀해야 일몰 전 하산 가능.<br/><br/>본 도구는 입력값 기준 자동 계산:<ul style="padding-left:20px;margin:8px 0"><li>✓ <strong style="color:var(--emerald-600)">안전</strong>: 일몰 1시간 전 도착</li><li>⚠️ <strong style="color:var(--amber-600)">주의</strong>: 일몰 1시간 전 ~ 일몰 사이 → 헤드랜턴 필수</li><li>🚨 <strong style="color:var(--red-600)">위험</strong>: 일몰 이후 → 야간 산행으로 전환됨</li></ul>',
   },
 ]
 
@@ -86,7 +86,7 @@ export default function HikingTimePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />등산 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -129,8 +129,8 @@ export default function HikingTimePage() {
                   ['한국 코스타임',     '보정',  '거리 10분/km + 오르막 100m당 16분', '⭐⭐⭐⭐⭐', '100대 명산 표준 코스타임 보정'],
                 ].map(([name, year, assumption, fit, note], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{name}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{year}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{name}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{year}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{assumption}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{fit}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{note}</td>
@@ -167,7 +167,7 @@ export default function HikingTimePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{cat}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{item}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{factor}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{factor}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{desc}</td>
                   </tr>
                 ))}
@@ -204,10 +204,10 @@ export default function HikingTimePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{mt}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{course}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{dist}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{elev}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{dist}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{elev}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{diff}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{time}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{time}</td>
                   </tr>
                 ))}
               </tbody>
@@ -253,8 +253,8 @@ export default function HikingTimePage() {
                 ].map(([trail, summer, winter], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{trail}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{summer}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{winter}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{summer}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{winter}</td>
                   </tr>
                 ))}
               </tbody>

@@ -68,8 +68,8 @@ function WarGuide() {
           <div key={t.range} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13 }}>
             <span style={{
               flexShrink: 0, minWidth: 64, textAlign: 'center', fontWeight: 800,
-              fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: t.color,
-              background: `${t.color}1a`, borderRadius: 8, padding: '4px 8px',
+              fontFamily: 'var(--font-sans)', color: t.color,
+              background: `${t.color}1a`, borderRadius: 'var(--radius-s)', padding: '4px 8px',
             }}>{t.range}</span>
             <span style={{ color: 'var(--text)' }}>{t.label}</span>
           </div>
@@ -741,7 +741,7 @@ export default function BaseballStatsClient() {
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
               {hasIp ? (<>
-              내 ERA <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{pcalc.era.toFixed(2)}</strong> 는 리그 평균 {league.avgERA.toFixed(2)} 대비
+              내 ERA <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{pcalc.era.toFixed(2)}</strong> 는 리그 평균 {league.avgERA.toFixed(2)} 대비
               <strong style={{ color: pcalc.era <= league.avgERA ? 'var(--success)' : 'var(--warning)', marginLeft: 6 }}>
                 {pcalc.era <= league.avgERA ? '−' : '+'}{Math.abs(pcalc.era - league.avgERA).toFixed(2)}
               </strong>
@@ -808,7 +808,7 @@ export default function BaseballStatsClient() {
                 <p className={styles.heroLead}>시즌 종료 예상 기록</p>
                 <p className={styles.heroNum}>{pace.projHits}<span style={{ fontSize: 18, color: 'var(--muted)', marginLeft: 6, verticalAlign: 'middle' }}>안타</span></p>
                 <p style={{ marginTop: 8, fontSize: 13, color: 'var(--muted)' }}>
-                  현재 페이스 × <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{pace.ratio.toFixed(2)}</strong>
+                  현재 페이스 × <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{pace.ratio.toFixed(2)}</strong>
                 </p>
               </div>
 
@@ -885,9 +885,9 @@ export default function BaseballStatsClient() {
                   <span>KBO 역대 단일시즌 기록 비교</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-                  <div>최다 안타 — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.hits.holder} {KBO_SEASON_RECORDS.hits.value} ({KBO_SEASON_RECORDS.hits.year})</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{pace.projHits}개</strong></div>
-                  <div>최다 홈런 — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.homeRuns.holder} {KBO_SEASON_RECORDS.homeRuns.value} ({KBO_SEASON_RECORDS.homeRuns.year})</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{pace.projHr}개</strong></div>
-                  <div>최고 OPS — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.ops.holder} {KBO_SEASON_RECORDS.ops.value} ({KBO_SEASON_RECORDS.ops.year})</strong> · 내 OPS: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{calc.ops.toFixed(3)}</strong></div>
+                  <div>최다 안타 — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.hits.holder} {KBO_SEASON_RECORDS.hits.value} ({KBO_SEASON_RECORDS.hits.year})</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{pace.projHits}개</strong></div>
+                  <div>최다 홈런 — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.homeRuns.holder} {KBO_SEASON_RECORDS.homeRuns.value} ({KBO_SEASON_RECORDS.homeRuns.year})</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{pace.projHr}개</strong></div>
+                  <div>최고 OPS — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.ops.holder} {KBO_SEASON_RECORDS.ops.value} ({KBO_SEASON_RECORDS.ops.year})</strong> · 내 OPS: <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{calc.ops.toFixed(3)}</strong></div>
                 </div>
               </div>
             </>

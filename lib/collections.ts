@@ -38,7 +38,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '예산·짐·옷 사이즈부터 현지 시차·팁·더치페이, 귀국 시 면세 한도까지 한 번에.',
     intro: '비행기 표만 끊는다고 여행 준비가 끝나는 건 아니죠. 예산을 짜고, 짐을 빠짐없이 챙기고, 현지에서 시차와 팁 문화에 적응하고, 돌아올 땐 면세 한도까지 — 여행의 처음과 끝에 필요한 계산을 순서대로 모았습니다.',
     emoji: '✈️',
-    color: '#0891B2',
+    color: 'var(--cyan-600)',
     seasonMonths: [1, 7, 8, 12],
     steps: [
       { title: '출발 전 준비', note: '환율과 하루 경비로 예산을 잡고, 빠뜨리기 쉬운 준비물과 현지 옷·신발 사이즈를 확인하세요. 유럽이라면 쉥겐 90/180일 체류 한도도 미리 점검.', toolHrefs: ['/tools/life/travel-budget', '/tools/life/packing', '/tools/unit/size', '/tools/date/schengen'] },
@@ -53,7 +53,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '대출 한도·청약·전월세 비교부터 도배·페인트·바닥재 물량까지, 집에 관한 계산을 한곳에서.',
     intro: '내 집 마련은 인생에서 가장 큰 계산입니다. 빌릴 수 있는 한도를 먼저 확인하고, 매물을 비교하고, 입주 후 셀프 인테리어 자재 물량까지 — 자금 계획부터 마무리 시공까지 단계별로 짚어봤어요.',
     emoji: '🏠',
-    color: '#059669',
+    color: 'var(--emerald-600)',
     steps: [
       { title: '자금·대출 계획', note: 'DSR로 받을 수 있는 대출 한도를 먼저 확인하고, 월 상환액과 청약 가점을 함께 따져보세요. 경매로 접근한다면 낙찰가 외 부대비용도 미리.', toolHrefs: ['/tools/finance/dsr', '/tools/finance/loan', '/tools/finance/housing-score', '/tools/finance/auction'] },
       { title: '집 고르기', note: '전세와 월세 중 무엇이 유리한지, 매매 시 기대 수익률과 매년 내는 보유세(재산세·종부세)는 얼마인지 따져보고, 평형·전용면적도 환산해 보세요.', toolHrefs: ['/tools/finance/rent-jeonse', '/tools/finance/real-estate', '/tools/finance/property-holding-tax', '/tools/unit/area'] },
@@ -68,7 +68,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '상차림 인원수, 음력 날짜, 비용 분담까지 — 명절 준비를 매끄럽게.',
     intro: '명절은 챙길 게 많습니다. 몇 인분을 준비할지, 차례·성묘 날짜가 음력으로 언제인지, 흩어진 비용은 어떻게 나눌지 — 가족 행사를 매끄럽게 치르는 데 필요한 도구를 모았어요.',
     emoji: '🍽️',
-    color: '#EA580C',
+    color: 'var(--orange-600)',
     seasonMonths: [1, 2, 9, 10],
     steps: [
       { title: '상차림·인원', note: '참석 인원에 맞춰 상차림 양과 장보기 분량을 가늠하세요.', toolHrefs: ['/tools/cooking/holiday-table', '/tools/cooking/serving', '/tools/cooking/kimjang'] },
@@ -83,7 +83,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '서버 시간을 ±0초로 맞추고 시작 시각을 카운트다운 — 콘서트 예매·수강신청·선착순 이벤트.',
     intro: '콘서트 예매도, 수강신청도, 선착순 이벤트도 결국 ‘시간 싸움’입니다. 1초 차이로 갈리는 순간을 위해, 서버 시간을 정확히 맞추고 시작 시각을 카운트다운하는 도구를 모았어요.',
     emoji: '🎫',
-    color: '#9333EA',
+    color: 'var(--purple-600)',
     steps: [
       { title: '회선·환경 점검', note: '예매는 0.1초 싸움입니다. 핑·지터·실패율로 내 인터넷이 티켓팅에 적합한지, 예매처 응답이 빠른지 먼저 진단하세요.', toolHrefs: ['/tools/dev/network-test'] },
       { title: '정확한 시각 맞추기', note: '내 컴퓨터 시계는 몇 초씩 어긋나 있을 수 있습니다. 서버 시간으로 맞추고, 해외 예매라면 현지 시각도 확인하세요.', toolHrefs: ['/tools/date/server-time', '/tools/date/timezone'] },
@@ -97,7 +97,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '더치페이 정산, 사다리·랜덤 뽑기, 술자리 페이스 관리까지 — 모임을 매끄럽게.',
     intro: '회식 자리에서 센스 있는 사람은 따로 있죠. 계산은 1/N로 깔끔하게, 게임은 사다리·랜덤으로 공정하게, 술자리는 내 페이스를 알고 안전하게 — 분위기를 살리는 도구를 모았습니다.',
     emoji: '🍻',
-    color: '#A16207',
+    color: 'var(--yellow-700)',
     seasonMonths: [12],
     steps: [
       { title: '정산·게임', note: '더치페이로 N빵을 정확히 나누고, 사다리타기·랜덤 뽑기로 메뉴나 순서를 공정하게 정하세요.', toolHrefs: ['/tools/life/dutch', '/tools/life/ladder', '/tools/life/random'] },
@@ -111,7 +111,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '연봉 실수령·세금 점검, 만 나이 확인, 새해 D-day까지 — 한 해를 정리하고 새해를 준비.',
     intro: '한 해의 끝은 정리와 시작이 함께 오는 때입니다. 연봉 실수령과 세금을 점검하고, 바뀐 만 나이를 확인하고, 새해 목표까지 D-day로 세어보며 한 해를 마무리해 보세요.',
     emoji: '📅',
-    color: '#DC2626',
+    color: 'var(--red-600)',
     seasonMonths: [1, 12],
     steps: [
       { title: '소득·세금 점검', note: '연말정산으로 환급·추가납부를 미리 보고, 연봉 실수령액을 다시 확인하세요. 프리랜서는 종합소득세를, 집을 팔았거나 퇴직·상속이 있었다면 양도세·퇴직소득세·상속증여세까지 미리 가늠해 두세요.', toolHrefs: ['/tools/finance/year-end-tax', '/tools/finance/salary', '/tools/finance/freelance-tax', '/tools/finance/capital-gains-tax', '/tools/finance/severance', '/tools/finance/inheritance'] },
@@ -125,7 +125,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '기초대사량·근력 1RM·러닝 페이스·심폐능력까지 — 내 기준에 맞는 운동 계획.',
     intro: '운동은 작심삼일이 되기 쉽죠. 막연히 시작하기보다 내 몸의 기준치를 알고, 적절한 강도와 페이스로 계획을 세우면 훨씬 오래갑니다. 근력부터 러닝까지 기록을 관리하는 도구를 모았어요.',
     emoji: '🏃',
-    color: '#0D9488',
+    color: 'var(--teal-600)',
     seasonMonths: [1, 3, 4],
     steps: [
       { title: '내 몸 기준 알기', note: '기초대사량과 BMI로 현재 상태와 하루 권장 열량을 먼저 파악하세요.', toolHrefs: ['/tools/health/bmr', '/tools/health/bmi'] },
@@ -141,7 +141,7 @@ export const COLLECTIONS: Collection[] = [
     lead: 'BMI·기초대사량·목표 감량 기간부터 간식·카페인·영양제 점검까지.',
     intro: '다이어트의 시작은 ‘내 몸을 아는 것’입니다. 목표 체중까지 얼마나 줄여야 하는지, 하루에 얼마나 먹어야 하는지 숫자로 확인하면 막연함이 줄어듭니다. 체중 관리와 식단 점검 도구를 모았어요.',
     emoji: '⚖️',
-    color: '#059669',
+    color: 'var(--emerald-600)',
     seasonMonths: [1, 5, 6],
     steps: [
       { title: '현재 상태 진단', note: 'BMI로 비만도를, 기초대사량으로 하루 소비 열량을, 감량 계산기로 목표까지의 기간을 확인하세요.', toolHrefs: ['/tools/health/bmi', '/tools/health/bmr', '/tools/health/weightloss'] },
@@ -155,7 +155,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '실수령 월급·전월세·방 면적부터 라면 물양·빨래 건조·단가 비교까지.',
     intro: '처음 독립하면 챙길 게 한둘이 아니죠. 월급에서 실제로 손에 쥐는 돈부터, 방 크기에 맞는 살림, 장 볼 때 더 싼 선택까지 — 1인 가구의 시작을 돕는 도구를 모았습니다.',
     emoji: '🧰',
-    color: '#A16207',
+    color: 'var(--yellow-700)',
     seasonMonths: [2, 3],
     steps: [
       { title: '돈 관리', note: '연봉 실수령액과 4대보험 공제를 확인하고, 매달 얼마를 모을 수 있을지 계획하세요.', toolHrefs: ['/tools/finance/salary', '/tools/finance/4-insurance', '/tools/finance/savings'] },
@@ -170,7 +170,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '노출·화각 계산부터 황금비 구도·색상 코드까지 — 의도한 장면을 담는 법.',
     intro: '좋은 사진은 감각만이 아니라 노출·화각·구도의 이해에서 나옵니다. 카메라 설정값을 계산하고, 어떤 렌즈가 어떤 화각인지, 황금비로 구도를 잡는 도구까지 모았어요.',
     emoji: '📷',
-    color: '#9333EA',
+    color: 'var(--purple-600)',
     steps: [
       { title: '노출·화각', note: '조리개·셔터·ISO의 노출 관계와 초점거리별 화각을 계산해 원하는 장면을 담으세요.', toolHrefs: ['/tools/art/exposure', '/tools/art/fov'] },
       { title: '구도·색', note: '황금비로 안정적인 구도를 잡고, 색상 코드를 변환해 보정·브랜딩에 활용하세요.', toolHrefs: ['/tools/art/golden-ratio', '/tools/art/color'] },
@@ -183,7 +183,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '산행 소요 시간·준비물 체크부터 자외선·타이어 공기압 점검까지.',
     intro: '자연으로 떠나기 전, 안전과 편의를 위한 준비가 반입니다. 산행 시간을 가늠하고, 빠진 짐이 없는지 챙기고, 자외선과 차량 타이어까지 점검하면 한결 든든합니다.',
     emoji: '⛺',
-    color: '#EA580C',
+    color: 'var(--orange-600)',
     seasonMonths: [4, 5, 9, 10],
     steps: [
       { title: '일정·짐', note: '코스별 산행 소요 시간을 예측하고, 캠핑·등산 준비물을 빠짐없이 챙기세요.', toolHrefs: ['/tools/sports/hiking-time', '/tools/life/packing'] },
@@ -197,7 +197,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '인코딩·해시·정규식부터 JSON·YAML 변환, API·네트워크 점검까지 — 브라우저에서 바로.',
     intro: '개발하다 보면 잠깐잠깐 필요한 변환·검증 도구들이 있죠. 매번 검색하지 않도록 인코딩과 해시, JSON·YAML 정리, 정규식 테스트, API·네트워크 점검까지 손이 자주 가는 것들을 한곳에 모았습니다. 전부 브라우저에서 처리돼 데이터가 서버로 새어 나가지 않아요.',
     emoji: '🖥️',
-    color: '#0EA5E9',
+    color: 'var(--sky-500)',
     steps: [
       { title: '인코딩·해시', note: '텍스트·URL·진법을 변환하고, MD5·SHA 해시와 HMAC 서명·파일 무결성을 확인하세요.', toolHrefs: ['/tools/dev/base64', '/tools/dev/url-encode', '/tools/dev/number-base', '/tools/dev/hash'] },
       { title: '데이터·포맷', note: 'JSON·YAML을 정렬·검증·상호 변환하고, CSS 단위를 바꾸고, 정규식을 실시간으로 테스트하세요.', toolHrefs: ['/tools/dev/json', '/tools/dev/yaml-json', '/tools/dev/css-converter', '/tools/dev/regex'] },
@@ -311,7 +311,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '사워도우·베이커 퍼센트·제빵 타임라인부터 제과 비율, 계란, 커피·차 추출까지.',
     intro: '집에서 빵을 굽고 커피를 내리는 일은 결국 비율과 타이밍의 예술입니다. 밀가루 기준 재료 비율을 맞추고 발효·굽기 일정을 역산하면 실패가 줄어요. 빵과 디저트, 브런치와 홈카페까지 — 손맛에 정확함을 더하는 도구를 모았습니다.',
     emoji: '🧁',
-    color: '#D97706',
+    color: 'var(--amber-600)',
     steps: [
       { title: '빵 만들기', note: '사워도우 스타터를 관리하고, 밀가루 100% 기준 베이커 퍼센트로 재료를 잡고, 완성 시각에서 발효·굽기 일정을 역산하세요.', toolHrefs: ['/tools/cooking/sourdough', '/tools/cooking/baker-percent', '/tools/cooking/baking-schedule'] },
       { title: '디저트·과자', note: '마들렌·파운드·쿠키 등 제과 비율을 맞추고, 인분만 바꿔 모든 재료를 비례 환산하세요.', toolHrefs: ['/tools/cooking/baking-recipe', '/tools/cooking/recipe'] },
@@ -367,7 +367,7 @@ export const COLLECTIONS: Collection[] = [
     lead: '부가세·종합소득세·4대보험부터 메뉴 원가율, 할부, 현금흐름까지.',
     intro: '장사와 프리랜싱은 버는 것만큼 새는 것을 막는 게 중요합니다. 부가세와 종합소득세를 미리 가늠하고, 메뉴 원가율로 진짜 마진을 확인하고, 현금흐름과 저축까지 관리하면 사업이 한결 단단해져요. 사장님·1인 사업자를 위한 도구를 모았습니다.',
     emoji: '🏪',
-    color: '#A16207',
+    color: 'var(--yellow-700)',
     seasonMonths: [5],
     steps: [
       { title: '세금·보험', note: '공급가↔세액 부가세를 역산하고, 종합소득세를 업종별로 가늠하고, 4대보험 사업주 부담을 확인하세요.', toolHrefs: ['/tools/finance/vat', '/tools/finance/freelance-tax', '/tools/finance/4-insurance'] },

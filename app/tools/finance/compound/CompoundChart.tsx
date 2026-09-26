@@ -7,10 +7,10 @@ interface Props {
 }
 
 const RATES = [
-  { rate: 3,  label: '3%',  color: '#0891B2' },
-  { rate: 5,  label: '5%',  color: '#059669' },
-  { rate: 7,  label: '7%',  color: '#0EA5E9' },
-  { rate: 10, label: '10%', color: '#EA580C' },
+  { rate: 3,  label: '3%',  color: 'var(--cyan-600)' },
+  { rate: 5,  label: '5%',  color: 'var(--emerald-600)' },
+  { rate: 7,  label: '7%',  color: 'var(--sky-500)' },
+  { rate: 10, label: '10%', color: 'var(--orange-600)' },
 ]
 
 const PRINCIPAL = 1000 // 만원
@@ -61,7 +61,7 @@ export default function CompoundChart({ years = YEARS }: Props) {
     <div style={{
       background: 'var(--bg2)',
       border: '1px solid var(--border)',
-      borderRadius: '14px',
+      borderRadius: 'var(--radius-card)',
       padding: '20px',
     }}>
       <p style={{ fontSize: '11px', color: 'var(--muted)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>
@@ -145,7 +145,7 @@ export default function CompoundChart({ years = YEARS }: Props) {
       <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', marginTop: '12px' }}>
         {data.map(({ label, color, points }) => (
           <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '6px' }}>
-            <span style={{ width: '20px', height: '3px', background: color, borderRadius: '999px', display: 'inline-block' }} />
+            <span style={{ width: '20px', height: '3px', background: color, borderRadius: 'var(--radius-pill)', display: 'inline-block' }} />
             <span style={{ fontSize: '12px', color: 'var(--muted)' }}>
               연 {label} → <strong style={{ color }}>{fmtVal(points[years].value)}</strong>
             </span>

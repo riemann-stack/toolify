@@ -21,7 +21,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -31,7 +31,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
@@ -55,7 +55,7 @@ export default function PaintMixPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         예술·창작 · 디자인·미술
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />색상 혼합 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -66,7 +66,7 @@ export default function PaintMixPage() {
       <div style={{
         background: 'rgba(255, 138, 62, 0.06)',
         border: '1px solid rgba(255, 138, 62, 0.40)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
@@ -169,7 +169,7 @@ export default function PaintMixPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: '#9333EA', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{row[3]}</td>
                 </tr>
               ))}
@@ -226,7 +226,7 @@ export default function PaintMixPage() {
                 <tr key={i}>
                   <td style={{ padding: '7px 8px', color: 'var(--muted)', fontSize: 12 }}>{row[0]}</td>
                   <td style={{ padding: '7px 8px', color: 'var(--text)', fontWeight: 600 }}>{row[1]}</td>
-                  <td style={{ padding: '7px 8px', color: '#9333EA', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '7px 8px', color: '#9333EA', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -267,7 +267,7 @@ export default function PaintMixPage() {
           <Link key={t.href} href={t.href} style={{
             display: 'flex', alignItems: 'center', gap: 12,
             background: 'var(--bg2)', border: '1px solid var(--border)',
-            borderRadius: 12, padding: '14px 16px', textDecoration: 'none',
+            borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
           }}>
             <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
             <div>

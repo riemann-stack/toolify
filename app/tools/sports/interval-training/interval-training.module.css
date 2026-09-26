@@ -6,9 +6,9 @@
    ══════════════════════════════════════════════ */
 .phaseBadge {
   display: inline-block;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px; font-weight: 700;
-  padding: 4px 10px; border-radius: 999px;
+  padding: 4px 10px; border-radius: var(--radius-pill);
   border: 1px solid; white-space: nowrap;
 }
 .scheduleCardsMobile { display: none; flex-direction: column; gap: 8px; }
@@ -22,7 +22,7 @@
   margin-bottom: 8px;
 }
 .weekCardNum {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text);
+  font-family: var(--font-sans); font-weight: 700; color: var(--text);
 }
 .weekCardBody { font-size: 13px; color: var(--text); }
 .weekCardMeta {
@@ -36,12 +36,12 @@
 
 /* 워밍업·쿨다운 공통 안내 카드 */
 .warmupCard {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.25);
-  border-radius: 12px; padding: 14px 18px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
+  border-radius: var(--radius-m); padding: 14px 18px;
 }
 .warmupTitle {
-  font-size: 13px; font-weight: 700; color: #0891B2;
+  font-size: 13px; font-weight: 700; color: var(--cyan-600);
   margin: 0 0 10px;
 }
 .warmupList {
@@ -64,14 +64,14 @@
 .goalCheck {
   position: absolute; top: 6px; right: 8px;
   background: var(--accent-strong); color: #ffffff;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 10px; font-weight: 800;
   width: 18px; height: 18px; border-radius: 50%;
   display: flex; align-items: center; justify-content: center;
 }
 .goalBtn { position: relative; }
 .goalActive {
   border-width: 2px !important;
-  box-shadow: 0 0 0 3px rgba(14,165,233,0.18);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 18%, transparent);
   transform: translateY(-1px);
 }
 
@@ -81,8 +81,8 @@
 .lapHint {
   font-size: 12px; color: var(--muted); line-height: 1.7;
   margin: 12px 0 0; padding: 10px 12px;
-  background: rgba(8,145,178,0.14); border-radius: 8px;
-  border-left: 3px solid #0891B2;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent); border-radius: var(--radius-s);
+  border-left: 3px solid var(--cyan-600);
 }
 .lapHint strong { color: var(--text); }
 
@@ -101,8 +101,8 @@
 }
 .customDistBtn {
   background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 8px; padding: 8px 4px;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 700;
+  border-radius: var(--radius-s); padding: 8px 4px;
+  font-family: var(--font-sans); font-size: 12px; font-weight: 700;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
   min-height: 38px;
 }@media (hover: hover) {
@@ -130,7 +130,7 @@
   align-items: center;
   padding: 11px 14px;
   border-bottom: 1px solid var(--border);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .sessionRow:last-child { border-bottom: none; }
 .sessionRowMain {
@@ -151,7 +151,7 @@
   flex-wrap: wrap;
 }
 .sessionDetail strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
 }
@@ -159,7 +159,7 @@
 .sessionSep { color: var(--muted); font-size: 12px; }
 .sessionPace {
   margin-left: auto;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 14px;
   color: var(--accent);
@@ -186,12 +186,12 @@
   border-radius: 10px; padding: 10px 12px;
   display: flex; flex-direction: column; gap: 3px; text-align: left;
   cursor: pointer; transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .raceBtn:hover { border-color: var(--accent); transform: translateY(-1px); }
 }
 .raceMonth {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 11px; font-weight: 800;
   color: var(--accent); letter-spacing: 0.04em;
 }
 .raceName { font-size: 13px; font-weight: 600; color: var(--text); }
@@ -202,13 +202,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -217,17 +217,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -244,7 +244,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -273,7 +273,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 입력 모드 ── */
@@ -290,16 +290,16 @@
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
 .modeRecord { border-color: rgba(161,98,7,0.40); }
-.modeTarget { border-color: rgba(8,145,178,0.40); }
-.modeRecord.modeActive { background: rgba(161,98,7,0.12); color: #A16207; border-color: #A16207; font-weight: 700; }
-.modeTarget.modeActive { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
+.modeTarget { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
+.modeRecord.modeActive { background: rgba(161,98,7,0.12); color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
+.modeTarget.modeActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
 
 /* ── 시간 입력 (분:초 / 시:분:초) ── */
 .timeInputRow {
@@ -314,7 +314,7 @@
   gap: 6px;
   align-items: center;
 }
-.timeColon { color: var(--muted); font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; text-align: center; }
+.timeColon { color: var(--muted); font-size: 18px; font-family: var(--font-sans); font-weight: 800; text-align: center; }
 .timeInput {
   width: 100%;
   background: var(--bg3);
@@ -322,14 +322,14 @@
   border-radius: 10px;
   padding: 12px 10px;
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
   text-align: center;
   box-sizing: border-box;
 }
-.timeInput:focus { border-color: #A16207; }
+.timeInput:focus { border-color: var(--yellow-700); }
 .timeInput::-webkit-outer-spin-button,
 .timeInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .timeInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -341,7 +341,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -356,7 +356,7 @@
   box-sizing: border-box;
   margin-bottom: 8px;
 }
-.distSelect:focus { border-color: #A16207; }
+.distSelect:focus { border-color: var(--yellow-700); }
 .distSelect option { background: var(--bg2); color: var(--text); }
 
 .recordTabs {
@@ -368,23 +368,23 @@
 .recordTabBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .recordTabBtn:hover { color: var(--text); }
 }
-.recordTabActive { background: rgba(161,98,7,0.12); color: #A16207; border-color: #A16207; font-weight: 700; }
+.recordTabActive { background: rgba(161,98,7,0.12); color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
 
 .vdotShow {
   font-size: 12px;
-  color: #A16207;
+  color: var(--yellow-700);
   margin-top: 6px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: center;
 }
@@ -405,7 +405,7 @@
   padding: 12px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -418,18 +418,18 @@
 }
 .goalIcon { font-size: 18px; }
 .goalLabel { font-size: 12px; font-weight: 600; }
-.goalIntensity { font-size: 10px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; letter-spacing: 0.04em; }
+.goalIntensity { font-size: 10px; color: var(--muted); font-family: var(--font-sans); font-weight: 800; letter-spacing: 0.04em; }
 
 .goalSpeed { border-color: rgba(220,38,38,0.40); }
 .goal5k    { border-color: var(--accent); }
 .goal10k   { border-color: rgba(234,88,12,0.40); }
-.goalHalf  { border-color: rgba(8,145,178,0.40); }
+.goalHalf  { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .goalMar   { border-color: rgba(155,89,182,0.40); }
-.goalSpeed.goalActive { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.goalSpeed.goalActive { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
 .goal5k.goalActive    { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.goal10k.goalActive   { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
-.goalHalf.goalActive  { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
-.goalMar.goalActive   { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
+.goal10k.goalActive   { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
+.goalHalf.goalActive  { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
+.goalMar.goalActive   { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
 
 /* ── 인터벌 거리 체크박스 ── */
 .distGrid {
@@ -443,11 +443,11 @@
 .distBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 9px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -461,12 +461,12 @@
   position: absolute;
   top: -8px;
   right: -2px;
-  background: #A16207;
+  background: var(--yellow-700);
   color: #000;
   font-size: 9px;
   padding: 1px 6px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 
@@ -474,23 +474,23 @@
 .hero {
   background: var(--bg2);
   border: 1px solid rgba(161,98,7,0.40);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
-  color: #A16207;
+  color: var(--yellow-700);
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: var(--font-sans); }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: var(--font-sans); color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -516,9 +516,9 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.lapTable td:first-child { color: var(--text); font-weight: 700; font-family: 'Inter', system-ui, sans-serif; }
-.lapTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: #A16207; font-size: 14px; }
-.lapTable td:nth-child(3) { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; color: var(--muted); font-size: 12px; }
+.lapTable td:first-child { color: var(--text); font-weight: 700; font-family: var(--font-sans); }
+.lapTable td:nth-child(2) { font-family: var(--font-sans); font-weight: 800; color: var(--yellow-700); font-size: 14px; }
+.lapTable td:nth-child(3) { font-family: var(--font-sans); font-weight: 600; color: var(--muted); font-size: 12px; }
 .lapTable .standardRow td { background: rgba(161,98,7,0.04); }
 .lapCopyBtn {
   background: var(--bg3);
@@ -528,25 +528,25 @@
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.12s;
 }@media (hover: hover) {
-  .lapCopyBtn:hover { color: #A16207; border-color: #A16207; }
+  .lapCopyBtn:hover { color: var(--yellow-700); border-color: var(--yellow-700); }
 }
-.lapCopyBtn.copied { background: rgba(161,98,7,0.12); color: #A16207; border-color: #A16207; }
+.lapCopyBtn.copied { background: rgba(161,98,7,0.12); color: var(--yellow-700); border-color: var(--yellow-700); }
 
 /* ── 추천 훈련 카드 ── */
 .recoCard {
   background: rgba(161,98,7,0.05);
   border: 1px solid rgba(161,98,7,0.30);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .recoTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
-  color: #A16207;
+  color: var(--yellow-700);
   margin-bottom: 12px;
 }
 .recoRow {
@@ -558,7 +558,7 @@
   border-bottom: 1px dashed var(--border);
 }
 .recoRow:last-child { border-bottom: none; }
-.recoRow strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.recoRow strong { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 
 /* ── 회복 가이드 표 ── */
 .recoveryTable {
@@ -580,7 +580,7 @@
 }
 .recoveryTable td:first-child {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 
@@ -588,14 +588,14 @@
 .warnCard {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 .warnTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 13px;
-  color: #DC2626;
+  color: var(--red-600);
   margin-bottom: 10px;
 }
 .warnList {
@@ -612,7 +612,7 @@
 }
 .warnList li::before {
   content: '•';
-  color: #DC2626;
+  color: var(--red-600);
   position: absolute;
   left: 6px;
   font-weight: 800;
@@ -624,26 +624,26 @@
   font-size: 12px;
   font-weight: 700;
   padding: 4px 12px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
   margin-top: 8px;
 }
-.relLow    { background: rgba(234,88,12,0.15); color: #EA580C; }
-.relMid    { background: rgba(161,98,7,0.15); color: #A16207; }
-.relHigh   { background: rgba(16,185,129,0.15); color: #059669; }
+.relLow    { background: rgba(234,88,12,0.15); color: var(--orange-600); }
+.relMid    { background: rgba(161,98,7,0.15); color: var(--yellow-700); }
+.relHigh   { background: rgba(16,185,129,0.15); color: var(--emerald-600); }
 
 /* ── 야소 800 안내 카드 ── */
 .yassoNote {
   background: rgba(234,88,12,0.14);
   border: 2px solid rgba(234,88,12,0.30);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 .yassoNoteTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 13px;
-  color: #EA580C;
+  color: var(--orange-600);
   margin-bottom: 10px;
 }
 .yassoNoteText {
@@ -672,8 +672,8 @@
   text-transform: uppercase;
   font-weight: 600;
 }
-.yassoTable td:first-child { color: #A16207; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.yassoTable td:nth-child(2) { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
+.yassoTable td:first-child { color: var(--yellow-700); font-family: var(--font-sans); font-weight: 700; }
+.yassoTable td:nth-child(2) { color: var(--text); font-family: var(--font-sans); font-weight: 600; }
 .yassoTable td:last-child { color: var(--muted); font-size: 12px; }
 
 /* ── 후반 분석 ── */
@@ -686,17 +686,17 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 10px;
   font-size: 16px; /* iOS 포커스 줌 방지 (16px 미만 시 자동 확대) */
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
   text-align: center;
   box-sizing: border-box;
 }
-.splitInput:focus { border-color: #A16207; }
+.splitInput:focus { border-color: var(--yellow-700); }
 
 /* ── 슬라이더 ── */
 .sliderRow {
@@ -707,14 +707,14 @@
 }
 .sliderRow input[type=range] {
   flex: 1;
-  accent-color: #A16207;
+  accent-color: var(--yellow-700);
 }
 .sliderValue {
   min-width: 64px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
-  color: #A16207;
+  color: var(--yellow-700);
   text-align: right;
 }
 
@@ -738,22 +738,22 @@
 }
 .scheduleTable td:first-child {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   white-space: nowrap;
 }
-.scheduleTable td:nth-child(2) { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 500; }
+.scheduleTable td:nth-child(2) { color: var(--text); font-family: var(--font-sans); font-weight: 500; }
 .scheduleTable td:last-child {
   text-align: right;
   font-size: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
-.phaseAdapt  td:last-child { color: #059669; }
+.phaseAdapt  td:last-child { color: var(--emerald-600); }
 .phaseDevel  td:last-child { color: var(--accent); }
-.phaseRecov  td:last-child { color: #0891B2; }
-.phasePeak   td:last-child { color: #EA580C; }
-.phaseTaper  td:last-child { color: #9333EA; }
+.phaseRecov  td:last-child { color: var(--cyan-600); }
+.phasePeak   td:last-child { color: var(--orange-600); }
+.phaseTaper  td:last-child { color: var(--purple-600); }
 
 .scheduleDetailCard {
   background: var(--bg3);
@@ -764,34 +764,34 @@
   font-size: 12px;
 }
 .scheduleDetailCard div { color: var(--muted); padding: 3px 0; }
-.scheduleDetailCard strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.scheduleDetailCard strong { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 
 .marathonExtra {
   background: rgba(155,89,182,0.06);
   border: 1px solid rgba(155,89,182,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.marathonExtra strong { color: #9333EA; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.marathonExtra strong { color: var(--purple-600); font-family: var(--font-sans); font-weight: 700; }
 .marathonExtra ul { padding-left: 18px; margin: 8px 0 0; color: var(--muted); }
 
 /* ── 결과 복사 ── */
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #A16207; color: #A16207; }
+  .copyBtn:hover { border-color: var(--yellow-700); color: var(--yellow-700); }
 }
-.copied { background: rgba(161,98,7,0.12); color: #A16207; border-color: #A16207; font-weight: 700; }
+.copied { background: rgba(161,98,7,0.12); color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }

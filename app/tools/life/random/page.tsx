@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -60,7 +60,7 @@ export default function RandomPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />랜덤 추첨기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -97,7 +97,7 @@ export default function RandomPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             텍스트박스에 줄바꿈으로 명단을 채우던 방식 대신, <strong style={{ color: 'var(--text)' }}>이름 한 개씩 Enter</strong>로 칩이 추가되는 방식을 채택했습니다. 모바일 키보드에서도 자연스럽게 입력·삭제할 수 있습니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: 20, margin: 0 }}>
               <li><strong style={{ color: 'var(--text)' }}>Enter / 쉼표</strong> — 칩 추가</li>
               <li><strong style={{ color: 'var(--text)' }}>붙여넣기</strong> — &quot;김민수, 이지은, 박서준&quot; 또는 여러 줄 한 번에 → 자동 분리</li>
@@ -136,10 +136,10 @@ export default function RandomPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             같은 항목을 여러 번 입력하는 대신 가중치로 확률을 조절합니다. <strong style={{ color: 'var(--text)' }}>확률 = 항목 가중치 / 전체 가중치 합</strong>.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
-            <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, fontFamily: 'var(--font-sans)' }}>
               예: A=3, B=1, C=2 → 총합 6
-              <br />→ A: <strong style={{ color: '#A16207' }}>3/6 = 50%</strong>, B: <strong style={{ color: '#A16207' }}>1/6 ≈ 17%</strong>, C: <strong style={{ color: '#A16207' }}>2/6 ≈ 33%</strong>
+              <br />→ A: <strong style={{ color: 'var(--yellow-700)' }}>3/6 = 50%</strong>, B: <strong style={{ color: 'var(--yellow-700)' }}>1/6 ≈ 17%</strong>, C: <strong style={{ color: 'var(--yellow-700)' }}>2/6 ≈ 33%</strong>
             </p>
           </div>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
@@ -210,8 +210,8 @@ export default function RandomPage() {
                   ['100,000회', '±0.7% 안팎',  '이론값에 매우 근접'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'JetBrains Mono, monospace' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--emerald-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -268,7 +268,7 @@ export default function RandomPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             명단 섞기(팀·순서·자리)는 <strong style={{ color: 'var(--text)' }}>Fisher-Yates 셔플</strong>을 사용합니다. 배열 끝에서부터 각 자리를 아직 확정되지 않은 자리 중 하나와 무작위로 맞바꾸는 방식으로, 모든 순열이 같은 확률로 나오는 균등 셔플의 표준 알고리즘입니다(컴퓨터용 O(n) 구현 원전: Durstenfeld, CACM Algorithm 235, 1964). 가중치 추첨은 <code>Math.random()</code> 값을 가중치 합의 누적 구간에 대응시켜 뽑습니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
               <strong style={{ color: 'var(--text)' }}>MDN 공식 경고 (2026-07 기준)</strong>: <code>Math.random()</code>은 0 이상 1 미만의 의사난수를 근사 균등 분포로 반환하지만, <strong style={{ color: 'var(--text)' }}>암호학적으로 안전한 난수는 제공하지 않으므로 보안 관련 용도로 쓰지 말라</strong>고 MDN 문서가 명시합니다. 점심 메뉴·자리 배치·발표 순서 같은 일상 추첨에는 충분히 공정하지만, 경품 추첨처럼 금전·이해관계가 큰 추첨이라면 암호학적 난수(<code>crypto.getRandomValues()</code> — MDN 기준 &ldquo;암호학적으로 강한 난수&rdquo;) 기반 도구나 공증 절차를 권장합니다.
             </p>
@@ -284,7 +284,7 @@ export default function RandomPage() {
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -309,7 +309,7 @@ export default function RandomPage() {
               { href: '/tools/life/zodiac',     icon: '🐲', name: '띠·별자리 계산기',     desc: '재미용 운세 정보' },
               { href: '/tools/life/pomodoro',   icon: '🍅', name: '뽀모도로 타이머',      desc: '집중·휴식 사이클' },
             ].map((tool, i) => (
-              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
+              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
                   <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>

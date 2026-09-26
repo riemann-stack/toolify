@@ -21,7 +21,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -31,14 +31,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -78,7 +78,7 @@ export default function HashPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />해시 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -88,13 +88,13 @@ export default function HashPage() {
       {/* 강한 면책 */}
       <div style={{
         background: 'rgba(219, 39, 119, 0.06)',
-        border: '2px solid #DB2777',
-        borderRadius: '14px',
+        border: '2px solid var(--pink-600)',
+        borderRadius: 'var(--radius-card)',
         padding: '14px 18px',
         marginBottom: '32px',
       }}>
         <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, margin: 0 }}>
-          🚨 <strong style={{ color: '#DB2777' }}>중요</strong> — <strong>MD5와 SHA-1은 충돌 공격이 발견</strong>되어 비밀번호 해싱·디지털 서명·SSL 인증서에 사용 금지입니다.
+          🚨 <strong style={{ color: 'var(--pink-600)' }}>중요</strong> — <strong>MD5와 SHA-1은 충돌 공격이 발견</strong>되어 비밀번호 해싱·디지털 서명·SSL 인증서에 사용 금지입니다.
           <strong> 파일 무결성 확인(체크섬) 용도로만</strong> 사용하세요.
           비밀번호는 반드시 <strong>bcrypt·scrypt·Argon2</strong>(서버 측)를 사용하세요.
           본 도구는 모든 계산이 브라우저에서 수행되며, 입력 데이터는 외부로 전송되지 않습니다.
@@ -145,8 +145,8 @@ export default function HashPage() {
                 ['SHA-512', '512bit / 128자', '🟢 안전 (64bit 시스템 빠름)',    '금융, 정부, 고보안 서명'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--sky-500)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 13 }}>{row[2]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 13 }}>{row[3]}</td>
                 </tr>
@@ -163,13 +163,13 @@ export default function HashPage() {
       <h2 style={sectionTitle}>🚨 안전성 등급 — 무엇에 써야 / 쓰지 말아야</h2>
       <div style={{
         background: 'rgba(219, 39, 119, 0.06)',
-        border: '2px solid #DB2777',
-        borderRadius: '14px',
+        border: '2px solid var(--pink-600)',
+        borderRadius: 'var(--radius-card)',
         padding: '18px 22px',
         marginBottom: '14px',
       }}>
         <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 12px' }}>
-          ❌ <strong style={{ color: '#DB2777' }}>MD5 · SHA-1을 절대 사용하면 안 되는 곳</strong>
+          ❌ <strong style={{ color: 'var(--pink-600)' }}>MD5 · SHA-1을 절대 사용하면 안 되는 곳</strong>
         </p>
         <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 1.95 }}>
           <li><strong>비밀번호 해싱</strong> — 무지개 표(rainbow table)로 즉시 깨짐. 반드시 <strong>bcrypt·scrypt·Argon2</strong>(KDF, 서버 측)</li>
@@ -184,7 +184,7 @@ export default function HashPage() {
       </div>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 12px' }}>
-          ✅ <strong style={{ color: '#0D9488' }}>MD5 · SHA-1을 사용해도 되는 곳 (무결성 전용)</strong>
+          ✅ <strong style={{ color: 'var(--teal-600)' }}>MD5 · SHA-1을 사용해도 되는 곳 (무결성 전용)</strong>
         </p>
         <ul style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 1.95 }}>
           <li><strong>파일 체크섬</strong> — Linux ISO·소프트웨어 다운로드 무결성 (충돌 위험 ↔ 손상 검출은 OK)</li>
@@ -222,7 +222,7 @@ export default function HashPage() {
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: 13 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--sky-500)', fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: 13 }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 13 }}>{row[2]}</td>
                 </tr>
               ))}
@@ -257,9 +257,9 @@ export default function HashPage() {
                 ['SHA-512', 'shasum -a 512 file',                      'certutil -hashfile FILE SHA512'],
               ].map((row, i) => (
                 <tr key={i}>
-                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 12 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 12 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--sky-500)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[0]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontSize: 12 }}>{row[1]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontSize: 12 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -390,21 +390,21 @@ export default function HashPage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/dev/base64" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/base64" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔐</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>Base64 인코더/디코더</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             텍스트·파일 ↔ Base64
           </p>
         </Link>
-        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📋</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>JSON 포맷터</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             JSON 정렬·압축·유효성 검사
           </p>
         </Link>
-        <Link href="/tools/dev/number-base" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/number-base" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔢</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>진법 변환기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

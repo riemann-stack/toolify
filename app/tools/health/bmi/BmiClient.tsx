@@ -442,7 +442,7 @@ export default function BmiClient() {
               <div className={styles.detailGrid3}>
                 <div className={styles.detailItem}>
                   <small>정상 범위 ({standard === 'KOREA' ? '한국' : 'WHO'})</small>
-                  <div>{rich.normalMin}<span style={{ fontSize: 14, opacity: 0.7, margin: '0 2px', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 600 }}>~</span>{rich.normalMax}</div>
+                  <div>{rich.normalMin}<span style={{ fontSize: 14, opacity: 0.7, margin: '0 2px', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>~</span>{rich.normalMax}</div>
                   <p>kg</p>
                 </div>
                 <div className={styles.detailItem}>

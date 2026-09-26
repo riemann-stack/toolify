@@ -451,7 +451,7 @@ export default function TravelBudgetClient() {
               {' · '}1인 하루 <strong style={{ color: 'var(--accent)' }}>{fmtMan(result.perPerson / inp.days)}</strong>
               {' · '}전체 하루 <strong>{fmtMan(result.perDay)}</strong>
               <br />현지 통화 ≈ <strong>{fmtCurrency(totalNative, city.currencyUnit, totalNative > 1000 ? 0 : 2)}</strong>
-              {' · '}도시 평균 대비 <strong style={{ color: vsAvgPct > 30 ? '#DB2777' : vsAvgPct < -30 ? '#0D9488' : 'var(--text)' }}>
+              {' · '}도시 평균 대비 <strong style={{ color: vsAvgPct > 30 ? 'var(--pink-600)' : vsAvgPct < -30 ? 'var(--teal-600)' : 'var(--text)' }}>
                 {vsAvgPct > 0 ? '+' : ''}{vsAvgPct.toFixed(0)}%
               </strong>
             </p>
@@ -582,10 +582,10 @@ export default function TravelBudgetClient() {
                 const userW = (d.user / max) * 100
                 const avgW = (d.avg / max) * 100
                 const colorMap = {
-                  low:    '#0891B2',
-                  normal: '#0D9488',
-                  high:   '#D97706',
-                  over:   '#DB2777',
+                  low:    'var(--cyan-600)',
+                  normal: 'var(--teal-600)',
+                  high:   'var(--amber-600)',
+                  over:   'var(--pink-600)',
                 }
                 return (
                   <div key={d.id} className={s.diagCard}>
@@ -705,7 +705,7 @@ export default function TravelBudgetClient() {
                         <td>{sc.style.emoji} {sc.style.label}</td>
                         <td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(sc.result.total)}</td>
                         <td className={s.cellMono}>{fmtMan(sc.result.perPerson)}</td>
-                        <td className={s.cellMono} style={{ color: diff > 0 ? '#EA580C' : 'var(--muted)' }}>
+                        <td className={s.cellMono} style={{ color: diff > 0 ? 'var(--orange-600)' : 'var(--muted)' }}>
                           {diff === 0 ? '기준' : `+${fmtMan(diff)}`}
                         </td>
                       </tr>
@@ -780,8 +780,8 @@ function DonutChart({ items, total }: { items: DonutItem[]; total: number }) {
           return <path key={d.id} d={describeArc(startAngle, endAngle)} fill={d.color} opacity={0.85} />
         })}
         <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>총 (예비비 X)</text>
-        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
+        <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle">총 (예비비 X)</text>
+        <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontWeight="800">
           {fmtMan(total)}
         </text>
       </svg>
@@ -790,7 +790,7 @@ function DonutChart({ items, total }: { items: DonutItem[]; total: number }) {
           <div key={d.id} style={{ display: 'grid', gridTemplateColumns: '14px 1fr auto', alignItems: 'center', gap: 8, fontSize: 12 }}>
             <span style={{ width: 12, height: 12, borderRadius: 3, background: d.color }} />
             <span style={{ color: 'var(--text)', fontWeight: 600 }}>{d.emoji} {d.label}</span>
-            <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)', fontWeight: 700 }}>
+            <span style={{ fontFamily: 'var(--font-sans)', color: 'var(--muted)', fontWeight: 700 }}>
               {fmtMan(d.total)} ({((d.total / total) * 100).toFixed(0)}%)
             </span>
           </div>

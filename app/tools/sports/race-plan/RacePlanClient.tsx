@@ -411,7 +411,7 @@ function ElevationProfile({
   return (
     <svg viewBox={`0 0 ${W} ${H}`} className={s.profSvg} preserveAspectRatio="none"
       role="img" aria-label={`고도 프로파일 — 출발 ${startElev}m, 최저 ${minY.toFixed(0)}m, 최고 ${maxY.toFixed(0)}m, 총 상승 ${ascent.toFixed(0)}m, 총 하강 ${descent.toFixed(0)}m`}>
-      <path d={area} fill="rgba(14,165,233,0.15)" />
+      <path d={area} fill="color-mix(in srgb, var(--accent) 15%, transparent)" />
       <path d={line} fill="none" stroke="var(--accent)" strokeWidth={2} strokeLinejoin="round" vectorEffect="non-scaling-stroke" />
     </svg>
   )

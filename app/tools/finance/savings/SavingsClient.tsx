@@ -303,15 +303,15 @@ export default function SavingsClient() {
           {/* 메인 결과 */}
           <div className={s.hero} role="status">
             <p className={s.heroLabel}>{isDeficit ? '월 수지 진단 (적자)' : '저축 가능액 진단'}</p>
-            <p className={s.heroValue} style={{ color: isDeficit ? '#DC2626' : grade.color }}>
+            <p className={s.heroValue} style={{ color: isDeficit ? 'var(--red-600)' : grade.color }}>
               {isDeficit ? '⚠️' : grade.emoji} <strong>{isDeficit ? `적자 ${fmtMan(Math.abs(savings))}` : fmtMan(savings)}</strong>
             </p>
             <p className={s.heroSub}>
-              저축률 <strong style={{ color: isDeficit ? '#DC2626' : grade.color }}>{savingsRate.toFixed(1)}%</strong>
+              저축률 <strong style={{ color: isDeficit ? 'var(--red-600)' : grade.color }}>{savingsRate.toFixed(1)}%</strong>
               {' · '}등급 <strong style={{ color: grade.color }}>{grade.grade} ({grade.label})</strong>
             </p>
             {isDeficit && (
-              <p className={s.heroSub} style={{ color: '#DC2626', fontWeight: 700, marginTop: 6 }}>
+              <p className={s.heroSub} style={{ color: 'var(--red-600)', fontWeight: 700, marginTop: 6 }}>
                 지출이 수입을 {fmtMan(Math.abs(savings))} 초과합니다 — 고정비·변동비를 우선 점검하세요.
               </p>
             )}
@@ -320,20 +320,20 @@ export default function SavingsClient() {
             <svg viewBox="0 0 420 60" width="100%" style={{ marginTop: 14, maxWidth: 480 }} role="img" aria-label="저축률 게이지">
               <defs>
                 <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#DB2777" />
-                  <stop offset="20%" stopColor="#D97706" />
-                  <stop offset="50%" stopColor="#0891B2" />
-                  <stop offset="80%" stopColor="#059669" />
-                  <stop offset="100%" stopColor="#0D9488" />
+                  <stop offset="0%" stopColor="var(--pink-600)" />
+                  <stop offset="20%" stopColor="var(--amber-600)" />
+                  <stop offset="50%" stopColor="var(--cyan-600)" />
+                  <stop offset="80%" stopColor="var(--emerald-600)" />
+                  <stop offset="100%" stopColor="var(--teal-600)" />
                 </linearGradient>
               </defs>
               <rect x={0} y={20} width={420} height={20} rx={5} fill="var(--bg3)" />
               <rect x={0} y={20} width={Math.max(0, Math.min((savingsRate / 50) * 420, 420))} height={20} rx={5} fill={`url(#${gradId})`} />
               {/* 권장 라인 */}
               <line x1={(recoMid / 50) * 420} y1={12} x2={(recoMid / 50) * 420} y2={48} stroke="var(--accent)" strokeWidth="2" strokeDasharray="3,2" />
-              <text x={(recoMid / 50) * 420} y={9} fill="var(--accent)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>권장 {recoMid}%</text>
+              <text x={(recoMid / 50) * 420} y={9} fill="var(--accent)" fontSize="9" textAnchor="middle">권장 {recoMid}%</text>
               {[0, 10, 20, 30, 40, 50].map((v) => (
-                <text key={v} x={(v / 50) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{v}%</text>
+                <text key={v} x={(v / 50) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle">{v}%</text>
               ))}
             </svg>
           </div>
@@ -347,19 +347,19 @@ export default function SavingsClient() {
                 <tr><td>고정비</td><td className={s.cellMono}>{fmtMan(totalFixed)}</td></tr>
                 <tr><td>변동비</td><td className={s.cellMono}>{fmtMan(totalVar)}</td></tr>
                 <tr><td>총 지출</td><td className={s.cellMono}>{fmtMan(totalExpense)}</td></tr>
-                <tr><td>{isDeficit ? '월 적자' : '저축액'}</td><td className={s.cellMono} style={{ color: isDeficit ? '#DC2626' : 'var(--accent)', fontWeight: 700 }}>{fmtMan(savings)}</td></tr>
-                <tr><td>저축률</td><td className={`${s.cellMono}`} style={{ color: isDeficit ? '#DC2626' : grade.color }}>{savingsRate.toFixed(1)}%</td></tr>
+                <tr><td>{isDeficit ? '월 적자' : '저축액'}</td><td className={s.cellMono} style={{ color: isDeficit ? 'var(--red-600)' : 'var(--accent)', fontWeight: 700 }}>{fmtMan(savings)}</td></tr>
+                <tr><td>저축률</td><td className={`${s.cellMono}`} style={{ color: isDeficit ? 'var(--red-600)' : grade.color }}>{savingsRate.toFixed(1)}%</td></tr>
                 <tr className={s.cellSubtitle}><td colSpan={2}>비교</td></tr>
                 {avgExp !== null ? (
                   <>
                     <tr><td>평균 소비지출 ({HOUSEHOLD_AVG_EXPENSE[household].label}, 2024)</td><td className={s.cellMono}>{avgExp} 만원</td></tr>
-                    <tr><td>본인 vs 평균</td><td className={s.cellMono} style={{ color: expVsAvg > 0 ? '#DB2777' : 'var(--accent)' }}>{expVsAvg > 0 ? '+' : ''}{fmt(expVsAvg)} 만원</td></tr>
+                    <tr><td>본인 vs 평균</td><td className={s.cellMono} style={{ color: expVsAvg > 0 ? 'var(--pink-600)' : 'var(--accent)' }}>{expVsAvg > 0 ? '+' : ''}{fmt(expVsAvg)} 만원</td></tr>
                   </>
                 ) : (
                   <tr><td>참고: 전체 가구 평균 소비지출 (2024, 가구원수 구분 없음)</td><td className={s.cellMono}>{ALL_HOUSEHOLD_AVG_EXPENSE_2024} 만원</td></tr>
                 )}
                 <tr><td>권장 저축률 ({ageMeta.label.split(' ')[0]})</td><td className={s.cellMono}>{ageMeta.rateMin}~{ageMeta.rateMax}%</td></tr>
-                <tr><td>본인 vs 권장</td><td className={s.cellMono} style={{ color: savingsRate >= recoMid ? 'var(--accent)' : '#D97706' }}>{(savingsRate - recoMid > 0 ? '+' : '')}{(savingsRate - recoMid).toFixed(1)}%p</td></tr>
+                <tr><td>본인 vs 권장</td><td className={s.cellMono} style={{ color: savingsRate >= recoMid ? 'var(--accent)' : 'var(--amber-600)' }}>{(savingsRate - recoMid > 0 ? '+' : '')}{(savingsRate - recoMid).toFixed(1)}%p</td></tr>
               </tbody>
             </table>
             <div className={s.tipBox}>
@@ -421,7 +421,7 @@ export default function SavingsClient() {
               </div>
             </div>
             {jarTotal !== 100 && (
-              <p className={s.helpText} style={{ color: '#D97706' }}>
+              <p className={s.helpText} style={{ color: 'var(--amber-600)' }}>
                 ⚠️ 본인 입력 합계가 {jarTotal.toFixed(0)}% — 100%가 되도록 조정해 주세요.
               </p>
             )}
@@ -458,7 +458,7 @@ export default function SavingsClient() {
                       />
                       <span className={s.jarUserMan}>= {fmt(userMan)}만원</span>
                     </div>
-                    <p className={s.jarDiff} style={{ color: Math.abs(diff) < 3 ? 'var(--accent)' : diff > 0 ? '#EA580C' : '#D97706' }}>
+                    <p className={s.jarDiff} style={{ color: Math.abs(diff) < 3 ? 'var(--accent)' : diff > 0 ? 'var(--orange-600)' : 'var(--amber-600)' }}>
                       {diff > 0 ? `▲ +${diff.toFixed(0)}%p (과다)` : diff < 0 ? `▼ ${diff.toFixed(0)}%p (부족)` : '✓ 권장 일치'}
                     </p>
                     <p className={s.jarExamples}>예: {j.examples}</p>
@@ -566,7 +566,7 @@ export default function SavingsClient() {
             </p>
             <p className={s.heroSub}>
               총 적립 {fmtMan(monthlyNeeded * goalMonths)} + 이자 {fmtMan(goalMan - monthlyNeeded * goalMonths)}
-              {' · '}현재 저축액 대비 <strong style={{ color: monthlyNeeded <= savings ? 'var(--accent)' : '#DB2777' }}>
+              {' · '}현재 저축액 대비 <strong style={{ color: monthlyNeeded <= savings ? 'var(--accent)' : 'var(--pink-600)' }}>
                 {monthlyNeeded <= savings ? '✅ 달성 가능' : `❌ ${fmt(monthlyNeeded - savings, 1)} 만원 부족`}
               </strong>
             </p>
@@ -716,7 +716,7 @@ export default function SavingsClient() {
           style={{
             marginTop: 10, padding: '8px 16px', fontSize: 13, fontWeight: 600,
             background: 'var(--bg3)', color: 'var(--text)', border: '1px solid var(--border)',
-            borderRadius: 8, cursor: 'pointer',
+            borderRadius: 'var(--radius-s)', cursor: 'pointer',
           }}
         >
           전체 입력 초기화
@@ -780,7 +780,7 @@ function DonutChart({ data }: { data: DonutDatum[] }) {
           <g key={d.id}>
             <path d={path} fill={d.color} opacity={0.85} />
             {d.value >= 6 && (
-              <text x={lx} y={ly} fill="#0D0D0D" fontSize="11" textAnchor="middle" dominantBaseline="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
+              <text x={lx} y={ly} fill="#0D0D0D" fontSize="11" textAnchor="middle" dominantBaseline="middle" fontWeight="800">
                 {Math.round(d.value)}%
               </text>
             )}
@@ -788,8 +788,8 @@ function DonutChart({ data }: { data: DonutDatum[] }) {
         )
       })}
       <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-      <text x={cx} y={cy - 4} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>합계</text>
-      <text x={cx} y={cy + 12} fill="var(--accent)" fontSize="14" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">{total.toFixed(0)}%</text>
+      <text x={cx} y={cy - 4} fill="var(--text)" fontSize="11" textAnchor="middle">합계</text>
+      <text x={cx} y={cy + 12} fill="var(--accent)" fontSize="14" textAnchor="middle" fontWeight="800">{total.toFixed(0)}%</text>
     </svg>
   )
 }

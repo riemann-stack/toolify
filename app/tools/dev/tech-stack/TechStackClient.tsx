@@ -438,7 +438,7 @@ function RadarChart({ rec }: { rec: Recommendation }) {
     { key: 'koreaJobs',   label: '한국 채용' },
   ]
   const W = 360, H = 360, cx = W / 2, cy = H / 2, R = 130
-  const colors = ['#0EA5E9', '#0891B2', '#FFB938']
+  const colors = ['var(--sky-500)', 'var(--cyan-600)', '#FFB938']
 
   const point = (axisIdx: number, value: number) => {
     const angle = (axisIdx / axes.length) * Math.PI * 2 - Math.PI / 2
@@ -475,7 +475,7 @@ function RadarChart({ rec }: { rec: Recommendation }) {
           return (
             <g key={a.key}>
               <line x1={cx} y1={cy} x2={x2} y2={y2} stroke="var(--border)" strokeWidth="1" opacity={0.4} />
-              <text x={lx} y={ly} fill="var(--muted)" fontSize="11" textAnchor="middle" dominantBaseline="middle" fontFamily="Noto Sans KR, sans-serif">
+              <text x={lx} y={ly} fill="var(--muted)" fontSize="11" textAnchor="middle" dominantBaseline="middle">
                 {a.label}
               </text>
             </g>
@@ -617,7 +617,7 @@ function GuideTab() {
 }
 
 function ScoreCell({ value }: { value: number }) {
-  const color = value >= 8 ? '#059669' : value >= 6 ? '#0EA5E9' : value >= 4 ? '#FFB938' : '#DC2626'
+  const color = value >= 8 ? 'var(--emerald-600)' : value >= 6 ? 'var(--sky-500)' : value >= 4 ? '#FFB938' : 'var(--red-600)'
   return (
     <span className={styles.scoreCellWrap}>
       <span className={styles.scoreCellBar} style={{ width: `${value * 10}%`, background: color }} />

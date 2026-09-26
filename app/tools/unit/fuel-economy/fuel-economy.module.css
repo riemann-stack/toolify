@@ -5,11 +5,11 @@
 .tabs {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tab {
   padding: 12px 6px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
@@ -19,7 +19,7 @@
 /* ── 카드 ── */
 .card {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
 }
 .cardLabel {
   display: block; font-size: 11px; color: var(--muted);
@@ -35,7 +35,7 @@
   padding: 12px 14px;
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 18px; font-weight: 700;
   color: var(--text); outline: none;
   transition: border 0.15s;
   letter-spacing: -0.5px;
@@ -50,10 +50,10 @@
   justify-content: center;
   width: 100%; box-sizing: border-box;
   padding: 12px 10px;
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.30);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px; font-weight: 800;
   color: var(--accent);
   letter-spacing: -0.3px;
@@ -72,7 +72,7 @@
   background: var(--bg3); border: 1px solid var(--border);
   border-radius: 10px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px; font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -89,13 +89,13 @@
 }
 @media (max-width: 480px) {
   .unitGrid { gap: 4px; }
-  .unitBtn { font-size: 11px; padding: 9px 2px; border-radius: 8px; }
+  .unitBtn { font-size: 11px; padding: 9px 2px; border-radius: var(--radius-s); }
 }
 
 /* ── 결과 표 ── */
 .resultCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; overflow: hidden;
+  border-radius: var(--radius-card); overflow: hidden;
 }
 .resultHeader {
   padding: 14px 18px; border-bottom: 1px solid var(--border);
@@ -106,7 +106,7 @@
   text-transform: uppercase; margin-bottom: 4px;
 }
 .resultHeaderValue {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 22px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.5px;
 }
 
@@ -133,8 +133,8 @@
   .resultCell:hover { border-color: var(--border-hover); }
 }
 .resultCellHighlight {
-  background: rgba(14,165,233,0.14);
-  border-color: rgba(14,165,233,0.40);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 .resultCellTop {
   display: flex;
@@ -145,7 +145,7 @@
 .resultLabel {
   font-size: 13px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   letter-spacing: -0.2px;
 }
@@ -155,7 +155,7 @@
   font-weight: 600;
 }
 .resultValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 22px;
   color: var(--text);
@@ -169,7 +169,7 @@
 .copyHint {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 2px;
   letter-spacing: 0.02em;
 }
@@ -186,11 +186,11 @@
 
 /* ── 등급 박스 ── */
 .gradeCard {
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
   display: flex; flex-direction: column; gap: 6px;
   border: 1px solid var(--border);
 }
-.gradeStar { background: rgba(14,165,233,0.14); border-color: rgba(14,165,233,0.4); }
+.gradeStar { background: color-mix(in srgb, var(--accent) 14%, transparent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .gradeGood { background: rgba(16,185,129,0.14); border-color: rgba(16,185,129,0.4); }
 .gradeMid  { background: var(--bg2); }
 .gradeLow  { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.4); }
@@ -198,10 +198,10 @@
 .gradeEmpty { background: var(--bg3); }
 
 .gradeStar .gradeTitle { color: var(--accent); }
-.gradeGood .gradeTitle { color: #059669; }
+.gradeGood .gradeTitle { color: var(--emerald-600); }
 .gradeMid  .gradeTitle { color: var(--text); }
-.gradeLow  .gradeTitle { color: #EA580C; }
-.gradeBad  .gradeTitle { color: #DC2626; }
+.gradeLow  .gradeTitle { color: var(--orange-600); }
+.gradeBad  .gradeTitle { color: var(--red-600); }
 .gradeEmpty .gradeTitle { color: var(--muted); }
 
 .gradeTitle { font-size: 16px; font-weight: 800; }
@@ -220,7 +220,7 @@
   font-size: 11px; color: var(--muted); margin-bottom: 4px;
 }
 .costValue {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 18px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 18px;
   color: var(--accent); letter-spacing: -0.3px;
 }
 .costMeta {
@@ -241,7 +241,7 @@
 }
 .costInput {
   width: 100%; background: transparent; border: none; outline: none;
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 16px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 16px;
   color: var(--text); padding: 0;
 }
 

@@ -15,7 +15,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -25,14 +25,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -71,7 +71,7 @@ export default function AuctionPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />경매 비용 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -128,7 +128,7 @@ export default function AuctionPage() {
                   {row.map((cell, j) => (
                     <td key={j} style={{
                       padding: '9px 12px',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'inherit',
+                      fontFamily: j === 0 ? 'var(--font-sans)' : 'inherit',
                       color: j === 1 ? 'var(--accent)' : (j === 2 ? 'var(--muted)' : 'var(--text)'),
                       fontWeight: j === 0 ? 700 : 500,
                       fontSize: 13,
@@ -170,7 +170,7 @@ export default function AuctionPage() {
                       padding: '6px 0',
                       textAlign: j === 0 ? 'left' : 'right',
                       color: j === 1 ? 'var(--accent)' : 'var(--text)',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Inter, "Noto Sans KR", system-ui, sans-serif',
+                      fontFamily: j === 0 ? 'var(--font-sans)' : 'var(--font-sans)',
                       fontWeight: j === 0 ? 600 : 700,
                     }}>{cell}</td>
                   ))}
@@ -200,10 +200,10 @@ export default function AuctionPage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '🚪 명도비 (이사비)', d: '점유자 인도 비용. 평균 200만원, 협상 시 50~70% 절감 가능. 최후 수단은 강제집행.', c: '#EA580C' },
-            { t: '💸 체납 관리비', d: '전 소유자 미납 관리비 중 공용부분만 낙찰자 승계 (전유부분·연체료 제외). 입찰 전 관리사무소 확인 필수.', c: '#DB2777' },
-            { t: '⚡ 체납 공과금', d: '전기·수도·가스 미납. 대부분 100만원 이내, 한국전력·가스공사 조회.', c: '#D97706' },
-            { t: '🔨 수리비', d: '도배·바닥·주방·욕실 평당 30~100만원. DIY·셀프 시공으로 30~50% 절감.', c: '#0891B2' },
+            { t: '🚪 명도비 (이사비)', d: '점유자 인도 비용. 평균 200만원, 협상 시 50~70% 절감 가능. 최후 수단은 강제집행.', c: 'var(--orange-600)' },
+            { t: '💸 체납 관리비', d: '전 소유자 미납 관리비 중 공용부분만 낙찰자 승계 (전유부분·연체료 제외). 입찰 전 관리사무소 확인 필수.', c: 'var(--pink-600)' },
+            { t: '⚡ 체납 공과금', d: '전기·수도·가스 미납. 대부분 100만원 이내, 한국전력·가스공사 조회.', c: 'var(--amber-600)' },
+            { t: '🔨 수리비', d: '도배·바닥·주방·욕실 평당 30~100만원. DIY·셀프 시공으로 30~50% 절감.', c: 'var(--cyan-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -212,7 +212,7 @@ export default function AuctionPage() {
           ))}
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          ⚠️ <strong style={{ color: '#DB2777' }}>유치권·법정지상권</strong>이 있는 물건은 추가 변호사·법무사 비용
+          ⚠️ <strong style={{ color: 'var(--pink-600)' }}>유치권·법정지상권</strong>이 있는 물건은 추가 변호사·법무사 비용
           (수백만~수천만원) 발생 가능. 입찰 전 반드시 법무사 자문을 받으세요.
         </p>
       </div>
@@ -386,21 +386,21 @@ export default function AuctionPage() {
       {/* finance 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/finance/loan" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/finance/loan" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💳</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>대출이자 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             원리금균등·중도상환·갈아타기
           </p>
         </Link>
-        <Link href="/tools/finance/real-estate" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/finance/real-estate" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🏘️</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>부동산 투자 수익률</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             매매·임대·레버리지 수익률
           </p>
         </Link>
-        <Link href="/tools/finance/savings" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/finance/savings" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💰</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>월 저축가능 금액</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

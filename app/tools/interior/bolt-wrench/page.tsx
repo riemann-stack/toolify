@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,14 +23,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -70,7 +70,7 @@ export default function BoltWrenchPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />볼트 스패너 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
@@ -117,11 +117,11 @@ export default function BoltWrenchPage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px' }}>주요 차이 사이즈</p>
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <tbody>
-              <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 13 / 구 DIN 13 / JIS 소형 12 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 16 / 구 DIN 17 / JIS 소형 14 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 18 / 구 DIN 19 / JIS 소형 17 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 21 / 구 DIN 22 / JIS 소형 19 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M22</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 34 / 구 DIN 32 / JIS 소형 30 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>ISO 13 / 구 DIN 13 / JIS 소형 12 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>ISO 16 / 구 DIN 17 / JIS 소형 14 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>ISO 18 / 구 DIN 19 / JIS 소형 17 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>ISO 21 / 구 DIN 22 / JIS 소형 19 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M22</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>ISO 34 / 구 DIN 32 / JIS 소형 30 mm</td></tr>
             </tbody>
           </table>
         </div>
@@ -184,11 +184,11 @@ export default function BoltWrenchPage() {
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
         {[
           { t: '🚲 자전거', c: 'var(--accent)', d: '알렌이 핵심. 2~8mm 알렌세트 + 8/10/13/15mm 콤비스패너 + 토크렌치(카본).' },
-          { t: '🪑 가구·DIY', c: '#EA580C', d: '이케아·한샘 표준 알렌 3/4/5/6mm + 10/13/14mm 스패너 + 드라이버.' },
-          { t: '🚗 자동차', c: '#0891B2', d: '3/8" 라쳇 + 8~22mm 소켓 풀세트 + 토크렌치 20~110Nm + 잭/잭스탠드.' },
-          { t: '🏭 산업', c: '#DB2777', d: '1/2" 라쳇 + 6~32mm 임팩트 소켓 + 100~500Nm 토크렌치 + 슬러그 스패너.' },
+          { t: '🪑 가구·DIY', c: 'var(--orange-600)', d: '이케아·한샘 표준 알렌 3/4/5/6mm + 10/13/14mm 스패너 + 드라이버.' },
+          { t: '🚗 자동차', c: 'var(--cyan-600)', d: '3/8" 라쳇 + 8~22mm 소켓 풀세트 + 토크렌치 20~110Nm + 잭/잭스탠드.' },
+          { t: '🏭 산업', c: 'var(--pink-600)', d: '1/2" 라쳇 + 6~32mm 임팩트 소켓 + 100~500Nm 토크렌치 + 슬러그 스패너.' },
         ].map((g, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
             <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{g.d}</p>
           </div>
@@ -306,21 +306,21 @@ export default function BoltWrenchPage() {
       {/* 인테리어 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/interior/screw" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/interior/screw" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔩</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>나사 규격 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             7종 나사 → 탭드릴·관통홀·인치↔mm
           </p>
         </Link>
-        <Link href="/tools/interior/molding" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/interior/molding" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📏</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>몰딩 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             천장·걸레받이·문틀 둘레
           </p>
         </Link>
-        <Link href="/tools/interior/wallpaper" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/interior/wallpaper" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🧱</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>도배 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

@@ -20,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -65,7 +65,7 @@ export default function GpaConverterPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />학점(GPA) 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -102,7 +102,7 @@ export default function GpaConverterPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
@@ -121,19 +121,19 @@ export default function GpaConverterPage() {
                 t: '🏛️ WES 기준 (미국 표준 · 4.0 캡)',
                 d: '미국 대학원 다수가 채택하는 World Education Services 방식. 과목 평어를 미국 평어로 옮겨 평균을 내므로 한국 4.5·4.3 만점에서는 대체로 비례보다 높게 나오지만, A+와 A0를 둘 다 4.00으로 캡해 상위권 변별이 없다는 점에서 보수적입니다. 본 도구는 평균 평점을 인접한 두 평어의 혼합으로 보고 추정합니다.',
                 use: '미국 대학원 GRAD 지원, 미국 취업 학력 평가 시 권장',
-                c: '#0891B2',
+                c: 'var(--cyan-600)',
               },
               {
                 t: '📏 비례 환산 (단순 비율)',
                 d: '단순 비율: US GPA = (한국 GPA / 만점) × 4.0. 계산이 투명해 일부 학교 자체 환산이나 자기소개서용으로 사용. 한국 4.5·4.3 만점에서는 대체로 WES보다 낮게 나옵니다(예: 4.5만점 4.0점은 비례 3.56, WES 4.00).',
                 use: '빠른 어림 계산, 학교 자체 환산과 비교하는 용도',
-                c: '#059669',
+                c: 'var(--emerald-600)',
               },
               {
                 t: '📝 평어 기준 (한국 성적표 직역)',
                 d: '한국 성적표의 평어(A+/A0/A-/B+ …)를 미국 4.0 스케일로 평어별 매핑. 한국 대학 자체 환산이나 영문 성적표 발급 시 학교가 쓰는 방식과 가까움.',
                 use: '교환학생 지원, 한국 대학 영문 성적증명서 발급 시',
-                c: '#D97706',
+                c: 'var(--amber-600)',
               },
             ].map((m, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${m.c}`, borderRadius: 10, padding: '14px 18px' }}>
@@ -158,15 +158,15 @@ export default function GpaConverterPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 10 }}>
             {[
-              { abbr: '1st', name: 'First Class', cut: '70%↑', meaning: '최상위 — 박사·MBA 직행 가능', c: '#059669' },
-              { abbr: '2:1', name: 'Upper Second', cut: '60-69%', meaning: '대학원 입학 기본선', c: '#0891B2' },
-              { abbr: '2:2', name: 'Lower Second', cut: '50-59%', meaning: '취업 가능, 일부 대학원 OK', c: '#D97706' },
-              { abbr: '3rd', name: 'Third Class', cut: '40-49%', meaning: '학사 학위는 인정', c: '#EA580C' },
+              { abbr: '1st', name: 'First Class', cut: '70%↑', meaning: '최상위 — 박사·MBA 직행 가능', c: 'var(--emerald-600)' },
+              { abbr: '2:1', name: 'Upper Second', cut: '60-69%', meaning: '대학원 입학 기본선', c: 'var(--cyan-600)' },
+              { abbr: '2:2', name: 'Lower Second', cut: '50-59%', meaning: '취업 가능, 일부 대학원 OK', c: 'var(--amber-600)' },
+              { abbr: '3rd', name: 'Third Class', cut: '40-49%', meaning: '학사 학위는 인정', c: 'var(--orange-600)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 22, color: g.c, fontWeight: 800, margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', letterSpacing: '-0.5px' }}>{g.abbr}</p>
+                <p style={{ fontSize: 22, color: g.c, fontWeight: 800, margin: '0 0 4px', fontFamily: 'var(--font-sans)', letterSpacing: '-0.5px' }}>{g.abbr}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: '0 0 4px' }}>{g.name}</p>
-                <p style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, margin: '0 0 6px' }}>{g.cut}</p>
+                <p style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, margin: '0 0 6px' }}>{g.cut}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{g.meaning}</p>
               </div>
             ))}
@@ -179,7 +179,7 @@ export default function GpaConverterPage() {
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -204,7 +204,7 @@ export default function GpaConverterPage() {
               { href: '/tools/finance/compound',     icon: '📈', name: '복리 계산기',           desc: '유학 자금 모으기 시뮬' },
               { href: '/tools/finance/savings',      icon: '💰', name: '저축액 계산기',         desc: '월 저축으로 학자금 만들기' },
             ].map((tool, i) => (
-              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
+              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
                   <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>

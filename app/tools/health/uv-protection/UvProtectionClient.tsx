@@ -664,7 +664,7 @@ export default function UvProtectionClient() {
                         <span className={s.uvLevelDot} style={{ background: lv.color }} />
                         <span style={{ color: lv.color, fontWeight: 700 }}>{lv.icon} {lv.level}</span>
                       </td>
-                      <td style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: '"Noto Sans KR", sans-serif' }}>{lv.advice}</td>
+                      <td style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: 'var(--font-sans)' }}>{lv.advice}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -738,9 +738,9 @@ export default function UvProtectionClient() {
                 { s: '가을 (9~11월)',r: '4~7',  level: '보통~높음',   c: '#A16207' },
                 { s: '겨울 (12~2월)',r: '1~4',  level: '낮음~보통',   c: '#059669' },
               ].map((r, i) => (
-                <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
+                <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${r.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                   <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 4, fontWeight: 600 }}>{r.s}</p>
-                  <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 18, color: r.c }}>{r.r}</p>
+                  <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 18, color: r.c }}>{r.r}</p>
                   <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{r.level}</p>
                 </div>
               ))}
@@ -750,8 +750,8 @@ export default function UvProtectionClient() {
       )}
 
       {/* 공식 자료 출처 (모든 탭 공통 푸터) */}
-      <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 12, padding: '12px 16px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
-        <p style={{ fontWeight: 700, color: '#0891B2', marginBottom: 6, fontFamily: '"Noto Sans KR", sans-serif' }}>공식 자료 출처</p>
+      <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
+        <p style={{ fontWeight: 700, color: '#0891B2', marginBottom: 6, fontFamily: 'var(--font-sans)' }}>공식 자료 출처</p>
         <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>기상청 자외선지수</a>
         {' · '}<a href="https://www.epa.gov/sunsafety/uv-index-scale-0" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>EPA UV Index</a>
         {' · '}<a href="https://www.who.int/health-topics/ultraviolet-radiation" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>WHO UV</a>

@@ -27,14 +27,14 @@ const FAQ_LD = [
     a: '벽을 더 자주 차고 도는 25m 풀이 일반적으로 더 빠릅니다. 흔히 <strong>100m당 약 2~4초</strong> 차이가 난다고 말하지만, 이는 폭넓은 범위 추정일 뿐 단일 계수로 환산할 수 없습니다. 턴·잠영 실력, 거리, 영법에 따라 차이가 크게 벌어지거나 거의 없을 수도 있습니다. 본 도구는 단일 공식 대신 범위로만 안내합니다.' },
 ]
 
-const sec = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' } as const
+const sec = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' } as const
 const lead = { fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' } as const
 
 export default function SwimPacePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />수영 페이스·SWOLF 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -134,7 +134,7 @@ export default function SwimPacePage() {
               { t: '배영', d: '자유형보다 약간 느린 수준. 호흡이 자유로워 페이스 유지엔 유리.' },
               { t: '평영', d: '글라이드 비중이 커 개인차가 가장 큼. 추정 계수의 오차도 제일 큼.' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', margin: '0 0 6px' }}>{m.t}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{m.d}</p>
               </div>
@@ -152,7 +152,7 @@ export default function SwimPacePage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/pace', icon: '🏃', name: '러닝 페이스 계산기', desc: '페이스↔완주 시간·구간 스플릿' },
@@ -162,7 +162,7 @@ export default function SwimPacePage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

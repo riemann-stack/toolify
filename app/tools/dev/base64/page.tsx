@@ -42,7 +42,7 @@ export default function Base64Page() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />Base64 인코더/디코더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -58,7 +58,7 @@ export default function Base64Page() {
 
         {/* ── 1. Base64 원리 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             Base64 인코딩 원리
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -68,42 +68,42 @@ export default function Base64Page() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 변환 단위</span></div>
-            <div>3 바이트 (24 비트) → <span style={{ color: '#059669' }}>4 문자 (6 비트 × 4)</span></div>
+            <div>3 바이트 (24 비트) → <span style={{ color: 'var(--emerald-600)' }}>4 문자 (6 비트 × 4)</span></div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 예시: &quot;Cat&quot; → &quot;Q2F0&quot;</span></div>
             <div>C(67) a(97) t(116) → 01000011 01100001 01110100</div>
             <div>→ 010000 110110 000101 110100</div>
-            <div>→ 16(<span style={{ color: '#0891B2' }}>Q</span>) 54(<span style={{ color: '#0891B2' }}>2</span>) 5(<span style={{ color: '#0891B2' }}>F</span>) 52(<span style={{ color: '#0891B2' }}>0</span>)</div>
+            <div>→ 16(<span style={{ color: 'var(--cyan-600)' }}>Q</span>) 54(<span style={{ color: 'var(--cyan-600)' }}>2</span>) 5(<span style={{ color: 'var(--cyan-600)' }}>F</span>) 52(<span style={{ color: 'var(--cyan-600)' }}>0</span>)</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📐 <strong style={{ color: 'var(--text)' }}>크기 변화:</strong> Base64는 항상 원본보다 약 <strong style={{ color: '#EA580C' }}>33% 증가</strong>합니다 (3바이트 → 4문자 = 4/3 ≈ 1.33).
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+            📐 <strong style={{ color: 'var(--text)' }}>크기 변화:</strong> Base64는 항상 원본보다 약 <strong style={{ color: 'var(--orange-600)' }}>33% 증가</strong>합니다 (3바이트 → 4문자 = 4/3 ≈ 1.33).
             10MB 파일을 Base64로 변환하면 약 13.3MB가 됩니다.
           </div>
         </div>
 
         {/* ── 2. 사용 사례 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             Base64 주요 사용 사례
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '📧 이메일 첨부파일',      c: 'var(--accent)', d: 'MIME 표준에서 이미지·문서를 7-bit ASCII로 안전하게 전송' },
-              { t: '🔑 JWT 토큰',            c: '#0891B2',       d: 'JSON Web Token의 헤더·페이로드를 URL-safe Base64로 인코딩' },
-              { t: '🖼️ 이미지 Data URI',     c: '#059669',       d: 'HTML/CSS에 이미지를 직접 임베드 (data:image/png;base64,...)' },
-              { t: '🔐 HTTP Basic 인증',     c: '#A16207',       d: 'Authorization 헤더에 user:password를 Base64로 전송' },
-              { t: '📦 PDF 임베드',          c: '#EA580C',       d: 'API 응답에 PDF 바이너리를 텍스트로 포함' },
-              { t: '🔒 PEM 인증서',          c: '#9B59B6',       d: 'X.509 인증서·SSH 키를 텍스트 파일로 저장' },
+              { t: '🔑 JWT 토큰',            c: 'var(--cyan-600)',       d: 'JSON Web Token의 헤더·페이로드를 URL-safe Base64로 인코딩' },
+              { t: '🖼️ 이미지 Data URI',     c: 'var(--emerald-600)',       d: 'HTML/CSS에 이미지를 직접 임베드 (data:image/png;base64,...)' },
+              { t: '🔐 HTTP Basic 인증',     c: 'var(--yellow-700)',       d: 'Authorization 헤더에 user:password를 Base64로 전송' },
+              { t: '📦 PDF 임베드',          c: 'var(--orange-600)',       d: 'API 응답에 PDF 바이너리를 텍스트로 포함' },
+              { t: '🔒 PEM 인증서',          c: 'var(--amethyst)',       d: 'X.509 인증서·SSH 키를 텍스트 파일로 저장' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
@@ -113,7 +113,7 @@ export default function Base64Page() {
 
         {/* ── 3. URL-safe vs 표준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             표준 Base64 vs URL-safe Base64
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -141,8 +141,8 @@ export default function Base64Page() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-            💡 <strong style={{ color: '#0891B2' }}>예시:</strong>
+          <div style={{ background: 'color-mix(in srgb, var(--cyan-600) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
+            💡 <strong style={{ color: 'var(--cyan-600)' }}>예시:</strong>
             표준 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4 }}>SGVsbG8/V29ybGQ+</code> →
             URL-safe <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4 }}>SGVsbG8_V29ybGQ-</code>
           </div>
@@ -150,7 +150,7 @@ export default function Base64Page() {
 
         {/* ── 4. 환경별 코드 스니펫 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             환경별 Base64 코드 — 한글 처리 3종 비교
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -160,9 +160,9 @@ export default function Base64Page() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
@@ -206,8 +206,8 @@ export default function Base64Page() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-            💡 <strong style={{ color: '#0891B2' }}>선택 기준:</strong> 새로 작성하는 브라우저 코드는 ② TextEncoder, 서버 코드는 ③ Buffer가 기본입니다.
+          <div style={{ background: 'color-mix(in srgb, var(--cyan-600) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
+            💡 <strong style={{ color: 'var(--cyan-600)' }}>선택 기준:</strong> 새로 작성하는 브라우저 코드는 ② TextEncoder, 서버 코드는 ③ Buffer가 기본입니다.
             ①은 <code>unescape</code>가 폐기 API라 신규 코드에는 권장되지 않지만, 기존 코드 해석을 위해 알아둘 가치가 있습니다.
             ②에서 수십 KB 이상 대용량을 다룰 땐 <code>String.fromCharCode(...bytes)</code>의 인수 개수 제한 때문에 바이트 배열을 청크로 나눠 처리해야 합니다.
           </div>
@@ -215,47 +215,47 @@ export default function Base64Page() {
 
         {/* ── 5. JWT 구조 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JWT(JSON Web Token) 구조
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
           }}>
-            <div><span style={{ color: '#DC2626' }}>HEADER</span>.<span style={{ color: 'var(--accent)' }}>PAYLOAD</span>.<span style={{ color: '#0891B2' }}>SIGNATURE</span></div>
+            <div><span style={{ color: 'var(--red-600)' }}>HEADER</span>.<span style={{ color: 'var(--accent)' }}>PAYLOAD</span>.<span style={{ color: 'var(--cyan-600)' }}>SIGNATURE</span></div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 각 부분은 URL-safe Base64로 인코딩된 JSON</div>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 12 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #DC2626', borderRadius: 12, padding: '12px 14px' }}>
-              <p style={{ fontSize: 13, color: '#DC2626', fontWeight: 700, marginBottom: 6 }}>HEADER</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--red-600)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+              <p style={{ fontSize: 13, color: 'var(--red-600)', fontWeight: 700, marginBottom: 6 }}>HEADER</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>알고리즘(alg)·토큰 타입(typ). 예: <code>HS256</code>, <code>RS256</code></p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 12, padding: '12px 14px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>PAYLOAD (Claims)</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>사용자 정보·만료 시간(exp)·발급(iat)·발급자(iss)·대상(aud)</p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0891B2', borderRadius: 12, padding: '12px 14px' }}>
-              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>SIGNATURE</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cyan-600)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+              <p style={{ fontSize: 13, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 6 }}>SIGNATURE</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>HEADER.PAYLOAD를 비밀키로 서명. 위변조 검증용.</p>
             </div>
           </div>
           <div style={{
             background: 'rgba(234,88,12,0.05)',
             border: '1px solid rgba(234,88,12,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#EA580C' }}>보안 주의:</strong> JWT의 PAYLOAD는 <strong>암호화가 아닌 인코딩</strong>입니다.
+            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>보안 주의:</strong> JWT의 PAYLOAD는 <strong>암호화가 아닌 인코딩</strong>입니다.
             누구나 디코딩 가능하므로 <strong>비밀번호·민감 정보는 PAYLOAD에 절대 포함하지 마세요.</strong>
             서명 검증은 비밀키가 있어야 가능하며, 본 도구는 디코딩만 수행합니다.
           </div>
@@ -263,7 +263,7 @@ export default function Base64Page() {
 
         {/* ── 6. JWT exp·iat 읽기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JWT exp·iat 읽는 법 — epoch 초 → 한국 시간
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -274,9 +274,9 @@ export default function Base64Page() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
@@ -300,14 +300,14 @@ export default function Base64Page() {
           <div style={{
             background: 'rgba(234,88,12,0.05)',
             border: '1px solid rgba(234,88,12,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#EA580C' }}>흔한 실수 — 초 vs 밀리초:</strong> ×1000을 빼먹고 <code>new Date(1767225600)</code>을 호출하면
+            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>흔한 실수 — 초 vs 밀리초:</strong> ×1000을 빼먹고 <code>new Date(1767225600)</code>을 호출하면
             <strong> 1970-01-21</strong>로 계산되어 &quot;항상 만료&quot;로 오판합니다. 반대로 서버가 밀리초 값을 exp에 넣으면 수만 년 뒤 만료로 인식돼 사실상 무기한 토큰이 됩니다.
             exp가 <strong style={{ color: 'var(--text)' }}>10자리(초, 2001~2286년 구간)인지 13자리(밀리초)인지</strong>부터 확인하세요.
           </div>
@@ -315,15 +315,15 @@ export default function Base64Page() {
 
         {/* ── 7. Data URI ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             이미지 Data URI 활용
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
@@ -337,10 +337,10 @@ export default function Base64Page() {
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10, marginTop: 12 }}>
             {[
-              { t: '✅ 적합한 경우',  c: '#059669', items: ['작은 아이콘 (< 5KB)', 'CSS 배경 이미지 단일 파일', '오프라인 HTML 이메일 템플릿', '캐시 분리가 불필요한 경우'] },
-              { t: '❌ 부적합한 경우', c: '#DC2626', items: ['큰 이미지 (> 50KB)', '여러 페이지에서 재사용', '브라우저 캐싱이 중요할 때', '이미지 최적화·CDN 활용 필요'] },
+              { t: '✅ 적합한 경우',  c: 'var(--emerald-600)', items: ['작은 아이콘 (< 5KB)', 'CSS 배경 이미지 단일 파일', '오프라인 HTML 이메일 템플릿', '캐시 분리가 불필요한 경우'] },
+              { t: '❌ 부적합한 경우', c: 'var(--red-600)', items: ['큰 이미지 (> 50KB)', '여러 페이지에서 재사용', '브라우저 캐싱이 중요할 때', '이미지 최적화·CDN 활용 필요'] },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => (<li key={j}>{it}</li>))}
@@ -352,7 +352,7 @@ export default function Base64Page() {
 
         {/* ── 8. 다중 인코딩 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             인코딩 방식 비교 (&quot;Hi&quot; 기준)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -374,7 +374,7 @@ export default function Base64Page() {
                   { e: 'HTML Entity',v: 'Hi (변경 없음)',            u: 'HTML 본문 안전 삽입 (&lt;&gt; 등)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.e}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.e}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{r.v}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
@@ -386,20 +386,20 @@ export default function Base64Page() {
 
         {/* ── 9. 보안 주의 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚠️ Base64는 암호화가 아닙니다
           </h2>
           <div style={{
             background: 'rgba(220,38,38,0.05)',
             border: '1px solid rgba(220,38,38,0.30)',
-            borderRadius: 14,
+            borderRadius: 'var(--radius-card)',
             padding: '16px 20px',
             fontSize: 13,
             color: 'var(--text)',
             lineHeight: 1.85,
           }}>
             <p style={{ marginBottom: 10 }}>
-              <strong style={{ color: '#DC2626' }}>흔한 오해:</strong> &quot;Base64는 암호화 같다&quot;라고 생각하는 경우가 있지만, 사실 Base64는 단순 <strong>인코딩</strong>이며 누구나 디코딩할 수 있습니다.
+              <strong style={{ color: 'var(--red-600)' }}>흔한 오해:</strong> &quot;Base64는 암호화 같다&quot;라고 생각하는 경우가 있지만, 사실 Base64는 단순 <strong>인코딩</strong>이며 누구나 디코딩할 수 있습니다.
             </p>
             <ul style={{ paddingLeft: 22, color: 'var(--muted)', margin: 0 }}>
               <li>비밀번호·API 키·신용카드 정보를 Base64로 &quot;감춰서&quot; 저장하는 것은 보안에 도움이 되지 않습니다</li>
@@ -413,13 +413,13 @@ export default function Base64Page() {
 
         {/* ── 10. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -434,7 +434,7 @@ export default function Base64Page() {
 
         {/* ── 11. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -454,7 +454,7 @@ export default function Base64Page() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

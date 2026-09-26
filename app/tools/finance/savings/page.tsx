@@ -15,7 +15,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -24,7 +24,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
@@ -74,7 +74,7 @@ export default function SavingsPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />저축액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -111,15 +111,15 @@ export default function SavingsPage() {
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
-            { t: '20대 사회초년생', d: '30~40%', desc: '복리 효과 시작 시기. 결혼·내 집 자금 준비.', c: '#0D9488' },
-            { t: '30대 미혼', d: '40~50%', desc: '소득 증가 + 부양 부담 적음. 황금 저축기.', c: '#059669' },
-            { t: '30대 기혼', d: '30~40%', desc: '내 집 마련·결혼·양가 부양 시기.', c: '#0891B2' },
-            { t: '40대 가족', d: '20~30%', desc: '교육비·주거비 정점. 일시 하락 OK.', c: '#D97706' },
-            { t: '50대 은퇴 준비', d: '30~40%', desc: '자녀 독립 + 마지막 저축 골든타임.', c: '#EA580C' },
+            { t: '20대 사회초년생', d: '30~40%', desc: '복리 효과 시작 시기. 결혼·내 집 자금 준비.', c: 'var(--teal-600)' },
+            { t: '30대 미혼', d: '40~50%', desc: '소득 증가 + 부양 부담 적음. 황금 저축기.', c: 'var(--emerald-600)' },
+            { t: '30대 기혼', d: '30~40%', desc: '내 집 마련·결혼·양가 부양 시기.', c: 'var(--cyan-600)' },
+            { t: '40대 가족', d: '20~30%', desc: '교육비·주거비 정점. 일시 하락 OK.', c: 'var(--amber-600)' },
+            { t: '50대 은퇴 준비', d: '30~40%', desc: '자녀 독립 + 마지막 저축 골든타임.', c: 'var(--orange-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
-              <p style={{ fontSize: 18, color: 'var(--text)', fontWeight: 800, margin: '0 0 6px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.d}</p>
+              <p style={{ fontSize: 18, color: 'var(--text)', fontWeight: 800, margin: '0 0 6px', fontFamily: 'var(--font-sans)' }}>{g.d}</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{g.desc}</p>
             </div>
           ))}
@@ -173,7 +173,7 @@ export default function SavingsPage() {
                   {row.map((cell, j) => (
                     <td key={j} style={{
                       padding: '9px 12px',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : (j === 2 ? 'Inter, "Noto Sans KR", system-ui, sans-serif' : 'inherit'),
+                      fontFamily: j === 0 ? 'var(--font-sans)' : (j === 2 ? 'var(--font-sans)' : 'inherit'),
                       color: j === 0 || j === 3 ? 'var(--text)' : 'var(--muted)',
                       fontWeight: j === 0 ? 700 : (j === 2 ? 600 : 400),
                       fontSize: 13,
@@ -209,7 +209,7 @@ export default function SavingsPage() {
         <FaqJsonLd items={FAQ_LD} />
         <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
           {FAQ_LD.map((f, i) => (
-            <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+            <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
               <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                 Q{i + 1}. {f.q}
               </summary>
@@ -246,7 +246,7 @@ export default function SavingsPage() {
             { href: '/tools/finance/loan',        icon: '💳', name: '대출이자 계산기',       desc: '원리금균등·갈아타기·중도상환' },
             { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기',    desc: '84점 만점 자동 + 특공 자가진단' },
           ].map((tool, i) => (
-            <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
+            <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
               <span style={{ fontSize: '22px' }}>{tool.icon}</span>
               <div>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>

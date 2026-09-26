@@ -538,7 +538,7 @@ function EquivTab() {
           </p>
         </div>
         {risk.level === 'high' || risk.level === 'very-high' ? (
-          <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: '#EA580C', lineHeight: 1.7 }}>
+          <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: 'var(--orange-600)', lineHeight: 1.7 }}>
             ⚠️ 이 정도 마셨다면: 절대 운전 금지 · 충분한 수분 · 다음날 운전도 자제(혈중알코올 도구 확인) · 대리운전 앱(카카오 T·티맵)·대중교통 이용
           </p>
         ) : null}
@@ -611,8 +611,8 @@ function PartyTab() {
                 onChange={e => updateDrink(d.id, 'presetId', e.target.value)}
                 style={{
                   flex: 1, minWidth: 0, background: 'var(--bg3)', color: 'var(--text)',
-                  border: '1px solid var(--border)', borderRadius: 8,
-                  padding: '8px 10px', fontSize: 16, fontFamily: 'Noto Sans KR, sans-serif',
+                  border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
+                  padding: '8px 10px', fontSize: 16, fontFamily: 'var(--font-sans)',
                 }}>
                 {KOREAN_GLASS_PRESETS.filter(p => p.abv !== null).map(p => (
                   <option key={p.id} value={p.id}>{p.icon} {p.name} ({p.ml}ml, {p.abv}%)</option>
@@ -714,7 +714,7 @@ function PartyTab() {
               </p>
             </div>
             {(risk.level === 'high' || risk.level === 'very-high') && (
-              <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: '#DC2626', lineHeight: 1.7 }}>
+              <p className={styles.stdNote} style={{ marginTop: 10, textAlign: 'left', color: 'var(--red-600)', lineHeight: 1.7 }}>
                 🔴 위험 수준 음주: 절대 운전 X · 다음날 출근 운전도 단속 가능(BAC 잔류) · 일주일 이상 간격 권장 · 대리운전 앱·대중교통 이용 · 상담 보건복지상담센터 129
               </p>
             )}

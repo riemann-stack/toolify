@@ -22,11 +22,11 @@ export interface SpeedOption {
 }
 
 export const SAFE_SPEEDS: SpeedOption[] = [
-  { id: 'very-slow',  name: '매우 천천히', percentPerWeek: 0.3, desc: '체중의 0.3%/주 · 가장 안전 · 근육 유지 ★★★', stars: 3, severity: 'safe',    color: '#059669' },
-  { id: 'slow',       name: '안정 감량',   percentPerWeek: 0.5, desc: '체중의 0.5%/주 · 권장 표준 ★★★',           stars: 3, severity: 'safe',    color: '#059669' },
-  { id: 'normal',     name: '보통 감량',   percentPerWeek: 0.7, desc: '체중의 0.7%/주 · 활동량 충분 시',          stars: 2, severity: 'caution', color: '#A16207' },
-  { id: 'fast',       name: '적극 감량',   percentPerWeek: 1.0, desc: '체중의 1.0%/주 · 단기만 권장 ⚠️',         stars: 1, severity: 'warning', color: '#EA580C' },
-  { id: 'aggressive', name: '매우 빠른',   percentPerWeek: 1.5, desc: '체중의 1.5%/주 · 의료 감독 시만 ⚠️⚠️',    stars: 0, severity: 'danger',  color: '#DC2626' },
+  { id: 'very-slow',  name: '매우 천천히', percentPerWeek: 0.3, desc: '체중의 0.3%/주 · 가장 안전 · 근육 유지 ★★★', stars: 3, severity: 'safe',    color: 'var(--emerald-600)' },
+  { id: 'slow',       name: '안정 감량',   percentPerWeek: 0.5, desc: '체중의 0.5%/주 · 권장 표준 ★★★',           stars: 3, severity: 'safe',    color: 'var(--emerald-600)' },
+  { id: 'normal',     name: '보통 감량',   percentPerWeek: 0.7, desc: '체중의 0.7%/주 · 활동량 충분 시',          stars: 2, severity: 'caution', color: 'var(--yellow-700)' },
+  { id: 'fast',       name: '적극 감량',   percentPerWeek: 1.0, desc: '체중의 1.0%/주 · 단기만 권장 ⚠️',         stars: 1, severity: 'warning', color: 'var(--orange-600)' },
+  { id: 'aggressive', name: '매우 빠른',   percentPerWeek: 1.5, desc: '체중의 1.5%/주 · 의료 감독 시만 ⚠️⚠️',    stars: 0, severity: 'danger',  color: 'var(--red-600)' },
 ]
 
 /* ─── 운동 — METs 기반 ─── */

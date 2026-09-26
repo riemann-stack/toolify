@@ -56,7 +56,7 @@ export default function CostRatePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />음식점 원가율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -75,15 +75,15 @@ export default function CostRatePage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             메뉴 원가율 핵심 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -91,13 +91,13 @@ export default function CostRatePage() {
             <div><span style={{ color: 'var(--muted)' }}>기본 원가율</span> = 재료비 ÷ 판매가 × 100</div>
             <div><span style={{ color: 'var(--muted)' }}>실질 원가율</span> = (재료비 + 포장재 + 부재료/소모품 + 배달앱·결제 수수료 + 배달비 부담 + 광고비) ÷ 판매가 × 100</div>
             <div><span style={{ color: 'var(--muted)' }}>1개당 마진</span> = 판매가 − 실질 변동비</div>
-            <div style={{ fontFamily: "'Noto Sans KR', sans-serif", fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>※ 임대료·인건비 같은 고정비는 별도로 손익분기 계산에 반영</div>
+            <div style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--muted)', marginTop: 4 }}>※ 임대료·인건비 같은 고정비는 별도로 손익분기 계산에 반영</div>
           </div>
         </div>
 
         {/* ── 2. 업종별 권장 원가율 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             업종별 권장 원가율 가이드
           </h2>
           <div>
@@ -121,8 +121,8 @@ export default function CostRatePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.c}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--emerald-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.m}</td>
                   </tr>
                 ))}
               </tbody>
@@ -132,37 +132,37 @@ export default function CostRatePage() {
 
         {/* ── 3. 배달앱 수수료 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             배달앱 수수료 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
-              { app: '🟢 배달의민족', color: '#059669', items: [
+              { app: '🟢 배달의민족', color: 'var(--emerald-600)', items: [
                 ['중개수수료', '2.0~7.8% 차등'],
                 ['매출 상위 35%', '7.8%'],
                 ['중위 35~80%', '6.8%'],
                 ['하위 20%', '2.0%'],
                 ['결제 수수료', '약 3%'],
               ]},
-              { app: '🔴 쿠팡이츠', color: '#DC2626', items: [
+              { app: '🔴 쿠팡이츠', color: 'var(--red-600)', items: [
                 ['중개수수료', '2.0~7.8% (동일)'],
                 ['포장 주문', '2026.4~ 유료화'],
                 ['결제 수수료', '약 3%'],
               ]},
-              { app: '🟡 요기요', color: '#A16207', items: [
+              { app: '🟡 요기요', color: 'var(--yellow-700)', items: [
                 ['중개수수료', '기본 9.7%'],
                 ['주문 많을수록', '최저 4.7%'],
                 ['포장 주문', '7.7%'],
                 ['결제 수수료', '약 3%'],
               ]},
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.color}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.color}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.color, fontWeight: 700, marginBottom: 8 }}>{g.app}</p>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
                   {g.items.map(([k, v], j) => (
                     <div key={j} style={{ display: 'flex', justifyContent: 'space-between', gap: 8, fontSize: 12, color: 'var(--muted)' }}>
                       <span>{k}</span>
-                      <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap' }}>{v}</span>
+                      <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap' }}>{v}</span>
                     </div>
                   ))}
                 </div>
@@ -181,13 +181,13 @@ export default function CostRatePage() {
 
         {/* ── 4. 배달 추가 비용 체크리스트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             배달 시 추가 비용 체크리스트
           </h2>
           <div style={{
             background: 'rgba(234,88,12,0.05)',
             border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 20px',
             fontSize: '13px',
             color: 'var(--text)',
@@ -206,19 +206,19 @@ export default function CostRatePage() {
 
         {/* ── 5. 가격 책정 심리 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             가격 책정 심리 — 100원 vs 1,000원 단위
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>심리 가격 (예: 11,900원)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cyan-600)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: 13, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 8 }}>심리 가격 (예: 11,900원)</p>
               <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>12,000원과 100원 차이지만 <strong>&ldquo;1만원대&rdquo;</strong>로 인식</li>
                 <li>매출 5~10% 차이 가능성</li>
                 <li>단, 너무 자주 사용하면 신뢰도 하락</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>라운드 가격 (예: 12,000원)</p>
               <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>고급 이미지 형성</li>
@@ -231,19 +231,19 @@ export default function CostRatePage() {
 
         {/* ── 6. 손익분기 판매량 계산법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             손익분기 판매량 계산법
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
             fontSize: '14px',
             color: 'var(--text)',
             lineHeight: 1.9,
           }}>
-            <p style={{ fontFamily: "'JetBrains Mono', Menlo, monospace", fontSize: 13, marginBottom: 12 }}>
+            <p style={{ fontFamily: 'var(--font-mono)', fontSize: 13, marginBottom: 12 }}>
               <span style={{ color: 'var(--muted)' }}>손익분기 판매량</span> = 월 고정비 ÷ 메뉴당 평균 마진
             </p>
             <p style={{ color: 'var(--muted)', fontSize: 13, lineHeight: 1.85 }}>
@@ -258,7 +258,7 @@ export default function CostRatePage() {
 
         {/* ── 7. 원가율 낮추는 5가지 방법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             원가율 낮추는 5가지 방법
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
@@ -269,7 +269,7 @@ export default function CostRatePage() {
               { i: '⚙️', t: '1차 가공 줄이기',   d: '전처리 식재료 활용 → 인건비·시간 동시 절감' },
               { i: '💰', t: '단계적 가격 인상',   d: '탄력성 고려 5~10%씩 분기별 인상' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 22, marginBottom: 6 }}>{s.i}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{s.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{s.d}</p>
@@ -283,13 +283,13 @@ export default function CostRatePage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -304,7 +304,7 @@ export default function CostRatePage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -323,7 +323,7 @@ export default function CostRatePage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

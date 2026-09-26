@@ -59,7 +59,7 @@ export default function GolfHandicapPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />골프 핸디캡 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -73,13 +73,13 @@ export default function GolfHandicapPage() {
 
         {/* ── 1. 공식 시각화 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             WHS 핵심 공식
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '10px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Score Differential</p>
-              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6 }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6 }}>
                 스코어 디퍼런셜 = (그로스 스코어 − 코스 레이팅) × 113 ÷ 슬로프 레이팅
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.6 }}>
@@ -87,9 +87,9 @@ export default function GolfHandicapPage() {
               </p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
               <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '10px', letterSpacing: '0.06em', textTransform: 'uppercase' }}>Handicap Index</p>
-              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6 }}>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(15px, 3vw, 18px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1.6 }}>
                 핸디캡 지수 = 최근 20라운드 중 최저 N개 평균 (+ 라운드 부족 시 조정)
               </p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.6 }}>
@@ -101,16 +101,16 @@ export default function GolfHandicapPage() {
 
         {/* ── 2. 계산 예시 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             계산 예시
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>예시 1 — 입문자 (5라운드)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 코스레이팅 72.0 / 슬로프 113 동일 코스에서 108, 103, 99, 105, 101타 기록
               </p>
-              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '10px' }}>
+              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '12px 14px', fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '10px' }}>
                 디퍼런셜 = (그로스 − 72.0) × 113 ÷ 113 = 그로스 − 72<br/>
                 108 → 36.0 · 103 → 31.0 · 99 → 27.0 · 105 → 33.0 · 101 → 29.0<br/>
                 <span style={{ color: '#059669' }}>5라운드 → 최저 1개 사용: 27.0</span><br/>
@@ -119,12 +119,12 @@ export default function GolfHandicapPage() {
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 하이 핸디캐퍼 등급. 꾸준히 라운드를 쌓으면 최저 N개가 늘어나 지수가 안정화됩니다.</p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>예시 2 — 중급자 (20라운드)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 20라운드 디퍼런셜 중 최저 8개 평균이 10.5라고 가정
               </p>
-              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '10px' }}>
+              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '12px 14px', fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '10px' }}>
                 핸디캡 지수 = 최저 8개 평균 10.5 (조정 없음) = <strong style={{ color: 'var(--accent)' }}>10.5</strong><br/>
                 <br/>
                 <span style={{ color: '#0EA5E9' }}>오늘 코스</span> 슬로프 128 / CR 72.5 / 파 72<br/>
@@ -140,7 +140,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 3. 라운드 수별 사용 디퍼런셜 표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             라운드 수별 사용 디퍼런셜 개수
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -167,8 +167,8 @@ export default function GolfHandicapPage() {
                   ['20',     '최저 8개', '표준 기준 (안정화)'],
                 ].map(([rounds, used, note], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{rounds}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{used}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>{rounds}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{used}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: '12px' }}>{note}</td>
                   </tr>
                 ))}
@@ -182,7 +182,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 4. 슬로프 레이팅 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📊 슬로프 레이팅 기준 안내
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -199,13 +199,13 @@ export default function GolfHandicapPage() {
               { range: '113',     level: '표준 기준값', color: '#A16207', sub: '공식 기준점, 평균 난이도' },
             ].map((item, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderRadius: '10px', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 700, color: item.color, marginBottom: '4px' }}>{item.range}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 700, color: item.color, marginBottom: '4px' }}>{item.range}</p>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{item.level}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.5 }}>{item.sub}</p>
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
               <strong style={{ color: '#0891B2' }}>한국 주요 골프장 평균</strong>: 약 118~128 수준.
               스코어카드, 클럽하우스 안내판, 또는 한국골프장경영협회(KGBA) 홈페이지에서 정확한 값을 확인할 수 있습니다.
@@ -215,7 +215,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 5. 핸디캡 등급 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🏆 핸디캡 등급
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(140px, 1fr))', gap: '10px' }}>
@@ -227,8 +227,8 @@ export default function GolfHandicapPage() {
               { range: '19~28',  name: '하이 핸디캐퍼',  color: '#EA580C', sub: '입문~초급' },
               { range: '29~54',  name: '맥스 핸디캐퍼',  color: '#DC2626', sub: '초보자' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}30`, borderRadius: '12px', padding: '16px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: g.color, marginBottom: '6px' }}>{g.range}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${g.color}30`, borderRadius: 'var(--radius-m)', padding: '16px', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 800, color: g.color, marginBottom: '6px' }}>{g.range}</p>
                 <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '3px' }}>{g.name}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)' }}>{g.sub}</p>
               </div>
@@ -238,7 +238,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 6. 라운드 자동 저장 활용 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📅 라운드 자동 저장 활용
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -252,7 +252,7 @@ export default function GolfHandicapPage() {
               { e: '📊', t: 'CSV 내보내기', d: 'Excel·Notion·Google Drive에 백업. UTF-8 BOM 포함.' },
               { e: '🔒', t: '프라이버시', d: '브라우저 로컬에만 저장. 서버 X. 다른 기기 동기화 X.' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '20px', marginBottom: '4px' }}>{m.e}</p>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>{m.t}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6 }}>{m.d}</p>
@@ -266,7 +266,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 7. 발전 추이 분석 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📈 핸디캡 발전 추이 분석
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -303,7 +303,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 8. 티별 차이 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🏌️ 티별 차이 — 본인 실력에 맞는 티 선택
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -328,8 +328,8 @@ export default function GolfHandicapPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.cr}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.sl}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.cr}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.sl}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.lv}</td>
                   </tr>
                 ))}
@@ -343,13 +343,13 @@ export default function GolfHandicapPage() {
 
         {/* ── 9. 9홀 라운드 환산 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🏌️ 9홀 라운드 환산
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             한국은 9홀 라운딩 비중이 높습니다. 본 도구는 9홀 → 18홀 단순 2배 환산을 씁니다(편의 우선). 각 라운드에서 [9홀]을 고르면 CR 칸이 9홀 코스 레이팅으로 바뀌고, 이미 넣어 둔 18홀 CR은 절반으로 자동 환산됩니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '8px' }}>
               <strong style={{ color: 'var(--text)' }}>본 도구 방식 (단순 2배)</strong>:<br/>
               디퍼런셜 = (9홀 그로스 × 2 − 9홀 CR × 2) × 113 ÷ 슬로프
@@ -363,14 +363,14 @@ export default function GolfHandicapPage() {
 
         {/* ── 10. 한국 공식 핸디캡 인증 안내 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📌 한국 공식 핸디캡 인증
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             본 도구는 WHS 핸디캡 지수 공식을 따르지만(홀별 네트 더블보기 보정·PCC 등 일부 절차는 생략) <strong style={{ color: '#EA580C' }}>비공식 산출 (참고용)</strong>입니다. 공식 핸디캡 인증은 별도 절차가 필요합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '8px' }}>🟢 본 도구 (비공식)</p>
               <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>WHS 지수 공식 기반 (AGS 보정 생략)</li>
@@ -379,7 +379,7 @@ export default function GolfHandicapPage() {
                 <li>무료, 즉시 사용</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.3)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '8px' }}>🟠 공식 인증 (KGA)</p>
               <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
                 <li>대한골프협회(KGA) 발급</li>
@@ -401,7 +401,7 @@ export default function GolfHandicapPage() {
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/golf-distance', icon: '🎯', name: '골프 비거리 계산기', desc: '클럽별 비거리·환경 보정' },
@@ -414,7 +414,7 @@ export default function GolfHandicapPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

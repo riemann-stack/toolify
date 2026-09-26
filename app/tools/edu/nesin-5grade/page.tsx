@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -65,7 +65,7 @@ export default function Nesin5GradePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />내신 5등급제 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -90,15 +90,15 @@ export default function Nesin5GradePage() {
         <section>
           <h2 style={sectionTitle}>내신 등급·평균 계산 방식</h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>석차 백분율</span> = 석차 ÷ 재적수 × 100</div>
             <div><span style={{ color: 'var(--muted)' }}>등급</span> = 백분율이 속한 누적 구간</div>
             <div><span style={{ color: 'var(--muted)' }}>평균 내신</span> = Σ(등급 × 학점) ÷ Σ학점</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 국어 4학점 1등급, 수학 4학점 3등급, 영어 3학점 2등급<br />
             • (1×4 + 3×4 + 2×3) ÷ (4+4+3) = 22 ÷ 11 = <strong style={{ color: 'var(--accent)' }}>2.0등급</strong>
           </div>
@@ -125,8 +125,8 @@ export default function Nesin5GradePage() {
                   ['5등급', '90 ~ 100%', '10%', '8~9등급'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[3]}</td>
                   </tr>
@@ -163,7 +163,7 @@ export default function Nesin5GradePage() {
                   ['5등급', '100%', '200.0', '200', '20명', '181 ~ 200위'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[3]}</td>
@@ -174,7 +174,7 @@ export default function Nesin5GradePage() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--warning)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--warning)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             <p style={{ color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>경계 석차는 어떻게 되나요</p>
             • <strong style={{ color: 'var(--text)' }}>정확히 20등(=10.0%)이면 1등급</strong>입니다. 표가 “10% 이하”를 1등급으로 두고, 누적 인원(20명)으로도 20위까지 1등급이라 두 방식이 일치합니다.<br />
             • 수강자수가 딱 떨어지지 않으면 달라집니다. 부산광역시교육청 「2026학년도 고등학교 학업성적관리 시행지침」(2026. 2.)의 <strong style={{ color: 'var(--text)' }}>178명 예시</strong>는 누적인원 17.80·60.52·117.48·160.20·178을 반올림해 18·61·117·160·178로 잡고, 등급별 인원을 <strong style={{ color: 'var(--text)' }}>18 · 43 · 56 · 43 · 18명</strong>으로 배분합니다. 이때 18위는 백분율로 10.11%지만 1등급이고, 3등급은 명목 32%(56.96명)가 아니라 56명입니다.<br />
@@ -189,7 +189,7 @@ export default function Nesin5GradePage() {
         <section>
           <h2 style={sectionTitle}>등급(상대) vs 성취도(절대) A~E</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>📊 등급 (1~5, 상대평가)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>다른 학생 대비 석차로 결정</li>
@@ -197,7 +197,7 @@ export default function Nesin5GradePage() {
                 <li>내신 평균·대입 반영의 핵심</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cat-health)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cat-health)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 8 }}>🅰️ 성취도 (A~E, 절대평가)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>원점수가 아니라 <strong>성취율</strong> 기준</li>
@@ -241,7 +241,7 @@ export default function Nesin5GradePage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.8 }}>
             ※ 석차등급을 산출하는 과목이라도 <strong style={{ color: 'var(--text)' }}>수강자수가 5명 이하</strong>이거나(제15조 제10항) <strong style={{ color: 'var(--text)' }}>공동교육과정·온라인학교</strong>로 이수한 과목은(제15항) 석차등급란에 ‘ㆍ’이 들어갑니다. 훈령상 인원 기준은 ‘5명 이하’ 하나뿐입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--danger)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--danger)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             <p style={{ color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>성취도 A~E는 ‘원점수’가 아니라 ‘성취율’ 기준</p>
             [별표 9] 제4조 라목 3)의 표 기준은 원점수가 아니라 성취율이고, 같은 조항이 <strong style={{ color: 'var(--text)' }}>“기준 성취율에 따른 분할점수를 과목별로 학교가 설정할 수 있다”</strong>고 정합니다. 따라서 <strong style={{ color: 'var(--text)' }}>‘원점수 90점이면 무조건 A’로 단정할 수 없고</strong>, A 커트라인은 과목·학교마다 다를 수 있습니다.<br />
             • <strong style={{ color: 'var(--text)' }}>5단계(A~E)</strong> — 성취율 90%↑ A · 80%↑ B · 70%↑ C · 60%↑ D. E는 공통과목이 40% 이상~60% 미만이고, 40%에 못 미쳐도 최소 성취수준 보장지도를 이수하면 E를 받습니다. 선택과목은 60% 미만이 모두 E입니다.<br />
@@ -259,7 +259,7 @@ export default function Nesin5GradePage() {
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>

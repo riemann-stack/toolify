@@ -9,7 +9,7 @@
 .inputCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
 }
 
@@ -36,7 +36,7 @@
   border-radius: 10px;
   padding: 14px 16px;
   font-size: 28px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
   outline: none;
@@ -75,9 +75,9 @@
   padding: 9px 4px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--muted);
   cursor: pointer;
@@ -90,7 +90,7 @@
 }
 
 .presetBtnActive {
-  background: rgba(14, 165, 233, 0.1);
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
   border-color: var(--accent) !important;
   color: var(--accent) !important;
 }
@@ -98,8 +98,8 @@
 /* ── 히어로 카드 ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(14, 165, 233, 0.3);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 32px 24px 24px;
   text-align: center;
   animation: fadeUp 0.25s ease;
@@ -114,7 +114,7 @@
 }
 
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(52px, 12vw, 80px);
   font-weight: 800;
   color: var(--accent);
@@ -130,9 +130,9 @@
 }
 
 .heroCopy {
-  background: rgba(14, 165, 233, 0.1);
-  border: 1px solid rgba(14, 165, 233, 0.3);
-  border-radius: 8px;
+  background: color-mix(in srgb, var(--accent) 10%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-s);
   padding: 9px 24px;
   font-size: 13px;
   color: var(--accent);
@@ -140,18 +140,18 @@
   transition: all 0.15s;
 }@media (hover: hover) {
   .heroCopy:hover {
-  background: rgba(14, 165, 233, 0.2);
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 }
 
 .heroCopied {
-  background: rgba(14, 165, 233, 0.2);
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 
 /* ── 테이블 ── */
 .tableWrap {
   overflow-x: auto;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   border: 1px solid var(--border);
   animation: fadeUp 0.25s ease;
 }
@@ -200,7 +200,7 @@
 }
 
 .ms {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
@@ -243,7 +243,7 @@
   font-size: 14px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 @keyframes fadeUp {

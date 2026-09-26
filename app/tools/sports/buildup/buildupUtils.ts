@@ -28,11 +28,11 @@ export const PROFILE_DESC: Record<Profile, string> = {
 // (race-predictor PACE_ZONES와 동일 — VDOT 50 → M 4:30/T 4:15/I 3:56/R 3:39, 공식표 4:31/4:15/3:55/3:40와 일치)
 export type Intensity = 'E' | 'M' | 'T' | 'I' | 'R'
 export const INTENSITY_LABEL: Record<Intensity, { label: string; color: string; pct: number }> = {
-  'E': { label: 'Easy',       color: '#0D9488', pct: DANIELS_PCT.E },
-  'M': { label: 'Marathon',   color: '#059669', pct: DANIELS_PCT.M },
+  'E': { label: 'Easy',       color: 'var(--teal-600)', pct: DANIELS_PCT.E },
+  'M': { label: 'Marathon',   color: 'var(--emerald-600)', pct: DANIELS_PCT.M },
   'T': { label: 'Threshold',  color: '#FFD93E', pct: DANIELS_PCT.T },
-  'I': { label: 'Interval',   color: '#EA580C', pct: DANIELS_PCT.I },
-  'R': { label: 'Repetition', color: '#DC2626', pct: DANIELS_PCT.R },
+  'I': { label: 'Interval',   color: 'var(--orange-600)', pct: DANIELS_PCT.I },
+  'R': { label: 'Repetition', color: 'var(--red-600)', pct: DANIELS_PCT.R },
 }
 
 // ── 프리셋 시작·끝 페이스 (VDOT 기반) ────

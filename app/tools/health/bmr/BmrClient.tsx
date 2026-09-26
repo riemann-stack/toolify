@@ -420,7 +420,7 @@ export default function BmrClient() {
           {bmr !== null && tdeeSimple !== null ? (
             <>
               <div className={styles.hero} role="status"
-                style={{ borderColor: 'rgba(14,165,233,0.30)', background: 'rgba(14,165,233,0.06)' }}>
+                style={{ borderColor: 'color-mix(in srgb, var(--accent) 30%, transparent)', background: 'color-mix(in srgb, var(--accent) 6%, transparent)' }}>
                 <div className={styles.heroLabel}>BMR · 기초대사량</div>
                 <div className={styles.heroNum} style={{ color: 'var(--accent)' }}>
                   {fmt(bmr)}<span className={styles.heroNumUnit}>kcal</span>
@@ -526,7 +526,7 @@ export default function BmrClient() {
                     ))}
                   </ul>
                   <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>109</strong> (24시간)
+                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: 'var(--red-600)' }}>1577-0199</strong> · 자살예방 <strong style={{ color: 'var(--red-600)' }}>109</strong> (24시간)
                   </p>
                 </div>
               )}
@@ -581,9 +581,9 @@ export default function BmrClient() {
               </div>
 
               <div className={styles.hero}
-                style={{ borderColor: 'rgba(8,145,178,0.30)', background: 'rgba(8,145,178,0.06)' }}>
+                style={{ borderColor: 'color-mix(in srgb, var(--cyan-600) 30%, transparent)', background: 'color-mix(in srgb, var(--cyan-600) 6%, transparent)' }}>
                 <div className={styles.heroLabel}>오늘의 칼로리 예산</div>
-                <div className={styles.heroNum} style={{ color: '#0891B2' }}>
+                <div className={styles.heroNum} style={{ color: 'var(--cyan-600)' }}>
                   {fmt(budgetGoal.daily)}<span className={styles.heroNumUnit}>kcal</span>
                 </div>
                 <div className={styles.heroDesc}>{budgetGoal.name} 목표 적용</div>
@@ -603,16 +603,16 @@ export default function BmrClient() {
                   return (
                     <>
                       <div className={styles.budgetBar}>
-                        <div className={styles.budgetSeg} style={{ width: `${bmrPct}%`, background: '#0891B2' }}>
+                        <div className={styles.budgetSeg} style={{ width: `${bmrPct}%`, background: 'var(--cyan-600)' }}>
                           <span>BMR</span><b>{fmt(bmr)}</b>
                         </div>
-                        <div className={styles.budgetSeg} style={{ width: `${actPct}%`, background: '#A16207' }}>
+                        <div className={styles.budgetSeg} style={{ width: `${actPct}%`, background: 'var(--yellow-700)' }}>
                           <span>활동</span><b>+{fmt(activity)}</b>
                         </div>
                         {adjustment !== 0 && (
                           <div className={styles.budgetSeg} style={{
                             width: `${adjPct}%`,
-                            background: isDeficit ? '#DC2626' : '#059669',
+                            background: isDeficit ? 'var(--red-600)' : 'var(--emerald-600)',
                           }}>
                             <span>{isDeficit ? '감량' : '증량'}</span>
                             <b>{isDeficit ? '−' : '+'}{fmt(Math.abs(adjustment))}</b>
@@ -621,17 +621,17 @@ export default function BmrClient() {
                       </div>
                       <div className={styles.budgetLegend}>
                         <div className={styles.budgetLegendItem}>
-                          <span className={styles.budgetSwatch} style={{ background: '#0891B2' }} />
+                          <span className={styles.budgetSwatch} style={{ background: 'var(--cyan-600)' }} />
                           기본 생명유지 (BMR) <b>{fmt(bmr)}</b>
                         </div>
                         <div className={styles.budgetLegendItem}>
-                          <span className={styles.budgetSwatch} style={{ background: '#A16207' }} />
+                          <span className={styles.budgetSwatch} style={{ background: 'var(--yellow-700)' }} />
                           일상 활동·운동 <b>+{fmt(activity)}</b>
                         </div>
                         {adjustment !== 0 && (
                           <div className={styles.budgetLegendItem}>
                             <span className={styles.budgetSwatch} style={{
-                              background: isDeficit ? '#DC2626' : '#059669',
+                              background: isDeficit ? 'var(--red-600)' : 'var(--emerald-600)',
                             }} />
                             {isDeficit ? '감량 차감' : '증량 추가'} <b>{isDeficit ? '−' : '+'}{fmt(Math.abs(adjustment))}</b>
                           </div>
@@ -689,7 +689,7 @@ export default function BmrClient() {
                   ))}
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                  💡 오늘 예산 <strong style={{ color: '#0891B2' }}>{fmt(budgetGoal.daily)}kcal</strong> ≈ 밥 {Math.floor(budgetGoal.daily / 300)}공기 + 단백질·지방·야채 균형
+                  💡 오늘 예산 <strong style={{ color: 'var(--cyan-600)' }}>{fmt(budgetGoal.daily)}kcal</strong> ≈ 밥 {Math.floor(budgetGoal.daily / 300)}공기 + 단백질·지방·야채 균형
                 </p>
               </div>
             </>

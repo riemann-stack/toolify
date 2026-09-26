@@ -60,7 +60,7 @@ const FAQ_LD = [
 ]
 
 const h2Style = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -77,7 +77,7 @@ export default function ChildHeightPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />자녀 예상 키 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -121,7 +121,7 @@ export default function ChildHeightPage() {
           <p style={pMuted}>
             보정값 <strong style={{ color: 'var(--text)' }}>13cm</strong>는 성인 남성이 성인 여성보다 평균적으로 약 13cm 크다는 통계에서 나옵니다. 자녀가 아들이면 어머니 키를 13cm 끌어올려(부모를 &lsquo;남성 기준&rsquo;으로 맞춰) 평균을 내고, 딸이면 아버지 키를 13cm 내려(부모를 &lsquo;여성 기준&rsquo;으로 맞춰) 평균을 냅니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', fontFamily: 'var(--font-sans)' }}>
             <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.9 }}>
               아들 = (아버지 + 어머니 + 13) ÷ 2 &nbsp;·&nbsp; 딸 = (아버지 + 어머니 − 13) ÷ 2
             </p>
@@ -135,13 +135,13 @@ export default function ChildHeightPage() {
             아버지 178cm·어머니 162cm를 예로 들어 보겠습니다. 부모 키 합은 <strong style={{ color: 'var(--text)' }}>340cm</strong>입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>👦 아들</p>
               <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
                 (178 + 162 + 13) ÷ 2 = 353 ÷ 2 = <strong style={{ color: 'var(--accent-ink)' }}>176.5cm</strong>
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>👧 딸</p>
               <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
                 (178 + 162 − 13) ÷ 2 = 327 ÷ 2 = <strong style={{ color: 'var(--accent-ink)' }}>163.5cm</strong>
@@ -209,7 +209,7 @@ export default function ChildHeightPage() {
               { icon: '🥗', t: '영양', d: '근육·뼈를 만드는 단백질, 뼈 성장의 칼슘과 흡수를 돕는 비타민D가 중요합니다. 다만 과도한 열량으로 비만이 되면 사춘기가 빨라져 오히려 최종 키에 불리할 수 있습니다.' },
               { icon: '🏃', t: '운동', d: '점프·달리기·스트레칭처럼 뼈에 적당한 자극을 주는 활동이 성장판을 돕습니다. 반대로 지나친 고강도 훈련·과도한 체중 부하는 역효과일 수 있습니다.' },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', display: 'flex', gap: '14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', display: 'flex', gap: '14px' }}>
                 <span style={{ fontSize: '22px', flexShrink: 0, marginTop: '2px' }}>{r.icon}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{r.t}</p>
@@ -259,7 +259,7 @@ export default function ChildHeightPage() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   background: 'var(--bg2)', border: '1px solid var(--border)',
-                  borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                  borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
                 }}
               >
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>

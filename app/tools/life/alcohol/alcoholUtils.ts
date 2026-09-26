@@ -232,7 +232,7 @@ export function riskLevel(alcoholG: number, sex: 'male' | 'female'): {
   // color는 텍스트에도 쓰이므로 AA 대비 토큰 사용 (노랑 #FFD93E는 흰 배경 1.4:1이라 판독 불가)
   if (pct <= 50)  return { level: 'safe',      pct, label: '🟢 참고 기준 이내', color: 'var(--success)' }
   if (pct <= 100) return { level: 'caution',   pct, label: '🟡 기준 근접',      color: 'var(--warning)' }
-  if (pct <= 200) return { level: 'high',      pct, label: '🟠 기준 초과',      color: '#EA580C' }
+  if (pct <= 200) return { level: 'high',      pct, label: '🟠 기준 초과',      color: 'var(--orange-600)' }
   return                  { level: 'very-high', pct, label: '🔴 고위험 수준',    color: 'var(--danger)' }
 }
 

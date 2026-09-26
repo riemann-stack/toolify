@@ -46,7 +46,7 @@ export default function NumberBasePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />진법 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -62,7 +62,7 @@ export default function NumberBasePage() {
 
         {/* ── 1. 실무 HEX 덤프 읽기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             실무 HEX 덤프 읽기 — 파일 시그니처(매직 넘버)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -90,14 +90,14 @@ export default function NumberBasePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{r.f}</td>
-                    <td style={{ padding: '10px 12px', color: '#EA580C', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--orange-600)', fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.a}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             🔍 <strong style={{ color: 'var(--text)' }}>직접 확인하는 절차:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li>macOS·리눅스: 터미널에서 <code style={{ background: 'var(--bg3)', padding: '1px 5px', borderRadius: 3, fontFamily: 'var(--font-mono)' }}>xxd 파일명 | head -1</code> — 첫 16바이트가 HEX와 ASCII로 나란히 출력됩니다</li>
@@ -110,11 +110,11 @@ export default function NumberBasePage() {
 
         {/* ── 2. 진법 간 관계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             진법 간 단축 변환 관계
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 16진수 (가장 자주)</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <strong>2진수 4자리 = 16진수 1자리</strong>
@@ -122,8 +122,8 @@ export default function NumberBasePage() {
                 <br />8비트(1바이트) = 16진수 2자리 (예: 0xFF)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #A16207', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#A16207', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 8진수</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--yellow-700)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--yellow-700)', fontWeight: 700, marginBottom: 8 }}>2진수 ↔ 8진수</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
                 <strong>2진수 3자리 = 8진수 1자리</strong>
                 <br />000 = 0 / 111 = 7
@@ -132,16 +132,16 @@ export default function NumberBasePage() {
             </div>
           </div>
           <div style={{
-            background: 'rgba(8,145,178,0.05)',
-            border: '1px solid rgba(8,145,178,0.30)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--cyan-600) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            💡 <strong style={{ color: '#0891B2' }}>왜 16진수를 자주 쓰나?</strong> 2진수는 너무 길어서 (8비트 = 16진 2자리),
+            💡 <strong style={{ color: 'var(--cyan-600)' }}>왜 16진수를 자주 쓰나?</strong> 2진수는 너무 길어서 (8비트 = 16진 2자리),
             메모리 주소·색상 코드·HEX 덤프 등에서 표준입니다.
             <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>0xFF</code>가
             <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>11111111</code>보다 훨씬 읽기 쉽습니다.
@@ -150,7 +150,7 @@ export default function NumberBasePage() {
 
         {/* ── 3. 비트 폭 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             비트 폭별 표현 범위
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -170,15 +170,15 @@ export default function NumberBasePage() {
                   { b: '64-bit (8B)',  u: '약 1.8 × 10¹⁹',        s: '−9.2 × 10¹⁸ ~ 9.2 × 10¹⁸' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.b}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.u}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.b}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.u}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.s}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             🔢 <strong style={{ color: 'var(--text)' }}>2의 거듭제곱 (자주 쓰는 값):</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li>2⁸ = <strong>256</strong> (1바이트)</li>
@@ -192,7 +192,7 @@ export default function NumberBasePage() {
 
         {/* ── 4. IPv4·서브넷 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             IPv4 주소·서브넷을 진법으로 읽기
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -202,9 +202,9 @@ export default function NumberBasePage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
@@ -213,7 +213,7 @@ export default function NumberBasePage() {
             <div>192.168.0.1 = <span style={{ color: 'var(--accent)' }}>11000000.10101000.00000000.00000001</span></div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># /24 = 앞 24비트가 네트워크, 뒤 8비트가 호스트</span></div>
-            <div>255.255.255.0 = <span style={{ color: '#0891B2' }}>11111111.11111111.11111111</span>.<span style={{ color: '#DC2626' }}>00000000</span></div>
+            <div>255.255.255.0 = <span style={{ color: 'var(--cyan-600)' }}>11111111.11111111.11111111</span>.<span style={{ color: 'var(--red-600)' }}>00000000</span></div>
           </div>
           <div style={{ overflowX: 'auto', marginTop: 12 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
@@ -235,14 +235,14 @@ export default function NumberBasePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{r.c}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{r.m}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.h}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             💡 <strong style={{ color: 'var(--text)' }}>왜 2ⁿ − 2인가:</strong> 호스트 비트가 전부 0인 주소는 네트워크 자체를, 전부 1인 주소는 브로드캐스트를 가리키므로
             장비에 배정할 수 없습니다. &quot;같은 서브넷인가?&quot; 판정도 결국 비트 연산입니다 — <strong style={{ color: 'var(--text)' }}>IP AND 마스크</strong>의 결과가
             서로 같으면 같은 네트워크입니다. 예를 들어 /25에서 192.168.0.130은 마지막 옥텟 130 = 10000010의 최상위 비트가 1이므로
@@ -252,7 +252,7 @@ export default function NumberBasePage() {
 
         {/* ── 5. 2의 보수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             2의 보수 (Two&apos;s Complement)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -261,16 +261,16 @@ export default function NumberBasePage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 8-bit 예시</span></div>
             <div>+5 = <span style={{ color: 'var(--accent)' }}>00000101</span></div>
-            <div>−5 = <span style={{ color: '#DC2626' }}>11111011</span> (00000101 비트 반전 후 +1)</div>
+            <div>−5 = <span style={{ color: 'var(--red-600)' }}>11111011</span> (00000101 비트 반전 후 +1)</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 8-bit 표현 범위 — MSB가 부호 비트</span></div>
             <div>00000000 (0) ~ 01111111 (+127)</div>
@@ -282,8 +282,8 @@ export default function NumberBasePage() {
               { t: '✓ 장점 2', d: '덧셈·뺄셈을 같은 회로로 처리 (a − b = a + (−b))' },
               { t: '✓ 장점 3', d: '비트 반전 후 +1로 매우 간단히 변환' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
+              <div key={i} style={{ background: 'rgba(16,185,129,0.05)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--emerald-600)', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
             ))}
@@ -292,7 +292,7 @@ export default function NumberBasePage() {
 
         {/* ── 6. IEEE 754 부동소수점 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             IEEE 754 부동소수점 — 0.1 + 0.2 ≠ 0.3인 이유
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -304,9 +304,9 @@ export default function NumberBasePage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
@@ -315,8 +315,8 @@ export default function NumberBasePage() {
             <div>0.1 = <span style={{ color: 'var(--accent)' }}>0.000110011001100110011...</span>₂</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 64비트에 잘라 담긴 실제 값 (반올림 오차)</span></div>
-            <div>0.1 → <span style={{ color: '#DC2626' }}>0.1000000000000000055511151231...</span></div>
-            <div>0.1 + 0.2 → <span style={{ color: '#DC2626' }}>0.30000000000000004</span></div>
+            <div>0.1 → <span style={{ color: 'var(--red-600)' }}>0.1000000000000000055511151231...</span></div>
+            <div>0.1 + 0.2 → <span style={{ color: 'var(--red-600)' }}>0.30000000000000004</span></div>
           </div>
           <div style={{ overflowX: 'auto', marginTop: 12 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
@@ -335,15 +335,15 @@ export default function NumberBasePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)' }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontWeight: 700 }}>{r.e}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontWeight: 700 }}>{r.m}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--yellow-700)', fontWeight: 700 }}>{r.e}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--cyan-600)', fontWeight: 700 }}>{r.m}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700 }}>{r.d}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             🛠️ <strong style={{ color: 'var(--text)' }}>실무 대처법:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li>금액 계산은 부동소수점 대신 <strong style={{ color: 'var(--text)' }}>정수(원 단위)</strong>로 처리하고 표시할 때만 변환</li>
@@ -356,7 +356,7 @@ export default function NumberBasePage() {
 
         {/* ── 7. 비트 연산 활용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             비트 연산 활용 가이드
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -386,7 +386,7 @@ export default function NumberBasePage() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             🛠️ <strong style={{ color: 'var(--text)' }}>실전 활용:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li>플래그 관리 (여러 옵션을 한 변수에): <code style={{ background: 'var(--bg3)', padding: '1px 5px', borderRadius: 3, fontFamily: 'var(--font-mono)' }}>flags |= READ; if (flags &amp; READ) ...</code></li>
@@ -399,7 +399,7 @@ export default function NumberBasePage() {
 
         {/* ── 8. ASCII ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ASCII 표준
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -409,13 +409,13 @@ export default function NumberBasePage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 8 }}>
             {[
               { range: '0~31',   label: '제어 문자',   c: '#A8A29E', d: 'NUL, TAB(9), LF(10), CR(13), ESC(27) 등' },
-              { range: '32',     label: '공백 (SPACE)', c: '#0D9488', d: '문자열 구분' },
-              { range: '48~57',  label: '숫자 0~9',     c: '#A16207', d: 'ord(\'0\') = 48' },
+              { range: '32',     label: '공백 (SPACE)', c: 'var(--teal-600)', d: '문자열 구분' },
+              { range: '48~57',  label: '숫자 0~9',     c: 'var(--yellow-700)', d: 'ord(\'0\') = 48' },
               { range: '65~90',  label: '대문자 A~Z',   c: 'var(--accent)', d: 'ord(\'A\') = 65' },
-              { range: '97~122', label: '소문자 a~z',   c: '#0891B2', d: 'ord(\'a\') = 97 (대문자+32)' },
-              { range: '127',    label: 'DEL',          c: '#DC2626', d: '구식 천공카드 삭제 표시' },
+              { range: '97~122', label: '소문자 a~z',   c: 'var(--cyan-600)', d: 'ord(\'a\') = 97 (대문자+32)' },
+              { range: '127',    label: 'DEL',          c: 'var(--red-600)', d: '구식 천공카드 삭제 표시' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: g.c, fontWeight: 800, marginBottom: 2 }}>{g.range}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{g.label}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{g.d}</p>
@@ -425,21 +425,21 @@ export default function NumberBasePage() {
           <div style={{
             background: 'rgba(155,89,182,0.06)',
             border: '1px solid rgba(155,89,182,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🌏 <strong style={{ color: '#9333EA' }}>유니코드:</strong> ASCII 0~127은 유니코드와 완전 동일.
+            🌏 <strong style={{ color: 'var(--purple-600)' }}>유니코드:</strong> ASCII 0~127은 유니코드와 완전 동일.
             한글은 <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>U+AC00 ~ U+D7A3</code> 범위에 11,172개가 정의 (가~힣).
           </div>
         </div>
 
         {/* ── 9. 언어별 표기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             프로그래밍 언어별 진법 표기
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -463,9 +463,9 @@ export default function NumberBasePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 600 }}>{r.l}</td>
-                    <td style={{ padding: '10px 12px', color: '#EA580C', fontFamily: 'var(--font-mono)' }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--orange-600)', fontFamily: 'var(--font-mono)' }}>{r.h}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>{r.b}</td>
-                    <td style={{ padding: '10px 12px', color: '#A16207', fontFamily: 'var(--font-mono)' }}>{r.o}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--yellow-700)', fontFamily: 'var(--font-mono)' }}>{r.o}</td>
                   </tr>
                 ))}
               </tbody>
@@ -477,13 +477,13 @@ export default function NumberBasePage() {
 
         {/* ── 10. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -498,7 +498,7 @@ export default function NumberBasePage() {
 
         {/* ── 11. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -518,7 +518,7 @@ export default function NumberBasePage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

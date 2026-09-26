@@ -48,9 +48,9 @@ export interface StrengthMeta {
 
 export const STRENGTH_META: Record<Strength, StrengthMeta> = {
   SD300: { id: 'SD300', yieldMpa: 300, use: '저층·소형 구조 (구형)',           priceFactor: 0.95, color: '#9B9B9B' },
-  SD400: { id: 'SD400', yieldMpa: 400, use: '한국 일반 표준 (공동주택·상가)',  priceFactor: 1.00, color: '#0D9488' },
-  SD500: { id: 'SD500', yieldMpa: 500, use: '대형·고층·교량',                   priceFactor: 1.10, color: '#D97706' },
-  SD600: { id: 'SD600', yieldMpa: 600, use: '초고층·내진·플랜트',               priceFactor: 1.20, color: '#DB2777' },
+  SD400: { id: 'SD400', yieldMpa: 400, use: '한국 일반 표준 (공동주택·상가)',  priceFactor: 1.00, color: 'var(--teal-600)' },
+  SD500: { id: 'SD500', yieldMpa: 500, use: '대형·고층·교량',                   priceFactor: 1.10, color: 'var(--amber-600)' },
+  SD600: { id: 'SD600', yieldMpa: 600, use: '초고층·내진·플랜트',               priceFactor: 1.20, color: 'var(--pink-600)' },
 }
 
 /* 트럭 종류 */

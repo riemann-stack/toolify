@@ -13,19 +13,19 @@ const ROUNDS = { reaction: 6, stroop: 20, dualSingle: 5, dualDouble: 10 } as con
 const STROOP_COLORS = [
   { name: '빨강', code: '#FF4444' },
   { name: '파랑', code: '#3E5BFF' },
-  { name: '초록', code: '#059669' },
-  { name: '노랑', code: '#A16207' },
-  { name: '보라', code: '#9B59B6' },
-  { name: '주황', code: '#EA580C' },
+  { name: '초록', code: 'var(--emerald-600)' },
+  { name: '노랑', code: 'var(--yellow-700)' },
+  { name: '보라', code: 'var(--amethyst)' },
+  { name: '주황', code: 'var(--orange-600)' },
 ]
 
 type Grade = { key: string; label: string; emoji: string; range: [number, number]; color: string }
 const REACTION_GRADES: Grade[] = [
-  { key: 'excellent', label: '매우 빠름',   emoji: '🚀', range: [0, 200],     color: '#0D9488' },
-  { key: 'fast',      label: '빠름',         emoji: '✨', range: [201, 250],   color: '#059669' },
+  { key: 'excellent', label: '매우 빠름',   emoji: '🚀', range: [0, 200],     color: 'var(--teal-600)' },
+  { key: 'fast',      label: '빠름',         emoji: '✨', range: [201, 250],   color: 'var(--emerald-600)' },
   { key: 'avg',       label: '평균',         emoji: '⭐', range: [251, 300],   color: 'var(--accent)' },
-  { key: 'below',     label: '평균 이하',    emoji: '👍', range: [301, 350],   color: '#A16207' },
-  { key: 'slow',      label: '느림',         emoji: '🐢', range: [351, 9999],  color: '#EA580C' },
+  { key: 'below',     label: '평균 이하',    emoji: '👍', range: [301, 350],   color: 'var(--yellow-700)' },
+  { key: 'slow',      label: '느림',         emoji: '🐢', range: [351, 9999],  color: 'var(--orange-600)' },
 ]
 function getReactionGrade(ms: number): Grade {
   return REACTION_GRADES.find(g => ms >= g.range[0] && ms <= g.range[1]) ?? REACTION_GRADES[4]
@@ -537,7 +537,7 @@ export default function CognitiveTestClient() {
               <p className={s.startTitle}>반응 속도 테스트</p>
               <p className={s.startDesc}>
                 <strong style={{ color: '#FF4444' }}>화면이 빨간색</strong>일 때는 기다리고,
-                <br /><strong style={{ color: '#059669' }}>초록색으로 바뀌면 즉시 클릭</strong>하세요.
+                <br /><strong style={{ color: 'var(--emerald-600)' }}>초록색으로 바뀌면 즉시 클릭</strong>하세요.
                 <br />6회 측정 (첫 1회 warm-up 제외, 5회 평균)
               </p>
               <button type="button" className={s.startBtn} onClick={startReactionRound}>테스트 시작</button>
@@ -613,8 +613,8 @@ export default function CognitiveTestClient() {
                   <table className={s.statsTable}>
                     <tbody>
                       <tr><td>평균</td><td>{reactionStats.mean}ms</td></tr>
-                      <tr><td>최고 (가장 빠름)</td><td style={{ color: '#0D9488' }}>{reactionStats.min}ms</td></tr>
-                      <tr><td>최저 (가장 느림)</td><td style={{ color: '#EA580C' }}>{reactionStats.max}ms</td></tr>
+                      <tr><td>최고 (가장 빠름)</td><td style={{ color: 'var(--teal-600)' }}>{reactionStats.min}ms</td></tr>
+                      <tr><td>최저 (가장 느림)</td><td style={{ color: 'var(--orange-600)' }}>{reactionStats.max}ms</td></tr>
                       <tr><td>중앙값</td><td>{reactionStats.median}ms</td></tr>
                       <tr><td>표준편차</td><td>{reactionStats.stdDev}ms</td></tr>
                       <tr><td>너무 빨리 누른 횟수</td><td>{rEarlyCount}회</td></tr>
@@ -658,11 +658,11 @@ export default function CognitiveTestClient() {
               <p style={{ fontSize: 36, marginBottom: 8 }}>🎨</p>
               <p className={s.startTitle}>스트룹 효과 테스트</p>
               <p className={s.startDesc}>
-                글자의 <strong style={{ color: '#DC2626' }}>의미가 아닌</strong> 글자 <strong style={{ color: '#0D9488' }}>색상</strong>을 선택하세요.
+                글자의 <strong style={{ color: 'var(--red-600)' }}>의미가 아닌</strong> 글자 <strong style={{ color: 'var(--teal-600)' }}>색상</strong>을 선택하세요.
                 <br />20회 시행 (일치 10회 + 불일치 10회)
               </p>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 16 }}>
-                예: <strong style={{ color: '#3E5BFF' }}>빨강</strong> → <strong style={{ color: '#0D9488' }}>파랑</strong> 선택 (글자 색이 파란색)
+                예: <strong style={{ color: '#3E5BFF' }}>빨강</strong> → <strong style={{ color: 'var(--teal-600)' }}>파랑</strong> 선택 (글자 색이 파란색)
               </p>
               <button className={s.startBtn} onClick={startStroop}>테스트 시작</button>
             </div>
@@ -719,7 +719,7 @@ export default function CognitiveTestClient() {
                 </div>
                 <p className={s.heroSub}>
                   {stroopStats.interference > 0 ? (
-                    <>불일치 조건이 일치 조건보다 <strong style={{ color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{stroopStats.interference}ms</strong> 느림</>
+                    <>불일치 조건이 일치 조건보다 <strong style={{ color: 'var(--teal-600)', fontFamily: 'var(--font-sans)' }}>{stroopStats.interference}ms</strong> 느림</>
                   ) : (
                     <>이번 측정에서는 간섭이 거의 나타나지 않았습니다 (조건별 10회라 오차 범위일 수 있어요)</>
                   )}
@@ -747,9 +747,9 @@ export default function CognitiveTestClient() {
                 </div>
                 <table className={s.statsTable} style={{ marginTop: 12 }}>
                   <tbody>
-                    <tr><td>일치 정답률</td><td style={{ color: '#0D9488' }}>{stroopStats.congAcc}%</td></tr>
-                    <tr><td>불일치 정답률</td><td style={{ color: '#EA580C' }}>{stroopStats.incAcc}%</td></tr>
-                    <tr><td>간섭 시간</td><td style={{ color: '#EA580C' }}>{fmtSigned(stroopStats.interference)}ms</td></tr>
+                    <tr><td>일치 정답률</td><td style={{ color: 'var(--teal-600)' }}>{stroopStats.congAcc}%</td></tr>
+                    <tr><td>불일치 정답률</td><td style={{ color: 'var(--orange-600)' }}>{stroopStats.incAcc}%</td></tr>
+                    <tr><td>간섭 시간</td><td style={{ color: 'var(--orange-600)' }}>{fmtSigned(stroopStats.interference)}ms</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -855,7 +855,7 @@ export default function CognitiveTestClient() {
                 </div>
                 <p className={s.heroSub}>
                   {dualStats.interferenceMs > 0 ? (
-                    <>이중 과제에서 <strong style={{ color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{dualStats.interferenceMs}ms ({dualStats.interferencePct}%)</strong> 더 느려짐</>
+                    <>이중 과제에서 <strong style={{ color: 'var(--teal-600)', fontFamily: 'var(--font-sans)' }}>{dualStats.interferenceMs}ms ({dualStats.interferencePct}%)</strong> 더 느려짐</>
                   ) : (
                     <>이번 측정에서는 이중 과제가 더 느려지지 않았습니다 (1단계 5회가 먼저라 익숙해진 효과일 수 있어요)</>
                   )}
@@ -883,10 +883,10 @@ export default function CognitiveTestClient() {
                 </div>
                 <table className={s.statsTable} style={{ marginTop: 12 }}>
                   <tbody>
-                    <tr><td>단일 정답률</td><td style={{ color: '#0D9488' }}>{dualStats.singleAcc}%</td></tr>
-                    <tr><td>이중 정답률 (숫자)</td><td style={{ color: '#EA580C' }}>{dualStats.dualAcc}%</td></tr>
+                    <tr><td>단일 정답률</td><td style={{ color: 'var(--teal-600)' }}>{dualStats.singleAcc}%</td></tr>
+                    <tr><td>이중 정답률 (숫자)</td><td style={{ color: 'var(--orange-600)' }}>{dualStats.dualAcc}%</td></tr>
                     <tr><td>이중 정답률 (빨간 점)</td><td>{dualStats.dotAcc}%</td></tr>
-                    <tr><td>간섭 시간</td><td style={{ color: '#EA580C' }}>{fmtSigned(dualStats.interferenceMs)}ms</td></tr>
+                    <tr><td>간섭 시간</td><td style={{ color: 'var(--orange-600)' }}>{fmtSigned(dualStats.interferenceMs)}ms</td></tr>
                   </tbody>
                 </table>
               </div>
@@ -918,7 +918,7 @@ export default function CognitiveTestClient() {
                 <span className={s.totalScoreUnit}>/ 100</span>
               </div>
               <p className={s.totalScoreSub}>
-                {totalScore.count === 3 ? '3가지 테스트 단순 평균' : `${totalScore.count}/3개 테스트 평균 (나머지를 마치면 종합 점수)`} · <strong style={{ color: '#EA580C' }}>게임형 참고 지표 — 의학 진단 X</strong>
+                {totalScore.count === 3 ? '3가지 테스트 단순 평균' : `${totalScore.count}/3개 테스트 평균 (나머지를 마치면 종합 점수)`} · <strong style={{ color: 'var(--orange-600)' }}>게임형 참고 지표 — 의학 진단 X</strong>
               </p>
             </div>
           ) : (

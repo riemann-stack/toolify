@@ -444,7 +444,7 @@ export default function LifeTimeClient() {
             </div>
           </div>
 
-          <div className={styles.hero} style={{ borderColor: 'rgba(8,145,178,0.35)' }}>
+          <div className={styles.hero} style={{ borderColor: 'color-mix(in srgb, var(--cyan-600) 35%, transparent)' }}>
             {calc.beyond ? (
               <>
                 <p className={styles.heroLabel}>평균 너머의 시간</p>
@@ -632,7 +632,7 @@ export default function LifeTimeClient() {
             </div>
             <div className={styles.actionInputCell}>
               <p className={styles.actionLabel}>활동</p>
-              <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+              <p style={{ fontSize: 16, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>
                 {activity.icon} {activity.label}
               </p>
             </div>

@@ -43,7 +43,7 @@ export default function LightingPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />조명 밝기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -66,15 +66,15 @@ export default function LightingPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             조명 밝기 핵심 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -83,7 +83,7 @@ export default function LightingPage() {
             <div><span style={{ color: 'var(--muted)' }}>필요 조명 개수</span> = 필요 총 루멘 ÷ 1개당 루멘</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 1 lux = 1 lumen / ㎡ (단위 면적당 빛의 양)</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 거실 16.5㎡, 권장 300 lux<br />
             • 필요 루멘 = 16.5 × 300 = <strong style={{ color: 'var(--accent)' }}>4,950 lm</strong><br />
             • LED 15W (1,500 lm) 사용 시 → <strong style={{ color: 'var(--accent)' }}>4개</strong> 필요
@@ -92,7 +92,7 @@ export default function LightingPage() {
 
         {/* ── 2. 공간별 권장 lux ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 공간별 권장 lux (KS A 3011 참고)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
@@ -124,7 +124,7 @@ export default function LightingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
                 ))}
@@ -135,16 +135,16 @@ export default function LightingPage() {
 
         {/* ── 3. W vs lm vs lux ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚡ 와트(W) vs 루멘(lm) vs lux — 차이 이해
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px', marginBottom: 14 }}>
             {[
-              { i: '⚡', t: '와트 (W)',     d: '전력 소비량 (전기 사용)', c: '#DC2626' },
+              { i: '⚡', t: '와트 (W)',     d: '전력 소비량 (전기 사용)', c: 'var(--red-600)' },
               { i: '💡', t: '루멘 (lm)',    d: '빛의 양 (밝기)',           c: 'var(--accent)' },
-              { i: '📐', t: 'lux',         d: '단위 면적당 빛의 양 (lm/㎡)', c: '#0891B2' },
+              { i: '📐', t: 'lux',         d: '단위 면적당 빛의 양 (lm/㎡)', c: 'var(--cyan-600)' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 22, marginBottom: 4 }}>{s.i}</p>
                 <p style={{ fontSize: 13, color: s.c, fontWeight: 700, marginBottom: 4 }}>{s.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{s.d}</p>
@@ -154,7 +154,7 @@ export default function LightingPage() {
           <div style={{
             background: 'rgba(234,88,12,0.06)',
             border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
@@ -166,7 +166,7 @@ export default function LightingPage() {
 
         {/* ── 4. W ↔ lm 환산표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             W ↔ 루멘 환산 빠른 참조표
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -188,11 +188,11 @@ export default function LightingPage() {
                   { lm: 2600, inc: '150W', hal: '145W', fluo: '40W',  led: '26W' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.lm.toLocaleString()} lm</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.inc}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.hal}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.fluo}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.led}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.lm.toLocaleString()} lm</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--red-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.inc}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--orange-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.hal}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--yellow-700)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.fluo}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.led}</td>
                   </tr>
                 ))}
               </tbody>
@@ -205,7 +205,7 @@ export default function LightingPage() {
 
         {/* ── 5. 색온도 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎨 색온도 가이드 (Kelvin)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -214,8 +214,8 @@ export default function LightingPage() {
               { k: '3500~4000K', n: '주백색 (내추럴화이트)', color: '#FFE0B0', vibe: '자연스러운 백색', use: '거실·복도·욕실·일상' },
               { k: '5000~6500K', n: '주광색 (쿨화이트)',     color: '#B0D8FF', vibe: '푸른빛 백색', use: '서재·주방·작업실·집중' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14, fontWeight: 800, color: s.color, marginBottom: 4 }}>{s.k}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.color}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 14, fontWeight: 800, color: s.color, marginBottom: 4 }}>{s.k}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{s.n}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 4 }}>{s.vibe}</p>
                 <p style={{ fontSize: 12, color: 'var(--accent)', fontWeight: 600 }}>{s.use}</p>
@@ -226,19 +226,19 @@ export default function LightingPage() {
 
         {/* ── 6. 한국 LED 표준 와트 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🇰🇷 한국 LED 시장 표준 와트 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { s: '소형',     w: '6~9W',     lm: '600~900 lm',     u: '작은방·복도', c: '#0891B2' },
+              { s: '소형',     w: '6~9W',     lm: '600~900 lm',     u: '작은방·복도', c: 'var(--cyan-600)' },
               { s: '중형',     w: '12~20W',   lm: '1,200~2,000 lm', u: '침실·서재·중간방', c: 'var(--accent)' },
-              { s: '대형',     w: '30~50W',   lm: '3,000~5,000 lm', u: '거실·큰방',   c: '#EA580C' },
-              { s: '초대형',   w: '50~75W',   lm: '5,000~7,500 lm', u: '대형 거실',   c: '#DC2626' },
+              { s: '대형',     w: '30~50W',   lm: '3,000~5,000 lm', u: '거실·큰방',   c: 'var(--orange-600)' },
+              { s: '초대형',   w: '50~75W',   lm: '5,000~7,500 lm', u: '대형 거실',   c: 'var(--red-600)' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: s.c, fontWeight: 700, marginBottom: 4 }}>{s.s}</p>
-                <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 800, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{s.w}</p>
+                <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 800, fontFamily: 'var(--font-sans)' }}>{s.w}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{s.lm}</p>
                 <p style={{ fontSize: 11, color: 'var(--accent)', marginTop: 4 }}>{s.u}</p>
               </div>
@@ -248,25 +248,25 @@ export default function LightingPage() {
 
         {/* ── 7. 조명 종류별 활용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             💡 조명 종류별 활용 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { i: '🔆', t: '메인 조명 (천장등·실링팬)', d: '공간 전체 균일 밝기. 권장 루멘의 70~80% 차지. 방 중앙·격자 배치.', c: 'var(--accent)' },
-              { i: '✨', t: '보조 조명 (펜던트·다운라이트·테이블 램프)', d: '특정 공간·작업 강조. 식탁 위 펜던트, 책상 위 스탠드. 색온도 차별화 가능.', c: '#0891B2' },
-              { i: '🌙', t: '무드 조명 (간접·LED 스트립·플로어 램프)', d: '분위기 연출. 색온도 2700~3000K 권장. 가구 뒤·벽면 코브에 설치.', c: '#9B59B6' },
+              { i: '✨', t: '보조 조명 (펜던트·다운라이트·테이블 램프)', d: '특정 공간·작업 강조. 식탁 위 펜던트, 책상 위 스탠드. 색온도 차별화 가능.', c: 'var(--cyan-600)' },
+              { i: '🌙', t: '무드 조명 (간접·LED 스트립·플로어 램프)', d: '분위기 연출. 색온도 2700~3000K 권장. 가구 뒤·벽면 코브에 설치.', c: 'var(--amethyst)' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <p style={{ fontSize: 14, color: s.c, fontWeight: 700, marginBottom: 6 }}>{s.i} {s.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{s.d}</p>
               </div>
             ))}
           </div>
           <div style={{
-            background: 'rgba(14,165,233,0.05)',
-            border: '1px solid rgba(14,165,233,0.3)',
-            borderRadius: 12,
+            background: 'color-mix(in srgb, var(--accent) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
@@ -279,7 +279,7 @@ export default function LightingPage() {
 
         {/* ── 8. LED 방등 교체 체크리스트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🔧 LED 방등 교체 체크리스트
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
@@ -287,10 +287,10 @@ export default function LightingPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px', marginBottom: 14 }}>
             {[
-              { t: '안정기 일체형 (컨버터 내장)', d: '기존 형광등 안정기를 그대로 두고 램프만 끼우는 방식. 설치는 간편하지만 비호환 안정기가 있어 제조사 호환 리스트 확인이 필수.', c: '#0891B2' },
+              { t: '안정기 일체형 (컨버터 내장)', d: '기존 형광등 안정기를 그대로 두고 램프만 끼우는 방식. 설치는 간편하지만 비호환 안정기가 있어 제조사 호환 리스트 확인이 필수.', c: 'var(--cyan-600)' },
               { t: '컨버터 외장형 (안정기 제거)', d: '기존 안정기를 떼고 LED 전용 컨버터를 배선. 손이 더 가지만 안정기 손실이 없어 효율·수명에 유리. 전기 작업이 익숙하지 않으면 기사 시공 권장.', c: 'var(--accent)' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: s.c, fontWeight: 700, marginBottom: 6 }}>{s.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{s.d}</p>
               </div>
@@ -318,7 +318,7 @@ export default function LightingPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.l}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.led}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.led}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
                 ))}
@@ -332,7 +332,7 @@ export default function LightingPage() {
 
         {/* ── 9. 천장 높이·반사율 루멘 보정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             📏 천장 높이·벽 반사율에 따른 루멘 보정
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
@@ -356,14 +356,14 @@ export default function LightingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.v}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>왜 그럴까?</strong> 조명설계 표에서 조명률(U)은 대략 <strong style={{ color: 'var(--accent)' }}>0.28~0.75</strong> 범위입니다. 천장이 높아 등기구와 바닥 거리가 멀거나 벽·천장 반사율이 낮으면 U가 하한 쪽으로 내려가, 같은 밝기를 내려면 필요 루멘이 그만큼 커집니다. 반대로 흰 천장·밝은 벽은 빛을 되반사해 U를 끌어올립니다. 정밀 설계는 <strong style={{ color: 'var(--text)' }}>실지수·감광보상률(약 1.3~2.4)</strong>까지 넣지만, 가정에서는 <strong style={{ color: 'var(--text)' }}>&ldquo;천장이 높거나 벽이 어두우면 루멘을 넉넉히&rdquo;</strong>로 기억하면 충분합니다.
           </div>
         </div>
@@ -378,7 +378,7 @@ export default function LightingPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -397,7 +397,7 @@ export default function LightingPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

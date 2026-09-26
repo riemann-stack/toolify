@@ -479,10 +479,10 @@ export default function BrewClient() {
                 return (
                   <g key={i}>
                     <rect x={x1} y={20} width={w - 1} height={28} fill={step.color} rx={3} />
-                    <text x={x1 + w / 2} y={38} fill="#0D0D0D" fontSize="11" textAnchor="middle" fontWeight="700" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                    <text x={x1 + w / 2} y={38} fill="#0D0D0D" fontSize="11" textAnchor="middle" fontWeight="700">
                       {step.emoji}
                     </text>
-                    <text x={x1 + w / 2} y={62} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                    <text x={x1 + w / 2} y={62} fill="var(--muted)" fontSize="9" textAnchor="middle">
                       {step.startSec}~{step.endSec}s
                     </text>
                   </g>
@@ -492,7 +492,7 @@ export default function BrewClient() {
               {[0, 30, 60, 90, 120, 150, 180, 210].map((t) => (
                 <g key={t}>
                   <line x1={(t / 210) * 420} y1={15} x2={(t / 210) * 420} y2={20} stroke="var(--muted)" strokeWidth="1" />
-                  <text x={(t / 210) * 420} y={12} fill="var(--muted)" fontSize="8" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{t}</text>
+                  <text x={(t / 210) * 420} y={12} fill="var(--muted)" fontSize="8" textAnchor="middle">{t}</text>
                 </g>
               ))}
             </svg>
@@ -557,10 +557,10 @@ export default function BrewClient() {
             <svg viewBox="0 0 420 70" width="100%" style={{ marginTop: 12, maxWidth: 600 }} role="img" aria-label="추출 비율 농도 게이지">
               <defs>
                 <linearGradient id={gradId} x1="0%" y1="0%" x2="100%" y2="0%">
-                  <stop offset="0%" stopColor="#DB2777" />
-                  <stop offset="30%" stopColor="#D97706" />
-                  <stop offset="50%" stopColor="#0D9488" />
-                  <stop offset="70%" stopColor="#0891B2" />
+                  <stop offset="0%" stopColor="var(--pink-600)" />
+                  <stop offset="30%" stopColor="var(--amber-600)" />
+                  <stop offset="50%" stopColor="var(--teal-600)" />
+                  <stop offset="70%" stopColor="var(--cyan-600)" />
                   <stop offset="100%" stopColor="#9B9B9B" />
                 </linearGradient>
               </defs>
@@ -580,7 +580,6 @@ export default function BrewClient() {
                 fill="var(--text)"
                 fontSize="10"
                 textAnchor="middle"
-                fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                 fontWeight="800"
               >
                 ▼ 1:{ratio.toFixed(1)}
@@ -592,7 +591,7 @@ export default function BrewClient() {
                 { r: 18, label: '1:18' },
                 { r: 20, label: '1:20' },
               ].map((t, i) => (
-                <text key={i} x={gaugeX(t.r)} y={66} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                <text key={i} x={gaugeX(t.r)} y={66} fill="var(--muted)" fontSize="9" textAnchor="middle">
                   {t.label}
                 </text>
               ))}
@@ -624,7 +623,7 @@ export default function BrewClient() {
                   <div style={{ flex: 1 }}>
                     <p className={s.zoneLabel} style={{ color: z.color }}>
                       {z.label}{' '}
-                      <span style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>
+                      <span style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: 'var(--font-sans)' }}>
                         1:{z.ratioMin}~{z.ratioMax >= 99 ? '∞' : z.ratioMax}
                       </span>
                     </p>

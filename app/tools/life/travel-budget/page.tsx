@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -24,14 +24,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -71,7 +71,7 @@ export default function TravelBudgetPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />해외여행 예산 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -133,7 +133,7 @@ export default function TravelBudgetPage() {
                     <td key={j} style={{
                       padding: '9px 12px',
                       textAlign: j === 0 ? 'left' : 'right',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Inter, "Noto Sans KR", system-ui, sans-serif',
+                      fontFamily: j === 0 ? 'var(--font-sans)' : 'var(--font-sans)',
                       color: j === 0 ? 'var(--text)' : 'var(--accent)',
                       fontWeight: j === 0 ? 700 : 600,
                       fontSize: 13,
@@ -178,7 +178,7 @@ export default function TravelBudgetPage() {
                     <td key={j} style={{
                       padding: '9px 12px',
                       textAlign: j === 0 ? 'left' : 'right',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Inter, "Noto Sans KR", system-ui, sans-serif',
+                      fontFamily: j === 0 ? 'var(--font-sans)' : 'var(--font-sans)',
                       color: 'var(--text)',
                       fontWeight: j === 0 ? 700 : 600,
                       fontSize: 13,
@@ -200,14 +200,14 @@ export default function TravelBudgetPage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '🎒 배낭여행', d: '호스텔 도미토리·로컬 식당·대중교통·박물관 무료. 자유로움·대화·문화 체험.', range: '하루 약 5~20만원', c: '#0D9488' },
-            { t: '🧳 중간 (Mid-range)', d: '3~4성 호텔·일반 식당·기본 투어·시티패스. 가성비 최고.', range: '하루 약 12~40만원', c: '#D97706' },
-            { t: '🥂 럭셔리', d: '5성 호텔·미슐랭·프라이빗 투어·비즈니스 항공. 휴식·기념일.', range: '하루 약 30~100만원', c: '#DB2777' },
+            { t: '🎒 배낭여행', d: '호스텔 도미토리·로컬 식당·대중교통·박물관 무료. 자유로움·대화·문화 체험.', range: '하루 약 5~20만원', c: 'var(--teal-600)' },
+            { t: '🧳 중간 (Mid-range)', d: '3~4성 호텔·일반 식당·기본 투어·시티패스. 가성비 최고.', range: '하루 약 12~40만원', c: 'var(--amber-600)' },
+            { t: '🥂 럭셔리', d: '5성 호텔·미슐랭·프라이빗 투어·비즈니스 항공. 휴식·기념일.', range: '하루 약 30~100만원', c: 'var(--pink-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 6px', lineHeight: 1.7 }}>{g.d}</p>
-              <p style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, margin: 0 }}>{g.range}</p>
+              <p style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, margin: 0 }}>{g.range}</p>
             </div>
           ))}
         </div>
@@ -370,21 +370,21 @@ export default function TravelBudgetPage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/life/travel-tip" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/life/travel-tip" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💵</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해외여행 팁 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             19국 × 9 서비스 + 만족도
           </p>
         </Link>
-        <Link href="/tools/date/jet-lag" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/date/jet-lag" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>✈️</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>시차 적응 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             여행 전·중·후 수면 타이밍
           </p>
         </Link>
-        <Link href="/tools/life/dutch" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/life/dutch" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🍻</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>더치페이 N빵</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

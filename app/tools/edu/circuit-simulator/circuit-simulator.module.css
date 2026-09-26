@@ -1,5 +1,5 @@
 /* 교육 카테고리 강조색.
-   ⚠️ --cat-edu(#0D9488, teal-600)는 흰/연회색 배경 대비 ~3.6:1로 **일반 텍스트 AA 미달**.
+   ⚠️ --cat-edu(var(--teal-600), teal-600)는 흰/연회색 배경 대비 ~3.6:1로 **일반 텍스트 AA 미달**.
       큰 볼드(≥18.66px 700)·테두리·배경엔 그대로 쓰되, 작은 텍스트엔 700레벨 ink를 쓴다
       (cosmic-calendar와 같은 패턴, 흰 위 5.47:1). */
 /* AA 보정 잉크: 흰/연회색·연틴트 배경에서 작은 텍스트가 4.5:1을 넘도록
@@ -13,7 +13,7 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
@@ -28,7 +28,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 600px) {
@@ -37,11 +37,11 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -50,7 +50,7 @@
 }
 .tabActive {
   background: rgba(13,148,136,0.10);
-  color: #0F766E;
+  color: var(--teal-700);
   font-weight: 700;
 }
 
@@ -58,7 +58,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -87,7 +87,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 입력 ── */
@@ -97,7 +97,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -106,7 +106,7 @@
   font-size: 16px;
 }
 .bigInput { font-size: 18px; padding: 12px 14px; }
-.bigInput:focus, .smallInput:focus { border-color: #0D9488; }
+.bigInput:focus, .smallInput:focus { border-color: var(--teal-600); }
 .bigInput::-webkit-outer-spin-button,
 .bigInput::-webkit-inner-spin-button,
 .smallInput::-webkit-outer-spin-button,
@@ -128,14 +128,14 @@
 }
 .sliderRow input[type=range] {
   flex: 1;
-  accent-color: #0D9488;
+  accent-color: var(--teal-600);
 }
 .sliderValue {
   min-width: 90px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
-  color: #0F766E;
+  color: var(--teal-700);
   text-align: right;
 }
 
@@ -151,12 +151,12 @@
 .presetCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 10px;
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -166,12 +166,12 @@
 }
 .presetIcon { font-size: 22px; }
 .presetName { font-size: 13px; font-weight: 700; color: var(--text); margin-top: 2px; }
-.presetGrade { font-size: 10px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.presetGrade { font-size: 10px; color: var(--muted); font-family: var(--font-sans); font-weight: 600; }
 .presetActive {
   background: rgba(13,148,136,0.10);
-  border-color: #0D9488;
+  border-color: var(--teal-600);
 }
-.presetActive .presetName { color: #0F766E; }
+.presetActive .presetName { color: var(--teal-700); }
 
 /* ── 빠른 전압 선택 ── */
 .voltQuickRow {
@@ -183,18 +183,18 @@
 .voltQuickBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }@media (hover: hover) {
   .voltQuickBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.voltQuickActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
+.voltQuickActive { background: rgba(13,148,136,0.10); color: var(--teal-700); border-color: var(--teal-600); font-weight: 700; }
 
 /* ── 회로 타입 토글 ── */
 .typeRow {
@@ -209,16 +209,16 @@
   padding: 11px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .typeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.typeSeries { border-color: rgba(8,145,178,0.40); }
+.typeSeries { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .typeParallel { border-color: rgba(234,88,12,0.40); }
-.typeSeries.typeActive   { background: rgba(8,145,178,0.10); color: #0E7490; border-color: #0891B2; font-weight: 700; }
-.typeParallel.typeActive { background: rgba(234,88,12,0.10); color: #C2410C; border-color: #EA580C; font-weight: 700; }
+.typeSeries.typeActive   { background: color-mix(in srgb, var(--cyan-600) 10%, transparent); color: #0E7490; border-color: var(--cyan-600); font-weight: 700; }
+.typeParallel.typeActive { background: rgba(234,88,12,0.10); color: #C2410C; border-color: var(--orange-600); font-weight: 700; }
 
 /* ── 저항 행 ── */
 .resistorRow {
@@ -228,7 +228,7 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-left: 3px solid #A16207;
+  border-left: 3px solid var(--yellow-700);
   border-radius: 10px;
   padding: 10px 12px;
 }
@@ -240,9 +240,9 @@
   .resistorValueRow { grid-column: 1 / -1; grid-row: 2; }
 }
 .resistorLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
-  color: #A16207;
+  color: var(--yellow-700);
   font-size: 14px;
 }
 .resistorValueRow {
@@ -254,7 +254,7 @@
 .resistorValueRow input[type=range] {
   flex: 1;
   min-width: 0;
-  accent-color: #A16207;
+  accent-color: var(--yellow-700);
 }
 .resistorPowerSelect {
   background: var(--bg2);
@@ -264,7 +264,7 @@
   font-size: 12px;
   color: var(--text);
   outline: none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .removeBtn {
@@ -284,7 +284,7 @@
 }
 /* 시각 크기는 유지하고 터치 히트영역만 44px로 확장 (cosmic 점 패턴) */
 .removeBtn:not(:disabled)::before { content: ''; position: absolute; inset: -9px; }@media (hover: hover) {
-  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.40); }
+  .removeBtn:hover { color: var(--red-600); border-color: rgba(220,38,38,0.40); }
 }
 .removeBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
@@ -295,13 +295,13 @@
   padding: 10px 12px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   margin-top: 6px;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .addResistorBtn:hover:not(:disabled) { color: #0F766E; border-color: #0D9488; }
+  .addResistorBtn:hover:not(:disabled) { color: var(--teal-700); border-color: var(--teal-600); }
 }
 .addResistorBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
@@ -311,7 +311,7 @@
     radial-gradient(ellipse at 50% 50%, rgba(13,148,136,0.14), transparent 70%),
     var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 16px;
   display: flex;
   justify-content: center;
@@ -345,7 +345,7 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-top-width: 3px;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 12px;
   text-align: center;
 }
@@ -354,10 +354,10 @@
   color: var(--muted);
   letter-spacing: 0.04em;
   margin-bottom: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .resultValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(20px, 5vw, 26px);
   letter-spacing: -0.5px;
@@ -367,17 +367,17 @@
   font-size: 12px;
   color: var(--muted);
   margin-left: 3px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
 }
-.resVoltage      { border-top-color: #0D9488; }
-.resVoltage      .resultValue { color: #0F766E; }
-.resCurrent      { border-top-color: #A16207; }
-.resCurrent      .resultValue { color: #A16207; }
-.resResistance   { border-top-color: #EA580C; }
+.resVoltage      { border-top-color: var(--teal-600); }
+.resVoltage      .resultValue { color: var(--teal-700); }
+.resCurrent      { border-top-color: var(--yellow-700); }
+.resCurrent      .resultValue { color: var(--yellow-700); }
+.resResistance   { border-top-color: var(--orange-600); }
 .resResistance   .resultValue { color: #C2410C; }
-.resPower        { border-top-color: #DC2626; }
-.resPower        .resultValue { color: #DC2626; }
+.resPower        { border-top-color: var(--red-600); }
+.resPower        .resultValue { color: var(--red-600); }
 
 /* ── 분석 표 ── */
 .analysisTable {
@@ -399,19 +399,19 @@
   font-weight: 600;
 }
 .analysisTable td:first-child {
-  color: #A16207;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--yellow-700);
+  font-family: var(--font-sans);
   font-weight: 800;
 }
 .analysisTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
 }
-.analysisTable .colVoltage { color: #0F766E; }
-.analysisTable .colCurrent { color: #A16207; }
-.analysisTable .colPower   { color: #DC2626; }
+.analysisTable .colVoltage { color: var(--teal-700); }
+.analysisTable .colCurrent { color: var(--yellow-700); }
+.analysisTable .colPower   { color: var(--red-600); }
 .analysisTable .powerWarn  { color: #B91C1C !important; background: rgba(220,38,38,0.14); }
 
 .tableScroll { overflow-x: auto; }
@@ -420,38 +420,38 @@
 .verifyCard {
   background: rgba(16,185,129,0.14);
   border: 1px solid rgba(16,185,129,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
 .verifyTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: #047857;
   font-size: 13px;
   margin-bottom: 8px;
 }
 .verifyLine {
-  font-family: 'JetBrains Mono', Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   padding: 3px 0;
 }
-.verifyLine strong { color: #047857; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.verifyLine strong { color: #047857; font-family: var(--font-sans); font-weight: 800; }
 
 /* ── 정격 초과 경고 ── */
 .warnCard {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.warnCard strong { color: #B91C1C; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.warnCard strong { color: #B91C1C; font-family: var(--font-sans); font-weight: 700; }
 
 /* ── 옴의 법칙 빠른 계산 ── */
 .knownToggle {
@@ -464,52 +464,52 @@
 .knownBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }@media (hover: hover) {
   .knownBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.knownActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
+.knownActive { background: rgba(13,148,136,0.10); color: var(--teal-700); border-color: var(--teal-600); font-weight: 700; }
 
 /* ── 학습 모드 단계 카드 ── */
 .stepCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-left: 4px solid #0D9488;
-  border-radius: 12px;
+  border-left: 4px solid var(--teal-600);
+  border-radius: var(--radius-m);
   padding: 14px 18px;
 }
 .stepNumber {
   display: inline-block;
   background: rgba(13,148,136,0.10);
-  color: #0F766E;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--teal-700);
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 11px;
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-bottom: 8px;
   letter-spacing: 0.04em;
 }
 .stepTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   color: var(--text);
   margin-bottom: 8px;
 }
 .stepFormula {
-  background: rgba(8,145,178,0.14);
-  border-left: 3px solid #0891B2;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border-left: 3px solid var(--cyan-600);
   border-radius: 6px;
   padding: 10px 14px;
-  font-family: 'JetBrains Mono', Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
@@ -517,29 +517,29 @@
 }
 .stepFormula .op { color: #0E7490; font-weight: 700; }
 .stepCalc {
-  font-family: 'JetBrains Mono', Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.stepCalc strong { color: #0F766E; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.stepCalc strong { color: var(--teal-700); font-family: var(--font-sans); font-weight: 800; }
 
 /* ── 핵심 공식 카드 ── */
 .formulaCard {
   background:
-    radial-gradient(ellipse at 50% 30%, rgba(8,145,178,0.14), transparent 60%),
+    radial-gradient(ellipse at 50% 30%, color-mix(in srgb, var(--cyan-600) 14%, transparent), transparent 60%),
     var(--bg2);
-  border: 1px solid #0891B2;
-  border-radius: 14px;
+  border: 1px solid var(--cyan-600);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
-  font-family: 'JetBrains Mono', Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   line-height: 2.1;
 }
-.formulaCard strong { color: #0E7490; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.formulaCard strong { color: #0E7490; font-family: var(--font-sans); font-weight: 800; }
 .formulaTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: #0E7490;
   font-weight: 700;
   font-size: 14px;
@@ -551,7 +551,7 @@
 .examCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .examHeader {
@@ -561,9 +561,9 @@
   margin-bottom: 10px;
 }
 .examNumber {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
-  color: #0F766E;
+  color: var(--teal-700);
   font-size: 14px;
   letter-spacing: 0.04em;
 }
@@ -572,15 +572,15 @@
   color: var(--muted);
   background: var(--bg3);
   padding: 2px 8px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
 .examQuestion {
   font-size: 14px;
   color: var(--text);
   line-height: 1.85;
   margin-bottom: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .examChoices {
   display: grid;
@@ -592,11 +592,11 @@
 .examChoice {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
@@ -606,23 +606,23 @@
 }
 .examChoiceCorrect {
   background: rgba(16,185,129,0.14);
-  border-color: #059669;
+  border-color: var(--emerald-600);
   color: #047857;
   font-weight: 800;
 }
 .examChoiceWrong {
   background: rgba(220,38,38,0.14);
-  border-color: #DC2626;
+  border-color: var(--red-600);
   color: #B91C1C;
 }
 .examShowBtn {
   background: rgba(13,148,136,0.10);
-  border: 1px solid #0D9488;
-  border-radius: 8px;
+  border: 1px solid var(--teal-600);
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   font-size: 13px;
-  color: #0F766E;
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--teal-700);
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -638,25 +638,25 @@
   line-height: 1.85;
   margin-top: 10px;
 }
-.examSolution strong { color: #0F766E; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.examSolution strong { color: var(--teal-700); font-family: var(--font-sans); font-weight: 800; }
 
 /* ── 사용자 결과 복사 ── */
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #0D9488; color: #0F766E; }
+  .copyBtn:hover { border-color: var(--teal-600); color: var(--teal-700); }
 }
-.copied { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
+.copied { background: rgba(13,148,136,0.10); color: var(--teal-700); border-color: var(--teal-600); font-weight: 700; }
 
 /* 탭 패널 — wrap과 같은 세로 리듬 유지 */
 .tabPanel { display: flex; flex-direction: column; gap: 12px; }
@@ -665,13 +665,13 @@
 .cautionCard {
   background: rgba(161,98,7,0.10);
   border: 1px solid rgba(161,98,7,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.cautionCard strong { color: #92400E; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; } /* amber-800 — 틴트 위 6.21:1 */
+.cautionCard strong { color: #92400E; font-family: var(--font-sans); font-weight: 700; } /* amber-800 — 틴트 위 6.21:1 */
 .analysisTable .powerCaution { color: #92400E !important; background: rgba(161,98,7,0.10); }
 
 /* 이상적 전압원 주석 */
@@ -686,14 +686,14 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 6px 6px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 13px;
   color: var(--text);
   text-align: right;
   outline: none;
 }
-.resistorValueInput:focus { border-color: #0D9488; }
+.resistorValueInput:focus { border-color: var(--teal-600); }
 .resistorUnit { font-size: 12px; color: var(--muted); flex-shrink: 0; }
 
 /* 큰 값이 카드 밖으로 밀고 나가지 않게 */
@@ -702,9 +702,9 @@
 
 /* LED 전압강하 입력 */
 .ledDropRow { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); }
-.ledDropLabel { display: flex; align-items: baseline; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; }
+.ledDropLabel { display: flex; align-items: baseline; gap: 8px; font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 8px; font-family: var(--font-sans); }
 .ledDropHint { font-size: 10.5px; font-weight: 400; color: var(--muted); }
 .ledDropNote { font-size: 11.5px; color: var(--muted); line-height: 1.7; margin: 8px 0 0; }
-.ledDropNote strong { color: #0F766E; }
+.ledDropNote strong { color: var(--teal-700); }
 .ledDropWarn { font-size: 11.5px; color: var(--danger); line-height: 1.7; margin: 8px 0 0; font-weight: 600; }
 .resultSub { font-size: 10.5px; color: var(--muted); margin: 2px 0 0; line-height: 1.4; }

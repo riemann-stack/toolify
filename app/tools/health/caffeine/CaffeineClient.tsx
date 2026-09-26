@@ -703,7 +703,7 @@ export default function CaffeineClient() {
             {/* Y축 */}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
               <text key={t} x={PL - 6} y={PT + (1 - t) * plotH + 3}
-                fill="var(--muted)" fontSize="11" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                fill="var(--muted)" fontSize="11" textAnchor="end">
                 {Math.round(t * maxMg)}
               </text>
             ))}
@@ -713,7 +713,7 @@ export default function CaffeineClient() {
               const t = chartData.startMs + (chartData.endMs - chartData.startMs) * (i / 6)
               return (
                 <text key={i} x={xFromT(t)} y={H - PB + 16}
-                  fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                  fill="var(--muted)" fontSize="11" textAnchor="middle">
                   {fmtHM(t)}
                 </text>
               )
@@ -726,7 +726,7 @@ export default function CaffeineClient() {
                   strokeWidth="1" strokeDasharray="3 4" opacity="0.6" />
                 <text x={W - PR - 4} y={yFromMg(t) - 3}
                   fill={t === 30 ? '#059669' : t === 100 ? '#D97706' : '#DC2626'}
-                  fontSize="11" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{t}mg</text>
+                  fontSize="11" textAnchor="end">{t}mg</text>
               </g>
             ))}
             {/* 영역·곡선 */}
@@ -736,13 +736,13 @@ export default function CaffeineClient() {
             <line x1={nowX} x2={nowX} y1={PT} y2={H - PB}
               stroke="var(--muted)" strokeWidth="1.5" strokeDasharray="2 3" />
             <circle cx={nowX} cy={yFromMg(currentBodyMg)} r="4" fill="var(--accent)" stroke="var(--bg2)" strokeWidth="1.5" />
-            <text x={nowX} y={PT - 5} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>지금</text>
+            <text x={nowX} y={PT - 5} fill="var(--muted)" fontSize="11" textAnchor="middle">지금</text>
             {/* 취침 시각 */}
             {bedX !== null && (
               <>
                 <line x1={bedX} x2={bedX} y1={PT} y2={H - PB}
                   stroke="var(--cat-unit)" strokeWidth="1.5" strokeDasharray="4 3" opacity="0.7" />
-                <text x={bedX} y={PT - 5} fill="var(--cat-unit-ink)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>취침</text>
+                <text x={bedX} y={PT - 5} fill="var(--cat-unit-ink)" fontSize="11" textAnchor="middle">취침</text>
               </>
             )}
           </svg>

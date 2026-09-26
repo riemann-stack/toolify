@@ -875,7 +875,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
   const chordSet = new Set(chordPCs)
 
   return (
-    <svg viewBox={`0 0 ${width} ${height}`} width="100%" height="auto" style={{ display: 'block' }} aria-hidden="true">
+    <svg viewBox={`0 0 ${width} ${height}`} width="100%" style={{ display: 'block', height: 'auto' }} aria-hidden="true">
       {/* White keys */}
       {Array.from({ length: octaves }).map((_, oct) =>
         whitePCs.map((pc, i) => {
@@ -895,7 +895,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
               <text
                 x={x + whiteW / 2} y={whiteH - 8}
                 textAnchor="middle"
-                fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700"
+                fontSize="10" fontWeight="700"
                 fill={isHighlight ? '#ffffff' : '#666'}
               >
                 {whiteLabels[i]}
@@ -926,7 +926,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
                 <text
                   x={x + blackW / 2} y={blackH - 6}
                   textAnchor="middle"
-                  fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800"
+                  fontSize="9" fontWeight="800"
                   fill="#ffffff"
                 >
                   {blackLabels[j]}
@@ -938,7 +938,7 @@ function PianoKeyboard({ chordPCs, rootPC, notation }: { chordPCs: number[]; roo
       )}
 
       {/* 피치클래스 기준 표시 — 특정 옥타브 아님 */}
-      <text x={width / 2} y={height - 4} textAnchor="middle" fontSize="9" fill="#777" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>옥타브와 무관하게 구성음의 음이름 위치를 표시합니다</text>
+      <text x={width / 2} y={height - 4} textAnchor="middle" fontSize="9" fill="#777">옥타브와 무관하게 구성음의 음이름 위치를 표시합니다</text>
     </svg>
   )
 }

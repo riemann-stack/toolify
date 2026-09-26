@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,14 +23,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -70,7 +70,7 @@ export default function MicrowavePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         요리·식품
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />전자레인지 출력 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -103,7 +103,7 @@ export default function MicrowavePage() {
           전자레인지 출력(W)이 다르면 같은 음식이라도 가열 시간이 반비례로 달라집니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, lineHeight: 2 }}>
+          <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'var(--font-sans)', fontWeight: 700, lineHeight: 2 }}>
             새 시간 = 기준 시간 × (기준 W / 새 W)
           </p>
         </div>
@@ -144,7 +144,7 @@ export default function MicrowavePage() {
                   {row.map((cell, j) => (
                     <td key={j} style={{
                       padding: '9px 12px',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : (j === 1 ? 'Inter, "Noto Sans KR", system-ui, sans-serif' : 'Noto Sans KR, sans-serif'),
+                      fontFamily: j === 0 ? 'var(--font-sans)' : (j === 1 ? 'var(--font-sans)' : 'var(--font-sans)'),
                       color: j === 1 ? 'var(--accent)' : (j === 0 ? 'var(--text)' : 'var(--muted)'),
                       fontWeight: j === 0 || j === 1 ? 700 : 400,
                       fontSize: 13,
@@ -162,9 +162,9 @@ export default function MicrowavePage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '✅ 사용 가능', c: '#0D9488', items: ['도자기', '내열유리 (파이렉스)', 'PP 5번 플라스틱', '키친타올'] },
-            { t: '⚠️ 주의', c: '#D97706', items: ['전용 비닐 (한쪽 끝 자르기)', '멜라민 (저출력만)', '오래된 도자기 (테두리 X)'] },
-            { t: '❌ 절대 금지', c: '#DB2777', items: ['알루미늄 호일·캔', '금속 그릇·포크', '금색·은색 테두리', '일반 플라스틱', '계란 통째', '닫힌 캔·용기'] },
+            { t: '✅ 사용 가능', c: 'var(--teal-600)', items: ['도자기', '내열유리 (파이렉스)', 'PP 5번 플라스틱', '키친타올'] },
+            { t: '⚠️ 주의', c: 'var(--amber-600)', items: ['전용 비닐 (한쪽 끝 자르기)', '멜라민 (저출력만)', '오래된 도자기 (테두리 X)'] },
+            { t: '❌ 절대 금지', c: 'var(--pink-600)', items: ['알루미늄 호일·캔', '금속 그릇·포크', '금색·은색 테두리', '일반 플라스틱', '계란 통째', '닫힌 캔·용기'] },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 6px' }}>{g.t}</p>
@@ -175,7 +175,7 @@ export default function MicrowavePage() {
           ))}
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          ⚠️ <strong style={{ color: '#DB2777' }}>가장 흔한 사고</strong>: 금색·은색 테두리 그릇(중고·빈티지 식기) → 스파크 발생.
+          ⚠️ <strong style={{ color: 'var(--pink-600)' }}>가장 흔한 사고</strong>: 금색·은색 테두리 그릇(중고·빈티지 식기) → 스파크 발생.
           <strong> 빈 가열</strong>은 마그네트론(본체) 손상 — 절대 X.
         </p>
       </div>
@@ -326,21 +326,21 @@ export default function MicrowavePage() {
       {/* cooking 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/cooking/thawing" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/cooking/thawing" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🧊</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해동 시간 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             식품·두께·전자레인지 W별 4가지 해동법
           </p>
         </Link>
-        <Link href="/tools/cooking/frying" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/cooking/frying" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🍳</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>튀김 시간 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             기름 온도·에어프라이어 변환
           </p>
         </Link>
-        <Link href="/tools/cooking/ramen" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/cooking/ramen" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🍜</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>라면 물양 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

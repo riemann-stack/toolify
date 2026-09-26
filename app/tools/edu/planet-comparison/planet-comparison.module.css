@@ -1,10 +1,10 @@
 /* 교육 카테고리 강조색.
-   ⚠️ --cat-edu(#0D9488, teal-600)는 흰 배경 대비 3.74:1로 **일반 텍스트 AA(4.5:1) 미달**이다.
+   ⚠️ --cat-edu(var(--teal-600), teal-600)는 흰 배경 대비 3.74:1로 **일반 텍스트 AA(4.5:1) 미달**이다.
       큰 글씨·테두리·점에는 그대로 쓰되, 작은 글씨에는 700레벨 ink를 쓴다
       (프로젝트의 --accent-ink / --coral-ink 와 같은 패턴, 흰 위 5.47:1). */
 :root {
   --edu: var(--cat-edu);
-  --edu-ink: #0F766E;   /* teal-700 */
+  --edu-ink: var(--teal-700);   /* teal-700 */
 }
 /* @hover-wrapped */
 .wrap { display: flex; flex-direction: column; gap: 12px; }
@@ -17,7 +17,7 @@
     radial-gradient(ellipse at 80% 70%, rgba(155,89,182,0.10), transparent 55%),
     var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 22px 22px;
   overflow: hidden;
 }
@@ -44,7 +44,7 @@
 .disclaimer {
   background: rgba(13,148,136,0.14);
   border: 1px solid rgba(13,148,136,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
@@ -56,7 +56,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -85,7 +85,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 입력 ── */
@@ -95,7 +95,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -118,7 +118,7 @@
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   outline: none;
@@ -142,7 +142,7 @@
 }
 .sliderValue {
   min-width: 80px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
   color: var(--edu-ink);
@@ -164,7 +164,7 @@
   min-height: 44px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -188,7 +188,7 @@
   min-height: 44px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   display: flex;
@@ -214,7 +214,7 @@
 /* ── 크기 비교 시각화 (Hero) ── */
 .sizeCompareWrap {
   background: rgba(0,0,0,0.20);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 12px;
   overflow-x: auto;
 }
@@ -226,7 +226,7 @@
 }
 
 .sizeCompareTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   color: var(--edu-ink);
@@ -234,12 +234,12 @@
   text-align: center;
 }
 .sizeCompareLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 700;
   fill: var(--muted);
 }
-.sizeCompareLabelEarth { fill: #0891B2; }
+.sizeCompareLabelEarth { fill: var(--cyan-600); }
 
 /* ── 행성 카드 그리드 ── */
 .planetGrid {
@@ -253,7 +253,7 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-top-width: 3px;
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 18px 16px;
   display: flex;
   flex-direction: column;
@@ -268,13 +268,13 @@
 }
 .planetCardEmoji { font-size: 28px; }
 .planetCardName {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
   color: var(--text);
 }
 .planetCardNameEn {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   font-size: 12px;
   color: var(--muted);
@@ -299,11 +299,11 @@
 .planetStatItem {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .planetStatItem strong {
   display: block;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
   color: var(--text);
@@ -330,15 +330,15 @@
   line-height: 1.7;
   margin-top: 4px;
 }
-.funFact strong { color: var(--edu-ink); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.funFact strong { color: var(--edu-ink); font-family: var(--font-sans); font-weight: 700; }
 
 /* 행성별 border-top 색상 */
 .borderMercury { border-top-color: #A8A29E; }
 .borderVenus   { border-top-color: #FFC857; }
-.borderEarth   { border-top-color: #0891B2; }
-.borderMars    { border-top-color: #DC2626; }
-.borderJupiter { border-top-color: #EA580C; }
-.borderSaturn  { border-top-color: #A16207; }
+.borderEarth   { border-top-color: var(--cyan-600); }
+.borderMars    { border-top-color: var(--red-600); }
+.borderJupiter { border-top-color: var(--orange-600); }
+.borderSaturn  { border-top-color: var(--yellow-700); }
 .borderUranus  { border-top-color: var(--edu); }
 .borderNeptune { border-top-color: #3E5BFF; }
 
@@ -364,18 +364,18 @@
 .compareTable td:first-child {
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .compareTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
 }
 .compareTable .earthRow td {
-  background: rgba(8,145,178,0.14);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
 }
-.compareTable .earthRow td:first-child { color: #0891B2; }
+.compareTable .earthRow td:first-child { color: var(--cyan-600); }
 
 .planetDot {
   display: inline-block;
@@ -404,17 +404,17 @@
 .gravitySim {
   background: rgba(0,0,0,0.25);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 16px 12px;
 }
 .gravityRunBtn {
   background: color-mix(in srgb, var(--edu) 18%, transparent);
   border: 1px solid var(--edu);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 16px;
   font-size: 13px;
   color: var(--edu-ink);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -455,7 +455,7 @@
   bottom: -22px;
   left: 50%;
   transform: translateX(-50%);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 10px;
   color: var(--muted);
@@ -482,7 +482,7 @@
 }
 .dayBarLabel {
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .dayBarTrack {
@@ -499,7 +499,7 @@
   transition: width 0.3s ease;
 }
 .dayBarValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   text-align: right;
@@ -515,7 +515,7 @@
   padding: 1px 5px;
   border-radius: 4px;
   margin-left: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 공유 카드 ── */
@@ -544,7 +544,7 @@
 }
 .shareCard > * { position: relative; }
 .shareTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 20px;
   color: var(--edu-ink);
@@ -557,9 +557,9 @@
   font-size: 13px;
   color: rgba(255,255,255,0.85);
   margin-bottom: 18px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.shareSubtitle strong { color: var(--edu-ink); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.shareSubtitle strong { color: var(--edu-ink); font-family: var(--font-sans); font-weight: 800; }
 
 .shareList {
   display: flex;
@@ -574,11 +574,11 @@
   font-size: 13px;
   color: rgba(255,255,255,0.85);
   padding: 4px 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .shareListItem strong {
   color: #fff;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 
@@ -590,15 +590,15 @@
   text-align: center;
   font-size: 13px;
   color: rgba(255,255,255,0.85);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.shareRecommend strong { color: var(--edu-ink); font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 15px; }
+.shareRecommend strong { color: var(--edu-ink); font-family: var(--font-sans); font-weight: 800; font-size: 15px; }
 
 .shareWatermark {
   position: absolute;
   bottom: 10px;
   right: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 11px;
   color: rgba(13,148,136,0.6);
@@ -609,35 +609,35 @@
 .warningCard {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.warningCard strong { color: var(--danger); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.warningCard strong { color: var(--danger); font-family: var(--font-sans); font-weight: 700; }
 .warningCard ul { padding-left: 18px; margin: 6px 0 0; color: var(--muted); }
 
 .sourceCard {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.25);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 12px;
   color: var(--muted);
   line-height: 1.75;
 }
-.sourceCard strong { color: var(--accent-ink); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.sourceCard strong { color: var(--accent-ink); font-family: var(--font-sans); font-weight: 700; }
 
 /* ── 결과 복사 ── */
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;

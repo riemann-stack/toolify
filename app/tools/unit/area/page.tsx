@@ -69,7 +69,7 @@ export default function AreaPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />평수 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -83,11 +83,11 @@ export default function AreaPage() {
 
         {/* 평수 공식 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평수 계산 공식</h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(176,62,255,0.20)', borderRadius: 14, padding: '20px 22px', textAlign: 'center', marginBottom: 12 }}>
-            <p style={{ fontSize: 12, color: '#9333EA', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 12 }}>평수 환산 공식</p>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>
-              1 평 = 400/121 ㎡ ≈ <strong style={{ color: '#9333EA' }}>3.305785 ㎡</strong>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>평수 계산 공식</h2>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(176,62,255,0.20)', borderRadius: 'var(--radius-card)', padding: '20px 22px', textAlign: 'center', marginBottom: 12 }}>
+            <p style={{ fontSize: 12, color: 'var(--purple-600)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: 12 }}>평수 환산 공식</p>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: 'var(--text)', marginBottom: 8 }}>
+              1 평 = 400/121 ㎡ ≈ <strong style={{ color: 'var(--purple-600)' }}>3.305785 ㎡</strong>
             </p>
             <p style={{ fontSize: 13, color: 'var(--muted)' }}>
               평 → ㎡: 평수 × 3.3058 / ㎡ → 평: 면적 ÷ 3.3058
@@ -101,7 +101,7 @@ export default function AreaPage() {
 
         {/* 국민평형 조견표 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>국민평형 조견표 — 전용면적 ↔ 분양 평형</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>국민평형 조견표 — 전용면적 ↔ 분양 평형</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
             아파트 분양 평형은 <strong style={{ color: 'var(--text)' }}>공급면적(전용 + 주거공용)</strong> 기준입니다.
             전용 84㎡는 환산하면 25.4평이지만 계단·복도·엘리베이터 같은 주거공용면적(약 26㎡)을 더한 공급면적이 약 110㎡가 되어
@@ -120,7 +120,7 @@ export default function AreaPage() {
               <tbody>
                 <tr><td style={cell}><strong>59㎡</strong></td><td style={cell}>약 17.8평</td><td style={cell}>24~25평형</td><td style={cell}>2~3인 가구 표준 — &lsquo;새 국민평형&rsquo;으로 불릴 만큼 선호 상승</td></tr>
                 <tr><td style={cell}><strong>74㎡</strong></td><td style={cell}>약 22.4평</td><td style={cell}>29~30평형</td><td style={cell}>59와 84 사이 틈새 평면</td></tr>
-                <tr><td style={{ ...cell, color: '#9333EA', fontWeight: 700 }}><strong>84㎡</strong></td><td style={cell}>약 25.4평</td><td style={cell}>33~34평형</td><td style={cell}>&lsquo;국민평형&rsquo; — 국민주택 규모(전용 85㎡ 이하)를 꽉 채우는 평면</td></tr>
+                <tr><td style={{ ...cell, color: 'var(--purple-600)', fontWeight: 700 }}><strong>84㎡</strong></td><td style={cell}>약 25.4평</td><td style={cell}>33~34평형</td><td style={cell}>&lsquo;국민평형&rsquo; — 국민주택 규모(전용 85㎡ 이하)를 꽉 채우는 평면</td></tr>
                 <tr><td style={cell}><strong>102㎡</strong></td><td style={cell}>약 30.9평</td><td style={cell}>40평형</td><td style={cell}>전용 85㎡ 초과 중대형 — 청약·세제 기준이 달라짐</td></tr>
                 <tr><td style={cell}><strong>114㎡</strong></td><td style={cell}>약 34.5평</td><td style={cell}>43~46평형</td><td style={cell}>대형 — 단지 전용률에 따라 표기 편차가 가장 큼</td></tr>
               </tbody>
@@ -139,17 +139,17 @@ export default function AreaPage() {
 
         {/* 전용률 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>전용률 — 같은 &lsquo;25평형&rsquo;인데 실평수가 다른 이유</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>전용률 — 같은 &lsquo;25평형&rsquo;인데 실평수가 다른 이유</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
             전용률은 분양면적에서 전용면적이 차지하는 비율입니다. <strong style={{ color: 'var(--text)' }}>아파트는 평균 80% 안팎이지만 오피스텔은 50% 수준</strong>까지 내려갑니다.
             오피스텔은 분양면적을 공급면적이 아닌 <strong style={{ color: 'var(--text)' }}>계약면적(기타공용 포함)</strong> 기준으로 표기하는 관행이라 분모가 크고,
             2014년 12월까지는 벽 두께가 들어가는 중심선치수로 전용면적을 쟀기 때문입니다(아파트는 1998년부터 벽 안쪽만 재는 안목치수 적용).
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginBottom: 14 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: 14 }}>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
               📌 <strong style={{ color: 'var(--text)' }}>같은 &lsquo;25평형&rsquo;(분양면적 약 82.6㎡) 매물 비교</strong><br />
-              · 아파트 (전용률 80%): 전용 약 <strong style={{ color: '#9333EA' }}>66㎡</strong><br />
-              · 오피스텔 (전용률 50%): 전용 약 <strong style={{ color: '#9333EA' }}>41㎡</strong><br />
+              · 아파트 (전용률 80%): 전용 약 <strong style={{ color: 'var(--purple-600)' }}>66㎡</strong><br />
+              · 오피스텔 (전용률 50%): 전용 약 <strong style={{ color: 'var(--purple-600)' }}>41㎡</strong><br />
               평형 표기가 같아도 실면적이 1.6배 차이 날 수 있습니다 — 비교는 반드시 전용면적(㎡) 기준으로.
             </p>
           </div>
@@ -161,7 +161,7 @@ export default function AreaPage() {
 
         {/* 서비스면적 — 84A vs 84B */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>같은 전용 84㎡인데 84A가 더 넓은 이유 — 서비스면적</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>같은 전용 84㎡인데 84A가 더 넓은 이유 — 서비스면적</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 14 }}>
             분양 공고의 84A·84B·84C는 전용면적이 똑같이 84㎡인 서로 다른 평면 타입입니다.
             그런데 <strong style={{ color: 'var(--text)' }}>발코니는 전용·공급 어느 면적에도 들어가지 않는 서비스면적</strong>입니다 —
@@ -184,7 +184,7 @@ export default function AreaPage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: '10px' }}>
             {[
               { href: '/tools/unit/converter',     icon: '📐', name: '단위 변환기',     desc: '14개 분야 + 한국 전통 단위' },
@@ -195,7 +195,7 @@ export default function AreaPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div style={{ minWidth: 0 }}>

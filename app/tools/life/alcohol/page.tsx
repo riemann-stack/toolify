@@ -96,7 +96,7 @@ export default function AlcoholPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />알코올 도수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -110,7 +110,7 @@ export default function AlcoholPage() {
 
         {/* ── 1. 한국 잔 단위 가이드 (NEW·SEO 핵심) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             한국 표준 잔·병 단위 (ml 기준)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -127,27 +127,27 @@ export default function AlcoholPage() {
               </thead>
               <tbody>
                 {[
-                  ['🍶 소주잔',         '50ml',    '15.7%', '6.2g',   '#0EA5E9'],
-                  ['🍺 맥주잔 (작은)',  '300ml',   '4.5%',  '10.7g',  '#059669'],
-                  ['🍺 맥주잔 (큰)',    '500ml',   '4.5%',  '17.8g',  '#059669'],
-                  ['🥃 양주 샷',        '30ml',    '40%',   '9.5g',   '#EA580C'],
-                  ['🥃 양주 1.5온스',   '45ml',    '40%',   '14.2g',  '#EA580C'],
+                  ['🍶 소주잔',         '50ml',    '15.7%', '6.2g',   'var(--sky-500)'],
+                  ['🍺 맥주잔 (작은)',  '300ml',   '4.5%',  '10.7g',  'var(--emerald-600)'],
+                  ['🍺 맥주잔 (큰)',    '500ml',   '4.5%',  '17.8g',  'var(--emerald-600)'],
+                  ['🥃 양주 샷',        '30ml',    '40%',   '9.5g',   'var(--orange-600)'],
+                  ['🥃 양주 1.5온스',   '45ml',    '40%',   '14.2g',  'var(--orange-600)'],
                   ['🍷 와인잔',         '150ml',   '13%',   '15.4g',  '#C83EFF'],
-                  ['🥣 막걸리 사발',    '200ml',   '6%',    '9.5g',   '#EA580C'],
-                  ['🍶 사케 잔',        '60ml',    '15%',   '7.1g',   '#DB2777'],
-                  ['🥤 종이컵',         '180ml',   '—',     '—',      '#0891B2'],
-                  ['🍹 하이볼잔',       '300ml',   `~${HIGHBALL_ABV}%`, `${calcAlcohol(300, HIGHBALL_ABV).alcoholG}g`, '#0891B2'],
-                  ['🍶 소주 1병',       '360ml',   '15.7%', '44.6g',  '#0EA5E9'],
-                  ['🥫 맥주 1캔',       '500ml',   '4.5%',  '17.8g',  '#059669'],
-                  ['🍶 막걸리 1병',     '750ml',   '6%',    '35.5g',  '#EA580C'],
+                  ['🥣 막걸리 사발',    '200ml',   '6%',    '9.5g',   'var(--orange-600)'],
+                  ['🍶 사케 잔',        '60ml',    '15%',   '7.1g',   'var(--pink-600)'],
+                  ['🥤 종이컵',         '180ml',   '—',     '—',      'var(--cyan-600)'],
+                  ['🍹 하이볼잔',       '300ml',   `~${HIGHBALL_ABV}%`, `${calcAlcohol(300, HIGHBALL_ABV).alcoholG}g`, 'var(--cyan-600)'],
+                  ['🍶 소주 1병',       '360ml',   '15.7%', '44.6g',  'var(--sky-500)'],
+                  ['🥫 맥주 1캔',       '500ml',   '4.5%',  '17.8g',  'var(--emerald-600)'],
+                  ['🍶 막걸리 1병',     '750ml',   '6%',    '35.5g',  'var(--orange-600)'],
                   ['🍷 와인 1병',       '750ml',   '13%',   '77.0g',  '#C83EFF'],
-                  ['🥃 위스키 1병',     '700ml',   '40%',   '221.0g', '#EA580C'],
+                  ['🥃 위스키 1병',     '700ml',   '40%',   '221.0g', 'var(--orange-600)'],
                 ].map(([name, vol, abv, alc, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 600 }}>{name}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{vol}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{vol}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{abv}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{alc}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{alc}</td>
                   </tr>
                 ))}
               </tbody>
@@ -160,7 +160,7 @@ export default function AlcoholPage() {
 
         {/* ── 2. 인기 칵테일·하이볼 도수 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             인기 한국 칵테일·하이볼 도수
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -187,7 +187,7 @@ export default function AlcoholPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.n}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.abv}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.abv}</td>
                   </tr>
                 ))}
               </tbody>
@@ -200,7 +200,7 @@ export default function AlcoholPage() {
 
         {/* ── 3. 같은 알코올량 환산 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             같은 알코올량 환산 (본 도구 표시 기준 1잔 = 8g)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -226,7 +226,7 @@ export default function AlcoholPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[2]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontSize: 12 }}>{r[3]}</td>
                   </tr>
                 ))}
@@ -237,7 +237,7 @@ export default function AlcoholPage() {
 
         {/* ── 4. 술자리 1인당 알코올 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             술자리 1인당 알코올 가이드 (예시)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -267,7 +267,7 @@ export default function AlcoholPage() {
                 color: SCN_C.male.color,
               },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${s.color} 15%, transparent)`, borderRadius: '12px', padding: '16px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${s.color} 15%, transparent)`, borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: s.color, marginBottom: '6px' }}>{s.title}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '6px' }}>{s.detail}</p>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '4px' }}>→ {s.perPerson}</p>
@@ -279,7 +279,7 @@ export default function AlcoholPage() {
 
         {/* ── 5. 본인 기준 도수 변환 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             소주 도수가 제품마다 다른 이유
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '20px' }}>
@@ -298,8 +298,8 @@ export default function AlcoholPage() {
                 {SOJU_BRANDS.map((b) => [b.brand, `${b.abv}%`, `${sojuBottleAlcoholG(b.abv)}g`]).map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -312,13 +312,13 @@ export default function AlcoholPage() {
 
         {/* ── 6. 표준 음주량 안내 (기존 유지·확장) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             📊 음주 참고 기준 & 표준잔 정의 (출처·기준일)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            &lsquo;표준잔(순수 알코올)&rsquo;의 정의는 기관마다 다릅니다 — <strong style={{ color: 'var(--text)' }}>보건복지부 절주 지침 약 7g</strong>, <strong style={{ color: 'var(--text)' }}>WHO 10g</strong>, 미국 NIAAA 14g. 본 도구는 표시 편의상 8g을 &lsquo;1잔&rsquo;으로 환산하며, 정확한 값은 순수 알코올 g으로 제공합니다. 아래는 <strong>참고용</strong> 권고이며, <strong style={{ color: '#EA580C' }}>WHO(2023)는 &ldquo;건강을 해치지 않는 안전한 음주량은 없다&rdquo;</strong>고 밝혔습니다.
+            &lsquo;표준잔(순수 알코올)&rsquo;의 정의는 기관마다 다릅니다 — <strong style={{ color: 'var(--text)' }}>보건복지부 절주 지침 약 7g</strong>, <strong style={{ color: 'var(--text)' }}>WHO 10g</strong>, 미국 NIAAA 14g. 본 도구는 표시 편의상 8g을 &lsquo;1잔&rsquo;으로 환산하며, 정확한 값은 순수 알코올 g으로 제공합니다. 아래는 <strong>참고용</strong> 권고이며, <strong style={{ color: 'var(--orange-600)' }}>WHO(2023)는 &ldquo;건강을 해치지 않는 안전한 음주량은 없다&rdquo;</strong>고 밝혔습니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.15)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 15%, transparent)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>음주 참고 기준 (기준일 2026-07)</p>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
               {[
@@ -327,7 +327,7 @@ export default function AlcoholPage() {
               ].map((item, i) => (
                 <div key={i} style={{ textAlign: 'center' }}>
                   <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{item.label}</p>
-                  <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)' }}>{item.value}</p>
+                  <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', fontWeight: 700, color: 'var(--text)' }}>{item.value}</p>
                   <p style={{ fontSize: '12px', color: 'var(--muted)' }}>{item.sub}</p>
                 </div>
               ))}
@@ -344,8 +344,8 @@ export default function AlcoholPage() {
         </section>
 
         {/* ── 8. 책임 있는 음주 (강화) ── */}
-        <section style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
-          <p style={{ fontSize: '14px', fontWeight: 700, color: '#DC2626', marginBottom: '12px' }}>⚠️ 책임 있는 음주 안내</p>
+        <section style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
+          <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--red-600)', marginBottom: '12px' }}>⚠️ 책임 있는 음주 안내</p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 계산기는 <strong style={{ color: 'var(--text)' }}>음주를 권장하지 않으며</strong>, 본인 음주량 인지·관리 보조 도구입니다. 계산 결과는 체내 알코올 분해 속도나 취기 정도를 보장하지 않습니다.
           </p>
@@ -366,7 +366,7 @@ export default function AlcoholPage() {
               ].map((c, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', fontSize: 13 }}>
                   <span style={{ color: 'var(--muted)' }}>{c.label}</span>
-                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: '#EA580C' }}>{c.tel}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--orange-600)' }}>{c.tel}</span>
                 </div>
               ))}
             </div>
@@ -379,7 +379,7 @@ export default function AlcoholPage() {
 
         {/* ── 9. 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/blood-alcohol', icon: '🍺', name: '혈중알코올 계산기', desc: 'BAC 참고 추정 (운전 판단 불가)' },
@@ -390,7 +390,7 @@ export default function AlcoholPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

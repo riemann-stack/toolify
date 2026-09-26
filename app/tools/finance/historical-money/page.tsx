@@ -22,7 +22,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -67,7 +67,7 @@ export default function HistoricalMoneyPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />한국 화폐가치 환산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -103,9 +103,9 @@ export default function HistoricalMoneyPage() {
                   ['1962.06~현재', '원 (Won)', '기준 단위', '2차 화폐개혁(10환=1원). 박정희 정부, 음성 자금 흡수가 목적.'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{row[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -122,12 +122,12 @@ export default function HistoricalMoneyPage() {
               {
                 t: '1953년 1차 화폐개혁',
                 d: '한국전쟁 중 인플레이션과 위조지폐가 통제 불능 수준이 되자 1953년 2월 15일 단행. <strong>100圓 = 1환</strong>으로 단위 절하하면서 동시에 일정 한도까지만 환전을 허용해 사실상 강제 저축 효과를 노렸습니다. 다만 전쟁 중이라 통화 안정 효과는 제한적.',
-                c: '#D97706',
+                c: 'var(--amber-600)',
               },
               {
                 t: '1962년 2차 화폐개혁',
                 d: '5·16 직후 박정희 정부가 1962년 6월 10일 단행. <strong>10환 = 1원</strong>으로 다시 절하. 명목 목표는 음성 자금 흡수와 산업자금 동원이었지만 실제 동원 효과는 적었고 결과적으로 단위 절하 효과만 정착. 이후 60년 넘게 같은 단위 유지.',
-                c: '#059669',
+                c: 'var(--emerald-600)',
               },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${r.c}`, borderRadius: 10, padding: '14px 18px' }}>
@@ -159,7 +159,7 @@ export default function HistoricalMoneyPage() {
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -184,7 +184,7 @@ export default function HistoricalMoneyPage() {
               { href: '/tools/finance/real-estate',  icon: '🏘️', name: '부동산 수익률',          desc: '매매 vs 임대 ROI' },
               { href: '/tools/finance/gold-converter', icon: '🥇', name: '금시세·돈 환산',       desc: '한돈·g·돈 단위 변환' },
             ].map((tool, i) => (
-              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
+              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
                   <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>

@@ -496,7 +496,7 @@ export default function FlooringClient() {
                   ))}
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1박스 {effectiveUnitArea}㎡</strong>
+                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>1박스 {effectiveUnitArea}㎡</strong>
                   {brandId && ` (${BRANDS.find(b => b.id === brandId)?.label})`}
                 </p>
               </>
@@ -523,13 +523,13 @@ export default function FlooringClient() {
                     </g></svg>
                   )
                   if (m.id === 'herringbone') return (
-                    <svg width="40" height="32" viewBox="0 0 40 32" aria-hidden="true"><g stroke={methodId === m.id ? '#EA580C' : 'var(--muted)'} strokeWidth="1.5" fill="none">
+                    <svg width="40" height="32" viewBox="0 0 40 32" aria-hidden="true"><g stroke={methodId === m.id ? 'var(--orange-600)' : 'var(--muted)'} strokeWidth="1.5" fill="none">
                       <polyline points="6,4 14,12 6,20" /><polyline points="14,12 22,4 30,12 22,20 30,28" />
                       <polyline points="22,20 30,28 22,32" />
                     </g></svg>
                   )
                   return (
-                    <svg width="40" height="32" viewBox="0 0 40 32" aria-hidden="true"><g stroke={methodId === m.id ? '#DC2626' : 'var(--muted)'} strokeWidth="1.5" fill="none">
+                    <svg width="40" height="32" viewBox="0 0 40 32" aria-hidden="true"><g stroke={methodId === m.id ? 'var(--red-600)' : 'var(--muted)'} strokeWidth="1.5" fill="none">
                       <polyline points="6,4 14,16 6,28" /><polyline points="22,4 30,16 22,28" />
                       <polyline points="14,16 22,16" />
                     </g></svg>
@@ -626,7 +626,7 @@ export default function FlooringClient() {
                     let x = stagger
                     while (x < drawW) {
                       const bw = Math.min(drawW * 0.3, drawW - x)
-                      patterns.push(<rect key={`p-${y}-${x}`} x={x0 + x} y={y0 + y} width={bw} height={Math.min(boxH, drawH - y)} fill="rgba(234,88,12,0.10)" stroke="#EA580C" strokeWidth={0.5} opacity={0.7} />)
+                      patterns.push(<rect key={`p-${y}-${x}`} x={x0 + x} y={y0 + y} width={bw} height={Math.min(boxH, drawH - y)} fill="rgba(234,88,12,0.10)" stroke="var(--orange-600)" strokeWidth={0.5} opacity={0.7} />)
                       x += bw
                     }
                   }
@@ -643,7 +643,7 @@ export default function FlooringClient() {
                       const px = x0 + c * sz
                       const py = y0 + r * sz
                       const dirL = (r + c) % 2 === 0
-                      patterns.push(<line key={`h-${r}-${c}`} x1={px} y1={py + (dirL ? sz : 0)} x2={px + sz} y2={py + (dirL ? 0 : sz)} stroke="#EA580C" strokeWidth={1} opacity={0.6} />)
+                      patterns.push(<line key={`h-${r}-${c}`} x1={px} y1={py + (dirL ? sz : 0)} x2={px + sz} y2={py + (dirL ? 0 : sz)} stroke="var(--orange-600)" strokeWidth={1} opacity={0.6} />)
                     }
                   }
                 } else {
@@ -655,8 +655,8 @@ export default function FlooringClient() {
                       const py = y0 + r * sz
                       patterns.push(
                         <g key={`c-${r}-${c}`}>
-                          <line x1={px} y1={py + sz} x2={px + sz / 2} y2={py} stroke="#DC2626" strokeWidth={1} opacity={0.6} />
-                          <line x1={px + sz / 2} y1={py} x2={px + sz} y2={py + sz} stroke="#DC2626" strokeWidth={1} opacity={0.6} />
+                          <line x1={px} y1={py + sz} x2={px + sz / 2} y2={py} stroke="var(--red-600)" strokeWidth={1} opacity={0.6} />
+                          <line x1={px + sz / 2} y1={py} x2={px + sz} y2={py + sz} stroke="var(--red-600)" strokeWidth={1} opacity={0.6} />
                         </g>
                       )
                     }

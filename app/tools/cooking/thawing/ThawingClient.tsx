@@ -473,18 +473,18 @@ function ThawTab() {
                 <label className={s.fieldLabel} htmlFor="thawing-cook-h">조리 예정 시각</label>
                 <div className={s.btnGroup}>
                   <select id="thawing-cook-h" aria-label="조리 예정 시" value={cookH} onChange={e => setCookH(+e.target.value)}
-                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Inter', system-ui, sans-serif", color: 'var(--text)', outline: 'none' }}>
+                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: 'var(--font-sans)', color: 'var(--text)', outline: 'none' }}>
                     {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{i < 10 ? '0' + i : i}시</option>)}
                   </select>
                   <select aria-label="조리 예정 분" value={cookM} onChange={e => setCookM(+e.target.value)}
-                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Inter', system-ui, sans-serif", color: 'var(--text)', outline: 'none' }}>
+                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: 'var(--font-sans)', color: 'var(--text)', outline: 'none' }}>
                     {[0, 10, 20, 30, 40, 50].map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
                   </select>
                 </div>
               </div>
               <div>
                 <span className={s.fieldLabel}>선택한 해동 방법</span>
-                <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+                <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>
                   {selected.icon} {selected.name}
                 </div>
               </div>
@@ -735,10 +735,10 @@ function ThermometerBox() {
           <g key={i}>
             <rect x={seg.x} y={22} width={seg.w} height={34} fill={seg.color} opacity="0.85"
                   rx={i === 0 ? 6 : 0} ry={i === 0 ? 6 : 0} />
-            <text x={seg.x + seg.w / 2} y={16} fill="var(--text)" fontSize="15" fontFamily="Noto Sans KR" textAnchor="middle" fontWeight="700">
+            <text x={seg.x + seg.w / 2} y={16} fill="var(--text)" fontSize="15" textAnchor="middle" fontWeight="700">
               {seg.label}
             </text>
-            <text x={seg.x + seg.w / 2} y={74} fill="var(--muted)" fontSize="14" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="middle" fontWeight="600">
+            <text x={seg.x + seg.w / 2} y={74} fill="var(--muted)" fontSize="14" textAnchor="middle" fontWeight="600">
               {seg.range}
             </text>
           </g>
@@ -771,7 +771,7 @@ function GuideTab() {
             <ul className={s.foodGuideTipList}>
               {food.tips.map((tip, i) => <li key={i}>{tip}</li>)}
             </ul>
-            <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>
               ⏰ 해동 후 조리 권장: <strong style={{ color: 'var(--text)' }}>{food.cookingHours}시간 내</strong>
             </div>
           </div>

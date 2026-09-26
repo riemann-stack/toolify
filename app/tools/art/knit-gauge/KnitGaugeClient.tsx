@@ -1211,7 +1211,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm, ready }: { stsPer10cm: number; rows
   const rowsSkip = rowsCount > 30 ? 2 : 1
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ maxWidth: 360, display: 'block', margin: '0 auto', background: 'var(--bg3)', borderRadius: 8 }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ maxWidth: 360, display: 'block', margin: '0 auto', background: 'var(--bg3)', borderRadius: 'var(--radius-s)' }}>
       {/* 외곽 사각형 (10×10cm) */}
       <rect
         x={padding} y={padding}
@@ -1258,19 +1258,19 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm, ready }: { stsPer10cm: number; rows
       })}
 
       {/* 라벨 */}
-      <text x={padding + gridSize / 2} y={padding - 10} textAnchor="middle" fill="var(--muted)" fontSize={11} fontFamily="Noto Sans KR, sans-serif">
+      <text x={padding + gridSize / 2} y={padding - 10} textAnchor="middle" fill="var(--muted)" fontSize={11}>
         ← 10cm{ready ? ` (${stsCount}코)` : ''} →
       </text>
       <text
         x={padding - 14} y={padding + gridSize / 2}
-        textAnchor="middle" fill="var(--muted)" fontSize={11} fontFamily="Noto Sans KR, sans-serif"
+        textAnchor="middle" fill="var(--muted)" fontSize={11}
         transform={`rotate(-90 ${padding - 14} ${padding + gridSize / 2})`}
       >
         ← 10cm{ready ? ` (${rowsCount}단)` : ''} →
       </text>
 
       {/* 중앙 표시 — Yarn 이름 */}
-      <text x={W / 2} y={H - 8} textAnchor="middle" fill="var(--cat-art)" fontSize={12} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+      <text x={W / 2} y={H - 8} textAnchor="middle" fill="var(--cat-art)" fontSize={12} fontWeight={700}>
         {ready
           ? `${getYarn(estimateYarnWeight(stsPer10cm).id).shortLabel} · ${fmt(stsPer10cm, 0)} sts × ${fmt(rowsPer10cm, 0)} rows / 10cm`
           : '코·단 수를 입력하세요'}

@@ -5,7 +5,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   width: 100%;
   box-sizing: border-box;
@@ -27,13 +27,13 @@
 .numInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   color: var(--text);
   outline: none;
   width: 100%;
   box-sizing: border-box;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -47,7 +47,7 @@
 .unit {
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 
@@ -66,11 +66,11 @@
 .toggleBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }@media (hover: hover) {
@@ -87,17 +87,17 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 11px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: left;
 }
 .compareToggleActive { background: var(--accent-dim); border-color: var(--accent); }
 .compareToggleState {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 12px;
   color: var(--muted);
@@ -106,7 +106,7 @@
 
 /* ── 히어로 ── */
 .hero {
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 28px 22px;
   text-align: center;
   border-width: 1px;
@@ -121,7 +121,7 @@
   margin-bottom: 8px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(44px, 11vw, 72px);
   letter-spacing: -3px;
@@ -130,7 +130,7 @@
   color: var(--accent-ink);
 }
 .heroNumUnit { font-size: 0.36em; color: var(--text); margin-left: 6px; letter-spacing: 0; }
-.heroSub { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.7; font-family: var(--font-sans); }
 .heroDisclaimer {
   font-size: 11px;
   color: var(--muted);
@@ -141,7 +141,7 @@
 
 /* ── 예측 범위 게이지 ── */
 .bandLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   font-size: 17px;
@@ -153,7 +153,7 @@
   font-size: 12px;
   color: var(--muted);
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 14px;
 }
 .bandGauge {
@@ -193,7 +193,7 @@
   display: flex;
   justify-content: space-between;
   margin: 6px 4px 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 11px;
   color: var(--muted);
@@ -223,7 +223,7 @@
   font-weight: 700;
 }
 .detailItem div {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   color: var(--text);
@@ -240,19 +240,19 @@
 .compareCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 14px;
   text-align: center;
 }
 .compareCardSex {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-bottom: 6px;
 }
 .compareCardNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   font-size: clamp(28px, 8vw, 40px);
@@ -265,7 +265,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-top: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
 }
 
@@ -278,7 +278,7 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.8;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .infoBox strong { color: var(--accent-ink); }
 .infoBoxLabel {
@@ -294,7 +294,7 @@
   font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .refNote strong { color: var(--text); }
 
@@ -302,11 +302,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -319,12 +319,12 @@
 .tipBox {
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.8;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .tipBoxTitle { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 8px; }
 .tipBoxList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; color: var(--muted); }
@@ -339,7 +339,7 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }

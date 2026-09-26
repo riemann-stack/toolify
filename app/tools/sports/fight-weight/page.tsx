@@ -67,7 +67,7 @@ export default function FightWeightPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />격투기 체급 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -86,13 +86,13 @@ export default function FightWeightPage() {
         <div style={{
           background: 'rgba(220,38,38,0.08)',
           border: '2px solid rgba(220,38,38,0.4)',
-          borderRadius: '14px',
+          borderRadius: 'var(--radius-card)',
           padding: '18px 22px',
           fontSize: '14px',
           color: 'var(--text)',
           lineHeight: 1.85,
         }}>
-          <strong style={{ color: '#DC2626', fontSize: '14px' }}>⚠️ 시작 전 반드시 읽어주세요</strong>
+          <strong style={{ color: 'var(--red-600)', fontSize: '14px' }}>⚠️ 시작 전 반드시 읽어주세요</strong>
           <p style={{ marginTop: '10px' }}>
             본 계산기는 격투기 체급과 감량 일정을 계획하기 위한 참고용 도구입니다.
             급격한 체중 감량은 <strong style={{ color: 'var(--text)' }}>심혈관·신장·신경계에 심각한 손상</strong>을 일으킬 수 있으며,
@@ -103,7 +103,7 @@ export default function FightWeightPage() {
 
         {/* ── 2. 종목별 체급 비교 (체중 70kg 기준) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             종목별 체급 비교 — 체중 69kg 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -111,17 +111,17 @@ export default function FightWeightPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { sport: '복싱',     cls: '슈퍼웰터급', limit: '69.85kg', color: '#DC2626' },
-              { sport: 'UFC',      cls: '라이트급',   limit: '70.3kg',  color: '#A16207' },
-              { sport: 'ONE',      cls: '페더급',     limit: '70.3kg (수분 감량 금지)', color: '#059669' },
-              { sport: '킥복싱(K-1)', cls: '슈퍼웰터급', limit: '70.0kg', color: '#0891B2' },
-              { sport: '유도',     cls: '-73kg급',    limit: '73.0kg',  color: '#0EA5E9' },
-              { sport: '태권도',   cls: '라이트급',   limit: '74.0kg',  color: '#9B59B6' },
+              { sport: '복싱',     cls: '슈퍼웰터급', limit: '69.85kg', color: 'var(--red-600)' },
+              { sport: 'UFC',      cls: '라이트급',   limit: '70.3kg',  color: 'var(--yellow-700)' },
+              { sport: 'ONE',      cls: '페더급',     limit: '70.3kg (수분 감량 금지)', color: 'var(--emerald-600)' },
+              { sport: '킥복싱(K-1)', cls: '슈퍼웰터급', limit: '70.0kg', color: 'var(--cyan-600)' },
+              { sport: '유도',     cls: '-73kg급',    limit: '73.0kg',  color: 'var(--sky-500)' },
+              { sport: '태권도',   cls: '라이트급',   limit: '74.0kg',  color: 'var(--amethyst)' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.color}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.color}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 12, color: c.color, fontWeight: 700, marginBottom: 4 }}>{c.sport}</p>
                 <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 600 }}>{c.cls}</p>
-                <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginTop: 4 }}>{c.limit}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 700, marginTop: 4 }}>{c.limit}</p>
               </div>
             ))}
           </div>
@@ -129,15 +129,15 @@ export default function FightWeightPage() {
 
         {/* ── 3. 격투기 감량 3단계 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             격투기 감량의 3단계 완전 가이드
           </h2>
-          <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: 12, padding: '12px 16px', marginBottom: 12, fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
+          <div style={{ background: 'rgba(220,38,38,0.08)', border: '1px solid rgba(220,38,38,0.4)', borderRadius: 'var(--radius-m)', padding: '12px 16px', marginBottom: 12, fontSize: 13, color: 'var(--text)', lineHeight: 1.75 }}>
             ⚠️ 아래는 <strong>실행 매뉴얼이 아니라 위험을 이해하기 위한 설명</strong>입니다. 특히 2단계 수분 감량(나트륨·수분 제한·사우나)은 탈수·신장 손상·심정지로 이어질 수 있어, <strong>반드시 전문 코치·영양사·스포츠의학 전문의 감독</strong> 하에서만 진행해야 합니다. 청소년·아마추어는 수분 감량보다 평소 체중을 체급 한도 가까이 유지하는 방식을 권장합니다.
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 6 }}>1단계 · 체지방 감량 (D-30 ~ D-7)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--orange-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 6 }}>1단계 · 체지방 감량 (D-30 ~ D-7)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>칼로리 적자 500~750kcal/일</li>
                 <li>유산소 + 근력 운동 병행</li>
@@ -145,8 +145,8 @@ export default function FightWeightPage() {
                 <li>주당 1kg 이내 안전한 감량</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 6 }}>2단계 · 수분 감량 (D-7 ~ D-1)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cyan-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 6 }}>2단계 · 수분 감량 (D-7 ~ D-1)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>나트륨 제한 (D-5)</li>
                 <li>탄수화물 제한 (D-3)</li>
@@ -154,8 +154,8 @@ export default function FightWeightPage() {
                 <li>짧은 기간에 수 kg이 빠지지만 탈수 위험이 가장 큰 단계</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 13, color: '#059669', fontWeight: 700, marginBottom: 6 }}>3단계 · 재수화 (계체 후 ~ 시합)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--emerald-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 13, color: 'var(--emerald-600)', fontWeight: 700, marginBottom: 6 }}>3단계 · 재수화 (계체 후 ~ 시합)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>경구 재수화만 — 전해질 음료를 천천히 (IV 정맥수액은 USADA·WADA 도핑 금지)</li>
                 <li>탄수화물 보충 (체중 1kg당 1g)</li>
@@ -168,7 +168,7 @@ export default function FightWeightPage() {
 
         {/* ── 4. 단체별 정책 비교표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             종목·단체별 감량·계체 정책 비교
           </h2>
           <div className="tableScroll">
@@ -190,8 +190,8 @@ export default function FightWeightPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.o}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.x}</td>
                   </tr>
                 ))}
@@ -205,7 +205,7 @@ export default function FightWeightPage() {
 
         {/* ── 4-1. 체중 1kg = 며칠? 감량 기간 추정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             감량 필요량별 권장 기간 — 한눈에 보기
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -217,8 +217,8 @@ export default function FightWeightPage() {
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>감량 필요</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>안전 (1%/주)</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#A16207', fontWeight: 700 }}>적극 (1.5%/주)</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontWeight: 700 }}>위험 (2%/주)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--yellow-700)', fontWeight: 700 }}>적극 (1.5%/주)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--orange-600)', fontWeight: 700 }}>위험 (2%/주)</th>
                 </tr>
               </thead>
               <tbody>
@@ -231,9 +231,9 @@ export default function FightWeightPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.l}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#EA580C', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--yellow-700)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--orange-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.d}</td>
                   </tr>
                 ))}
               </tbody>
@@ -246,14 +246,14 @@ export default function FightWeightPage() {
 
         {/* ── 4-2. 감량 단계별 영양 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             감량 단계별 영양·식단 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               {
                 stage: '🍗 체지방 감량기 (D-30 ~ D-7)',
-                color: '#EA580C',
+                color: 'var(--orange-600)',
                 items: [
                   '단백질 — 체중 1kg당 2.0~2.4g (근손실 방지 핵심)',
                   '탄수화물 — 체중 1kg당 3~4g (운동량 유지)',
@@ -264,7 +264,7 @@ export default function FightWeightPage() {
               },
               {
                 stage: '💧 수분 감량기 (D-7 ~ D-1)',
-                color: '#0891B2',
+                color: 'var(--cyan-600)',
                 items: [
                   '⚠️ 아래는 관행 설명이며 실행 매뉴얼이 아닙니다 — 반드시 전문 코치·의사 감독 하에서만',
                   'D-7~D-3 — 나트륨을 크게 줄이는 방식이 쓰임',
@@ -276,7 +276,7 @@ export default function FightWeightPage() {
               },
               {
                 stage: '🔋 재수화·시합기 (계체 후 ~ 시합)',
-                color: '#059669',
+                color: 'var(--emerald-600)',
                 items: [
                   '계체 직후 30분 — 전해질 음료 500~750ml',
                   '~6시간 — 탄수화물 (체중 1kg당 5~10g) 재충전',
@@ -286,7 +286,7 @@ export default function FightWeightPage() {
                 ],
               },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <p style={{ fontSize: 13, color: s.color, fontWeight: 700, marginBottom: 8 }}>{s.stage}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                   {s.items.map((it, j) => <li key={j}>{it}</li>)}
@@ -298,14 +298,14 @@ export default function FightWeightPage() {
 
         {/* ── 4-3. 체급 선택 전략 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎯 체급 선택 전략 — 어떤 체급이 유리할까?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               {
                 head: '✅ 한 단계 아래 체급으로 내리는 게 유리한 경우',
-                color: '#059669',
+                color: 'var(--emerald-600)',
                 items: [
                   '체지방률이 평균(남 15%·여 23%) 이상 — 줄일 여지 ↑',
                   '키·리치(팔 길이) 우위가 명확',
@@ -316,7 +316,7 @@ export default function FightWeightPage() {
               },
               {
                 head: '⚠️ 한 단계 위 체급으로 올리는 게 나은 경우',
-                color: '#EA580C',
+                color: 'var(--orange-600)',
                 items: [
                   '체지방률이 이미 낮음 (남 10%·여 18% 이하)',
                   '체급 한도가 평소보다 −10% 초과',
@@ -327,7 +327,7 @@ export default function FightWeightPage() {
                 ],
               },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.color}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.color}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: c.color, fontWeight: 700, marginBottom: 6 }}>{c.head}</p>
                 <ul style={{ paddingLeft: 16, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                   {c.items.map((it, j) => <li key={j}>{it}</li>)}
@@ -339,13 +339,13 @@ export default function FightWeightPage() {
 
         {/* ── 5. 위험 사례 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚠️ 위험한 감량 사례 — 경각심 환기
           </h2>
           <div style={{
             background: 'rgba(255,70,70,0.06)',
             border: '1px solid rgba(255,70,70,0.3)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 18px',
           }}>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -372,7 +372,7 @@ export default function FightWeightPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -391,7 +391,7 @@ export default function FightWeightPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

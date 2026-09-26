@@ -425,7 +425,7 @@ export default function HolidayTableClient() {
    위(북)=신위, 아래(남)=제주. 제주가 바라볼 때 오른쪽=동·왼쪽=서.
    글자색은 배경(var(--bg3)) 위에서 읽히는 토큰만 사용 */
 function CharyeLayoutSvg() {
-  const font = 'Noto Sans KR, sans-serif'
+  const font = 'var(--font-sans)'
   const T = (x: number, y: number, label: string, opts: { fill?: string; size?: number; bold?: boolean; anchor?: 'start' | 'middle' | 'end' } = {}) => (
     <text x={x} y={y} fill={opts.fill ?? 'var(--text)'} fontSize={opts.size ?? 11} fontFamily={font}
       fontWeight={opts.bold ? 700 : 400} textAnchor={opts.anchor ?? 'middle'}>{label}</text>

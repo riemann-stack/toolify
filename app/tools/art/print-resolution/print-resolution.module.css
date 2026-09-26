@@ -8,7 +8,7 @@
   gap: 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .modeBtn {
@@ -16,13 +16,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 8px;
   font-size: 14px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 46px;
 }
 .modeActive { background: var(--accent-strong); color: #fff; }
@@ -31,7 +31,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -52,10 +52,10 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 36px 12px 14px;
   font-size: 15px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   cursor: pointer;
@@ -83,10 +83,10 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
   font-size: 15px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -113,25 +113,25 @@
   align-items: center;
   gap: 4px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 56px;
 }
 .ucActive { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent); background: var(--accent-dim); }
 .ucLabel { font-size: 12px; font-weight: 700; color: var(--text); line-height: 1.3; text-align: center; }
-.ucDpi { font-size: 11px; font-weight: 700; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; }
+.ucDpi { font-size: 11px; font-weight: 700; color: var(--muted); font-family: var(--font-sans); }
 .ucActive .ucDpi { color: var(--accent); }
 
 /* ── 히어로(결과) ── */
 .hero {
-  background: linear-gradient(135deg, rgba(14,165,233,0.1) 0%, rgba(5,150,105,0.05) 100%);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent) 0%, rgba(5,150,105,0.05) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLead { font-size: 13px; color: var(--muted); font-weight: 600; margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(26px, 7vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -158,8 +158,8 @@
   color: var(--text);
   border: 1px solid var(--border);
   padding: 5px 14px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
   margin-bottom: 14px;
 }
 
@@ -180,7 +180,7 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 .maxDot {
@@ -191,14 +191,14 @@
   flex-shrink: 0;
 }
 .maxBand {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 600;
   color: var(--muted);
   margin-left: 7px;
 }
 .maxSize {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -219,7 +219,7 @@
 }
 .dpiRefRow:last-child { border-bottom: none; }
 .dpiRefDpi {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 19px;
   font-weight: 800;
   color: var(--accent);
@@ -269,14 +269,14 @@
   appearance: none;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
   cursor: pointer;
   min-height: 36px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .bleedActive { background: var(--accent-strong); color: #ffffff; border-color: var(--accent-strong); }
 @media (max-width: 420px) { .ucGrid { grid-template-columns: 1fr 1fr; } }

@@ -602,7 +602,7 @@ function A11yTab({ initialHex, copiedKey, copy }: A11yTabProps) {
                   Aa 가나다 ABC 123
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between' }}>
-                  <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'JetBrains Mono, monospace' }}>
+                  <span style={{ fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
                     {fmtRatio(cbRatio)} : 1
                   </span>
                   <span className={distinct ? styles.cbDistinct : styles.cbWarning}>

@@ -11,11 +11,11 @@ export const MAX_INPUT_BYTES = 50 * 1024  /* 50KB */
    메서드 색상
    ───────────────────────────────────────────── */
 export const METHOD_COLORS: Record<Method, string> = {
-  GET:     '#0D9488',
-  POST:    '#0891B2',
-  PUT:     '#D97706',
-  DELETE:  '#DB2777',
-  PATCH:   '#9B59B6',
+  GET:     'var(--teal-600)',
+  POST:    'var(--cyan-600)',
+  PUT:     'var(--amber-600)',
+  DELETE:  'var(--pink-600)',
+  PATCH:   'var(--amethyst)',
   HEAD:    '#888888',
   OPTIONS: '#888888',
 }

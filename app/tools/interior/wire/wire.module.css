@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -21,14 +21,14 @@
 .warnBanner {
   background: rgba(219, 39, 119, 0.08);
   border: 1px solid rgba(219, 39, 119, 0.4);
-  border-left: 4px solid #DB2777;
+  border-left: 4px solid var(--pink-600);
   border-radius: 10px;
   padding: 12px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.warnBanner strong { color: #DB2777; }
+.warnBanner strong { color: var(--pink-600); }
 
 /* 탭 */
 .tabs {
@@ -36,7 +36,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -46,13 +46,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -69,11 +69,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -82,7 +82,7 @@
 
 /* 드롭다운 — 화살표를 명시해 입력창과 명확히 구분 */
 select.input {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   padding-right: 38px;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.6' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E");
@@ -103,13 +103,13 @@ select.input {
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -118,15 +118,15 @@ select.input {
 
 /* 히어로 */
 .hero {
-  background: linear-gradient(135deg, rgba(232, 151, 87, 0.1) 0%, rgba(14, 165, 233, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(232, 151, 87, 0.1) 0%, color-mix(in srgb, var(--accent) 5%, transparent) 100%);
   border: 1px solid rgba(232, 151, 87, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
@@ -156,12 +156,12 @@ select.input {
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; }
+.cellMono { font-family: var(--font-sans); }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -169,7 +169,7 @@ select.input {
   font-weight: 600;
   letter-spacing: 0.02em;
 }
-.cellSubtitle td { text-align: left !important; font-family: 'Noto Sans KR', sans-serif !important; }
+.cellSubtitle td { text-align: left !important; font-family: var(--font-sans); }
 .rowActive { background: rgba(232, 151, 87, 0.08); }
 
 .tableScroll {
@@ -232,7 +232,7 @@ select.input {
 }
 .convertLabel { font-size: 12px; color: var(--muted); margin: 0 0 4px; }
 .convertValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 800;
   color: var(--accent);
@@ -242,7 +242,7 @@ select.input {
 .convertSub {
   font-size: 12px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   margin: 0;
 }
 
@@ -266,7 +266,7 @@ select.input {
   font-weight: 700;
   color: var(--text);
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .presetSpecs {
   display: flex;
@@ -279,7 +279,7 @@ select.input {
   background: var(--bg2);
   border-radius: 6px;
   padding: 4px 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .presetSpecs span b {
   color: var(--text);
@@ -289,12 +289,12 @@ select.input {
   margin: 0;
   padding: 6px 8px;
   background: rgba(217, 119, 6, 0.08);
-  border-left: 2px solid #D97706;
+  border-left: 2px solid var(--amber-600);
   border-radius: 4px;
   font-size: 11px;
-  color: #D97706;
+  color: var(--amber-600);
   line-height: 1.6;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 크로스링크 */
@@ -302,7 +302,7 @@ select.input {
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;
@@ -320,11 +320,11 @@ select.input {
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 /* 결과 해석 글머리 — dot과 텍스트가 줄바꿈 없이 한 줄에 */
 .bullets { margin: 4px 0 0; padding-left: 18px; color: var(--muted); line-height: 1.8; font-size: 12px; }
@@ -336,7 +336,7 @@ select.input {
 .disclaimer {
   background: rgba(219, 39, 119, 0.06);
   border: 1px solid rgba(219, 39, 119, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -344,9 +344,9 @@ select.input {
 }
 .disclaimer strong {
   display: block;
-  color: #DB2777;
+  color: var(--pink-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

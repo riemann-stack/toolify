@@ -5,23 +5,23 @@
 .tabs {
   display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tab {
   padding: 11px 8px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
 
 /* ── 카드 공통 ── */
 .card {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 20px 22px; box-sizing: border-box;
+  border-radius: var(--radius-card); padding: 20px 22px; box-sizing: border-box;
 }
 .cardLabel {
   display: block; font-size: 11px; color: var(--muted);
@@ -30,15 +30,15 @@
 
 /* ── 탭 템포 메인 버튼 ── */
 .tapCard {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 14px; padding: 28px 22px;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-card); padding: 28px 22px;
   display: flex; flex-direction: column; align-items: center; gap: 14px;
 }
 .tapButton {
   position: relative; overflow: hidden;
   width: 100%; max-width: 320px; aspect-ratio: 1 / 1;
-  border-radius: 50%; border: 2px solid rgba(14,165,233,0.4);
-  background: radial-gradient(circle at center, rgba(14,165,233,0.1), var(--bg3));
+  border-radius: 50%; border: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--accent) 10%, transparent), var(--bg3));
   color: var(--text); cursor: pointer;
   display: flex; flex-direction: column; align-items: center; justify-content: center;
   gap: 8px; transition: transform 0.08s, border-color 0.18s;
@@ -49,7 +49,7 @@
 .tapButton:active { transform: scale(0.97); }
 .ripple {
   position: absolute; inset: 0; border-radius: 50%;
-  background: radial-gradient(circle, rgba(14,165,233,0.35) 0%, rgba(14,165,233,0) 70%);
+  background: radial-gradient(circle, color-mix(in srgb, var(--accent) 35%, transparent) 0%, rgba(14,165,233,0) 70%);
   opacity: 0; pointer-events: none;
   animation: ripple 0.5s ease-out;
 }
@@ -58,18 +58,18 @@
   display: flex; flex-direction: column; align-items: center;
 }
 .tapBpm {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
+  font-family: var(--font-sans); font-weight: 800;
   font-size: clamp(52px, 14vw, 84px); color: var(--accent);
   line-height: 1; letter-spacing: -2px;
 }
 .tapBpmLabel {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  font-family: var(--font-sans); font-weight: 700;
   font-size: 14px; color: var(--muted);
   letter-spacing: 0.1em; margin-top: 4px;
 }
 .tapCount {
   position: relative; z-index: 1;
-  font-size: 13px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; color: var(--muted); font-family: var(--font-sans);
 }
 .kbdHint {
   font-size: 12px; color: var(--muted); line-height: 1.6; margin: 0; text-align: center;
@@ -77,37 +77,37 @@
 .kbdHint kbd {
   display: inline-block; padding: 2px 7px; margin: 0 2px;
   background: var(--bg3); border: 1px solid var(--border);
-  border-radius: 5px; font-family: 'Inter', system-ui, sans-serif; font-size: 11px;
+  border-radius: 5px; font-family: var(--font-sans); font-size: 11px;
   color: var(--text);
 }
 
 /* ── 템포 이름 ── */
 .tempoBadge {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 16px 20px;
+  border-radius: var(--radius-card); padding: 16px 20px;
   display: flex; flex-direction: column; align-items: center; gap: 4px;
   animation: fadeUp 0.25s ease;
 }
 .tempoName {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 22px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.3px;
 }
 .tempoKo {
-  font-size: 13px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif;
+  font-size: 13px; color: var(--muted); font-family: var(--font-sans);
 }
 
 /* ── 정확도 ── */
 .accCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 14px 20px;
+  border-radius: var(--radius-card); padding: 14px 20px;
   display: flex; flex-direction: column; gap: 8px;
 }
 .accLabel { font-size: 12px; color: var(--muted); }
 .accBar {
-  width: 100%; height: 6px; background: var(--bg3); border-radius: 999px; overflow: hidden;
+  width: 100%; height: 6px; background: var(--bg3); border-radius: var(--radius-pill); overflow: hidden;
 }
 .accBarFill {
-  height: 100%; background: linear-gradient(90deg, #059669, var(--accent));
+  height: 100%; background: linear-gradient(90deg, var(--emerald-600), var(--accent));
   transition: width 0.25s ease;
 }
 
@@ -130,7 +130,7 @@
   border-color: var(--accent);
 }
 .chartLabel {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 10px; color: var(--muted);
+  font-family: var(--font-sans); font-size: 10px; color: var(--muted);
 }
 
 /* ── 컨트롤 ── */
@@ -141,7 +141,7 @@
   padding: 12px 14px; border-radius: 10px;
   background: var(--bg3); border: 1px solid var(--border);
   color: var(--muted); font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-family: var(--font-sans); font-weight: 500;
   cursor: pointer; transition: all 0.15s;
   text-decoration: none; text-align: center;
   display: inline-flex; align-items: center; justify-content: center;
@@ -155,10 +155,10 @@
 }
 .ctrlBtnLink {
   grid-column: 1 / -1;
-  background: rgba(14,165,233,0.14); border-color: rgba(14,165,233,0.3);
+  background: color-mix(in srgb, var(--accent) 14%, transparent); border-color: color-mix(in srgb, var(--accent) 30%, transparent);
   color: var(--accent);
 }@media (hover: hover) {
-  .ctrlBtnLink:hover { background: rgba(14,165,233,0.15); color: var(--accent); }
+  .ctrlBtnLink:hover { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
 }
 
 /* ── 메트로놈 BPM 입력 ── */
@@ -169,7 +169,7 @@
 .bpmInput {
   width: 140px; padding: 8px 12px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 32px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 32px; font-weight: 800;
   color: var(--accent); text-align: center; letter-spacing: -0.5px;
   -moz-appearance: textfield;
 }
@@ -178,7 +178,7 @@
 }
 .bpmInput:focus { outline: none; border-color: var(--accent); }
 .bpmUnit {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 700;
   color: var(--muted); letter-spacing: 0.08em;
 }
 .bpmSlider {
@@ -188,9 +188,9 @@
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
 }
 .adjBtn {
-  padding: 8px; border-radius: 8px;
+  padding: 8px; border-radius: var(--radius-s);
   background: var(--bg3); border: 1px solid var(--border);
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 13px;
   color: var(--text); cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .adjBtn:hover { border-color: var(--accent); color: var(--accent); }
@@ -201,7 +201,7 @@
 .sigBtn {
   padding: 12px 6px; border-radius: 10px;
   background: var(--bg3); border: 1px solid var(--border);
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 16px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 16px;
   color: var(--muted); cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .sigBtn:hover { color: var(--text); }
@@ -214,7 +214,7 @@
 /* ── 펄스 원 ── */
 .pulseCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 28px 22px;
+  border-radius: var(--radius-card); padding: 28px 22px;
   display: flex; flex-direction: column; align-items: center; gap: 20px;
 }
 .pulse {
@@ -224,15 +224,15 @@
   transition: background 0.08s, border-color 0.08s, transform 0.08s;
 }
 .pulseActive { animation: pulseBeat 1s infinite; }
-.pulseAccent { background: rgba(14,165,233,0.2); border-color: var(--accent); }
+.pulseAccent { background: color-mix(in srgb, var(--accent) 20%, transparent); border-color: var(--accent); }
 .pulseBeat {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 28px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 28px;
   color: var(--text); letter-spacing: 0.05em;
 }
 .playBtn {
   padding: 13px 40px; border-radius: 10px;
   background: var(--accent-strong); border: 1px solid var(--accent);
-  color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
+  color: #ffffff; font-family: var(--font-sans); font-weight: 700; font-size: 15px;
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .playBtn:hover { filter: brightness(1.1); }
@@ -256,17 +256,17 @@
   .presetBtn:hover { border-color: var(--accent); color: var(--text); }
 }
 .presetBtnActive {
-  background: rgba(14,165,233,0.18) !important;
+  background: color-mix(in srgb, var(--accent) 18%, transparent) !important;
   border-color: var(--accent) !important; color: var(--accent) !important;
 }
-.presetBpm { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 15px; line-height: 1; }
+.presetBpm { font-family: var(--font-sans); font-weight: 700; font-size: 15px; line-height: 1; }
 .presetName { font-size: 10px; letter-spacing: 0.02em; line-height: 1.2; }
 
 /* ── 박자감 테스트 ── */
 .randomRow { display: flex; justify-content: center; margin-top: 4px; }
 .testInfoCard {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 20px 22px;
+  border-radius: var(--radius-card); padding: 20px 22px;
   display: flex; flex-direction: column; gap: 14px;
 }
 .testInfoText {
@@ -274,29 +274,29 @@
 }
 .testInfoText strong { color: var(--accent); font-weight: 700; }
 .startBtn {
-  padding: 14px; border-radius: 12px;
+  padding: 14px; border-radius: var(--radius-m);
   background: var(--accent-strong); border: 1px solid var(--accent);
-  color: #ffffff; font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 15px;
+  color: #ffffff; font-family: var(--font-sans); font-weight: 700; font-size: 15px;
   cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .startBtn:hover { filter: brightness(1.1); }
 }
 
 .testStageCard {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 14px; padding: 32px 22px;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-card); padding: 32px 22px;
   display: flex; flex-direction: column; align-items: center; gap: 14px;
 }
 .testStageLabel {
   font-size: 13px; color: var(--muted); letter-spacing: 0.04em;
 }
 .testTarget {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
+  font-family: var(--font-sans); font-weight: 800;
   font-size: clamp(52px, 14vw, 84px); color: var(--accent);
   line-height: 1; letter-spacing: -2px;
 }
 .testTargetSub {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  font-family: var(--font-sans); font-weight: 700;
   font-size: 14px; color: var(--muted); letter-spacing: 0.1em;
   margin-top: -4px;
 }
@@ -307,15 +307,15 @@
   transition: all 0.1s;
 }
 .previewDotActive { background: var(--accent); border-color: var(--accent); }
-.previewDotAccent { transform: scale(1.3); box-shadow: 0 0 0 4px rgba(14,165,233,0.2); }
+.previewDotAccent { transform: scale(1.3); box-shadow: 0 0 0 4px color-mix(in srgb, var(--accent) 20%, transparent); }
 .testHint {
   font-size: 12px; color: var(--muted); margin: 0; text-align: center;
 }
 .testTapBtn {
   width: 100%; max-width: 280px; aspect-ratio: 1 / 1;
   border-radius: 50%; border: 2px solid var(--accent);
-  background: radial-gradient(circle at center, rgba(14,165,233,0.15), var(--bg3));
-  color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
+  background: radial-gradient(circle at center, color-mix(in srgb, var(--accent) 15%, transparent), var(--bg3));
+  color: var(--accent); font-family: var(--font-sans); font-weight: 800;
   font-size: 44px; letter-spacing: 0.05em;
   cursor: pointer; transition: transform 0.08s;
   user-select: none; -webkit-tap-highlight-color: transparent;
@@ -334,8 +334,8 @@
 
 /* ── 결과 ── */
 .resultCard {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px; padding: 28px 22px;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card); padding: 28px 22px;
   display: flex; flex-direction: column; align-items: center; gap: 14px;
   animation: fadeUp 0.3s ease;
 }
@@ -360,12 +360,12 @@
   text-transform: uppercase;
 }
 .resultNum {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
+  font-family: var(--font-sans); font-weight: 800;
   font-size: clamp(32px, 8vw, 48px); color: var(--text);
   letter-spacing: -0.5px; line-height: 1;
 }
 .resultArrow {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 16px; color: var(--muted);
+  font-family: var(--font-sans); font-size: 16px; color: var(--muted);
   font-weight: 700; letter-spacing: 0.1em;
 }
 .resultErrRow {
@@ -377,11 +377,11 @@
   flex-shrink: 0;
 }
 .resultErrBar {
-  flex: 1; height: 8px; background: var(--bg3); border-radius: 999px; overflow: hidden;
+  flex: 1; height: 8px; background: var(--bg3); border-radius: var(--radius-pill); overflow: hidden;
 }
-.resultErrBarFill { height: 100%; transition: width 0.4s ease; border-radius: 999px; }
+.resultErrBarFill { height: 100%; transition: width 0.4s ease; border-radius: var(--radius-pill); }
 .resultErrValue {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 13px;
   color: var(--text); min-width: 48px; text-align: right;
 }
 .resultActions {

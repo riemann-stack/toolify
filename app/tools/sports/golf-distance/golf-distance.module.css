@@ -5,12 +5,12 @@
 .tabs {
   display: grid; grid-template-columns: repeat(2, 1fr); gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tabs4 {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 4px;
+  border-radius: var(--radius-m); padding: 4px;
 }
 .tabs4 .tab { padding: 10px 4px; font-size: 12px; }
 @media (max-width: 480px) {
@@ -25,12 +25,12 @@
 }
 .unitLabel { font-size: 12px; color: var(--muted); }
 .unitToggle {
-  display: flex; gap: 4px; background: var(--bg3); border-radius: 8px; padding: 3px;
+  display: flex; gap: 4px; background: var(--bg3); border-radius: var(--radius-s); padding: 3px;
 }
 .unitBtn {
   background: transparent; border: none; padding: 6px 12px;
   font-size: 12px; color: var(--muted); cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif; border-radius: 6px;
+  font-family: var(--font-sans); border-radius: 6px;
 }@media (hover: hover) {
   .unitBtn:hover { color: var(--text); }
 }
@@ -49,7 +49,7 @@
   flex: 1; accent-color: var(--accent);
 }
 .envSliderValue {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 14px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 14px;
   color: var(--accent); min-width: 60px; text-align: right;
 }
 .lieGrid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px; flex: 1; }
@@ -59,19 +59,19 @@
 
 /* 환경 결과 카드 */
 .envResultCard {
-  background: var(--bg2); border: 1.5px solid rgba(14,165,233,0.35);
-  border-radius: 14px; padding: 18px 22px;
+  background: var(--bg2); border: 1.5px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius-card); padding: 18px 22px;
 }
 .envResultHead { display: flex; justify-content: space-between; align-items: center; margin-bottom: 14px; }
 .envResultBadge {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px;
-  border: 1px solid; border-radius: 999px; padding: 4px 12px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 16px;
+  border: 1px solid; border-radius: var(--radius-pill); padding: 4px 12px;
 }
 .envResultRow { display: flex; align-items: center; justify-content: center; gap: 16px; margin-bottom: 12px; }
 .envResultBlock { text-align: center; }
 .envResultLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .envResultValue {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 28px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 28px;
   color: var(--text); letter-spacing: -1px;
 }
 .envResultArrow { font-size: 22px; color: var(--accent); }
@@ -86,8 +86,8 @@
 
 /* ── 내 기록 ── */
 .recordStatsCard {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px; padding: 16px 20px;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card); padding: 16px 20px;
 }
 .recordStatsGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 8px; }
 .recordStat {
@@ -96,7 +96,7 @@
 }
 .recordStatLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .recordStatValue {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 22px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 22px;
   color: var(--accent); letter-spacing: -0.5px;
 }
 .recordStatSub { font-size: 11px; color: var(--muted); margin-top: 4px; }
@@ -104,9 +104,9 @@
 .recordFormGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .recordDateInput, .recordSelect, .recordInput {
   width: 100%; box-sizing: border-box;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-s);
   padding: 10px 12px; font-size: 16px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; outline: none;
+  font-family: var(--font-sans); outline: none;
   min-height: 42px;
 }
 .recordSelect { appearance: none; -webkit-appearance: none; cursor: pointer; }
@@ -115,7 +115,7 @@
   width: 100%; margin-top: 14px;
   background: var(--accent-strong); color: #ffffff; border: none;
   padding: 12px; border-radius: 10px;
-  font-size: 14px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-weight: 700; font-family: var(--font-sans);
   cursor: pointer; transition: opacity 0.15s; min-height: 48px;
 }@media (hover: hover) {
   .recordSaveBtn:hover { opacity: 0.88; }
@@ -123,7 +123,7 @@
 
 .tab {
   padding: 12px 6px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
@@ -132,14 +132,14 @@
 
 /* ── 공통 카드 ── */
 .section { display: flex; flex-direction: column; gap: 10px; }
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 20px 22px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 20px 22px; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
-.cardTitle { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; font-family: 'Noto Sans KR', sans-serif; }
+.cardTitle { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 12px; font-family: var(--font-sans); }
 
 /* ── 안내 박스 ── */
 .infoBox {
-  background: rgba(14,165,233,0.14); border: 1px solid rgba(14,165,233,0.2);
-  border-radius: 12px; padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.7;
+  background: color-mix(in srgb, var(--accent) 14%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border-radius: var(--radius-m); padding: 14px 18px; font-size: 13px; color: var(--muted); line-height: 1.7;
 }
 
 /* ── 토글 그룹 ── */
@@ -147,13 +147,13 @@
 .toggleBtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 14px; font-size: 13px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.15s;
 }@media (hover: hover) {
   .toggleBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .toggleBtnActive {
-  background: rgba(14,165,233,0.15) !important;
-  border-color: rgba(14,165,233,0.4) !important;
+  background: color-mix(in srgb, var(--accent) 15%, transparent) !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important;
   color: var(--accent) !important;
 }
 
@@ -167,9 +167,9 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 14px; transition: border-color 0.15s;
 }
-.clubInputRowActive { border-color: rgba(14,165,233,0.4); }
+.clubInputRowActive { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .clubInputName {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 14px; font-weight: 700;
   color: var(--text); letter-spacing: 0.04em;
 }
 .clubInputName small { display: block; font-size: 10px; color: var(--muted); font-weight: 500; margin-top: 2px; }
@@ -177,17 +177,17 @@
 .clubInputBox { position: relative; }
 .clubInput {
   width: 100%; background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 8px; padding: 10px 36px 10px 12px; font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text);
+  border-radius: var(--radius-s); padding: 10px 36px 10px 12px; font-size: 16px;
+  font-family: var(--font-sans); font-weight: 700; color: var(--text);
   outline: none; transition: border-color 0.15s;
   -moz-appearance: textfield; appearance: textfield;
 }
 .clubInput::-webkit-inner-spin-button, .clubInput::-webkit-outer-spin-button { -webkit-appearance: none; }
 .clubInput::placeholder { color: var(--muted); font-size: 13px; font-weight: 500; opacity: 0.7; }
-.clubInput:focus { border-color: rgba(14,165,233,0.4); }
+.clubInput:focus { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .clubInputUnit {
   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
-  font-size: 12px; color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  font-size: 12px; color: var(--muted); font-family: var(--font-sans); font-weight: 700;
   pointer-events: none;
 }
 
@@ -195,7 +195,7 @@
 .expandBtn {
   width: 100%; background: var(--bg3); border: 1px dashed var(--border); border-radius: 10px;
   padding: 12px; cursor: pointer; color: var(--muted);
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  font-size: 13px; font-family: var(--font-sans); transition: all 0.15s;
   margin-top: 10px;
 }@media (hover: hover) {
   .expandBtn:hover { border-color: var(--accent); color: var(--accent); }
@@ -203,7 +203,7 @@
 
 /* ── 바 차트 ── */
 .chartWrap {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card);
   padding: 22px 18px; margin-top: 4px;
   animation: gdFadeUp 0.25s ease;
 }
@@ -228,7 +228,7 @@
   align-items: center; padding: 4px 0;
 }
 .barLabel {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 12px; font-weight: 700;
   color: var(--text); letter-spacing: 0.04em; text-align: right;
 }
 .barTrack {
@@ -246,12 +246,12 @@
   opacity: 0.7;
 }
 .barNum {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 800; color: #000;
+  font-family: var(--font-sans); font-size: 11px; font-weight: 800; color: #000;
   white-space: nowrap;
 }
 .barNumOutside {
   position: absolute; left: calc(100% + 6px); top: 50%; transform: translateY(-50%);
-  font-family: 'Inter', system-ui, sans-serif; font-size: 11px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 11px; font-weight: 700;
   color: var(--text); white-space: nowrap;
 }
 .avgMarker {
@@ -262,12 +262,12 @@
 .barTagWrap { display: inline-flex; align-items: center; gap: 6px; margin-left: 8px; }
 .barTag {
   display: inline-block; padding: 2px 7px; border-radius: 10px;
-  font-size: 10px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  font-size: 10px; font-family: var(--font-sans); font-weight: 600;
   flex-shrink: 0;
 }
 .tagActual {
-  background: rgba(14,165,233,0.15); color: var(--accent);
-  border: 1px solid rgba(14,165,233,0.4);
+  background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
 }
 .tagEst {
   background: var(--bg3); color: var(--muted);
@@ -287,10 +287,10 @@
   padding: 10px 12px; border-bottom: 1px solid var(--border);
   color: var(--text); font-size: 13px;
 }
-.tdClub { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
-.tdNum  { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); text-align: right; }
-.tdMuted { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; text-align: right; }
-.tdDiff  { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: right; }
+.tdClub { font-family: var(--font-sans); font-weight: 700; color: var(--text); letter-spacing: 0.04em; }
+.tdNum  { font-family: var(--font-sans); font-weight: 700; color: var(--text); text-align: right; }
+.tdMuted { color: var(--muted); font-family: var(--font-sans); text-align: right; }
+.tdDiff  { font-family: var(--font-sans); font-weight: 700; text-align: right; }
 .diffPlus  { color: var(--accent); }
 .diffMinus { color: var(--muted); }
 .diffZero  { color: var(--muted); }
@@ -308,31 +308,31 @@
   color: var(--text); font-size: 13px;
 }
 .gapBadge {
-  display: inline-block; padding: 4px 10px; border-radius: 12px;
-  font-size: 11px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700;
+  display: inline-block; padding: 4px 10px; border-radius: var(--radius-m);
+  font-size: 11px; font-family: var(--font-sans); font-weight: 700;
   white-space: nowrap;
 }
-.gapOk    { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
-.gapTight { background: rgba(8,145,178,0.15); color: #0891B2; border: 1px solid rgba(8,145,178,0.4); }
-.gapWide  { background: rgba(220,38,38,0.15); color: #DC2626; border: 1px solid rgba(220,38,38,0.4); }
+.gapOk    { background: rgba(16,185,129,0.15); color: var(--emerald-600); border: 1px solid rgba(16,185,129,0.4); }
+.gapTight { background: color-mix(in srgb, var(--cyan-600) 15%, transparent); color: var(--cyan-600); border: 1px solid color-mix(in srgb, var(--cyan-600) 40%, transparent); }
+.gapWide  { background: rgba(220,38,38,0.15); color: var(--red-600); border: 1px solid rgba(220,38,38,0.4); }
 
 /* ── 추천 카드 ── */
 .recommendCard {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 12px; padding: 16px 18px;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-m); padding: 16px 18px;
   display: flex; gap: 14px; align-items: flex-start;
 }
 .recommendIcon {
   flex-shrink: 0; width: 36px; height: 36px; border-radius: 10px;
-  background: rgba(14,165,233,0.1); border: 1px solid rgba(14,165,233,0.3);
+  background: color-mix(in srgb, var(--accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   display: flex; align-items: center; justify-content: center; font-size: 18px;
 }
 .recommendBody { flex: 1; }
 .recommendBadge {
   display: inline-block; padding: 2px 8px; border-radius: 10px;
-  background: rgba(14,165,233,0.15); color: var(--accent);
-  border: 1px solid rgba(14,165,233,0.4);
-  font-size: 10px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700;
+  background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  font-size: 10px; font-family: var(--font-sans); font-weight: 700;
   margin-bottom: 6px;
 }
 .recommendText { font-size: 13px; color: var(--text); line-height: 1.7; }
@@ -341,42 +341,42 @@
 /* ── 총평 카드 ── */
 .summaryGrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; animation: gdFadeUp 0.25s ease; }
 .summaryCell {
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-m);
   padding: 14px 16px;
 }
 .summaryLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; letter-spacing: 0.04em; }
 .summaryValue {
-  font-family: 'Inter', system-ui, sans-serif; font-size: clamp(20px, 4vw, 26px); font-weight: 800;
+  font-family: var(--font-sans); font-size: clamp(20px, 4vw, 26px); font-weight: 800;
   color: var(--accent); line-height: 1.1;
 }
 .summarySub { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 /* ── 평가 등급 ── */
 .gradeBadge {
-  display: inline-block; padding: 6px 14px; border-radius: 20px;
-  font-size: 12px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  display: inline-block; padding: 6px 14px; border-radius: var(--radius-lg);
+  font-size: 12px; font-weight: 700; font-family: var(--font-sans);
   letter-spacing: 0.04em;
 }
-.gradeTop  { background: rgba(161,98,7,0.15); color: #A16207; border: 1px solid rgba(161,98,7,0.4); }
-.gradeHigh { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
-.gradeMid  { background: rgba(14,165,233,0.15); color: var(--accent); border: 1px solid rgba(14,165,233,0.4); }
-.gradeLow  { background: rgba(234,88,12,0.15); color: #EA580C; border: 1px solid rgba(234,88,12,0.4); }
-.gradeBeg  { background: rgba(220,38,38,0.15); color: #DC2626; border: 1px solid rgba(220,38,38,0.4); }
+.gradeTop  { background: rgba(161,98,7,0.15); color: var(--yellow-700); border: 1px solid rgba(161,98,7,0.4); }
+.gradeHigh { background: rgba(16,185,129,0.15); color: var(--emerald-600); border: 1px solid rgba(16,185,129,0.4); }
+.gradeMid  { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
+.gradeLow  { background: rgba(234,88,12,0.15); color: var(--orange-600); border: 1px solid rgba(234,88,12,0.4); }
+.gradeBeg  { background: rgba(220,38,38,0.15); color: var(--red-600); border: 1px solid rgba(220,38,38,0.4); }
 
 .evalCard {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px; padding: 22px 24px;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card); padding: 22px 24px;
   display: flex; flex-direction: column; gap: 12px;
   animation: gdFadeUp 0.25s ease;
 }
 .evalTop { display: flex; justify-content: space-between; align-items: flex-start; gap: 12px; flex-wrap: wrap; }
 .evalLabel { font-size: 12px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 6px; }
-.evalNum { font-family: 'Inter', system-ui, sans-serif; font-size: clamp(36px, 9vw, 56px); font-weight: 800; color: var(--accent); line-height: 1; }
+.evalNum { font-family: var(--font-sans); font-size: clamp(36px, 9vw, 56px); font-weight: 800; color: var(--accent); line-height: 1; }
 .evalSub { font-size: 13px; color: var(--muted); margin-top: 6px; line-height: 1.6; }
 
 /* ── 빈 상태 ── */
 .emptyCard {
-  background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius-card);
   padding: 36px 22px; text-align: center;
   color: var(--muted); font-size: 13px; line-height: 1.7;
 }

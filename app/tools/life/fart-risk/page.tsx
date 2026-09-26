@@ -37,7 +37,7 @@ export default function FartRiskPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />방귀 위험도 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -51,7 +51,7 @@ export default function FartRiskPage() {
 
         {/* 1. 과학 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스를 만드는 음식의 과학</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스를 만드는 음식의 과학</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             방귀는 음식을 먹을 때 함께 삼킨 공기와 장내 세균이 특정 성분을 <strong style={{ color: 'var(--text)' }}>발효</strong>할 때 생기는 가스가 섞여 만들어집니다.
             작은창자에서 미처 흡수되지 못한 탄수화물이 대장까지 내려오면 세균이 이를 분해하면서 수소·메탄·이산화탄소가 만들어지고, 황 성분이 있으면 고약한 냄새가 납니다.
@@ -66,7 +66,7 @@ export default function FartRiskPage() {
               { title: '과당', desc: '과일(사과/배/수박)과 꿀에 많음. 흡수 용량을 넘으면 대장에서 발효됨.' },
               { title: '폴리올', desc: '인공감미료 소르비톨·자일리톨. 거의 흡수되지 않고 대장에서 발효됨.' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', marginBottom: '4px' }}>{item.title}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{item.desc}</p>
               </div>
@@ -79,7 +79,7 @@ export default function FartRiskPage() {
 
         {/* 2. TOP 7 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스 유발 음식 TOP 7</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스 유발 음식 TOP 7</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
               { rank: '1', emoji: '🫘', name: '콩류',            desc: '올리고당 함량이 가장 높은 슈퍼 발효 재료.' },
@@ -90,8 +90,8 @@ export default function FartRiskPage() {
               { rank: '6', emoji: '💪', name: '단백질 보충제',    desc: '유청 단백질(유당) + 인공감미료 조합이 문제.' },
               { rank: '7', emoji: '🥦', name: '양배추·브로콜리', desc: '황 함유 → 냄새가 특히 고약함.' },
             ].map((item) => (
-              <div key={item.rank} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 800, color: 'var(--accent)', minWidth: '26px' }}>{item.rank}</span>
+              <div key={item.rank} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', display: 'flex', alignItems: 'center', gap: '14px' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 800, color: 'var(--accent)', minWidth: '26px' }}>{item.rank}</span>
                 <span style={{ fontSize: '22px' }}>{item.emoji}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '2px' }}>{item.name}</p>
@@ -104,9 +104,9 @@ export default function FartRiskPage() {
 
         {/* 3. 조합 비교 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>나쁜 조합 vs 괜찮은 조합</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>나쁜 조합 vs 괜찮은 조합</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <div style={{ background: 'rgba(255,70,70,0.06)', border: '1px solid rgba(255,70,70,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'rgba(255,70,70,0.06)', border: '1px solid rgba(255,70,70,0.3)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#DC2626', marginBottom: '10px' }}>🚨 최악 조합</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
@@ -118,7 +118,7 @@ export default function FartRiskPage() {
                 ))}
               </ul>
             </div>
-            <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.3)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '10px' }}>✅ 괜찮은 조합</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '8px' }}>
                 {[
@@ -135,9 +135,9 @@ export default function FartRiskPage() {
 
         {/* 4. 실용 팁 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스 줄이는 실용 팁</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>가스 줄이는 실용 팁</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>즉각 효과</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
@@ -147,7 +147,7 @@ export default function FartRiskPage() {
                 ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>• {t}</li>)}
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>평소 습관</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
@@ -163,7 +163,7 @@ export default function FartRiskPage() {
 
         {/* 5. 원인 유형 5가지 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             가스 원인 유형 5가지
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -177,7 +177,7 @@ export default function FartRiskPage() {
               { e: '🍔', t: '소화지연형', c: '#EA580C', d: '과식·튀김·고지방·가공식품 (느린 소화)' },
               { e: '🦨', t: '냄새강화형', c: '#E11D48', d: '계란·고기·양배추·브로콜리 (황 성분 → H₂S)' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.c}55`, borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.c}55`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: m.c, marginBottom: '6px' }}>{m.e} {m.t}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{m.d}</p>
               </div>
@@ -187,7 +187,7 @@ export default function FartRiskPage() {
 
         {/* 6. 고FODMAP vs 저FODMAP 종합 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             고FODMAP vs 저FODMAP 음식 한눈에
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -230,7 +230,7 @@ export default function FartRiskPage() {
 
         {/* 7. 단백질 보충제 종류별 (NEW) */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             💪 단백질 보충제 종류별 가스 위험
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -255,9 +255,9 @@ export default function FartRiskPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.l}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
                   </tr>
                 ))}
               </tbody>
@@ -271,7 +271,7 @@ export default function FartRiskPage() {
         </div>
 
         {/* 9. 면책 강화 */}
-        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '14px', padding: '20px 22px' }}>
+        <div style={{ background: 'var(--bg2)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-card)', padding: '20px 22px' }}>
           <p style={{ fontSize: '14px', fontWeight: 700, color: '#DC2626', marginBottom: '12px' }}>⚠️ 책임 있는 사용 안내</p>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 계산기는 <strong style={{ color: 'var(--text)' }}>재미·교육용 참고 도구</strong>입니다. 의학적 진단·처방·치료 도구가 아니며, 모든 점수는 추정으로 개인 체질에 따라 다릅니다. 본 결과로 질병 진단은 불가합니다.
@@ -304,7 +304,7 @@ export default function FartRiskPage() {
               ].map((c, i) => (
                 <div key={i} style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '6px 0', fontSize: 13 }}>
                   <span style={{ color: 'var(--muted)' }}>{c.l}</span>
-                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: '#EA580C' }}>{c.t}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: '#EA580C' }}>{c.t}</span>
                 </div>
               ))}
             </div>
@@ -313,7 +313,7 @@ export default function FartRiskPage() {
 
         {/* 7. 관련 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/supplement',  emoji: '💊', name: '영양제 성분 체크',   desc: '단백질 보충제 안전' },
@@ -321,7 +321,7 @@ export default function FartRiskPage() {
               { href: '/tools/health/bmr',         emoji: '🔥', name: '기초대사량 계산기', desc: '하루 칼로리 관리' },
               { href: '/tools/life/dutch',         emoji: '🤝', name: '더치페이 계산기',   desc: '외식 비용 나누기' },
             ].map((t) => (
-              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
+              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none', color: 'var(--text)', display: 'flex', alignItems: 'center', gap: '12px' }}>
                 <span style={{ fontSize: '22px' }}>{t.emoji}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 500, marginBottom: '2px' }}>{t.name}</p>

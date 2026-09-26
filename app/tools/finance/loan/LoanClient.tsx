@@ -777,7 +777,7 @@ export default function LoanClient() {
                 </div>
                 {reverseRateTable.map(r => (
                   <div key={r.rate} className={styles.scenarioRow}>
-                    <span style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.rate}%</span>
+                    <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.rate}%</span>
                     <span>{formatEok(r.result.principal)}</span>
                     <span>{formatEok(r.result.totalInterest)}</span>
                     <span>{formatEok(r.result.totalPayment)}</span>
@@ -812,7 +812,7 @@ export default function LoanClient() {
               {compareTermTable.map(r => (
                 <div key={r.months}
                   className={`${styles.scenarioRow} ${r.months === monthsNum ? styles.scenarioRowBaseline : ''}`}>
-                  <span style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.months / 12}년</span>
+                  <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.months / 12}년</span>
                   <span>{won(r.monthlyPayment)}</span>
                   <span>{formatEok(r.totalInterest)}</span>
                   <span>{formatEok(r.totalPayment)}</span>
@@ -833,7 +833,7 @@ export default function LoanClient() {
               {compareRateTable.map(r => (
                 <div key={r.rate}
                   className={`${styles.scenarioRow} ${Math.abs(r.rate - rateNum) < 0.01 ? styles.scenarioRowBaseline : ''}`}>
-                  <span style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.rate}%</span>
+                  <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.rate}%</span>
                   <span>{won(r.monthlyPayment)}</span>
                   <span>{formatEok(r.totalInterest)}</span>
                   <span></span>
@@ -853,13 +853,13 @@ export default function LoanClient() {
                   <span style={{ textAlign: 'right' }}>총 상환</span>
                 </div>
                 <div className={styles.scenarioRow}>
-                  <span style={{ fontWeight: 700, fontFamily: 'Noto Sans KR' }}>원리금균등</span>
+                  <span style={{ fontWeight: 700, fontFamily: 'var(--font-sans)' }}>원리금균등</span>
                   <span>{won(ep.monthlyPayment)}</span>
                   <span>{formatEok(ep.totalInterest)}</span>
                   <span>{formatEok(ep.totalPayment)}</span>
                 </div>
                 <div className={styles.scenarioRow}>
-                  <span style={{ fontWeight: 700, fontFamily: 'Noto Sans KR' }}>원금균등</span>
+                  <span style={{ fontWeight: 700, fontFamily: 'var(--font-sans)' }}>원금균등</span>
                   <span>{won(epr.firstPayment)}~{won(epr.lastPayment)}</span>
                   <span>{formatEok(epr.totalInterest)}</span>
                   <span>{formatEok(epr.totalPayment)}</span>
@@ -883,7 +883,7 @@ export default function LoanClient() {
             </div>
             {reverseTermTable.map(r => (
               <div key={r.months} className={styles.scenarioRow}>
-                <span style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.months / 12}년</span>
+                <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.months / 12}년</span>
                 <span>{formatEok(r.result.principal)}</span>
                 <span>{formatEok(r.result.totalInterest)}</span>
                 <span>{formatEok(r.result.totalPayment)}</span>

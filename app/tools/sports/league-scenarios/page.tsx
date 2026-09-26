@@ -44,7 +44,7 @@ const FAQ_LD = [
   },
 ]
 
-const sec = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' } as const
+const sec = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' } as const
 const lead = { fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' } as const
 const strong = { color: 'var(--text)' } as const
 
@@ -52,7 +52,7 @@ export default function LeagueScenariosPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />축구 순위 경우의 수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -131,7 +131,7 @@ export default function LeagueScenariosPage() {
               { t: '자력 예시', d: '2승(승점 6) 한 팀이 마지막 경기를 이기면 9점으로 조 1위 확정 — 다른 경기 무관.' },
               { t: '타력 예시', d: '우리가 이겨도 같은 승점 팀이 생겨, 그 팀이 다른 경기서 지거나 비겨야 올라가는 경우.' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--accent)', margin: '0 0 6px' }}>{m.t}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{m.d}</p>
               </div>
@@ -188,7 +188,7 @@ export default function LeagueScenariosPage() {
 
         {/* 함께 쓰면 좋은 도구 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/football-points', icon: '⚽', name: '축구 승점 계산기', desc: '목표 승점 달성 가능성·라이벌 추격' },
@@ -199,7 +199,7 @@ export default function LeagueScenariosPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

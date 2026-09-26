@@ -48,7 +48,7 @@ export default function LoremPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />더미 텍스트 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -73,7 +73,7 @@ export default function LoremPage() {
 
         {/* 1. 도구 개요 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>이 도구가 해결하는 문제</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>이 도구가 해결하는 문제</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             UI 디자이너와 프론트엔드 개발자는 시안 작업과 프로토타이핑 단계에서 항상 같은 고민에 부딪힙니다. <strong style={{ color: 'var(--text)' }}>실제 콘텐츠가 없으니 임시 텍스트로 채워야 하는데, 단순 Lorem Ipsum은 한국어 환경의 글자 폭과 줄바꿈을 반영하지 못합니다.</strong> 또한 카드·리뷰·회원 정보·주문 같은 구조화된 데이터도 함께 필요합니다.
           </p>
@@ -84,7 +84,7 @@ export default function LoremPage() {
 
         {/* 2. 6 tabs guide */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>6가지 탭 활용 가이드</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>6가지 탭 활용 가이드</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'minmax(0, 1fr) minmax(0, 1fr)', gap: '10px' }}>
             {[
               { icon: '📝', title: '문단', desc: '5단계 길이(아주 짧게~매우 길게) × 9가지 톤의 한글 문단. 영문은 고전 Lorem Ipsum(톤 무관). 1~20문단.' },
@@ -94,7 +94,7 @@ export default function LoremPage() {
               { icon: '✍️', title: 'UX 라이팅', desc: '로그인 실패·결제 실패·삭제 확인·빈 상태 등 5가지 시나리오를 톤별로 자동 작성. 제목·본문·버튼 카피 한 세트.' },
               { icon: '📏', title: '길이 테스트', desc: '5단계 길이 샘플 + truncate 1·2·3줄 비교 + 띄어쓰기 없는 한글, URL, 이모지 등 오버플로 케이스 박스.' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
                 <div style={{ fontSize: '22px', marginBottom: '8px' }}>{item.icon}</div>
                 <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>{item.title}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, overflowWrap: 'anywhere' }}>{item.desc}</p>
@@ -105,7 +105,7 @@ export default function LoremPage() {
 
         {/* 3. tone guide */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>9가지 톤이 만드는 차이</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>9가지 톤이 만드는 차이</h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
             톤이 적용되는 곳은 <strong style={{ color: 'var(--text)' }}>한글 문단 · UI 문구(19종 중 11종) · 카드 목업(아티클·프로필 카드) · UX 라이팅</strong>입니다. 영문 Lorem Ipsum은 의사 라틴어라 톤 개념이 성립하지 않고, 이름·상품 카드의 상품명·JSON 더미는 문체가 아니라 <strong style={{ color: 'var(--text)' }}>값</strong>이라 톤과 무관합니다. 각 화면에도 같은 안내를 표시합니다.
           </p>
@@ -124,7 +124,7 @@ export default function LoremPage() {
               { tone: '교육', sample: '수업 시작' },
               { tone: '게임', sample: '전투 시작!' },
             ].map((t, i) => (
-              <div key={i} style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 12px', textAlign: 'center' }}>
+              <div key={i} style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '10px 12px', textAlign: 'center' }}>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', textTransform: 'uppercase', letterSpacing: '0.04em', marginBottom: '4px' }}>{t.tone}</p>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600 }}>{t.sample}</p>
               </div>
@@ -134,11 +134,11 @@ export default function LoremPage() {
 
         {/* 4. JSON formats */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>JSON 더미 데이터 8가지 출력 형식</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>JSON 더미 데이터 8가지 출력 형식</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             &quot;회원 정보 50명&quot;을 만든다고 할 때, 어디에 붙여넣을지에 따라 필요한 형식이 다릅니다. 본 도구는 한 번 생성한 데이터를 <strong style={{ color: 'var(--text)' }}>다시 만들지 않고</strong> 8가지 포맷 중 어느 것으로든 바꿔 보여 줍니다. 포맷 버튼을 누르면 같은 레코드가 그대로 유지된 채 표기만 바뀝니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
               <li><strong style={{ color: 'var(--text)' }}>JSON</strong> — REST API mock, fixture 파일, 서버 응답 예시</li>
               <li><strong style={{ color: 'var(--text)' }}>JSON Lines (JSONL)</strong> — 로그 파이프라인, 스트리밍 처리, BigQuery 적재</li>
@@ -154,7 +154,7 @@ export default function LoremPage() {
 
         {/* 5. when to use length test */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>길이 테스트 탭이 잡아내는 버그</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>길이 테스트 탭이 잡아내는 버그</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             카드·리스트·테이블 컴포넌트의 상당수는 <strong style={{ color: 'var(--text)' }}>실제 데이터가 들어오면 깨집니다.</strong> 디자인 단계에서 적당한 길이의 더미 텍스트로 채우면 이상해 보이지 않지만, 실제로는 다양한 길이의 한국어 텍스트가 들어오기 때문입니다.
           </p>
@@ -175,7 +175,7 @@ export default function LoremPage() {
 
         {/* 6. UX writing */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>UX 라이팅: 톤이 사용자 경험을 만든다</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>UX 라이팅: 톤이 사용자 경험을 만든다</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             &quot;삭제하시겠습니까?&quot;라는 같은 질문도 — 친근체로 작성하면 부드럽지만 안전감이 약하고, 전문가 톤으로 작성하면 무겁지만 신뢰가 갑니다. 본 도구의 UX 라이팅 탭은 동일한 시나리오를 9가지 톤으로 즉시 비교할 수 있어, 제품의 분위기에 맞는 카피를 선택하는 데 도움이 됩니다.
           </p>
@@ -186,7 +186,7 @@ export default function LoremPage() {
 
         {/* 6b. lorem ipsum origin */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>Lorem Ipsum은 어디서 왔나 — 2,000년 전 키케로</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>Lorem Ipsum은 어디서 왔나 — 2,000년 전 키케로</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             Lorem Ipsum은 무작위 음절 뭉치가 아니라 <strong style={{ color: 'var(--text)' }}>실제 고전 문헌의 조각</strong>입니다. 원전은 기원전 45년 키케로(Cicero)의 윤리학 저작 「De finibus bonorum et malorum」 1권 32~33절 — 원문의 &quot;neque porro quisquam est, qui <strong style={{ color: 'var(--text)' }}>dolorem ipsum</strong>, quia dolor sit, <strong style={{ color: 'var(--text)' }}>amet, consectetur, adipisci velit</strong>…&quot; 대목에서 필러 첫 문장이 나왔고, 필러 후반부의 &quot;sed ut perspiciatis&quot; &quot;at vero eos et accusamus&quot; 같은 문구도 같은 32~33절과 연속으로 대응합니다.
           </p>
@@ -230,7 +230,7 @@ export default function LoremPage() {
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
             이 대목은 예전에 두 군데가 틀렸던 것을 바로잡은 것입니다. ① 그를 &apos;라틴어 교수&apos;라 부르는 것이 부정확하다고 적었지만, 그렇게 볼 근거가 어디에도 없습니다 — 2001년 <a href="https://www.straightdope.com/21343427/what-does-the-filler-text-lorem-ipsum-mean" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">The Straight Dope 칼럼</a>은 그를 &quot;라틴어 교수에서 출판부장이 된 인물&quot;로 소개하고, 대학 아카이브는 1975년부터 출판부장이었다고 적습니다(두 역할이 순차였는지 병행이었는지도 확정할 수 없어 단정하지 않았습니다). ② 정정 기사 제목을 &apos;Lorem Oopsum&apos;이라고 적었는데, 이 제목을 대는 곳은 무출처 웹문서뿐입니다. 서한 본문을 가장 원본에 가깝게 옮긴 <a href="https://nwalsh.com/comp.fonts/FAQ/cf_36.htm" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">comp.fonts FAQ</a>(&quot;Before and After Magazine, Volume 4 Number 2&quot;)에도, Priceonomics 기사에도 그런 제목은 없습니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '6px' }}>&apos;1500년대 무명 인쇄공&apos; 통설의 반전</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               &quot;1500년대에 어느 무명 인쇄공이 활자 견본용으로 만들었다&quot;는 유명한 이야기는 매클린톡 본인의 미확인 회고가 출처였습니다. 정작 본인도 그 옛 견본집을 다시 찾지 못했고, 확실히 추적된 가장 오래된 사용은 <strong style={{ color: 'var(--text)' }}>1966년 Letraset 전사(레터링) 시트</strong>라고 인정했습니다. 통설의 진원지였던 lipsum.com조차 최근 이 서술을 공식 개정해(2026-07 확인 기준), 지금은 1966년 Letraset이 런던 세인트브라이드 인쇄도서관 사서 제임스 모즐리(James Mosley)와 함께 1914년판 키케로 번역본을 재배열해 만들었다는 설명으로 바뀌었습니다(모즐리가 직접 재배열까지 했는지 자문에 그쳤는지는 자료마다 서술이 다릅니다). 한국어 웹 상당수에는 아직 옛 &apos;1500년대&apos; 서술이 그대로 남아 있습니다. 이후 1980년대 후반 Aldus PageMaker에 더미 텍스트로 실리면서 데스크톱 출판과 함께 업계 표준으로 굳어졌습니다.
@@ -239,7 +239,7 @@ export default function LoremPage() {
               <strong style={{ color: 'var(--text)' }}>어디까지가 확인된 사실인가</strong> — 실제 Letraset 견본 시트 스캔은 <a href="https://commons.wikimedia.org/wiki/File:Letraset_Lorem_Ipsum.jpg" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">위키미디어 공용에 1점(품번 PM169)</a> 공개돼 있지만, 제작 연도가 &lsquo;1970년경(불확실)&rsquo;으로만 적혀 있어 <strong style={{ color: 'var(--text)' }}>1966년을 직접 증명하지는 못합니다</strong>. 1966년이라는 연도와 모즐리의 관여는 Letraset 초기 디자이너 데이브 페리(Dave Farey)의 회고에 기대고 있으며, 당시 사내 문서가 공개된 것은 아닙니다. PageMaker에 실린 정확한 버전·연도도 자료마다 엇갈려(1985년 초판설·1987년설·3.0/1988년설) 확정할 수 없습니다. 이 문단은 그래서 &lsquo;확인된 물증&rsquo;과 &lsquo;증언&rsquo;을 구분해 적었습니다.
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, fontStyle: 'italic', marginBottom: '8px' }}>
               &quot;No one rejects, dislikes or avoids pleasure itself, because it is pleasure, but because those who do not know how to pursue pleasure rationally encounter consequences that are extremely painful.&quot;
             </p>
@@ -251,7 +251,7 @@ export default function LoremPage() {
 
         {/* 6c. why korean dummy */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>한국어 더미 텍스트는 왜 따로 필요한가</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>한국어 더미 텍스트는 왜 따로 필요한가</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
             한글은 글자 폭과 줄바꿈 특성이 라틴 알파벳과 다릅니다. 같은 폭 안에 들어가는 글자 수, 줄이 바뀌는 위치, 단어가 끊기는 방식이 달라서 <strong style={{ color: 'var(--text)' }}>Lorem Ipsum으로 보기 좋게 맞춘 카드·버튼·제목이 한국어 실데이터를 넣는 순간 다르게 흐르는</strong> 일이 흔합니다. 그래서 실무에서는 목표 언어와 같은 문자 체계의 더미 텍스트로 조판을 확인하는 것이 통용 관행입니다. 본 도구의 문단 탭이 한글 더미를 9가지 톤으로 따로 제공하고, 길이 테스트 탭이 띄어쓰기 없는 한글·긴 URL 같은 극단 케이스를 별도로 두는 이유입니다.
           </p>
@@ -259,7 +259,7 @@ export default function LoremPage() {
 
         {/* 6b. 안전한 더미 값 규칙 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>더미 이메일·전화번호는 아무 값이나 쓰면 안 됩니다</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>더미 이메일·전화번호는 아무 값이나 쓰면 안 됩니다</h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
             더미 데이터의 사고는 대부분 &lsquo;형식만 맞춘 값&rsquo;에서 납니다. 시드 데이터로 넣어 둔 주소로 스테이징 서버가 실제 안내 메일을 보내거나, 테스트 문자가 모르는 사람에게 도착하는 식입니다. <strong style={{ color: 'var(--text)' }}>실존할 수 없는 값</strong>을 쓰면 이 사고가 구조적으로 막힙니다. 본 도구가 쓰는 대역과 근거는 다음과 같습니다.
           </p>
@@ -306,8 +306,8 @@ export default function LoremPage() {
 
         {/* 7. legal */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>저작권·사용 권한</h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '14px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>저작권·사용 권한</h2>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '14px' }}>
             <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>이용 허락</p>
             <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
               본 도구가 출력하는 모든 텍스트와 데이터는 <strong style={{ color: 'var(--text)' }}>용도 제한 없이 자유롭게 사용하실 수 있습니다</strong> — 개인·상업 프로젝트, 클라이언트 시안, 제품 문구 어디에든, 출처 표시나 별도 허락 없이 쓰셔도 됩니다. 재배포와 2차적 저작물 작성도 허용합니다.
@@ -331,7 +331,7 @@ export default function LoremPage() {
 
         {/* 8. tips */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>활용 팁 5가지</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>활용 팁 5가지</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               '디자인 시스템 검수 시 — 길이 테스트 탭의 truncate 비교를 그대로 스크린샷해 가이드 문서에 첨부',
@@ -350,13 +350,13 @@ export default function LoremPage() {
 
         {/* FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -371,7 +371,7 @@ export default function LoremPage() {
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 700, marginBottom: '14px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
             {[
               { href: '/tools/art/charcount',     icon: '🔡', name: '글자수 세기',          desc: '공백 포함·제외 실시간 카운트' },
@@ -381,7 +381,7 @@ export default function LoremPage() {
               { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 단위 변환기',         desc: 'px·rem·clamp() 변환' },
               { href: '/tools/dev/number-base',   icon: '🔢', name: '진법 변환기',           desc: '2·8·10·16진 + 비트 시각화' },
             ].map((tool, i) => (
-              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
+              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
                   <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>

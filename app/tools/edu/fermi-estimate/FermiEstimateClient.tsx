@@ -445,7 +445,7 @@ export default function FermiEstimateClient() {
           <span className={s.heroUnit}>{f.unit}{resultUnit && ` ${resultUnit}`}</span>
         </div>
         <p className={s.heroSub}>
-          정확한 값 ≈ <strong style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{Math.round(baseResult).toLocaleString('ko-KR')}</strong>
+          정확한 값 ≈ <strong style={{ fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{Math.round(baseResult).toLocaleString('ko-KR')}</strong>
         </p>
         <div className={s.heroCalc}>
           {calcStr}<br />
@@ -687,7 +687,7 @@ export default function FermiEstimateClient() {
             <div className={s.card} style={{ textAlign: 'center', padding: 30 }}>
               <p style={{ fontSize: 32, marginBottom: 8 }}>📊</p>
               <p style={{ color: 'var(--muted)', fontSize: 13, lineHeight: 1.85 }}>
-                먼저 <strong style={{ color: '#0D9488' }}>템플릿 시작</strong> 또는 <strong style={{ color: '#0D9488' }}>자유 추정</strong> 탭에서 추정을 입력해주세요.
+                먼저 <strong style={{ color: 'var(--teal-600)' }}>템플릿 시작</strong> 또는 <strong style={{ color: 'var(--teal-600)' }}>자유 추정</strong> 탭에서 추정을 입력해주세요.
               </p>
             </div>
           ) : (
@@ -841,7 +841,7 @@ export default function FermiEstimateClient() {
                         <span className={s.libItemDate}>{date}</span>
                       </div>
                       <p className={s.libItemValue}>약 {f.value} {f.unit}{item.resultUnit && ` ${item.resultUnit}`}</p>
-                      <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'JetBrains Mono, Menlo, monospace' }}>
+                      <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-mono)' }}>
                         {item.formula} · 변수 {item.variables.length}개
                       </p>
                       <div className={s.libItemActions}>

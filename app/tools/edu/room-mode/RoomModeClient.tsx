@@ -448,7 +448,7 @@ export default function RoomModeClient() {
                         className={s.bonelloFill}
                         style={{
                           width: `${Math.max(w, 4)}%`,
-                          background: bad ? '#BE185D' : (b.count === 0 ? '#444' : '#0F766E'),
+                          background: bad ? '#BE185D' : (b.count === 0 ? '#444' : 'var(--teal-700)'),
                         }}
                       >
                         <span className={s.bonelloVal}>{b.count}{b.coincidentViolation ? ' ⚠' : ''}</span>
@@ -459,7 +459,7 @@ export default function RoomModeClient() {
               })}
             </div>
             <p className={s.helpText}>
-              Bonello(1981) 두 조건 — ✅ <strong style={{ color: '#0F766E' }}>비감소</strong>: 위 대역으로 갈수록 모드 수가 줄지 않아야
+              Bonello(1981) 두 조건 — ✅ <strong style={{ color: 'var(--teal-700)' }}>비감소</strong>: 위 대역으로 갈수록 모드 수가 줄지 않아야
               (급증은 정상) · ⚠ <strong style={{ color: '#BE185D' }}>중복 모드</strong>: 같은 주파수에 겹친 모드는
               그 대역 모드 수가 5개 이상일 때만 허용<br />
               ※ 원 기준 대역 10~200Hz 중 20Hz 이상 표시. 참고 지표 — 충족이 좋은 저역 응답을
@@ -571,21 +571,21 @@ function ModeBarChart({ modes, schroeder }: BarProps) {
       {[20, 50, 100, 150, 200, 250, 300].map((f) => (
         <g key={f}>
           <line x1={xScale(f)} y1={padT} x2={xScale(f)} y2={yBase} stroke="var(--border)" strokeWidth="0.5" />
-          <text x={xScale(f)} y={H - 8} fill="var(--muted)" fontSize="13" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{f}</text>
+          <text x={xScale(f)} y={H - 8} fill="var(--muted)" fontSize="13" textAnchor="middle">{f}</text>
         </g>
       ))}
       {/* 강도 라벨 */}
       {[0.5, 0.7, 1.0].map((s) => (
         <g key={s}>
           <line x1={padL} y1={yScale(s)} x2={W - padR} y2={yScale(s)} stroke="var(--border)" strokeWidth="0.3" strokeDasharray="2,3" />
-          <text x={padL - 4} y={yScale(s) + 3} fill="var(--muted)" fontSize="11" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{s}</text>
+          <text x={padL - 4} y={yScale(s) + 3} fill="var(--muted)" fontSize="11" textAnchor="end">{s}</text>
         </g>
       ))}
       {/* 슈로더 라인 */}
       {schroeder >= fMin && schroeder <= fMax && (
         <g>
           <line x1={xScale(schroeder)} y1={padT - 4} x2={xScale(schroeder)} y2={yBase + 4} stroke="#B45309" strokeWidth="1.5" strokeDasharray="3,2" />
-          <text x={xScale(schroeder)} y={padT - 6} fill="#B45309" fontSize="12" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">슈로더</text>
+          <text x={xScale(schroeder)} y={padT - 6} fill="#B45309" fontSize="12" textAnchor="middle" fontWeight="700">슈로더</text>
         </g>
       )}
       {/* 모드 막대 */}
@@ -609,7 +609,7 @@ function ModeBarChart({ modes, schroeder }: BarProps) {
       })}
       {/* X축 + 단위 */}
       <line x1={padL} y1={yBase} x2={W - padR} y2={yBase} stroke="var(--text)" strokeWidth="1" />
-      <text x={W - padR} y={padT + 2} fill="var(--muted)" fontSize="11" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>Hz</text>
+      <text x={W - padR} y={padT + 2} fill="var(--muted)" fontSize="11" textAnchor="end">Hz</text>
     </svg>
   )
 }
@@ -715,15 +715,15 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
         <rect x={pad} y={pad} width={w} height={h} fill="none" stroke="var(--text)" strokeWidth="2" />
         {/* 38% 라인 */}
         <line x1={pad} y1={pad + h * 0.38} x2={pad + w} y2={pad + h * 0.38} stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="6,4" />
-        <text x={pad + w + 4} y={pad + h * 0.38 + 4} fill="var(--accent-ink)" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>38%</text>
+        <text x={pad + w + 4} y={pad + h * 0.38 + 4} fill="var(--accent-ink)" fontSize="10">38%</text>
         {/* 가로/세로 치수 */}
-        <text x={pad + w / 2} y={pad - 8} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmt(W, 1)}m (가로 W)</text>
-        <text x={pad - 8} y={pad + h / 2} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' transform={`rotate(-90, ${pad - 8}, ${pad + h / 2})`}>
+        <text x={pad + w / 2} y={pad - 8} fill="var(--muted)" fontSize="11" textAnchor="middle">{fmt(W, 1)}m (가로 W)</text>
+        <text x={pad - 8} y={pad + h / 2} fill="var(--muted)" fontSize="11" textAnchor="middle" transform={`rotate(-90, ${pad - 8}, ${pad + h / 2})`}>
           {fmt(L, 1)}m (세로 L)
         </text>
         {/* 앞 벽 라벨 */}
-        <text x={pad + w / 2} y={pad + 14} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>앞 벽 (스피커 면)</text>
-        <text x={pad + w / 2} y={pad + h - 6} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>뒤 벽</text>
+        <text x={pad + w / 2} y={pad + 14} fill="var(--muted)" fontSize="11" textAnchor="middle">앞 벽 (스피커 면)</text>
+        <text x={pad + w / 2} y={pad + h - 6} fill="var(--muted)" fontSize="11" textAnchor="middle">뒤 벽</text>
 
         {/* 청취자 (드래그) */}
         <g
@@ -735,8 +735,8 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
           onKeyDown={(e) => moveMarkerByKey(e, 'listener')}
           style={{ cursor: 'pointer', touchAction: 'none' }}
         >
-          <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={16} fill="rgba(8, 145, 178, 0.25)" />
-          <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={12} fill="#0891B2" stroke="#000" strokeWidth="1.5" />
+          <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={16} fill="color-mix(in srgb, var(--cyan-600) 25%, transparent)" />
+          <circle cx={pad + listener.x * w} cy={pad + listener.y * h} r={12} fill="var(--cyan-600)" stroke="#000" strokeWidth="1.5" />
           <text x={pad + listener.x * w} y={pad + listener.y * h + 4} fontSize="14" textAnchor="middle">🪑</text>
         </g>
 
@@ -750,7 +750,7 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
           onKeyDown={(e) => moveMarkerByKey(e, 'sL')}
           style={{ cursor: 'pointer', touchAction: 'none' }}
         >
-          <circle cx={pad + speakerL.x * w} cy={pad + speakerL.y * h} r={11} fill="#EA580C" stroke="#000" strokeWidth="1.5" />
+          <circle cx={pad + speakerL.x * w} cy={pad + speakerL.y * h} r={11} fill="var(--orange-600)" stroke="#000" strokeWidth="1.5" />
           <text x={pad + speakerL.x * w} y={pad + speakerL.y * h + 4} fontSize="13" textAnchor="middle">L</text>
         </g>
 
@@ -764,7 +764,7 @@ function RoomPlanSVG({ W, L, speakerL, speakerR, listener, onSpeakerLChange, onS
           onKeyDown={(e) => moveMarkerByKey(e, 'sR')}
           style={{ cursor: 'pointer', touchAction: 'none' }}
         >
-          <circle cx={pad + speakerR.x * w} cy={pad + speakerR.y * h} r={11} fill="#EA580C" stroke="#000" strokeWidth="1.5" />
+          <circle cx={pad + speakerR.x * w} cy={pad + speakerR.y * h} r={11} fill="var(--orange-600)" stroke="#000" strokeWidth="1.5" />
           <text x={pad + speakerR.x * w} y={pad + speakerR.y * h + 4} fontSize="13" textAnchor="middle">R</text>
         </g>
 
@@ -819,33 +819,33 @@ function BoltAreaSVG({ W, L, H }: { W: number; L: number; H: number }) {
         {[1.0, 1.5, 2.0, 2.5].map((v) => (
           <g key={`gx-${v}`}>
             <line x1={xScale(v)} y1={padT} x2={xScale(v)} y2={svgH - padB} stroke="var(--border)" strokeWidth="0.4" />
-            <text x={xScale(v)} y={svgH - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{v}</text>
+            <text x={xScale(v)} y={svgH - 10} fill="var(--muted)" fontSize="10" textAnchor="middle">{v}</text>
           </g>
         ))}
         {[1.0, 1.5, 2.0, 2.5].map((v) => (
           <g key={`gy-${v}`}>
             <line x1={padL} y1={yScale(v)} x2={svgW - padR} y2={yScale(v)} stroke="var(--border)" strokeWidth="0.4" />
-            <text x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{v}</text>
+            <text x={padL - 6} y={yScale(v) + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{v}</text>
           </g>
         ))}
         {/* 안전 영역 */}
-        <polygon points={safePoly} fill="rgba(13, 148, 136, 0.18)" stroke="#0D9488" strokeWidth="1.5" />
+        <polygon points={safePoly} fill="rgba(13, 148, 136, 0.18)" stroke="var(--teal-600)" strokeWidth="1.5" />
         {/* Sepmeyer 권장비 점 */}
-        <circle cx={xScale(1.14)} cy={yScale(1.39)} r={6} fill="#D97706" stroke="#000" strokeWidth="0.5" />
-        <text x={xScale(1.14) + 8} y={yScale(1.39) + 4} fill="#B45309" fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>Sepmeyer ⭐</text>
+        <circle cx={xScale(1.14)} cy={yScale(1.39)} r={6} fill="var(--amber-600)" stroke="#000" strokeWidth="0.5" />
+        <text x={xScale(1.14) + 8} y={yScale(1.39) + 4} fill="#B45309" fontSize="9">Sepmeyer ⭐</text>
         {/* 정육면체 (위험) */}
-        <circle cx={xScale(1.0)} cy={yScale(1.0)} r={5} fill="#DB2777" stroke="#000" strokeWidth="0.5" />
-        <text x={xScale(1.0) + 7} y={yScale(1.0) + 4} fill="#BE185D" fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>정육면체 ⚠️</text>
+        <circle cx={xScale(1.0)} cy={yScale(1.0)} r={5} fill="var(--pink-600)" stroke="#000" strokeWidth="0.5" />
+        <text x={xScale(1.0) + 7} y={yScale(1.0) + 4} fill="#BE185D" fontSize="9">정육면체 ⚠️</text>
         {/* 본인 방 (범위 밖이면 가장자리 클램프 + 표시) */}
         <g>
           <circle cx={xScale(dotWl)} cy={yScale(dotLl)} r={9} fill="var(--accent)" stroke="#000" strokeWidth="1.5" />
-          <text x={xScale(dotWl)} y={yScale(dotLl) - 14 < 10 ? yScale(dotLl) + 22 : yScale(dotLl) - 14} fill="var(--accent-ink)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
+          <text x={xScale(dotWl)} y={yScale(dotLl) - 14 < 10 ? yScale(dotLl) + 22 : yScale(dotLl) - 14} fill="var(--accent-ink)" fontSize="11" textAnchor="middle" fontWeight="700">
             내 방{dotClamped ? ' (차트 밖)' : ''}
           </text>
         </g>
         {/* 축 라벨 */}
-        <text x={svgW / 2} y={svgH - 1} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>W / H (가로/높이)</text>
-        <text x={padL - 28} y={svgH / 2} fill="var(--text)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' transform={`rotate(-90, ${padL - 28}, ${svgH / 2})`}>L / H (세로/높이)</text>
+        <text x={svgW / 2} y={svgH - 1} fill="var(--text)" fontSize="11" textAnchor="middle">W / H (가로/높이)</text>
+        <text x={padL - 28} y={svgH / 2} fill="var(--text)" fontSize="11" textAnchor="middle" transform={`rotate(-90, ${padL - 28}, ${svgH / 2})`}>L / H (세로/높이)</text>
       </svg>
     </div>
   )

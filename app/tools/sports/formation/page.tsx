@@ -20,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -30,7 +30,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
 }
 const cell: React.CSSProperties = {
@@ -52,7 +52,7 @@ const headCell: React.CSSProperties = {
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -86,7 +86,7 @@ export default function FormationPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />축구 포메이션 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -134,7 +134,7 @@ export default function FormationPage() {
               { icon: '🎮', name: 'FIFA·이풋볼 전술',  desc: '게임 전술 스쿼드 시뮬레이션' },
               { icon: '🏫', name: '체육 수업·합반',    desc: '팀 나누기 + 포지션 일괄 안내' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 16px' }}>
                 <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.icon} {b.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
               </div>
@@ -181,8 +181,8 @@ export default function FormationPage() {
               { name: '4-1-4-1', color: '#0D9488', tag: '수비 안정', desc: '단일 수비형 미드 + 박스 4. 점유와 안정 동시. 만치니 시티 시기' },
               { name: '3-6-1',   color: '#DB2777', tag: '점유 압도', desc: '미드 6인으로 중원 압도. 빌드업·점유 위주' },
             ].map((f, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: 12, padding: '10px 12px', minWidth: 0 }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 17, fontWeight: 800, color: f.color, margin: 0 }}>{f.name}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: 'var(--radius-m)', padding: '10px 12px', minWidth: 0 }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 17, fontWeight: 800, color: f.color, margin: 0 }}>{f.name}</p>
                 <p style={{ fontSize: 11, color: f.color, fontWeight: 700, margin: '2px 0 6px', opacity: 0.85 }}>{f.tag}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{f.desc}</p>
               </div>
@@ -256,7 +256,7 @@ export default function FormationPage() {
             — 2026년 7월 30일 현재 후임 미정.
           </p>
 
-          <h3 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 16, fontWeight: 700, letterSpacing: '-0.3px', margin: '24px 0 10px' }}>
+          <h3 style={{ fontFamily: 'var(--font-sans)', fontSize: 16, fontWeight: 700, letterSpacing: '-0.3px', margin: '24px 0 10px' }}>
             🌍 2026 월드컵이 보여준 세계 전술 트렌드
           </h3>
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
@@ -271,7 +271,7 @@ export default function FormationPage() {
               { title: '2. 카운터-프레싱 확산', desc: '승리팀이 패배팀보다 평균 4초 빨리 볼을 재탈환 — 소유권을 잃은 직후의 즉각 압박이 승패를 가름' },
               { title: '3. 골키퍼의 플레이메이커화', desc: 'GK가 골킥을 직접 처리한 비율 2018년 100% → 2022년 91% → 2026년 52% — 골키퍼의 빌드업 관여 급증' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 16px' }}>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.title}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
               </div>
@@ -297,7 +297,7 @@ export default function FormationPage() {
               { title: '3. 상대 강도', desc: '약체 상대 → 공격적(4-3-3·3-4-3) / 강팀 상대 → 수비적(5-4-1·4-5-1)' },
               { title: '4. 체력 수준', desc: '풀백 공격 가담은 체력 소모 큼. 동호회는 4-4-2·4-2-3-1 권장 / 초등부 8인제는 3-3-1·2-3-2가 무난' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 16px' }}>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.title}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
               </div>

@@ -324,7 +324,7 @@ export default function HyroxClient() {
                   {FIXED_SPECS.map(r => (
                     <tr key={r.station}>
                       <td>{r.station}</td>
-                      <td style={{ textAlign: 'right', fontFamily: "'Inter', system-ui, sans-serif" }}>{r.spec}</td>
+                      <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)' }}>{r.spec}</td>
                     </tr>
                   ))}
                 </tbody>

@@ -171,10 +171,10 @@ export default function AuctionClient() {
 
   /* 도넛 차트 데이터 (탭 4) */
   const donutData = [
-    { id: 'price', label: '낙찰가', value: price, color: '#0D9488' },
-    { id: 'tax', label: '세금·법무', value: itemCosts.filter((c) => c.category === 'tax' || c.category === 'legal').reduce((s, c) => s + c.value, 0), color: '#0891B2' },
-    { id: 'auction', label: '명도·체납·수리', value: itemCosts.filter((c) => c.category === 'auction').reduce((s, c) => s + c.value, 0), color: '#EA580C' },
-    { id: 'extra', label: '기타', value: itemCosts.filter((c) => c.category === 'extra').reduce((s, c) => s + c.value, 0), color: '#9B59B6' },
+    { id: 'price', label: '낙찰가', value: price, color: 'var(--teal-600)' },
+    { id: 'tax', label: '세금·법무', value: itemCosts.filter((c) => c.category === 'tax' || c.category === 'legal').reduce((s, c) => s + c.value, 0), color: 'var(--cyan-600)' },
+    { id: 'auction', label: '명도·체납·수리', value: itemCosts.filter((c) => c.category === 'auction').reduce((s, c) => s + c.value, 0), color: 'var(--orange-600)' },
+    { id: 'extra', label: '기타', value: itemCosts.filter((c) => c.category === 'extra').reduce((s, c) => s + c.value, 0), color: 'var(--amethyst)' },
   ]
 
   const updateCost = (id: string, v: string) => setCosts((prev) => ({ ...prev, [id]: v }))
@@ -580,7 +580,7 @@ export default function AuctionClient() {
               <strong>🚨 현금 부족 경고</strong>
               <p>
                 자기자본 <strong>{fmtMan(loanResult.ownEquity)}</strong>이 필요한데 보유 현금은{' '}
-                <strong>{fmtMan(cashOwnN)}</strong> — <strong style={{ color: '#DB2777' }}>{fmtMan(cashShortage)} 부족</strong>합니다.
+                <strong>{fmtMan(cashOwnN)}</strong> — <strong style={{ color: 'var(--pink-600)' }}>{fmtMan(cashShortage)} 부족</strong>합니다.
                 <br />→ 추가 자금 마련 / 대출 한도 상향 / 낙찰가 조정 필요
               </p>
             </div>
@@ -606,7 +606,7 @@ export default function AuctionClient() {
                   <tr className={s.cellSubtitle}><td colSpan={2}>자기자본</td></tr>
                   <tr><td>자기자본 필요</td><td className={`${s.cellMono} ${s.cellAccent}`}>{fmtMan(loanResult.ownEquity)}</td></tr>
                   <tr><td>보유 현금</td><td className={s.cellMono}>{fmtMan(cashOwnN)}</td></tr>
-                  <tr><td>{cashShortage > 0 ? '❌ 부족' : '✅ 잉여'}</td><td className={s.cellMono} style={{ color: cashShortage > 0 ? '#DB2777' : 'var(--accent)' }}>{cashShortage > 0 ? `-${fmtMan(cashShortage)}` : `+${fmtMan(cashOwnN - loanResult.ownEquity)}`}</td></tr>
+                  <tr><td>{cashShortage > 0 ? '❌ 부족' : '✅ 잉여'}</td><td className={s.cellMono} style={{ color: cashShortage > 0 ? 'var(--pink-600)' : 'var(--accent)' }}>{cashShortage > 0 ? `-${fmtMan(cashShortage)}` : `+${fmtMan(cashOwnN - loanResult.ownEquity)}`}</td></tr>
                 </tbody>
               </table>
             </div>
@@ -666,7 +666,7 @@ export default function AuctionClient() {
                       <strong className={s.cellAccent}>{fmtMan(sc.total)}</strong>
                     </div>
                     {sc.diff !== 0 && (
-                      <p className={s.scenarioDiff} style={{ color: sc.diff > 0 ? '#DB2777' : '#059669' }}>
+                      <p className={s.scenarioDiff} style={{ color: sc.diff > 0 ? 'var(--pink-600)' : 'var(--emerald-600)' }}>
                         {sc.diff > 0 ? '▲' : '▼'} {fmtMan(Math.abs(sc.diff))} ({sc.diff > 0 ? '+' : ''}{((sc.diff / baseTotal) * 100).toFixed(1)}%)
                       </p>
                     )}
@@ -835,8 +835,8 @@ function DonutChart({ data, total }: { data: DonutDatum[]; total: number }) {
         )
       })}
       <circle cx={cx} cy={cy} r={rInner - 2} fill="var(--bg2)" />
-      <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>총 투자</text>
-      <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
+      <text x={cx} y={cy - 4} fill="var(--muted)" fontSize="10" textAnchor="middle">총 투자</text>
+      <text x={cx} y={cy + 14} fill="var(--accent)" fontSize="13" textAnchor="middle" fontWeight="800">
         {total >= 10000 ? `${(total / 10000).toFixed(1)}억` : `${total.toFixed(0)}만`}
       </text>
     </svg>

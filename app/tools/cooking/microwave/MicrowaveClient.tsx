@@ -338,7 +338,7 @@ export default function MicrowaveClient() {
               <strong>{fmtSec(convertedSec)}</strong>
             </p>
             <p className={s.heroSub}>
-              차이 <strong style={{ color: diff > 0 ? '#EA580C' : 'var(--accent)' }}>
+              차이 <strong style={{ color: diff > 0 ? 'var(--orange-600)' : 'var(--accent)' }}>
                 {diff > 0 ? '+' : ''}{Math.round(diff)}초
               </strong>
               {' · '}{myW > refW ? '⬇️ 더 짧게' : myW < refW ? '⬆️ 더 길게' : '동일'}
@@ -377,7 +377,7 @@ export default function MicrowaveClient() {
                         className={s.barFill}
                         style={{
                           width: `${Math.max(w, 4)}%`,
-                          background: isMine ? 'var(--accent)' : isRef ? '#0891B2' : 'rgba(234,88,12,0.5)',
+                          background: isMine ? 'var(--accent)' : isRef ? 'var(--cyan-600)' : 'rgba(234,88,12,0.5)',
                         }}
                       >
                         <span className={s.barValue}>{fmtSec(c.sec)}</span>
@@ -627,7 +627,7 @@ export default function MicrowaveClient() {
                     <circle cx={100} cy={100} r={r} stroke="var(--bg3)" strokeWidth="14" fill="none" />
                     <circle
                       cx={100} cy={100} r={r}
-                      stroke={isLast10 ? '#DB2777' : 'var(--accent)'}
+                      stroke={isLast10 ? 'var(--pink-600)' : 'var(--accent)'}
                       strokeWidth="14"
                       fill="none"
                       strokeLinecap="round"
@@ -638,15 +638,14 @@ export default function MicrowaveClient() {
                     />
                     <text
                       x={100} y={106}
-                      fill={isLast10 ? '#DB2777' : 'var(--text)'}
+                      fill={isLast10 ? 'var(--pink-600)' : 'var(--text)'}
                       fontSize="36"
                       fontWeight="800"
                       textAnchor="middle"
-                      fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                     >
                       {fmtTimer(total)}
                     </text>
-                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif">
+                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle">
                       {running
                         ? (phases.length > 1 ? `${phases[phaseIdx]?.label ?? ''} (${phaseIdx + 1}/${phases.length})` : '실행 중')
                         : remaining > 0 ? '일시정지' : '대기'}
@@ -704,9 +703,9 @@ export default function MicrowaveClient() {
         <>
           {VESSELS.map((v) => {
             const titles = {
-              safe: { emoji: '✅', label: '사용 가능 용기', color: '#0D9488' },
-              caution: { emoji: '⚠️', label: '주의 용기', color: '#D97706' },
-              forbidden: { emoji: '❌', label: '절대 금지', color: '#DB2777' },
+              safe: { emoji: '✅', label: '사용 가능 용기', color: 'var(--teal-600)' },
+              caution: { emoji: '⚠️', label: '주의 용기', color: 'var(--amber-600)' },
+              forbidden: { emoji: '❌', label: '절대 금지', color: 'var(--pink-600)' },
             }[v.category]
             return (
               <div key={v.category} className={s.card}>

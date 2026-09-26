@@ -40,7 +40,7 @@ const FAQ_LD = [
 ]
 
 const h2: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -48,7 +48,7 @@ const h2: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   fontSize: 13,
   color: 'var(--muted)',
@@ -61,7 +61,7 @@ export default function JwtPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />JWT 디코더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -84,11 +84,11 @@ export default function JwtPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
             {[
-              { n: '① Header', c: '#DC2626', d: '서명 알고리즘(alg)과 타입(typ). 어떤 방식으로 서명했는지 알려줍니다.' },
+              { n: '① Header', c: 'var(--red-600)', d: '서명 알고리즘(alg)과 타입(typ). 어떤 방식으로 서명했는지 알려줍니다.' },
               { n: '② Payload', c: 'var(--accent)', d: '클레임의 집합. 사용자 ID(sub)·발급자(iss)·만료(exp) 등이 담깁니다.' },
-              { n: '③ Signature', c: '#0891B2', d: 'header·payload와 비밀키로 만든 서명. 위변조를 잡아내는 검증용입니다.' },
+              { n: '③ Signature', c: 'var(--cyan-600)', d: 'header·payload와 비밀키로 만든 서명. 위변조를 잡아내는 검증용입니다.' },
             ].map((p, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${p.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${p.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: p.c, fontWeight: 700, marginBottom: 6 }}>{p.n}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{p.d}</p>
               </div>
@@ -280,7 +280,7 @@ export default function JwtPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                 }}
               >

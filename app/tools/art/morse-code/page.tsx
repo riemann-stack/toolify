@@ -16,18 +16,18 @@ export const metadata = buildMetadata({
   keywords: ['모스부호변환기', '모스부호', '한글모스부호', '모스부호표', 'SOS모스부호', 'NATO음성기호', '포네틱코드', '음성문자', 'morse code', '모스부호소리'],
 })
 
-const sectionTitle: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }
-const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '18px 20px' }
-const faqDetails: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '8px' }
+const sectionTitle: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }
+const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '18px 20px' }
+const faqDetails: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '8px' }
 const faqSummary: React.CSSProperties = { cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }
 const faqAnswer: React.CSSProperties = { marginTop: '10px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }
 
 const codeCell: React.CSSProperties = {
   display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '8px',
-  padding: '8px 12px', background: 'var(--bg3)', borderRadius: '8px', border: '1px solid var(--border)',
+  padding: '8px 12px', background: 'var(--bg3)', borderRadius: 'var(--radius-s)', border: '1px solid var(--border)',
 }
-const chStyle: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: '15px', color: 'var(--text)' }
-const mcStyle: React.CSSProperties = { fontFamily: 'Inter, system-ui, monospace', color: 'var(--accent)', fontSize: '14px', letterSpacing: '0.08em', fontWeight: 600 }
+const chStyle: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: '15px', color: 'var(--text)' }
+const mcStyle: React.CSSProperties = { fontFamily: 'var(--font-mono)', color: 'var(--accent)', fontSize: '14px', letterSpacing: '0.08em', fontWeight: 600 }
 
 const EN_LETTERS = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ'.split('')
 const EN_DIGITS = '0123456789'.split('')
@@ -62,7 +62,7 @@ export default function MorseCodePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />모스 부호 · NATO 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>

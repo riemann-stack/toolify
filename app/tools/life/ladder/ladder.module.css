@@ -3,21 +3,21 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--cyan-600); }
 
 /* ── 카드 ── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   width: 100%;
   box-sizing: border-box;
@@ -34,7 +34,7 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
 
 /* ── 입력 표 (참가자·결과) ── */
 .inputSection {
@@ -52,7 +52,7 @@
   text-transform: uppercase;
   font-weight: 700;
   margin-bottom: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .inputWithDot {
@@ -75,11 +75,11 @@
 .nameInput, .resultInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   width: 100%;
   box-sizing: border-box;
@@ -101,18 +101,18 @@
 .countBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .countBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
 .countBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .countNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-size: 18px;
@@ -131,11 +131,11 @@
 .optionBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
   text-align: center;
@@ -159,7 +159,7 @@
   padding: 9px 14px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: left;
@@ -187,18 +187,18 @@
   .tplCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 }
 .tplEmoji { font-size: 28px; line-height: 1; margin-bottom: 4px; }
-.tplName { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.tplName { font-size: 12px; color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 .tplDesc { font-size: 11px; color: var(--muted); margin-top: 2px; line-height: 1.4; }
 
 /* ── CTA 버튼 ── */
 .bigGenerate {
   background: var(--accent);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 14px;
   color: #000;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   cursor: pointer;
   width: 100%;
@@ -216,13 +216,13 @@
   padding: 11px 16px;
   font-size: 13px;
   color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(14,165,233,0.18); }
+  .actionBtn:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
 }
 
 .miniBtn {
@@ -232,23 +232,23 @@
   padding: 5px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+.miniDanger { color: var(--red-600); border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
   .miniDanger:hover { background: rgba(220,38,38,0.18); }
 }
 
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -263,7 +263,7 @@
 .ladderBox {
   background: rgba(255,255,255,0.65);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 14px 12px 18px;
   overflow-x: auto;
 }
@@ -282,7 +282,7 @@
   padding: 8px 4px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   text-align: center;
@@ -314,7 +314,7 @@
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   text-align: center;
   word-break: keep-all;
@@ -322,7 +322,7 @@
   text-overflow: ellipsis;
   white-space: nowrap;
 }
-.resultTagOn { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 800; }
+.resultTagOn { background: rgba(161,98,7,0.18); color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 800; }
 
 /* SVG */
 .ladderSvg {
@@ -344,7 +344,7 @@
   stroke: rgba(15,23,42,0.08);
 }
 .rungLine {
-  stroke: rgba(14,165,233,0.50);
+  stroke: color-mix(in srgb, var(--accent) 50%, transparent);
   stroke-linecap: round;
 }
 
@@ -367,27 +367,27 @@
 
 /* 결과 카드 (한명씩 모드) */
 .singleResult {
-  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 16px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .singleEmoji { font-size: 56px; line-height: 1; margin-bottom: 10px; }
 .singleParticipant {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   color: var(--muted);
   margin-bottom: 4px;
 }
 .singleArrow {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   color: var(--accent);
   margin: 8px 0;
 }
 .singleResultName {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(28px, 6vw, 40px);
   color: var(--accent);
@@ -397,7 +397,7 @@
   font-size: 12px;
   color: var(--muted);
   margin-top: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 결과 표 (전체·즉시 모드) */
@@ -413,15 +413,15 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .resultTableEmoji { font-size: 22px; text-align: center; }
 .resultTableName { color: var(--text); font-weight: 600; }
-.resultTableArrow { color: var(--muted); text-align: center; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
-.resultTableValue { color: var(--accent); font-weight: 800; font-family: 'Noto Sans KR', sans-serif; }
+.resultTableArrow { color: var(--muted); text-align: center; font-family: var(--font-sans); font-weight: 700; }
+.resultTableValue { color: var(--accent); font-weight: 800; font-family: var(--font-sans); }
 
 /* 익명 모드 카드 */
 .anonGrid {
@@ -434,7 +434,7 @@
 .anonCard {
   background: var(--bg3);
   border: 2px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 8px;
   cursor: pointer;
   text-align: center;
@@ -444,11 +444,11 @@
 }
 .anonCardRevealed { background: var(--accent-dim); border-color: var(--accent); }
 .anonEmoji { font-size: 32px; line-height: 1; margin-bottom: 4px; }
-.anonLabel { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.anonLabel { font-size: 12px; color: var(--muted); font-family: var(--font-sans); }
 .anonResult {
   font-size: 13px;
   color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   margin-top: 4px;
   word-break: keep-all;
@@ -464,23 +464,23 @@
 .reverseCard {
   background: var(--bg3);
   border: 2px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 10px;
   cursor: pointer;
   text-align: center;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .reverseCard:hover { transform: translateY(-2px); border-color: #A16207; }
+  .reverseCard:hover { transform: translateY(-2px); border-color: var(--yellow-700); }
 }
 .reverseLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; }
-.reverseResult { font-family: 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; word-break: keep-all; }
-.reverseRevealed { background: rgba(161,98,7,0.18); border-color: #A16207; }
-.reverseRevealed .reverseResult { color: #A16207; }
+.reverseResult { font-family: var(--font-sans); font-weight: 700; font-size: 14px; color: var(--text); margin-bottom: 6px; word-break: keep-all; }
+.reverseRevealed { background: rgba(161,98,7,0.18); border-color: var(--yellow-700); }
+.reverseRevealed .reverseResult { color: var(--yellow-700); }
 .reverseAnswer {
   font-size: 13px;
   color: var(--accent);
   margin-top: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 
@@ -501,10 +501,10 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .savedName { color: var(--text); font-weight: 600; }
 .savedName small { color: var(--muted); margin-left: 6px; font-size: 11px; font-weight: 400; }
@@ -516,24 +516,24 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
 
 /* 클릭 안내 배너 */
 .clickHint {
   text-align: center;
-  background: rgba(8,145,178,0.14);
-  border: 1px dashed rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-radius: 10px;
   padding: 9px 14px;
   font-size: 12px;
   color: var(--muted);
   line-height: 1.6;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.clickHint strong { color: #0891B2; }
+.clickHint strong { color: var(--cyan-600); }
 
 /* 시작·공개 버튼 행 (3개) */
 .startBtnRow {
@@ -546,11 +546,11 @@
 .startBtnSecondary {
   background: var(--bg2);
   border: 1px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 14px;
   color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   cursor: pointer;
   transition: all 0.15s;
@@ -562,11 +562,11 @@
 .shuffleBtn {
   background: rgba(155,89,182,0.10);
   border: 1px solid rgba(155,89,182,0.40);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 14px;
   font-size: 13px;
-  color: #9333EA;
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--purple-600);
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
 }@media (hover: hover) {

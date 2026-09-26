@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--cyan-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,7 +20,7 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
@@ -28,11 +28,11 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -40,16 +40,16 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveDrink  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
-.tabActivePerson { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
-.tabActivePrepaid{ background: rgba(161,98,7,0.18);  color: #A16207; font-weight: 700; }
+.tabActiveDrink  { background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
+.tabActivePerson { background: rgba(155,89,182,0.10); color: var(--purple-600); font-weight: 700; }
+.tabActivePrepaid{ background: rgba(161,98,7,0.18);  color: var(--yellow-700); font-weight: 700; }
 .tabActiveShare  { background: #FFE400;  color: #3C1E1E; font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   width: 100%;
   box-sizing: border-box;
@@ -66,24 +66,24 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
 
 /* ── 입력 ── */
 .amountInput, .textInput, .numInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 16px; /* 16px 이상이라야 iOS 포커스 시 자동 확대(zoom) 안 됨 */
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   width: 100%;
   box-sizing: border-box;
 }
 .amountInput:focus, .textInput:focus, .numInput:focus { border-color: var(--accent); }
 .amountInput, .numInput {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -95,7 +95,7 @@
 .unit {
   font-size: 14px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 
@@ -127,12 +127,12 @@
 .select {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 16px; /* iOS 자동 확대 방지 */
   font-weight: 600;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
   flex-shrink: 0;
@@ -147,7 +147,7 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   overflow: hidden;
   min-width: 0;
 }
@@ -161,7 +161,7 @@
   font-weight: 700;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) { .stepperBtn:hover:not(:disabled) { color: var(--accent); } }
 .stepperBtn:disabled { opacity: 0.35; cursor: not-allowed; }
@@ -172,7 +172,7 @@
   border: none;
   background: transparent;
   text-align: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
   color: var(--accent);
@@ -208,18 +208,18 @@
 .peopleBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .peopleBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
 .peopleBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 .peopleNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-size: 18px;
@@ -236,7 +236,7 @@
   padding: 5px 11px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   font-variant-numeric: tabular-nums;
@@ -264,7 +264,7 @@
   .scenarioCard:hover { transform: translateY(-2px); border-color: var(--border-hover); }
 }
 .scenarioCard small { display: block; font-size: 22px; line-height: 1; margin-bottom: 4px; }
-.scenarioCard div { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.scenarioCard div { font-size: 12px; color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 .scenarioCard p { font-size: 11px; color: var(--muted); margin-top: 2px; }
 .scenarioActive { background: var(--accent-dim); border-color: var(--accent); }
 .scenarioActive div { color: var(--accent); }
@@ -279,11 +279,11 @@
 .optionBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
@@ -299,7 +299,7 @@
   gap: 8px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .toggleLabel input { accent-color: var(--accent); width: 16px; height: 16px; }
@@ -312,13 +312,13 @@
   padding: 11px 16px;
   font-size: 13px;
   color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(14,165,233,0.18); }
+  .actionBtn:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
 }
 
 .miniBtn {
@@ -328,12 +328,12 @@
   padding: 5px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+.miniDanger { color: var(--red-600); border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
   .miniDanger:hover { background: rgba(220,38,38,0.18); }
 }
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
@@ -341,11 +341,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -358,9 +358,9 @@
 
 /* ── 결과 히어로 ── */
 .hero {
-  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 16px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 26px 22px;
   text-align: center;
 }
@@ -373,7 +373,7 @@
   margin-bottom: 8px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(44px, 11vw, 72px);
   letter-spacing: -1.5px;
@@ -382,7 +382,7 @@
   font-variant-numeric: tabular-nums;
 }
 .heroNumUnit { font-size: 0.4em; color: var(--text); margin-left: 6px; }
-.heroSub { font-size: 13px; color: var(--muted); margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.6; }
+.heroSub { font-size: 13px; color: var(--muted); margin-top: 8px; font-family: var(--font-sans); line-height: 1.6; }
 
 .heroDual {
   display: grid;
@@ -399,12 +399,12 @@
 }
 .heroDualLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 4px; }
 .heroDualValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 22px;
   font-variant-numeric: tabular-nums;
 }
-.heroDualValueDrink { color: #EA580C; }
+.heroDualValueDrink { color: var(--orange-600); }
 .heroDualValueNon   { color: var(--accent); }
 
 /* 상세 표 */
@@ -418,21 +418,21 @@
   grid-template-columns: 1fr auto;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .detailRow span:first-child { color: var(--text); }
 .detailRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
 .detailRowAccent {
-  background: rgba(14,165,233,0.14);
-  border-color: rgba(14,165,233,0.30);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
   font-weight: 700;
 }
 
@@ -444,9 +444,9 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.remainderHint strong { color: #A16207; }
+.remainderHint strong { color: var(--yellow-700); }
 
 .resultActions {
   display: grid;
@@ -461,7 +461,7 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-left: 4px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   margin-bottom: 8px;
 }
@@ -475,11 +475,11 @@
 .personName {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 16px; /* iOS 자동 확대 방지 */
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   outline: none;
   width: 100%;
@@ -501,7 +501,7 @@
   padding: 7px 10px;
   font-size: 16px; /* iOS 자동 확대 방지 */
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   outline: none;
   text-align: right;
@@ -518,19 +518,19 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .itemDelete:hover { color: #DC2626; border-color: rgba(220,38,38,0.30); }
+  .itemDelete:hover { color: var(--red-600); border-color: rgba(220,38,38,0.30); }
 }
 
 .addItemBtn {
   background: transparent;
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
   width: 100%;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .addItemBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
@@ -553,10 +553,10 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (max-width: 540px) {
   .resultTableRow { grid-template-columns: 1fr 60px 60px 60px 70px; gap: 4px; padding: 9px 10px; font-size: 11px; }
@@ -574,14 +574,14 @@
 .rtName { color: var(--text); font-weight: 600; }
 .rtName small { color: var(--muted); margin-left: 4px; font-size: 11px; font-weight: 400; }
 .rtVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
   color: var(--muted);
 }
 .rtTotal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -618,15 +618,15 @@
   padding: 10px 14px;
   text-align: center;
 }
-.balanceName { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 4px; }
+.balanceName { font-size: 12px; color: var(--text); font-family: var(--font-sans); font-weight: 700; margin-bottom: 4px; }
 .balanceVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
   font-variant-numeric: tabular-nums;
 }
-.balanceCredit { color: #059669; }
-.balanceDebit  { color: #DC2626; }
+.balanceCredit { color: var(--emerald-600); }
+.balanceDebit  { color: var(--red-600); }
 .balanceZero   { color: var(--muted); }
 .balanceCardCredit { background: rgba(16,185,129,0.14); border-color: rgba(16,185,129,0.30); }
 .balanceCardDebit  { background: rgba(220,38,38,0.14); border-color: rgba(220,38,38,0.30); }
@@ -643,22 +643,22 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-left: 4px solid #A16207;
+  border-left: 4px solid var(--yellow-700);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (max-width: 480px) {
   .transferRow { grid-template-columns: 1fr; gap: 4px; text-align: center; }
 }
-.transferFrom { color: #DC2626; font-weight: 700; }
-.transferTo   { color: #059669; font-weight: 700; }
-.transferArrow { color: var(--muted); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: center; }
+.transferFrom { color: var(--red-600); font-weight: 700; }
+.transferTo   { color: var(--emerald-600); font-weight: 700; }
+.transferArrow { color: var(--muted); font-family: var(--font-sans); font-weight: 700; text-align: center; }
 .transferAmount {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
-  color: #A16207;
+  color: var(--yellow-700);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
@@ -671,17 +671,17 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.warnBox strong { color: #DC2626; }
+.warnBox strong { color: var(--red-600); }
 
 /* ─── 카카오톡 공유 탭 ─── */
 .shareTextBox {
   background: #FFE400;
   border: 2px solid #FFD600;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: #3C1E1E;
   line-height: 1.7;
@@ -709,8 +709,8 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
 
@@ -722,15 +722,15 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .historyName { color: var(--text); font-weight: 600; }
 .historyName small { color: var(--muted); margin-left: 6px; font-size: 11px; font-weight: 400; }
 .historyAmount {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;

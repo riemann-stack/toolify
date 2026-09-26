@@ -381,18 +381,18 @@ export default function TeaClient() {
               <svg viewBox="0 0 420 60" width="100%" style={{ maxWidth: 600 }} role="img" aria-label="우림 시간 탄닌 추출 게이지">
                 <defs>
                   <linearGradient id={tanninGradId} x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#0D9488" />
-                    <stop offset="40%" stopColor="#0D9488" />
-                    <stop offset="50%" stopColor="#D97706" />
-                    <stop offset="70%" stopColor="#D97706" />
-                    <stop offset="80%" stopColor="#DB2777" />
-                    <stop offset="100%" stopColor="#DB2777" />
+                    <stop offset="0%" stopColor="var(--teal-600)" />
+                    <stop offset="40%" stopColor="var(--teal-600)" />
+                    <stop offset="50%" stopColor="var(--amber-600)" />
+                    <stop offset="70%" stopColor="var(--amber-600)" />
+                    <stop offset="80%" stopColor="var(--pink-600)" />
+                    <stop offset="100%" stopColor="var(--pink-600)" />
                   </linearGradient>
                 </defs>
                 <rect x={0} y={20} width={420} height={22} rx={5} fill="var(--bg3)" />
                 <rect x={0} y={20} width={(risk / 100) * 420} height={22} rx={5} fill={`url(#${tanninGradId})`} />
                 <line x1={(30 / 100) * 420} y1={15} x2={(30 / 100) * 420} y2={47} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3,2" />
-                <text x={(30 / 100) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>권장</text>
+                <text x={(30 / 100) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle">권장</text>
               </svg>
 
               <div className={s.hero} style={{ marginTop: 12 }}>

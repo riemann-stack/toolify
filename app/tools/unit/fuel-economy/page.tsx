@@ -54,7 +54,7 @@ export default function FuelEconomyPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />연비 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -80,7 +80,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 1. 국가별 연비 표기 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             국가별 연비 표기 차이
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -108,7 +108,7 @@ export default function FuelEconomyPage() {
                 fontSize: '13px',
               }}>
                 <span style={{ color: 'var(--text)', fontWeight: 700 }}>{c.flag} {c.country}</span>
-                <span style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: '13px' }}>{c.unit}</span>
+                <span style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: '13px' }}>{c.unit}</span>
                 <span style={{ color: 'var(--muted)', fontSize: '12px', textAlign: 'right' }}>
                   <span style={{ color: 'var(--text)', marginRight: 6 }}>{c.dir}</span>
                   · {c.ex}
@@ -123,21 +123,21 @@ export default function FuelEconomyPage() {
 
         {/* ── 2. mpg US vs UK ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             mpg US vs mpg UK — 같은 단위, 다른 결과
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
             mpg(miles per gallon)는 미국과 영국에서 모두 사용되지만, <strong style={{ color: 'var(--accent)' }}>1갤런의 용량 자체가 다릅니다</strong>. 같은 차량의 mpg 수치가 영국이 더 크게 나오는 이유입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>🇺🇸 1 US 갤런</p>
-              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '24px', color: 'var(--accent)', fontWeight: 800, letterSpacing: '-0.5px' }}>3.78541 L</p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '24px', color: 'var(--accent)', fontWeight: 800, letterSpacing: '-0.5px' }}>3.78541 L</p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, marginTop: '4px' }}>10 km/L = <strong style={{ color: 'var(--text)' }}>23.5 mpg (US)</strong></p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '14px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>🇬🇧 1 UK(Imperial) 갤런</p>
-              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '24px', color: 'var(--accent)', fontWeight: 800, letterSpacing: '-0.5px' }}>4.54609 L</p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '24px', color: 'var(--accent)', fontWeight: 800, letterSpacing: '-0.5px' }}>4.54609 L</p>
               <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, marginTop: '4px' }}>10 km/L = <strong style={{ color: 'var(--text)' }}>28.2 mpg (UK)</strong></p>
             </div>
           </div>
@@ -148,7 +148,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 3. L/100km이 낮을수록 좋은 이유 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             L/100km이 낮을수록 좋은 이유
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -173,8 +173,8 @@ export default function FuelEconomyPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.c}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.k}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.k}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.l}</td>
                   </tr>
                 ))}
               </tbody>
@@ -187,7 +187,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 4. 인기 차종별 연비 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             인기 차종별 연비 참고표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -216,8 +216,8 @@ export default function FuelEconomyPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.car}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '11px' }}>{r.fuel}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '11px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.conv}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.v}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '11px', fontFamily: 'var(--font-sans)' }}>{r.conv}</td>
                   </tr>
                 ))}
               </tbody>
@@ -230,7 +230,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 4-1. 연료별 100km 비용 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🇰🇷 연료별 100km 주행 비용 비교
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -257,9 +257,9 @@ export default function FuelEconomyPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.f}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.e}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.e}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.c}</td>
                   </tr>
                 ))}
               </tbody>
@@ -275,7 +275,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 4-2. 연비 향상 실전 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🚗 연비 향상 실전 팁 — 같은 차로 +15~20%
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -287,10 +287,10 @@ export default function FuelEconomyPage() {
               { t: '⛽ 풀탱크 회피',   d: '연료 50L = 약 38kg. 항상 만탱크는 +1% 손실.', impact: '+1%' },
               { t: '🛠️ 정기 점검',    d: '엔진오일·에어필터·점화플러그 노후 시 ~10% 손실.', impact: '+5%' },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 6 }}>
                   <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, margin: 0 }}>{r.t}</p>
-                  <span style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.impact}</span>
+                  <span style={{ fontSize: '12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.impact}</span>
                 </div>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{r.d}</p>
               </div>
@@ -303,7 +303,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 5. 자주 검색되는 변환 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 검색되는 변환
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '10px' }}>
@@ -315,9 +315,9 @@ export default function FuelEconomyPage() {
               { q: '150 Wh/km은 km/kWh?',    a: '약 6.67 km/kWh', sub: '1000 ÷ 150 = 6.67' },
               { q: '40 mpg(US) vs 40 mpg(UK)', a: '17.0 vs 14.2 km/L', sub: 'UK 갤런이 더 커서 같은 mpg면 km/L↓' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px', fontWeight: 600 }}>Q. {c.q}</p>
-                <p style={{ fontSize: '17px', color: 'var(--accent)', fontWeight: 800, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: '4px', letterSpacing: '-0.3px' }}>{c.a}</p>
+                <p style={{ fontSize: '17px', color: 'var(--accent)', fontWeight: 800, fontFamily: 'var(--font-sans)', marginBottom: '4px', letterSpacing: '-0.3px' }}>{c.a}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.sub}</p>
               </div>
             ))}
@@ -334,7 +334,7 @@ export default function FuelEconomyPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -352,7 +352,7 @@ export default function FuelEconomyPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

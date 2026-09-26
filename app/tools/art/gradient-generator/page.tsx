@@ -26,7 +26,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -34,7 +34,7 @@ const sectionTitle: React.CSSProperties = {
 }
 
 const faqQuestion: React.CSSProperties = {
-  fontFamily: 'Noto Sans KR, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '15px',
   fontWeight: 700,
   color: 'var(--text)',
@@ -51,9 +51,9 @@ const faqAnswer: React.CSSProperties = {
 const codeBlock: React.CSSProperties = {
   background: '#0E0E0F',
   border: '1px solid var(--border)',
-  borderRadius: '8px',
+  borderRadius: 'var(--radius-s)',
   padding: '12px 14px',
-  fontFamily: 'JetBrains Mono, monospace',
+  fontFamily: 'var(--font-mono)',
   fontSize: '12px',
   color: '#C8FF9E',
   overflowX: 'auto',
@@ -76,7 +76,7 @@ export default function GradientGeneratorPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>예술·창작</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />CSS 그라디언트 생성기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -111,7 +111,7 @@ export default function GradientGeneratorPage() {
                   ['LAB',   '인쇄·측색 표준 색공간',   '인쇄물·정밀 디자인',         '중간색이 보라·회색빛을 띠기 쉬움'],
                 ].map(([sp, feat, use, con], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'JetBrains Mono, monospace' }}>{sp}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-mono)' }}>{sp}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{feat}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{use}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{con}</td>

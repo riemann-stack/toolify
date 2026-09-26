@@ -37,7 +37,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -52,19 +52,19 @@ const faqAnswer: React.CSSProperties = {
 const dedTitle: React.CSSProperties = { fontSize: '14px', fontWeight: 700, marginBottom: '8px' }
 const dedTable: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', fontSize: '13px' }
 const dedTh: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }
-const faqDetails: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', marginBottom: '8px' }
+const faqDetails: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '8px' }
 const faqSummary: React.CSSProperties = { cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }
 const faqAnswerAcc: React.CSSProperties = { marginTop: '10px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }
-const relCard: React.CSSProperties = { display: 'block', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', textDecoration: 'none' }
+const relCard: React.CSSProperties = { display: 'block', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none' }
 
 const FAQ_LD = [
-  { q: '3.3% 원천징수만 내면 되는 거 아닌가요?', a: '아닙니다. 3.3%(소득세 3% + 지방소득세 0.3%)는 <strong style="color:var(--text)">임시로 미리 낸 세금</strong>일 뿐, 진짜 세금은 매년 5월 종합소득세 신고로 정산합니다. 본인의 실제 세율(6~45% 누진)에 따라 더 받거나 더 내야 합니다. 매출이 적고 경비·공제가 충분하면 <strong style="color:#059669">환급</strong>, 매출이 크고 한계세율 24% 이상이면 <strong style="color:#DC2626">추가 납부</strong>가 일반적입니다.' },
+  { q: '3.3% 원천징수만 내면 되는 거 아닌가요?', a: '아닙니다. 3.3%(소득세 3% + 지방소득세 0.3%)는 <strong style="color:var(--text)">임시로 미리 낸 세금</strong>일 뿐, 진짜 세금은 매년 5월 종합소득세 신고로 정산합니다. 본인의 실제 세율(6~45% 누진)에 따라 더 받거나 더 내야 합니다. 매출이 적고 경비·공제가 충분하면 <strong style="color:var(--emerald-600)">환급</strong>, 매출이 크고 한계세율 24% 이상이면 <strong style="color:var(--red-600)">추가 납부</strong>가 일반적입니다.' },
   { q: '단순경비율과 장부 작성, 어느 게 유리한가요?', a: '<strong style="color:var(--text)">실제 경비가 단순경비율보다 크면 장부, 적으면 단순경비율</strong>이 유리합니다. 예: IT 개발자 매출 3천만원 → 단순경비율 64.1%로 1,923만 경비 자동 인정. 실제로 사무실·장비·소프트웨어에 2,500만을 썼다면 장부로 경비를 577만 더 인정받아 장부 작성이 유리합니다. 다만 장부 작성에는 <strong style="color:var(--text)">증빙(영수증·세금계산서·신용카드)</strong> 보관과 매출·경비 기록 의무가 있습니다. 단순경비율은 <strong style="color:var(--text)">계속사업자 직전년도 수입이 인적용역 3,600만(도소매 6,000만) 미만</strong>일 때 적용되고, 그 이상이면 기준경비율로 전환됩니다. 신규(개업 첫해)는 복식부기 의무 기준(인적용역 7,500만)까지 단순경비율이 가능하며, 그 기준을 넘으면 복식부기 의무로 장부가 필수입니다. 신규사업자가 단순경비율을 쓸 때는 매출 4천만원을 넘는 부분에 더 낮은 초과율이 붙습니다(IT 개발자 64.1% → 49.7%).' },
   { q: '노란우산공제 vs 연금저축, 뭐가 절세 효과가 큰가요?', a: '<strong style="color:var(--text)">본인 한계세율에 따라 다릅니다.</strong><ul style="margin:8px 0;padding-left:18px"><li><strong>노란우산</strong>은 소득공제 → 한계세율만큼 절세. 한계세율 24%면 200만 납입 시 약 53만 절세(지방세 포함).</li><li><strong>연금저축</strong>은 세액공제 → 종합소득금액 4,500만 이하 16.5%, 초과 13.2% 정액. 600만 납입 시 79~99만 절세.</li></ul>과세표준 5천만 이상(한계세율 24%+)이면 노란우산이, 4,500만 이하 저소득 구간이면 연금저축의 16.5% 정률이 유리합니다. 본 도구의 「시나리오 비교」 탭에서 즉시 확인할 수 있습니다.' },
-  { q: '직장인 + 부업 프리랜서, 합산 신고 어떻게 하나요?', a: '근로소득과 사업소득은 <strong style="color:var(--text)">합산되어 종합과세</strong>됩니다. 회사에서 연말정산을 마쳐도 부업 사업소득이 있으면 5월에 종소세 신고 의무가 있습니다. 합산 시 한계세율이 더 높은 구간으로 점프해 <strong style="color:#DC2626">추가 납부</strong>가 발생하는 경우가 흔합니다. 예: 본업 7,000만(24% 구간) + 부업 1,500만 → 합산 8,500만으로 일부는 35% 적용 가능. 본 계산기는 단독 사업소득 기준이므로 겸업자는 본업 근로소득과 합산해 계산해야 정확합니다.' },
-  { q: '신고 안 하면 어떻게 되나요?', a: '무신고 시 다음 가산세가 부과됩니다.<ul style="margin:8px 0;padding-left:18px"><li><strong style="color:#DC2626">무신고 가산세 20%</strong>(부정 무신고 40%)</li><li><strong style="color:#DC2626">납부지연 가산세 일 0.022%</strong>(연 약 8.0%, 2022년 2월 15일 시행령 개정 이후)</li><li><strong style="color:#DC2626">무기장 가산세 20%</strong>(복식부기 의무자가 미작성 시)</li></ul>또한 환급 대상이었어도 신고하지 않으면 <strong style="color:var(--text)">환급 받지 못합니다</strong>. 5월 1~31일 신고 의무는 매출 규모와 무관하게 모든 사업소득자에게 적용됩니다.' },
+  { q: '직장인 + 부업 프리랜서, 합산 신고 어떻게 하나요?', a: '근로소득과 사업소득은 <strong style="color:var(--text)">합산되어 종합과세</strong>됩니다. 회사에서 연말정산을 마쳐도 부업 사업소득이 있으면 5월에 종소세 신고 의무가 있습니다. 합산 시 한계세율이 더 높은 구간으로 점프해 <strong style="color:var(--red-600)">추가 납부</strong>가 발생하는 경우가 흔합니다. 예: 본업 7,000만(24% 구간) + 부업 1,500만 → 합산 8,500만으로 일부는 35% 적용 가능. 본 계산기는 단독 사업소득 기준이므로 겸업자는 본업 근로소득과 합산해 계산해야 정확합니다.' },
+  { q: '신고 안 하면 어떻게 되나요?', a: '무신고 시 다음 가산세가 부과됩니다.<ul style="margin:8px 0;padding-left:18px"><li><strong style="color:var(--red-600)">무신고 가산세 20%</strong>(부정 무신고 40%)</li><li><strong style="color:var(--red-600)">납부지연 가산세 일 0.022%</strong>(연 약 8.0%, 2022년 2월 15일 시행령 개정 이후)</li><li><strong style="color:var(--red-600)">무기장 가산세 20%</strong>(복식부기 의무자가 미작성 시)</li></ul>또한 환급 대상이었어도 신고하지 않으면 <strong style="color:var(--text)">환급 받지 못합니다</strong>. 5월 1~31일 신고 의무는 매출 규모와 무관하게 모든 사업소득자에게 적용됩니다.' },
   { q: '종소세 신고하면 건강보험료가 오른다는데?', a: '직장가입자가 아닌 <strong style="color:var(--text)">지역가입자</strong>는 종합과세된 사업소득이 다음 해 11월부터 건보료 산정 기준에 반영됩니다. 매출이 크게 늘어난 해의 다음 해 건보료가 인상되는 패턴입니다. 다만 <strong style="color:var(--text)">경비 처리·공제로 사업소득금액 자체가 줄어들면 건보료도 함께 줄어듭니다</strong>. 종소세 절세가 건보료 절세로 이어지는 효과. 직장가입자는 본업 근로소득 기준이라 부업 사업소득이 일정 기준 미만이면 영향 없습니다.' },
-  { q: '장부 작성 의무는 언제부터 생기나요?', a: '업종별 직전년도 매출 기준입니다.<ul style="margin:8px 0;padding-left:18px"><li><strong>간편장부</strong>: 일반(사업 시작 후 누구나 권장)</li><li><strong>복식부기 의무</strong>: 인적용역 7,500만 / 부동산임대 7,500만 / 음식·숙박 1억5천 / 도소매 3억 등</li></ul>복식부기 의무자가 미작성하면 <strong style="color:#DC2626">무기장 가산세 20%</strong>, 단순경비율 적용도 불가합니다. 매출이 위 한도를 넘으면 세무사 또는 회계 프로그램을 통해 복식부기 작성이 일반적입니다.' },
+  { q: '장부 작성 의무는 언제부터 생기나요?', a: '업종별 직전년도 매출 기준입니다.<ul style="margin:8px 0;padding-left:18px"><li><strong>간편장부</strong>: 일반(사업 시작 후 누구나 권장)</li><li><strong>복식부기 의무</strong>: 인적용역 7,500만 / 부동산임대 7,500만 / 음식·숙박 1억5천 / 도소매 3억 등</li></ul>복식부기 의무자가 미작성하면 <strong style="color:var(--red-600)">무기장 가산세 20%</strong>, 단순경비율 적용도 불가합니다. 매출이 위 한도를 넘으면 세무사 또는 회계 프로그램을 통해 복식부기 작성이 일반적입니다.' },
   { q: '수입 1억 넘으면 세무사 써야 하나요?', a: '의무는 아니지만 <strong style="color:var(--text)">실익이 큰 시점</strong>입니다.<ul style="margin:8px 0;padding-left:18px"><li>한계세율 35% 이상 → 절세 1만원이면 세무사 비용 회수가 빠름</li><li>복식부기 의무 → 정확한 장부 + 결산 보고서 필요</li><li>경비 항목별 한도·증빙 요건 복잡 → 누락 시 큰 손실</li><li>사업자등록(개인사업자/법인) 전환 절세 검토 필요</li></ul>매출 1.5억 이상이면 거의 필수입니다. 매출 5천~1억 구간은 본 도구로 자가진단 → 세무사 1회 자문 → 다음 해부터 직접 신고하는 흐름이 일반적입니다.' },
 ]
 
@@ -72,7 +72,7 @@ export default function FreelanceTaxPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />프리랜서 종합소득세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -114,8 +114,8 @@ export default function FreelanceTaxPage() {
                 ].map(([base, rate, ded], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{base}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{rate}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{ded}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{rate}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{ded}</td>
                   </tr>
                 ))}
               </tbody>
@@ -148,10 +148,10 @@ export default function FreelanceTaxPage() {
                       {r.code} {r.name}
                       {r.jobs && <span style={{ display: 'block', fontSize: '12px', color: 'var(--muted)' }}>{r.jobs}</span>}
                     </td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.simpleRate.toFixed(1)}%</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{simpleExcessRate(r.simpleRate).toFixed(1)}%</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.baseRate.toFixed(1)}%</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>3,600만</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.simpleRate.toFixed(1)}%</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{simpleExcessRate(r.simpleRate).toFixed(1)}%</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.baseRate.toFixed(1)}%</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>3,600만</td>
                   </tr>
                 ))}
               </tbody>
@@ -166,7 +166,7 @@ export default function FreelanceTaxPage() {
         <section>
           <h2 style={sectionTitle}>주요 소득공제·세액공제 항목</h2>
 
-          <p style={{ ...dedTitle, color: '#0891B2' }}>소득공제</p>
+          <p style={{ ...dedTitle, color: 'var(--cyan-600)' }}>소득공제</p>
           <div style={{ overflowX: 'auto' }}>
             <table style={dedTable}>
               <thead>
@@ -183,7 +183,7 @@ export default function FreelanceTaxPage() {
                 ].map(([item, lim, effect], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{item}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{lim}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{lim}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{effect}</td>
                   </tr>
                 ))}
@@ -191,7 +191,7 @@ export default function FreelanceTaxPage() {
             </table>
           </div>
 
-          <p style={{ ...dedTitle, color: '#059669', marginTop: '22px' }}>세액공제</p>
+          <p style={{ ...dedTitle, color: 'var(--emerald-600)', marginTop: '22px' }}>세액공제</p>
           <div style={{ overflowX: 'auto' }}>
             <table style={dedTable}>
               <thead>
@@ -208,7 +208,7 @@ export default function FreelanceTaxPage() {
                 ].map(([item, lim, effect], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{item}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{lim}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{lim}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{effect}</td>
                   </tr>
                 ))}

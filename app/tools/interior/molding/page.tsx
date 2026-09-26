@@ -50,7 +50,7 @@ export default function MoldingPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />몰딩 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -67,20 +67,20 @@ export default function MoldingPage() {
 
         {/* ── 1. 몰딩 종류별 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             몰딩 종류별 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { t: '천장 몰딩 (Crown)',   c: 'var(--accent)', d: '천장과 벽 경계 마감. 한국에서 가장 흔한 PVC·MDF.', s: '폭 5~10cm · 1,500~5,000원/m' },
-              { t: '걸레받이 (Baseboard)', c: '#EA580C',       d: '벽-바닥 경계. 청소 흔적·의자 상처 가림.',           s: '높이 6~10cm · 1,000~3,000원/m' },
-              { t: '띠몰딩 (Chair Rail)',  c: '#9B59B6',       d: '벽 중간 장식 (보통 바닥 90cm). 데코 목적.',         s: '폭 3~6cm · 2,000~5,000원/m' },
-              { t: '출입문 프레임',         c: '#0891B2',       d: '문틀 ㄷ자 3면(좌·우·상) 마감. 폭 4~7cm 표준.',       s: '문 1개 ≈ 5.1m · 2,000~6,000원/m' },
+              { t: '걸레받이 (Baseboard)', c: 'var(--orange-600)',       d: '벽-바닥 경계. 청소 흔적·의자 상처 가림.',           s: '높이 6~10cm · 1,000~3,000원/m' },
+              { t: '띠몰딩 (Chair Rail)',  c: 'var(--amethyst)',       d: '벽 중간 장식 (보통 바닥 90cm). 데코 목적.',         s: '폭 3~6cm · 2,000~5,000원/m' },
+              { t: '출입문 프레임',         c: 'var(--cyan-600)',       d: '문틀 ㄷ자 3면(좌·우·상) 마감. 폭 4~7cm 표준.',       s: '문 1개 ≈ 5.1m · 2,000~6,000원/m' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{g.d}</p>
-                <p style={{ fontSize: 12, color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{g.s}</p>
+                <p style={{ fontSize: 12, color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{g.s}</p>
               </div>
             ))}
           </div>
@@ -88,7 +88,7 @@ export default function MoldingPage() {
 
         {/* ── 2. 무몰딩·마이너스몰딩 vs 몰딩 시공 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             무몰딩·마이너스몰딩 vs 몰딩 시공
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
@@ -129,7 +129,7 @@ export default function MoldingPage() {
 
         {/* ── 3. 걸레받이 높이 선택 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             걸레받이 높이 선택 — 6·8·10cm
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
@@ -141,13 +141,13 @@ export default function MoldingPage() {
               { t: '8cm 안팎 — 중간', d: '낮은 높이와 클래식한 높이 사이의 절충. 기성품에서 흔히 유통되는 높이대로, 어느 쪽으로도 튀지 않는 무난한 선택입니다.' },
               { t: '10cm 안팎 — 높게', d: '클래식하고 안정감 있는 인상. 청소기·대걸레·의자 다리가 닿는 벽 하단 보호 면적이 넓지만, 낮은 천장에서는 무거워 보일 수 있습니다.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>본 계산기와의 연결:</strong> 걸레받이 필요 길이·본 수는 <strong style={{ color: 'var(--text)' }}>둘레(m) 기준</strong>이라 높이를 6cm로 하든 10cm로 하든 개수는 같습니다.
             높이가 바꾸는 것은 공간 인상과 m당 단가 — 높이·폭이 큰 제품일수록 단가가 높은 경향(통용 관행)이니 실제 구매가는 재질 카드의 &lsquo;직접 입력&rsquo;으로 반영하세요.
             교체 공사라면 기존보다 낮은 걸레받이는 벽지에 이전 자국·경계선이 드러날 수 있어 <strong style={{ color: 'var(--text)' }}>기존 높이 이상</strong>을 고르는 것이 통용 관행입니다.
@@ -156,15 +156,15 @@ export default function MoldingPage() {
 
         {/* ── 4. 한국 표준 몰딩 길이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 표준 몰딩 길이
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -174,7 +174,7 @@ export default function MoldingPage() {
             <div><span style={{ color: 'var(--muted)' }}>몰딩 1개</span> = 3.6m (큰 사이즈, 자투리 적음)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>※ 길이가 길수록 자투리 손실이 적지만, 운반·취급 난이도 ↑</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 24평 단일 정사각형 공간, 천장 몰딩 + 걸레받이<br />
             • 둘레 ≈ 35.6m (√면적×4) × 2(천장·걸레받이) ≈ 71m<br />
             • +10% 로스율 + 모서리 8개×5cm = 약 78m<br />
@@ -184,7 +184,7 @@ export default function MoldingPage() {
 
         {/* ── 5. 재질별 가격 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             재질별 가격·특징 비교
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -206,7 +206,7 @@ export default function MoldingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.p}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontSize: 12 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
@@ -221,17 +221,17 @@ export default function MoldingPage() {
 
         {/* ── 6. 모서리 절단 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             모서리 45도 절단 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
               { t: '🔪 마이터 박스', c: 'var(--accent)', d: '저렴(만원대), 손톱+가이드. 셀프 시공 권장.' },
-              { t: '⚙️ 마이터 톱', c: '#0891B2', d: '전동 톱, 정밀도 우수. 대량 작업·전문 시공.' },
-              { t: '📐 외각 vs 내각', c: '#EA580C', d: '외각(밖으로 튀어나온 모서리) +0.5cm, 내각(안쪽) -0.5cm 보정.' },
-              { t: '🧪 시운전', c: '#9B59B6', d: '본 자재 자르기 전 자투리 자재로 각도·맞물림 시험.' },
+              { t: '⚙️ 마이터 톱', c: 'var(--cyan-600)', d: '전동 톱, 정밀도 우수. 대량 작업·전문 시공.' },
+              { t: '📐 외각 vs 내각', c: 'var(--orange-600)', d: '외각(밖으로 튀어나온 모서리) +0.5cm, 내각(안쪽) -0.5cm 보정.' },
+              { t: '🧪 시운전', c: 'var(--amethyst)', d: '본 자재 자르기 전 자투리 자재로 각도·맞물림 시험.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${c.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: c.c, fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
@@ -240,21 +240,21 @@ export default function MoldingPage() {
           <div style={{
             background: 'rgba(220,38,38,0.05)',
             border: '1px solid rgba(220,38,38,0.25)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            ⚠️ 모서리 1개당 <strong style={{ color: '#EA580C' }}>5~10cm 여유분</strong> 권장.
+            ⚠️ 모서리 1개당 <strong style={{ color: 'var(--orange-600)' }}>5~10cm 여유분</strong> 권장.
             직사각형 방은 모서리 4개 = 20~40cm. 자투리 1개를 보수용으로 남겨두세요.
           </div>
         </div>
 
         {/* ── 7. 평수별 빠른 참조 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             평수별 몰딩 길이 빠른 참조 (천장 + 걸레받이, +10% 로스)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -279,12 +279,12 @@ export default function MoldingPage() {
                   const cost = c24 * 2.4 * 2500
                   return (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                      <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{py}평</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{peri.toFixed(1)}m</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{total.toFixed(1)}m</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{c24}개</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{c36}개</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{Math.round(cost).toLocaleString('ko-KR')}원</td>
+                      <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{py}평</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{peri.toFixed(1)}m</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{total.toFixed(1)}m</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{c24}개</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{c36}개</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{Math.round(cost).toLocaleString('ko-KR')}원</td>
                     </tr>
                   )
                 })}
@@ -299,7 +299,7 @@ export default function MoldingPage() {
 
         {/* ── 8. 시공 시 주의사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             시공 시 주의사항
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
@@ -311,7 +311,7 @@ export default function MoldingPage() {
               { t: '🔁 추가 여유', d: '시공 미숙·셀프 시공은 +5% 추가 권장. 보수용 1~2개 남겨두기.' },
               { t: '🌡️ 자재 적응', d: 'PVC·MDF는 시공 24시간 전부터 시공할 방에 두기 (변형 방지).' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
@@ -324,13 +324,13 @@ export default function MoldingPage() {
 
         {/* ── 9. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -345,7 +345,7 @@ export default function MoldingPage() {
 
         {/* ── 10. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -365,7 +365,7 @@ export default function MoldingPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

@@ -24,7 +24,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -69,7 +69,7 @@ export default function TokenCounterPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>개발자</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />AI 프롬프트 토큰 카운터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -101,14 +101,14 @@ export default function TokenCounterPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
             {[
-              { t: '영문', e: '4 chars ≈ 1 token', c: '#059669' },
-              { t: '한국어', e: '1자 ≈ 1~1.5 token', c: '#D97706' },
-              { t: '코드', e: '3 chars ≈ 1 token', c: '#0891B2' },
-              { t: '숫자·공백', e: '3 chars ≈ 1 token', c: '#9333EA' },
+              { t: '영문', e: '4 chars ≈ 1 token', c: 'var(--emerald-600)' },
+              { t: '한국어', e: '1자 ≈ 1~1.5 token', c: 'var(--amber-600)' },
+              { t: '코드', e: '3 chars ≈ 1 token', c: 'var(--cyan-600)' },
+              { t: '숫자·공백', e: '3 chars ≈ 1 token', c: 'var(--purple-600)' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderLeft: `3px solid ${g.c}`, borderRadius: 10, padding: '11px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
-                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.e}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, margin: 0, fontFamily: 'var(--font-sans)' }}>{g.e}</p>
               </div>
             ))}
           </div>
@@ -132,9 +132,9 @@ export default function TokenCounterPage() {
                 ]).map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[2]}</td>
-                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row[3]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[2]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{row[3]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{row[4]}</td>
                   </tr>
                 ))}
@@ -176,7 +176,7 @@ export default function TokenCounterPage() {
               { t: '1M (Claude Opus·Sonnet 5, Gemini 2.5)', d: '문서 묶음 한 번에', desc: '여러 문서 비교, 대형 코드베이스·논문 묶음' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderRadius: 10, padding: '12px 14px', border: '1px solid var(--border)' }}>
-                <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.t}</p>
+                <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, margin: '0 0 4px', fontFamily: 'var(--font-sans)' }}>{g.t}</p>
                 <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 6px' }}>{g.d}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{g.desc}</p>
               </div>
@@ -193,7 +193,7 @@ export default function TokenCounterPage() {
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -218,7 +218,7 @@ export default function TokenCounterPage() {
               { href: '/tools/art/charcount',     icon: '✏️', name: '글자 수 세기',          desc: '바이트·공백 제외 카운트' },
               { href: '/tools/dev/tech-stack',    icon: '🛠️', name: '기술 스택 추천기',       desc: 'AI 앱용 풀스택 자동 추천' },
             ].map((tool, i) => (
-              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
+              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center', color: 'inherit' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
                   <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>

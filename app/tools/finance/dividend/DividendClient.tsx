@@ -213,10 +213,10 @@ export default function DividendClient() {
             <g key={i}>
               <rect x={x} y={y} width={barW} height={h} fill="var(--accent)" rx="2" />
               <text x={x + barW / 2} y={H - 8} textAnchor="middle" fill="var(--muted)"
-                fontSize="10" fontFamily="Noto Sans KR, sans-serif">{i + 1}</text>
+                fontSize="10">{i + 1}</text>
               {v > max * 0.2 && (
                 <text x={x + barW / 2} y={y - 4} textAnchor="middle" fill="var(--accent)"
-                  fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
+                  fontSize="9" fontWeight="800">
                   {Math.round(v / 10_000)}만
                 </text>
               )}
@@ -389,7 +389,7 @@ export default function DividendClient() {
                   <label className={styles.cardLabel}>현재 {formatEok(currentV)} 투자 중이라면</label>
                   {additionalNeeded > 0 ? (
                     <>
-                      <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--accent)' }}>
+                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: 'var(--accent)' }}>
                         추가 필요 {formatKRW(additionalNeeded)}원
                       </div>
                       <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
@@ -397,7 +397,7 @@ export default function DividendClient() {
                       </div>
                     </>
                   ) : (
-                    <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 20, fontWeight: 800, color: '#059669' }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 20, fontWeight: 800, color: '#059669' }}>
                       🎉 이미 목표 달성!
                     </div>
                   )}
@@ -962,9 +962,9 @@ export default function DividendClient() {
                   return (
                     <div key={acc.id} className={`${styles.savingsCard} ${isBest ? styles.savingsCardWinner : ''}`}>
                       {isBest && <div className={styles.winnerBadge}>★ 최적</div>}
-                      <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4, fontFamily: 'Noto Sans KR, sans-serif' }}>{acc.name}</p>
+                      <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4, fontFamily: 'var(--font-sans)' }}>{acc.name}</p>
                       <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.6 }}>{acc.desc}</p>
-                      <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#059669' : 'var(--muted)' }}>
+                      <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#059669' : 'var(--muted)' }}>
                         {row.netBenefit > 0 ? `+${formatEok(row.netBenefit)}` : '기준'}
                       </div>
                       <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{savingsYears}년 누적 이득</p>

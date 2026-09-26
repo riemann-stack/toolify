@@ -372,7 +372,7 @@ export default function CurtainBlindClient() {
                     <button key={opt.id} type="button" aria-pressed={lengthOpt === opt.id} className={`${styles.lengthBtn} ${lengthOpt === opt.id ? styles.lengthActive : ''}`} onClick={() => setLengthOpt(opt.id)}>
                       <svg className={styles.lengthSvg} width="40" height="80" viewBox="0 0 40 80" aria-hidden="true">
                         {/* 창문 */}
-                        <rect x="8" y="14" width="24" height="22" fill="rgba(8,145,178,0.15)" stroke="#0891B2" strokeWidth="1" />
+                        <rect x="8" y="14" width="24" height="22" fill="color-mix(in srgb, var(--cyan-600) 15%, transparent)" stroke="var(--cyan-600)" strokeWidth="1" />
                         {/* 커튼 */}
                         <line x1="6" y1="12" x2="6" y2={heights[opt.id]} stroke={lengthOpt === opt.id ? 'var(--accent)' : 'var(--muted)'} strokeWidth="2" />
                         <line x1="34" y1="12" x2="34" y2={heights[opt.id]} stroke={lengthOpt === opt.id ? 'var(--accent)' : 'var(--muted)'} strokeWidth="2" />
@@ -497,8 +497,8 @@ export default function CurtainBlindClient() {
             )}
             {result.type === 'curtain' && (
               <p className={styles.heroSub}>
-                길이는 <strong style={{ color: 'var(--text)' }}>완성(걸었을 때)</strong> 기준 · 원단 재단 주문 시 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(result.orderLength)}cm</strong>(헴 10cm 포함)
-                <br />1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
+                길이는 <strong style={{ color: 'var(--text)' }}>완성(걸었을 때)</strong> 기준 · 원단 재단 주문 시 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{fmt(result.orderLength)}cm</strong>(헴 10cm 포함)
+                <br />1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
                 {doubleLayer && ' · 이중 (시어 + 암막)'}
               </p>
             )}
@@ -581,10 +581,10 @@ export default function CurtainBlindClient() {
                     <text x={VBW - 25} y={VBH - 14} textAnchor="end" fill="var(--muted)" fontSize="9" fontFamily="monospace">바닥</text>
 
                     {/* 창문 */}
-                    <rect x={winX} y={winY} width={drawWinW} height={drawWinH} fill="rgba(8,145,178,0.10)" stroke="#0891B2" strokeWidth="2" />
+                    <rect x={winX} y={winY} width={drawWinW} height={drawWinH} fill="color-mix(in srgb, var(--cyan-600) 10%, transparent)" stroke="var(--cyan-600)" strokeWidth="2" />
                     {/* 창문 격자 (4분할) */}
-                    <line x1={winX + drawWinW / 2} y1={winY} x2={winX + drawWinW / 2} y2={winY + drawWinH} stroke="#0891B2" strokeWidth="0.8" opacity="0.5" />
-                    <line x1={winX} y1={winY + drawWinH / 2} x2={winX + drawWinW} y2={winY + drawWinH / 2} stroke="#0891B2" strokeWidth="0.8" opacity="0.5" />
+                    <line x1={winX + drawWinW / 2} y1={winY} x2={winX + drawWinW / 2} y2={winY + drawWinH} stroke="var(--cyan-600)" strokeWidth="0.8" opacity="0.5" />
+                    <line x1={winX} y1={winY + drawWinH / 2} x2={winX + drawWinW} y2={winY + drawWinH / 2} stroke="var(--cyan-600)" strokeWidth="0.8" opacity="0.5" />
 
                     {/* 제품별 시각화 */}
                     {productId === 'curtain' && result.type === 'curtain' && (() => {
@@ -609,7 +609,7 @@ export default function CurtainBlindClient() {
                         }
                         panels.push(
                           <g key={i}>
-                            <rect x={px + 2} y={rodY + 2} width={pw - 4} height={drawCurtainBottom - rodY - 2} fill="rgba(14,165,233,0.12)" stroke="var(--accent)" strokeWidth="1" rx="1" />
+                            <rect x={px + 2} y={rodY + 2} width={pw - 4} height={drawCurtainBottom - rodY - 2} fill="color-mix(in srgb, var(--accent) 12%, transparent)" stroke="var(--accent)" strokeWidth="1" rx="1" />
                             {lines}
                           </g>
                         )
@@ -617,9 +617,9 @@ export default function CurtainBlindClient() {
                       return (
                         <>
                           {/* 봉 */}
-                          <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="#A16207" strokeWidth="2.5" />
-                          <circle cx={rodX1} cy={rodY} r="3" fill="#A16207" />
-                          <circle cx={rodX2} cy={rodY} r="3" fill="#A16207" />
+                          <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="var(--yellow-700)" strokeWidth="2.5" />
+                          <circle cx={rodX1} cy={rodY} r="3" fill="var(--yellow-700)" />
+                          <circle cx={rodX2} cy={rodY} r="3" fill="var(--yellow-700)" />
                           {/* 커튼 패널 */}
                           {panels}
                         </>
@@ -635,10 +635,10 @@ export default function CurtainBlindClient() {
                       const slats = []
                       const slatCount = productId === 'blind' ? 8 : productId === 'roman' ? 4 : 0
                       for (let i = 1; i < slatCount; i++) {
-                        slats.push(<line key={i} x1={winX + offsetX} y1={winY + offsetY + (h / slatCount) * i} x2={winX + offsetX + w} y2={winY + offsetY + (h / slatCount) * i} stroke={productId === 'roman' ? '#9B59B6' : '#0891B2'} strokeWidth={productId === 'roman' ? 1 : 0.6} opacity="0.5" />)
+                        slats.push(<line key={i} x1={winX + offsetX} y1={winY + offsetY + (h / slatCount) * i} x2={winX + offsetX + w} y2={winY + offsetY + (h / slatCount) * i} stroke={productId === 'roman' ? 'var(--amethyst)' : 'var(--cyan-600)'} strokeWidth={productId === 'roman' ? 1 : 0.6} opacity="0.5" />)
                       }
-                      const fillColor = productId === 'blind' ? 'rgba(8,145,178,0.18)' : productId === 'roll' ? 'rgba(161,98,7,0.18)' : 'rgba(155,89,182,0.18)'
-                      const strokeColor = productId === 'blind' ? '#0891B2' : productId === 'roll' ? '#A16207' : '#9B59B6'
+                      const fillColor = productId === 'blind' ? 'color-mix(in srgb, var(--cyan-600) 18%, transparent)' : productId === 'roll' ? 'rgba(161,98,7,0.18)' : 'rgba(155,89,182,0.18)'
+                      const strokeColor = productId === 'blind' ? 'var(--cyan-600)' : productId === 'roll' ? 'var(--yellow-700)' : 'var(--amethyst)'
                       return (
                         <>
                           <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill={fillColor} stroke={strokeColor} strokeWidth="1.5" />
@@ -655,11 +655,11 @@ export default function CurtainBlindClient() {
                       const verts = []
                       for (let i = 0; i <= 8; i++) {
                         const x = winX + offsetX + (w / 8) * i
-                        verts.push(<line key={i} x1={x} y1={winY + offsetY} x2={x} y2={winY + offsetY + h} stroke="#DC2626" strokeWidth="1.5" opacity="0.6" />)
+                        verts.push(<line key={i} x1={x} y1={winY + offsetY} x2={x} y2={winY + offsetY + h} stroke="var(--red-600)" strokeWidth="1.5" opacity="0.6" />)
                       }
                       return (
                         <>
-                          <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill="rgba(220,38,38,0.10)" stroke="#DC2626" strokeWidth="1" />
+                          <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill="rgba(220,38,38,0.10)" stroke="var(--red-600)" strokeWidth="1" />
                           {verts}
                         </>
                       )
@@ -668,13 +668,13 @@ export default function CurtainBlindClient() {
                     {/* 라벨 — 항상 마지막에 그려서 패널 위에 보이도록 (z-order) */}
                     {/* 봉 라벨 — 커튼 모드일 때만 위쪽에 분리 배치 */}
                     {isCurtain && (
-                      <text x={VBW / 2} y={28} textAnchor="middle" fill="#A16207" fontSize="11" fontFamily="monospace" fontWeight="700">
+                      <text x={VBW / 2} y={28} textAnchor="middle" fill="var(--yellow-700)" fontSize="11" fontFamily="monospace" fontWeight="700">
                         봉 {fmt(result.rodLength)}cm
                       </text>
                     )}
                     {/* 창문 너비 라벨 — 커튼 모드일 땐 창문 안쪽 상단 (봉·끝마개와 안 겹침) / 그 외엔 창문 위쪽 */}
                     {isCurtain ? (
-                      <text x={winX + drawWinW / 2} y={winY + 14} textAnchor="middle" fill="#0891B2" fontSize="10" fontFamily="monospace" fontWeight="700">
+                      <text x={winX + drawWinW / 2} y={winY + 14} textAnchor="middle" fill="var(--cyan-600)" fontSize="10" fontFamily="monospace" fontWeight="700">
                         창문 {winW}cm
                       </text>
                     ) : (
@@ -684,7 +684,7 @@ export default function CurtainBlindClient() {
                     )}
                     {/* 창문 높이 라벨 — 커튼 모드일 땐 커튼 바깥 우측, 그 외엔 창문 바로 옆 */}
                     <text x={heightLabelX} y={winY + drawWinH / 2 + 3} textAnchor="start"
-                      fill={isCurtain ? '#0891B2' : 'var(--muted)'} fontSize="10" fontFamily="monospace"
+                      fill={isCurtain ? 'var(--cyan-600)' : 'var(--muted)'} fontSize="10" fontFamily="monospace"
                       fontWeight={isCurtain ? '700' : '400'}>
                       {winH}cm
                     </text>
@@ -741,16 +741,16 @@ export default function CurtainBlindClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>롤스크린 vs 로만쉐이드</span></div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #A16207', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#A16207', fontWeight: 700, marginBottom: 6 }}>롤스크린</p>
+              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid var(--yellow-700)', borderRadius: 10, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--yellow-700)', fontWeight: 700, marginBottom: 6 }}>롤스크린</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>단순한 천 형태, 위로 말려 올라감</li>
                   <li>작은 창·욕실·주방에 인기</li>
                   <li>가격 저렴</li>
                 </ul>
               </div>
-              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #9B59B6', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>로만쉐이드</p>
+              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid var(--amethyst)', borderRadius: 10, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--purple-600)', fontWeight: 700, marginBottom: 6 }}>로만쉐이드</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>가로 주름이 잡히며 올라감</li>
                   <li>커튼처럼 부드러운 느낌</li>

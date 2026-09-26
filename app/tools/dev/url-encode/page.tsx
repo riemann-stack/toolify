@@ -22,7 +22,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -32,14 +32,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -65,7 +65,7 @@ const codeStyle: React.CSSProperties = {
   borderRadius: '4px',
   fontFamily: 'var(--font-mono)',
   fontSize: '13px',
-  color: '#0EA5E9',
+  color: 'var(--sky-500)',
 }
 
 const FAQ_LD = [
@@ -87,7 +87,7 @@ export default function UrlEncodePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />URL 인코더/디코더
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -98,7 +98,7 @@ export default function UrlEncodePage() {
       <div style={{
         background: 'rgba(255, 138, 62, 0.06)',
         border: '1px solid rgba(255, 138, 62, 0.40)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
@@ -157,7 +157,7 @@ export default function UrlEncodePage() {
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>escape</code></td>
                 <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>영숫자 + @*+-./_</td>
-                <td style={{ padding: '8px 10px', color: '#DB2777', fontWeight: 600 }}>❌ 사용 금지 (Unicode 부정확, deprecated)</td>
+                <td style={{ padding: '8px 10px', color: 'var(--pink-600)', fontWeight: 600 }}>❌ 사용 금지 (Unicode 부정확, deprecated)</td>
               </tr>
             </tbody>
           </table>
@@ -196,7 +196,7 @@ export default function UrlEncodePage() {
                   <td style={{ padding: '8px 10px', fontSize: 22, fontWeight: 700 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--text)' }}>{row[1]}</td>
                   <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--muted)', fontSize: 12 }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#0EA5E9', fontWeight: 700 }}>{row[3]}</td>
+                  <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--sky-500)', fontWeight: 700 }}>{row[3]}</td>
                 </tr>
               ))}
             </tbody>
@@ -213,7 +213,7 @@ export default function UrlEncodePage() {
       <div style={{
         background: 'rgba(255, 138, 62, 0.06)',
         border: '2px solid rgba(255, 138, 62, 0.50)',
-        borderRadius: '14px',
+        borderRadius: 'var(--radius-card)',
         padding: '18px 22px',
         marginBottom: '14px',
       }}>
@@ -399,21 +399,21 @@ export default function UrlEncodePage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📋</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>JSON 포맷터</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             JSON 정렬·압축·유효성
           </p>
         </Link>
-        <Link href="/tools/dev/regex" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/regex" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔍</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>정규식 테스트기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             매칭·캡처·치환·치트시트
           </p>
         </Link>
-        <Link href="/tools/dev/yaml-json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/yaml-json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📄</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>YAML ↔ JSON 변환기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

@@ -12,9 +12,9 @@ export type Phase = 'menstrual' | 'follicular' | 'ovulation' | 'luteal'
  * ink = 글자(텍스트·SVG text)용 토큰 — 흰 배경 AA(4.5:1) 이상.
  */
 export const PHASE_META: Record<Phase, { label: string; emoji: string; color: string; bgColor: string; ink: string }> = {
-  menstrual:  { label: '생리기', emoji: '🩸', color: '#DC2626', bgColor: 'rgba(220, 38, 38, 0.18)', ink: 'var(--danger)' },
+  menstrual:  { label: '생리기', emoji: '🩸', color: 'var(--red-600)', bgColor: 'rgba(220, 38, 38, 0.18)', ink: 'var(--danger)' },
   follicular: { label: '난포기', emoji: '🌱', color: '#FFD93E', bgColor: 'rgba(255, 217, 62, 0.18)', ink: 'var(--warning)' },
-  ovulation:  { label: '배란기', emoji: '🥚', color: '#059669', bgColor: 'rgba(16, 185, 129, 0.20)', ink: 'var(--cat-finance-ink)' },
+  ovulation:  { label: '배란기', emoji: '🥚', color: 'var(--emerald-600)', bgColor: 'rgba(16, 185, 129, 0.20)', ink: 'var(--cat-finance-ink)' },
   luteal:     { label: '황체기', emoji: '🌙', color: '#B885DA', bgColor: 'rgba(184, 133, 218, 0.18)', ink: 'var(--cat-unit-ink)' },
 }
 

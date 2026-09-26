@@ -19,8 +19,8 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
-const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+const h2: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
+const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }
 
 const FAQ_LD = [
               {
@@ -53,7 +53,7 @@ export default function DsrPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />DSR·LTV·스트레스DSR 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -82,17 +82,17 @@ export default function DsrPage() {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
               {
-                t: 'DSR — 소득 대비 빚 갚는 부담', c: '#059669',
+                t: 'DSR — 소득 대비 빚 갚는 부담', c: 'var(--emerald-600)',
                 d: '총부채원리금상환비율. 내 연소득에서 「모든 대출의 1년치 원리금」이 차지하는 비율입니다. 주택담보대출뿐 아니라 신용대출·자동차할부·카드론까지 전부 합산해요.',
                 f: 'DSR(%) = (모든 대출 연간 원리금 ÷ 연소득) × 100  ·  은행 40% / 2금융권 50% 이내',
               },
               {
-                t: 'LTV — 집값 대비 빌릴 수 있는 한도', c: '#0891B2',
+                t: 'LTV — 집값 대비 빌릴 수 있는 한도', c: 'var(--cyan-600)',
                 d: '담보인정비율. 담보로 잡는 주택 가격 대비 대출 가능 비율입니다. 규제지역·주택 수·생애최초 여부에 따라 한도가 달라집니다.',
                 f: 'LTV(%) = (대출금 ÷ 주택가격) × 100  ·  비규제 70% / 생애최초 최대 80% / 규제지역 40%(2025.10 대책) 등',
               },
               {
-                t: '스트레스 DSR — 금리 오를 걸 미리 반영', c: '#D97706',
+                t: '스트레스 DSR — 금리 오를 걸 미리 반영', c: 'var(--amber-600)',
                 d: '변동금리로 빌리면 나중에 금리가 오를 수 있으니, DSR을 계산할 때 실제 금리에 「스트레스 가산금리」를 더해 더 보수적으로 한도를 잡는 제도입니다. 그만큼 빌릴 수 있는 금액이 줄어듭니다.',
                 f: '스트레스 DSR = 실제금리 + 스트레스 가산금리(변동형일수록 큼)로 원리금을 재계산한 DSR',
               },
@@ -100,7 +100,7 @@ export default function DsrPage() {
               <div key={i} style={{ ...card, borderLeft: `4px solid ${x.c}` }}>
                 <p style={{ fontSize: 15, fontWeight: 700, color: x.c, marginBottom: 6 }}>{x.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>{x.d}</p>
-                <p style={{ fontSize: 13, color: 'var(--text)', background: 'var(--bg3)', borderRadius: 8, padding: '8px 12px', lineHeight: 1.7, fontFamily: "'Noto Sans KR', sans-serif" }}>{x.f}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', background: 'var(--bg3)', borderRadius: 'var(--radius-s)', padding: '8px 12px', lineHeight: 1.7, fontFamily: 'var(--font-sans)' }}>{x.f}</p>
               </div>
             ))}
           </div>
@@ -120,7 +120,7 @@ export default function DsrPage() {
               📌 <strong>예시</strong> — 연소득 6,000만원 / 기존 대출 연 300만원 / 집값 5억 / 금리 4.5% / 30년 / 변동형
               <br />• LTV 70% → 최대 3.5억
               <br />• 스트레스 DSR 40%(가산 +1.5%p 반영) → 약 2.9억
-              <br />→ <strong style={{ color: '#059669' }}>실제 한도 ≈ 2.9억 (DSR에 묶임)</strong>
+              <br />→ <strong style={{ color: 'var(--emerald-600)' }}>실제 한도 ≈ 2.9억 (DSR에 묶임)</strong>
             </p>
           </div>
         </section>
@@ -149,8 +149,8 @@ export default function DsrPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', color: '#D97706', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--amber-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 13 }}>{row[3]}</td>
                   </tr>
                 ))}
@@ -191,7 +191,7 @@ export default function DsrPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
                     {row.slice(1).map((cell, j) => (
-                      <td key={j} style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{cell}</td>
+                      <td key={j} style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{cell}</td>
                     ))}
                   </tr>
                 ))}

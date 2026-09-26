@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,14 +23,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -70,7 +70,7 @@ export default function CustomsPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />관부가세 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -82,8 +82,8 @@ export default function CustomsPage() {
       <GuideDivider />
 
       {/* 공식 출처 · 기준일 */}
-      <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 14, padding: '16px 20px', marginTop: 28, fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
-        <p style={{ margin: '0 0 6px', fontWeight: 700, color: 'var(--text)', fontFamily: 'Noto Sans KR, sans-serif' }}>📌 공식 출처 · 기준일</p>
+      <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '16px 20px', marginTop: 28, fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+        <p style={{ margin: '0 0 6px', fontWeight: 700, color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>📌 공식 출처 · 기준일</p>
         <p style={{ margin: 0 }}>
           본 도구는 <strong style={{ color: 'var(--text)' }}>간이 예상세액</strong>으로 HS코드·원산지·FTA·개별 규정이 반영되지 않습니다.
           실제 세액·면세·합산·통관 가능 여부는 아래 관세청 공식 자료로 확인하세요.
@@ -117,8 +117,8 @@ export default function CustomsPage() {
       <h2 style={sectionTitle}>📋 목록통관 vs 일반통관 차이</h2>
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0D9488', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, margin: '0 0 6px' }}>✅ 목록통관 (간이 절차)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--teal-600)', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 13, color: 'var(--teal-600)', fontWeight: 700, margin: '0 0 6px' }}>✅ 목록통관 (간이 절차)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--text)' }}>관세·부가세 면제</strong><br />
               조건:<br />
@@ -127,8 +127,8 @@ export default function CustomsPage() {
               • 목록통관 가능 품목 (배제대상 아님)
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #DB2777', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 6px' }}>❌ 일반(수입)신고</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--pink-600)', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 13, color: 'var(--pink-600)', fontWeight: 700, margin: '0 0 6px' }}>❌ 일반(수입)신고</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--text)' }}>정식 신고 후 통관</strong><br />
               사유:<br />
@@ -175,7 +175,7 @@ export default function CustomsPage() {
                     <td key={j} style={{
                       padding: '6px 0',
                       textAlign: j === 1 ? 'right' : 'left',
-                      fontFamily: j === 1 ? 'Inter, "Noto Sans KR", system-ui, sans-serif' : 'Noto Sans KR, sans-serif',
+                      fontFamily: j === 1 ? 'var(--font-sans)' : 'var(--font-sans)',
                       color: j === 1 ? 'var(--accent)' : 'var(--text)',
                       fontWeight: j === 0 || j === 1 ? 700 : 500,
                     }}>{cell}</td>
@@ -192,12 +192,12 @@ export default function CustomsPage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '⭐ 무관세 (0%)', d: '노트북·태블릿·핸드폰·키보드·마우스·컴퓨터 모니터·디지털카메라(ITA 품목)·게임기(콘솔)·도서. 부가세 10%만 부과 (도서는 부가세도 면제).', c: '#0D9488' },
-            { t: '👜 8%', d: '가방·핸드백·지갑·시계·선글라스·이어폰·카메라 렌즈·완구·운동용품.', c: '#D97706' },
-            { t: '👕 13%', d: '의류 (편직·직물·니트·셔츠·바지·재킷)·운동화·가죽 신발·유아 의류.', c: '#EA580C' },
-            { t: '💄 6.5%', d: '화장품·헤어·바디 케어 (기초·립스틱·파운데이션 등).', c: '#0891B2' },
-            { t: '🍷 15~36%', d: '와인 15% + 주세 30% / 치즈 36% / 일부 식품 8~30%.', c: '#DB2777' },
-            { t: '⚠️ 200만원+ 개소세', d: '가방·시계·주얼리: (과세가격+관세) 200만원 초과분에 개별소비세 20% + 교육세(개소세의 30%) 추가.', c: '#9B59B6' },
+            { t: '⭐ 무관세 (0%)', d: '노트북·태블릿·핸드폰·키보드·마우스·컴퓨터 모니터·디지털카메라(ITA 품목)·게임기(콘솔)·도서. 부가세 10%만 부과 (도서는 부가세도 면제).', c: 'var(--teal-600)' },
+            { t: '👜 8%', d: '가방·핸드백·지갑·시계·선글라스·이어폰·카메라 렌즈·완구·운동용품.', c: 'var(--amber-600)' },
+            { t: '👕 13%', d: '의류 (편직·직물·니트·셔츠·바지·재킷)·운동화·가죽 신발·유아 의류.', c: 'var(--orange-600)' },
+            { t: '💄 6.5%', d: '화장품·헤어·바디 케어 (기초·립스틱·파운데이션 등).', c: 'var(--cyan-600)' },
+            { t: '🍷 15~36%', d: '와인 15% + 주세 30% / 치즈 36% / 일부 식품 8~30%.', c: 'var(--pink-600)' },
+            { t: '⚠️ 200만원+ 개소세', d: '가방·시계·주얼리: (과세가격+관세) 200만원 초과분에 개별소비세 20% + 교육세(개소세의 30%) 추가.', c: 'var(--amethyst)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -366,21 +366,21 @@ export default function CustomsPage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/unit/size" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/unit/size" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🛍️</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해외 직구 사이즈</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             US·EU·UK → 한국 의류·신발
           </p>
         </Link>
-        <Link href="/tools/life/travel-budget" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/life/travel-budget" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>✈️</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해외여행 예산</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             18 도시 × 3 스타일
           </p>
         </Link>
-        <Link href="/tools/finance/savings" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/finance/savings" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💰</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>월 저축가능 금액</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

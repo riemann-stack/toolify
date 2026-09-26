@@ -60,7 +60,7 @@ export default function GolfCostPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />골프 비용 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -82,7 +82,7 @@ export default function GolfCostPage() {
 
         {/* ── 1. 골프장 타입별 평균 비용표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             골프장 타입별 평균 비용 (참고)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '14px' }}>
@@ -100,16 +100,16 @@ export default function GolfCostPage() {
               </thead>
               <tbody>
                 {[
-                  { type: '퍼블릭(대중형) 주중',  color: '#059669', green: '약 17만',  cart: '약 10만', caddie: '14~15만' },
-                  { type: '퍼블릭(대중형) 주말',  color: '#0EA5E9', green: '약 21만',  cart: '약 10만', caddie: '14~15만' },
-                  { type: '회원제(비회원) 주중', color: '#0891B2', green: '약 22만',  cart: '약 10만', caddie: '14~15만' },
-                  { type: '회원제(비회원) 주말', color: '#A16207', green: '약 27만',  cart: '약 10만', caddie: '14~15만' },
+                  { type: '퍼블릭(대중형) 주중',  color: 'var(--emerald-600)', green: '약 17만',  cart: '약 10만', caddie: '14~15만' },
+                  { type: '퍼블릭(대중형) 주말',  color: 'var(--sky-500)', green: '약 21만',  cart: '약 10만', caddie: '14~15만' },
+                  { type: '회원제(비회원) 주중', color: 'var(--cyan-600)', green: '약 22만',  cart: '약 10만', caddie: '14~15만' },
+                  { type: '회원제(비회원) 주말', color: 'var(--yellow-700)', green: '약 27만',  cart: '약 10만', caddie: '14~15만' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', fontWeight: 600, color: row.color }}>{row.type}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{row.green}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{row.cart}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--text)' }}>{row.caddie}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{row.green}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{row.cart}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--text)' }}>{row.caddie}</td>
                   </tr>
                 ))}
               </tbody>
@@ -122,55 +122,55 @@ export default function GolfCostPage() {
 
         {/* ── 2. 1인당 라운딩 비용 예시 시나리오 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             1인당 라운딩 비용 예시
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0EA5E9', marginBottom: '8px' }}>예시 1 — 퍼블릭 주말 4인 (캐디 동반)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--sky-500)', marginBottom: '8px' }}>예시 1 — 퍼블릭 주말 4인 (캐디 동반)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 그린피 21만(인당) · 카트비 10만(팀) · 캐디피 15만(팀) · 식사 1.5만(인당) · 자차 카풀
               </p>
-              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
+              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '12px 14px', fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
                 그린피 21만 × 4 = 84만<br/>
                 카트비 10만 (팀 부담)<br/>
                 캐디피 15만 + 팁 4만 = 19만 (팀 부담)<br/>
                 식사 1.5만 × 4 = 6만<br/>
                 교통비 8만 (자차 카풀, 팀 분담)<br/>
-                <span style={{ color: '#0EA5E9' }}>팀 합계 = 127만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 32만원</strong>
+                <span style={{ color: 'var(--sky-500)' }}>팀 합계 = 127만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 32만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 2025년 대중형 평균 주말 그린피를 넣은 경우입니다.</p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', marginBottom: '8px' }}>예시 2 — 퍼블릭 주중 4인 (노캐디)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cyan-600)', marginBottom: '8px' }}>예시 2 — 퍼블릭 주중 4인 (노캐디)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 그린피 17만(인당) · 카트비 10만(팀) · 캐디 미사용 · 식사 1.5만(인당) · KTX 이동
               </p>
-              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
+              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '12px 14px', fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
                 그린피 17만 × 4 = 68만<br/>
                 카트비 10만 (팀)<br/>
                 캐디피 0 (노캐디)<br/>
                 식사 1.5만 × 4 = 6만<br/>
                 교통비 4만 × 4 = 16만 (KTX 왕복 인당)<br/>
-                <span style={{ color: '#0891B2' }}>팀 합계 = 100만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 25만원</strong>
+                <span style={{ color: 'var(--cyan-600)' }}>팀 합계 = 100만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 25만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 노캐디로 팀당 캐디피 15만원(1인 약 3.8만원)을 아꼈지만, KTX 이동비가 붙어 절약분이 상당 부분 상쇄됩니다.</p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: '#A16207', marginBottom: '8px' }}>예시 3 — 회원제 비회원 동반 (4인)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.25)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
+              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--yellow-700)', marginBottom: '8px' }}>예시 3 — 회원제 비회원 동반 (4인)</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '10px', lineHeight: 1.7 }}>
                 그린피 25만(인당) · 카트비 10만(팀) · 캐디피 14만(팀) + 팁 6만 · 식사 2만 · 자차
               </p>
-              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '12px 14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
+              <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '12px 14px', fontFamily: 'var(--font-sans)', fontSize: '12px', color: 'var(--text)', lineHeight: 1.8, marginBottom: '8px' }}>
                 그린피 25만 × 4 = 100만<br/>
                 카트비 10만<br/>
                 캐디피 14만 + 팁 6만 = 20만<br/>
                 식사 2만 × 4 = 8만<br/>
                 교통비 8만 (자차 카풀)<br/>
-                <span style={{ color: '#A16207' }}>팀 합계 = 146만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 36.5만원</strong>
+                <span style={{ color: 'var(--yellow-700)' }}>팀 합계 = 146만</span> → <strong style={{ color: 'var(--accent)' }}>1인당 약 36.5만원</strong>
               </div>
               <p style={{ fontSize: '12px', color: 'var(--muted)' }}>→ 회원 동반(그린피 할인) 여부에 따라 1인당 10~15만원이 줄어들 수 있습니다.</p>
             </div>
@@ -180,11 +180,11 @@ export default function GolfCostPage() {
 
         {/* ── 3. 캐디피 정산 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🧾 캐디피 정산 완전 가이드
           </h2>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 20%, transparent)', borderRadius: 'var(--radius-m)', padding: '18px 20px', marginBottom: '12px' }}>
             <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>1. 캐디피는 보통 &ldquo;팀 부담&rdquo;</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               한국 골프장의 캐디피는 1팀(보통 4인) 기준 14~15만원이 일반적입니다(대중형은 15만원대가 다수, 한국레저산업연구소). 골프장에 직접 지불하는 것이 아니라 라운드 종료 후
@@ -192,24 +192,24 @@ export default function GolfCostPage() {
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 600, color: '#059669', marginBottom: '10px' }}>2. N빵 vs 한 명이 선결제</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.2)', borderRadius: 'var(--radius-m)', padding: '18px 20px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--emerald-600)', marginBottom: '10px' }}>2. N빵 vs 한 명이 선결제</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               4인 1팀이면 캐디피 15만 ÷ 4 = <strong style={{ color: 'var(--text)' }}>1인당 3만 7,500원</strong>씩 N빵하는 것이 일반적입니다.
               한 명이 먼저 캐디에게 지불하고 나머지는 그 사람에게 카카오페이·이체로 정산합니다. 더치페이 계산기를 활용하면 식사·카트비까지 한 번에 정리할 수 있습니다.
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.2)', borderRadius: '12px', padding: '18px 20px', marginBottom: '12px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 600, color: '#EA580C', marginBottom: '10px' }}>3. 팁(촌지) 관행</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.2)', borderRadius: 'var(--radius-m)', padding: '18px 20px', marginBottom: '12px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--orange-600)', marginBottom: '10px' }}>3. 팁(촌지) 관행</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               만족스러운 라운드였다면 캐디피의 <strong style={{ color: 'var(--text)' }}>10~30%(2~5만원)</strong> 정도를 팁으로 추가 지급합니다.
               팁은 의무는 아니지만, 첫 라운드·접대 자리·회원 동반 시에는 관행적으로 챙기는 경우가 많습니다. 노캐디(캐디 미동반) 라운드는 캐디피와 팁 모두 발생하지 않습니다.
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.2)', borderRadius: '12px', padding: '18px 20px' }}>
-            <p style={{ fontSize: '14px', fontWeight: 600, color: '#0891B2', marginBottom: '10px' }}>4. 노캐디·드라이빙 캐디·마샬 캐디</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
+            <p style={{ fontSize: '14px', fontWeight: 600, color: 'var(--cyan-600)', marginBottom: '10px' }}>4. 노캐디·드라이빙 캐디·마샬 캐디</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               <strong style={{ color: 'var(--text)' }}>노캐디</strong>: 캐디 없이 직접 진행. 캐디피 0원, 시간 단축.<br/>
               <strong style={{ color: 'var(--text)' }}>드라이빙 캐디</strong>: 카트만 운전, 클럽 추천 없음. 보통 6~8만원.<br/>
@@ -220,7 +220,7 @@ export default function GolfCostPage() {
 
         {/* ── 4. 회원권 손익분기 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🏆 회원권 손익분기 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -245,8 +245,8 @@ export default function GolfCostPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.n}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.m}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.n}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 600 }}>{r.v}</td>
                   </tr>
                 ))}
@@ -260,7 +260,7 @@ export default function GolfCostPage() {
 
         {/* ── 5. 시즌·요일별 가격 변동 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📅 시즌·요일별 그린피 변동
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -277,9 +277,9 @@ export default function GolfCostPage() {
               { p: '공휴일',         r: '+10~20%',    d: '예약 가장 어려움' },
               { p: '평일 새벽 (6~7시)', r: '-20~30%', d: '가성비 ★★★' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{m.p}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '15px', fontWeight: 800, color: 'var(--accent)', marginBottom: '4px' }}>{m.r}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 800, color: 'var(--accent)', marginBottom: '4px' }}>{m.r}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.5 }}>{m.d}</p>
               </div>
             ))}
@@ -288,7 +288,7 @@ export default function GolfCostPage() {
 
         {/* ── 6. 한국 인기 골프장 타입 비교 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🏌️ 한국 인기 골프장 타입 한눈에
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -309,7 +309,7 @@ export default function GolfCostPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.t}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.f}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.c}</td>
                   </tr>
                 ))}
               </tbody>
@@ -322,7 +322,7 @@ export default function GolfCostPage() {
 
         {/* ── 7. 동남아 골프 가이드 (NEW, 참고만) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             ✈️ 동남아 골프 패키지 평균 (참고)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -335,10 +335,10 @@ export default function GolfCostPage() {
               { c: '🇵🇭 필리핀',    p: '4박 5일 / 4라운드',  cost: '약 130~220만원/인',  green: '라운딩 6~10만원' },
               { c: '🇯🇵 일본',      p: '2박 3일 / 2라운드',  cost: '약 100~180만원/인',  green: '라운딩 15~20만원' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>{m.c}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '4px' }}>{m.p}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '14px', fontWeight: 800, color: 'var(--accent)', marginBottom: '4px' }}>{m.cost}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', fontWeight: 800, color: 'var(--accent)', marginBottom: '4px' }}>{m.cost}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)' }}>{m.green}</p>
               </div>
             ))}
@@ -355,7 +355,7 @@ export default function GolfCostPage() {
 
         {/* ── 5. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/dutch',          icon: '🍻', name: '더치페이 계산기',       desc: '식사·카트비 N빵 정산' },
@@ -368,7 +368,7 @@ export default function GolfCostPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

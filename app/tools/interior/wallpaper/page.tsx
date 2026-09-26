@@ -59,7 +59,7 @@ export default function WallpaperPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />도배 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '20px' }}>
@@ -81,15 +81,15 @@ export default function WallpaperPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             도배 소요량 핵심 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -98,7 +98,7 @@ export default function WallpaperPage() {
             <div><span style={{ color: 'var(--muted)' }}>필요 벽지 면적</span> = 시공 면적 × (1 + 로스율 / 100)</div>
             <div><span style={{ color: 'var(--muted)' }}>필요 롤 수</span> = 필요 벽지 면적 ÷ (벽지 폭 × 1롤 길이)</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 방 4m × 4m, 천장 2.4m, 창 1.5×1.5, 문 0.9×2.1<br />
             • 둘레 16m × 2.4 = <strong style={{ color: 'var(--text)' }}>38.4㎡</strong><br />
             • 차감 후 시공 면적: 38.4 − 2.25 − 1.89 = <strong style={{ color: 'var(--text)' }}>34.26㎡</strong><br />
@@ -108,21 +108,21 @@ export default function WallpaperPage() {
 
         {/* ── 2. 벽지 종류별 표준 사이즈 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 벽지 종류별 표준 사이즈
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { i: '🧵', name: '실크벽지', spec: '폭 106cm × 길이 15.6m', area: '1롤 약 16.5㎡', price: '2~5만원', tip: '주거용 일반', color: 'var(--accent)' },
-              { i: '📄', name: '합지벽지', spec: '폭 93cm × 길이 17.75m', area: '1롤 약 16.5㎡', price: '1~2만원', tip: '저렴, 셀프 입문 추천', color: '#059669' },
-              { i: '🛡️', name: 'PVC벽지', spec: '폭 106cm × 길이 15.6m', area: '방수·내구성',     price: '3~6만원', tip: '욕실·주방 추천',    color: '#0891B2' },
+              { i: '📄', name: '합지벽지', spec: '폭 93cm × 길이 17.75m', area: '1롤 약 16.5㎡', price: '1~2만원', tip: '저렴, 셀프 입문 추천', color: 'var(--emerald-600)' },
+              { i: '🛡️', name: 'PVC벽지', spec: '폭 106cm × 길이 15.6m', area: '방수·내구성',     price: '3~6만원', tip: '욕실·주방 추천',    color: 'var(--cyan-600)' },
             ].map((w, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${w.color}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${w.color}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{w.i}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: w.color, marginBottom: 6 }}>{w.name}</p>
-                <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{w.spec}</p>
-                <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{w.area}</p>
-                <p style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginTop: 6 }}>{w.price}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{w.spec}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{w.area}</p>
+                <p style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, marginTop: 6 }}>{w.price}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 2 }}>{w.tip}</p>
               </div>
             ))}
@@ -131,7 +131,7 @@ export default function WallpaperPage() {
 
         {/* ── 3. 평수별 빠른 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             평수별 벽지 롤 수 빠른 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -157,11 +157,11 @@ export default function WallpaperPage() {
                   { p: '30평', a: '99㎡',   s: '91㎡', r: '7롤', c: '13롤' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.s}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.c}</td>
                   </tr>
                 ))}
               </tbody>
@@ -171,13 +171,13 @@ export default function WallpaperPage() {
 
         {/* ── 3-1. 천장 포함 소요량 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             천장 도배 포함 시 소요량 계산
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.8 }}>
             직사각형 방에서 천장 면적은 가로 × 세로, 즉 <strong style={{ color: 'var(--text)' }}>바닥 면적과 같습니다</strong>. 천장까지 도배한다면 벽 시공 면적에 바닥 면적을 그대로 더하면 됩니다. 계산기 [간편 계산]의 [천장도 도배] 체크박스와 [상세 계산]의 방별 천장 옵션이 이 방식으로 계산합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시 — 15평 한 공간:</strong> 벽 시공 면적 63.5㎡ + 천장 49.6㎡ = <strong style={{ color: 'var(--text)' }}>113㎡</strong><br />
             • 10% 로스율: <strong style={{ color: 'var(--accent)' }}>124.3㎡</strong> → 실크벽지(1롤 16.5㎡) 기준 <strong style={{ color: 'var(--accent)' }}>8롤</strong> — 벽만 도배(5롤)보다 3롤 증가<br />
             • 벽 면적은 둘레를 따라 완만하게 늘지만 천장 면적은 평수에 정비례하므로, <strong style={{ color: 'var(--text)' }}>평수가 클수록 천장 몫이 커집니다</strong>. 25평이면 벽만 6롤 ↔ 천장 포함 12롤로 2배입니다.
@@ -185,49 +185,49 @@ export default function WallpaperPage() {
           <div style={{
             background: 'rgba(234,88,12,0.06)',
             border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            ⚠️ <strong style={{ color: '#EA580C' }}>천장은 난이도가 다릅니다</strong> — 풀 먹인 벽지를 머리 위에서 지탱하며 붙여야 해 벽보다 시공이 훨씬 어렵고, 셀프라면 사다리(우마)와 2인 작업이 사실상 필수입니다. 전문 시공도 천장 포함 여부에 따라 견적이 달라지므로 견적 요청 시 천장 포함 여부를 반드시 명시하세요.
+            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>천장은 난이도가 다릅니다</strong> — 풀 먹인 벽지를 머리 위에서 지탱하며 붙여야 해 벽보다 시공이 훨씬 어렵고, 셀프라면 사다리(우마)와 2인 작업이 사실상 필수입니다. 전문 시공도 천장 포함 여부에 따라 견적이 달라지므로 견적 요청 시 천장 포함 여부를 반드시 명시하세요.
           </div>
         </div>
 
         {/* ── 3-2. 포인트 벽 폭 수 계산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             포인트 벽(부분 도배) 폭 수 계산
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.8 }}>
             벽 1면만 바꾸는 포인트 도배는 면적보다 <strong style={{ color: 'var(--text)' }}>폭(장) 수</strong>로 세는 편이 정확합니다. 필요한 폭 수 = 벽 너비 ÷ 벽지 폭(실크 1.06m) 올림. 계산기 [상세 계산] 탭의 [포인트 도배 (1면만)] 옵션이 같은 방식으로 계산합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시 — 너비 3.6m·천장 2.4m 벽:</strong> 3.6 ÷ 1.06 = 3.4 → <strong style={{ color: 'var(--accent)' }}>4폭</strong><br />
             • 민무늬: 1롤(15.6m)에서 2.4m짜리 <strong style={{ color: 'var(--text)' }}>6장</strong> 재단 가능 → 4폭이면 <strong style={{ color: 'var(--accent)' }}>1롤</strong>로 충분<br />
             • 무늬 벽지: 장마다 무늬를 맞추느라 커트 길이가 리피트(무늬 반복 길이)만큼 길어집니다. 예컨대 리피트 64cm 패턴이면 커트 약 3.0m → 1롤에서 <strong style={{ color: 'var(--text)' }}>5장</strong>. 너비 5m가 넘는 거실 아트월(5폭)은 여유가 없어지므로 로스율을 한 단계 높여 잡으세요.
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.75 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.75 }}>
             💡 <strong style={{ color: 'var(--accent)' }}>로트(lot) 번호는 반드시 통일</strong> — 같은 제품이라도 생산 차수(로트)마다 잉크 배합·인쇄 조건이 미세하게 달라 색상이 조금씩 다를 수 있습니다. 다른 로트를 나란히 붙이면 이음매에서 색 차이가 드러나므로, 여유분까지 포함한 전체 수량을 <strong style={{ color: 'var(--text)' }}>한 번에 같은 로트로</strong> 구매하고, 추가 구매 시엔 라벨의 로트 번호가 같은지 확인하세요.
           </div>
         </div>
 
         {/* ── 4. 로스율 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎯 로스율(여유분) 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { p: '5%',  c: '#059669',       t: '단색·작은 패턴',  d: '숙련 시공자, 솔리드 컬러' },
+              { p: '5%',  c: 'var(--emerald-600)',       t: '단색·작은 패턴',  d: '숙련 시공자, 솔리드 컬러' },
               { p: '10%', c: 'var(--accent)', t: '한국 표준 권장',  d: '일반 가정용 기본값' },
-              { p: '15%', c: '#EA580C',       t: '큰 패턴',          d: '무늬 맞춤 필요' },
-              { p: '20%', c: '#DC2626',       t: '셀프 + 큰 패턴',  d: '안전 마진' },
+              { p: '15%', c: 'var(--orange-600)',       t: '큰 패턴',          d: '무늬 맞춤 필요' },
+              { p: '20%', c: 'var(--red-600)',       t: '셀프 + 큰 패턴',  d: '안전 마진' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: s.c, marginBottom: 4 }}>{s.p}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: s.c, marginBottom: 4 }}>{s.p}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 2 }}>{s.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{s.d}</p>
               </div>
@@ -236,24 +236,24 @@ export default function WallpaperPage() {
           <div style={{
             background: 'rgba(234,88,12,0.06)',
             border: '1px solid rgba(234,88,12,0.25)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.75,
           }}>
-            ⚠️ <strong style={{ color: '#EA580C' }}>무늬벽지 주의</strong> — 패턴 리피트가 클수록 무늬 맞춤 손실이 커지므로 로스율을 한 단계 높여 계산하세요.
+            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>무늬벽지 주의</strong> — 패턴 리피트가 클수록 무늬 맞춤 손실이 커지므로 로스율을 한 단계 높여 계산하세요.
           </div>
         </div>
 
         {/* ── 5. 셀프 vs 전문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🛠️ 셀프 도배 vs 전문 시공
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🔧 셀프 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>재료비만 — 실크 기준 평당 약 1.5~3.5만원</li>
@@ -262,8 +262,8 @@ export default function WallpaperPage() {
                 <li>실수 복구 가능 (합지 추천)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cyan-600)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>실크 평당 약 5~8만원 (벽지·인건비 포함)</li>
                 <li>빠르고 깔끔 (24평 1~2일)</li>
@@ -276,13 +276,13 @@ export default function WallpaperPage() {
 
         {/* ── 6. 부자재 체크리스트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             📋 도배 부자재 체크리스트
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 20px',
             fontSize: '13px',
             color: 'var(--text)',
@@ -296,11 +296,11 @@ export default function WallpaperPage() {
               <li>헤라 (매끄럽게 펴는 도구)</li>
               <li>마른 걸레 (기포 제거)</li>
             </ul>
-            <p style={{ fontSize: 13, fontWeight: 700, color: '#EA580C', marginBottom: 8 }}>🪜 천장 높이 따라</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--orange-600)', marginBottom: 8 }}>🪜 천장 높이 따라</p>
             <ul style={{ paddingLeft: 22, margin: 0, marginBottom: 12 }}>
               <li>사다리 2~5만원 (천장 도배 시 필수)</li>
             </ul>
-            <p style={{ fontSize: 13, fontWeight: 700, color: '#0891B2', marginBottom: 8 }}>💡 선택</p>
+            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--cyan-600)', marginBottom: 8 }}>💡 선택</p>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li>프라이머·바인더 (벽 상태 안 좋을 때)</li>
               <li>마스킹 테이프 (보호용)</li>
@@ -313,7 +313,7 @@ export default function WallpaperPage() {
 
         {/* ── 7. 도배 시기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🗓️ 도배 시기 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
@@ -323,7 +323,7 @@ export default function WallpaperPage() {
               { i: '⏱️', t: '시공 시간 (전문)', d: '24평 기준 1~2일' },
               { i: '🛠️', t: '시공 시간 (셀프)', d: '24평 기준 3~5일' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 2 }}>{s.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{s.d}</p>
@@ -342,7 +342,7 @@ export default function WallpaperPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -360,7 +360,7 @@ export default function WallpaperPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

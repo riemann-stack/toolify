@@ -17,7 +17,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -146,7 +146,7 @@ export default function GlycemicLoadPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         건강·웰빙
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />당부하지수(GL) 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -174,8 +174,8 @@ export default function GlycemicLoadPage() {
         <section>
           <h2 style={sectionTitle}>당부하지수(GL) 계산 공식</h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>GL</span> = 1회 섭취 탄수화물(g) × GI ÷ 100</div>
@@ -210,7 +210,7 @@ export default function GlycemicLoadPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[3]}</td>
                     <td style={{ padding: '10px 12px', color: r[5], fontWeight: 700 }}>{r[4]}</td>
                   </tr>
                 ))}
@@ -250,7 +250,7 @@ export default function GlycemicLoadPage() {
                 ) : (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.food}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: r.tone ? TONE_COLOR[r.tone] : 'var(--text)' }}>{r.gi}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontWeight: 700, fontFamily: 'var(--font-sans)', color: r.tone ? TONE_COLOR[r.tone] : 'var(--text)' }}>{r.gi}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.src}</td>
                   </tr>
                 ))}
@@ -264,7 +264,7 @@ export default function GlycemicLoadPage() {
             한국(농진청): 「탄수화물 다소비 식품의 당지수 관련 분석 및 평가」(농촌진흥청 발주·경희대학교 수행, 2015) — 건강 성인 151명, 13종을 50가지 조리 형태로 측정.
             <br />⚠️ GI는 <strong style={{ color: 'var(--text)' }}>시험 조건에 따라 변동</strong>하는 값입니다 — 품종·도정·불림·가열 시간·측정 실험실이 달라지면 같은 식품도 값이 크게 바뀌므로(국제표의 개별 백미 항목만 해도 GI 38~93 분포), 표의 값은 확정치가 아니라 대표 참고치로만 쓰세요.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 12 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 12 }}>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--text)' }}>※1 현미밥</strong> — 국제표는 65(2021판 현미 평균)~68±4(2008판)인데 국내 인체시험은 87.6±12.0으로 20 이상 벌어집니다. 품종·조리 조건에 따라 연구 간 차이가 커서 어느 값이 한국 현미밥을 대표하는지 확정할 수 없어 두 값을 함께 적었습니다.<br />
               <strong style={{ color: 'var(--text)' }}>※2 생바나나</strong> — 숙성도에 따라 덜 익은 것 39, 잘 익은 것 47±5, 과숙 57±8(2021판)로 달라집니다.<br />
@@ -288,7 +288,7 @@ export default function GlycemicLoadPage() {
             표를 보기 전에 이 구분부터 짚습니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', marginBottom: 16 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginBottom: 16 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--warning)', margin: '0 0 8px' }}>
               ⚠️ 먼저 — 아래 표의 값은 GI가 아닙니다
             </p>
@@ -325,9 +325,9 @@ export default function GlycemicLoadPage() {
                 ) : (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.name}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.amylose}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.rs}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.pgi}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.amylose}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.rs}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.pgi}</td>
                   </tr>
                 ))}
               </tbody>
@@ -351,7 +351,7 @@ export default function GlycemicLoadPage() {
             시험 중 섭취량이 위장 불편을 일으킬 만큼 저항전분이 많은 식품은 <strong style={{ color: 'var(--text)' }}>GI 시험에 적합하지 않다</strong>고 봅니다. 고저항전분 쌀은 애초에 GI 시험 설계가 까다로운 대상입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 16 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 16 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>도담쌀은 어떤 쌀인가</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
               농촌진흥청이 <strong style={{ color: 'var(--text)' }}>2013년 개발</strong>한 품종으로, 고아미와 고아미2호를 교배해 얻은 자포니카 계통입니다.
@@ -366,7 +366,7 @@ export default function GlycemicLoadPage() {
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 10 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 10 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>사람 대상 시험은 있습니다 — 다만 GI 측정이 아닙니다</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
               농촌진흥청은 차병원과 공동으로, 농진청 기술이 적용된 <strong style={{ color: 'var(--text)' }}>도담쌀 선식</strong>을 비만 환자에게 적용한 인체적용시험을 수행해
@@ -401,7 +401,7 @@ export default function GlycemicLoadPage() {
               { t: '주스보다 생과일', d: '갈거나 즙을 내면 GI가 올라갑니다. 통째로 씹어 먹기.' },
               { t: '식후 10분 걷기', d: '가벼운 활동만으로도 식후 혈당이 낮아집니다.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>✅ {c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.d}</p>
               </div>
@@ -419,7 +419,7 @@ export default function GlycemicLoadPage() {
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>

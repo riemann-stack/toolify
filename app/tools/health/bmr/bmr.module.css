@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--cyan-600); }
 
 .warnBox {
   background: rgba(220,38,38,0.14);
@@ -21,21 +21,21 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.warnBox strong { color: #DC2626; }
+.warnBox strong { color: var(--red-600); }
 
 .criticalBox {
   background: rgba(220,38,38,0.18);
-  border: 2px solid #DC2626;
-  border-radius: 12px;
+  border: 2px solid var(--red-600);
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.75;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.criticalBox strong { color: #DC2626; font-weight: 800; }
+.criticalBox strong { color: var(--red-600); font-weight: 800; }
 
 /* ── 탭 ── */
 .tabs {
@@ -44,7 +44,7 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
@@ -52,11 +52,11 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -64,16 +64,16 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveActivity { background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
-.tabActiveSplit    { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
-.tabActiveBudget   { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
-.tabActiveWatch    { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
+.tabActiveActivity { background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
+.tabActiveSplit    { background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
+.tabActiveBudget   { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
+.tabActiveWatch    { background: rgba(155,89,182,0.10); color: var(--purple-600); font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   width: 100%;
   box-sizing: border-box;
@@ -90,23 +90,23 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
 
 /* ── 입력 ── */
 .numInput, .textInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   width: 100%;
   box-sizing: border-box;
 }
 .numInput {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -123,7 +123,7 @@
 .unit {
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 
@@ -153,11 +153,11 @@
 .toggleBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }@media (hover: hover) {
@@ -188,11 +188,11 @@
 .optionBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
@@ -200,7 +200,7 @@
   .optionBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .optionActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.optionWarning { color: #EA580C; }
+.optionWarning { color: var(--orange-600); }
 
 /* 활동 카드 (5단계 단순) */
 .activityList { display: flex; flex-direction: column; gap: 6px; }
@@ -214,7 +214,7 @@
   display: flex;
   flex-direction: column;
   gap: 3px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .activityBtn:hover { border-color: var(--border-hover); }
 }
@@ -222,7 +222,7 @@
 .activityName { font-size: 13px; font-weight: 700; color: var(--text); display: flex; justify-content: space-between; align-items: baseline; }
 .activityActive .activityName { color: var(--accent); }
 .activityName small {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: 13px;
@@ -231,7 +231,7 @@
 
 /* ── 히어로 ── */
 .hero {
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 26px 22px;
   text-align: center;
   border-width: 1px;
@@ -246,7 +246,7 @@
   margin-bottom: 6px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(48px, 12vw, 80px);
   letter-spacing: -2px;
@@ -255,14 +255,14 @@
 }
 .heroNumUnit { font-size: 0.32em; color: var(--text); margin-left: 6px; letter-spacing: 0; }
 .heroSub2 {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: clamp(28px, 8vw, 44px);
   letter-spacing: -1px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
   margin-top: 12px;
-  color: #0891B2;
+  color: var(--cyan-600);
 }
 .heroSubLabel {
   font-size: 12px;
@@ -273,7 +273,7 @@
   margin-bottom: 4px;
   margin-top: 8px;
 }
-.heroDesc { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.7; font-family: 'Noto Sans KR', sans-serif; }
+.heroDesc { font-size: 13px; color: var(--muted); margin-top: 10px; line-height: 1.7; font-family: var(--font-sans); }
 .heroDisclaimer {
   font-size: 11px;
   color: var(--muted);
@@ -297,18 +297,18 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: #000;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
 }
 .tdeeBarActivity {
-  background: rgba(8,145,178,0.45);
+  background: color-mix(in srgb, var(--cyan-600) 45%, transparent);
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
   font-size: 12px;
@@ -328,10 +328,10 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .formulaRowActive {
   background: var(--accent-dim);
@@ -344,7 +344,7 @@
 .formulaName { color: var(--text); font-weight: 600; }
 .formulaName small { color: var(--muted); margin-left: 6px; font-size: 11px; font-weight: 400; }
 .formulaBmr {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -353,7 +353,7 @@
 }
 .formulaUnavailable .formulaBmr { color: var(--muted); }
 .formulaDiff {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -370,21 +370,21 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .goalRow.goalRowMaintain {
   background: var(--accent-dim);
   border-color: var(--accent);
   font-weight: 700;
 }
-.goalRow.goalWarning { border-left: 4px solid #EA580C; }
+.goalRow.goalWarning { border-left: 4px solid var(--orange-600); }
 .goalName { color: var(--text); }
 .goalName small { color: var(--muted); margin-left: 6px; font-size: 11px; }
 .goalKcal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -393,7 +393,7 @@
 }
 .goalRowMaintain .goalKcal { color: var(--accent); }
 .goalChange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -405,11 +405,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -454,7 +454,7 @@
 }
 .sliderRow { display: flex; align-items: center; gap: 10px; }
 .sliderVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-size: 18px;
@@ -470,14 +470,14 @@
   grid-template-columns: 1fr auto;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .detailRow span:first-child { color: var(--text); }
 .detailRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -498,30 +498,30 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-left: 4px solid;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.dayRowRest    { border-left-color: #0891B2; }
-.dayRowExer    { border-left-color: #EA580C; }
-.dayRowLong    { border-left-color: #DC2626; }
+.dayRowRest    { border-left-color: var(--cyan-600); }
+.dayRowExer    { border-left-color: var(--orange-600); }
+.dayRowLong    { border-left-color: var(--red-600); }
 .dayName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
   font-size: 13px;
 }
 .dayActivity { color: var(--muted); font-size: 12px; }
 .dayTdee {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   font-size: 13px;
   color: var(--accent);
 }
 .dayTarget {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   font-size: 13px;
@@ -535,7 +535,7 @@
 .budgetBar {
   display: flex;
   height: 48px;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   overflow: hidden;
   border: 1px solid var(--border);
   margin-top: 8px;
@@ -545,7 +545,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: rgba(0,0,0,0.7);
   font-size: 11px;
@@ -553,7 +553,7 @@
   padding: 3px;
 }
 .budgetSeg b {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 13px;
   font-variant-numeric: tabular-nums;
@@ -572,11 +572,11 @@
   color: var(--muted);
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
 }
 .budgetLegendItem b {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
@@ -593,10 +593,10 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .macroRow.headerRow {
   background: transparent; border: none;
@@ -606,7 +606,7 @@
 }
 .macroRow span:first-child { color: var(--text); font-weight: 600; }
 .macroRow span:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -625,14 +625,14 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .foodItem span:first-child { color: var(--text); }
 .foodItem span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -646,8 +646,8 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
 
@@ -659,15 +659,15 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .historyName { color: var(--text); font-weight: 600; }
 .historyName small { color: var(--muted); margin-left: 6px; font-size: 11px; font-weight: 400; }
 .historyVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -679,12 +679,12 @@
   padding: 5px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+.miniDanger { color: var(--red-600); border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
   .miniDanger:hover { background: rgba(220,38,38,0.18); }
 }
 
@@ -692,14 +692,14 @@
 .advanced {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 8px 14px;
 }
 .advanced summary {
   cursor: pointer;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   padding: 6px 0;
   list-style: none;
@@ -718,22 +718,22 @@
 .quizCard {
   background: rgba(161,98,7,0.14);
   border: 1px solid rgba(161,98,7,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
 .quizTitle {
   font-size: 14px;
   font-weight: 700;
-  color: #A16207;
+  color: var(--yellow-700);
   margin-bottom: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .quizQuestion {
   font-size: 13px;
   color: var(--text);
   font-weight: 600;
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .quizAnswers {
   display: grid;

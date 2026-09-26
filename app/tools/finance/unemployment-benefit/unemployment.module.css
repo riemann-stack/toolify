@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -28,19 +28,19 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus,
 .select:focus { border-color: var(--accent); }
 .input::-webkit-outer-spin-button,
 .input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.input[type="date"] { font-family: 'Noto Sans KR', sans-serif; }
-.select { font-family: 'Noto Sans KR', sans-serif; cursor: pointer; }
+.input[type="date"] { font-family: var(--font-sans); }
+.select { font-family: var(--font-sans); cursor: pointer; }
 
 .row2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 600px) { .row2 { grid-template-columns: 1fr; } }
@@ -52,7 +52,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tab {
@@ -60,13 +60,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }
 @media (hover: hover) {
@@ -109,7 +109,7 @@
   font-size: 12px;
   color: var(--accent-ink);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .monthCard .input { padding: 8px 10px; font-size: 14px; }
 
@@ -117,13 +117,13 @@
 .hero {
   background: linear-gradient(135deg, rgba(5, 150, 105, 0.10) 0%, rgba(3, 105, 161, 0.06) 100%);
   border: 1px solid rgba(5, 150, 105, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 28px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 10px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(44px, 11vw, 72px);
   font-weight: 800;
   color: var(--accent-ink);
@@ -142,8 +142,8 @@
   font-size: 12px;
   font-weight: 700;
   padding: 4px 12px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
 .badgeUpper { background: rgba(217, 119, 6, 0.12); color: var(--warning); border: 1px solid rgba(217, 119, 6, 0.35); }
 .badgeLower { background: rgba(3, 105, 161, 0.12); color: var(--accent-ink); border: 1px solid rgba(3, 105, 161, 0.3); }
@@ -158,13 +158,13 @@
 .statCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
 .statLabel { font-size: 12px; color: var(--muted); margin: 0 0 6px; line-height: 1.5; }
 .statValue {
   margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 20px;
   font-weight: 800;
   color: var(--text);
@@ -180,12 +180,12 @@
   margin: 8px 0 0;
   line-height: 1.7;
 }
-.helpText strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.helpText strong { color: var(--text); font-family: var(--font-sans); }
 .cellAccent { color: var(--accent-ink); }
 
 .tipBox {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
   margin-top: 12px;
   font-size: 13px;
@@ -213,11 +213,11 @@
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; }
+.cellMono { font-family: var(--font-sans); font-weight: 600; }
 
 /* 소정급여일수 표 — 현재 셀/행 하이라이트 */
 .daysTable { width: 100%; border-collapse: collapse; font-size: 13px; min-width: 520px; }
@@ -237,12 +237,12 @@
   text-align: left;
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   background: var(--bg3);
 }
 .daysTable td {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .daysTable tr:last-child td, .daysTable tr:last-child th { border-bottom: none; }
@@ -260,22 +260,22 @@
 .noteCard {
   background: rgba(3, 105, 161, 0.05);
   border: 1px solid rgba(3, 105, 161, 0.22);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.noteCard strong { display: block; color: var(--accent-ink); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.noteCard strong { display: block; color: var(--accent-ink); margin-bottom: 6px; font-family: var(--font-sans); }
 .noteCard p { margin: 0; color: var(--muted); line-height: 1.75; }
 .noteCard p strong { display: inline; color: var(--text); margin: 0; }
 
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: var(--warning); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--warning); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.75; }
 .warnCard p strong { display: inline; color: var(--text); margin: 0; }
 
@@ -288,9 +288,9 @@
   background: var(--bg3);
   color: var(--text);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) {
   .resetBtn:hover { border-color: var(--accent); }
@@ -301,7 +301,7 @@
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;

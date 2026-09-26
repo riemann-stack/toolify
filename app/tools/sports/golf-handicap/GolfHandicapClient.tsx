@@ -154,7 +154,7 @@ function HandicapIndexTab({
       <div className={s.card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <span className={s.cardLabel} style={{ margin: 0 }}>라운드 기록 ({rounds.length}/20)</span>
-          <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>
+          <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>
             사용 {validRounds.length > 0 ? usedCount : 0}개
           </span>
         </div>
@@ -247,7 +247,7 @@ function HandicapIndexTab({
           style={{
             background: 'var(--bg2)', border: '1px solid var(--accent)',
             borderRadius: '10px', padding: '12px', color: 'var(--accent-ink)',
-            fontSize: '13px', fontFamily: 'Noto Sans KR', cursor: 'pointer',
+            fontSize: '13px', fontFamily: 'var(--font-sans)', cursor: 'pointer',
             fontWeight: 500,
           }}
         >
@@ -1049,13 +1049,13 @@ function RecordsTab() {
                   const d = calcDifferential(r.grossScore, r.cr, r.slope, r.is9Holes)
                   return (
                     <tr key={r.id}>
-                      <td style={{ fontSize: 12, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>
+                      <td style={{ fontSize: 12, fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>
                         {r.date || '—'}
                         {r.is9Holes && <span style={{ marginLeft: 4, color: 'var(--warning)', fontSize: 11 }}>9H</span>}
                       </td>
                       <td style={{ fontSize: 12, color: 'var(--text)' }}>{r.course ?? '—'}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.grossScore}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent-ink)' }}>
+                      <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.grossScore}</td>
+                      <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--accent-ink)' }}>
                         {Number.isFinite(d) ? d.toFixed(1) : '—'}
                       </td>
                       <td>

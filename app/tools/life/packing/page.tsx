@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,14 +23,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -70,7 +70,7 @@ export default function PackingPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         생활·재미
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />여행 짐 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -125,7 +125,7 @@ export default function PackingPage() {
                     <td key={j} style={{
                       padding: '9px 12px',
                       textAlign: j === 0 ? 'left' : 'right',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Inter, "Noto Sans KR", system-ui, sans-serif',
+                      fontFamily: j === 0 ? 'var(--font-sans)' : 'var(--font-sans)',
                       color: j === 0 ? 'var(--text)' : 'var(--accent)',
                       fontWeight: j === 0 ? 700 : 600,
                       fontSize: 13,
@@ -146,12 +146,12 @@ export default function PackingPage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '❄️ 혹한 (-10°C↓)', d: '두꺼운 니트·플리스·기모. 롱패딩·롱코트. 내복·핫팩·털모자·장갑·머플러 필수.', c: '#0891B2' },
-            { t: '🥶 겨울 (0~10°C)', d: '니트·후리스·긴팔. 패딩·트렌치. 머플러·장갑.', c: '#9B59B6' },
-            { t: '🍂 봄·가을 (10~20°C)', d: '긴팔·맨투맨·셔츠. 자켓·가디건·바람막이. 일교차 큼 → 레이어드.', c: '#D97706' },
-            { t: '🌤️ 초여름 (20~25°C)', d: '반팔·긴팔 혼용. 가벼운 가디건 (실내 냉방). 우산·선글라스.', c: '#0D9488' },
-            { t: '☀️ 여름 (25~30°C)', d: '반팔·민소매·린넨. 모자·선글라스·선크림 SPF 50+.', c: '#EA580C' },
-            { t: '🔥 한여름 (30°C↑)', d: '통풍 셔츠·드라이핏·민소매. 수영복 2벌. 휴대용 선풍기.', c: '#DB2777' },
+            { t: '❄️ 혹한 (-10°C↓)', d: '두꺼운 니트·플리스·기모. 롱패딩·롱코트. 내복·핫팩·털모자·장갑·머플러 필수.', c: 'var(--cyan-600)' },
+            { t: '🥶 겨울 (0~10°C)', d: '니트·후리스·긴팔. 패딩·트렌치. 머플러·장갑.', c: 'var(--amethyst)' },
+            { t: '🍂 봄·가을 (10~20°C)', d: '긴팔·맨투맨·셔츠. 자켓·가디건·바람막이. 일교차 큼 → 레이어드.', c: 'var(--amber-600)' },
+            { t: '🌤️ 초여름 (20~25°C)', d: '반팔·긴팔 혼용. 가벼운 가디건 (실내 냉방). 우산·선글라스.', c: 'var(--teal-600)' },
+            { t: '☀️ 여름 (25~30°C)', d: '반팔·민소매·린넨. 모자·선글라스·선크림 SPF 50+.', c: 'var(--orange-600)' },
+            { t: '🔥 한여름 (30°C↑)', d: '통풍 셔츠·드라이핏·민소매. 수영복 2벌. 휴대용 선풍기.', c: 'var(--pink-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -198,7 +198,7 @@ export default function PackingPage() {
                     <td key={j} style={{
                       padding: '9px 12px',
                       textAlign: j === 0 ? 'left' : (j === 3 ? 'left' : 'right'),
-                      fontFamily: j === 0 || j === 3 ? 'Noto Sans KR, sans-serif' : 'Inter, "Noto Sans KR", system-ui, sans-serif',
+                      fontFamily: j === 0 || j === 3 ? 'var(--font-sans)' : 'var(--font-sans)',
                       color: j === 0 || j === 3 ? 'var(--text)' : 'var(--accent)',
                       fontWeight: j === 0 ? 700 : 600,
                       fontSize: 13,
@@ -376,21 +376,21 @@ export default function PackingPage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/life/travel-budget" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/life/travel-budget" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>✈️</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해외여행 예산 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             18 도시 × 3 스타일
           </p>
         </Link>
-        <Link href="/tools/life/travel-tip" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/life/travel-tip" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💵</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>해외여행 팁 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             19국 × 9 서비스
           </p>
         </Link>
-        <Link href="/tools/date/jet-lag" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/date/jet-lag" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>✈️</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>시차 적응 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

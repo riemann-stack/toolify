@@ -5,7 +5,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -38,7 +38,7 @@
   position: relative;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 6px;
   min-height: 84px;
   display: flex;
@@ -48,10 +48,10 @@
   gap: 4px;
   cursor: pointer;
   transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .ingBtn:hover {
-  border-color: rgba(14,165,233,0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--text);
 }
 }
@@ -94,7 +94,7 @@
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
   text-align: center;
 }@media (hover: hover) {
@@ -102,21 +102,21 @@
 }
 .condActive {
   background: var(--accent-dim);
-  border-color: rgba(14,165,233,0.5);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
   color: var(--accent);
   font-weight: 700;
 }
 
 /* state color variants */
-.stateFresh.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: #059669; }
-.stateFridge.condActive { background: rgba(8,145,178,0.18); border-color: rgba(8,145,178,0.5); color: #0891B2; }
+.stateFresh.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: var(--emerald-600); }
+.stateFridge.condActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); border-color: color-mix(in srgb, var(--cyan-600) 50%, transparent); color: var(--cyan-600); }
 .stateFrozen.condActive { background: rgba(155,89,182,0.12); border-color: rgba(155,89,182,0.5); color: #B885DA; }
 
 /* temperature buttons */
-.tempBtn.temp160.condActive { background: rgba(8,145,178,0.18); border-color: rgba(8,145,178,0.5); color: #0891B2; }
-.tempBtn.temp170.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: #059669; }
-.tempBtn.temp180.condActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.5); color: var(--accent); }
-.tempBtn.temp190.condActive { background: rgba(234,88,12,0.18); border-color: rgba(234,88,12,0.5); color: #EA580C; }
+.tempBtn.temp160.condActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); border-color: color-mix(in srgb, var(--cyan-600) 50%, transparent); color: var(--cyan-600); }
+.tempBtn.temp170.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: var(--emerald-600); }
+.tempBtn.temp180.condActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 50%, transparent); color: var(--accent); }
+.tempBtn.temp190.condActive { background: rgba(234,88,12,0.18); border-color: rgba(234,88,12,0.5); color: var(--orange-600); }
 
 .recBadge {
   display: inline-block;
@@ -125,16 +125,16 @@
   background: var(--accent-dim);
   color: var(--accent);
   font-size: 9px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-weight: 700;
 }
 .tempRecBorder {
-  border-color: rgba(14,165,233,0.6) !important;
+  border-color: color-mix(in srgb, var(--accent) 60%, transparent) !important;
 }
 
 /* quantity */
-.qtySmall.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: #059669; }
-.qtyLarge.condActive { background: rgba(234,88,12,0.18); border-color: rgba(234,88,12,0.5); color: #EA580C; }
+.qtySmall.condActive { background: rgba(16,185,129,0.18); border-color: rgba(16,185,129,0.5); color: var(--emerald-600); }
+.qtyLarge.condActive { background: rgba(234,88,12,0.18); border-color: rgba(234,88,12,0.5); color: var(--orange-600); }
 
 .warnNote {
   margin-top: 10px;
@@ -143,14 +143,14 @@
   border: 1px solid rgba(234,88,12,0.25);
   border-radius: 10px;
   font-size: 12px;
-  color: #EA580C;
+  color: var(--orange-600);
   line-height: 1.6;
 }
 .infoNote {
   margin-top: 10px;
   padding: 10px 12px;
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.2);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent);
   border-radius: 10px;
   font-size: 12px;
   color: var(--muted);
@@ -168,9 +168,9 @@
   flex: 1;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
@@ -178,7 +178,7 @@
   width: 90px;
 }
 .customTempInput:focus {
-  border-color: rgba(14,165,233,0.5);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
 }
 
 /* ── OPTIONS checkbox ── */
@@ -200,15 +200,15 @@
   font-size: 13px;
   color: var(--text);
 }@media (hover: hover) {
-  .optItem:hover { border-color: rgba(14,165,233,0.3); }
+  .optItem:hover { border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
 }
 .optItem input { accent-color: var(--accent); width: 16px; height: 16px; }
 
 /* ── RESULT CARD ── */
 .result {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   animation: fadeUp 0.3s ease;
 }
@@ -220,7 +220,7 @@
 }
 .resultEmoji { font-size: 32px; line-height: 1; }
 .resultName {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--text);
@@ -228,14 +228,14 @@
 
 .tempBadge {
   display: inline-block;
-  background: rgba(14,165,233,0.18);
-  border: 1px solid rgba(14,165,233,0.4);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--accent);
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
   font-weight: 700;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 .timeGrid {
@@ -261,7 +261,7 @@
   margin-bottom: 6px;
 }
 .timeValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 26px;
   font-weight: 800;
   color: var(--text);
@@ -272,8 +272,8 @@
 .timeNote { font-size: 11px; color: var(--muted); margin-top: 4px; }
 
 .totalBox {
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.3);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-radius: 10px;
   padding: 14px 18px;
   text-align: center;
@@ -287,7 +287,7 @@
   margin-bottom: 4px;
 }
 .totalValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 800;
   color: var(--accent);
@@ -332,7 +332,7 @@
 .colorBar {
   width: 100%;
   height: 20px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: linear-gradient(to right, #FFF9C4 0%, #F59E0B 55%, #92400E 100%);
   border: 1px solid var(--border);
 }
@@ -355,9 +355,9 @@
 
 /* tip box */
 .tipBox {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-left: 3px solid var(--accent);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 16px;
   margin-bottom: 12px;
   font-size: 13px;
@@ -377,19 +377,19 @@
   color: var(--text);
   line-height: 1.7;
 }
-.warnBox strong { color: #DC2626; }
+.warnBox strong { color: var(--red-600); }
 
 /* airfryer */
 .airBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.25);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
   border-radius: 10px;
   padding: 14px 18px;
   margin-bottom: 12px;
 }
 .airHead {
   font-size: 12px;
-  color: #0891B2;
+  color: var(--cyan-600);
   font-weight: 700;
   margin-bottom: 10px;
   letter-spacing: 0.05em;
@@ -402,11 +402,11 @@
 }
 .airItem {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
 }
 .airLabel { font-size: 10px; color: var(--muted); letter-spacing: 0.05em; text-transform: uppercase; margin-bottom: 4px; }
-.airVal { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 800; color: var(--text); }
+.airVal { font-family: var(--font-sans); font-size: 18px; font-weight: 800; color: var(--text); }
 .airNote { font-size: 11px; color: var(--muted); line-height: 1.6; margin-top: 4px; }
 
 /* start timer button */
@@ -419,7 +419,7 @@
   padding: 14px;
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -430,14 +430,14 @@
 /* ── TIMER ── */
 .timerCard {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 24px 24px;
   text-align: center;
   transition: border-color 0.3s;
 }
 .timerCardDone {
-  border-color: #059669;
+  border-color: var(--emerald-600);
   background: rgba(16,185,129,0.14);
   animation: flash 0.5s 2;
 }
@@ -451,7 +451,7 @@
   margin-bottom: 14px;
 }
 .timerTitleDone {
-  color: #059669;
+  color: var(--emerald-600);
   font-weight: 700;
   font-size: 15px;
 }
@@ -467,13 +467,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 32px;
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -1px;
 }
-.timerCenterDone { color: #059669; }
+.timerCenterDone { color: var(--emerald-600); }
 .timerBtns {
   display: flex;
   gap: 8px;
@@ -489,13 +489,13 @@
   border: 1px solid var(--border);
   background: var(--bg3);
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .timerBtn:hover { border-color: rgba(14,165,233,0.4); }
+  .timerBtn:hover { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 }
 .timerBtnPrimary {
   background: var(--accent-strong);
@@ -508,7 +508,7 @@
 .timerDoneMsg {
   margin-top: 14px;
   font-size: 13px;
-  color: #059669;
+  color: var(--emerald-600);
   line-height: 1.7;
 }
 
@@ -516,7 +516,7 @@
 .disclaimer {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.2);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 12px;
   color: var(--muted);
@@ -531,7 +531,7 @@
   color: var(--muted);
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 @keyframes fadeUp {

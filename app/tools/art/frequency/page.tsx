@@ -30,7 +30,7 @@ export default function FrequencyPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>음악</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="art" />주파수↔음정 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '18px' }}>
@@ -53,7 +53,7 @@ export default function FrequencyPage() {
 
         {/* ── 1. 음정과 주파수의 관계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             음정과 주파수의 관계
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -61,7 +61,7 @@ export default function FrequencyPage() {
             A4 = 440 Hz를 기준으로 반음마다 2^(1/12) ≈ 1.0595배씩 주파수가 증가합니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '20px 22px', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: 'var(--radius-card)', padding: '20px 22px', marginBottom: '16px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>핵심 공식</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
               {[
@@ -70,9 +70,9 @@ export default function FrequencyPage() {
                 { label: '센트 오차',       formula: 'cents = 1200 × log₂(실제Hz / 이론Hz)' },
                 { label: '파장(cm)',        formula: 'λ = 34,300 cm/s ÷ Hz' },
               ].map(({ label, formula }) => (
-                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '8px', padding: '10px 14px' }}>
+                <div key={label} style={{ display: 'flex', alignItems: 'center', gap: '12px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '10px 14px' }}>
                   <span style={{ fontSize: '11px', color: 'var(--accent)', fontWeight: 600, minWidth: 70, letterSpacing: '0.03em' }}>{label}</span>
-                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '14px', color: 'var(--text)', fontWeight: 700 }}>{formula}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '14px', color: 'var(--text)', fontWeight: 700 }}>{formula}</span>
                 </div>
               ))}
             </div>
@@ -88,7 +88,7 @@ export default function FrequencyPage() {
 
         {/* ── 2. 주요 음정 주파수 기준표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             주요 음정 주파수 기준표 (A4 = 440 Hz)
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -115,10 +115,10 @@ export default function FrequencyPage() {
                   ['A5', '880.00', '81', '39.0', '5', '#0891B2'],
                 ].map(([note, hz, midi, wave, oct, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{note}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{hz}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{midi}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{wave}</td>
+                    <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{note}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{hz}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{midi}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{wave}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{oct}</td>
                   </tr>
                 ))}
@@ -132,7 +132,7 @@ export default function FrequencyPage() {
 
         {/* ── 3. 기준음 A4 변천사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             기준음 A4 변천사와 용도
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -166,9 +166,9 @@ export default function FrequencyPage() {
                 desc: '바로크 시대의 실제 피치는 지역·용도별로 크게 달랐지만(프랑스 약 392 Hz, 독일 교회 460~470 Hz 등), 현대 시대 연주(HIP) 앙상블은 A=415 Hz를 합의된 표준 관행으로 사용합니다. 440 Hz보다 거의 반음(약 101센트) 낮습니다.',
               },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderRadius: '12px', padding: '18px 20px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}25`, borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '8px' }}>
-                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: item.color }}>{item.hz}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 800, color: item.color }}>{item.hz}</span>
                   <span style={{ fontSize: '11px', background: `${item.color}20`, color: item.color, fontWeight: 600, padding: '3px 8px', borderRadius: '6px' }}>{item.badge}</span>
                 </div>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', marginBottom: '6px', letterSpacing: '0.03em' }}>{item.year}</p>
@@ -180,7 +180,7 @@ export default function FrequencyPage() {
 
         {/* ── 4. 현악기 개방현 튜닝 주파수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             현악기 개방현 튜닝 주파수 (A4 = 440 Hz)
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -220,9 +220,9 @@ export default function FrequencyPage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{inst}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{str}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{note}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{hz}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{midi}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{note}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{hz}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{midi}</td>
                   </tr>
                 ))}
               </tbody>
@@ -237,7 +237,7 @@ export default function FrequencyPage() {
 
         {/* ── 5. 평균율 vs 순정률 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             평균율 vs 순정률 — 주요 음정 센트 비교
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -266,10 +266,10 @@ export default function FrequencyPage() {
                 ].map(([name, ratio, ji, et, diff], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{name}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{ratio}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{ji}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>{et}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{diff}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{ratio}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{ji}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>{et}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{diff}</td>
                   </tr>
                 ))}
               </tbody>
@@ -287,14 +287,14 @@ export default function FrequencyPage() {
 
         {/* ── 6. 출처가 확인된 기준 주파수 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             출처가 확인된 기준 주파수
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
             아래는 국제 표준 문서·제조사 공식 자료·대학 규준표에서 원문이 확인되는 값만 모은 표입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: '12px', padding: '16px 18px', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginBottom: '16px' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>기음과 배음</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               Shure 공식자료는 <strong style={{ color: 'var(--text)' }}>기음(fundamental)</strong>을 &lsquo;복합 파형에서 가장 낮은 주파수 성분으로 음의 기본 음높이를 결정하는 것&rsquo;,
@@ -325,7 +325,7 @@ export default function FrequencyPage() {
                 ].map(([item, val, src], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{item}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{val}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{val}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{src}</td>
                   </tr>
                 ))}
@@ -347,7 +347,7 @@ export default function FrequencyPage() {
 
         {/* ── 7. 가청 범위와 주파수 대역 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             가청 범위와 주파수 대역 — 어디까지가 사실인가
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -356,7 +356,7 @@ export default function FrequencyPage() {
             Shure도 마이크 주파수 응답 차트를 20 Hz~20 kHz로 그리며 인간의 청각 범위라고 명시합니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--warning)', borderRadius: '12px', padding: '16px 18px', marginBottom: '16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--warning)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginBottom: '16px' }}>
             <p style={{ fontSize: '12px', color: 'var(--warning)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>자주 보이는 오귀속</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               20~20 kHz의 근거로 <strong style={{ color: 'var(--text)' }}>ISO 226 등청감곡선</strong>을 드는 글이 많습니다.
@@ -387,7 +387,7 @@ export default function FrequencyPage() {
                 ].map(([band, range], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{band}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{range}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{range}</td>
                   </tr>
                 ))}
               </tbody>
@@ -410,7 +410,7 @@ export default function FrequencyPage() {
             다만 마스킹 임계값 같은 정량 수치는 유료 규격에만 있어 제시하지 않습니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--success)', borderRadius: '12px', padding: '16px 18px', marginTop: '16px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--success)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginTop: '16px' }}>
             <p style={{ fontSize: '12px', color: 'var(--success)', fontWeight: 600, letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '10px' }}>Shure 공식 믹싱 가이드의 실무 컷오프</p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               <li>남성 보컬 로우컷 약 <strong style={{ color: 'var(--text)' }}>80 Hz</strong>, 여성 보컬 <strong style={{ color: 'var(--text)' }}>140 Hz</strong> — 문서는 &lsquo;보컬은 80 Hz보다 낮게 노래할 수 없다&rsquo;고 씁니다. 80 Hz는 기타 6번줄 E2(82.41 Hz)보다 살짝 낮고, 140 Hz는 C♯3(138.59 Hz) 바로 위입니다.</li>
@@ -449,7 +449,7 @@ export default function FrequencyPage() {
 
         {/* ── 9. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: '음표별 딜레이 타임 ms 계산' },
@@ -460,7 +460,7 @@ export default function FrequencyPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

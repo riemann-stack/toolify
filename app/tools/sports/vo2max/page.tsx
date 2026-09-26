@@ -19,7 +19,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -29,7 +29,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
 }
 const cell: React.CSSProperties = {
@@ -51,7 +51,7 @@ const headCell: React.CSSProperties = {
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -85,7 +85,7 @@ export default function VO2MaxPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />VO₂ Max 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -129,42 +129,42 @@ export default function VO2MaxPage() {
                     <td style={cell}>🏃 <strong>쿠퍼 12분</strong></td>
                     <td style={cell}>12분</td>
                     <td style={cell}>어려움</td>
-                    <td style={cell}><strong style={{ color: '#059669' }}>높음</strong></td>
+                    <td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>높음</strong></td>
                     <td style={cell}>러너 표준. 트랙·러닝머신 필요. 전력으로 12분 달리기</td>
                   </tr>
                   <tr>
                     <td style={cell}>🏃‍♂️ <strong>1.5마일</strong></td>
                     <td style={cell}>10~16분</td>
                     <td style={cell}>어려움</td>
-                    <td style={cell}><strong style={{ color: '#059669' }}>높음</strong></td>
+                    <td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>높음</strong></td>
                     <td style={cell}>미군·소방관 체력 표준. 시간을 측정해서 단순 변환</td>
                   </tr>
                   <tr>
                     <td style={cell}>🚶 <strong>락포트 1마일 걷기</strong></td>
                     <td style={cell}>12~20분</td>
                     <td style={cell}>쉬움</td>
-                    <td style={cell}><strong style={{ color: '#D97706' }}>보통</strong></td>
+                    <td style={cell}><strong style={{ color: 'var(--amber-600)' }}>보통</strong></td>
                     <td style={cell}>관절 부담 X. 초보·고령·재활 단계 적합. HR 측정 필요</td>
                   </tr>
                   <tr>
                     <td style={cell}>🪜 <strong>퀸즈칼리지 스텝</strong></td>
                     <td style={cell}>3분</td>
                     <td style={cell}>보통</td>
-                    <td style={cell}><strong style={{ color: '#D97706' }}>보통</strong></td>
+                    <td style={cell}><strong style={{ color: 'var(--amber-600)' }}>보통</strong></td>
                     <td style={cell}>실내 가능. 41cm 박스 + 메트로놈. 박자 못 맞추면 오차 ↑</td>
                   </tr>
                   <tr>
                     <td style={cell}>📋 <strong>노르웨이 비운동</strong></td>
                     <td style={cell}>1분</td>
                     <td style={cell}>쉬움</td>
-                    <td style={cell}><strong style={{ color: '#D97706' }}>보통</strong></td>
+                    <td style={cell}><strong style={{ color: 'var(--amber-600)' }}>보통</strong></td>
                     <td style={cell}>운동 X. 나이·허리둘레·HR·운동습관만으로 추정 (NTNU)</td>
                   </tr>
                   <tr>
                     <td style={cell}>❤️ <strong>안정시 심박</strong></td>
                     <td style={cell}>30초</td>
                     <td style={cell}>쉬움</td>
-                    <td style={cell}><strong style={{ color: '#EA580C' }}>낮음</strong></td>
+                    <td style={cell}><strong style={{ color: 'var(--orange-600)' }}>낮음</strong></td>
                     <td style={cell}>가장 간단. 신뢰도는 가장 낮음 — 참고용 추세 추적</td>
                   </tr>
                 </tbody>
@@ -197,11 +197,11 @@ export default function VO2MaxPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td style={cell}><strong>20대</strong></td><td style={cell}>&lt; 38</td><td style={cell}>38~43</td><td style={cell}>44~51</td><td style={cell}>52~56</td><td style={cell}><strong style={{ color: '#059669' }}>57+</strong></td></tr>
-                  <tr><td style={cell}><strong>30대</strong></td><td style={cell}>&lt; 34</td><td style={cell}>34~39</td><td style={cell}>40~47</td><td style={cell}>48~51</td><td style={cell}><strong style={{ color: '#059669' }}>52+</strong></td></tr>
-                  <tr><td style={cell}><strong>40대</strong></td><td style={cell}>&lt; 30</td><td style={cell}>30~35</td><td style={cell}>36~43</td><td style={cell}>44~47</td><td style={cell}><strong style={{ color: '#059669' }}>48+</strong></td></tr>
-                  <tr><td style={cell}><strong>50대</strong></td><td style={cell}>&lt; 25</td><td style={cell}>25~31</td><td style={cell}>32~39</td><td style={cell}>40~43</td><td style={cell}><strong style={{ color: '#059669' }}>44+</strong></td></tr>
-                  <tr><td style={cell}><strong>60대+</strong></td><td style={cell}>&lt; 21</td><td style={cell}>21~26</td><td style={cell}>27~35</td><td style={cell}>36~39</td><td style={cell}><strong style={{ color: '#059669' }}>40+</strong></td></tr>
+                  <tr><td style={cell}><strong>20대</strong></td><td style={cell}>&lt; 38</td><td style={cell}>38~43</td><td style={cell}>44~51</td><td style={cell}>52~56</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>57+</strong></td></tr>
+                  <tr><td style={cell}><strong>30대</strong></td><td style={cell}>&lt; 34</td><td style={cell}>34~39</td><td style={cell}>40~47</td><td style={cell}>48~51</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>52+</strong></td></tr>
+                  <tr><td style={cell}><strong>40대</strong></td><td style={cell}>&lt; 30</td><td style={cell}>30~35</td><td style={cell}>36~43</td><td style={cell}>44~47</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>48+</strong></td></tr>
+                  <tr><td style={cell}><strong>50대</strong></td><td style={cell}>&lt; 25</td><td style={cell}>25~31</td><td style={cell}>32~39</td><td style={cell}>40~43</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>44+</strong></td></tr>
+                  <tr><td style={cell}><strong>60대+</strong></td><td style={cell}>&lt; 21</td><td style={cell}>21~26</td><td style={cell}>27~35</td><td style={cell}>36~39</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>40+</strong></td></tr>
                 </tbody>
               </table>
             </div>
@@ -223,11 +223,11 @@ export default function VO2MaxPage() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td style={cell}><strong>20대</strong></td><td style={cell}>&lt; 28</td><td style={cell}>28~33</td><td style={cell}>34~41</td><td style={cell}>42~46</td><td style={cell}><strong style={{ color: '#059669' }}>47+</strong></td></tr>
-                  <tr><td style={cell}><strong>30대</strong></td><td style={cell}>&lt; 27</td><td style={cell}>27~32</td><td style={cell}>33~40</td><td style={cell}>41~45</td><td style={cell}><strong style={{ color: '#059669' }}>46+</strong></td></tr>
-                  <tr><td style={cell}><strong>40대</strong></td><td style={cell}>&lt; 25</td><td style={cell}>25~30</td><td style={cell}>31~38</td><td style={cell}>39~42</td><td style={cell}><strong style={{ color: '#059669' }}>43+</strong></td></tr>
-                  <tr><td style={cell}><strong>50대</strong></td><td style={cell}>&lt; 22</td><td style={cell}>22~28</td><td style={cell}>29~36</td><td style={cell}>37~40</td><td style={cell}><strong style={{ color: '#059669' }}>41+</strong></td></tr>
-                  <tr><td style={cell}><strong>60대+</strong></td><td style={cell}>&lt; 20</td><td style={cell}>20~25</td><td style={cell}>26~32</td><td style={cell}>33~36</td><td style={cell}><strong style={{ color: '#059669' }}>37+</strong></td></tr>
+                  <tr><td style={cell}><strong>20대</strong></td><td style={cell}>&lt; 28</td><td style={cell}>28~33</td><td style={cell}>34~41</td><td style={cell}>42~46</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>47+</strong></td></tr>
+                  <tr><td style={cell}><strong>30대</strong></td><td style={cell}>&lt; 27</td><td style={cell}>27~32</td><td style={cell}>33~40</td><td style={cell}>41~45</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>46+</strong></td></tr>
+                  <tr><td style={cell}><strong>40대</strong></td><td style={cell}>&lt; 25</td><td style={cell}>25~30</td><td style={cell}>31~38</td><td style={cell}>39~42</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>43+</strong></td></tr>
+                  <tr><td style={cell}><strong>50대</strong></td><td style={cell}>&lt; 22</td><td style={cell}>22~28</td><td style={cell}>29~36</td><td style={cell}>37~40</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>41+</strong></td></tr>
+                  <tr><td style={cell}><strong>60대+</strong></td><td style={cell}>&lt; 20</td><td style={cell}>20~25</td><td style={cell}>26~32</td><td style={cell}>33~36</td><td style={cell}><strong style={{ color: 'var(--emerald-600)' }}>37+</strong></td></tr>
                 </tbody>
               </table>
             </div>
@@ -250,7 +250,7 @@ export default function VO2MaxPage() {
               { icon: '⏱️', title: '재측정', desc: '3~6개월마다 같은 방법으로. 추세가 절대값보다 중요' },
               { icon: '⚠️', title: '주의', desc: '심장질환·고혈압·관절 통증 있으면 의사 상담 후 측정' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 16px' }}>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{b.icon} {b.title}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{b.desc}</p>
               </div>
@@ -323,7 +323,7 @@ export default function VO2MaxPage() {
                 <li><strong>실내:</strong> 퀸즈칼리지 스텝테스트</li>
                 <li><strong>측정 자체가 어렵다면:</strong> 노르웨이 비운동 추정 (정확도 ±10~15% 오차이지만 운동 X)</li>
               </ul>
-              <strong style={{ color: '#D97706' }}>안정시 심박 비율법</strong>은 가장 간단하지만 오차가 크므로 추세 추적용으로만.
+              <strong style={{ color: 'var(--amber-600)' }}>안정시 심박 비율법</strong>은 가장 간단하지만 오차가 크므로 추세 추적용으로만.
             </div>
           </details>
 
@@ -346,7 +346,7 @@ export default function VO2MaxPage() {
             <summary style={faqSummary}>Q3. 나이가 들면 VO₂max는 얼마나 떨어지나요?</summary>
             <div style={faqAnswer}>
               <strong style={{ color: 'var(--text)' }}>비활동인은 10년에 약 10% 감소</strong> (30대 45 → 60대 약 33).
-              그러나 <strong style={{ color: '#059669' }}>꾸준한 유산소 운동</strong>으로 감소를 절반 이하로 늦출 수 있습니다 (10년에 4~5% 감소).
+              그러나 <strong style={{ color: 'var(--emerald-600)' }}>꾸준한 유산소 운동</strong>으로 감소를 절반 이하로 늦출 수 있습니다 (10년에 4~5% 감소).
               <br /><br />
               마스터즈 러너 연구에서:
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
@@ -359,7 +359,7 @@ export default function VO2MaxPage() {
           <details style={faqDetails}>
             <summary style={faqSummary}>Q4. VO₂max가 낮으면 무엇이 문제인가요?</summary>
             <div style={faqAnswer}>
-              <strong style={{ color: '#DC2626' }}>심혈관 사망률·전체 사망률의 가장 강력한 단일 예측 인자</strong>입니다.
+              <strong style={{ color: 'var(--red-600)' }}>심혈관 사망률·전체 사망률의 가장 강력한 단일 예측 인자</strong>입니다.
               Mandsager 2018 (JAMA Network Open) 12만 명 연구:
               <ul style={{ paddingLeft: 18, marginTop: 8 }}>
                 <li>심폐체력 하위 25%는 최상위(엘리트, 상위 약 2%)군보다 사망 위험 약 5배 (HR 5.04)</li>

@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -59,7 +59,7 @@ export default function KeyboardLayoutPage() {
       <p style={{ fontSize: '12px', color: 'var(--cat-dev)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px', fontWeight: 700 }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />한영타 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -78,7 +78,7 @@ export default function KeyboardLayoutPage() {
           <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             한글과 영문은 같은 키보드의 같은 키를 공유합니다. 운영체제의 입력기(IME)가 지금 어느 모드인지에 따라 같은 키 <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>d</code>가 <strong style={{ color: 'var(--text)' }}>ㅇ</strong>이 되기도, <strong style={{ color: 'var(--text)' }}>d</strong>가 되기도 합니다. 한/영 키를 누르지 않은 채 타이핑하면 의도한 글자 대신 반대 언어가 입력됩니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
             <div><span style={{ color: 'var(--muted)' }}># 한글 모드라고 착각하고 &quot;안녕&quot;을 타이핑</span></div>
             <div>의도한 키: ㅇ ㅏ ㄴ / ㄴ ㅕ ㅇ</div>
             <div>영문 모드 출력: <span style={{ color: 'var(--cat-dev)' }}>d k s</span> <span style={{ color: 'var(--cat-dev)' }}>s u d</span> → <span style={{ color: 'var(--cat-dev)' }}>dkssud</span></div>
@@ -220,7 +220,7 @@ export default function KeyboardLayoutPage() {
               { t: '겹받침·겹모음 경계', d: '받침 뒤에 모음이 오면 받침이 다음 글자로 넘어가는 연음 처리, ㅘ·ㅢ 같은 겹모음 조합 시점이 IME마다 미세하게 다릅니다.' },
               { t: '특수문자·이모지', d: '자판에 매핑되지 않는 문자는 변환하지 않고 그 자리에 그대로 둡니다. 한글·영문이 섞여 있으면 자동 모드에서는 영문 부분만 한글로 바꿉니다.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cat-dev)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cat-dev)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
@@ -241,7 +241,7 @@ export default function KeyboardLayoutPage() {
               <Link
                 key={i}
                 href={t.href}
-                style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}
+                style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}
               >
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>

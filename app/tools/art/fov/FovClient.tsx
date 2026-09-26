@@ -500,7 +500,7 @@ function AovDiagram({ aovDegrees, color }: { aovDegrees: number; color: string }
       {/* 카메라 점 */}
       <circle cx={cx} cy={cy} r={4} fill={color} />
       {/* 각도 텍스트 */}
-      <text x={cx} y={cy - R - 4} textAnchor="middle" fill={color} fontSize={14} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+      <text x={cx} y={cy - R - 4} textAnchor="middle" fill={color} fontSize={14} fontWeight={700}>
         {aovDegrees.toFixed(1)}°
       </text>
     </svg>
@@ -539,7 +539,7 @@ function CompareDiagram({ sensor }: { sensor: SensorMeta }) {
             />
             <text
               x={x2 + 4} y={y2 + 4}
-              fill={p.color} fontSize={11} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
+              fill={p.color} fontSize={11} fontWeight={700}
             >
               {p.label} ({aovDeg.toFixed(0)}°)
             </text>
@@ -548,7 +548,7 @@ function CompareDiagram({ sensor }: { sensor: SensorMeta }) {
       })}
       {/* 카메라 점 */}
       <circle cx={cx} cy={cy} r={5} fill="var(--text)" />
-      <text x={cx} y={cy + 18} textAnchor="middle" fill="var(--muted)" fontSize={10} fontFamily="Noto Sans KR, sans-serif">
+      <text x={cx} y={cy + 18} textAnchor="middle" fill="var(--muted)" fontSize={10}>
         카메라 (센서 폭 {sensor.width}mm)
       </text>
     </svg>

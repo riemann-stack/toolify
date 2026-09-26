@@ -16,8 +16,8 @@ export const metadata = buildMetadata({
   keywords: ['청소세제계산기', '구연산사용법', '과탄산소다사용법', '베이킹소다청소', '락스희석', '천연세제', '청소꿀팁', '세제혼합위험', '곰팡이제거'],
 })
 
-const sectionTitle: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }
-const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '18px 20px' }
+const sectionTitle: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }
+const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '18px 20px' }
 const cell: React.CSSProperties = { padding: '9px 11px', borderBottom: '1px solid var(--border)', fontSize: '13px', color: 'var(--text)', verticalAlign: 'top' }
 const headCell: React.CSSProperties = { padding: '9px 11px', textAlign: 'left', fontWeight: 700, fontSize: '11px', color: 'var(--muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg3)', whiteSpace: 'nowrap' }
 
@@ -34,7 +34,7 @@ export default function CleaningPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />상황별 청소 세제 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -52,12 +52,12 @@ export default function CleaningPage() {
         {/* 혼합 위험 */}
         <div>
           <h2 style={sectionTitle}>🚫 절대 섞으면 안 되는 조합</h2>
-          <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.3)', borderRadius: '14px', padding: '8px 0', overflow: 'hidden' }}>
+          <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.3)', borderRadius: 'var(--radius-card)', padding: '8px 0', overflow: 'hidden' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', tableLayout: 'fixed' }}>
               <tbody>
                 {MIX_RISKS.map((m, i) => (
                   <tr key={i} style={{ borderBottom: i < MIX_RISKS.length - 1 ? '1px solid rgba(220,38,38,0.15)' : 'none' }}>
-                    <td style={{ padding: '10px 14px', fontSize: '13px', fontWeight: 700, color: m.level === 'danger' ? '#DC2626' : '#EA580C', width: '42%' }}>{m.combo}</td>
+                    <td style={{ padding: '10px 14px', fontSize: '13px', fontWeight: 700, color: m.level === 'danger' ? 'var(--red-600)' : 'var(--orange-600)', width: '42%' }}>{m.combo}</td>
                     <td style={{ padding: '10px 14px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.6 }}>{m.result}</td>
                   </tr>
                 ))}
@@ -100,14 +100,14 @@ export default function CleaningPage() {
         <div>
           <h2 style={sectionTitle}>🧪 산성 vs 알칼리 — 원리만 알면 쉬워요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-            <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
-              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>산성 (구연산·식초)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--orange-600)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--orange-600)', fontWeight: 700, marginBottom: '8px' }}>산성 (구연산·식초)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 <strong>물때·석회·비누때·소변석</strong> 같은 <strong>알칼리성 오염</strong>을 녹입니다. 전기포트 스케일, 섬유유연제 대체에도.
               </p>
             </div>
-            <div style={{ ...card, borderTop: '3px solid #059669' }}>
-              <p style={{ fontSize: '13px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>알칼리 (베이킹·과탄산·소다회)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--emerald-600)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--emerald-600)', fontWeight: 700, marginBottom: '8px' }}>알칼리 (베이킹·과탄산·소다회)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 <strong>기름때·찌든때·단백질 오염</strong> 같은 <strong>산성 오염</strong>을 분해합니다. 과탄산은 표백·살균까지.
               </p>
@@ -228,7 +228,7 @@ export default function CleaningPage() {
                 ].map((r, i) => (
                   <tr key={i}>
                     <td style={{ ...cell, fontWeight: 700, whiteSpace: 'nowrap' }}>{r.m}</td>
-                    <td style={{ ...cell, color: '#DC2626' }}>{r.avoid}</td>
+                    <td style={{ ...cell, color: 'var(--red-600)' }}>{r.avoid}</td>
                     <td style={{ ...cell, color: 'var(--muted)' }}>{r.ok}</td>
                   </tr>
                 ))}
@@ -246,8 +246,8 @@ export default function CleaningPage() {
         </section>
 
         {/* 면책 */}
-        <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: '12px', padding: '16px 20px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-          <strong style={{ color: '#DC2626' }}>⚠️ 안전 안내</strong>
+        <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 20px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
+          <strong style={{ color: 'var(--red-600)' }}>⚠️ 안전 안내</strong>
           <p style={{ margin: '8px 0 0', color: 'var(--muted)' }}>
             본 도구의 희석량은 일반적인 권장 근사치이며 <strong style={{ color: 'var(--text)' }}>제품 라벨의 사용법·경고가 우선</strong>합니다. 어떤 세제든 <strong style={{ color: 'var(--text)' }}>환기·장갑·눈에 안 띄는 곳 먼저 테스트</strong>를 권장하고, 락스 등은 절대 다른 세제와 섞지 마세요. 어린이·반려동물 손에 닿지 않게 보관하고, 흡입·피부 이상 시 환기 후 의료기관에 문의하세요.
           </p>

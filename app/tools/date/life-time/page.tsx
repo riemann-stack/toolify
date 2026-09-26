@@ -44,7 +44,7 @@ export default function LifeTimePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         날짜·시간
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />생애 시간 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -61,13 +61,13 @@ export default function LifeTimePage() {
 
         {/* ── 1. 도구 소개 (긍정적 프레이밍) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             이 도구를 만든 이유
           </h2>
           <div style={{
             background: 'rgba(16,185,129,0.05)',
             border: '1px solid rgba(16,185,129,0.25)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 20px',
             fontSize: '14px',
             color: 'var(--text)',
@@ -87,13 +87,13 @@ export default function LifeTimePage() {
 
         {/* ── 2. 메멘토 모리 철학 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             📿 메멘토 모리 — 철학적 배경
           </h2>
           <div style={{
             background: 'rgba(155,89,182,0.05)',
             border: '1px solid rgba(155,89,182,0.25)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 20px',
             fontSize: '13px',
             color: 'var(--text)',
@@ -114,7 +114,7 @@ export default function LifeTimePage() {
 
         {/* ── 3. 한국인 기대수명 통계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국인 기대수명 통계 (2024년 생명표)
           </h2>
           <UpdatedMeta
@@ -139,8 +139,8 @@ export default function LifeTimePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.c}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--cat-health)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--cat-health)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.h}</td>
                   </tr>
                 ))}
               </tbody>
@@ -155,7 +155,7 @@ export default function LifeTimePage() {
 
         {/* ── 4. 1만 시간 법칙 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎯 1만 시간 법칙과 시간 환산
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -169,9 +169,9 @@ export default function LifeTimePage() {
               { p: '하루 3시간', t: '9.1년' },
               { p: '하루 4시간', t: '6.8년' },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', textAlign: 'center' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', textAlign: 'center' }}>
                 <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 4 }}>{r.p}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--accent)' }}>{r.t}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: 'var(--accent)' }}>{r.t}</p>
               </div>
             ))}
           </div>
@@ -182,7 +182,7 @@ export default function LifeTimePage() {
 
         {/* ── 5. 시간 활용 명언 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             시간 활용에 관한 통찰
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
@@ -192,7 +192,7 @@ export default function LifeTimePage() {
               { q: '지금 당장이라도 삶을 떠날 수 있다. 그 사실이 네가 행하고 말하고 생각하는 것을 결정하게 하라.', a: '마르쿠스 아우렐리우스, 「명상록」 2.11' },
               { q: '만 년을 살 것처럼 행동하지 마라. 살 수 있는 동안, 할 수 있는 동안, 선한 사람이 되라.', a: '마르쿠스 아우렐리우스, 「명상록」 4.17' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontStyle: 'italic', marginBottom: 6 }}>“{m.q}”</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)' }}>— {m.a}</p>
               </div>
@@ -202,7 +202,7 @@ export default function LifeTimePage() {
 
         {/* ── 6. 작은 습관 누적 효과 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🌱 하루 작은 습관의 누적 효과 (실제 연구)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
@@ -212,10 +212,10 @@ export default function LifeTimePage() {
               { i: '✍️', t: '표현적 글쓰기 15~20분',   e: '정신·신체 건강 지표 개선',            src: 'Pennebaker(텍사스대 오스틴) 연구 계열' },
               { i: '🧘', t: '8주 명상 프로그램',       e: '불안·우울·통증 완만한 개선',          src: 'Goyal 외, JAMA Internal Medicine, 2014 (메타분석)' },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 22, marginBottom: 6 }}>{r.i}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{r.t}</p>
-                <p style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginBottom: 4 }}>{r.e}</p>
+                <p style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, marginBottom: 4 }}>{r.e}</p>
                 <p style={{ fontSize: 11, color: 'var(--muted)', fontStyle: 'italic' }}>출처: {r.src}</p>
               </div>
             ))}
@@ -235,7 +235,7 @@ export default function LifeTimePage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -254,7 +254,7 @@ export default function LifeTimePage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

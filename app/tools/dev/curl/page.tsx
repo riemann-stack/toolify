@@ -21,7 +21,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -31,14 +31,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -64,7 +64,7 @@ const codeStyle: React.CSSProperties = {
   borderRadius: '4px',
   fontFamily: 'var(--font-mono)',
   fontSize: '13px',
-  color: '#0EA5E9',
+  color: 'var(--sky-500)',
 }
 
 const FAQ_LD = [
@@ -86,7 +86,7 @@ export default function CurlPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />cURL 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -97,7 +97,7 @@ export default function CurlPage() {
       <div style={{
         background: 'rgba(255, 138, 62, 0.06)',
         border: '1px solid rgba(255, 138, 62, 0.40)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
@@ -186,11 +186,11 @@ export default function CurlPage() {
             { emoji: '🟩', name: 'Node.js http/https', when: '의존성 없는 환경', pros: '내장, 가벼움', cons: '장황함, 콜백 패턴' },
             { emoji: '🐹', name: 'Go net/http', when: '백엔드·CLI', pros: '내장, 동시성', cons: 'Go 문법 학습 필요' },
           ].map((l, i) => (
-            <div key={i} style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', borderLeft: '3px solid #0EA5E9' }}>
+            <div key={i} style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', borderLeft: '3px solid var(--sky-500)' }}>
               <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{l.emoji} {l.name}</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 4px' }}><strong>언제:</strong> {l.when}</p>
-              <p style={{ fontSize: 12, color: '#0D9488', margin: '0 0 4px' }}>✓ {l.pros}</p>
-              <p style={{ fontSize: 12, color: '#EA580C', margin: 0 }}>✗ {l.cons}</p>
+              <p style={{ fontSize: 12, color: 'var(--teal-600)', margin: '0 0 4px' }}>✓ {l.pros}</p>
+              <p style={{ fontSize: 12, color: 'var(--orange-600)', margin: 0 }}>✗ {l.cons}</p>
             </div>
           ))}
         </div>
@@ -201,7 +201,7 @@ export default function CurlPage() {
       <div style={{
         background: 'rgba(255, 138, 62, 0.06)',
         border: '2px solid rgba(255, 138, 62, 0.50)',
-        borderRadius: '14px',
+        borderRadius: 'var(--radius-card)',
         padding: '18px 22px',
         marginBottom: '14px',
       }}>
@@ -397,21 +397,21 @@ export default function CurlPage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/dev/url-encode" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/url-encode" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔗</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>URL 인코더/디코더</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             인코드·쿼리 편집·추적 정리
           </p>
         </Link>
-        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📋</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>JSON 포맷터</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             JSON 정렬·압축·유효성
           </p>
         </Link>
-        <Link href="/tools/dev/yaml-json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/yaml-json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📄</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>YAML ↔ JSON</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

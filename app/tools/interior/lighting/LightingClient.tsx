@@ -316,8 +316,8 @@ export default function LightingClient() {
         {/* 조명 점 */}
         {positions.map((p, i) => (
           <g key={`l-${i}`}>
-            <circle cx={p.x} cy={p.y} r={5} fill="#A16207" stroke="#fff" strokeWidth={1} />
-            <circle cx={p.x} cy={p.y} r={9} fill="none" stroke="#A16207" strokeWidth={0.6} opacity={0.5} />
+            <circle cx={p.x} cy={p.y} r={5} fill="var(--yellow-700)" stroke="#fff" strokeWidth={1} />
+            <circle cx={p.x} cy={p.y} r={9} fill="none" stroke="var(--yellow-700)" strokeWidth={0.6} opacity={0.5} />
           </g>
         ))}
         {/* 조명 개수 라벨 */}
@@ -417,7 +417,7 @@ export default function LightingClient() {
               ))}
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{space.range}</strong>
+              현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{space.range}</strong>
               <br /><span style={{ fontSize: 11 }}>※ KS A 3011(조도 기준)을 가정용으로 참고한 대표 중앙값입니다. 실제 권장값은 작업·연령·취향에 따라 달라집니다.</span>
             </p>
           </div>
@@ -622,7 +622,7 @@ export default function LightingClient() {
                       <td>{r.name}</td>
                       <td>{r.lmPerW}lm/W</td>
                       <td>{r.w.toFixed(1)}W</td>
-                      <td style={{ fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 400, color: 'var(--muted)', fontSize: 11 }}>{r.lifespan}</td>
+                      <td style={{ fontFamily: 'var(--font-sans)', fontWeight: 400, color: 'var(--muted)', fontSize: 11 }}>{r.lifespan}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -635,7 +635,7 @@ export default function LightingClient() {
 
           {/* 연간 전기료 비교 */}
           <div className={styles.savingCard}>
-            <div className={styles.cardLabel} style={{ marginBottom: 0, color: '#059669' }}>
+            <div className={styles.cardLabel} style={{ marginBottom: 0, color: 'var(--emerald-600)' }}>
               <span>연간 전기료 비교</span>
               <span className={styles.cardLabelHint}>1일 5시간 사용 기준</span>
             </div>

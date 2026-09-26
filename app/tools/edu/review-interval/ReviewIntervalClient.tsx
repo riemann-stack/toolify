@@ -155,50 +155,50 @@ function ForgettingCurve({ reviewDays, totalDays = 30, baseStability = CURVE_BAS
       {[0, 25, 50, 75, 100].map(p => (
         <g key={p}>
           <line x1={padL} y1={yScale(p)} x2={W - padR} y2={yScale(p)} stroke="var(--bg3)" strokeWidth="1" strokeDasharray="2 4" />
-          <text x={padL - 8} y={yScale(p) + 4} fontSize="10" fill="var(--muted)" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>{p}%</text>
+          <text x={padL - 8} y={yScale(p) + 4} fontSize="10" fill="var(--muted)" textAnchor="end" fontWeight={700}>{p}%</text>
         </g>
       ))}
       {[0, 7, 14, 21, 30].filter(d => d <= totalDays).map(d => (
         <g key={d}>
           <line x1={xScale(d)} y1={padT} x2={xScale(d)} y2={H - padB} stroke="var(--bg3)" strokeWidth="1" strokeDasharray="2 4" />
-          <text x={xScale(d)} y={H - padB + 16} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>{d}일</text>
+          <text x={xScale(d)} y={H - padB + 16} fontSize="10" fill="var(--muted)" textAnchor="middle" fontWeight={700}>{d}일</text>
         </g>
       ))}
 
       {/* 축 라벨 */}
-      <text x={padL - 36} y={padT + innerH / 2} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" transform={`rotate(-90 ${padL - 36} ${padT + innerH / 2})`}>기억 유지율 (%)</text>
-      <text x={padL + innerW / 2} y={H - 6} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif">학습 후 일수</text>
+      <text x={padL - 36} y={padT + innerH / 2} fontSize="10" fill="var(--muted)" textAnchor="middle" transform={`rotate(-90 ${padL - 36} ${padT + innerH / 2})`}>기억 유지율 (%)</text>
+      <text x={padL + innerW / 2} y={H - 6} fontSize="10" fill="var(--muted)" textAnchor="middle">학습 후 일수</text>
 
       {/* 복습 안 한 곡선 */}
       <polyline
         points={pointsNoReview.map(p => `${p[0]},${p[1]}`).join(' ')}
-        fill="none" stroke="#DC2626" strokeWidth="2" strokeDasharray="6 4" opacity="0.75"
+        fill="none" stroke="var(--red-600)" strokeWidth="2" strokeDasharray="6 4" opacity="0.75"
       />
-      <text x={padL + innerW * 0.5} y={yScale(35) + 6} fontSize="11" fill="#DC2626" fontFamily="Noto Sans KR, sans-serif" fontWeight={700}>복습 안 함</text>
+      <text x={padL + innerW * 0.5} y={yScale(35) + 6} fontSize="11" fill="var(--red-600)" fontWeight={700}>복습 안 함</text>
 
       {/* 복습 한 곡선 */}
       <polyline
         points={pointsWithReview.map(p => `${p[0]},${p[1]}`).join(' ')}
-        fill="none" stroke="#0D9488" strokeWidth="2.5"
+        fill="none" stroke="var(--teal-600)" strokeWidth="2.5"
       />
 
       {/* 복습 마커 */}
       {markers.map((m, i) => (
         <g key={i}>
           {/* 100% 점프 표시 */}
-          <line x1={m.x} y1={m.yBefore} x2={m.x} y2={m.yAfter} stroke="#0D9488" strokeWidth="1.5" strokeDasharray="3 3" />
-          <circle cx={m.x} cy={m.yAfter} r="5" fill="#0D9488" stroke="#0a0a2e" strokeWidth="2" />
-          <text x={m.x} y={m.yAfter - 10} fontSize="10" fill="#0D9488" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>R{m.idx}</text>
+          <line x1={m.x} y1={m.yBefore} x2={m.x} y2={m.yAfter} stroke="var(--teal-600)" strokeWidth="1.5" strokeDasharray="3 3" />
+          <circle cx={m.x} cy={m.yAfter} r="5" fill="var(--teal-600)" stroke="#0a0a2e" strokeWidth="2" />
+          <text x={m.x} y={m.yAfter - 10} fontSize="10" fill="var(--teal-600)" textAnchor="middle" fontWeight={800}>R{m.idx}</text>
         </g>
       ))}
 
       {/* 범례 */}
       <g transform={`translate(${W - padR - 130}, ${padT + 4})`}>
         <rect x="0" y="0" width="130" height="36" fill="var(--bg2)" stroke="var(--border)" rx="4" opacity="0.92" />
-        <line x1="8" y1="12" x2="22" y2="12" stroke="#DC2626" strokeWidth="2" strokeDasharray="3 2" />
-        <text x="26" y="15" fontSize="10" fill="var(--text)" fontFamily="Noto Sans KR, sans-serif">복습 안 함</text>
-        <line x1="8" y1="26" x2="22" y2="26" stroke="#0D9488" strokeWidth="2.5" />
-        <text x="26" y="29" fontSize="10" fill="var(--text)" fontFamily="Noto Sans KR, sans-serif">복습 함 (R1, R2…)</text>
+        <line x1="8" y1="12" x2="22" y2="12" stroke="var(--red-600)" strokeWidth="2" strokeDasharray="3 2" />
+        <text x="26" y="15" fontSize="10" fill="var(--text)">복습 안 함</text>
+        <line x1="8" y1="26" x2="22" y2="26" stroke="var(--teal-600)" strokeWidth="2.5" />
+        <text x="26" y="29" fontSize="10" fill="var(--text)">복습 함 (R1, R2…)</text>
       </g>
     </svg>
   )
@@ -828,9 +828,9 @@ export default function ReviewIntervalClient() {
           <div className={s.scoreGuide}>
             <strong>점수별 동작:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
-              <li><strong style={{ color: '#DC2626' }}>0~2점:</strong> 처음부터 다시 시작 (간격 1일, 횟수 0)</li>
-              <li><strong style={{ color: '#A16207' }}>3점:</strong> 간격 약간 증가, EF 약간 ↓</li>
-              <li><strong style={{ color: '#059669' }}>4점:</strong> 간격 정상 증가, EF 유지</li>
+              <li><strong style={{ color: 'var(--red-600)' }}>0~2점:</strong> 처음부터 다시 시작 (간격 1일, 횟수 0)</li>
+              <li><strong style={{ color: 'var(--yellow-700)' }}>3점:</strong> 간격 약간 증가, EF 약간 ↓</li>
+              <li><strong style={{ color: 'var(--emerald-600)' }}>4점:</strong> 간격 정상 증가, EF 유지</li>
               <li><strong style={{ color: 'var(--accent)' }}>5점:</strong> 간격 크게 증가, EF 상승</li>
             </ul>
           </div>
@@ -876,8 +876,8 @@ export default function ReviewIntervalClient() {
             <div className={s.todayBanner}>
               <p className={s.todayBannerTitle}>⏰ 복습할 항목 ({dueItems.length}개)</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
-                {missedItems.length > 0 && <>놓친 항목 <strong style={{ color: '#DC2626' }}>{missedItems.length}개</strong> · </>}
-                {todayItems.length > 0 && <>오늘 복습 <strong style={{ color: '#0D9488' }}>{todayItems.length}개</strong></>}
+                {missedItems.length > 0 && <>놓친 항목 <strong style={{ color: 'var(--red-600)' }}>{missedItems.length}개</strong> · </>}
+                {todayItems.length > 0 && <>오늘 복습 <strong style={{ color: 'var(--teal-600)' }}>{todayItems.length}개</strong></>}
               </p>
             </div>
           )}
@@ -886,8 +886,8 @@ export default function ReviewIntervalClient() {
           {!showAdd ? (
             <button
               style={{
-                background: 'rgba(13,148,136,0.06)', border: '1px dashed #0D9488', borderRadius: 12,
-                padding: '14px 18px', fontSize: 13, color: '#0D9488', fontFamily: 'Noto Sans KR, sans-serif',
+                background: 'rgba(13,148,136,0.06)', border: '1px dashed var(--teal-600)', borderRadius: 'var(--radius-m)',
+                padding: '14px 18px', fontSize: 13, color: 'var(--teal-600)', fontFamily: 'var(--font-sans)',
                 fontWeight: 700, cursor: 'pointer', width: '100%',
               }}
               onClick={() => setShowAdd(true)}

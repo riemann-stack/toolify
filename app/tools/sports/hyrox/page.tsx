@@ -19,8 +19,8 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
-const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+const h2: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
+const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }
 
 const FAQ_LD = [
               {
@@ -65,7 +65,7 @@ export default function HyroxPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />하이록스(HYROX) 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -117,9 +117,9 @@ export default function HyroxPage() {
                     ['⑧ 런 ', '월 볼 (Wall Balls)', `${WALLBALL_REPS}회`],
                   ].map((r, i) => (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                      <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: '#A16207', fontWeight: 700 }}>1km</span></td>
+                      <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: 'var(--yellow-700)', fontWeight: 700 }}>1km</span></td>
                       <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[2]}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -136,10 +136,10 @@ export default function HyroxPage() {
           <h2 style={h2}>참가 부문 (Division)</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: 'Open', d: '입문·일반. 표준 중량. 가장 많이 참가하는 부문.', c: '#0EA5E9' },
-              { t: 'Pro', d: '고중량 부문. 썰매·런지·월볼 중량이 더 무겁습니다.', c: '#DC2626' },
-              { t: 'Doubles (2인)', d: '둘이 한 팀으로 스테이션 작업을 분담. 런은 함께.', c: '#059669' },
-              { t: 'Relay (4인)', d: '4명이 코스를 나눠 이어 달리는 릴레이 방식.', c: '#9333EA' },
+              { t: 'Open', d: '입문·일반. 표준 중량. 가장 많이 참가하는 부문.', c: 'var(--sky-500)' },
+              { t: 'Pro', d: '고중량 부문. 썰매·런지·월볼 중량이 더 무겁습니다.', c: 'var(--red-600)' },
+              { t: 'Doubles (2인)', d: '둘이 한 팀으로 스테이션 작업을 분담. 런은 함께.', c: 'var(--emerald-600)' },
+              { t: 'Relay (4인)', d: '4명이 코스를 나눠 이어 달리는 릴레이 방식.', c: 'var(--purple-600)' },
             ].map((x, i) => (
               <div key={i} style={{ ...card, borderLeft: `4px solid ${x.c}` }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: x.c, marginBottom: 6 }}>{x.t}</p>
@@ -194,7 +194,7 @@ export default function HyroxPage() {
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                       <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r[0]}</td>
                       <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[1]}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[2]}</td>
                     </tr>
                   ))}
                 </tbody>

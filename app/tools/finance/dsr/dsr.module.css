@@ -4,11 +4,11 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   box-sizing: border-box;
 }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 
 .cardLabel {
   display: flex;
@@ -58,7 +58,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 13px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
@@ -77,9 +77,9 @@
   flex: 1 1 auto;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
@@ -92,17 +92,17 @@
 /* ── 히어로 (최종 한도) ── */
 .hero {
   background: linear-gradient(135deg, rgba(5,150,105,0.10), rgba(5,150,105,0.03));
-  border: 1px solid #059669;
-  border-radius: 16px;
+  border: 1px solid var(--emerald-600);
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   text-align: center;
 }
-.heroLabel { font-size: 12px; color: #059669; font-weight: 700; margin-bottom: 6px; }
+.heroLabel { font-size: 12px; color: var(--emerald-600); font-weight: 700; margin-bottom: 6px; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(26px, 6vw, 36px);
   font-weight: 800;
-  color: #059669;
+  color: var(--emerald-600);
   letter-spacing: -1px;
   line-height: 1.1;
 }
@@ -114,9 +114,9 @@
   font-size: 12px;
   font-weight: 700;
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(220,38,38,0.10);
-  color: #DC2626;
+  color: var(--red-600);
 }
 
 /* ── 결과 행 ── */
@@ -128,13 +128,13 @@
   gap: 10px;
   padding: 11px 4px;
   border-bottom: 1px dashed var(--border);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .resRow:last-child { border-bottom: none; }
 .resName { font-size: 13px; color: var(--text); font-weight: 600; }
 .resName small { display: block; font-size: 11px; color: var(--muted); font-weight: 400; margin-top: 2px; }
 .resVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 800;
   color: var(--text);
@@ -147,45 +147,45 @@
   position: relative;
   height: 14px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
   margin: 6px 0 2px;
 }
-.gaugeFill { position: absolute; top: 0; left: 0; height: 100%; border-radius: 999px; transition: width 0.3s; }
+.gaugeFill { position: absolute; top: 0; left: 0; height: 100%; border-radius: var(--radius-pill); transition: width 0.3s; }
 .gaugeLimit {
   position: absolute; top: -3px; bottom: -3px; width: 2px;
-  background: #DC2626;
+  background: var(--red-600);
 }
 .gaugeLabel {
   display: flex; justify-content: space-between;
   font-size: 11px; color: var(--muted); margin-top: 4px;
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 600;
+  font-family: var(--font-sans); font-weight: 600;
 }
 
-.statusOk { color: #059669; }
-.statusWarn { color: #D97706; }
-.statusOver { color: #DC2626; }
+.statusOk { color: var(--emerald-600); }
+.statusWarn { color: var(--amber-600); }
+.statusOver { color: var(--red-600); }
 
 .note {
   font-size: 12px;
   color: var(--muted);
   line-height: 1.7;
   margin: 10px 0 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .note strong { color: var(--text); }
 
 .advanced {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 8px 14px;
 }
 .advanced summary {
   cursor: pointer;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   padding: 6px 0;
   list-style: none;

@@ -16,7 +16,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -64,7 +64,7 @@ export default function FtpZonesPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />FTP·파워존 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -80,8 +80,8 @@ export default function FtpZonesPage() {
         <section>
           <h2 style={sectionTitle}>FTP 추정 방법</h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>20분 테스트</span> = 20분 평균 파워 × 0.95</div>
@@ -122,7 +122,7 @@ export default function FtpZonesPage() {
                   ['8', '마무리', '10~15분', '이지 페달링'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[3]}</td>
@@ -135,7 +135,7 @@ export default function FtpZonesPage() {
             ※ 출처: Peaks Coaching Group — Hunter Allen, &ldquo;So you&rsquo;re ready for your first FTP test?!?&rdquo;(2019-02-04 게시)의 원문 순서. 재측정할 때도 <strong>같은 워밍업</strong>을 쓰는 것이 비교의 전제입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', marginTop: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginTop: 14, display: 'flex', flexDirection: 'column', gap: 10 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>5분 올아웃을 20분 TT 앞에 두는 세 가지 이유</p>
             {[
               ['다리를 연다', '본 측정 전에 다리를 깨워, 20분 구간 초반부터 제 파워가 나오게 합니다.'],
@@ -154,7 +154,7 @@ export default function FtpZonesPage() {
             ※ 워밍업 비교 연구: Borszcz FK 외, &ldquo;Functional Threshold Power Estimated from a 20-minute Time-trial Test is Warm-up-dependent&rdquo;, <em>Int J Sports Med</em> 2022;43(5):411-417 (PMID 34749416).
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', marginTop: 14 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', marginTop: 14 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 8 }}>×0.95의 근거와 한계</p>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
               Allen의 설명은 단순합니다 — 20분 노력에는 무산소 능력이 더 섞여 60분 노력보다 파워가 약 5% 부풀려지므로, 20분 <strong style={{ color: 'var(--text)' }}>전체 평균 파워</strong>(정규화 파워가 아님)에서 5%를 뺍니다. 원문 예시는 평균 300W → 15W 차감 → FTP 285W입니다. TrainingPeaks도 &lsquo;최근 최고 20분 평균 파워의 95%가 현재 설정된 역치보다 크면 역치 상향을 제안한다&rsquo;는 규칙을 제품에 그대로 구현해 두었습니다(헬프센터 2025-05-21 갱신 기준).
@@ -188,7 +188,7 @@ export default function FtpZonesPage() {
                   ['Z7', '신경근', '%FTP 미정의', '스프린트'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[3]}</td>
@@ -225,7 +225,7 @@ export default function FtpZonesPage() {
                   ['Z6 무산소', '30초~3분 고강도 인터벌', '회복 구간을 충분히 — 총량보다 한 번의 질'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
@@ -258,7 +258,7 @@ export default function FtpZonesPage() {
                   ['Z7 신경근', '해당 없음', '최대'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</td>
+                    <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[0]}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '9px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
@@ -286,8 +286,8 @@ export default function FtpZonesPage() {
               ['1.8~2.5', '입문 (초급)'],
               ['1.8 미만', '초보 시작 단계'],
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 2 }}>
-                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[0]}</span>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 2 }}>
+                <span style={{ fontSize: 14, fontWeight: 700, color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{r[0]}</span>
                 <span style={{ fontSize: 12, color: 'var(--muted)' }}>{r[1]}</span>
               </div>
             ))}
@@ -307,7 +307,7 @@ export default function FtpZonesPage() {
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>

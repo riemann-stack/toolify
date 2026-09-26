@@ -308,8 +308,8 @@ export default function PregnancyClient() {
       {!result && (
         <div style={{
           background: 'var(--bg2)', border: '1px dashed var(--border)',
-          borderRadius: 14, padding: '30px 20px', textAlign: 'center',
-          color: 'var(--muted)', fontSize: 13, fontFamily: 'Noto Sans KR, sans-serif',
+          borderRadius: 'var(--radius-card)', padding: '30px 20px', textAlign: 'center',
+          color: 'var(--muted)', fontSize: 13, fontFamily: 'var(--font-sans)',
         }}>
           {date
             ? '입력한 날짜로는 아직 임신 기간이 시작되지 않아 주수를 계산할 수 없습니다. 날짜와 입력 방식을 확인하세요.'
@@ -360,7 +360,7 @@ export default function PregnancyClient() {
               </div>
               <div className={styles.triMarker} style={{ left: `${markerPos}%` }} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginTop: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 700, marginTop: 8 }}>
               <span>0주</span><span>13주</span><span>27주</span><span>40주</span>
             </div>
           </div>
@@ -412,8 +412,8 @@ export default function PregnancyClient() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
                 <span style={{ fontSize: 36 }}>{fetal.emoji}</span>
                 <div>
-                  <div style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, fontFamily: 'Noto Sans KR' }}>
-                    {result.currentWeek}주차 — <span style={{ color: '#DB2777' }}>{fetal.size} 크기 ({fetal.length})</span>
+                  <div style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>
+                    {result.currentWeek}주차 — <span style={{ color: 'var(--pink-600)' }}>{fetal.size} 크기 ({fetal.length})</span>
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>{fetal.development}</div>
                 </div>
@@ -455,7 +455,7 @@ export default function PregnancyClient() {
                         {t.status === 'past' ? '○' : t.status === 'current' ? '🟡' : '📅'}
                         {' '}{t.test.name}
                         {t.test.importance === 'essential' && (
-                          <span style={{ marginLeft: 6, fontSize: 10, color: '#EA580C', fontWeight: 700 }}>핵심</span>
+                          <span style={{ marginLeft: 6, fontSize: 10, color: 'var(--orange-600)', fontWeight: 700 }}>핵심</span>
                         )}
                       </div>
                       <div className={styles.testDesc}>{t.test.desc}</div>
@@ -599,18 +599,18 @@ export default function PregnancyClient() {
                   background: 'var(--bg2)',
                   border: `1px solid ${isCurrentTri ? triInfo.color : 'var(--border)'}`,
                   borderLeft: `4px solid ${triInfo.color}`,
-                  borderRadius: 12,
+                  borderRadius: 'var(--radius-m)',
                   padding: '12px 14px',
                 }}>
                 <summary style={{
                   cursor: 'pointer',
                   fontSize: 13, fontWeight: 700,
                   color: isCurrentTri ? triInfo.color : 'var(--text)',
-                  fontFamily: 'Noto Sans KR, sans-serif',
+                  fontFamily: 'var(--font-sans)',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 }}>
                   <span>{triInfo.name} ({triInfo.startWeek}~{triInfo.endWeek}주){isCurrentTri && ' · 현재'}</span>
-                  <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>
+                  <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
                     {triCompleted}/{items.length}
                   </span>
                 </summary>

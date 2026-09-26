@@ -587,14 +587,14 @@ export default function CronClient() {
                           gap: 10,
                           padding: '8px 12px',
                           background: 'var(--bg3)',
-                          borderRadius: 8,
+                          borderRadius: 'var(--radius-s)',
                           fontFamily: 'var(--font-mono)',
                         }}
                       >
                         <span style={{ fontSize: 11, color: 'var(--muted)', minWidth: 22 }}>{i + 1}.</span>
                         <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--text)' }}>{f.date}</span>
                         <span style={{ fontSize: 12, color: 'var(--accent)' }}>({f.dow})</span>
-                        <span style={{ fontSize: 15, fontWeight: 700, color: '#0891B2', marginLeft: 'auto' }}>{f.time}</span>
+                        <span style={{ fontSize: 15, fontWeight: 700, color: 'var(--cyan-600)', marginLeft: 'auto' }}>{f.time}</span>
                       </li>
                     )
                   })}

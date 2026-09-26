@@ -3,16 +3,16 @@
 
 /* 면책 */
 .disclaimer {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--cyan-600); }
 
 .warnBox {
   background: rgba(220,38,38,0.14);
@@ -22,21 +22,21 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.warnBox strong { color: #DC2626; }
+.warnBox strong { color: var(--red-600); }
 
 .infoBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.75;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.infoBox strong { color: #0891B2; }
+.infoBox strong { color: var(--cyan-600); }
 
 /* ─── 탭 (5개) ─── */
 .tabs {
@@ -45,7 +45,7 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
@@ -53,27 +53,27 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive          { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveQuote     { background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
-.tabActiveNet       { background: rgba(8,145,178,0.18); color: #0891B2; font-weight: 700; }
-.tabActiveInvoice   { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
-.tabActiveCompare   { background: rgba(155,89,182,0.10); color: #9333EA; font-weight: 700; }
+.tabActiveQuote     { background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
+.tabActiveNet       { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); font-weight: 700; }
+.tabActiveInvoice   { background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
+.tabActiveCompare   { background: rgba(155,89,182,0.10); color: var(--purple-600); font-weight: 700; }
 
 /* 카드 */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   width: 100%;
   box-sizing: border-box;
@@ -104,9 +104,9 @@
   flex: 1; min-width: 0;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 11px 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -120,15 +120,15 @@
 .numInput::-webkit-inner-spin-button,
 .numInput::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .numInput { -moz-appearance: textfield; appearance: textfield; }
-.unit { font-size: 13px; color: var(--muted); white-space: nowrap; font-family: 'Noto Sans KR', sans-serif; }
+.unit { font-size: 13px; color: var(--muted); white-space: nowrap; font-family: var(--font-sans); }
 
 .textInput {
   flex: 1; min-width: 0;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--text);
   outline: none;
@@ -157,11 +157,11 @@
 .optionBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
@@ -179,21 +179,21 @@
 }@media (hover: hover) {
   .modeBtn:hover { border-color: var(--border-hover); }
 }
-.modeBtnActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4); }
-.modeBtnLabel { font-size: 13px; font-weight: 500; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.modeBtnActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.modeBtnLabel { font-size: 13px; font-weight: 500; color: var(--text); font-family: var(--font-sans); }
 .modeBtnActive .modeBtnLabel { color: var(--accent); }
-.modeBtnDesc { font-size: 11px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.modeBtnDesc { font-size: 11px; color: var(--muted); font-family: var(--font-sans); }
 
 /* 칩 */
 .chips { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 8px; }
 .chip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
 }@media (hover: hover) {
@@ -206,11 +206,11 @@
 .toggleBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }
@@ -218,15 +218,15 @@
 
 /* ─── 히어로 ─── */
 .hero {
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 26px 22px;
   text-align: center;
   border-width: 1px;
   border-style: solid;
 }
-.heroAccent { background: var(--bg2); border-color: rgba(14,165,233,0.30); }
+.heroAccent { background: var(--bg2); border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
 .heroGold   { background: rgba(161,98,7,0.14); border-color: rgba(161,98,7,0.30); }
-.heroCyan   { background: rgba(8,145,178,0.14); border-color: rgba(8,145,178,0.30); }
+.heroCyan   { background: color-mix(in srgb, var(--cyan-600) 14%, transparent); border-color: color-mix(in srgb, var(--cyan-600) 30%, transparent); }
 .heroOrange { background: rgba(234,88,12,0.14); border-color: rgba(234,88,12,0.30); }
 .heroPurple { background: rgba(155,89,182,0.04); border-color: rgba(155,89,182,0.30); }
 
@@ -239,7 +239,7 @@
   margin-bottom: 8px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(36px, 9vw, 56px);
   letter-spacing: -1.5px;
@@ -247,24 +247,24 @@
   font-variant-numeric: tabular-nums;
 }
 .heroNumAccent { color: var(--accent); }
-.heroNumGold   { color: #A16207; }
-.heroNumCyan   { color: #0891B2; }
-.heroNumOrange { color: #EA580C; }
-.heroNumPurple { color: #9333EA; }
-.heroSub  { font-size: 13px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
-.heroDesc { font-size: 13px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.heroNumGold   { color: var(--yellow-700); }
+.heroNumCyan   { color: var(--cyan-600); }
+.heroNumOrange { color: var(--orange-600); }
+.heroNumPurple { color: var(--purple-600); }
+.heroSub  { font-size: 13px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: var(--font-sans); font-weight: 600; }
+.heroDesc { font-size: 13px; color: var(--muted); margin-top: 6px; font-family: var(--font-sans); }
 
 .rateBadge {
   display: inline-block;
   margin-top: 12px;
   background: var(--accent-dim);
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 999px;
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-pill);
   padding: 5px 14px;
   font-size: 13px;
   color: var(--accent);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ─── 메인 결과 (3 카드) ─── */
@@ -273,8 +273,8 @@
 @media (max-width: 540px) { .resultGrid { grid-template-columns: 1fr; } }
 .resultItem { display: flex; flex-direction: column; gap: 6px; padding: 4px 4px; }
 .resultLabel { font-size: 12px; color: var(--muted); }
-.resultValue { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
-.vatValue { color: #EA580C; }
+.resultValue { font-family: var(--font-sans); font-size: 22px; font-weight: 800; color: var(--text); font-variant-numeric: tabular-nums; }
+.vatValue { color: var(--orange-600); }
 .totalValue { color: var(--accent); font-size: 28px; }
 
 /* ─── 통합 결과 breakdown (히어로 내부) ─── */
@@ -291,32 +291,32 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 11px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--muted);
 }
 .breakdownRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 15px;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
-.breakdownRow span.vatValue { color: #EA580C; }
+.breakdownRow span.vatValue { color: var(--orange-600); }
 
 .formulaBox {
   background: var(--bg2);
-  border: 1px solid rgba(8,145,178,0.25);
-  border-radius: 12px;
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   display: flex;
   flex-direction: column;
   gap: 6px;
 }
-.formulaTitle { font-size: 12px; font-weight: 600; color: #0891B2; margin-bottom: 4px; }
-.formulaLine { font-family: monospace; font-size: 13px; color: var(--muted); line-height: 1.7; }
+.formulaTitle { font-size: 12px; font-weight: 600; color: var(--cyan-600); margin-bottom: 4px; }
+.formulaLine { font-family: var(--font-mono); font-size: 13px; color: var(--muted); line-height: 1.7; }
 .formulaLine strong { color: var(--text); }
 
 /* ─── 견적서 표 ─── */
@@ -326,7 +326,7 @@
   min-width: 560px;
   border-collapse: collapse;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .quoteTable thead th {
   font-size: 11px;
@@ -343,7 +343,7 @@
 .quoteTable tbody td {
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -351,7 +351,7 @@
 }
 .quoteTable tbody td:first-child {
   text-align: left;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
 }
@@ -363,7 +363,7 @@
   font-size: 13px;
 }
 .quoteTable tbody tr.quoteTotalRow td:first-child { color: var(--accent); }
-.quoteTable .vatCol { color: #EA580C; }
+.quoteTable .vatCol { color: var(--orange-600); }
 .quoteTable .totalCol { color: var(--accent); font-weight: 800; }
 
 /* 견적 품목 입력 행 */
@@ -377,30 +377,30 @@
 .quoteItemRowDelete {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   width: 36px; height: 36px;
   cursor: pointer;
   color: var(--muted);
   font-size: 16px;
 }@media (hover: hover) {
-  .quoteItemRowDelete:hover { color: #DC2626; border-color: #DC2626; }
+  .quoteItemRowDelete:hover { color: var(--red-600); border-color: var(--red-600); }
 }
 .quoteItemTaxBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
   height: 36px;
 }@media (hover: hover) {
   .quoteItemTaxBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.quoteItemTaxBtnTaxable { background: rgba(14,165,233,0.18); color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.quoteItemTaxBtnExempt  { background: rgba(8,145,178,0.18); color: #0891B2; border-color: rgba(8,145,178,0.4); font-weight: 700; }
+.quoteItemTaxBtnTaxable { background: color-mix(in srgb, var(--accent) 18%, transparent); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.quoteItemTaxBtnExempt  { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); font-weight: 700; }
 
 @media (max-width: 720px) {
   .quoteItemRow {
@@ -429,11 +429,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   margin-top: 4px;
 }@media (hover: hover) {
@@ -450,13 +450,13 @@
 .compareCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 18px;
   position: relative;
 }
 .compareCardWinner {
-  border-color: rgba(14,165,233,0.40);
-  background: rgba(14,165,233,0.14);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .compareCardLoser {
   border-color: rgba(220,38,38,0.30);
@@ -471,13 +471,13 @@
   font-size: 11px;
   font-weight: 800;
   padding: 3px 10px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
-.compareCardTitle { font-family: 'Inter', system-ui, sans-serif; font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
+.compareCardTitle { font-family: var(--font-sans); font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 2px; }
 .compareCardDesc { font-size: 11px; color: var(--muted); margin-bottom: 14px; }
 .compareCardMain {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(22px, 4.5vw, 32px);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
@@ -490,10 +490,10 @@
   font-size: 13px;
   padding: 4px 0;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .compareCardRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   font-variant-numeric: tabular-nums;
@@ -508,27 +508,27 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .stepRowResult {
   background: var(--accent-dim);
   border-color: var(--accent);
 }
 .stepSign {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 14px;
   color: var(--muted);
 }
-.stepSignPlus  { color: #0891B2; }
-.stepSignMinus { color: #DC2626; }
+.stepSignPlus  { color: var(--cyan-600); }
+.stepSignMinus { color: var(--red-600); }
 .stepSignEq    { color: var(--accent); }
 .stepLabel { color: var(--text); }
 .stepValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   color: var(--text);
@@ -544,10 +544,10 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .scenarioRow.headerRow {
   background: transparent; border: none;
@@ -557,7 +557,7 @@
 }
 .scenarioRow span:nth-child(1) { color: var(--text); font-weight: 700; }
 .scenarioRow span:nth-child(2) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   text-align: right;
   color: var(--accent);
@@ -574,9 +574,9 @@
 .invoiceCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 22px 22px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .invoiceTitle {
   font-size: 16px;
@@ -619,14 +619,14 @@
   padding: 10px 10px;
   border-bottom: 1px solid var(--border);
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
 .invoiceItemTable tbody td:first-child {
   text-align: left;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
 }
 
@@ -641,20 +641,20 @@
 .invoiceTotalCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   text-align: center;
 }
 .invoiceTotalLabel { font-size: 11px; color: var(--muted); margin-bottom: 6px; }
 .invoiceTotalValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
 .invoiceTotalValueAccent { color: var(--accent); }
-.invoiceTotalValueOrange { color: #EA580C; }
+.invoiceTotalValueOrange { color: var(--orange-600); }
 @media (max-width: 540px) {
   .invoiceTotalGrid { grid-template-columns: 1fr; }
   .invoiceHeader { grid-template-columns: 1fr; }
@@ -670,12 +670,12 @@
 .gsCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 18px;
   position: relative;
 }
 .gsCardActive  { border-color: rgba(155,89,182,0.40); background: rgba(155,89,182,0.04); }
-.gsCardWinner  { border-color: rgba(14,165,233,0.40); background: rgba(14,165,233,0.14); }
+.gsCardWinner  { border-color: color-mix(in srgb, var(--accent) 40%, transparent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .gsCardDisabled { opacity: 0.55; }
 
 .guideTable { display: flex; flex-direction: column; gap: 4px; }
@@ -685,14 +685,14 @@
   gap: 8px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .guideRow span:first-child { color: var(--text); }
 .guideRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: right;
   color: var(--accent);
@@ -702,11 +702,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -723,7 +723,7 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }

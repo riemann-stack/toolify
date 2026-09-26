@@ -487,7 +487,7 @@ export default function CosmicCalendarClient() {
       {tab === 'year' && (
         <>
           <div className={s.tlStage}>
-            <p style={{ textAlign: 'center', color: '#0F766E', fontSize: 14, fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 700, marginBottom: 6 }}>
+            <p style={{ textAlign: 'center', color: '#0F766E', fontSize: 14, fontFamily: 'var(--font-sans)', fontWeight: 700, marginBottom: 6 }}>
               우주 138억 년 = 1년
             </p>
             <p className={s.tlHint}>점에 마우스를 올리거나 탭하면 사건 정보가 열립니다 · 숫자는 그 구간에 모인 사건 수</p>

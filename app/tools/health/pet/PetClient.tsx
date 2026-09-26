@@ -93,7 +93,7 @@ function BodyConditionCard({ body, weight, species }: { body: BodyEvaluation; we
       </div>
       {body.range && (
         <div className={styles.bcsRange}>
-          {body.range.sizeName} 정상 범위: <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{body.range.min}~{body.range.max}kg</strong>
+          {body.range.sizeName} 정상 범위: <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{body.range.min}~{body.range.max}kg</strong>
         </div>
       )}
       {!growing && (

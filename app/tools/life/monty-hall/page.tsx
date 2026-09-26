@@ -39,7 +39,7 @@ export default function MontyHallPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />몬티홀 시뮬레이터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -53,7 +53,7 @@ export default function MontyHallPage() {
 
         {/* ── 1. 몬티홀 문제란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             몬티홀 문제란?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
@@ -71,7 +71,7 @@ export default function MontyHallPage() {
 
         {/* ── 2. 정확한 규칙 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             정확한 규칙
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -83,7 +83,7 @@ export default function MontyHallPage() {
               { n: '⑤', t: '참가자는 처음 선택을 <strong>유지</strong>하거나 남은 다른 문으로 <strong>바꿀</strong> 수 있습니다.' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px', display: 'flex', gap: '12px', alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{r.n}</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', flexShrink: 0 }}>{r.n}</span>
                 <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8, margin: 0 }} dangerouslySetInnerHTML={{ __html: r.t }} />
               </div>
             ))}
@@ -95,12 +95,12 @@ export default function MontyHallPage() {
 
         {/* ── 3. 3가지 증명 방법 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             3가지 증명 방법
           </h2>
 
           {/* 증명 1: 경우의 수 */}
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '8px' }}>증명 1 · 경우의 수로 풀기</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '8px' }}>
               처음 선택이 <strong style={{ color: 'var(--text)' }}>자동차일 확률은 1/3</strong>, <strong style={{ color: 'var(--text)' }}>염소일 확률은 2/3</strong>입니다. 진행자는 이 확률을 바꾸지 못합니다(이미 선택된 문을 열지 않으므로).
@@ -112,7 +112,7 @@ export default function MontyHallPage() {
           </div>
 
           {/* 증명 2: 표 */}
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px', marginBottom: '12px' }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '10px' }}>증명 2 · 모든 경우 표로 확인</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '10px' }}>참가자가 항상 1번 문을 고른다고 가정(대칭이므로 일반성 유지).</p>
             <div style={{ overflowX: 'auto' }}>
@@ -131,7 +131,7 @@ export default function MontyHallPage() {
                     { car: '3번', open: '2번',      stay: '🐐 염소',       sw: '🚗 자동차' },
                   ].map((r, i) => (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
-                      <td style={{ padding: '8px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.car}</td>
+                      <td style={{ padding: '8px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.car}</td>
                       <td style={{ padding: '8px 10px', color: 'var(--muted)' }}>{r.open}</td>
                       <td style={{ padding: '8px 10px', color: 'var(--text)' }}>{r.stay}</td>
                       <td style={{ padding: '8px 10px', color: 'var(--text)' }}>{r.sw}</td>
@@ -146,12 +146,12 @@ export default function MontyHallPage() {
           </div>
 
           {/* 증명 3: 베이즈 */}
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '10px' }}>증명 3 · 베이즈 정리</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
               참가자가 1번 선택 · 진행자가 3번 염소 공개 상황에서 자동차가 2번 문에 있을 조건부 확률:
             </p>
-            <div style={{ background: 'var(--bg3)', borderRadius: '8px', padding: '14px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, textAlign: 'center' }}>
+            <div style={{ background: 'var(--bg3)', borderRadius: 'var(--radius-s)', padding: '14px', fontFamily: 'var(--font-sans)', fontSize: '13px', color: 'var(--text)', lineHeight: 1.9, textAlign: 'center' }}>
               P(car=2 | open=3) = <br />
               <span style={{ color: 'var(--accent)' }}>[P(open=3|car=2) × P(car=2)] / P(open=3)</span><br />
               = (1 × 1/3) / (1/2) = <strong>2/3</strong>
@@ -164,7 +164,7 @@ export default function MontyHallPage() {
 
         {/* ── 4. 왜 틀리는가 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             사람들이 틀리는 이유
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -174,7 +174,7 @@ export default function MontyHallPage() {
               { t: '🔄 고착 편향', d: '사람은 자기가 이미 내린 선택을 바꾸기 싫어합니다(현상유지 편향). 바꿔서 지면 더 후회할 것 같다는 심리가 합리적 선택을 막습니다.' },
               { t: '🔢 작은 표본', d: '3개 문은 직관적으로 확률 차이가 잘 보이지 않습니다. 100문으로 확장하면(아래 참조) &ldquo;99문 중 남은 하나&rdquo;로 자동차 확률이 몰리는 게 명백해집니다.' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '6px' }}>{m.t}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }} dangerouslySetInnerHTML={{ __html: m.d }} />
               </div>
@@ -184,7 +184,7 @@ export default function MontyHallPage() {
 
         {/* ── 5. 현실 응용 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             현실에서의 응용
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -194,7 +194,7 @@ export default function MontyHallPage() {
               { icon: '🤖', title: 'AI·ML', desc: '베이지안 추론의 기초. 사전확률(Prior)에 증거(Evidence)를 곱해 사후확률(Posterior)을 갱신하는 직관을 제공합니다.' },
               { icon: '🔍', title: '수사·감사', desc: '용의자를 좁히는 과정, 회계 표본 추출 후 재조사 시 남은 표본의 위험도 재평가에 같은 논리가 쓰입니다.' },
             ].map((z, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '18px', marginBottom: '4px' }}>{z.icon}</p>
                 <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '6px' }}>{z.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{z.desc}</p>
@@ -205,7 +205,7 @@ export default function MontyHallPage() {
 
         {/* ── 6. N문 확장 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🚪 N문 확장 — 문이 많을수록 직관 명확
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -230,10 +230,10 @@ export default function MontyHallPage() {
                   { n: '1,000개', stay: '0.1%',   sw: '99.9%',  diff: '999배' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.stay}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.sw}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.diff}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.n}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0891B2', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.stay}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.sw}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.diff}</td>
                   </tr>
                 ))}
               </tbody>
@@ -246,7 +246,7 @@ export default function MontyHallPage() {
 
         {/* ── 7. 변형 규칙 3가지 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🎭 변형 규칙 3가지 — 진행자의 의도가 결과를 결정
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -264,7 +264,7 @@ export default function MontyHallPage() {
                 rule: '진행자가 참가자가 자동차 골랐을 때만 염소 공개 (함정)',
                 result: '바꾸기 0% / 유지 100%', insight: '진행자 의도 = 참가자 패배 유도.' },
             ].map((v, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${v.color}44`, borderRadius: '12px', padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${v.color}44`, borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <p style={{ fontSize: '13px', color: v.color, fontWeight: 700, marginBottom: '6px' }}>{v.emoji} {v.name}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '4px' }}>규칙: {v.rule}</p>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '4px' }}>→ {v.result}</p>
@@ -284,7 +284,7 @@ export default function MontyHallPage() {
 
         {/* ── 7. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/lotto',        icon: '🎰', name: '로또 번호 생성기',       desc: '1/8,145,060의 확률 세계' },
@@ -295,7 +295,7 @@ export default function MontyHallPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

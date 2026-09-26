@@ -16,16 +16,16 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px', fontWeight: 700, marginBottom: '14px', marginTop: '48px', letterSpacing: '-0.5px',
 }
 const card: CSSProperties = {
-  background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '14px', padding: '20px 22px', marginBottom: '14px',
+  background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-card)', padding: '20px 22px', marginBottom: '14px',
 }
 const para: CSSProperties = { fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }
 const cell: CSSProperties = { padding: '10px 14px', borderBottom: '1px solid var(--border)', fontSize: '13px', color: 'var(--text)', verticalAlign: 'top' }
 const headCell: CSSProperties = { padding: '10px 14px', textAlign: 'left', fontWeight: 700, fontSize: '12px', color: 'var(--muted)', borderBottom: '1px solid var(--border)', background: 'var(--bg3)' }
-const codeCell: CSSProperties = { ...cell, fontFamily: 'Inter, ui-monospace, monospace', fontWeight: 700, letterSpacing: '0.06em', whiteSpace: 'nowrap' }
+const codeCell: CSSProperties = { ...cell, fontFamily: 'var(--font-mono)', fontWeight: 700, letterSpacing: '0.06em', whiteSpace: 'nowrap' }
 
 const FAQ_LD = [
   { "q": "차대번호로 사고 이력이나 주행거리를 알 수 있나요?", "a": "<strong>아니요.</strong> 본 도구는 VIN에 표준 규칙으로 인코딩된 <strong>구조 정보</strong>(제조국·제조사·연식·공장 등)만 해석합니다. 사고·주행거리·소유자·압류 같은 <strong>이력은 VIN 문자 자체에 들어 있지 않으며</strong>, 별도의 공식 데이터베이스에서만 확인됩니다. 차량 이력은 <strong>카히스토리(보험개발원, carhistory.or.kr)</strong>, 압류·저당은 <strong>정부24 자동차등록원부</strong> 등 공식 서비스를 이용하세요." },
@@ -41,7 +41,7 @@ export default function VinDecoderPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="life" />차대번호(VIN) 해석기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -127,7 +127,7 @@ export default function VinDecoderPage() {
       <p style={para}>
         9번째 자리는 나머지 16자리를 검산하는 숫자입니다. 각 문자를 정해진 값으로 바꾼 뒤 자리별 가중치를 곱해 더하고,
         그 합을 11로 나눈 나머지가 체크 디지트입니다(나머지가 10이면 <strong style={{ color: 'var(--text)' }}>X</strong>).
-        예를 들어 <code style={{ fontFamily: 'ui-monospace, monospace' }}>1HGCM82633A004352</code>의 계산 결과는 <strong style={{ color: 'var(--text)' }}>3</strong>으로, 9번째 자리와 일치합니다.
+        예를 들어 <code style={{ fontFamily: 'var(--font-mono)' }}>1HGCM82633A004352</code>의 계산 결과는 <strong style={{ color: 'var(--text)' }}>3</strong>으로, 9번째 자리와 일치합니다.
       </p>
       <p style={para}>
         다만 이 검증식은 <strong style={{ color: 'var(--text)' }}>북미(NHTSA)·중국에서 의무</strong>인 표준입니다. 한국 현대·기아·제네시스도 적용해 보통 일치하지만,
@@ -157,9 +157,9 @@ export default function VinDecoderPage() {
       </p>
       <div style={card}>
         <ul style={{ margin: 0, paddingLeft: 18, fontSize: 14, color: 'var(--muted)', lineHeight: 2 }}>
-          <li><strong style={{ color: 'var(--text)' }}>차량 사고·보험 이력</strong> — 카히스토리(보험개발원) <span style={{ fontFamily: 'ui-monospace, monospace' }}>carhistory.or.kr</span></li>
-          <li><strong style={{ color: 'var(--text)' }}>자동차 등록·제원·정비</strong> — 자동차365(국토교통부) <span style={{ fontFamily: 'ui-monospace, monospace' }}>www.car365.go.kr</span></li>
-          <li><strong style={{ color: 'var(--text)' }}>압류·저당·소유</strong> — 정부24 자동차등록원부 <span style={{ fontFamily: 'ui-monospace, monospace' }}>www.gov.kr</span></li>
+          <li><strong style={{ color: 'var(--text)' }}>차량 사고·보험 이력</strong> — 카히스토리(보험개발원) <span style={{ fontFamily: 'var(--font-mono)' }}>carhistory.or.kr</span></li>
+          <li><strong style={{ color: 'var(--text)' }}>자동차 등록·제원·정비</strong> — 자동차365(국토교통부) <span style={{ fontFamily: 'var(--font-mono)' }}>www.car365.go.kr</span></li>
+          <li><strong style={{ color: 'var(--text)' }}>압류·저당·소유</strong> — 정부24 자동차등록원부 <span style={{ fontFamily: 'var(--font-mono)' }}>www.gov.kr</span></li>
         </ul>
       </div>
 

@@ -376,7 +376,7 @@ export default function KeyboardLayoutClient() {
                     minWidth: 40,
                     background: 'var(--bg3)',
                     border: '1px solid var(--border)',
-                    borderRadius: 8,
+                    borderRadius: 'var(--radius-s)',
                     padding: '6px 4px',
                     textAlign: 'center',
                     fontFamily: 'var(--font-mono)',

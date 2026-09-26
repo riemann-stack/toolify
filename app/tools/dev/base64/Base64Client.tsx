@@ -281,7 +281,7 @@ export default function Base64Client() {
             </div>
             <div className={`${s.outputBox} ${textOutput.error ? s.outputError : ''}`} role="status">
               {textOutput.error
-                ? <span style={{ color: '#DC2626' }}>⚠️ {textOutput.error}</span>
+                ? <span style={{ color: 'var(--red-600)' }}>⚠️ {textOutput.error}</span>
                 : binaryInfo
                   ? <span style={{ color: 'var(--warning)' }}>유효한 Base64지만 UTF-8 텍스트가 아닙니다 ({binaryInfo.size.toLocaleString()}바이트 바이너리). 아래 HEX로 확인하거나 파일로 저장하세요.</span>
                   : (textOutput.value || <span className={s.outputPlaceholder}>결과가 여기에 표시됩니다</span>)
@@ -321,7 +321,7 @@ export default function Base64Client() {
               </div>
               <div className={s.sizeRow}><span>원본 (UTF-8 바이트)</span><strong>{sizeAnalysis.origBytes.toLocaleString()} B</strong></div>
               <div className={s.sizeRow}><span>Base64 결과</span><strong>{sizeAnalysis.encBytes.toLocaleString()} B</strong></div>
-              <div className={s.sizeRow}><span>오버헤드</span><strong style={{ color: '#EA580C' }}>+{sizeAnalysis.overhead.toFixed(1)}%</strong></div>
+              <div className={s.sizeRow}><span>오버헤드</span><strong style={{ color: 'var(--orange-600)' }}>+{sizeAnalysis.overhead.toFixed(1)}%</strong></div>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6, lineHeight: 1.7 }}>
                 ※ Base64 인코딩은 약 33% 크기 증가 (3바이트 → 4문자)
               </p>
@@ -469,7 +469,7 @@ export default function Base64Client() {
                       </div>
                       <div className={s.sizeRow}>
                         <span>상태 (토큰을 넣은 시각 기준)</span>
-                        <strong style={{ color: jwtExpInfo.isExpired ? '#DC2626' : '#059669' }}>
+                        <strong style={{ color: jwtExpInfo.isExpired ? 'var(--red-600)' : 'var(--emerald-600)' }}>
                           {jwtExpInfo.isExpired
                             ? `❌ 만료됨 (${fmtDuration(jwtExpInfo.remainingSec ?? 0)} 전)`
                             : `✓ 유효 (남은 시간 ${fmtDuration(jwtExpInfo.remainingSec ?? 0)})`}

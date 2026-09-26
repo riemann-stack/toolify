@@ -302,7 +302,7 @@ export default function JsonClient() {
         />
         {/* 검증 상태 */}
         {input.trim() && parsed.ok && (
-          <p role="status" style={{ fontSize: 12, color: '#059669', marginTop: 8, fontWeight: 600 }}>✓ 유효한 JSON</p>
+          <p role="status" style={{ fontSize: 12, color: 'var(--emerald-600)', marginTop: 8, fontWeight: 600 }}>✓ 유효한 JSON</p>
         )}
         {input.trim() && !parsed.ok && (
           <>
@@ -370,9 +370,9 @@ export default function JsonClient() {
               </div>
               <div className={s.sizeRow}><span>원본 입력</span><strong>{fmtBytes(sizes.origBytes)}</strong></div>
               <div className={s.sizeRow}><span>정렬 (Beautify, 들여쓰기 {indent})</span><strong>{fmtBytes(sizes.fmtBytes)}</strong></div>
-              <div className={s.sizeRow}><span>압축 (Minify)</span><strong style={{ color: '#059669' }}>{fmtBytes(sizes.minBytes)}</strong></div>
+              <div className={s.sizeRow}><span>압축 (Minify)</span><strong style={{ color: 'var(--emerald-600)' }}>{fmtBytes(sizes.minBytes)}</strong></div>
               {sizes.saving > 0 && (
-                <div className={s.sizeRow}><span>압축 절약률</span><strong style={{ color: '#059669' }}>{sizes.saving.toFixed(1)}%</strong></div>
+                <div className={s.sizeRow}><span>압축 절약률</span><strong style={{ color: 'var(--emerald-600)' }}>{sizes.saving.toFixed(1)}%</strong></div>
               )}
             </div>
           )}

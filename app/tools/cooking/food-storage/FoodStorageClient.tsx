@@ -398,7 +398,7 @@ export default function FoodStorageClient() {
                       </span>
                       <span className={s.urgentItemDday} style={{
                         color: calc.status === 'expired' ? '#FF4646' :
-                               calc.status === 'urgent'  ? '#DC2626' : '#EA580C',
+                               calc.status === 'urgent'  ? 'var(--red-600)' : 'var(--orange-600)',
                       }}>
                         {calc.status === 'expired'
                           ? `D+${Math.abs(calc.remainingDays)} 초과`
@@ -770,7 +770,7 @@ function AddForm({ onAdd, onCancel }: { onAdd: (it: FoodItem) => void; onCancel:
             color: 'var(--muted)',
             lineHeight: 1.6,
           }}>
-            ⚠️ 선택한 <strong style={{ color: '#EA580C' }}>보관 방식·상태</strong> 조합은 이 식재료의 기준 보관 기간이 없어 D-day가 표시되지 않습니다. 보관 방식이나 상태를 바꿔보세요.
+            ⚠️ 선택한 <strong style={{ color: 'var(--orange-600)' }}>보관 방식·상태</strong> 조합은 이 식재료의 기준 보관 기간이 없어 D-day가 표시되지 않습니다. 보관 방식이나 상태를 바꿔보세요.
           </div>
         )}
 

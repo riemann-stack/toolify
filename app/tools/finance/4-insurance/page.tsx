@@ -63,7 +63,7 @@ export default function FourInsurancePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />4대보험 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -83,7 +83,7 @@ export default function FourInsurancePage() {
 
         {/* ── 1. 2026 요율 한눈에 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             2026년 4대보험 요율 한눈에 보기
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -97,18 +97,18 @@ export default function FourInsurancePage() {
               </thead>
               <tbody>
                 {[
-                  { n: '국민연금',          c: '#0EA5E9', t: `${R26.pension.total}%`,  e: `${R26.pension.employee}%`,  r: `${R26.pension.employer}%` },
-                  { n: '건강보험',          c: '#DC2626', t: `${R26.health.total}%`, e: `${R26.health.employee}%`, r: `${R26.health.employer}%` },
-                  { n: '장기요양보험*',     c: '#EA580C', t: `${R26.ltc.rateOfSalary}%`, e: `${R26.ltc.employee}%`, r: `${R26.ltc.employer}%` },
-                  { n: '고용보험 (실업급여)', c: '#0891B2', t: `${Math.round((R26.unemp.employee + R26.unemp.employer) * 1e4) / 1e4}%`,  e: `${R26.unemp.employee}%`,  r: `${R26.unemp.employer}%` },
-                  { n: '고용보험 (사업주 추가)', c: '#0891B2', t: `${R26.unemp.extra.under150}~${R26.unemp.extra.over1000}%`, e: '0%', r: `${R26.unemp.extra.under150}~${R26.unemp.extra.over1000}%` },
-                  { n: '산재보험',          c: '#A16207', t: `업종별 ${WC_MIN}~${WC_MAX}% 등`, e: '0%', r: '100%' },
+                  { n: '국민연금',          c: 'var(--sky-500)', t: `${R26.pension.total}%`,  e: `${R26.pension.employee}%`,  r: `${R26.pension.employer}%` },
+                  { n: '건강보험',          c: 'var(--red-600)', t: `${R26.health.total}%`, e: `${R26.health.employee}%`, r: `${R26.health.employer}%` },
+                  { n: '장기요양보험*',     c: 'var(--orange-600)', t: `${R26.ltc.rateOfSalary}%`, e: `${R26.ltc.employee}%`, r: `${R26.ltc.employer}%` },
+                  { n: '고용보험 (실업급여)', c: 'var(--cyan-600)', t: `${Math.round((R26.unemp.employee + R26.unemp.employer) * 1e4) / 1e4}%`,  e: `${R26.unemp.employee}%`,  r: `${R26.unemp.employer}%` },
+                  { n: '고용보험 (사업주 추가)', c: 'var(--cyan-600)', t: `${R26.unemp.extra.under150}~${R26.unemp.extra.over1000}%`, e: '0%', r: `${R26.unemp.extra.under150}~${R26.unemp.extra.over1000}%` },
+                  { n: '산재보험',          c: 'var(--yellow-700)', t: `업종별 ${WC_MIN}~${WC_MAX}% 등`, e: '0%', r: '100%' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, boxShadow: `inset 3px 0 0 0 ${r.c}`, paddingLeft: 16 }}>{r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.e}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.e}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
                   </tr>
                 ))}
               </tbody>
@@ -122,13 +122,13 @@ export default function FourInsurancePage() {
 
         {/* ── 2. 2026 변경사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             2026년 4대보험 변경사항
           </h2>
           <div style={{
-            background: 'rgba(14,165,233,0.05)',
+            background: 'color-mix(in srgb, var(--accent) 5%, transparent)',
             border: '1px solid var(--accent)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
             fontSize: '13px',
             color: 'var(--text)',
@@ -148,18 +148,18 @@ export default function FourInsurancePage() {
 
         {/* ── 3. 보험별 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             보험별 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { n: '국민연금',     c: '#0EA5E9', d: `만 60세까지 가입 (수령 만 65세부터). 노령·유족·장애연금 보장. 기준소득월액 ${man(PB.min)}~${man(PB.max)}원(${PB_LABEL}).` },
-              { n: '건강보험',     c: '#DC2626', d: '직장가입자(사업장 통해)·지역가입자(자영업자). 본인부담금 외 의료 혜택. 피부양자 등록 가능.' },
-              { n: '장기요양보험', c: '#EA580C', d: '65세 이상·노인성 질병 환자 대상. 건강보험료에 자동 부과. 방문요양·요양시설 지원.' },
-              { n: '고용보험',     c: '#0891B2', d: '실업급여(비자발 퇴사 90~270일), 출산휴가급여·육아휴직급여, 국민내일배움카드.' },
-              { n: '산재보험',     c: '#A16207', d: '100% 사업주 부담. 업무상 재해·질병 보장. 출퇴근재해 포함(2018년~).' },
+              { n: '국민연금',     c: 'var(--sky-500)', d: `만 60세까지 가입 (수령 만 65세부터). 노령·유족·장애연금 보장. 기준소득월액 ${man(PB.min)}~${man(PB.max)}원(${PB_LABEL}).` },
+              { n: '건강보험',     c: 'var(--red-600)', d: '직장가입자(사업장 통해)·지역가입자(자영업자). 본인부담금 외 의료 혜택. 피부양자 등록 가능.' },
+              { n: '장기요양보험', c: 'var(--orange-600)', d: '65세 이상·노인성 질병 환자 대상. 건강보험료에 자동 부과. 방문요양·요양시설 지원.' },
+              { n: '고용보험',     c: 'var(--cyan-600)', d: '실업급여(비자발 퇴사 90~270일), 출산휴가급여·육아휴직급여, 국민내일배움카드.' },
+              { n: '산재보험',     c: 'var(--yellow-700)', d: '100% 사업주 부담. 업무상 재해·질병 보장. 출퇴근재해 포함(2018년~).' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.n}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
@@ -169,7 +169,7 @@ export default function FourInsurancePage() {
 
         {/* ── 4. 직원 1명 채용 시 회사 부담 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
             직원 1명 채용 시 회사 실제 부담
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.6 }}>
@@ -196,7 +196,7 @@ export default function FourInsurancePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: r.a ? 'var(--accent-dim)' : (i % 2 === 0 ? 'transparent' : 'var(--bg2)') }}>
                     <td style={{ padding: '10px 12px', color: r.a ? 'var(--accent-ink)' : 'var(--text)', fontWeight: r.a ? 800 : 600 }}>{r.i}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.a ? 'var(--accent-ink)' : 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: r.a ? 800 : 700, fontSize: r.a ? 14 : 13 }}>{r.v}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.a ? 'var(--accent-ink)' : 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: r.a ? 800 : 700, fontSize: r.a ? 14 : 13 }}>{r.v}</td>
                   </tr>
                 ))}
               </tbody>
@@ -209,48 +209,48 @@ export default function FourInsurancePage() {
 
         {/* ── 5. 두루누리 지원 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             두루누리 사회보험료 지원
           </h2>
           <div style={{
             background: 'rgba(16,185,129,0.06)',
-            border: '1px solid #059669',
-            borderRadius: '12px',
+            border: '1px solid var(--emerald-600)',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 1.95,
           }}>
-            <p style={{ fontWeight: 700, color: '#059669', marginBottom: 10 }}>대상 조건</p>
+            <p style={{ fontWeight: 700, color: 'var(--emerald-600)', marginBottom: 10 }}>대상 조건</p>
             <ul style={{ paddingLeft: 20, margin: 0, color: 'var(--muted)' }}>
               <li>사업장 근로자 <strong style={{ color: 'var(--text)' }}>10인 미만</strong></li>
               <li>월 평균 보수 <strong style={{ color: 'var(--text)' }}>270만원 미만</strong></li>
               <li>입사일 직전 6개월간 고용 이력 없음</li>
               <li>재산 6억 이하, 종합소득 4,300만 이하</li>
             </ul>
-            <p style={{ fontWeight: 700, color: '#059669', marginTop: 12, marginBottom: 6 }}>지원 내용</p>
+            <p style={{ fontWeight: 700, color: 'var(--emerald-600)', marginTop: 12, marginBottom: 6 }}>지원 내용</p>
             <p style={{ color: 'var(--muted)' }}><strong style={{ color: 'var(--text)' }}>국민연금·고용보험 최대 80% 지원</strong>, 36개월간</p>
-            <p style={{ fontWeight: 700, color: '#059669', marginTop: 12, marginBottom: 6 }}>신청</p>
+            <p style={{ fontWeight: 700, color: 'var(--emerald-600)', marginTop: 12, marginBottom: 6 }}>신청</p>
             <p style={{ color: 'var(--muted)' }}>4대보험 취득신고 시 동시 신청 · 국민연금공단 <strong style={{ color: 'var(--text)' }}>1355</strong></p>
           </div>
         </div>
 
         {/* ── 6. 알바 의무 가입 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             알바 4대보험 의무 가입 기준
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#059669', fontWeight: 700, marginBottom: 8 }}>✅ 가입 의무</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--emerald-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--emerald-600)', fontWeight: 700, marginBottom: 8 }}>✅ 가입 의무</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>1개월 이상 근무 + 월 60시간 이상 → 국민·건강·고용 의무</li>
                 <li>주 15시간 이상 → 주휴수당 + 고용보험 의무</li>
                 <li>산재보험은 모든 근로자 의무 (시간 무관)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>❌ 미가입 가능</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--orange-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--orange-600)', fontWeight: 700, marginBottom: 8 }}>❌ 미가입 가능</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>1개월 미만 단기 근무</li>
                 <li>월 60시간 미만 (4대보험 일부 면제)</li>
@@ -262,12 +262,12 @@ export default function FourInsurancePage() {
 
         {/* ── 7. 프리랜서 vs 4대보험 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             프리랜서 3.3% vs 근로자 4대보험 차이
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'rgba(155,89,182,0.05)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#9333EA', fontWeight: 700, marginBottom: 8 }}>프리랜서 (사업소득자)</p>
+            <div style={{ background: 'rgba(155,89,182,0.05)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--purple-600)', fontWeight: 700, marginBottom: 8 }}>프리랜서 (사업소득자)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>원천징수 3.3% (사업소득세 3% + 지방세 0.3%)</li>
                 <li>5월 종합소득세 신고 의무</li>
@@ -276,7 +276,7 @@ export default function FourInsurancePage() {
                 <li>실업급여·산재 보장 X (특수형태근로자 일부 적용)</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(14,165,233,0.04)', border: '1px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'color-mix(in srgb, var(--accent) 4%, transparent)', border: '1px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>근로자 (4대보험)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>4대보험 약 9.7% 공제</li>
@@ -289,14 +289,14 @@ export default function FourInsurancePage() {
           <div style={{
             background: 'rgba(220,38,38,0.05)',
             border: '1px solid rgba(220,38,38,0.25)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '12px 16px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⚠️ <strong style={{ color: '#DC2626' }}>위장도급 주의:</strong> 실질이 근로자인데 프리랜서 계약 = 법 위반.
+            ⚠️ <strong style={{ color: 'var(--red-600)' }}>위장도급 주의:</strong> 실질이 근로자인데 프리랜서 계약 = 법 위반.
             의심 시 고용노동부 <strong style={{ color: 'var(--text)' }}>1350</strong> 또는 노무사 상담을 권장합니다.
           </div>
         </div>
@@ -306,13 +306,13 @@ export default function FourInsurancePage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -327,7 +327,7 @@ export default function FourInsurancePage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -347,7 +347,7 @@ export default function FourInsurancePage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

@@ -483,7 +483,7 @@ function SampleSparkline({ samples }: { samples: number[] }) {
       <div style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 6, textAlign: 'center' }}>
         샘플 {samples.length}회 시계열 (낮을수록 좋음)
       </div>
-      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 80, background: 'var(--bg3)', borderRadius: 8 }}>
+      <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 80, background: 'var(--bg3)', borderRadius: 'var(--radius-s)' }}>
         <polyline
           points={pts.join(' ')}
           fill="none"

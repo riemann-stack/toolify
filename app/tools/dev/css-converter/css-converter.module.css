@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -17,7 +17,7 @@
   margin-bottom: 14px;
 }
 .cardTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -35,20 +35,20 @@
   margin-bottom: 16px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tab {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
   transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.3;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -81,11 +81,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   box-sizing: border-box;
   outline: none;
   transition: border-color 0.15s;
@@ -95,11 +95,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   box-sizing: border-box;
   outline: none;
   cursor: pointer;
@@ -114,13 +114,13 @@
 .unitBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 7px 16px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .unitBtn:hover { color: var(--text); }
@@ -143,12 +143,12 @@
 .presetBtn {
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .presetBtn:hover { color: var(--accent); border-color: var(--accent); }
@@ -168,7 +168,7 @@
   display: flex;
   justify-content: space-between;
   align-items: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .configToggle:hover { color: var(--text); }
 }
@@ -209,7 +209,7 @@
   padding: 7px 10px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   min-width: 0;
 }
@@ -254,7 +254,7 @@
   border-left: 3px solid var(--accent);
 }
 .codeCell {
-  font-family: 'Fira Code', 'Consolas', monospace;
+  font-family: var(--font-mono);
   background: var(--bg3);
   border-radius: 6px;
   padding: 4px 10px;
@@ -263,13 +263,13 @@
   display: inline-block;
 }
 .unitCell {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--muted);
   font-size: 13px;
 }
 .valCell {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   font-size: 15px;
@@ -288,7 +288,7 @@
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -303,7 +303,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px 16px;
-  font-family: 'Fira Code', 'Consolas', monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
@@ -358,11 +358,11 @@
 .summaryLine {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 12px;
   padding: 10px 14px;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   border-left: 2px solid var(--accent);
 }
 
@@ -378,7 +378,7 @@
   padding: 3px 9px;
   border-radius: 6px;
   font-size: 11px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .badgeOk {
@@ -407,7 +407,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -423,12 +423,12 @@
   flex: 1;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .toggleBtnActive {
   background: var(--bg2);
@@ -446,7 +446,7 @@
   padding-bottom: 11px;
   color: var(--muted);
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 
@@ -489,7 +489,7 @@
   line-height: 1.7;
   padding: 8px 12px;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   border-left: 2px solid var(--accent);
 }
 
@@ -508,7 +508,7 @@
   margin: 22px 0 20px;
 }
 .sectionTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
@@ -519,12 +519,12 @@
 .resetBtn {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .resetBtn:hover { color: var(--text); border-color: var(--text); }
 }

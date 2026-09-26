@@ -654,17 +654,17 @@ export default function VocalRangeClient() {
                         background: isCurrent ? `${r.color}15` : 'var(--bg3)',
                         border: `1px solid ${isCurrent ? r.color : 'var(--border)'}`,
                         borderLeft: `4px solid ${r.color}`,
-                        borderRadius: 8, padding: '8px 14px',
+                        borderRadius: 'var(--radius-s)', padding: '8px 14px',
                         display: 'grid', gridTemplateColumns: '1fr auto auto',
                         gap: 10, alignItems: 'center',
-                        fontSize: 13, fontFamily: 'Noto Sans KR, sans-serif',
+                        fontSize: 13, fontFamily: 'var(--font-sans)',
                         opacity: isCurrent ? 1 : 0.7,
                       }}>
                         <span style={{ color: 'var(--text)', fontWeight: isCurrent ? 700 : 600 }}>
                           {r.name}{isCurrent && ' ←'}
                           <small style={{ display: 'block', color: 'var(--muted)', fontSize: 11, fontWeight: 400 }}>{r.examples}</small>
                         </span>
-                        <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: 11, color: 'var(--text)' }}>
+                        <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: 11, color: 'var(--text)' }}>
                           {r.low}~{r.high}
                         </span>
                         <span style={{ fontSize: 11, color: 'var(--muted)' }}>{r.gender === 'male' ? '♂' : r.gender === 'female' ? '♀' : '·'}</span>

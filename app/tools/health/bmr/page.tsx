@@ -66,7 +66,7 @@ export default function BmrPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />기초대사량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -82,7 +82,7 @@ export default function BmrPage() {
 
         {/* ── 1. BMR과 TDEE란? (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             기초대사량(BMR)과 TDEE란?
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -92,23 +92,23 @@ export default function BmrPage() {
           </p>
 
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '16px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>BMR</p>
-              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>기초대사량</p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>기초대사량</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 완전한 안정 상태에서 생명 유지에 필요한 최소 칼로리. 아무것도 안 해도 소모됩니다.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: '12px', padding: '18px 20px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 'var(--radius-m)', padding: '18px 20px' }}>
               <p style={{ fontSize: '12px', color: '#0891B2', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>TDEE</p>
-              <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>총 일일 에너지 소비량</p>
+              <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>총 일일 에너지 소비량</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
                 BMR에 활동량을 반영한 <strong style={{ color: 'var(--text)' }}>하루 실제 소비 칼로리</strong>. 다이어트·식단 설계의 기준이 됩니다.
               </p>
             </div>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
               💡 <strong style={{ color: 'var(--text)' }}>쉽게 이해하기:</strong> BMR은 자동차가 주차 중에도 소모하는 연료(엔진 공회전)이고,
               TDEE는 실제 주행거리에 따른 총 연료 소비량입니다.
@@ -119,7 +119,7 @@ export default function BmrPage() {
 
         {/* ── 2. BMR 4공식 비교 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             BMR 4공식 비교
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -154,7 +154,7 @@ export default function BmrPage() {
 
         {/* ── 3. Harris-Benedict 공식 시각화 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             Harris-Benedict 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -163,12 +163,12 @@ export default function BmrPage() {
           </p>
 
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.3)', borderRadius: '12px', padding: '20px 22px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.3)', borderRadius: 'var(--radius-m)', padding: '20px 22px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <span style={{ fontSize: '18px' }}>👨</span>
                 <span style={{ fontSize: '13px', fontWeight: 700, color: '#0891B2', letterSpacing: '0.04em' }}>남성 BMR 공식</span>
               </div>
-              <p style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2, background: 'var(--bg3)', borderRadius: '8px', padding: '12px 14px', marginBottom: '10px' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--text)', lineHeight: 2, background: 'var(--bg3)', borderRadius: 'var(--radius-s)', padding: '12px 14px', marginBottom: '10px' }}>
                 BMR = 88.362<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (13.397 × 체중<span style={{ color: '#0891B2' }}>kg</span>)<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (4.799 × 키<span style={{ color: '#0891B2' }}>cm</span>)<br />
@@ -180,12 +180,12 @@ export default function BmrPage() {
               </p>
             </div>
 
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,213,0.3)', borderRadius: '12px', padding: '20px 22px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(255,107,213,0.3)', borderRadius: 'var(--radius-m)', padding: '20px 22px' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '14px' }}>
                 <span style={{ fontSize: '18px' }}>👩</span>
                 <span style={{ fontSize: '13px', fontWeight: 700, color: '#FF6BD9', letterSpacing: '0.04em' }}>여성 BMR 공식</span>
               </div>
-              <p style={{ fontFamily: 'monospace', fontSize: '14px', color: 'var(--text)', lineHeight: 2, background: 'var(--bg3)', borderRadius: '8px', padding: '12px 14px', marginBottom: '10px' }}>
+              <p style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--text)', lineHeight: 2, background: 'var(--bg3)', borderRadius: 'var(--radius-s)', padding: '12px 14px', marginBottom: '10px' }}>
                 BMR = 447.593<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (9.247 × 체중<span style={{ color: '#FF6BD9' }}>kg</span>)<br />
                 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;+ (3.098 × 키<span style={{ color: '#FF6BD9' }}>cm</span>)<br />
@@ -201,7 +201,7 @@ export default function BmrPage() {
 
         {/* ── 4. 활동 수준별 TDEE 표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             활동 수준별 TDEE 계산
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -234,7 +234,7 @@ export default function BmrPage() {
             </table>
           </div>
 
-          <div style={{ marginTop: '12px', background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '14px 18px', display: 'flex', gap: '12px' }}>
+          <div style={{ marginTop: '12px', background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: 'var(--radius-m)', padding: '14px 18px', display: 'flex', gap: '12px' }}>
             <span style={{ fontSize: '20px', flexShrink: 0 }}>🏃</span>
             <div>
               <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '4px' }}>마라톤 러너를 위한 팁</p>
@@ -249,7 +249,7 @@ export default function BmrPage() {
 
         {/* ── 5. 정밀 활동 수준 분석 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             정밀 활동 수준 분석 — 5단계의 한계
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -261,7 +261,7 @@ export default function BmrPage() {
             <li>· 직업 활동량(사무·서비스·육체노동) 무시</li>
             <li>· 일일 걸음 수 반영 X</li>
           </ul>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(161,98,7,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', fontWeight: 700, color: '#A16207', marginBottom: '8px' }}>본 도구의 정밀 분석</p>
             <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
               <li>① <strong style={{ color: 'var(--text)' }}>직업 활동 (4단계)</strong> — 사무·서비스·도보·육체노동</li>
@@ -277,7 +277,7 @@ export default function BmrPage() {
 
         {/* ── 6. 운동일/휴식일 칼로리 사이클링 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             운동일/휴식일 칼로리 사이클링
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
@@ -285,7 +285,7 @@ export default function BmrPage() {
             <strong style={{ color: 'var(--text)' }}> 운동일에 더 먹고, 휴식일에 적게 먹는 방식</strong>은 회복·근성장·식단 만족감 모두에 유리합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(16,185,129,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#059669', marginBottom: '6px' }}>✅ 장점</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 운동일 충분한 영양 → 회복·근성장</li>
@@ -294,7 +294,7 @@ export default function BmrPage() {
                 <li>· 호르몬 안정 (장기 지속)</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>⚠️ 주의</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 단순 평균 TDEE 사용 시 운동일 영양 부족</li>
@@ -303,7 +303,7 @@ export default function BmrPage() {
               </ul>
             </div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>
               <strong style={{ color: 'var(--text)' }}>본 도구에서 활용하는 법</strong> — [BMR·TDEE] 탭에서 활동 수준 입력 방식을 <strong style={{ color: 'var(--accent)' }}>「정밀」</strong>로 전환하면 직업·걸음·주간 운동량을 기반으로 <strong style={{ color: 'var(--text)' }}>휴식일 TDEE</strong>와 <strong style={{ color: 'var(--text)' }}>운동일 TDEE</strong>가 자동 분리 계산됩니다.
             </p>
@@ -315,14 +315,14 @@ export default function BmrPage() {
 
         {/* ── 7. 안전 하한선 — 거식증 예방 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             안전 하한선 — 거식증·식이장애 예방
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
             본 도구는 아래 <strong style={{ color: 'var(--text)' }}>🔴 조건</strong>에서 강한 경고를 자동 표시합니다. <strong style={{ color: 'var(--text)' }}>🟡 상황</strong>은 도구가 일일이 잡지 못하므로 스스로 점검하세요 —
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '14px' }}>
-            <div style={{ background: 'rgba(220,38,38,0.06)', border: '2px solid #DC2626', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'rgba(220,38,38,0.06)', border: '2px solid #DC2626', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#DC2626', marginBottom: '6px' }}>🔴 매우 위험 (자동 경고)</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 여성 1,200kcal 미만</li>
@@ -331,7 +331,7 @@ export default function BmrPage() {
                 <li>· 18세 미만 사용</li>
               </ul>
             </div>
-            <div style={{ background: 'rgba(234,88,12,0.06)', border: '1px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'rgba(234,88,12,0.06)', border: '1px solid #EA580C', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>🟡 주의 (직접 점검)</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· TDEE 대비 −20% 이상 장기 지속</li>
@@ -350,7 +350,7 @@ export default function BmrPage() {
 
         {/* ── 8. 목표별 칼로리 가이드 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             목표별 칼로리 설정 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -371,7 +371,7 @@ export default function BmrPage() {
                 content: 'TDEE보다 200~500kcal를 추가 섭취하고 충분한 단백질(체중 1kg당 1.6~2.2g)을 섭취하면 근육 성장에 도움이 됩니다. 너무 많은 칼로리 잉여는 체지방 증가로 이어집니다.',
               },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}40`, borderRadius: '12px', padding: '16px 20px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}40`, borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: item.color, marginBottom: '6px' }}>{item.title}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>{item.content}</p>
               </div>
@@ -384,11 +384,11 @@ export default function BmrPage() {
 
         {/* ── 9. 스마트워치 vs 공식 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             스마트워치 vs 공식 — 어느 게 정확?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '6px' }}>📐 공식 BMR/TDEE</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 장점: 빠른 추정</li>
@@ -396,7 +396,7 @@ export default function BmrPage() {
                 <li>· 정확도: ±10%</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(155,89,182,0.30)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: '#9333EA', marginBottom: '6px' }}>⌚ Apple/Garmin/Fitbit</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 장점: 실시간·개인화</li>
@@ -431,7 +431,7 @@ export default function BmrPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmi',         icon: '⚖️', name: 'BMI 계산기',                 desc: '체질량지수·키별 정상 체중·허리둘레' },
@@ -444,7 +444,7 @@ export default function BmrPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

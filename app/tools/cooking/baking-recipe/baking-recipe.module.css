@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -32,7 +32,7 @@
   display: block;
   color: var(--accent);
   margin-bottom: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .diffRow { font-size: 12px; color: var(--muted); }
 .diffLink { color: var(--accent); text-decoration: none; }@media (hover: hover) {
@@ -46,7 +46,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 @media (max-width: 480px) {
@@ -55,13 +55,13 @@
 .tab {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -75,11 +75,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   box-sizing: border-box;
   outline: none;
 }
@@ -93,7 +93,7 @@
   padding: 6px 8px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   text-align: right;
 }
@@ -104,13 +104,13 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { background: var(--bg2); color: var(--text); }
@@ -139,7 +139,7 @@
   align-items: center;
   gap: 4px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 70px;
   color: var(--text);
 }@media (hover: hover) {
@@ -190,10 +190,10 @@
   font-size: 10px;
   color: var(--accent);
   font-weight: 700;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .weightCell {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   text-align: right;
   color: var(--muted);
 }
@@ -211,18 +211,18 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px;
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   min-height: 44px;
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copyBtnDone { border-color: #059669; color: #059669; }
+.copyBtnDone { border-color: var(--emerald-600); color: var(--emerald-600); }
 
 /* ── 굽기 가이드 ── */
 .bakeGrid {
@@ -249,7 +249,7 @@
   letter-spacing: 0.04em;
 }
 .bakeValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -262,7 +262,7 @@
   padding: 10px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
 }
 
 /* ── 식감 보정 ── */
@@ -277,12 +277,12 @@
 .adjustBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   font-size: 12px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
   min-height: 44px;
 }@media (hover: hover) {
@@ -292,12 +292,12 @@
   grid-column: 1 / -1;
   background: transparent;
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .adjustBtnReset:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -312,12 +312,12 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 18px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
   white-space: nowrap;
 }
@@ -336,7 +336,7 @@
   padding: 10px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
 }
 .savedIcon { font-size: 20px; }
 .savedInfo { flex: 1; display: flex; flex-direction: column; }
@@ -351,7 +351,7 @@
   font-size: 11px;
   font-weight: 600;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 32px;
 }@media (hover: hover) {
   .loadBtn:hover { background: var(--accent-strong); color: #ffffff; }
@@ -364,7 +364,7 @@
   cursor: pointer;
   padding: 4px 8px;
 }@media (hover: hover) {
-  .removeBtn:hover { color: #DC2626; }
+  .removeBtn:hover { color: var(--red-600); }
 }
 .savedEmpty {
   margin: 12px 0 0;
@@ -384,7 +384,7 @@
 }
 .diagOk {
   font-size: 14px;
-  color: #059669;
+  color: var(--emerald-600);
   margin: 0;
   text-align: center;
   padding: 10px;
@@ -404,7 +404,7 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-left-width: 3px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
 }
 .warningItem strong {
   display: block;
@@ -435,7 +435,7 @@
 .predDesc {
   font-size: 12px;
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .predBar {
   width: 100%;
@@ -446,7 +446,7 @@
 }
 .predBarFill {
   height: 100%;
-  background: linear-gradient(to right, var(--accent), #059669);
+  background: linear-gradient(to right, var(--accent), var(--emerald-600));
   border-radius: 3px;
   transition: width 0.3s ease;
 }
@@ -466,7 +466,7 @@
   line-height: 1.7;
   margin: 0;
 }
-.moldIntro strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.moldIntro strong { color: var(--accent); font-family: var(--font-sans); }
 
 .moldGrid {
   display: grid;
@@ -486,7 +486,7 @@
   align-items: flex-start;
   gap: 4px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   text-align: left;
 }@media (hover: hover) {
@@ -501,7 +501,7 @@
 .moldSpec {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .moldHint {
   margin: 8px 0 0;
@@ -516,7 +516,7 @@
   line-height: 1.7;
   margin: 0 0 6px;
 }
-.moldResult strong { font-family: 'Inter', system-ui, sans-serif; }
+.moldResult strong { font-family: var(--font-sans); }
 .moldDiff {
   font-size: 12px;
   color: var(--muted);
@@ -528,7 +528,7 @@
   padding: 12px 14px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 12px;
   color: var(--text);
 }
@@ -536,7 +536,7 @@
   display: block;
   color: var(--accent);
   margin-bottom: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .moldNote ul {
   margin: 0;
@@ -561,7 +561,7 @@
   border-radius: 10px;
   padding: 14px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
   display: flex;
   flex-direction: column;
@@ -585,12 +585,12 @@
   color: var(--muted);
   line-height: 1.6;
   margin: 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .presetApply {
   font-size: 11px;
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   align-self: flex-end;
 }
 
@@ -598,16 +598,16 @@
 .disclaimer {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
 }
 .disclaimer strong {
   display: block;
-  color: #D97706;
+  color: var(--amber-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

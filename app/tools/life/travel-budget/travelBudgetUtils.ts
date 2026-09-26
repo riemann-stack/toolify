@@ -189,9 +189,9 @@ export const FLIGHT_PRICES: Record<string, Record<Airline, Record<Season, number
 
 /* 스타일·시즌·항공사 메타 */
 export const STYLES: { id: Style; emoji: string; label: string; desc: string; color: string }[] = [
-  { id: 'backpack', emoji: '🎒', label: '배낭여행',  desc: '호스텔·로컬 식당·대중교통',         color: '#0D9488' },
-  { id: 'middle',   emoji: '🧳', label: '중간',      desc: '3~4성 호텔·일반 식당·기본 투어',    color: '#D97706' },
-  { id: 'luxury',   emoji: '🥂', label: '럭셔리',    desc: '5성 호텔·고급 식당·프라이빗 투어',  color: '#DB2777' },
+  { id: 'backpack', emoji: '🎒', label: '배낭여행',  desc: '호스텔·로컬 식당·대중교통',         color: 'var(--teal-600)' },
+  { id: 'middle',   emoji: '🧳', label: '중간',      desc: '3~4성 호텔·일반 식당·기본 투어',    color: 'var(--amber-600)' },
+  { id: 'luxury',   emoji: '🥂', label: '럭셔리',    desc: '5성 호텔·고급 식당·프라이빗 투어',  color: 'var(--pink-600)' },
 ]
 
 export const SEASONS: { id: Season; emoji: string; label: string }[] = [
@@ -250,14 +250,14 @@ export function calcBudget(inp: BudgetInputs): { items: ItemBreakdown[]; subTota
   const nights = Math.max(0, days - 1)
 
   const items: ItemBreakdown[] = [
-    { id: 'flight',    emoji: '✈️', label: '항공권',     perPerson: inp.flight,                total: inp.flight * people,                  isPerson: true,  color: '#0891B2' },
-    { id: 'hotel',     emoji: '🏨', label: `숙박 (${nights}박)`, perPerson: inp.hotel * nights,    total: inp.hotel * nights * people,           isPerson: true,  color: '#EA580C' },
-    { id: 'food',      emoji: '🍽️', label: '식비',       perPerson: inp.food * days,            total: inp.food * days * people,              isPerson: true,  color: '#D97706' },
-    { id: 'transport', emoji: '🚕', label: '교통·투어',  perPerson: inp.transport * days,       total: inp.transport * days * people,         isPerson: true,  color: '#0D9488' },
-    { id: 'shopping',  emoji: '🛍️', label: '쇼핑',       perPerson: inp.shopping / people,      total: inp.shopping,                          isPerson: false, color: '#DB2777' },
-    { id: 'ticket',    emoji: '🎟️', label: '입장권·액티비티', perPerson: inp.ticket / people,    total: inp.ticket,                            isPerson: false, color: '#9B59B6' },
-    { id: 'comm',      emoji: '📱', label: '통신·로밍',   perPerson: inp.comm / people,          total: inp.comm,                              isPerson: false, color: '#059669' },
-    { id: 'insurance', emoji: '🛡️', label: '여행자보험',  perPerson: inp.insurance,              total: inp.insurance * people,                isPerson: true,  color: '#9333EA' },
+    { id: 'flight',    emoji: '✈️', label: '항공권',     perPerson: inp.flight,                total: inp.flight * people,                  isPerson: true,  color: 'var(--cyan-600)' },
+    { id: 'hotel',     emoji: '🏨', label: `숙박 (${nights}박)`, perPerson: inp.hotel * nights,    total: inp.hotel * nights * people,           isPerson: true,  color: 'var(--orange-600)' },
+    { id: 'food',      emoji: '🍽️', label: '식비',       perPerson: inp.food * days,            total: inp.food * days * people,              isPerson: true,  color: 'var(--amber-600)' },
+    { id: 'transport', emoji: '🚕', label: '교통·투어',  perPerson: inp.transport * days,       total: inp.transport * days * people,         isPerson: true,  color: 'var(--teal-600)' },
+    { id: 'shopping',  emoji: '🛍️', label: '쇼핑',       perPerson: inp.shopping / people,      total: inp.shopping,                          isPerson: false, color: 'var(--pink-600)' },
+    { id: 'ticket',    emoji: '🎟️', label: '입장권·액티비티', perPerson: inp.ticket / people,    total: inp.ticket,                            isPerson: false, color: 'var(--amethyst)' },
+    { id: 'comm',      emoji: '📱', label: '통신·로밍',   perPerson: inp.comm / people,          total: inp.comm,                              isPerson: false, color: 'var(--emerald-600)' },
+    { id: 'insurance', emoji: '🛡️', label: '여행자보험',  perPerson: inp.insurance,              total: inp.insurance * people,                isPerson: true,  color: 'var(--purple-600)' },
     { id: 'etc',       emoji: '💵', label: '기타',       perPerson: inp.etc / people,           total: inp.etc,                               isPerson: false, color: '#9B9B9B' },
   ]
 

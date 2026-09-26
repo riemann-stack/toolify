@@ -640,7 +640,7 @@ export default function BloodAlcoholClient() {
               {/* Y축 레이블 */}
               {[0, 0.25, 0.5, 0.75, 1].map((t, i) => (
                 <text key={i} x={padL - 6} y={padT + (1 - t) * plotH + 3}
-                  fill="var(--muted)" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end"
+                  fill="var(--muted)" fontSize="10" textAnchor="end"
                 >
                   {(t * maxBAC).toFixed(2)}
                 </text>
@@ -651,7 +651,7 @@ export default function BloodAlcoholClient() {
                 if (h > maxHours) return null
                 return (
                   <text key={i} x={xFromHour(h)} y={chartH - padB + 14}
-                    fill="var(--muted)" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="middle"
+                    fill="var(--muted)" fontSize="10" textAnchor="middle"
                   >
                     +{h}h
                   </text>
@@ -661,14 +661,14 @@ export default function BloodAlcoholClient() {
               <line x1={padL} x2={chartW - padR} y1={y003} y2={y003}
                 stroke="#EA580C" strokeWidth="1.5" strokeDasharray="4 4" />
               <text x={chartW - padR - 4} y={y003 - 4}
-                fill="#EA580C" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end"
+                fill="#EA580C" fontSize="10" textAnchor="end"
               >
                 0.03 면허정지
               </text>
               <line x1={padL} x2={chartW - padR} y1={y008} y2={y008}
                 stroke="#DC2626" strokeWidth="1.5" strokeDasharray="4 4" />
               <text x={chartW - padR - 4} y={y008 - 4}
-                fill="#DC2626" fontSize="10" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end"
+                fill="#DC2626" fontSize="10" textAnchor="end"
               >
                 0.08 면허취소
               </text>
@@ -1077,11 +1077,11 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
           {/* SVG 곡선 */}
           <div className={s.card}>
             <span className={s.cardLabel}>BAC 누적 곡선</span>
-            <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 200, display: 'block', background: 'var(--bg3)', borderRadius: 8 }}>
+            <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 200, display: 'block', background: 'var(--bg3)', borderRadius: 'var(--radius-s)' }}>
               {[BAC_SUSPEND, BAC_REVOKE].map(t => (
                 <g key={t}>
                   <line x1={P} x2={W - P} y1={ys(t)} y2={ys(t)} stroke={t === BAC_REVOKE ? '#DC2626' : '#EA580C'} strokeWidth="1.5" strokeDasharray="4 4" />
-                  <text x={W - P - 4} y={ys(t) - 4} fill={t === BAC_REVOKE ? '#DC2626' : '#EA580C'} fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{t === BAC_REVOKE ? '0.08 취소' : '0.03 정지'}</text>
+                  <text x={W - P - 4} y={ys(t) - 4} fill={t === BAC_REVOKE ? '#DC2626' : '#EA580C'} fontSize="10" textAnchor="end">{t === BAC_REVOKE ? '0.08 취소' : '0.03 정지'}</text>
                 </g>
               ))}
               {/* 자리별 영역 */}
@@ -1114,7 +1114,7 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
                       <tr key={ses.id}>
                         <td>{idx + 1}차</td>
                         <td>{utilPad2(ses.startH)}:{utilPad2(ses.startM)}~{utilPad2(ses.endH)}:{utilPad2(ses.endM)}</td>
-                        <td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 400 }}>
+                        <td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)', fontWeight: 400 }}>
                           {ses.drinks.map(d => d.name || '?').join(', ')}
                         </td>
                         <td>{grams.toFixed(1)}</td>
@@ -1179,15 +1179,15 @@ function GuideTab() {
               </tr>
             </thead>
             <tbody>
-              <tr><td>0.00~0.02</td><td style={{ color: '#059669' }}>정상</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>거의 영향 없음</td></tr>
-              <tr><td>0.02~0.03</td><td style={{ color: '#059669' }}>단속 기준 미만</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>약간 어지러움·기분 상승</td></tr>
-              <tr><td style={{ color: '#EA580C' }}>0.03~0.05</td><td style={{ color: '#EA580C' }}>일반 정지 ❌</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>판단력 약간 ↓</td></tr>
-              <tr><td>0.05~0.08</td><td style={{ color: '#EA580C' }}>정지</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>운동 능력 ↓·반응 속도 ↓</td></tr>
-              <tr><td style={{ color: '#DC2626' }}>0.08~0.10</td><td style={{ color: '#DC2626' }}>취소 ❌</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>명확한 인지 장애</td></tr>
-              <tr><td>0.10~0.20</td><td style={{ color: '#DC2626' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>균형 잃음·언어 둔화</td></tr>
-              <tr><td>0.20~0.30</td><td style={{ color: '#DC2626' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>의식 혼탁·구토</td></tr>
-              <tr><td>0.30~0.40</td><td style={{ color: '#FF3E3E' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR', color: '#DC2626', fontWeight: 700 }}>의식 상실 위험 ⚠️</td></tr>
-              <tr><td style={{ color: '#FF3E3E' }}>0.40+</td><td style={{ color: '#FF3E3E' }}>응급</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR', color: '#FF3E3E', fontWeight: 700 }}>사망 가능성 🚨</td></tr>
+              <tr><td>0.00~0.02</td><td style={{ color: '#059669' }}>정상</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>거의 영향 없음</td></tr>
+              <tr><td>0.02~0.03</td><td style={{ color: '#059669' }}>단속 기준 미만</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>약간 어지러움·기분 상승</td></tr>
+              <tr><td style={{ color: '#EA580C' }}>0.03~0.05</td><td style={{ color: '#EA580C' }}>일반 정지 ❌</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>판단력 약간 ↓</td></tr>
+              <tr><td>0.05~0.08</td><td style={{ color: '#EA580C' }}>정지</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>운동 능력 ↓·반응 속도 ↓</td></tr>
+              <tr><td style={{ color: '#DC2626' }}>0.08~0.10</td><td style={{ color: '#DC2626' }}>취소 ❌</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>명확한 인지 장애</td></tr>
+              <tr><td>0.10~0.20</td><td style={{ color: '#DC2626' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>균형 잃음·언어 둔화</td></tr>
+              <tr><td>0.20~0.30</td><td style={{ color: '#DC2626' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>의식 혼탁·구토</td></tr>
+              <tr><td>0.30~0.40</td><td style={{ color: '#FF3E3E' }}>취소</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)', color: '#DC2626', fontWeight: 700 }}>의식 상실 위험 ⚠️</td></tr>
+              <tr><td style={{ color: '#FF3E3E' }}>0.40+</td><td style={{ color: '#FF3E3E' }}>응급</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)', color: '#FF3E3E', fontWeight: 700 }}>사망 가능성 🚨</td></tr>
             </tbody>
           </table>
         </div>
@@ -1207,10 +1207,10 @@ function GuideTab() {
               </tr>
             </thead>
             <tbody>
-              <tr><td>일반 면허</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>자가용</td></tr>
-              <tr><td>영업용 (택시·버스·화물)</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>법적 기준 동일 + 자격정지·해고 등 추가 제재</td></tr>
-              <tr><td>자전거</td><td>0.03</td><td>—</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>{fmtLawDate(BICYCLE_PM_FINES.bicycle.since, 'dot')}부터 범칙금 {fmtManwonWon(BICYCLE_PM_FINES.bicycle.fine)} (측정 불응 {fmtManwonWon(BICYCLE_PM_FINES.bicycle.refusal)})</td></tr>
-              <tr><td>전동킥보드</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'Noto Sans KR' }}>{fmtLawDate(BICYCLE_PM_FINES.pm.since, 'dot')}부터 범칙금 {fmtManwonWon(BICYCLE_PM_FINES.pm.fine)} (측정 불응 {fmtManwonWon(BICYCLE_PM_FINES.pm.refusal)}) + 운전면허 정지·취소</td></tr>
+              <tr><td>일반 면허</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>자가용</td></tr>
+              <tr><td>영업용 (택시·버스·화물)</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>법적 기준 동일 + 자격정지·해고 등 추가 제재</td></tr>
+              <tr><td>자전거</td><td>0.03</td><td>—</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>{fmtLawDate(BICYCLE_PM_FINES.bicycle.since, 'dot')}부터 범칙금 {fmtManwonWon(BICYCLE_PM_FINES.bicycle.fine)} (측정 불응 {fmtManwonWon(BICYCLE_PM_FINES.bicycle.refusal)})</td></tr>
+              <tr><td>전동킥보드</td><td>0.03</td><td>0.08</td><td style={{ textAlign: 'left', fontFamily: 'var(--font-sans)' }}>{fmtLawDate(BICYCLE_PM_FINES.pm.since, 'dot')}부터 범칙금 {fmtManwonWon(BICYCLE_PM_FINES.pm.fine)} (측정 불응 {fmtManwonWon(BICYCLE_PM_FINES.pm.refusal)}) + 운전면허 정지·취소</td></tr>
             </tbody>
           </table>
         </div>

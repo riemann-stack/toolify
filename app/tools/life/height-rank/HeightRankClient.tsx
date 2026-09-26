@@ -49,7 +49,7 @@ function BellCurve({ mean, sd, height }: { mean: number; sd: number; height: num
       <circle cx={hPx} cy={hY} r="4" fill="var(--danger)" />
       {[mean - 2 * sd, mean, mean + 2 * sd].map((tick, i) => (
         <text key={i} x={xToPx(tick)} y={H - 1} textAnchor="middle"
-          fontSize="9" fill="var(--muted)" fontFamily="Inter, sans-serif">
+          fontSize="9" fill="var(--muted)">
           {tick.toFixed(0)}
         </text>
       ))}

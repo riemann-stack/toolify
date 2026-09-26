@@ -8,7 +8,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 480px) {
@@ -17,11 +17,11 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -38,7 +38,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -67,7 +67,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 채널 선택 ── */
@@ -86,7 +86,7 @@
   padding: 11px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -114,14 +114,14 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 22px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
   transition: border-color 0.2s, box-shadow 0.2s;
 }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
-.numInput:focus { border-color: rgba(14,165,233,0.5); box-shadow: 0 0 0 3px rgba(14,165,233,0.14); }
+.numInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); }
 .numInput::-webkit-outer-spin-button,
 .numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .numInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -133,14 +133,14 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;       /* iOS 줌 방지 */
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
-.smallInput:focus { border-color: rgba(14,165,233,0.5); }
+.smallInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .smallInput::-webkit-outer-spin-button,
 .smallInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -152,27 +152,27 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
-.textInput:focus { border-color: rgba(14,165,233,0.5); }
+.textInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 
 .unit {
   font-size: 13px;
   color: var(--muted);
   flex-shrink: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .koreanLabel {
   font-size: 12px;
   color: var(--accent);
   margin-top: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -181,7 +181,7 @@
   display: inline-flex;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 3px;
   gap: 2px;
   margin-bottom: 10px;
@@ -189,11 +189,11 @@
 .miniBtn {
   background: transparent;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 14px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -232,14 +232,14 @@
   border-radius: 6px;
   padding: 6px 8px;
   font-size: 13px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
   box-sizing: border-box;
 }
 .ingRow td input[type=text] {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 400;
   font-size: 13px;
 }
@@ -247,7 +247,7 @@
 .ingRow td input[type=number]::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .ingRow td input[type=number] { -moz-appearance: textfield; appearance: textfield; }
 .ingRow td.costCell {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   text-align: right;
@@ -263,13 +263,13 @@
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .ingRemove:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
+  .ingRemove:hover { color: var(--red-600); border-color: rgba(220,38,38,0.4); }
 }
 
 .ingTotalRow td {
   background: var(--accent-dim);
   font-weight: 700;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
   padding-top: 9px;
 }
@@ -278,11 +278,11 @@
 .addBtn {
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   margin-top: 8px;
@@ -308,7 +308,7 @@
   padding: 11px 12px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: left;
@@ -319,7 +319,7 @@
   .appBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .appBtn small {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   font-size: 12px;
@@ -327,18 +327,18 @@
 .appBaemin    { border-color: rgba(16,185,129,0.45); }
 .appCoupang   { border-color: rgba(220,38,38,0.45); }
 .appYogiyo    { border-color: rgba(161,98,7,0.45); }
-.appOwn       { border-color: rgba(14,165,233,0.45); }
-.appBaemin.appActive    { background: rgba(16,185,129,0.18);  border-color: #059669; color: #059669; font-weight: 700; }
-.appCoupang.appActive   { background: rgba(220,38,38,0.18); border-color: #DC2626; color: #DC2626; font-weight: 700; }
-.appYogiyo.appActive    { background: rgba(161,98,7,0.18);   border-color: #A16207; color: #A16207; font-weight: 700; }
+.appOwn       { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.appBaemin.appActive    { background: rgba(16,185,129,0.18);  border-color: var(--emerald-600); color: var(--emerald-600); font-weight: 700; }
+.appCoupang.appActive   { background: rgba(220,38,38,0.18); border-color: var(--red-600); color: var(--red-600); font-weight: 700; }
+.appYogiyo.appActive    { background: rgba(161,98,7,0.18);   border-color: var(--yellow-700); color: var(--yellow-700); font-weight: 700; }
 .appOwn.appActive       { background: var(--accent-dim);      border-color: var(--accent); color: var(--accent); font-weight: 700; }
 .appBtn.appActive small { color: inherit; opacity: 0.85; }
 
 /* ── HERO (원가율 결과) ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.35);
-  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius-card);
   padding: 26px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
@@ -361,16 +361,16 @@
 .heroDualSep { color: var(--muted); font-size: 24px; opacity: 0.4; }
 .heroDualLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .heroDualNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 6vw, 40px);
   font-weight: 800;
   letter-spacing: -1px;
   line-height: 1;
 }
-.heroDualNum.basic { color: #0891B2; }
+.heroDualNum.basic { color: var(--cyan-600); }
 .heroDualNum.real { color: var(--accent); }
-.heroDualNum.warn { color: #EA580C; }
-.heroDualNum.danger { color: #DC2626; }
+.heroDualNum.warn { color: var(--orange-600); }
+.heroDualNum.danger { color: var(--red-600); }
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
   to   { opacity: 1; transform: translateY(0); }
@@ -380,7 +380,7 @@
 .gradeLine {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--text);
@@ -394,16 +394,16 @@
 .gradeBadge {
   display: inline-block;
   padding: 4px 12px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.gradeExcellent { background: rgba(16,185,129,0.15);  color: #059669; }
+.gradeExcellent { background: rgba(16,185,129,0.15);  color: var(--emerald-600); }
 .gradeGood      { background: var(--accent-dim);       color: var(--accent); }
-.gradeAverage   { background: rgba(161,98,7,0.15);   color: #A16207; }
-.gradeWarning   { background: rgba(234,88,12,0.15);  color: #EA580C; }
-.gradeDanger    { background: rgba(220,38,38,0.15); color: #DC2626; }
+.gradeAverage   { background: rgba(161,98,7,0.15);   color: var(--yellow-700); }
+.gradeWarning   { background: rgba(234,88,12,0.15);  color: var(--orange-600); }
+.gradeDanger    { background: rgba(220,38,38,0.15); color: var(--red-600); }
 
 /* ── breakdown 도넛 + 표 ── */
 .breakdownWrap {
@@ -429,7 +429,7 @@
 }
 .donutCenterLabel { font-size: 11px; color: var(--muted); }
 .donutCenterValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 22px;
   color: var(--text);
@@ -447,14 +447,14 @@
   border-bottom: 1px solid var(--border);
 }
 .breakdownTable td:nth-child(2) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   text-align: right;
   white-space: nowrap;
 }
 .breakdownTable td:nth-child(3) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--muted);
   text-align: right;
@@ -501,10 +501,10 @@
   padding: 7px 4px;
   border-bottom: 1px solid var(--border);
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .ingCostRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
@@ -519,9 +519,9 @@
 
 /* ── 실수령액 강조 ── */
 .netCard {
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   text-align: center;
 }
@@ -532,14 +532,14 @@
   letter-spacing: 0.04em;
 }
 .netCardValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(36px, 8vw, 48px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -1px;
   line-height: 1;
 }
-.netCardValue.loss { color: #DC2626; }
+.netCardValue.loss { color: var(--red-600); }
 .netCardSub {
   font-size: 12px;
   color: var(--muted);
@@ -566,7 +566,7 @@
   font-weight: 600;
 }
 .compareTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
@@ -574,7 +574,7 @@
 .compareBaemin td  { background: rgba(16,185,129,0.14); }
 .compareCoupang td { background: rgba(220,38,38,0.14); }
 .compareYogiyo td  { background: rgba(161,98,7,0.14); }
-.compareOwn td     { background: rgba(14,165,233,0.14); }
+.compareOwn td     { background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .compareTable .bestRow td:first-child { border-left: 3px solid var(--accent); padding-left: 8px; }
 .compareTable .bestRow td { color: var(--accent); }
 
@@ -590,7 +590,7 @@
   -webkit-appearance: none;
   height: 4px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   outline: none;
   cursor: pointer;
 }
@@ -610,13 +610,13 @@
 }
 .sliderUp::-webkit-slider-thumb { background: var(--accent); }
 .sliderUp::-moz-range-thumb { background: var(--accent); }
-.sliderDown::-webkit-slider-thumb { background: #DC2626; }
-.sliderDown::-moz-range-thumb { background: #DC2626; }
+.sliderDown::-webkit-slider-thumb { background: var(--red-600); }
+.sliderDown::-moz-range-thumb { background: var(--red-600); }
 .sliderZero::-webkit-slider-thumb { background: var(--muted); }
 .sliderZero::-moz-range-thumb { background: var(--muted); }
 
 .sliderValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
   color: var(--text);
@@ -633,18 +633,18 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .pill:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.pillUp { color: var(--accent); border-color: rgba(14,165,233,0.35); }
-.pillDown { color: #DC2626; border-color: rgba(220,38,38,0.35); }
+.pillUp { color: var(--accent); border-color: color-mix(in srgb, var(--accent) 35%, transparent); }
+.pillDown { color: var(--red-600); border-color: rgba(220,38,38,0.35); }
 
 /* ── 비교 카드 (현재 vs 인상 후) ── */
 .compareGrid {
@@ -658,7 +658,7 @@
 .compareCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
 }
 .compareCardCurrent { border-left: 3px solid var(--muted); }
@@ -673,7 +673,7 @@
 }
 .compareCardRow span:first-child { color: var(--muted); }
 .compareCardRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
@@ -682,9 +682,9 @@
 
 /* ── 월 추가 이익 강조 ── */
 .profitCard {
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .profitLead { font-size: 13px; color: var(--muted); margin-bottom: 10px; }
@@ -701,26 +701,26 @@
 }
 .profitCellLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .profitCellValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.5px;
   color: var(--text);
 }
-.profitCellValue.gain { color: #059669; }
-.profitCellValue.loss { color: #DC2626; }
+.profitCellValue.gain { color: var(--emerald-600); }
+.profitCellValue.loss { color: var(--red-600); }
 
 /* ── 위험 안내 ── */
 .warnBox {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.warnBox strong { color: #EA580C; font-weight: 700; }
+.warnBox strong { color: var(--orange-600); font-weight: 700; }
 
 /* ── 메뉴 등록 행 (월 수익) ── */
 .menuRow {
@@ -752,17 +752,17 @@
 .breakEvenCard {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.25);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .breakEvenLead {
   font-size: 12px;
-  color: #EA580C;
+  color: var(--orange-600);
   font-weight: 700;
   margin-bottom: 10px;
 }
 .breakEvenValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 6vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -775,7 +775,7 @@
   margin-top: 10px;
   line-height: 1.7;
 }
-.breakEvenSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.breakEvenSub strong { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 
 /* ── KPI ── */
 .kpiGrid {
@@ -789,21 +789,21 @@
 .kpiCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 14px;
   text-align: center;
 }
 .kpiLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .kpiValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.5px;
 }
 .kpiValueAccent { color: var(--accent); }
-.kpiValuePos { color: #059669; }
-.kpiValueNeg { color: #DC2626; }
+.kpiValuePos { color: var(--emerald-600); }
+.kpiValueNeg { color: var(--red-600); }
 
 /* ── 추천 가격 카드 ── */
 .priceRecGrid {
@@ -817,14 +817,14 @@
 .priceRecCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 14px;
   text-align: center;
 }
-.priceRecRound { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.priceRecRound { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .priceRecLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; }
 .priceRecValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--accent);
@@ -837,11 +837,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;

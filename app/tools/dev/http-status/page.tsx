@@ -21,7 +21,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -31,14 +31,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -64,7 +64,7 @@ const codeStyle: React.CSSProperties = {
   borderRadius: '4px',
   fontFamily: 'var(--font-mono)',
   fontSize: '13px',
-  color: '#0EA5E9',
+  color: 'var(--sky-500)',
 }
 
 const FAQ_LD = [
@@ -86,7 +86,7 @@ export default function HttpStatusPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />HTTP 상태 코드 검색기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -97,7 +97,7 @@ export default function HttpStatusPage() {
       <div style={{
         background: 'rgba(255, 138, 62, 0.06)',
         border: '1px solid rgba(255, 138, 62, 0.40)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '12px 16px',
         marginBottom: '32px',
       }}>
@@ -146,11 +146,11 @@ export default function HttpStatusPage() {
             <tbody>
               {[
                 ['ℹ️ 1xx', '100~199', 'Informational (정보)', '100, 101, 103', '#888888'],
-                ['✅ 2xx', '200~299', 'Success (성공)', '200, 201, 204, 304', '#0D9488'],
-                ['↪️ 3xx', '300~399', 'Redirect (리다이렉트)', '301, 302, 307, 308', '#0891B2'],
-                ['⚠️ 4xx', '400~499', 'Client Error (클라이언트 오류)', '400, 401, 403, 404, 429', '#D97706'],
-                ['🚨 5xx', '500~599', 'Server Error (서버 오류)', '500, 502, 503, 504', '#DB2777'],
-                ['🔌 비표준', '벤더', 'Cloudflare·nginx 자체 정의', '521, 524, 499', '#9B59B6'],
+                ['✅ 2xx', '200~299', 'Success (성공)', '200, 201, 204, 304', 'var(--teal-600)'],
+                ['↪️ 3xx', '300~399', 'Redirect (리다이렉트)', '301, 302, 307, 308', 'var(--cyan-600)'],
+                ['⚠️ 4xx', '400~499', 'Client Error (클라이언트 오류)', '400, 401, 403, 404, 429', 'var(--amber-600)'],
+                ['🚨 5xx', '500~599', 'Server Error (서버 오류)', '500, 502, 503, 504', 'var(--pink-600)'],
+                ['🔌 비표준', '벤더', 'Cloudflare·nginx 자체 정의', '521, 524, 499', 'var(--amethyst)'],
               ].map((row, i) => (
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: row[4], fontWeight: 700 }}>{row[0]}</td>
@@ -221,7 +221,7 @@ export default function HttpStatusPage() {
                 <tr key={i}>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
                   <td style={{ padding: '8px 10px', color: 'var(--text)', fontSize: 13 }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', color: '#0EA5E9', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{row[2]}</td>
+                  <td style={{ padding: '8px 10px', color: 'var(--sky-500)', fontFamily: 'var(--font-mono)', fontWeight: 700 }}>{row[2]}</td>
                 </tr>
               ))}
             </tbody>
@@ -385,21 +385,21 @@ export default function HttpStatusPage() {
       {/* 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/dev/curl" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/curl" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🌀</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>cURL 변환기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             cURL → fetch·axios·Python·Go
           </p>
         </Link>
-        <Link href="/tools/dev/url-encode" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/url-encode" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔗</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>URL 인코더/디코더</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             인코드·쿼리 편집·추적 정리
           </p>
         </Link>
-        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📋</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>JSON 포맷터</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

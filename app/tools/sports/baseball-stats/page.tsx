@@ -45,7 +45,7 @@ export default function BaseballStatsPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />야구 타율 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -71,15 +71,15 @@ export default function BaseballStatsPage() {
 
         {/* ── 1. 핵심 타격 지표 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             야구 핵심 타격 지표 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -94,7 +94,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 1-1. 타석(PA) vs 타수(AB) 구분 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             타석(PA) vs 타수(AB) — 입력 실수 방지 가이드
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginBottom: '14px' }}>
@@ -140,7 +140,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 2. OPS 수준 평가 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             OPS 수준 평가 기준
           </h2>
           <div className="tableScroll">
@@ -154,15 +154,15 @@ export default function BaseballStatsPage() {
               </thead>
               <tbody>
                 {[
-                  { ops: '1.000+',       lv: '🌟 MVP급',       cls: '#A16207', who: '이정후·트라웃 시즌급' },
-                  { ops: '0.900~1.000',  lv: '✅ 올스타급',     cls: '#0EA5E9', who: 'KBO 상위 5%' },
-                  { ops: '0.800~0.900',  lv: '주전급',          cls: '#059669', who: 'KBO 상위 20%' },
+                  { ops: '1.000+',       lv: '🌟 MVP급',       cls: 'var(--yellow-700)', who: '이정후·트라웃 시즌급' },
+                  { ops: '0.900~1.000',  lv: '✅ 올스타급',     cls: 'var(--sky-500)', who: 'KBO 상위 5%' },
+                  { ops: '0.800~0.900',  lv: '주전급',          cls: 'var(--emerald-600)', who: 'KBO 상위 20%' },
                   { ops: '0.700~0.800',  lv: '평균',            cls: '#B8B8B0', who: '리그 평균 수준' },
-                  { ops: '0.600~0.700',  lv: '🔶 평균 이하',    cls: '#EA580C', who: '백업 후보' },
-                  { ops: '0.600 미만',   lv: '❌ 교체 권장',    cls: '#DC2626', who: '마이너급' },
+                  { ops: '0.600~0.700',  lv: '🔶 평균 이하',    cls: 'var(--orange-600)', who: '백업 후보' },
+                  { ops: '0.600 미만',   lv: '❌ 교체 권장',    cls: 'var(--red-600)', who: '마이너급' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.ops}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.ops}</td>
                     <td style={{ padding: '10px 12px', color: r.cls, fontWeight: 600 }}>{r.lv}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.who}</td>
                   </tr>
@@ -174,15 +174,15 @@ export default function BaseballStatsPage() {
 
         {/* ── 3. 투수 핵심 지표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             투수 핵심 지표
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -199,7 +199,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 3-1. 규정타석·규정이닝 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             규정타석·규정이닝 — 순위표에 오르는 최소 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginBottom: '14px' }}>
@@ -224,7 +224,7 @@ export default function BaseballStatsPage() {
                   { lg: 'NPB', games: '143경기', pa: '143 × 3.1 = 443.3 → 443타석', ip: '143이닝' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.lg}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.lg}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.games}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.pa}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.ip}</td>
@@ -243,19 +243,19 @@ export default function BaseballStatsPage() {
 
         {/* ── 4. 세이버메트릭스 입문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             세이버메트릭스 입문 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             {[
-              { name: 'ISO', kor: '순수 장타율', formula: 'SLG − AVG', tip: '단타 외 장타 비율 측정. 0.200 이상 = 슬러거급.', color: '#A16207' },
-              { name: 'BABIP', kor: '인플레이 타율', formula: '(H − HR) ÷ (AB − K − HR + SF)', tip: '인플레이 타구의 타율. 0.300 평균, 0.350+ 운빨 의심, 0.250- 불운.', color: '#0891B2' },
-              { name: 'wOBA', kor: '가중 출루율', formula: '타격 행위별 가중치 통합', tip: '출루율보다 정확한 타자 가치 측정. 0.370+ 엘리트급.', color: '#0EA5E9' },
-              { name: 'FIP', kor: '수비 무관 ERA', formula: 'HR·BB·K만 사용', tip: 'ERA보다 낮으면 운 나빴음, 높으면 운 좋았음 신호.', color: '#EA580C' },
+              { name: 'ISO', kor: '순수 장타율', formula: 'SLG − AVG', tip: '단타 외 장타 비율 측정. 0.200 이상 = 슬러거급.', color: 'var(--yellow-700)' },
+              { name: 'BABIP', kor: '인플레이 타율', formula: '(H − HR) ÷ (AB − K − HR + SF)', tip: '인플레이 타구의 타율. 0.300 평균, 0.350+ 운빨 의심, 0.250- 불운.', color: 'var(--cyan-600)' },
+              { name: 'wOBA', kor: '가중 출루율', formula: '타격 행위별 가중치 통합', tip: '출루율보다 정확한 타자 가치 측정. 0.370+ 엘리트급.', color: 'var(--sky-500)' },
+              { name: 'FIP', kor: '수비 무관 ERA', formula: 'HR·BB·K만 사용', tip: 'ERA보다 낮으면 운 나빴음, 높으면 운 좋았음 신호.', color: 'var(--orange-600)' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: s.color, marginBottom: 6, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{s.name} <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 400 }}>— {s.kor}</span></p>
-                <p style={{ fontSize: 12, color: 'var(--text)', fontFamily: "'JetBrains Mono', Menlo, monospace", marginBottom: 6, opacity: 0.85 }}>{s.formula}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 14, fontWeight: 700, color: s.color, marginBottom: 6, fontFamily: 'var(--font-sans)' }}>{s.name} <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 400 }}>— {s.kor}</span></p>
+                <p style={{ fontSize: 12, color: 'var(--text)', fontFamily: 'var(--font-mono)', marginBottom: 6, opacity: 0.85 }}>{s.formula}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{s.tip}</p>
               </div>
             ))}
@@ -264,11 +264,11 @@ export default function BaseballStatsPage() {
 
         {/* ── 5. KBO 역대 기록 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             KBO 역대 단일시즌 주요 기록
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '16px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 10 }}>타자</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
                 <li>최다 안타 — <strong>{fmtRecord(REC.hits)}</strong></li>
@@ -277,8 +277,8 @@ export default function BaseballStatsPage() {
                 <li>최고 OPS — <strong>{fmtRecord(REC.ops)}</strong></li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '16px 18px' }}>
-              <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, marginBottom: 10 }}>투수</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cyan-600)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+              <p style={{ fontSize: 13, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 10 }}>투수</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
                 <li>최저 ERA — <strong>{fmtRecord(REC.era)}</strong></li>
                 <li>최다 탈삼진 — <strong>{fmtRecord(REC.strikeouts)}</strong></li>
@@ -294,7 +294,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 6. 자주 검색되는 질문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 검색되는 시나리오
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
@@ -304,9 +304,9 @@ export default function BaseballStatsPage() {
               { q: '30-30 클럽',         a: '시즌 30+ 홈런 + 30+ 도루', sub: 'KBO에서 손에 꼽히는 위업' },
               { q: '퀄리티스타트 (QS)',  a: '선발 6이닝+ / 자책 3점 이하', sub: '선발 투수의 기본 평가 지표' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6, fontWeight: 600 }}>Q. {c.q}</p>
-                <p style={{ fontSize: 16, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: 4, letterSpacing: '-0.3px' }}>{c.a}</p>
+                <p style={{ fontSize: 16, color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)', marginBottom: 4, letterSpacing: '-0.3px' }}>{c.a}</p>
                 <p style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6 }}>{c.sub}</p>
               </div>
             ))}
@@ -323,7 +323,7 @@ export default function BaseballStatsPage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -342,7 +342,7 @@ export default function BaseballStatsPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

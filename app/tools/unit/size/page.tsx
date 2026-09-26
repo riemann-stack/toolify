@@ -36,7 +36,7 @@ export default function SizePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />사이즈 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -47,7 +47,7 @@ export default function SizePage() {
       <div style={{
         background: 'rgba(8,145,178,0.05)',
         border: '1px solid rgba(8,145,178,0.2)',
-        borderRadius: '12px',
+        borderRadius: 'var(--radius-m)',
         padding: '14px 18px',
         marginBottom: '40px',
       }}>
@@ -67,7 +67,7 @@ export default function SizePage() {
 
         {/* ── 1. 카테고리별 측정 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             카테고리별 측정 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -81,7 +81,7 @@ export default function SizePage() {
               { icon: '🧤', name: '장갑',  tip: '엄지를 제외한 손등의 가장 두꺼운 부분(중지 시작점 부근)을 측정.' },
               { icon: '🪢', name: '벨트',  tip: '잘 맞는 바지의 허리 사이즈 + 5cm. 벨트 총 길이 = 허리 + 12~15cm.' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6 }}>
                   <span style={{ fontSize: 18 }}>{g.icon}</span>
                   <span style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700 }}>{g.name}</span>
@@ -94,7 +94,7 @@ export default function SizePage() {
 
         {/* ── 2. 직구 사이트별 사이즈 가이드 위치 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             주요 직구 사이트별 사이즈 가이드 위치
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -119,7 +119,7 @@ export default function SizePage() {
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.n}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, fontSize: 12 }}>{r.u}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, fontSize: 12 }}>{r.u}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.r}</td>
                   </tr>
                 ))}
@@ -133,7 +133,7 @@ export default function SizePage() {
 
         {/* ── 3. 브랜드별 사이즈 특징 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             브랜드별 사이즈 특징 (참고)
           </h2>
           <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6, marginBottom: '12px' }}>
@@ -151,7 +151,7 @@ export default function SizePage() {
                   { n: '뉴발란스',  c: '#059669', d: 'US 표준, 와이드(EE) 모델 별도' },
                   { n: '버켄스탁', c: '#B885DA', d: 'EU 사이즈 표기 — 레귤러·내로우 폭을 따로 고름' },
                 ].map((b, i) => (
-                  <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.c}33`, borderLeft: `3px solid ${b.c}`, borderRadius: 8, padding: '10px 12px' }}>
+                  <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.c}33`, borderLeft: `3px solid ${b.c}`, borderRadius: 'var(--radius-s)', padding: '10px 12px' }}>
                     <p style={{ fontSize: 12, color: b.c, fontWeight: 700, marginBottom: 4 }}>{b.n}</p>
                     <p style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{b.d}</p>
                   </div>
@@ -169,7 +169,7 @@ export default function SizePage() {
                   { n: 'GAP',      c: '#D97706', d: '약간 큰 편 — 정사이즈 또는 0.5 작게' },
                   { n: 'ASOS',     c: '#B885DA', d: '브랜드별 편차 큼 — 측정값 확인 필수' },
                 ].map((b, i) => (
-                  <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.c}33`, borderLeft: `3px solid ${b.c}`, borderRadius: 8, padding: '10px 12px' }}>
+                  <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.c}33`, borderLeft: `3px solid ${b.c}`, borderRadius: 'var(--radius-s)', padding: '10px 12px' }}>
                     <p style={{ fontSize: 12, color: b.c, fontWeight: 700, marginBottom: 4 }}>{b.n}</p>
                     <p style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{b.d}</p>
                   </div>
@@ -181,7 +181,7 @@ export default function SizePage() {
 
         {/* ── 4. 국가별 옷 사이즈 비교표 (남/여 분리) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             국가별 옷 사이즈 비교표
           </h2>
 
@@ -205,10 +205,10 @@ export default function SizePage() {
                   { kr: '115 (XXXL)',u: 'XXL', e: '54', uk: '44', c: '108-112' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.u}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.e}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.uk}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.kr}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.u}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.e}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.uk}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r.c}</td>
                   </tr>
                 ))}
@@ -236,10 +236,10 @@ export default function SizePage() {
                   { kr: '99', u: '10', e: '42', uk: '14', c: '98-104' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.u}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.e}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.uk}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.kr}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.u}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.e}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.uk}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r.c}</td>
                   </tr>
                 ))}
@@ -250,7 +250,7 @@ export default function SizePage() {
 
         {/* ── 5. 신발 사이즈 핵심 변환표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             신발 사이즈 핵심 변환표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
@@ -270,10 +270,10 @@ export default function SizePage() {
               <tbody>
                 {SHOE_M.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.us}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.uk}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.eu}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.kr}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.us}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.uk}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.eu}</td>
                   </tr>
                 ))}
               </tbody>
@@ -293,10 +293,10 @@ export default function SizePage() {
               <tbody>
                 {SHOE_F.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.us}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.uk}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.eu}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.kr}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.us}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.uk}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.eu}</td>
                   </tr>
                 ))}
               </tbody>
@@ -309,7 +309,7 @@ export default function SizePage() {
 
         {/* ── 6. 반지 호수 요약 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             반지 호수 요약표
           </h2>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
@@ -338,10 +338,10 @@ export default function SizePage() {
                   { kr: '25호', inner: '20.2', circ: '63.4', us: '10.5'  },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.kr}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.inner}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.circ}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.us}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.kr}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.inner}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.circ}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r.us}</td>
                   </tr>
                 ))}
               </tbody>
@@ -354,7 +354,7 @@ export default function SizePage() {
 
         {/* ── 7. 직구 실패 줄이기 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             해외 직구 사이즈 실패 줄이는 5가지 방법
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -365,9 +365,9 @@ export default function SizePage() {
               { n: '④', t: '의심스러우면 한 사이즈 크게',          d: '특히 H&M·자라는 거의 항상 한 사이즈 크게 주문.' },
               { n: '⑤', t: '본인 사이즈를 cm로 정확히 측정',       d: '발 길이·가슴·허리·머리 둘레 등 핵심 측정값을 메모해 두면 실패 확률 급감.' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, color: 'var(--accent)', fontWeight: 800 }}>{s.n}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: 18, color: 'var(--accent)', fontWeight: 800 }}>{s.n}</span>
                   <span style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700 }}>{s.t}</span>
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0, marginLeft: 28 }}>{s.d}</p>
@@ -378,7 +378,7 @@ export default function SizePage() {
 
         {/* ── 8. 직구 반품·면세 실전 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             직구 반품·면세 실전
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -391,9 +391,9 @@ export default function SizePage() {
               { n: '③', t: '목록통관 배제 품목 혼재 주의', d: '기준 금액 이하 자가사용물품은 특송업체의 통관목록 제출만으로 수입신고가 생략되지만, 건강기능식품 등 목록통관 배제 품목이 하나라도 섞이면 그 화물 전체가 목록통관에서 배제됩니다. 이때 물품가격에는 발송 국가에서 부과된 세금·현지 운임·보험료가 포함됩니다 (「특송물품 수입통관 사무처리에 관한 고시」 제8조).' },
               { n: '④', t: '반품 정책은 주문 전에 확인', d: '사이즈 실패로 반품·재주문할 계획이라면 위 직구 사이트별 표의 무료 반품 여부를 주문 전에 확인하세요. 반품 배송비가 물품가보다 커지는 경우도 있습니다.' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 }}>
-                  <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 18, color: 'var(--accent)', fontWeight: 800 }}>{s.n}</span>
+                  <span style={{ fontFamily: 'var(--font-sans)', fontSize: 18, color: 'var(--accent)', fontWeight: 800 }}>{s.n}</span>
                   <span style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700 }}>{s.t}</span>
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0, marginLeft: 28 }}>{s.d}</p>
@@ -419,7 +419,7 @@ export default function SizePage() {
 
         {/* ── 10. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/unit/converter',  icon: '📐', name: '단위 변환기',     desc: '길이·무게·온도 통합 변환' },
@@ -430,7 +430,7 @@ export default function SizePage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

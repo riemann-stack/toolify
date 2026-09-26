@@ -81,12 +81,12 @@ export interface ScoreGrade {
 }
 
 export const GRADES: ScoreGrade[] = [
-  { grade: 'S', color: '#A16207', desc: '서울 인기 단지 당첨 가능권 (강남·송파·서초)', minScore: 70 },
-  { grade: 'A', color: '#059669', desc: '서울 일반·수도권 인기 단지 당첨권',          minScore: 60 },
-  { grade: 'B', color: '#0891B2', desc: '수도권 일반·지방 광역시 인기 단지권',          minScore: 50 },
-  { grade: 'C', color: '#D97706', desc: '지방 광역시 일반·중소도시 당첨권',            minScore: 40 },
-  { grade: 'D', color: '#EA580C', desc: '지방 중소도시 + 특별공급 검토 권장',         minScore: 25 },
-  { grade: 'E', color: '#DC2626', desc: '가점 부족 — 특별공급·추첨제 우선 검토',      minScore: 0 },
+  { grade: 'S', color: 'var(--yellow-700)', desc: '서울 인기 단지 당첨 가능권 (강남·송파·서초)', minScore: 70 },
+  { grade: 'A', color: 'var(--emerald-600)', desc: '서울 일반·수도권 인기 단지 당첨권',          minScore: 60 },
+  { grade: 'B', color: 'var(--cyan-600)', desc: '수도권 일반·지방 광역시 인기 단지권',          minScore: 50 },
+  { grade: 'C', color: 'var(--amber-600)', desc: '지방 광역시 일반·중소도시 당첨권',            minScore: 40 },
+  { grade: 'D', color: 'var(--orange-600)', desc: '지방 중소도시 + 특별공급 검토 권장',         minScore: 25 },
+  { grade: 'E', color: 'var(--red-600)', desc: '가점 부족 — 특별공급·추첨제 우선 검토',      minScore: 0 },
 ]
 
 export function getGrade(score: number): ScoreGrade {

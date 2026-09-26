@@ -757,13 +757,13 @@ function FermentationGraph({
 
         {/* 피크 기준선 */}
         <line x1={padL} x2={W - padR} y1={toY(200)} y2={toY(200)}
-          stroke="rgba(14,165,233,0.2)" strokeDasharray="3 4" />
+          stroke="color-mix(in srgb, var(--accent) 20%, transparent)" strokeDasharray="3 4" />
 
         {/* 발효 곡선 */}
         <polyline points={poly} fill="none" stroke="var(--accent)" strokeWidth={2.5} strokeLinejoin="round" />
 
         {/* 피크 마커 */}
-        <circle cx={peakX} cy={peakY} r={6} fill="#059669" stroke="var(--bg2)" strokeWidth={2} />
+        <circle cx={peakX} cy={peakY} r={6} fill="var(--emerald-600)" stroke="var(--bg2)" strokeWidth={2} />
 
         {/* 주요 지점 */}
         {markers.map((m, i) => {
@@ -771,7 +771,7 @@ function FermentationGraph({
           return (
             <g key={i}>
               <circle cx={toX(m.t)} cy={toY(v)} r={3}
-                fill={m.highlight ? '#059669' : 'var(--accent)'} />
+                fill={m.highlight ? 'var(--emerald-600)' : 'var(--accent)'} />
             </g>
           )
         })}

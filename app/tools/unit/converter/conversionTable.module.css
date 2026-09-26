@@ -8,11 +8,11 @@
 .tab {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 7px 13px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   cursor: pointer;
   transition: all 0.15s;
@@ -23,14 +23,14 @@
 .tabActive {
   background: rgba(124,58,237,0.12);
   border-color: rgba(124,58,237,0.45);
-  color: #9333EA;
+  color: var(--purple-600);
 }
 
 .table {
   width: 100%;
   border-collapse: collapse;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .table td {
   padding: 11px 14px;
@@ -43,12 +43,12 @@
   width: 24px;
   text-align: center;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .resultCell {
   text-align: right;
-  color: #9333EA;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--purple-600);
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }

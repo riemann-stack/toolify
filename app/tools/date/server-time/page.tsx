@@ -57,7 +57,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -67,7 +67,7 @@ export default function ServerTimePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="date" />실시간 서버 시간
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -144,7 +144,7 @@ export default function ServerTimePage() {
           </p>
 
           {/* 실사용 스토리 */}
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(13,148,136,0.35)', borderLeft: '3px solid var(--cat-edu)', borderRadius: 14, padding: '18px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(13,148,136,0.35)', borderLeft: '3px solid var(--cat-edu)', borderRadius: 'var(--radius-card)', padding: '18px 20px' }}>
             <p style={{ fontSize: '12px', color: 'var(--cat-edu)', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '10px' }}>
               실사용 사례 — 2026 경주 동아마라톤 접수 성공 (2026. 05. 26. 19시)
             </p>
@@ -173,8 +173,8 @@ export default function ServerTimePage() {
               { step: '3', title: '오프셋 계산', content: '서버 시간 + RTT/2(단방향 지연 추정) − 클라이언트 시간 = 오프셋. 이 값을 매 프레임 현재 시간에 더해 표시합니다.' },
               { step: '4', title: '5분마다 재동기화', content: '브라우저 슬립·시계 드리프트를 보정하기 위해 자동 재측정. 「↻ 다시 동기화」 버튼으로 수동 실행도 가능.' },
             ].map((item) => (
-              <div key={item.step} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', gap: '14px' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', minWidth: '24px' }}>{item.step}</span>
+              <div key={item.step} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', display: 'flex', gap: '14px' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', minWidth: '24px' }}>{item.step}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>{item.title}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{item.content}</p>
@@ -194,7 +194,7 @@ export default function ServerTimePage() {
             본 도구로 오차가 ±1초 이상 나면 OS 시계를 강제 동기화하세요. 한국에서는 <strong style={{ color: 'var(--text)' }}>한국표준과학연구원(KRISS) NTP 서버 (ntp.kriss.re.kr)</strong>가 가장 정확합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cat-health)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cat-health)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 6 }}>🪟 Windows</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 시간 및 언어 → 날짜 및 시간 → 「지금 동기화」<br/>
@@ -202,7 +202,7 @@ export default function ServerTimePage() {
                 NTP 서버: <strong style={{ color: 'var(--text)' }}>ntp.kriss.re.kr</strong> (KRISS 공식)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 6 }}>🍎 macOS</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 일반 → 날짜 및 시간 → 자동 ON<br/>
@@ -210,7 +210,7 @@ export default function ServerTimePage() {
                 기본: timed 데몬이 수시로 자동 동기화
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--warning)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--warning)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--warning)', fontWeight: 700, marginBottom: 6 }}>📱 Android·iPhone</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 일반 → 날짜 및 시간 → 「자동 설정」 ON<br/>
@@ -241,7 +241,7 @@ export default function ServerTimePage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

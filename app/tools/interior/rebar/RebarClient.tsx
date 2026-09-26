@@ -570,7 +570,7 @@ export default function RebarClient() {
                         )}
                       </>
                     ) : (
-                      <p className={s.truckTrips} style={{ color: '#DB2777' }}>
+                      <p className={s.truckTrips} style={{ color: 'var(--pink-600)' }}>
                         ❌ 길이 초과
                       </p>
                     )}

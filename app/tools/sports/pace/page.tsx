@@ -37,7 +37,7 @@ export default function PacePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />러닝 페이스 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -51,7 +51,7 @@ export default function PacePage() {
 
         {/* ── 1. 페이스 기준표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             페이스별 완주 예상 시간 기준표
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -96,7 +96,7 @@ export default function PacePage() {
 
         {/* ── 2. 트레드밀 시속 ↔ 페이스 변환표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             트레드밀 시속 ↔ 페이스 변환표
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -138,7 +138,7 @@ export default function PacePage() {
 
         {/* ── 3. 거리별 레이스 페이스 전략 (전면 개편) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             📐 거리별 레이스 페이스 전략
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -148,7 +148,7 @@ export default function PacePage() {
             {[
               {
                 d: '5km',
-                color: '#DC2626',
+                color: 'var(--red-600)',
                 strategy: '초반 빠르게 + 끝까지 유지',
                 points: [
                   '0~1km : 목표 페이스보다 5~10초 빠르게 (출발 흥분)',
@@ -159,7 +159,7 @@ export default function PacePage() {
               },
               {
                 d: '10km',
-                color: '#A16207',
+                color: 'var(--yellow-700)',
                 strategy: '일정 페이스 + 후반 스퍼트',
                 points: [
                   '0~2km : 목표 페이스 +3~5초 (워밍업 가속)',
@@ -171,7 +171,7 @@ export default function PacePage() {
               },
               {
                 d: '하프(21.0975km)',
-                color: '#0891B2',
+                color: 'var(--cyan-600)',
                 strategy: '네거티브 스플릿 — 후반에 페이스 ↑',
                 points: [
                   '0~10km (전반) : 목표 페이스 +2~3초 (여유)',
@@ -183,7 +183,7 @@ export default function PacePage() {
               },
               {
                 d: '풀 마라톤(42.195km)',
-                color: '#059669',
+                color: 'var(--emerald-600)',
                 strategy: '3구간 분할 — 절제→유지→집중',
                 points: [
                   '🟢 0~15km : 목표 페이스 +3~5초 (절제 구간) — 신체 에너지 절약',
@@ -195,9 +195,9 @@ export default function PacePage() {
                 ],
               },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${r.color}`, borderRadius: 12, padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${r.color}`, borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: 8, marginBottom: 8 }}>
-                  <span style={{ fontSize: 15, color: r.color, fontWeight: 800, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.d}</span>
+                  <span style={{ fontSize: 15, color: r.color, fontWeight: 800, fontFamily: 'var(--font-sans)' }}>{r.d}</span>
                   <span style={{ fontSize: 12, color: 'var(--text)', fontWeight: 600 }}>{r.strategy}</span>
                 </div>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
@@ -213,7 +213,7 @@ export default function PacePage() {
 
         {/* ── 4. 네거티브 스플릿 전략 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             💡 네거티브 스플릿 전략
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -224,8 +224,8 @@ export default function PacePage() {
               { t: '🟢 장점', items: ['초반 흥분 오버페이스 ↓', '후반 무너짐(속도 ↓) 방지', '심리적 자신감 ↑', '같은 평균 페이스로 더 안정적 완주'] },
               { t: '⚠️ 주의', items: ['충분히 훈련된 러너만 가능', '초보는 일정 페이스 익히기 우선', '날씨·코스에 따라 조정 필요', '전반 너무 느슨하면 후반 만회 어려움'] },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13px', fontWeight: 700, color: i === 0 ? '#059669' : '#EA580C', marginBottom: '8px' }}>{m.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: i === 0 ? 'var(--emerald-600)' : 'var(--orange-600)', marginBottom: '8px' }}>{m.t}</p>
                 <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
                   {m.items.map((it, j) => <li key={j}>{it}</li>)}
                 </ul>
@@ -239,7 +239,7 @@ export default function PacePage() {
 
         {/* ── 5. 한국 인기 페이스 가이드 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🇰🇷 한국 마라톤 인기 목표 페이스
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -268,8 +268,8 @@ export default function PacePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.goal}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.pace}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.kph}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.pace}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.kph}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.lv}</td>
                   </tr>
                 ))}
@@ -280,7 +280,7 @@ export default function PacePage() {
 
         {/* ── 6. 트레드밀 vs 야외 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
             🏃 트레드밀 vs 야외
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -291,7 +291,7 @@ export default function PacePage() {
               { t: '트레드밀이 쉬운 이유', items: ['바람 저항 없음', '벨트가 발을 밀어줌', '온도·습도 일정', '코스 변화 없음 (평지)'] },
               { t: '야외 시뮬 방법', items: ['경사 1~1.5% 설정', '같은 시속도 약 5% 강도 ↑', '본인 페이스 5~10초 더 느리게', '프로그램 인터벌 활용'] },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>{m.t}</p>
                 <ul style={{ paddingLeft: '18px', margin: 0, fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85 }}>
                   {m.items.map((it, j) => <li key={j}>{it}</li>)}
@@ -308,7 +308,7 @@ export default function PacePage() {
 
         {/* ── 4. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/sports/interval-training', icon: '🏃‍♂️', name: '인터벌 훈련 계산기',     desc: 'VDOT·인터벌 페이스·훈련 스케줄' },
@@ -321,7 +321,7 @@ export default function PacePage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

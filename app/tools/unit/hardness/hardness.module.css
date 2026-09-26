@@ -4,11 +4,11 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   box-sizing: border-box;
 }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 .cardLabel {
   display: block;
   font-size: 11px;
@@ -48,11 +48,11 @@
   gap: 1px;
   min-width: 0;
   transition: all 0.12s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) { .scaleBtn:hover { border-color: var(--border-hover); } }
 .scaleName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 800;
   color: var(--text);
@@ -80,9 +80,9 @@
   color: var(--muted);
   margin: 4px 0 0;
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.scaleMeta strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.scaleMeta strong { color: var(--text); font-family: var(--font-sans); }
 
 /* ── 입력 ── */
 .inputRow {
@@ -97,7 +97,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 12px 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 800;
   color: var(--text);
@@ -111,7 +111,7 @@
 .unit {
   font-size: 14px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   flex-shrink: 0;
 }
@@ -122,8 +122,8 @@
   color: var(--warning);
   background: rgba(217,119,6,0.14);
   border: 1px solid rgba(217,119,6,0.30);
-  border-radius: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
 }
 
 .presetRow {
@@ -135,15 +135,15 @@
 .presetBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 11px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .presetBtn small {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-left: 4px;
 }
@@ -160,7 +160,7 @@
 .resCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 14px;
   display: flex;
   flex-direction: column;
@@ -169,7 +169,7 @@
   text-align: center;
 }
 .resCardInput {
-  background: linear-gradient(135deg, rgba(14,165,233,0.18), rgba(16,185,129,0.14));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 18%, transparent), rgba(16,185,129,0.14));
   border-color: var(--accent);
 }
 .resCardDim { opacity: 0.55; }
@@ -180,7 +180,7 @@
   gap: 6px;
 }
 .resName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 800;
   color: var(--muted);
@@ -193,11 +193,11 @@
   background: var(--accent-strong);
   color: #ffffff;
   padding: 1px 6px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
 }
 .resValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(22px, 4.5vw, 30px);
   font-weight: 800;
   color: var(--text);
@@ -214,12 +214,12 @@
 .resFull {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .resRange {
   font-size: 10px;
   color: var(--warning);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 2px;
 }
 
@@ -234,7 +234,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }
 .refRowMatch {
@@ -254,7 +254,7 @@
   line-height: 1.4;
 }
 .refHrc {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   display: flex;
   align-items: baseline;
   gap: 4px;
@@ -278,7 +278,7 @@
   background: var(--accent-strong);
   color: #ffffff;
   padding: 2px 7px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
 @media (max-width: 540px) {
@@ -294,7 +294,7 @@
   gap: 10px;
   align-items: center;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   padding: 6px 4px;
   border-bottom: 1px dashed var(--border);
 }
@@ -304,7 +304,7 @@
   .mohsNote { display: none; }
 }
 .mohsNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
   color: var(--accent);
@@ -312,7 +312,7 @@
 }
 .mohsName { color: var(--text); font-weight: 600; }
 .mohsHv {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--muted);
   font-size: 12px;
 }
@@ -322,9 +322,9 @@
 .shoreCard {
   background: rgba(147, 51, 234, 0.04);
   border: 1px solid rgba(147, 51, 234, 0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .shoreTitle {
   display: block;

@@ -55,11 +55,11 @@ export interface UkClass {
   color: string
 }
 
-const UK_FIRST: UkClass = { abbr: '1st',  name: 'First Class Honours',         color: '#059669' }
-const UK_21: UkClass    = { abbr: '2:1',  name: 'Upper Second (Two-One)',      color: '#0891B2' }
-const UK_22: UkClass    = { abbr: '2:2',  name: 'Lower Second (Two-Two)',      color: '#D97706' }
-const UK_3RD: UkClass   = { abbr: '3rd',  name: 'Third Class Honours',         color: '#EA580C' }
-const UK_FAIL: UkClass  = { abbr: 'Fail', name: 'Fail',                        color: '#DC2626' }
+const UK_FIRST: UkClass = { abbr: '1st',  name: 'First Class Honours',         color: 'var(--emerald-600)' }
+const UK_21: UkClass    = { abbr: '2:1',  name: 'Upper Second (Two-One)',      color: 'var(--cyan-600)' }
+const UK_22: UkClass    = { abbr: '2:2',  name: 'Lower Second (Two-Two)',      color: 'var(--amber-600)' }
+const UK_3RD: UkClass   = { abbr: '3rd',  name: 'Third Class Honours',         color: 'var(--orange-600)' }
+const UK_FAIL: UkClass  = { abbr: 'Fail', name: 'Fail',                        color: 'var(--red-600)' }
 
 /**
  * 한국 학점 → 영국 학위 등급 대략 동등 컷 (1st / 2:1 / 2:2 / 3rd 하한).

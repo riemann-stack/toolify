@@ -6,9 +6,9 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
@@ -23,7 +23,7 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
@@ -31,11 +31,11 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -48,7 +48,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -65,7 +65,7 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: var(--font-sans); }
 
 /* ── 톤 칩 ── */
 .toneRow {
@@ -78,11 +78,11 @@
 .toneBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 7px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
@@ -102,11 +102,11 @@
 .optBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -122,21 +122,21 @@
   padding: 12px 18px;
   font-size: 13px;
   color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(14,165,233,0.18); }
+  .actionBtn:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
 }
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
@@ -153,7 +153,7 @@
   padding: 4px 10px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
 }@media (hover: hover) {
@@ -167,7 +167,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   color: var(--text);
   white-space: pre-wrap;
@@ -181,7 +181,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 14px 16px;
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   overflow-x: auto;
@@ -211,7 +211,7 @@
   padding: 10px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -234,11 +234,11 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
 }
 
@@ -258,7 +258,7 @@
   padding: 12px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -278,11 +278,11 @@
 .formatBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -296,7 +296,7 @@
   gap: 14px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .checkRow label { display: flex; align-items: center; gap: 6px; cursor: pointer; }
 .checkRow input { accent-color: var(--accent); width: 14px; height: 14px; }
@@ -319,7 +319,7 @@
 .previewCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   position: relative;
   transition: transform 0.15s;
@@ -335,12 +335,12 @@
   color: var(--warning);
   font-size: 11px;
   padding: 3px 9px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-weight: 700;
   letter-spacing: 0.04em;
 }
 .previewTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 15px;
   color: var(--text);
@@ -361,12 +361,12 @@
   color: var(--muted);
 }
 .previewPrice {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 14px;
   color: var(--accent);
 }
-.previewRating { color: var(--warning); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.previewRating { color: var(--warning); font-family: var(--font-sans); font-weight: 700; }
 
 /* ── UX 라이팅 시나리오 ── */
 .scenarioGrid {
@@ -384,7 +384,7 @@
   padding: 10px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -398,7 +398,7 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-left: 3px solid var(--cat-art);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 18px;
 }
 .uxRow { padding: 6px 0; font-size: 13px; line-height: 1.7; }
@@ -411,7 +411,7 @@
   display: inline-block;
   min-width: 60px;
   margin-right: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 길이 테스트 ──
@@ -425,11 +425,11 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (max-width: 600px) {
   /* 라벨·글자수·복사를 한 줄에, 본문은 아래 줄 전체 폭으로 */
@@ -447,7 +447,7 @@
   .lenItem .lenText  { grid-area: text; }
 }
 .lenItem .lenLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 12px;
   color: var(--accent);
@@ -455,7 +455,7 @@
 }
 .lenItem .lenText { word-break: break-word; line-height: 1.6; font-size: 13px; }
 .lenItem .lenSize {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   font-size: 11px;
   color: var(--muted);
@@ -480,7 +480,7 @@
   padding: 12px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-width: 0;
 }
 /* 오버플로 테스트 칸은 '넘치는 모습'을 보여주는 것이 목적이므로 강제 줄바꿈하지 않는다.
@@ -529,42 +529,42 @@
 .btnPrimary {
   background: var(--accent-strong);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 16px;
   color: #fff;
   font-size: 13px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .btnSecondary {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 16px;
   color: var(--text);
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .btnGhost {
   background: transparent;
   border: 1px solid var(--accent);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 16px;
   color: var(--accent);
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .btnDanger {
   background: color-mix(in srgb, var(--danger) 14%, transparent);
   border: 1px solid var(--danger);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 16px;
   color: var(--danger);
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 
@@ -577,7 +577,7 @@
 .sliderRow input[type=range] { flex: 1; accent-color: var(--accent); }
 .sliderValue {
   min-width: 70px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   text-align: right;
@@ -587,11 +587,11 @@
 .toggleBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .toggleActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
@@ -602,7 +602,7 @@
   padding: 9px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 12px;
   line-height: 1.75;
   color: var(--muted);

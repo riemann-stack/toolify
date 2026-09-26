@@ -40,8 +40,8 @@ const FAQ_LD = [
   },
 ]
 
-const H2 = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' } as const
-const CARD = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 } as const
+const H2 = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' } as const
+const CARD = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 } as const
 const CODE = { background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)', color: 'var(--text)' } as const
 
 export default function CronPage() {
@@ -50,7 +50,7 @@ export default function CronPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />Cron 표현식 생성기·해석기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -72,7 +72,7 @@ export default function CronPage() {
             표준 cron은 공백으로 구분된 5개 필드로 시각을 표현합니다. 왼쪽부터 분·시·일·월·요일 순서입니다.
           </p>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
             padding: '16px 18px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)', lineHeight: 2, overflowX: 'auto',
           }}>
             <div style={{ whiteSpace: 'pre' }}><span style={{ color: 'var(--accent)' }}>┌─</span> 분    (0-59)</div>
@@ -80,7 +80,7 @@ export default function CronPage() {
             <div style={{ whiteSpace: 'pre' }}><span style={{ color: 'var(--accent)' }}>│ │ ┌─</span> 일  (1-31)</div>
             <div style={{ whiteSpace: 'pre' }}><span style={{ color: 'var(--accent)' }}>│ │ │ ┌─</span> 월 (1-12)</div>
             <div style={{ whiteSpace: 'pre' }}><span style={{ color: 'var(--accent)' }}>│ │ │ │ ┌─</span> 요일 (0-7, 0·7=일)</div>
-            <div style={{ whiteSpace: 'pre', color: '#EA580C' }}>* * * * *</div>
+            <div style={{ whiteSpace: 'pre', color: 'var(--orange-600)' }}>* * * * *</div>
           </div>
           <div style={{ ...CARD, marginTop: 12 }}>
             예: <code style={CODE}>0 9 * * 1-5</code> = 분 0, 시 9, 일 매일, 월 매월, 요일 월~금 → <strong style={{ color: 'var(--text)' }}>평일 오전 9시</strong>.
@@ -138,7 +138,7 @@ export default function CronPage() {
               { a: '@yearly', e: '0 0 1 1 *', d: '매년 1/1 0시 (=@annually)' },
               { a: '@reboot', e: '—', d: '부팅 시 1회 (시각 계산 불가)' },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--accent)', fontWeight: 700 }}>{r.a}</p>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)', margin: '2px 0 4px' }}>{r.e}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{r.d}</p>
@@ -161,7 +161,7 @@ export default function CronPage() {
             반대로 한쪽이 <code style={CODE}>*/2</code>처럼 <code style={CODE}>*</code>로 시작하면 Vixie·cronie는 그 칸을 &lsquo;제한 없음&rsquo;으로 보고 AND로 판정하며, 이 도구도 같은 규칙을 따릅니다(구현마다 다를 수 있음).
           </p>
           <div style={{
-            background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12,
+            background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 'var(--radius-m)',
             padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.9,
           }}>
             <code style={CODE}>0 0 13 * 5</code> → 매월 <strong>13일</strong> <em>또는</em> 매주 <strong>금요일</strong> 자정.
@@ -319,7 +319,7 @@ export default function CronPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

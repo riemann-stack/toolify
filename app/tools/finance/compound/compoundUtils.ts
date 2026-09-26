@@ -25,10 +25,10 @@ export interface ReturnScenario {
 }
 
 export const RETURN_SCENARIOS: ReturnScenario[] = [
-  { id: 'conservative', name: '보수적', rate: 4,  desc: '예금·채권 중심',          color: '#0891B2' },
+  { id: 'conservative', name: '보수적', rate: 4,  desc: '예금·채권 중심',          color: 'var(--cyan-600)' },
   { id: 'moderate',     name: '기준',   rate: 7,  desc: '주식·채권 분산투자 장기 가정', color: 'var(--accent)' },
-  { id: 'optimistic',   name: '낙관적', rate: 10, desc: 'S&P500 명목 장기 평균',    color: '#A16207' },
-  { id: 'aggressive',   name: '공격적', rate: 13, desc: '성장주 (고위험·고수익)',  color: '#EA580C', warning: '큰 변동성' },
+  { id: 'optimistic',   name: '낙관적', rate: 10, desc: 'S&P500 명목 장기 평균',    color: 'var(--yellow-700)' },
+  { id: 'aggressive',   name: '공격적', rate: 13, desc: '성장주 (고위험·고수익)',  color: 'var(--orange-600)', warning: '큰 변동성' },
 ]
 
 /* ─── 주기 ─── */
@@ -194,7 +194,7 @@ export function reverseCalcContribution(input: ReverseInput): ReverseResult | nu
     return {
       requiredMonthly: 0, requiredYearly: 0,
       feasibility: 'easy', feasibilityLabel: '🟢 추가 적립 불필요',
-      feasibilityColor: '#059669',
+      feasibilityColor: 'var(--emerald-600)',
       feasibilityNote: '현재 자산만으로 목표 도달 가능 (추가 적립 0)',
     }
   }
@@ -221,19 +221,19 @@ export function reverseCalcContribution(input: ReverseInput): ReverseResult | nu
   let feasibilityNote: string
   if (requiredMonthly < 200_000) {
     feasibility = 'easy'; feasibilityLabel = '🟢 매우 합리적'
-    feasibilityColor = '#059669'
+    feasibilityColor = 'var(--emerald-600)'
     feasibilityNote = '월 소득의 5% 미만 수준 — 충분히 도달 가능'
   } else if (requiredMonthly < 600_000) {
     feasibility = 'reasonable'; feasibilityLabel = '🔵 합리적'
-    feasibilityColor = '#0891B2'
+    feasibilityColor = 'var(--cyan-600)'
     feasibilityNote = '월 소득의 10~15% 수준 — 일반 직장인 가능'
   } else if (requiredMonthly < 1_500_000) {
     feasibility = 'tight'; feasibilityLabel = '🟡 도전적'
-    feasibilityColor = '#A16207'
+    feasibilityColor = 'var(--yellow-700)'
     feasibilityNote = '월 소득의 25% 이상 — 검토 필요'
   } else {
     feasibility = 'unrealistic'; feasibilityLabel = '🔴 비현실적'
-    feasibilityColor = '#DC2626'
+    feasibilityColor = 'var(--red-600)'
     feasibilityNote = '월 소득 50%+ — 기간 늘리거나 목표 조정 권장'
   }
 

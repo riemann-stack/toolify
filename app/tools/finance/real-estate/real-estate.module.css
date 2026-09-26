@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 모드 토글 (간단/상세) ── */
 .modeToggle {
@@ -20,17 +20,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px;
 }
 .modeBtn {
   background: transparent;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 10px 12px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -47,7 +47,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -76,7 +76,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── INPUTS ── */
@@ -94,7 +94,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 22px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -102,8 +102,8 @@
 }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 13px; }
 .numInput:focus {
-  border-color: rgba(14,165,233,0.5);
-  box-shadow: 0 0 0 3px rgba(14,165,233,0.14);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .numInput::-webkit-outer-spin-button,
 .numInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
@@ -117,14 +117,14 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;       /* iOS Safari 자동 확대 방지 */
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
   box-sizing: border-box;
   transition: border-color 0.2s;
 }
-.smallInput:focus { border-color: rgba(14,165,233,0.5); }
+.smallInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .smallInput::-webkit-outer-spin-button,
 .smallInput::-webkit-inner-spin-button { -webkit-appearance: none; appearance: none; }
 .smallInput[type=number] { -moz-appearance: textfield; appearance: textfield; }
@@ -133,14 +133,14 @@
   font-size: 14px;
   color: var(--muted);
   flex-shrink: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .koreanLabel {
   font-size: 13px;
   color: var(--accent);
   margin-top: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   letter-spacing: -0.2px;
 }
@@ -148,7 +148,7 @@
   font-size: 12px;
   color: var(--muted);
   margin-top: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 슬라이더 ── */
@@ -164,7 +164,7 @@
   -webkit-appearance: none;
   height: 4px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   outline: none;
   cursor: pointer;
 }
@@ -192,19 +192,19 @@
 .pill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 12px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--border-hover); color: var(--text); }
 }
 .pillActive {
   background: var(--accent-dim);
-  border-color: rgba(14,165,233,0.4);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
   color: var(--accent);
   font-weight: 700;
 }
@@ -222,12 +222,12 @@
 .ltvBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   transition: all 0.15s;
   text-align: center;
@@ -235,11 +235,11 @@
   .ltvBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
 .ltvCash    { border-color: rgba(16,185,129,0.35); }
-.ltvNormal  { border-color: rgba(14,165,233,0.30); }
-.ltvHigh    { border-color: rgba(234,88,12,0.45); color: #EA580C; }
-.ltvCash.ltvActive    { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; }
+.ltvNormal  { border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
+.ltvHigh    { border-color: rgba(234,88,12,0.45); color: var(--orange-600); }
+.ltvCash.ltvActive    { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); }
 .ltvNormal.ltvActive  { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); }
-.ltvHigh.ltvActive    { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; }
+.ltvHigh.ltvActive    { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); }
 
 /* ── 토글 그리드 (주택 종류, 임대 형태 등) ── */
 .toggleGrid4 {
@@ -257,7 +257,7 @@
   padding: 11px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -277,7 +277,7 @@
   display: inline-flex;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 3px;
   gap: 2px;
   margin-bottom: 10px;
@@ -285,11 +285,11 @@
 .miniBtn {
   background: transparent;
   border: none;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 14px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -306,15 +306,15 @@
   display: flex;
   justify-content: space-between;
   align-items: baseline;
-  background: rgba(14,165,233,0.14);
-  border: 1px dashed rgba(14,165,233,0.25);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px dashed color-mix(in srgb, var(--accent) 25%, transparent);
   border-radius: 10px;
   padding: 10px 14px;
   font-size: 13px;
   color: var(--muted);
 }
 .autoResult strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--accent);
@@ -323,8 +323,8 @@
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.35);
-  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
@@ -335,7 +335,7 @@
   margin-bottom: 10px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(36px, 7vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -350,7 +350,7 @@
   font-size: 13px;
   color: var(--muted);
   margin-top: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.7;
 }
 
@@ -371,7 +371,7 @@
 .kpiCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 18px;
 }
 .kpiLabel {
@@ -382,14 +382,14 @@
   margin-bottom: 6px;
 }
 .kpiValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.5px;
 }
 .kpiValueAccent { color: var(--accent); }
-.kpiValuePos    { color: #059669; }
+.kpiValuePos    { color: var(--emerald-600); }
 .kpiValueNeg    { color: #FF4646; }
 
 /* ── 비용/수익 표 ── */
@@ -404,7 +404,7 @@
 }
 .breakdownTable td:last-child {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   white-space: nowrap;
@@ -413,7 +413,7 @@
   color: var(--muted);
 }
 .rowHilight td {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 .rowHilight td:first-child { color: var(--text); font-weight: 600; }
 .rowTotal td {
@@ -421,12 +421,12 @@
   font-weight: 700;
   font-size: 15px;
   border-bottom: none;
-  border-top: 2px solid rgba(14,165,233,0.4);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
 }
 .rowTotal td:first-child { color: var(--accent); }
 .rowTotal td:last-child  { color: var(--accent); font-size: 18px; }
-.posValue { color: #059669 !important; }
-.negValue { color: #DC2626 !important; }
+.posValue { color: var(--emerald-600) !important; }
+.negValue { color: var(--red-600) !important; }
 .totalNeg td:last-child { color: #FF4646 !important; }
 
 /* ── 매도 시나리오 3 카드 ── */
@@ -441,26 +441,26 @@
 .scenarioCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 16px;
   text-align: center;
   position: relative;
   overflow: hidden;
 }
 .scenarioConservative { border-color: rgba(234,88,12,0.4); }
-.scenarioBase         { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.scenarioBase         { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .scenarioOptimistic   { border-color: rgba(16,185,129,0.4); }
 .scenarioArrow {
   position: absolute;
   top: 12px;
   left: 14px;
   font-size: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
-.arrowDown { color: #EA580C; }
+.arrowDown { color: var(--orange-600); }
 .arrowFlat { color: var(--accent); }
-.arrowUp   { color: #059669; }
+.arrowUp   { color: var(--emerald-600); }
 
 .scenarioLabel {
   font-size: 11px;
@@ -474,17 +474,17 @@
   font-size: 12px;
   color: var(--muted);
   margin-bottom: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .scenarioProfit {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   letter-spacing: -0.5px;
   color: var(--text);
   margin-bottom: 4px;
 }
-.scenarioProfit.posValue { color: #059669; }
+.scenarioProfit.posValue { color: var(--emerald-600); }
 .scenarioProfit.negValue { color: #FF4646; }
 .scenarioROE {
   font-size: 12px;
@@ -492,7 +492,7 @@
 }
 .scenarioROE strong {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 
@@ -500,18 +500,18 @@
 .breakEvenCard {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.25);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .breakEvenLead {
   font-size: 12px;
-  color: #EA580C;
+  color: var(--orange-600);
   font-weight: 700;
   letter-spacing: 0.06em;
   margin-bottom: 8px;
 }
 .breakEvenValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 800;
   color: var(--text);
@@ -545,49 +545,49 @@
   font-weight: 600;
 }
 .leverageTable td {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
 }
 .leverageTable td:first-child {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--muted);
 }
 .leverageTable .roeRow td {
-  background: rgba(14,165,233,0.14);
-  border-top: 1px dashed rgba(14,165,233,0.3);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-top: 1px dashed color-mix(in srgb, var(--accent) 30%, transparent);
 }
 .leverageTable .roeRow td:first-child { color: var(--accent); font-weight: 700; }
 .leverageMultiplier {
   display: inline-block;
   background: var(--accent-dim);
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 14px;
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-left: 8px;
 }
 
 .leverageNote {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.2);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent);
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.8;
   margin-top: 12px;
 }
-.leverageNote strong { color: #0891B2; }
+.leverageNote strong { color: var(--cyan-600); }
 
 /* ── 월 환산 라인 ── */
 .monthlyLine {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--muted);
@@ -598,7 +598,7 @@
   gap: 8px;
 }
 .monthlyLine strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);
@@ -609,7 +609,7 @@
 .lossWarn {
   background: rgba(255,70,70,0.08);
   border: 2px solid rgba(255,70,70,0.4);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
   font-size: 14px;
   color: #FFD0D0;
@@ -618,7 +618,7 @@
   gap: 12px;
   align-items: flex-start;
 }
-.lossWarn strong { color: #DC2626; font-weight: 700; }
+.lossWarn strong { color: var(--red-600); font-weight: 700; }
 .lossIcon { font-size: 22px; flex-shrink: 0; }
 
 /* ── 기타 비용 자유 입력 (3행) ── */
@@ -635,23 +635,23 @@
   border-radius: 10px;
   padding: 10px 12px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   outline: none;
   box-sizing: border-box;
 }
 .otherName::placeholder { color: var(--muted); }
-.otherName:focus { border-color: rgba(14,165,233,0.5); }
+.otherName:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 
 /* ── 복사 버튼 ── */
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;

@@ -42,7 +42,7 @@ export default function ReviewIntervalPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />복습 간격 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -58,7 +58,7 @@ export default function ReviewIntervalPage() {
 
         {/* ── 1. 망각곡선 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             에빙하우스 망각곡선
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -77,16 +77,16 @@ export default function ReviewIntervalPage() {
               </thead>
               <tbody>
                 {[
-                  { t: '학습 직후',   r: '100%', c: '#0D9488' },
-                  { t: '20분 후',     r: '약 58%', c: '#059669' },
-                  { t: '1시간 후',    r: '약 44%', c: '#A16207' },
-                  { t: '1일 후',      r: '약 33%', c: '#EA580C' },
-                  { t: '6일 후',      r: '약 25%', c: '#EA580C' },
-                  { t: '31일 후',     r: '약 21%', c: '#DC2626' },
+                  { t: '학습 직후',   r: '100%', c: 'var(--teal-600)' },
+                  { t: '20분 후',     r: '약 58%', c: 'var(--emerald-600)' },
+                  { t: '1시간 후',    r: '약 44%', c: 'var(--yellow-700)' },
+                  { t: '1일 후',      r: '약 33%', c: 'var(--orange-600)' },
+                  { t: '6일 후',      r: '약 25%', c: 'var(--orange-600)' },
+                  { t: '31일 후',     r: '약 21%', c: 'var(--red-600)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: r.c, fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.r}</td>
                   </tr>
                 ))}
               </tbody>
@@ -95,23 +95,23 @@ export default function ReviewIntervalPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
             marginTop: 12,
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 단순 모델</span></div>
-            <div><span style={{ color: '#0D9488' }}>R(t)</span> = e^(−t/<span style={{ color: '#A16207' }}>S</span>) × 100</div>
+            <div><span style={{ color: 'var(--teal-600)' }}>R(t)</span> = e^(−t/<span style={{ color: 'var(--yellow-700)' }}>S</span>) × 100</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>R: 기억 유지율(%) · t: 경과 시간 · S: 기억 안정도</div>
           </div>
         </div>
 
         {/* ── 2. 간격 반복 학습 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             간격 반복 학습 (Spaced Repetition)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -125,13 +125,13 @@ export default function ReviewIntervalPage() {
               { t: '📚 장기 기억 형성', d: '시험 직전 벼락치기보다 효과적. 평생 활용 가능한 지식으로 정착.' },
               { t: '🎯 정확한 타이밍', d: '"잊을 만 할 때" 복습이 가장 효과적. SM-2가 자동 계산.' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0D9488', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--teal-600)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--teal-600)', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             🛠️ <strong style={{ color: 'var(--text)' }}>대표 SRS 도구:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
               <li><strong>Anki</strong> (오픈소스, 무료) — apps.ankiweb.net</li>
@@ -144,7 +144,7 @@ export default function ReviewIntervalPage() {
 
         {/* ── 3. SM-2 알고리즘 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             SM-2 알고리즘 (SuperMemo 2)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -154,37 +154,37 @@ export default function ReviewIntervalPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 핵심 원리</span></div>
-            <div>각 학습 항목에 <span style={{ color: '#0D9488' }}>난이도 계수(EF)</span> 부여 (기본 2.5)</div>
+            <div>각 학습 항목에 <span style={{ color: 'var(--teal-600)' }}>난이도 계수(EF)</span> 부여 (기본 2.5)</div>
             <div>기억 점수(0~5)에 따라 EF 자동 조정</div>
             <div>점수 ↑ → EF ↑ → 다음 간격 길어짐</div>
             <div>점수 낮음(&lt;3) → 처음부터 다시 (간격 1일)</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 계산 공식</span></div>
-            <div><span style={{ color: '#0D9488' }}>EF&apos;</span> = EF + (0.1 − (5 − q) × (0.08 + (5 − q) × 0.02))</div>
-            <div><span style={{ color: '#0D9488' }}>다음 간격</span> = 이전 간격 × EF (3회 성공 후)</div>
+            <div><span style={{ color: 'var(--teal-600)' }}>EF&apos;</span> = EF + (0.1 − (5 − q) × (0.08 + (5 − q) × 0.02))</div>
+            <div><span style={{ color: 'var(--teal-600)' }}>다음 간격</span> = 이전 간격 × EF (3회 성공 후)</div>
           </div>
         </div>
 
         {/* ── 4. 권장 복습 간격 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             권장 복습 간격 (한국 학생용)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
               { t: '📘 일반 학습 (보통)', c: 'var(--accent)', items: ['1차: 학습 다음 날', '2차: 3일 후', '3차: 7일 후', '4차: 14일 후', '5차: 30일 후', '시험 2일 전 최종 복습'] },
-              { t: '📕 어려운 내용',      c: '#DC2626',     items: ['1차: 당일 또는 다음 날', '2차: 2일 후', '3차: 5일 후', '4차: 10일 후', '5차: 21일 후'] },
-              { t: '📗 외국어 단어장',    c: '#0891B2',     items: ['1차: 다음 날', '2차: 3~4일 후', '3차: 7일 후', '4차: 14일 후', '5차: 30일 후', '이후 매월 1회'] },
+              { t: '📕 어려운 내용',      c: 'var(--red-600)',     items: ['1차: 당일 또는 다음 날', '2차: 2일 후', '3차: 5일 후', '4차: 10일 후', '5차: 21일 후'] },
+              { t: '📗 외국어 단어장',    c: 'var(--cyan-600)',     items: ['1차: 다음 날', '2차: 3~4일 후', '3차: 7일 후', '4차: 14일 후', '5차: 30일 후', '이후 매월 1회'] },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => <li key={j}>{it}</li>)}
@@ -196,7 +196,7 @@ export default function ReviewIntervalPage() {
 
         {/* ── 5. 효과적 복습 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             효과적인 복습 방법
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -206,8 +206,8 @@ export default function ReviewIntervalPage() {
               { t: '🔗 개념 연결',                    d: '새 정보를 기존 지식과 연결 · 시각화·이미지화 · 비유와 예시 활용 → 장기 기억 형성' },
               { t: '✏️ 손으로 쓰기',                  d: '키보드 입력보다 손글씨가 기억 정착에 효과적 (cognitive engagement ↑)' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'rgba(13,148,136,0.05)', border: '1px solid rgba(13,148,136,0.30)', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
+              <div key={i} style={{ background: 'rgba(13,148,136,0.05)', border: '1px solid rgba(13,148,136,0.30)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--teal-600)', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
             ))}
@@ -216,7 +216,7 @@ export default function ReviewIntervalPage() {
 
         {/* ── 6. 학습 주의사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             학습 시 주의사항
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -226,7 +226,7 @@ export default function ReviewIntervalPage() {
               { t: '💪 건강',          d: '규칙적 운동 → 기억력 ↑. 균형 잡힌 식단. 카페인 적정량 (오전 위주).' },
               { t: '⏰ 골든 타임',     d: '학습 후 기억 정착에 결정적. 학습 후 1시간 이내 한 번 훑어보기 — 이후 복습 효율 ↑.' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
@@ -236,7 +236,7 @@ export default function ReviewIntervalPage() {
 
         {/* ── 7. 활용 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             본 도구 활용 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -246,8 +246,8 @@ export default function ReviewIntervalPage() {
               { t: '🌳 고급자',  d: '<strong>탭 2 (SM-2)</strong> + 탭 3 조합 · EF 변화 추적 · 백업 다운로드로 데이터 보존 · 다른 기기 사용 시 가져오기' },
               { t: '📅 시험 대비', d: '<strong>탭 4 (시험일 역산)</strong>으로 일별 학습량 미리 계산 · 시험 2일 전 최종 복습 시간 확보' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid #0D9488', borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--teal-600)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--teal-600)', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }} dangerouslySetInnerHTML={{ __html: g.d }} />
               </div>
             ))}
@@ -258,13 +258,13 @@ export default function ReviewIntervalPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -279,7 +279,7 @@ export default function ReviewIntervalPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -299,7 +299,7 @@ export default function ReviewIntervalPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -314,10 +314,10 @@ export default function ReviewIntervalPage() {
 
         {/* ── 10. 외부 자원 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             추천 학습 자원
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li><strong style={{ color: 'var(--text)' }}>Anki</strong> (무료 SRS): apps.ankiweb.net</li>
               <li><strong style={{ color: 'var(--text)' }}>Quizlet</strong> (단어장 SRS, 입문용)</li>

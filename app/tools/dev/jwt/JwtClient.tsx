@@ -293,10 +293,10 @@ export default function JwtClient() {
     <div className={s.wrap}>
       {/* 보안 고지 */}
       <div style={{
-        background: 'rgba(8,145,178,0.08)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12,
+        background: 'color-mix(in srgb, var(--cyan-600) 8%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-m)',
         padding: '12px 16px', fontSize: 13, color: 'var(--text)', lineHeight: 1.75,
       }}>
-        <strong style={{ color: '#0891B2' }}>🔒 서명을 검증하지 않습니다.</strong> 토큰의 진위는 서버에서 비밀키로 검증해야 합니다.
+        <strong style={{ color: 'var(--cyan-600)' }}>🔒 서명을 검증하지 않습니다.</strong> 토큰의 진위는 서버에서 비밀키로 검증해야 합니다.
         입력값은 브라우저에서만 처리되어 서버로 전송되지 않습니다.
       </div>
 
@@ -338,9 +338,9 @@ export default function JwtClient() {
             )}
 
             {/* HEADER */}
-            <div className={`${s.card}`} style={{ borderLeft: '3px solid #DC2626' }}>
+            <div className={`${s.card}`} style={{ borderLeft: '3px solid var(--red-600)' }}>
               <div className={s.cardTop}>
-                <label className={s.cardLabel} style={{ color: '#DC2626' }}>① Header — 알고리즘·타입</label>
+                <label className={s.cardLabel} style={{ color: 'var(--red-600)' }}>① Header — 알고리즘·타입</label>
                 {result.header.ok && (
                   <button className={s.copyBtn} onClick={() => copyValue(result.header.ok ? result.header.prettyText : '', 'header')} type="button">
                     {copiedKey === 'header' ? '✓ 복사됨' : copiedKey === 'header:fail' ? '복사 실패' : '복사'}
@@ -348,9 +348,9 @@ export default function JwtClient() {
                 )}
               </div>
               {result.header.ok ? (
-                <ClaimTable rows={result.header.rows} accent="#DC2626" />
+                <ClaimTable rows={result.header.rows} accent="var(--red-600)" />
               ) : (
-                <p style={{ fontSize: 13, color: '#DC2626', fontFamily: 'var(--font-mono)' }}>JSON 파싱 실패 — 원문: {result.header.raw}</p>
+                <p style={{ fontSize: 13, color: 'var(--red-600)', fontFamily: 'var(--font-mono)' }}>JSON 파싱 실패 — 원문: {result.header.raw}</p>
               )}
             </div>
 
@@ -367,19 +367,19 @@ export default function JwtClient() {
               {result.payload.ok ? (
                 <ClaimTable rows={result.payload.rows} accent="var(--accent)" />
               ) : (
-                <p style={{ fontSize: 13, color: '#DC2626', fontFamily: 'var(--font-mono)' }}>JSON 파싱 실패 — 원문: {result.payload.raw}</p>
+                <p style={{ fontSize: 13, color: 'var(--red-600)', fontFamily: 'var(--font-mono)' }}>JSON 파싱 실패 — 원문: {result.payload.raw}</p>
               )}
             </div>
 
             {/* SIGNATURE */}
-            <div className={`${s.card}`} style={{ borderLeft: '3px solid #0891B2' }}>
+            <div className={`${s.card}`} style={{ borderLeft: '3px solid var(--cyan-600)' }}>
               <div className={s.cardTop}>
-                <label className={s.cardLabel} style={{ color: '#0891B2' }}>③ Signature — 서명 (검증 안 함)</label>
+                <label className={s.cardLabel} style={{ color: 'var(--cyan-600)' }}>③ Signature — 서명 (검증 안 함)</label>
               </div>
               <p style={{
                 fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--text)',
                 wordBreak: 'break-all', lineHeight: 1.7, background: 'var(--bg3)',
-                padding: '10px 12px', borderRadius: 8,
+                padding: '10px 12px', borderRadius: 'var(--radius-s)',
               }}>
                 {result.signature || '(빈 서명)'}
               </p>
@@ -402,9 +402,9 @@ export default function JwtClient() {
 function ExpBadge({ status }: { status: ExpStatus }) {
   if (status.kind === 'none') return null
   const styleMap = {
-    valid:   { bg: 'rgba(5,150,105,0.10)',  bd: 'rgba(5,150,105,0.35)',  fg: '#059669', icon: '✓', title: '유효 (만료 전)' },
-    soon:    { bg: 'rgba(217,119,6,0.10)',  bd: 'rgba(217,119,6,0.40)',  fg: '#D97706', icon: '⏳', title: '만료 임박 (5분 이내)' },
-    expired: { bg: 'rgba(220,38,38,0.10)',  bd: 'rgba(220,38,38,0.40)',  fg: '#DC2626', icon: '⚠️', title: '만료됨' },
+    valid:   { bg: 'rgba(5,150,105,0.10)',  bd: 'rgba(5,150,105,0.35)',  fg: 'var(--emerald-600)', icon: '✓', title: '유효 (만료 전)' },
+    soon:    { bg: 'rgba(217,119,6,0.10)',  bd: 'rgba(217,119,6,0.40)',  fg: 'var(--amber-600)', icon: '⏳', title: '만료 임박 (5분 이내)' },
+    expired: { bg: 'rgba(220,38,38,0.10)',  bd: 'rgba(220,38,38,0.40)',  fg: 'var(--red-600)', icon: '⚠️', title: '만료됨' },
     notyet:  { bg: 'color-mix(in srgb, var(--warning) 10%, transparent)', bd: 'color-mix(in srgb, var(--warning) 40%, transparent)', fg: 'var(--warning)', icon: '…', title: '아직 사용 전 (nbf 이전)' },
   } as const
   const c = styleMap[status.kind]
@@ -415,7 +415,7 @@ function ExpBadge({ status }: { status: ExpStatus }) {
   else if (status.kind === 'notyet') detail = `${status.wait} 뒤부터 사용 가능 · ${status.kst}${status.expKst ? ` · 만료 ${status.expKst}` : ''}`
   return (
     <div style={{
-      background: c.bg, border: `1px solid ${c.bd}`, borderRadius: 12,
+      background: c.bg, border: `1px solid ${c.bd}`, borderRadius: 'var(--radius-m)',
       padding: '12px 16px', display: 'flex', alignItems: 'center', gap: 12,
     }}>
       <span style={{ fontSize: 20 }}>{c.icon}</span>
@@ -451,9 +451,9 @@ function ClaimTable({ rows, accent }: { rows: ClaimRow[]; accent: string }) {
               <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--text)', wordBreak: 'break-all' }}>
                 {r.display}
                 {r.isTime && r.kst && (
-                  <span style={{ display: 'block', marginTop: 4, color: '#0891B2', fontSize: 12 }}>
+                  <span style={{ display: 'block', marginTop: 4, color: 'var(--cyan-600)', fontSize: 12 }}>
                     🕒 {r.kst}
-                    {r.msHint && <span style={{ color: '#D97706', marginLeft: 6 }}>· 13자리(밀리초 추정)</span>}
+                    {r.msHint && <span style={{ color: 'var(--amber-600)', marginLeft: 6 }}>· 13자리(밀리초 추정)</span>}
                   </span>
                 )}
               </td>

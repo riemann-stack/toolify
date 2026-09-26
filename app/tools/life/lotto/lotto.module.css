@@ -5,7 +5,7 @@
 .responsibilityBanner {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
@@ -50,17 +50,17 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -80,7 +80,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   width: 100%;
   box-sizing: border-box;
@@ -97,7 +97,7 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
 
 /* ── 모드 카드 8개 ── */
 .modeGrid {
@@ -110,7 +110,7 @@
 .modeCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 10px;
   cursor: pointer;
   text-align: center;
@@ -124,9 +124,9 @@
   box-shadow: 0 0 0 2px rgba(14,165,233,0.18);
 }
 .modeCardEmoji { font-size: 28px; line-height: 1; margin-bottom: 6px; }
-.modeCardName { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; margin-bottom: 3px; }
+.modeCardName { font-size: 13px; color: var(--text); font-family: var(--font-sans); font-weight: 700; margin-bottom: 3px; }
 .modeCardActive .modeCardName { color: var(--accent); }
-.modeCardDesc { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: 'Noto Sans KR', sans-serif; }
+.modeCardDesc { font-size: 11px; color: var(--muted); line-height: 1.5; font-family: var(--font-sans); }
 
 /* ── 컴팩트 모드 그리드 (입력 영역 — 이름만 4열) ── */
 .modeGridCompact {
@@ -145,7 +145,7 @@
   align-items: center;
   justify-content: center;
   min-width: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) { .modeChip:hover { border-color: var(--border-hover); } }
 .modeChipName {
@@ -175,10 +175,10 @@
 .pickerCount {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .pickerCount strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
 }
@@ -200,11 +200,11 @@
 .countBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.12s;
@@ -224,8 +224,8 @@
   aspect-ratio: 1;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 13px;
   color: var(--text);
@@ -244,12 +244,12 @@
   font-size: 11px;
   color: var(--muted);
   margin-top: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   display: flex;
   flex-wrap: wrap;
   gap: 12px;
 }
-.numLegend strong { font-family: 'Inter', system-ui, sans-serif; }
+.numLegend strong { font-family: var(--font-sans); }
 
 /* 모드 선택 (고정/제외 토글) */
 .fixExcludeToggle {
@@ -261,11 +261,11 @@
 .fixExcludeBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .fixExcludeBtn:hover { color: var(--text); border-color: var(--border-hover); }
@@ -280,7 +280,7 @@
   gap: 8px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .toggleLabel input { accent-color: var(--accent); width: 16px; height: 16px; }
@@ -289,11 +289,11 @@
 .bigGenerate {
   background: var(--accent);
   border: none;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 14px;
   color: #000;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   cursor: pointer;
   width: 100%;
@@ -311,7 +311,7 @@
   padding: 11px 16px;
   font-size: 13px;
   color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -327,7 +327,7 @@
   padding: 5px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
 }@media (hover: hover) {
@@ -341,11 +341,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
@@ -364,7 +364,7 @@
 .gameCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 12px 14px;
 }
 .gameHeader {
@@ -377,14 +377,14 @@
   display: inline-flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-size: 14px;
 }
 .gameLabel small {
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 400;
 }
@@ -404,7 +404,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
   font-variant-numeric: tabular-nums;
@@ -422,7 +422,7 @@
   font-size: 12px;
   color: var(--muted);
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 4px;
   line-height: 1.6;
 }
@@ -446,11 +446,11 @@
 .numInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px;
   font-size: 16px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   outline: none;
   text-align: center;
@@ -472,15 +472,15 @@
   padding: 12px 14px;
   text-align: center;
 }
-.analysisLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.analysisLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; margin-bottom: 6px; font-family: var(--font-sans); }
 .analysisValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 20px;
   color: #A16207;
   font-variant-numeric: tabular-nums;
 }
-.analysisHint { font-size: 11px; color: var(--muted); margin-top: 3px; font-family: 'Noto Sans KR', sans-serif; }
+.analysisHint { font-size: 11px; color: var(--muted); margin-top: 3px; font-family: var(--font-sans); }
 
 .tagRow {
   display: flex;
@@ -493,9 +493,9 @@
   border: 1px solid rgba(161,98,7,0.30);
   color: #A16207;
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -512,19 +512,19 @@
   gap: 8px;
   align-items: center;
   font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .rangeRow span:first-child { color: var(--text); font-weight: 600; }
 .rangeBarTrack {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   height: 12px;
   overflow: hidden;
 }
-.rangeBarFill { height: 100%; border-radius: 999px; transition: width 0.4s; }
+.rangeBarFill { height: 100%; border-radius: var(--radius-pill); transition: width 0.4s; }
 .rangeRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: #A16207;
   font-variant-numeric: tabular-nums;
@@ -541,11 +541,11 @@
 .simBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   font-variant-numeric: tabular-nums;
@@ -557,7 +557,7 @@
 .simHero {
   background: linear-gradient(140deg, rgba(220,38,38,0.14), rgba(155,89,182,0.04));
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
@@ -568,10 +568,10 @@
   text-transform: uppercase;
   font-weight: 700;
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .simHeroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(44px, 9vw, 60px);
   letter-spacing: -1.5px;
@@ -580,7 +580,7 @@
 }
 .simHeroLoss { color: #DC2626; }
 .simHeroProfit { color: #059669; }
-.simHeroBreakdown { font-size: 13px; color: var(--muted); margin-top: 10px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.7; }
+.simHeroBreakdown { font-size: 13px; color: var(--muted); margin-top: 10px; font-family: var(--font-sans); line-height: 1.7; }
 
 .simTable {
   display: flex;
@@ -594,16 +594,16 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.simRowGrade { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; color: var(--accent); }
+.simRowGrade { font-family: var(--font-sans); font-weight: 800; color: var(--accent); }
 .simRowLabel { color: var(--text); }
 .simRowLabel small { color: var(--muted); margin-left: 6px; font-size: 11px; }
 .simRowVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: #DC2626;
   font-variant-numeric: tabular-nums;
@@ -614,12 +614,12 @@
 .warningBox {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .warningBox strong { color: #DC2626; }
 .warningBox a { color: #DC2626; text-decoration: underline; font-weight: 600; }
@@ -628,7 +628,7 @@
 .jackpotHero {
   background: linear-gradient(140deg, rgba(155,89,182,0.10), rgba(220,38,38,0.14));
   border: 1px solid rgba(155,89,182,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
@@ -640,10 +640,10 @@
   text-transform: uppercase;
   font-weight: 700;
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .jackpotYears {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(56px, 12vw, 84px);
   color: #9333EA;
@@ -651,7 +651,7 @@
   font-variant-numeric: tabular-nums;
 }
 .jackpotYearsUnit { font-size: 0.4em; color: var(--text); margin-left: 6px; }
-.jackpotMeta { font-size: 13px; color: var(--muted); margin-top: 10px; font-family: 'Noto Sans KR', sans-serif; line-height: 1.7; }
+.jackpotMeta { font-size: 13px; color: var(--muted); margin-top: 10px; font-family: var(--font-sans); line-height: 1.7; }
 .jackpotAge { color: #A16207; font-weight: 700; }
 
 .jackpotInfoGrid {
@@ -668,18 +668,18 @@
   text-align: center;
 }
 .jackpotInfoVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 20px;
   color: #9333EA;
   font-variant-numeric: tabular-nums;
 }
-.jackpotInfoLbl { font-size: 12px; color: var(--muted); margin-top: 3px; font-family: 'Noto Sans KR', sans-serif; }
+.jackpotInfoLbl { font-size: 12px; color: var(--muted); margin-top: 3px; font-family: var(--font-sans); }
 
 .compareTable {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
 .compareRow {
@@ -688,17 +688,17 @@
   padding: 5px 0;
   border-bottom: 1px solid var(--border);
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .compareRow:last-child { border-bottom: none; }
 .compareRow span:first-child { color: var(--text); }
-.compareRow span:last-child { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #9333EA; font-variant-numeric: tabular-nums; }
+.compareRow span:last-child { font-family: var(--font-sans); font-weight: 700; color: #9333EA; font-variant-numeric: tabular-nums; }
 
 /* ── 세후 탭 ── */
 .taxHero {
   background: linear-gradient(140deg, rgba(16,185,129,0.14), rgba(8,145,178,0.14));
   border: 1px solid rgba(16,185,129,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
@@ -709,10 +709,10 @@
   text-transform: uppercase;
   font-weight: 700;
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .taxNet {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(40px, 8vw, 56px);
   color: #059669;
@@ -720,7 +720,7 @@
   font-variant-numeric: tabular-nums;
 }
 .taxNetUnit { font-size: 0.4em; color: var(--text); margin-left: 6px; }
-.taxRate { font-size: 13px; color: var(--muted); margin-top: 8px; font-family: 'Noto Sans KR', sans-serif; }
+.taxRate { font-size: 13px; color: var(--muted); margin-top: 8px; font-family: var(--font-sans); }
 
 .taxBreakdown {
   display: flex;
@@ -732,14 +732,14 @@
   grid-template-columns: 1fr auto;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .taxRow span:first-child { color: var(--text); }
 .taxRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -761,10 +761,10 @@
   padding: 8px 10px;
   text-align: left;
   border-bottom: 1px solid var(--border);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .taxTable th { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 700; }
-.taxTable td:nth-child(2) { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: #059669; text-align: right; font-variant-numeric: tabular-nums; }
+.taxTable td:nth-child(2) { font-family: var(--font-sans); font-weight: 700; color: #059669; text-align: right; font-variant-numeric: tabular-nums; }
 
 /* ── 저장된 번호 ── */
 .savedList {
@@ -795,7 +795,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 12px;
   font-variant-numeric: tabular-nums;
@@ -804,7 +804,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-left: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .empty {
@@ -814,8 +814,8 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
 
@@ -823,11 +823,11 @@
 .numberField {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   outline: none;
   width: 100%;

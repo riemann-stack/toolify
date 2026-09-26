@@ -459,7 +459,7 @@ export default function DrakeEquationClient({ radioRangeLy }: { radioRangeLy: nu
                   <div className={styles.distItemLabel}>인류 전파권 ({radioRangeLy}광년) 내</div>
                   <div className={styles.distItemValue} style={{
                     color: distance.rangeLabel === 'high' ? 'var(--success)'
-                      : distance.rangeLabel === 'medium' ? 'var(--warning)' : '#EA580C',
+                      : distance.rangeLabel === 'medium' ? 'var(--warning)' : 'var(--orange-600)',
                   }}>
                     {distance.potentialContactsInRange < 0.001
                       ? distance.potentialContactsInRange.toExponential(2)
@@ -695,7 +695,7 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
         <circle
           key={`h-${i}`}
           cx={h.x} cy={h.y} r={2.2}
-          fill="#0EA5E9"
+          fill="var(--sky-500)"
           className={styles.highlightStar}
           style={{ animationDelay: `${(i % 10) * 0.15}s` }}
         />
@@ -703,22 +703,22 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
 
       {/* 인류 전파권 (태양 중심 원) */}
       <circle cx={SUN_X} cy={SUN_Y} r={RADIO_RANGE_R}
-        fill="rgba(8,145,178,0.08)" stroke="#0891B2" strokeWidth={0.8}
+        fill="color-mix(in srgb, var(--cyan-600) 8%, transparent)" stroke="var(--cyan-600)" strokeWidth={0.8}
         strokeDasharray="2,2" />
 
       {/* 가장 가까운 문명 라인 + 강조 */}
       {nearest && nearest !== undefined && (
         <>
           <line x1={SUN_X} y1={SUN_Y} x2={nearest.x} y2={nearest.y}
-            stroke="#DC2626" strokeWidth={0.6} strokeDasharray="2,2" opacity={0.55} />
+            stroke="var(--red-600)" strokeWidth={0.6} strokeDasharray="2,2" opacity={0.55} />
           <circle cx={nearest.x} cy={nearest.y} r={3}
-            fill="#DC2626" stroke="#fff" strokeWidth={0.5} />
+            fill="var(--red-600)" stroke="#fff" strokeWidth={0.5} />
         </>
       )}
 
       {/* 태양 (지구 위치) */}
-      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="#A16207" />
-      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="#A16207" strokeWidth={0.6} opacity={0.6} />
+      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="var(--yellow-700)" />
+      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="var(--yellow-700)" strokeWidth={0.6} opacity={0.6} />
     </svg>
   )
 }

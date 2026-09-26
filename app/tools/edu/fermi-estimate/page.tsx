@@ -43,7 +43,7 @@ export default function FermiEstimatePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         교육·학습
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />페르미 추정 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -59,7 +59,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 1. 페르미 추정이란? ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             페르미 추정이란?
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -74,8 +74,8 @@ export default function FermiEstimatePage() {
               { t: '✖️ 곱셈으로 결합', d: '각 변수를 곱하면 자릿수(order of magnitude) 정확도' },
               { t: '🔍 가치는 사고 과정', d: '정답이 아닌 논리 분해 자체가 비즈니스·면접·연구의 핵심' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, color: '#0D9488', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--teal-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, color: 'var(--teal-600)', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
             ))}
@@ -83,14 +83,14 @@ export default function FermiEstimatePage() {
           <div style={{
             background: 'rgba(155,89,182,0.06)',
             border: '1px solid rgba(155,89,182,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            🎼 <strong style={{ color: '#9333EA' }}>가장 유명한 문제:</strong> &quot;시카고에 피아노 조율사는 몇 명일까?&quot;
+            🎼 <strong style={{ color: 'var(--purple-600)' }}>가장 유명한 문제:</strong> &quot;시카고에 피아노 조율사는 몇 명일까?&quot;
             <br />→ 인구 → 가구 → 피아노 보유 비율 → 조율 빈도 → 조율사 작업량
             <br />→ <strong>약 100~200명</strong> (실제 약 150명) — 페르미가 학생들에게 던진 고전 문제.
           </div>
@@ -98,7 +98,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 2. 4단계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             페르미 추정 4단계
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
@@ -108,8 +108,8 @@ export default function FermiEstimatePage() {
               { n: 'STEP 3', t: '가정 입력',  d: '인구·비율·빈도·평균 — 신뢰할 수 있는 자료 활용' },
               { n: 'STEP 4', t: '곱셈·검증',  d: '변수값 곱하기 → 시나리오 비교 → 실제 데이터와 비교' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '4px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 11, color: '#0D9488', fontWeight: 800, letterSpacing: '0.04em', marginBottom: 4 }}>{g.n}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '4px solid var(--teal-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 11, color: 'var(--teal-600)', fontWeight: 800, letterSpacing: '0.04em', marginBottom: 4 }}>{g.n}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{g.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
@@ -119,17 +119,17 @@ export default function FermiEstimatePage() {
 
         {/* ── 3. 활용 분야 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             페르미 추정의 활용 분야
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '💼 비즈니스·창업', items: ['신사업 시장 규모 (TAM·SAM·SOM)', '매출·고객 수 예측', '광고·마케팅 효과 추정'], c: '#A16207' },
-              { t: '🎓 교육·면접',     items: ['컨설팅 면접 (맥킨지·BCG·베인)', 'MBA 케이스 스터디', '논리적 사고 훈련'], c: '#9B59B6' },
-              { t: '📊 정책·연구',     items: ['환경 영향 평가', '인구 통계 추정', '자원 사용량 예측'], c: '#059669' },
+              { t: '💼 비즈니스·창업', items: ['신사업 시장 규모 (TAM·SAM·SOM)', '매출·고객 수 예측', '광고·마케팅 효과 추정'], c: 'var(--yellow-700)' },
+              { t: '🎓 교육·면접',     items: ['컨설팅 면접 (맥킨지·BCG·베인)', 'MBA 케이스 스터디', '논리적 사고 훈련'], c: 'var(--amethyst)' },
+              { t: '📊 정책·연구',     items: ['환경 영향 평가', '인구 통계 추정', '자원 사용량 예측'], c: 'var(--emerald-600)' },
               { t: '🌍 일상 호기심',   items: ['"지구 모래알 수"', '"평생 먹는 밥의 양"', '"한국 전체 자판기 수"'], c: 'var(--accent)' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: g.c, fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => <li key={j}>{it}</li>)}
@@ -141,7 +141,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 4. 시나리오 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             시나리오 비교의 가치
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -150,11 +150,11 @@ export default function FermiEstimatePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 10 }}>
             {[
-              { l: '🟦 보수적', d: '낮은 가정', c: '#0891B2' },
+              { l: '🟦 보수적', d: '낮은 가정', c: 'var(--cyan-600)' },
               { l: '🟢 기준',  d: '평균 가정', c: 'var(--accent)' },
-              { l: '🟡 낙관적', d: '높은 가정', c: '#A16207' },
+              { l: '🟡 낙관적', d: '높은 가정', c: 'var(--yellow-700)' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px', textAlign: 'center' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px', textAlign: 'center' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 4 }}>{g.l}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)' }}>{g.d}</p>
               </div>
@@ -163,7 +163,7 @@ export default function FermiEstimatePage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
             marginTop: 12,
             fontSize: 13,
@@ -172,9 +172,9 @@ export default function FermiEstimatePage() {
           }}>
             <strong style={{ color: 'var(--text)' }}>예: &quot;서울 하루 아메리카노 판매량&quot; 템플릿 기본값</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6 }}>
-              <li>보수적: <strong style={{ color: '#0891B2' }}>약 13.5만 잔</strong></li>
+              <li>보수적: <strong style={{ color: 'var(--cyan-600)' }}>약 13.5만 잔</strong></li>
               <li>기준: <strong style={{ color: 'var(--accent)' }}>약 203만 잔</strong></li>
-              <li>낙관적: <strong style={{ color: '#A16207' }}>약 1,440만 잔</strong></li>
+              <li>낙관적: <strong style={{ color: 'var(--yellow-700)' }}>약 1,440만 잔</strong></li>
             </ul>
             → 네 변수의 범위 끝값이 겹치면 보수적과 낙관적이 100배 가까이 벌어집니다. 범위가 이렇게 넓다면 민감도가 가장 큰 변수부터 자료를 더 찾아 좁혀 보세요.
           </div>
@@ -182,7 +182,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 5. 한국 통계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 쓰는 한국 통계 (페르미 추정용)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -192,7 +192,7 @@ export default function FermiEstimatePage() {
               { t: '🏢 기업·시장', items: ['한국 사업체: 약 600만 개 (99%+가 중소기업)', '카페: 약 9만 개', '편의점: 약 5만 개'] },
               { t: '🚗 교통·환경', items: ['자동차 등록: 약 2,670만 대 (2026년 6월)', '전기차: 약 110만 대 (2026년 6월)', '1인 일일 음식물 쓰레기: 약 0.3kg'] },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>{g.t}</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
                   {g.items.map((it, j) => <li key={j}>{it}</li>)}
@@ -216,10 +216,10 @@ export default function FermiEstimatePage() {
 
         {/* ── 6. 컨설팅 면접 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             컨설팅 면접에서의 페르미 추정
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
             <strong style={{ color: 'var(--text)' }}>주요 컨설팅 회사 면접 빈출 문제:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6, color: 'var(--muted)' }}>
               <li>&quot;한국에 자동차 정비소는 몇 개 있을까?&quot;</li>
@@ -230,14 +230,14 @@ export default function FermiEstimatePage() {
           <div style={{
             background: 'rgba(161,98,7,0.05)',
             border: '1px solid rgba(161,98,7,0.30)',
-            borderRadius: 12,
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
             fontSize: 13,
             color: 'var(--text)',
             marginTop: 12,
             lineHeight: 1.85,
           }}>
-            ⭐ <strong style={{ color: '#A16207' }}>답변 평가 기준:</strong>
+            ⭐ <strong style={{ color: 'var(--yellow-700)' }}>답변 평가 기준:</strong>
             <ul style={{ paddingLeft: 22, marginTop: 6, color: 'var(--muted)' }}>
               <li>① 논리 구조 (변수 분해의 합리성)</li>
               <li>② 가정의 타당성 (출처·근거)</li>
@@ -245,7 +245,7 @@ export default function FermiEstimatePage() {
               <li>④ 결과 검증·해석</li>
               <li>⑤ 의사소통 (명확한 설명)</li>
             </ul>
-            <p style={{ marginTop: 8, fontSize: 13, color: '#A16207', fontWeight: 700 }}>
+            <p style={{ marginTop: 8, fontSize: 13, color: 'var(--yellow-700)', fontWeight: 700 }}>
               ※ 정확한 답이 중요하지 않음 — <strong>사고 과정</strong>을 평가받음
             </p>
           </div>
@@ -253,7 +253,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 7. TAM·SAM·SOM ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             TAM·SAM·SOM 분석 (시장 규모)
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -261,12 +261,12 @@ export default function FermiEstimatePage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: 'TAM', n: 'Total Addressable Market', d: '전체 시장 규모. "이 제품이 모든 사람에게 팔린다면?" 가장 큰 추정값.', c: '#A16207' },
-              { t: 'SAM', n: 'Serviceable Available Market', d: '실제 도달 가능한 시장. "내 회사가 서비스 가능한 범위?" TAM의 일부.', c: '#EA580C' },
-              { t: 'SOM', n: 'Serviceable Obtainable Market', d: '실제 점유 가능한 시장. "현실적으로 얼마를 가져올 수 있나?" SAM의 일부.', c: '#DC2626' },
+              { t: 'TAM', n: 'Total Addressable Market', d: '전체 시장 규모. "이 제품이 모든 사람에게 팔린다면?" 가장 큰 추정값.', c: 'var(--yellow-700)' },
+              { t: 'SAM', n: 'Serviceable Available Market', d: '실제 도달 가능한 시장. "내 회사가 서비스 가능한 범위?" TAM의 일부.', c: 'var(--orange-600)' },
+              { t: 'SOM', n: 'Serviceable Obtainable Market', d: '실제 점유 가능한 시장. "현실적으로 얼마를 가져올 수 있나?" SAM의 일부.', c: 'var(--red-600)' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 24, fontWeight: 800, color: g.c, marginBottom: 4 }}>{g.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 24, fontWeight: 800, color: g.c, marginBottom: 4 }}>{g.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6, fontStyle: 'italic' }}>{g.n}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
@@ -275,17 +275,17 @@ export default function FermiEstimatePage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 16px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2,
             marginTop: 12,
           }}>
-            <div><span style={{ color: '#A16207' }}>TAM</span> = 인구 × 1인당 소비</div>
-            <div><span style={{ color: '#EA580C' }}>SAM</span> = TAM × 도달 비율</div>
-            <div><span style={{ color: '#DC2626' }}>SOM</span> = SAM × 점유 비율</div>
+            <div><span style={{ color: 'var(--yellow-700)' }}>TAM</span> = 인구 × 1인당 소비</div>
+            <div><span style={{ color: 'var(--orange-600)' }}>SAM</span> = TAM × 도달 비율</div>
+            <div><span style={{ color: 'var(--red-600)' }}>SOM</span> = SAM × 점유 비율</div>
           </div>
         </div>
 
@@ -293,13 +293,13 @@ export default function FermiEstimatePage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -314,7 +314,7 @@ export default function FermiEstimatePage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -334,7 +334,7 @@ export default function FermiEstimatePage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -349,10 +349,10 @@ export default function FermiEstimatePage() {
 
         {/* ── 10. 학습 자료 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             추천 학습 자료
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
             <ul style={{ paddingLeft: 22, margin: 0 }}>
               <li><em>&quot;How to Solve It&quot;</em> — George Pólya (사고법 고전)</li>
               <li><em>&quot;Thinking in Bets&quot;</em> — Annie Duke (불확실성 하의 의사결정)</li>

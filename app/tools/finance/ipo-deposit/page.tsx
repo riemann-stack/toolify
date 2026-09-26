@@ -15,7 +15,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -25,7 +25,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
@@ -48,7 +48,7 @@ const headCell: React.CSSProperties = {
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -85,7 +85,7 @@ export default function IpoDepositPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />공모주 증거금 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -140,11 +140,11 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>10 ~ 100주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>10주</td><td style={cell}>10·20·30·...·100</td></tr>
-            <tr><td style={cell}>100 ~ 500주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>50주</td><td style={cell}>100·150·...·500</td></tr>
-            <tr><td style={cell}>500 ~ 1,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>100주</td><td style={cell}>500·600·...·1,000</td></tr>
-            <tr><td style={cell}>1,000 ~ 5,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>500주</td><td style={cell}>1,000·1,500·...·5,000</td></tr>
-            <tr><td style={cell}>5,000주 이상</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1,000주</td><td style={cell}>5,000·6,000·...</td></tr>
+            <tr><td style={cell}>10 ~ 100주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>10주</td><td style={cell}>10·20·30·...·100</td></tr>
+            <tr><td style={cell}>100 ~ 500주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>50주</td><td style={cell}>100·150·...·500</td></tr>
+            <tr><td style={cell}>500 ~ 1,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>100주</td><td style={cell}>500·600·...·1,000</td></tr>
+            <tr><td style={cell}>1,000 ~ 5,000주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>500주</td><td style={cell}>1,000·1,500·...·5,000</td></tr>
+            <tr><td style={cell}>5,000주 이상</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>1,000주</td><td style={cell}>5,000·6,000·...</td></tr>
           </tbody>
         </table>
       </div>
@@ -167,12 +167,12 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>4는 5 이하 → 버림 (1주 보장 추첨 옵션 별도)</td></tr>
-            <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>0주</td><td style={cell}>5는 5 이하 → 버림 (반올림과 다른 점)</td></tr>
-            <tr><td style={cell}>0.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>6은 6 이상 → 올림</td></tr>
-            <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>4는 5 이하 → 버림</td></tr>
-            <tr><td style={cell}>1.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>1주</td><td style={cell}>5는 5 이하 → 버림</td></tr>
-            <tr><td style={cell}>1.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2주</td><td style={cell}>6은 6 이상 → 올림</td></tr>
+            <tr><td style={cell}>0.4주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>0주</td><td style={cell}>4는 5 이하 → 버림 (1주 보장 추첨 옵션 별도)</td></tr>
+            <tr><td style={cell}>0.5주</td><td style={{ ...cell, color: '#DC2626', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>0주</td><td style={cell}>5는 5 이하 → 버림 (반올림과 다른 점)</td></tr>
+            <tr><td style={cell}>0.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>1주</td><td style={cell}>6은 6 이상 → 올림</td></tr>
+            <tr><td style={cell}>1.4주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>1주</td><td style={cell}>4는 5 이하 → 버림</td></tr>
+            <tr><td style={cell}>1.5주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>1주</td><td style={cell}>5는 5 이하 → 버림</td></tr>
+            <tr><td style={cell}>1.6주</td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>2주</td><td style={cell}>6은 6 이상 → 올림</td></tr>
           </tbody>
         </table>
       </div>
@@ -183,7 +183,7 @@ export default function IpoDepositPage() {
       {/* 4. 청약 한도·중복청약 */}
       <h2 style={sectionTitle}>🚫 청약 한도·중복청약 금지 가이드</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-        <div style={{ background: 'var(--bg2)', border: '1px solid #D9770644', borderRadius: '12px', padding: '16px 18px' }}>
+        <div style={{ background: 'var(--bg2)', border: '1px solid #D9770644', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
           <p style={{ fontSize: '13px', color: '#D97706', fontWeight: 700, marginBottom: '8px' }}>📏 청약 한도</p>
           <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 18, margin: 0 }}>
             <li>증권사·종목별 다름 (보통 5,000~50,000주)</li>
@@ -192,7 +192,7 @@ export default function IpoDepositPage() {
             <li>본 도구의 한도 입력으로 자동 경고</li>
           </ul>
         </div>
-        <div style={{ background: 'var(--bg2)', border: '1px solid #DC262644', borderRadius: '12px', padding: '16px 18px' }}>
+        <div style={{ background: 'var(--bg2)', border: '1px solid #DC262644', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
           <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>🚫 중복청약 금지 (2021년 이후)</p>
           <ul style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, paddingLeft: 18, margin: 0 }}>
             <li>한 종목당 한 증권사만 가능</li>
@@ -221,11 +221,11 @@ export default function IpoDepositPage() {
             </tr>
           </thead>
           <tbody>
-            <tr><td style={cell}><strong>① 청약일</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D ~ D+1 (보통 2일)</td><td style={cell}>증거금 납입 (계좌 출금 또는 묶임)</td></tr>
-            <tr><td style={cell}><strong>② 배정 발표</strong></td><td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D+1 ~ D+2</td><td style={cell}>증권사 알림 (HTS·MTS·문자)</td></tr>
-            <tr><td style={cell}><strong>③ 환불</strong></td><td style={{ ...cell, color: '#059669', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>미배정분 환불 (증거금률 50%면 약 절반)</td></tr>
-            <tr><td style={cell}><strong>④ 잔금 납입</strong></td><td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D+2 ~ D+3</td><td style={cell}>배정 주식 잔금 (증거금률 50%면 나머지 50%)</td></tr>
-            <tr><td style={cell}><strong>⑤ 상장</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>D+7 ~ D+10</td><td style={cell}>거래 시작</td></tr>
+            <tr><td style={cell}><strong>① 청약일</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>D ~ D+1 (보통 2일)</td><td style={cell}>증거금 납입 (계좌 출금 또는 묶임)</td></tr>
+            <tr><td style={cell}><strong>② 배정 발표</strong></td><td style={{ ...cell, fontFamily: 'var(--font-sans)' }}>D+1 ~ D+2</td><td style={cell}>증권사 알림 (HTS·MTS·문자)</td></tr>
+            <tr><td style={cell}><strong>③ 환불</strong></td><td style={{ ...cell, color: '#059669', fontFamily: 'var(--font-sans)' }}>D+2 ~ D+3</td><td style={cell}>미배정분 환불 (증거금률 50%면 약 절반)</td></tr>
+            <tr><td style={cell}><strong>④ 잔금 납입</strong></td><td style={{ ...cell, fontFamily: 'var(--font-sans)' }}>D+2 ~ D+3</td><td style={cell}>배정 주식 잔금 (증거금률 50%면 나머지 50%)</td></tr>
+            <tr><td style={cell}><strong>⑤ 상장</strong></td><td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>D+7 ~ D+10</td><td style={cell}>거래 시작</td></tr>
           </tbody>
         </table>
       </div>

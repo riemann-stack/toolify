@@ -6,7 +6,7 @@
   border-radius: var(--radius-card);
   padding: 16px 18px;
 }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 
 /* ── 면적 입력 ── */
 .fieldHead { display: flex; align-items: center; justify-content: space-between; margin-bottom: 10px; gap: 12px; }
@@ -25,7 +25,7 @@
   flex: 1; min-width: 0;
   font-size: 22px; font-weight: 700; color: var(--text);
   background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m);
-  padding: 12px 14px; font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  padding: 12px 14px; font-family: var(--font-sans);
 }
 .input:focus { outline: none; border-color: var(--accent); }
 .unit { font-size: 15px; color: var(--muted); font-weight: 600; flex-shrink: 0; }
@@ -55,7 +55,7 @@
 }
 .resultLabel { font-size: 13px; color: var(--muted); margin: 0 0 4px; text-align: center; }
 .hero {
-  font-family: Inter, "Noto Sans KR", system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(44px, 11vw, 72px); font-weight: 800; line-height: 1;
   color: var(--accent-ink); text-align: center; margin: 0; letter-spacing: -0.02em;
 }
@@ -65,7 +65,7 @@
 .tierBox { margin-top: 18px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 14px 16px; }
 .tierMain { display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px 10px; }
 .tierLabel { font-size: 13px; color: var(--muted); }
-.tierValue { font-size: 22px; font-weight: 800; color: var(--accent-ink); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.tierValue { font-size: 22px; font-weight: 800; color: var(--accent-ink); font-family: var(--font-sans); }
 .tierSpace { font-size: 12px; color: var(--muted); }
 .tierNote { font-size: 12px; color: var(--muted); line-height: 1.6; margin: 8px 0 0; }
 
@@ -73,15 +73,15 @@
 .powerRow { display: flex; align-items: center; justify-content: space-between; padding: 8px 2px; font-size: 13px; border-bottom: 1px solid var(--border); }
 .powerRow:last-child { border-bottom: none; }
 .powerKey { color: var(--muted); }
-.powerVal { color: var(--text); font-weight: 600; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.powerVal { color: var(--text); font-weight: 600; font-family: var(--font-sans); }
 .powerRowMain .powerKey { color: var(--text); font-weight: 700; }
-.powerValMain { color: var(--accent-ink); font-weight: 800; font-size: 15px; font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.powerValMain { color: var(--accent-ink); font-weight: 800; font-size: 15px; font-family: var(--font-sans); }
 
 .assumeRow { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 14px; }
 .assumeField { display: flex; flex-direction: column; gap: 5px; min-width: 0; }
 .assumeLabel { font-size: 12px; color: var(--muted); }
 .assumeInputWrap { display: flex; align-items: center; gap: 6px; background: var(--bg); border: 1px solid var(--border); border-radius: var(--radius-s); padding: 6px 10px; }
-.assumeInput { flex: 1; min-width: 0; border: none; background: transparent; font-size: 16px; font-weight: 600; color: var(--text); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; }
+.assumeInput { flex: 1; min-width: 0; border: none; background: transparent; font-size: 16px; font-weight: 600; color: var(--text); font-family: var(--font-sans); }
 .assumeInput:focus { outline: none; }
 .assumeUnit { font-size: 12px; color: var(--muted); flex-shrink: 0; }
 .assumeNote { font-size: 11px; color: var(--muted); line-height: 1.6; margin: 10px 0 0; }
@@ -97,7 +97,7 @@
   padding: 10px 12px;
 }
 .tierRowActive { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 8%, var(--bg2)); }
-.tierRowL { font-size: 14px; font-weight: 800; color: var(--accent-ink); font-family: Inter, "Noto Sans KR", system-ui, sans-serif; flex-shrink: 0; min-width: 52px; }
+.tierRowL { font-size: 14px; font-weight: 800; color: var(--accent-ink); font-family: var(--font-sans); flex-shrink: 0; min-width: 52px; }
 .tierRowSpace { font-size: 12px; color: var(--muted); flex: 1; min-width: 0; }
 .tierRowWatt { font-size: 12px; color: var(--text); font-weight: 600; flex-shrink: 0; }
 .tierRowBadge { font-size: 11px; font-weight: 700; color: #fff; background: var(--accent-strong); border-radius: var(--radius-pill); padding: 2px 8px; flex-shrink: 0; }

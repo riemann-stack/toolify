@@ -653,9 +653,9 @@ export default function WallpaperClient() {
               <span className={styles.cardLabelHint}>면적 vs 장수 중 큰 값 채택</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              천장 높이 <strong style={{ color: 'var(--text)' }}>{heightM}m</strong> + 재단 여유 {Math.round(TRIM_M * 100)}cm 기준 1롤에서 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{t1.stripsPerRoll}장</strong> 절단 가능 →
-              둘레 {fmt(t1.perimeter)}m ÷ 폭 {wpWidth}m = <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{t1.totalStripsNeeded}장</strong> 필요 →
-              장 수 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{t1.stripsRollsNeeded}롤</strong>
+              천장 높이 <strong style={{ color: 'var(--text)' }}>{heightM}m</strong> + 재단 여유 {Math.round(TRIM_M * 100)}cm 기준 1롤에서 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{t1.stripsPerRoll}장</strong> 절단 가능 →
+              둘레 {fmt(t1.perimeter)}m ÷ 폭 {wpWidth}m = <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{t1.totalStripsNeeded}장</strong> 필요 →
+              장 수 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{t1.stripsRollsNeeded}롤</strong>
             </p>
           </div>
 
@@ -697,12 +697,12 @@ export default function WallpaperClient() {
                         y1={y0}
                         x2={x0 + drawW * 0.7}
                         y2={y0}
-                        stroke="#0891B2"
+                        stroke="var(--cyan-600)"
                         strokeWidth={5}
                       />
                     )}
                     {winCount > 0 && (
-                      <text x={x0 + drawW * 0.5} y={y0 + 18} textAnchor="middle" fill="#0891B2" fontSize="10" fontFamily="monospace">창</text>
+                      <text x={x0 + drawW * 0.5} y={y0 + 18} textAnchor="middle" fill="var(--cyan-600)" fontSize="10" fontFamily="monospace">창</text>
                     )}
                     {/* 문 (아래) */}
                     {doorCount > 0 && doorW > 0 && (
@@ -711,12 +711,12 @@ export default function WallpaperClient() {
                         y1={y0 + drawH}
                         x2={x0 + drawW * 0.85}
                         y2={y0 + drawH}
-                        stroke="#EA580C"
+                        stroke="var(--orange-600)"
                         strokeWidth={5}
                       />
                     )}
                     {doorCount > 0 && (
-                      <text x={x0 + drawW * 0.78} y={y0 + drawH - 8} textAnchor="middle" fill="#EA580C" fontSize="10" fontFamily="monospace">문</text>
+                      <text x={x0 + drawW * 0.78} y={y0 + drawH - 8} textAnchor="middle" fill="var(--orange-600)" fontSize="10" fontFamily="monospace">문</text>
                     )}
                   </svg>
                 )
@@ -883,7 +883,7 @@ export default function WallpaperClient() {
               <span className={styles.cardLabelHint}>{`현재 ${usedRolls}롤 적용 (${quoteSource === 'detail' ? '상세' : '간편'} 계산 결과)`}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-              {quoteSource === 'detail' ? '상세' : '간편'} 계산 결과 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{usedRolls}롤</strong> · 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평)
+              {quoteSource === 'detail' ? '상세' : '간편'} 계산 결과 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{usedRolls}롤</strong> · 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평)
             </p>
 
             <span className={styles.subLabel}>벽지 1롤 가격</span>

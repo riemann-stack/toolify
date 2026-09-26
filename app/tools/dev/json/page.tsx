@@ -42,7 +42,7 @@ export default function JsonPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         개발자
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="dev" />JSON 포맷터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -58,7 +58,7 @@ export default function JsonPage() {
 
         {/* ── 1. JSON 기본 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JSON(JavaScript Object Notation)이란?
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -69,36 +69,36 @@ export default function JsonPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 16px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 1.85,
             overflowX: 'auto',
           }}>
             <div><span style={{ color: 'var(--muted)' }}># JSON 기본 데이터 타입</span></div>
-            <div><span style={{ color: '#0891B2' }}>&quot;string&quot;</span> · <span style={{ color: '#A16207' }}>123</span> · <span style={{ color: '#9333EA' }}>true / false</span> · <span style={{ color: 'var(--muted)' }}>null</span></div>
+            <div><span style={{ color: 'var(--cyan-600)' }}>&quot;string&quot;</span> · <span style={{ color: 'var(--yellow-700)' }}>123</span> · <span style={{ color: 'var(--purple-600)' }}>true / false</span> · <span style={{ color: 'var(--muted)' }}>null</span></div>
             <div><span style={{ color: 'var(--muted)' }}>{'{ object }'}</span> · <span style={{ color: 'var(--muted)' }}>{'[ array ]'}</span></div>
           </div>
         </div>
 
         {/* ── 2. 자주 발생하는 오류 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 발생하는 JSON 오류 7가지
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
             {[
-              { e: 'Trailing comma',  c: '#DC2626', d: '마지막 요소 뒤 쉼표 — JSON 표준 비허용. JSON5/JSONC는 허용.' },
-              { e: 'Single quotes',   c: '#DC2626', d: '문자열에 작은따옴표(\') 사용 — JSON은 큰따옴표(") 전용.' },
-              { e: 'Unquoted keys',   c: '#DC2626', d: '키에 따옴표 없음 — { name: "John" } ❌ → { "name": "John" } ✓.' },
-              { e: 'undefined / NaN', c: '#DC2626', d: 'JS 값 undefined·NaN·Infinity는 JSON에 사용 불가. null로 대체.' },
-              { e: '주석 포함',         c: '#DC2626', d: 'JSON은 // 또는 /* */ 주석 미지원. JSON5·JSONC는 지원.' },
-              { e: 'Escape 누락',      c: '#DC2626', d: '문자열 안의 ", \\, 줄바꿈은 \\", \\\\, \\n으로 이스케이프 필수.' },
-              { e: '인코딩 BOM',       c: '#DC2626', d: 'UTF-8 BOM(\\uFEFF)은 JSON 표준 미허용. 파일 저장 시 주의.' },
+              { e: 'Trailing comma',  c: 'var(--red-600)', d: '마지막 요소 뒤 쉼표 — JSON 표준 비허용. JSON5/JSONC는 허용.' },
+              { e: 'Single quotes',   c: 'var(--red-600)', d: '문자열에 작은따옴표(\') 사용 — JSON은 큰따옴표(") 전용.' },
+              { e: 'Unquoted keys',   c: 'var(--red-600)', d: '키에 따옴표 없음 — { name: "John" } ❌ → { "name": "John" } ✓.' },
+              { e: 'undefined / NaN', c: 'var(--red-600)', d: 'JS 값 undefined·NaN·Infinity는 JSON에 사용 불가. null로 대체.' },
+              { e: '주석 포함',         c: 'var(--red-600)', d: 'JSON은 // 또는 /* */ 주석 미지원. JSON5·JSONC는 지원.' },
+              { e: 'Escape 누락',      c: 'var(--red-600)', d: '문자열 안의 ", \\, 줄바꿈은 \\", \\\\, \\n으로 이스케이프 필수.' },
+              { e: '인코딩 BOM',       c: 'var(--red-600)', d: 'UTF-8 BOM(\\uFEFF)은 JSON 표준 미허용. 파일 저장 시 주의.' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 4, fontFamily: 'var(--font-mono)' }}>{g.e}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{g.d}</p>
               </div>
@@ -108,7 +108,7 @@ export default function JsonPage() {
 
         {/* ── 3. 2^53 정밀도 한계 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JSON.parse가 64비트 ID를 조용히 바꾸는 이유 — 2⁵³ 한계
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -120,9 +120,9 @@ export default function JsonPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 16px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '12px',
             color: 'var(--text)',
             lineHeight: 1.85,
@@ -131,8 +131,8 @@ export default function JsonPage() {
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 실제로 깨지는 예 (Node.js·브라우저 공통)</span></div>
             <div>JSON.parse(&apos;{'{'}&quot;id&quot;: 1234567890123456789{'}'}&apos;).id</div>
-            <div><span style={{ color: '#DC2626' }}>{'// → 1234567890123456800  ← 끝 세 자리가 조용히 바뀜'}</span></div>
-            <div>JSON.parse(&apos;9007199254740993&apos;)  <span style={{ color: '#DC2626' }}>{'// → 9007199254740992'}</span></div>
+            <div><span style={{ color: 'var(--red-600)' }}>{'// → 1234567890123456800  ← 끝 세 자리가 조용히 바뀜'}</span></div>
+            <div>JSON.parse(&apos;9007199254740993&apos;)  <span style={{ color: 'var(--red-600)' }}>{'// → 9007199254740992'}</span></div>
           </div>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             대처는 세 가지입니다. ① <strong style={{ color: 'var(--text)' }}>서버가 ID를 문자열로 직렬화</strong> — 트위터 API가 숫자 id와 별도로
@@ -145,7 +145,7 @@ export default function JsonPage() {
 
         {/* ── 4. JSON vs JSON5 vs JSONC ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JSON vs JSON5 vs JSONC
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -179,11 +179,11 @@ export default function JsonPage() {
 
         {/* ── 5. 정렬 vs 압축 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JSON 정렬(Beautify) vs 압축(Minify)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>✦ 정렬 (Beautify)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>가독성 ↑ (들여쓰기 2/4칸)</li>
@@ -192,8 +192,8 @@ export default function JsonPage() {
                 <li>API 응답 분석·로그 분석</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #059669', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#059669', fontWeight: 700, marginBottom: 8 }}>⊟ 압축 (Minify)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--emerald-600)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: 14, color: 'var(--emerald-600)', fontWeight: 700, marginBottom: 8 }}>⊟ 압축 (Minify)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>공백·줄바꿈 제거</li>
                 <li>네트워크 전송 절약</li>
@@ -206,7 +206,7 @@ export default function JsonPage() {
 
         {/* ── 6. JSON → TypeScript ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JSON → TypeScript 인터페이스 자동 생성
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -216,9 +216,9 @@ export default function JsonPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 16px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '12px',
             color: 'var(--text)',
             lineHeight: 1.85,
@@ -228,31 +228,31 @@ export default function JsonPage() {
             <div>{'{ "name": "Alice", "age": 30, "address": { "city": "Seoul" } }'}</div>
             <div></div>
             <div><span style={{ color: 'var(--muted)' }}># 자동 생성 TypeScript</span></div>
-            <div><span style={{ color: '#9333EA' }}>interface</span> <span style={{ color: '#0891B2' }}>Address</span> {'{'}</div>
-            <div>  <span style={{ color: '#0891B2' }}>city</span>: <span style={{ color: '#059669' }}>string</span></div>
+            <div><span style={{ color: 'var(--purple-600)' }}>interface</span> <span style={{ color: 'var(--cyan-600)' }}>Address</span> {'{'}</div>
+            <div>  <span style={{ color: 'var(--cyan-600)' }}>city</span>: <span style={{ color: 'var(--emerald-600)' }}>string</span></div>
             <div>{'}'}</div>
             <div></div>
-            <div><span style={{ color: '#9333EA' }}>interface</span> <span style={{ color: '#0891B2' }}>Root</span> {'{'}</div>
-            <div>  <span style={{ color: '#0891B2' }}>address</span>: <span style={{ color: '#0891B2' }}>Address</span></div>
-            <div>  <span style={{ color: '#0891B2' }}>age</span>: <span style={{ color: '#059669' }}>number</span></div>
-            <div>  <span style={{ color: '#0891B2' }}>name</span>: <span style={{ color: '#059669' }}>string</span></div>
+            <div><span style={{ color: 'var(--purple-600)' }}>interface</span> <span style={{ color: 'var(--cyan-600)' }}>Root</span> {'{'}</div>
+            <div>  <span style={{ color: 'var(--cyan-600)' }}>address</span>: <span style={{ color: 'var(--cyan-600)' }}>Address</span></div>
+            <div>  <span style={{ color: 'var(--cyan-600)' }}>age</span>: <span style={{ color: 'var(--emerald-600)' }}>number</span></div>
+            <div>  <span style={{ color: 'var(--cyan-600)' }}>name</span>: <span style={{ color: 'var(--emerald-600)' }}>string</span></div>
             <div>{'}'}</div>
           </div>
         </div>
 
         {/* ── 7. JSON ↔ YAML ↔ CSV ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JSON ↔ YAML ↔ CSV 변환
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: 'YAML',    c: '#0891B2', d: 'Kubernetes·Docker Compose·GitHub Actions·Ansible 설정 파일 표준' },
-              { t: 'CSV',     c: '#059669', d: '엑셀·Google Sheets·DB import에 사용. 객체 배열 → 평탄화된 표' },
+              { t: 'YAML',    c: 'var(--cyan-600)', d: 'Kubernetes·Docker Compose·GitHub Actions·Ansible 설정 파일 표준' },
+              { t: 'CSV',     c: 'var(--emerald-600)', d: '엑셀·Google Sheets·DB import에 사용. 객체 배열 → 평탄화된 표' },
               { t: '키 정렬',  c: 'var(--accent)', d: '두 JSON 비교(diff) 시 키 순서 차이를 제거하고 의미 차이만 비교' },
-              { t: '이스케이프', c: '#A16207', d: 'JSON을 다시 JS 문자열에 임베드할 때 사용 (코드 안에 JSON 리터럴)' },
+              { t: '이스케이프', c: 'var(--yellow-700)', d: 'JSON을 다시 JS 문자열에 임베드할 때 사용 (코드 안에 JSON 리터럴)' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
@@ -262,7 +262,7 @@ export default function JsonPage() {
 
         {/* ── 8. 한글 이스케이프 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한글 이스케이프 — JS와 Python의 기본값이 반대입니다
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -307,7 +307,7 @@ export default function JsonPage() {
 
         {/* ── 9. JSON Pointer / 활용 팁 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             JSON 활용 팁
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
@@ -319,7 +319,7 @@ export default function JsonPage() {
               { t: '📋 클립보드 → 코드',     d: 'API 응답 복사 → 변환 → 붙여넣기로 mock 데이터·테스트 데이터 즉시 생성.' },
               { t: '🚨 에러 위치 추적',       d: '파싱 오류 시 라인·컬럼 자동 표시. 큰 파일에서도 즉시 위치 확인.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{c.d}</p>
               </div>
@@ -329,7 +329,7 @@ export default function JsonPage() {
 
         {/* ── 10. jq 실전 치트시트 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             jq 실전 치트시트 — 화면에서 확인, CLI에서 반복
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
@@ -359,9 +359,9 @@ export default function JsonPage() {
                   { c: 'jq -S .',                            u: '키 재귀 정렬',              o: '본 도구 \'키 정렬\'과 동일' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: "'JetBrains Mono', Menlo, monospace", fontSize: '12px', whiteSpace: 'nowrap' }}>{r.c}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'var(--font-mono)', fontSize: '12px', whiteSpace: 'nowrap' }}>{r.c}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.u}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: "'JetBrains Mono', Menlo, monospace", fontSize: '12px' }}>{r.o}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{r.o}</td>
                   </tr>
                 ))}
               </tbody>
@@ -375,9 +375,9 @@ export default function JsonPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 16px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '12px',
             color: 'var(--text)',
             lineHeight: 1.85,
@@ -392,13 +392,13 @@ export default function JsonPage() {
 
         {/* ── 11. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -413,7 +413,7 @@ export default function JsonPage() {
 
         {/* ── 12. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -433,7 +433,7 @@ export default function JsonPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

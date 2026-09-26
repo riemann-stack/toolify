@@ -84,11 +84,11 @@ export interface SavingsGrade {
 }
 
 export const GRADES: SavingsGrade[] = [
-  { grade: 'S', rateMin: 50, label: '절약왕',     emoji: '🏆', color: '#0D9488', desc: '수입의 절반 이상을 모으는 단계. 자산 형성이 빠르게 진행됩니다' },
-  { grade: 'A', rateMin: 35, label: '우수',       emoji: '⭐', color: '#059669', desc: '권장 구간의 상단. 목표 달성이 빠릅니다' },
-  { grade: 'B', rateMin: 20, label: '양호',       emoji: '👍', color: '#0891B2', desc: '일반적으로 권하는 저축 수준입니다' },
-  { grade: 'C', rateMin: 10, label: '보통',       emoji: '😐', color: '#D97706', desc: '저축은 되고 있지만 권장 수준보다 낮아요. 변동비를 점검해 보세요' },
-  { grade: 'D', rateMin: 0,  label: '점검 필요',  emoji: '⚠️', color: '#DB2777', desc: '저축액 부족. 고정비·변동비 재구성 필요' },
+  { grade: 'S', rateMin: 50, label: '절약왕',     emoji: '🏆', color: 'var(--teal-600)', desc: '수입의 절반 이상을 모으는 단계. 자산 형성이 빠르게 진행됩니다' },
+  { grade: 'A', rateMin: 35, label: '우수',       emoji: '⭐', color: 'var(--emerald-600)', desc: '권장 구간의 상단. 목표 달성이 빠릅니다' },
+  { grade: 'B', rateMin: 20, label: '양호',       emoji: '👍', color: 'var(--cyan-600)', desc: '일반적으로 권하는 저축 수준입니다' },
+  { grade: 'C', rateMin: 10, label: '보통',       emoji: '😐', color: 'var(--amber-600)', desc: '저축은 되고 있지만 권장 수준보다 낮아요. 변동비를 점검해 보세요' },
+  { grade: 'D', rateMin: 0,  label: '점검 필요',  emoji: '⚠️', color: 'var(--pink-600)', desc: '저축액 부족. 고정비·변동비 재구성 필요' },
 ]
 
 export function getGrade(savingsRate: number): SavingsGrade {
@@ -111,12 +111,12 @@ export interface JarMeta {
 }
 
 export const JARS: JarMeta[] = [
-  { id: 'nec',  emoji: '🍽️', label: '생활비 (NEC)',         shortLabel: '생활비',  pct: 55, desc: 'Necessities — 의식주·교통·통신 등 기본 생활', color: '#0891B2', examples: '월세·식비·교통·통신·공과금' },
-  { id: 'edu',  emoji: '📚', label: '교육·자기개발 (EDU)',  shortLabel: '교육',    pct: 10, desc: 'Education — 책·강의·세미나·자격증',           color: '#D97706', examples: '책·인강·세미나·자격증·코칭' },
-  { id: 'play', emoji: '🎮', label: '놀이·취미 (PLAY)',      shortLabel: '놀이',    pct: 10, desc: 'Play — 즐거움·여행·취미·외식',                color: '#EA580C', examples: '여행·외식·취미·문화·여가' },
-  { id: 'ffa',  emoji: '💰', label: '저축·재정자유 (FFA)',   shortLabel: '저축',    pct: 10, desc: 'Financial Freedom — 비상금·단기 저축',         color: '#0D9488', examples: '예적금·CMA·비상자금' },
-  { id: 'ltss', emoji: '📈', label: '장기 투자 (LTSS)',      shortLabel: '투자',    pct: 10, desc: 'Long-Term Savings — 주식·연금·부동산',        color: '#DB2777', examples: 'ETF·연금저축·IRP·주택청약' },
-  { id: 'give', emoji: '🎁', label: '기부·나눔 (GIVE)',      shortLabel: '기부',    pct: 5,  desc: 'Give — 기부·후원·선물',                       color: '#9B59B6', examples: '정기 후원·선물·경조사' },
+  { id: 'nec',  emoji: '🍽️', label: '생활비 (NEC)',         shortLabel: '생활비',  pct: 55, desc: 'Necessities — 의식주·교통·통신 등 기본 생활', color: 'var(--cyan-600)', examples: '월세·식비·교통·통신·공과금' },
+  { id: 'edu',  emoji: '📚', label: '교육·자기개발 (EDU)',  shortLabel: '교육',    pct: 10, desc: 'Education — 책·강의·세미나·자격증',           color: 'var(--amber-600)', examples: '책·인강·세미나·자격증·코칭' },
+  { id: 'play', emoji: '🎮', label: '놀이·취미 (PLAY)',      shortLabel: '놀이',    pct: 10, desc: 'Play — 즐거움·여행·취미·외식',                color: 'var(--orange-600)', examples: '여행·외식·취미·문화·여가' },
+  { id: 'ffa',  emoji: '💰', label: '저축·재정자유 (FFA)',   shortLabel: '저축',    pct: 10, desc: 'Financial Freedom — 비상금·단기 저축',         color: 'var(--teal-600)', examples: '예적금·CMA·비상자금' },
+  { id: 'ltss', emoji: '📈', label: '장기 투자 (LTSS)',      shortLabel: '투자',    pct: 10, desc: 'Long-Term Savings — 주식·연금·부동산',        color: 'var(--pink-600)', examples: 'ETF·연금저축·IRP·주택청약' },
+  { id: 'give', emoji: '🎁', label: '기부·나눔 (GIVE)',      shortLabel: '기부',    pct: 5,  desc: 'Give — 기부·후원·선물',                       color: 'var(--amethyst)', examples: '정기 후원·선물·경조사' },
 ]
 
 /* ─────────────────────────────────────────────
@@ -201,7 +201,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['정부기여금 매칭 (일반형 6%·우대형 12%)', '3년 만기 — 청년도약계좌(5년)보다 짧음', '청년 전용 상품'],
     cons: ['나이·소득 요건', '모집 기간(6월·12월)에만 가입', '중도해지 시 정부기여금을 받지 못할 수 있음'],
     recommendFor: '20~30대 초반 사회초년생',
-    color: '#0D9488',
+    color: 'var(--teal-600)',
   },
   {
     id: 'isa',
@@ -216,7 +216,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['주식·ETF·예금·펀드 통합 운용', '비과세 한도 큼', '3년 후 자유 인출'],
     cons: ['중도 인출 시 비과세 혜택 일부 소멸', '연간 한도 제한'],
     recommendFor: '주식·ETF 투자 + 절세 동시',
-    color: '#D97706',
+    color: 'var(--amber-600)',
   },
   {
     id: 'pension_save',
@@ -231,7 +231,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['세액공제 즉시 환급 (연 최대 99만원)', '운용 자유도 높음', '평생 가입'],
     cons: ['만 55세 이후 연금 수령', '중도해지 시 기타소득세 16.5%'],
     recommendFor: '직장인·세액공제 받고 싶은 모든 소득자',
-    color: '#0891B2',
+    color: 'var(--cyan-600)',
   },
   {
     id: 'irp',
@@ -246,7 +246,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['연금저축과 합산 한도 확장', '퇴직금 통합 운용 가능', '안전·위험 자산 분산'],
     cons: ['만 55세 이후 연금 수령', '중도해지 어려움', '위험자산 70% 한도'],
     recommendFor: '연금저축 600 채운 후 추가 절세',
-    color: '#EA580C',
+    color: 'var(--orange-600)',
   },
   {
     id: 'house',
@@ -261,7 +261,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['청약가점 누적', '소득공제 (자격 요건)', '저금리 시대 대안'],
     cons: ['금리 낮음', '청약 사용 시 해지', '소득공제 자격 까다로움'],
     recommendFor: '무주택 청년·세대주',
-    color: '#DB2777',
+    color: 'var(--pink-600)',
   },
   {
     id: 'youth_jump',
@@ -276,7 +276,7 @@ export const TAX_PRODUCTS: TaxProduct[] = [
     pros: ['정부 기여금 (월 최대 약 3.3만원)', '5년 만기 비과세', '청년 전용 우대금리'],
     cons: ['신규 가입 불가 (2025년 12월 종료)', '5년 유지해야 혜택', '중도해지 시 정부지원금 환수'],
     recommendFor: '이미 가입한 청년 — 가능하면 만기까지 유지',
-    color: '#059669',
+    color: 'var(--emerald-600)',
   },
 ]
 

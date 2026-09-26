@@ -70,10 +70,10 @@ export interface ConcentrationLevel {
 }
 
 export const CONCENTRATION_LEVELS: ConcentrationLevel[] = [
-  { min: 0,  max: 10, level: 'safe',   label: '🟢 안전',       color: '#059669', note: '한 종목 10% 이내 — 분산 투자 적정' },
-  { min: 10, max: 20, level: 'warn',   label: '🟡 주의',       color: '#A16207', note: '한 종목 10~20% — 약간 집중' },
-  { min: 20, max: 30, level: 'risk',   label: '🟠 집중 위험',  color: '#EA580C', note: '20% 이상 — 추가 매수는 신중히' },
-  { min: 30, max: Infinity, level: 'danger', label: '🔴 매우 위험', color: '#DC2626', note: '30% 이상 — 분산 권장 / 추가 매수 비권장' },
+  { min: 0,  max: 10, level: 'safe',   label: '🟢 안전',       color: 'var(--emerald-600)', note: '한 종목 10% 이내 — 분산 투자 적정' },
+  { min: 10, max: 20, level: 'warn',   label: '🟡 주의',       color: 'var(--yellow-700)', note: '한 종목 10~20% — 약간 집중' },
+  { min: 20, max: 30, level: 'risk',   label: '🟠 집중 위험',  color: 'var(--orange-600)', note: '20% 이상 — 추가 매수는 신중히' },
+  { min: 30, max: Infinity, level: 'danger', label: '🔴 매우 위험', color: 'var(--red-600)', note: '30% 이상 — 분산 권장 / 추가 매수 비권장' },
 ]
 
 export function getConcentrationLevel(pct: number): ConcentrationLevel {

@@ -18,8 +18,8 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
-const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+const h2: React.CSSProperties = { fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
+const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }
 
 const FAQ_LD = [
               { q: '1500의 유효숫자는 몇 개인가요?', a: '소수점이 없는 정수의 후행 0은 <strong>모호</strong>합니다. 1500은 표기만으로 2개(1,5)인지 4개(1,5,0,0)인지 알 수 없어요. 명확히 하려면 과학적 표기로 씁니다 — <strong>1.5×10³</strong>(2개), <strong>1.50×10³</strong>(3개), <strong>1.500×10³</strong>(4개). 본 계산기는 이런 경우 모호함을 경고합니다.' },
@@ -33,7 +33,7 @@ export default function SigFigsPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>교육·학습</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="edu" />유효숫자·오차 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -84,9 +84,9 @@ export default function SigFigsPage() {
               { t: '백분율오차', d: '상대오차를 %로 표현. 정확도 비교에 편리.', e: '상대오차 × 100%' },
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: '#0D9488', marginBottom: 4 }}>{x.t}</p>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--teal-600)', marginBottom: 4 }}>{x.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7, marginBottom: 6 }}>{x.d}</p>
-                <p style={{ fontSize: 13, color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{x.e}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{x.e}</p>
               </div>
             ))}
           </div>
@@ -113,8 +113,8 @@ export default function SigFigsPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[2]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
@@ -180,8 +180,8 @@ export default function SigFigsPage() {
                   ['tan A', 'δR = δA/cos²A', '90° 부근에서 급격히 커짐'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
                 ))}

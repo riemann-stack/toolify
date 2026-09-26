@@ -38,7 +38,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
 
       {/* 토성 고리 (뒤쪽 절반) */}
       {planet.id === 'saturn' && (
-        <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#A16207" strokeWidth="2" opacity="0.55" />
+        <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="var(--yellow-700)" strokeWidth="2" opacity="0.55" />
       )}
 
       <circle cx={cx} cy={cy} r={r} fill={`url(#${id})`} stroke={planet.color} strokeWidth="0.5" opacity="0.95" />
@@ -47,7 +47,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
       {planet.id === 'saturn' && (
         <path
           d={`M ${cx - r * 1.55} ${cy} A ${r * 1.55} ${r * 0.30} 0 0 0 ${cx + r * 1.55} ${cy}`}
-          fill="none" stroke="#A16207" strokeWidth="2.5" opacity="0.9"
+          fill="none" stroke="var(--yellow-700)" strokeWidth="2.5" opacity="0.9"
         />
       )}
 
@@ -65,9 +65,9 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
       {/* 지구: 대륙 단순화 */}
       {planet.id === 'earth' && (
         <g clipPath={`circle(${r}px at ${cx}px ${cy}px)`} opacity="0.85">
-          <ellipse cx={cx - r * 0.30} cy={cy - r * 0.10} rx={r * 0.30} ry={r * 0.20} fill="#059669" />
-          <ellipse cx={cx + r * 0.20} cy={cy + r * 0.20} rx={r * 0.25} ry={r * 0.30} fill="#059669" />
-          <ellipse cx={cx - r * 0.50} cy={cy + r * 0.40} rx={r * 0.18} ry={r * 0.10} fill="#059669" />
+          <ellipse cx={cx - r * 0.30} cy={cy - r * 0.10} rx={r * 0.30} ry={r * 0.20} fill="var(--emerald-600)" />
+          <ellipse cx={cx + r * 0.20} cy={cy + r * 0.20} rx={r * 0.25} ry={r * 0.30} fill="var(--emerald-600)" />
+          <ellipse cx={cx - r * 0.50} cy={cy + r * 0.40} rx={r * 0.18} ry={r * 0.10} fill="var(--emerald-600)" />
         </g>
       )}
 
@@ -82,7 +82,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
 
       {/* 천왕성: 자전축 옆으로 굴러가는 느낌 */}
       {planet.id === 'uranus' && (
-        <ellipse cx={cx} cy={cy} rx={r * 1.15} ry={r * 0.12} fill="none" stroke="#0D9488" strokeWidth="1.5" opacity="0.5" transform={`rotate(80 ${cx} ${cy})`} />
+        <ellipse cx={cx} cy={cy} rx={r * 1.15} ry={r * 0.12} fill="none" stroke="var(--teal-600)" strokeWidth="1.5" opacity="0.5" transform={`rotate(80 ${cx} ${cy})`} />
       )}
 
       {/* 광택 하이라이트 */}
@@ -228,7 +228,7 @@ export default function PlanetComparisonClient() {
             <g key={p.id}>
               {/* 행성 */}
               {p.id === 'saturn' && (
-                <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#A16207" strokeWidth="1.5" opacity="0.7" />
+                <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="var(--yellow-700)" strokeWidth="1.5" opacity="0.7" />
               )}
               <circle cx={cx} cy={cy} r={r} fill={p.color} opacity="0.95" />
               <ellipse cx={cx - r * 0.3} cy={cy - r * 0.3} rx={r * 0.3} ry={r * 0.15} fill="#fff" opacity="0.30" />
@@ -243,7 +243,7 @@ export default function PlanetComparisonClient() {
           )
         })}
         {/* 기준 라벨 */}
-        <text x={W / 2} y={20} textAnchor="middle" fill="#0D9488" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700} fontSize={12} letterSpacing="0.06em">
+        <text x={W / 2} y={20} textAnchor="middle" fill="var(--teal-600)" fontWeight={700} fontSize={12} letterSpacing="0.06em">
           크기 비교 (지구 = 1.0×)
         </text>
       </svg>
@@ -501,7 +501,7 @@ export default function PlanetComparisonClient() {
           })}
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 18, lineHeight: 1.7, textAlign: 'center' }}>
-          중력이 클수록 빨리 떨어집니다. 목성에서는 약 <strong style={{ color: '#EA580C' }}>1.5배 빠르게</strong>, 화성에서는 <strong style={{ color: '#DC2626' }}>1.6배 천천히</strong> 떨어집니다.
+          중력이 클수록 빨리 떨어집니다. 목성에서는 약 <strong style={{ color: 'var(--orange-600)' }}>1.5배 빠르게</strong>, 화성에서는 <strong style={{ color: 'var(--red-600)' }}>1.6배 천천히</strong> 떨어집니다.
         </p>
       </div>
 
@@ -601,7 +601,7 @@ export default function PlanetComparisonClient() {
           </table>
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-          💡 화성에 메시지를 보내면 빛의 속도로도 가장 가까울 때 약 <strong style={{ color: '#DC2626' }}>{marsDist ? fmtLightTime(marsDist.minLightMin) : '4분'}</strong>, 가장 멀 때 약 <strong style={{ color: '#DC2626' }}>{marsDist ? fmtLightTime(marsDist.maxLightMin) : '21분'}</strong>이 걸립니다. 해왕성까지는 약 <strong style={{ color: '#3E5BFF' }}>{neptuneDist ? fmtLightTime(neptuneDist.minLightMin) : '4시간'}</strong>.
+          💡 화성에 메시지를 보내면 빛의 속도로도 가장 가까울 때 약 <strong style={{ color: 'var(--red-600)' }}>{marsDist ? fmtLightTime(marsDist.minLightMin) : '4분'}</strong>, 가장 멀 때 약 <strong style={{ color: 'var(--red-600)' }}>{marsDist ? fmtLightTime(marsDist.maxLightMin) : '21분'}</strong>이 걸립니다. 해왕성까지는 약 <strong style={{ color: '#3E5BFF' }}>{neptuneDist ? fmtLightTime(neptuneDist.minLightMin) : '4시간'}</strong>.
         </p>
       </div>
 

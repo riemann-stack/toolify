@@ -44,7 +44,7 @@ export default function FootballPointsPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         스포츠
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />축구 승점 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -70,13 +70,13 @@ export default function FootballPointsPage() {
 
         {/* ── 1. 축구 승점 시스템 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             축구 승점 시스템 가이드
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 18px',
             fontSize: '13px',
             color: 'var(--text)',
@@ -94,7 +94,7 @@ export default function FootballPointsPage() {
 
         {/* ── 2. EPL·K리그1 최근 10시즌 실측 우승·강등 승점 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             EPL·K리그1 최근 10시즌 — 실제 우승·강등 승점
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -124,11 +124,11 @@ export default function FootballPointsPage() {
                   { y: '2025-26', c: '아스널',        cp: '85점',  r: '웨스트햄',    rp: '39점' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.y}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>{r.y}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.c}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.cp}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.cp}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--danger)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.rp}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--danger)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.rp}</td>
                   </tr>
                 ))}
               </tbody>
@@ -157,11 +157,11 @@ export default function FootballPointsPage() {
                   { y: '2025', c: '전북 현대', cp: '79점', r: '대구FC',          rp: '34점' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.y}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontFamily: 'var(--font-sans)' }}>{r.y}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.c}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.cp}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.cp}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--danger)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.rp}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--danger)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.rp}</td>
                   </tr>
                 ))}
               </tbody>
@@ -170,7 +170,7 @@ export default function FootballPointsPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
             fontSize: '13px',
             color: 'var(--text)',
@@ -189,13 +189,13 @@ export default function FootballPointsPage() {
 
         {/* ── 3. 순위 결정 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             순위 결정 기준 (Tie-Breaker)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             대부분의 리그가 승점이 동률일 때 아래 순서로 순위를 가르지만, <strong style={{ color: 'var(--text)' }}>리그마다 우선순위가 다릅니다.</strong>
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <ol style={{ paddingLeft: 22, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
               <li><strong>1차</strong> — 승점</li>
               <li><strong>2차</strong> — 득실차 (득점 − 실점)</li>
@@ -206,16 +206,16 @@ export default function FootballPointsPage() {
             </ol>
           </div>
           <div style={{
-            background: 'rgba(8,145,178,0.06)',
-            border: '1px solid rgba(8,145,178,0.2)',
-            borderRadius: '12px',
+            background: 'color-mix(in srgb, var(--cyan-600) 6%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 1.8,
             marginTop: 12,
           }}>
-            <strong style={{ color: '#0891B2' }}>리그별 차이</strong> — EPL·분데스리가는 <strong>득실차 → 다득점</strong> 순서이지만,
+            <strong style={{ color: 'var(--cyan-600)' }}>리그별 차이</strong> — EPL·분데스리가는 <strong>득실차 → 다득점</strong> 순서이지만,
             <strong> K리그는 2016년부터 다득점 → 득실차</strong> 순서(공격 축구 장려 취지)를 적용하고,
             라리가는 <strong>head-to-head 우선</strong> 적용으로 시즌 막판 동률 다툼에서 결과가 자주 갈립니다.
           </div>
@@ -223,14 +223,14 @@ export default function FootballPointsPage() {
 
         {/* ── 4. K리그1 파이널 라운드 승점 계산 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             K리그1 파이널 라운드 — 승점 계산이 달라지는 지점
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             K리그1은 유럽 리그처럼 38경기를 한 번에 돌지 않고 <strong style={{ color: 'var(--text)' }}>시즌을 두 단계로 나눕니다.</strong>
             정규 33라운드(11개 상대와 3번씩 맞대결) 후 1~6위는 파이널A, 7~12위는 파이널B로 분리되어 같은 그룹 팀과만 5경기를 더 치릅니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <ul style={{ paddingLeft: 20, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
               <li><strong>승점 전액 승계</strong> — 33라운드까지 쌓은 승점·득실을 그대로 안고 파이널 라운드를 진행합니다.</li>
               <li><strong>그룹 간 역전 불가</strong> — 파이널B 팀이 승점을 더 쌓아도 최종 순위는 7위가 상한. 우승·ACL 경쟁은 33라운드 종료 시점에 6위 안에 들어야 시작됩니다.</li>
@@ -247,13 +247,13 @@ export default function FootballPointsPage() {
 
         {/* ── 5. PPG로 최종 승점 예측 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             경기당 승점(PPG)으로 최종 승점 예측하기
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
             시즌 중반에 “이 페이스면 몇 점으로 끝날까”를 가장 빠르게 어림하는 방법이 <strong style={{ color: 'var(--text)' }}>경기당 평균 승점(PPG, Points Per Game)</strong> 환산입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <ol style={{ paddingLeft: 22, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
               <li><strong>1단계</strong> — PPG = 현재 승점 ÷ 치른 경기 수. 예: 20경기 32점 → 32 ÷ 20 = <strong style={{ color: 'var(--accent)' }}>1.60</strong></li>
               <li><strong>2단계</strong> — 예상 최종 승점 = PPG × 시즌 전체 경기 수. 예: 1.60 × 38 = 60.8 → <strong style={{ color: 'var(--accent)' }}>약 61점</strong></li>
@@ -271,7 +271,7 @@ export default function FootballPointsPage() {
 
         {/* ── 6. 자주 검색되는 시나리오 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             자주 검색되는 시나리오 예시
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(280px, 1fr))', gap: 10 }}>
@@ -281,9 +281,9 @@ export default function FootballPointsPage() {
               { q: '챔피언스리그 진출권 (EPL)',       a: '1~4위 — 보통 65~70점',              sub: '리그 성과 순위로 5위도 진출 가능 (2025-26 리버풀)' },
               { q: '수학적 우승 확정이란?',            a: '필요 승점 = 라이벌 최대 승점 + 1', sub: '남은 경기 결과와 무관하게 1위 보장' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 6, fontWeight: 600 }}>Q. {c.q}</p>
-                <p style={{ fontSize: 16, color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', marginBottom: 4, letterSpacing: '-0.3px' }}>{c.a}</p>
+                <p style={{ fontSize: 16, color: 'var(--accent)', fontWeight: 700, fontFamily: 'var(--font-sans)', marginBottom: 4, letterSpacing: '-0.3px' }}>{c.a}</p>
                 <p style={{ fontSize: 11, color: 'var(--muted)', lineHeight: 1.6 }}>{c.sub}</p>
               </div>
             ))}
@@ -292,13 +292,13 @@ export default function FootballPointsPage() {
 
         {/* ── 7. 무승부 가치 전략 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎯 승점 활용 전략 — 무승부 가치
           </h2>
           <div style={{
-            background: 'rgba(14,165,233,0.05)',
-            border: '1px solid rgba(14,165,233,0.25)',
-            borderRadius: '12px',
+            background: 'color-mix(in srgb, var(--accent) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 18px',
             fontSize: '13px',
             color: 'var(--text)',
@@ -328,7 +328,7 @@ export default function FootballPointsPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -346,7 +346,7 @@ export default function FootballPointsPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

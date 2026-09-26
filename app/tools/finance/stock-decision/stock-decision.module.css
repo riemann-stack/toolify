@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -22,9 +22,9 @@
   display: flex;
   align-items: center;
   gap: 16px;
-  background: linear-gradient(135deg, rgba(14,165,233,0.14) 0%, rgba(234,88,12,0.14) 100%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent) 0%, rgba(234,88,12,0.14) 100%);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 .mascotImgWrap {
@@ -46,7 +46,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0 0 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .mascotSub {
   font-size: 13px;
@@ -62,7 +62,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs3 { grid-template-columns: repeat(3, 1fr); }
@@ -72,13 +72,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -96,11 +96,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -121,7 +121,7 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 48px;
 }@media (hover: hover) {
   .dirBtn:hover { border-color: var(--accent); color: var(--text); }
@@ -153,14 +153,14 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.55;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .checkBiasTag {
   flex-shrink: 0;
   font-size: 10px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 2px 8px;
   color: var(--muted);
 }
@@ -168,7 +168,7 @@
   background: rgba(220, 38, 38, 0.06);
   border-color: rgba(220, 38, 38, 0.4);
 }
-.checkItemRisk .checkBiasTag { background: rgba(220, 38, 38, 0.12); color: #DC2626; border-color: transparent; }
+.checkItemRisk .checkBiasTag { background: rgba(220, 38, 38, 0.12); color: var(--red-600); border-color: transparent; }
 .checkItemGood {
   background: rgba(16, 185, 129, 0.05);
   border-color: rgba(16, 185, 129, 0.35);
@@ -176,7 +176,7 @@
 
 /* ── 결과 카드 ── */
 .resultCard {
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   border: 1px solid;
 }
@@ -185,7 +185,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0 0 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .resultMessage {
   font-size: 13px;
@@ -209,16 +209,16 @@
   gap: 4px;
 }
 .scoreLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.04em; }
-.scoreVal { font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; }
+.scoreVal { font-family: var(--font-sans); font-size: 22px; font-weight: 800; }
 .biasBoxes { margin-top: 14px; }
 .biasBoxesTitle { font-size: 12px; color: var(--muted); margin: 0 0 6px; font-weight: 600; }
 .biasChips { display: flex; gap: 6px; flex-wrap: wrap; }
 .biasChip {
   font-size: 11px;
   background: rgba(220, 38, 38, 0.12);
-  color: #DC2626;
+  color: var(--red-600);
   border: 1px solid rgba(220, 38, 38, 0.3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 4px 10px;
 }
 .criticalBox {
@@ -231,7 +231,7 @@
 .criticalTitle {
   font-size: 13px;
   font-weight: 800;
-  color: #DC2626;
+  color: var(--red-600);
   margin: 0 0 8px;
 }
 .criticalList {
@@ -276,7 +276,7 @@
   font-weight: 700;
   color: #ffffff;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 48px;
 }
 .runBtn:disabled { opacity: 0.4; cursor: not-allowed; }@media (hover: hover) {
@@ -290,12 +290,12 @@
   width: 100%;
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .resetBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -308,13 +308,13 @@
   gap: 8px;
   align-items: center;
   border: 1px solid;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 12px;
 }
-.histDate { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); }
+.histDate { font-family: var(--font-sans); color: var(--muted); }
 .histDir { font-size: 12px; color: var(--text); }
-.histScore { font-family: 'Inter', system-ui, sans-serif; color: var(--muted); font-size: 11px; }
+.histScore { font-family: var(--font-sans); color: var(--muted); font-size: 11px; }
 
 /* ────────────────────────────────────────────
    무작위 모드 — 공통 무대
@@ -323,7 +323,7 @@
   position: relative;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   height: 280px;
   overflow: hidden;
   margin-bottom: 12px;
@@ -348,7 +348,7 @@
   border-radius: 10px;
   padding: 12px 6px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 70px;
 }@media (hover: hover) {
   .modeBtn:hover { border-color: var(--accent); }
@@ -364,7 +364,7 @@
   margin: 12px 0 0;
   padding: 10px 12px;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 12px;
   color: var(--muted);
   line-height: 1.6;
@@ -378,10 +378,10 @@
   gap: 8px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
 }
-.optText { flex: 1; font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.optText { flex: 1; font-size: 13px; color: var(--text); font-family: var(--font-sans); }
 .optRemove {
   appearance: none;
   -webkit-appearance: none;
@@ -392,7 +392,7 @@
   cursor: pointer;
   padding: 4px 8px;
 }@media (hover: hover) {
-  .optRemove:hover { color: #DC2626; }
+  .optRemove:hover { color: var(--red-600); }
 }
 .optAddRow { display: flex; gap: 6px; }
 .optAddBtn {
@@ -402,7 +402,7 @@
   flex-shrink: 0;
   background: var(--accent-strong);
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 18px;
   font-weight: 700;
   color: #ffffff;
@@ -446,7 +446,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
   text-align: center;
@@ -455,7 +455,7 @@
   backface-visibility: hidden;
 }
 .coinHeads {
-  background: radial-gradient(circle at 30% 30%, #A16207 0%, #C8A52E 100%);
+  background: radial-gradient(circle at 30% 30%, var(--yellow-700) 0%, #C8A52E 100%);
   color: #4A3500;
 }
 .coinTails {
@@ -486,12 +486,12 @@
 .cube {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-width: 70px;
   text-align: center;
   transform: translateY(0);
@@ -508,12 +508,12 @@
   color: #ffffff;
   border-color: var(--accent);
   transform: translateY(-8px) scale(1.1);
-  box-shadow: 0 0 20px rgba(14,165,233,0.5);
+  box-shadow: 0 0 20px color-mix(in srgb, var(--accent) 50%, transparent);
   animation: cubeGlow 1.2s ease-in-out infinite alternate;
 }
 @keyframes cubeGlow {
-  from { box-shadow: 0 0 12px rgba(14,165,233,0.4); }
-  to   { box-shadow: 0 0 28px rgba(14,165,233,0.7); }
+  from { box-shadow: 0 0 12px color-mix(in srgb, var(--accent) 40%, transparent); }
+  to   { box-shadow: 0 0 28px color-mix(in srgb, var(--accent) 70%, transparent); }
 }
 
 .chin {
@@ -584,7 +584,7 @@
   font-size: 12px;
   font-weight: 800;
   color: #ffffff;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
   pointer-events: none;
   text-shadow: 0 1px 2px rgba(255,255,255,0.4);
@@ -612,7 +612,7 @@
   width: 22px;
   height: 22px;
   background: #1a1a1a;
-  border: 2px solid #DC2626;
+  border: 2px solid var(--red-600);
   border-radius: 50%;
   transform: translate(-50%, -50%);
   box-shadow: 0 0 10px rgba(220,38,38,0.6), inset 0 0 4px rgba(0,0,0,0.6);
@@ -667,12 +667,12 @@
 .catCube {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: center;
   flex: 1;
   max-width: 100px;
@@ -755,7 +755,7 @@
   height: 220px;
   border-radius: 50%;
   border: 4px solid var(--accent);
-  box-shadow: 0 0 24px rgba(14,165,233,0.25), inset 0 0 0 2px rgba(0,0,0,0.4);
+  box-shadow: 0 0 24px color-mix(in srgb, var(--accent) 25%, transparent), inset 0 0 0 2px rgba(0,0,0,0.4);
 }
 .rouletteSpin {
   animation: rouletteIdleSpin 0.8s linear infinite;
@@ -778,7 +778,7 @@
   font-size: 13px;
   font-weight: 800;
   color: #ffffff;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
   pointer-events: none;
   text-shadow: 0 1px 2px rgba(255,255,255,0.5);
@@ -799,16 +799,16 @@
   border: 3px solid var(--accent);
   border-radius: 50%;
   transform: translate(-50%, -50%);
-  box-shadow: 0 0 10px rgba(14,165,233,0.4);
+  box-shadow: 0 0 10px color-mix(in srgb, var(--accent) 40%, transparent);
   z-index: 5;
 }
 
 /* ── 결과 카드 (무작위) ── */
 .pickedCard {
   margin-top: 12px;
-  background: linear-gradient(135deg, rgba(14,165,233,0.1) 0%, rgba(8,145,178,0.14) 100%);
-  border: 1px solid rgba(14,165,233,0.4);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent) 0%, color-mix(in srgb, var(--cyan-600) 14%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: var(--radius-card);
   padding: 20px;
   text-align: center;
   animation: pickedReveal 0.6s ease-out;
@@ -823,7 +823,7 @@
   margin: 0 0 8px;
 }
 .pickedValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 800;
   color: var(--accent);
@@ -841,18 +841,18 @@
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* ── 5개 모드 종합 ── */
 .summaryCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .summaryHead {
@@ -867,7 +867,7 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .summaryReset {
   appearance: none;
@@ -879,9 +879,9 @@
   font-size: 11px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
-  .summaryReset:hover { border-color: #DC2626; color: #DC2626; }
+  .summaryReset:hover { border-color: var(--red-600); color: var(--red-600); }
 }
 
 .modeResultList {
@@ -897,17 +897,17 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 13px;
 }
 .modeResultRowDone {
-  border-color: rgba(14,165,233,0.3);
+  border-color: color-mix(in srgb, var(--accent) 30%, transparent);
   background: var(--bg3);
 }
 .modeResultEmoji { font-size: 18px; }
-.modeResultName { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
-.modeResultPick { font-size: 13px; text-align: right; font-family: 'Noto Sans KR', sans-serif; }
+.modeResultName { font-size: 12px; color: var(--muted); font-family: var(--font-sans); }
+.modeResultPick { font-size: 13px; text-align: right; font-family: var(--font-sans); }
 .modeResultPending { color: var(--muted); font-size: 11px; font-style: italic; }
 
 /* 투표 집계 바 */
@@ -933,7 +933,7 @@
   font-size: 12px;
 }
 .tallyRow:last-child { margin-bottom: 0; }
-.tallyOpt { color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
+.tallyOpt { color: var(--text); font-family: var(--font-sans); font-weight: 600; }
 .tallyBar {
   height: 8px;
   background: var(--bg2);
@@ -945,13 +945,13 @@
   border-radius: 4px;
   transition: width 0.4s ease-out;
 }
-.tallyCount { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 12px; }
+.tallyCount { font-family: var(--font-sans); font-weight: 700; font-size: 12px; }
 
 /* 다수결 박스 */
 .winnerBox {
   background: var(--bg3);
   border: 2px solid;
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 18px;
   text-align: center;
 }
@@ -962,7 +962,7 @@
   letter-spacing: 0.04em;
 }
 .winnerValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 26px;
   font-weight: 800;
   margin: 0 0 8px;
@@ -989,7 +989,7 @@
   padding: 8px 12px;
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.25);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
 }
 .caseList { display: flex; flex-direction: column; gap: 10px; }
 .caseItem {
@@ -1006,8 +1006,8 @@
   gap: 8px;
   margin-bottom: 6px;
 }
-.caseTitle { font-size: 14px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
-.caseYear { font-size: 11px; color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.caseTitle { font-size: 14px; font-weight: 700; color: var(--text); font-family: var(--font-sans); }
+.caseYear { font-size: 11px; color: var(--accent); font-family: var(--font-sans); font-weight: 700; }
 .caseWho { font-size: 12px; color: var(--muted); margin: 0 0 6px; line-height: 1.6; }
 .caseResult { font-size: 13px; color: var(--text); margin: 0 0 4px; line-height: 1.7; }
 .caseResult strong { color: var(--accent); }
@@ -1020,7 +1020,7 @@
   border-radius: 10px;
   padding: 14px 16px;
 }
-.biasTitle { font-size: 14px; font-weight: 700; color: var(--text); margin: 0 0 6px; font-family: 'Noto Sans KR', sans-serif; }
+.biasTitle { font-size: 14px; font-weight: 700; color: var(--text); margin: 0 0 6px; font-family: var(--font-sans); }
 .biasDesc { font-size: 12px; color: var(--muted); line-height: 1.7; margin: 0 0 6px; }
 .biasExample, .biasTip { font-size: 12px; color: var(--text); line-height: 1.7; margin: 0 0 4px; }
 .biasExample strong, .biasTip strong { color: var(--accent); }
@@ -1029,7 +1029,7 @@
 .disclaimer {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -1037,9 +1037,9 @@
 }
 .disclaimer strong {
   display: block;
-  color: #D97706;
+  color: var(--amber-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

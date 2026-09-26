@@ -251,7 +251,7 @@ export default function CharCountClient() {
             marginTop: 10, fontSize: 12, lineHeight: 1.75, color: 'var(--text)',
             background: 'color-mix(in srgb, var(--warning) 8%, transparent)',
             border: '1px solid color-mix(in srgb, var(--warning) 35%, transparent)',
-            borderRadius: 8, padding: '10px 12px',
+            borderRadius: 'var(--radius-s)', padding: '10px 12px',
           }}>
             ⚠️ EUC-KR로 표현할 수 없는 문자가 <strong>{stats.eucUnsupported.length}개</strong> 있습니다
             ({[...new Set(stats.eucUnsupported)].slice(0, 8).join(' ')}
@@ -285,13 +285,13 @@ export default function CharCountClient() {
                   onChange={e => setTargetLimit(e.target.value.replace(/[^\d]/g, ''))}
                   style={{
                     width: 110, background: 'var(--bg3)', border: '1px solid var(--border)',
-                    borderRadius: 8, padding: '7px 10px', fontFamily: 'var(--font-mono)',
+                    borderRadius: 'var(--radius-s)', padding: '7px 10px', fontFamily: 'var(--font-mono)',
                     fontSize: 14, color: 'var(--text)', textAlign: 'right',
                   }}
                 />
                 <span style={{ fontSize: 12, color: 'var(--muted)' }}>자 (공백 포함)</span>
                 {hasTarget && (
-                  <span style={{ marginLeft: 'auto', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 14, color: over ? 'var(--danger)' : 'var(--accent-ink)' }}>
+                  <span style={{ marginLeft: 'auto', fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 14, color: over ? 'var(--danger)' : 'var(--accent-ink)' }}>
                     {over ? `초과 ${fmt(stats.len - targetN)}자` : `남은 ${fmt(targetN - stats.len)}자`}
                     <span style={{ color: 'var(--muted)', fontWeight: 600, fontSize: 12, marginLeft: 6 }}>{fmt(stats.len)} / {fmt(targetN)}</span>
                   </span>
@@ -391,7 +391,7 @@ export default function CharCountClient() {
                           <span
                             title={SOURCE_TIER_LABEL[p.tier]}
                             style={{
-                              fontSize: 11, marginLeft: 6, padding: '1px 6px', borderRadius: 999,
+                              fontSize: 11, marginLeft: 6, padding: '1px 6px', borderRadius: 'var(--radius-pill)',
                               border: '1px solid var(--border)',
                               color: p.tier === 'official' ? 'var(--success)' : 'var(--muted)',
                               background: 'var(--bg3)', whiteSpace: 'nowrap',
@@ -476,7 +476,7 @@ export default function CharCountClient() {
             <div className={s.cardTop}>
               <label className={s.cardLabel}>찾기·바꾸기</label>
               {findReplaceResult && (
-                <span style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>
+                <span style={{ fontSize: 12, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
                   {findReplaceResult.count}회 일치
                 </span>
               )}
@@ -489,7 +489,7 @@ export default function CharCountClient() {
                 value={findStr}
                 onChange={e => setFindStr(e.target.value)}
                 style={{
-                  background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8,
+                  background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
                   padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)',
                 }}
               />
@@ -500,7 +500,7 @@ export default function CharCountClient() {
                 value={replaceStr}
                 onChange={e => setReplaceStr(e.target.value)}
                 style={{
-                  background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8,
+                  background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
                   padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)',
                 }}
               />

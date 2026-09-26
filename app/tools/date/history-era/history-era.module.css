@@ -3,9 +3,9 @@
 
 /* ── 오늘은 무슨 해? 자동 카드 ── */
 .todayHero {
-  background: linear-gradient(135deg, rgba(219,39,119,0.18), rgba(14,165,233,0.14));
+  background: linear-gradient(135deg, rgba(219,39,119,0.18), color-mix(in srgb, var(--accent) 14%, transparent));
   border: 1px solid rgba(219,39,119,0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
   margin-bottom: 4px;
 }
@@ -18,7 +18,7 @@
   letter-spacing: 0.06em; text-transform: uppercase; font-weight: 600;
 }
 .todayYear {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 22px; font-weight: 800;
   color: var(--accent); letter-spacing: -0.5px;
 }
 .todayGrid {
@@ -34,13 +34,13 @@
 }
 .todayItemLabel { font-size: 11px; color: var(--muted); }
 .todayItemValue {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 800;
+  font-family: var(--font-sans); font-size: 15px; font-weight: 800;
   color: var(--text); letter-spacing: -0.2px;
 }
 .todayGanjji {
   margin: 12px 0 0; font-size: 13px; color: var(--text);
   text-align: center; font-weight: 600;
-  padding: 8px; background: var(--bg3); border-radius: 8px;
+  padding: 8px; background: var(--bg3); border-radius: var(--radius-s);
 }
 
 
@@ -49,17 +49,17 @@
 .tabs {
   display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tab {
   padding: 11px 6px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
   white-space: nowrap;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
+.tabActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 
 /* ── 섹션 공통 ── */
 .section { display: flex; flex-direction: column; gap: 12px; }
@@ -69,7 +69,7 @@
 .radioLabel {
   position: relative;
   display: flex; align-items: center; gap: 6px;
-  padding: 8px 14px; border-radius: 20px; cursor: pointer;
+  padding: 8px 14px; border-radius: var(--radius-lg); cursor: pointer;
   background: var(--bg2); border: 1px solid var(--border);
   font-size: 13px; color: var(--muted); transition: all 0.15s;
 }
@@ -78,11 +78,11 @@
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
   border: 0; clip-path: inset(50%); overflow: hidden; white-space: nowrap;
 }
-.radioLabel:focus-within { border-color: rgba(14,165,233,0.5); box-shadow: 0 0 0 2px rgba(14,165,233,0.25); }
+.radioLabel:focus-within { border-color: color-mix(in srgb, var(--accent) 50%, transparent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent); }
 @media (hover: hover) {
   .radioLabel:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.radioActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
+.radioActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
 
 /* ── 폼 행 ── */
 .fieldRow { display: flex; align-items: center; gap: 10px; }
@@ -91,24 +91,24 @@
 .select {
   flex: 1; min-width: 0;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 11px 36px 11px 14px; font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+  padding: 11px 36px 11px 14px; font-size: 14px; font-family: var(--font-sans);
   color: var(--text); outline: none; cursor: pointer;
   appearance: none; -webkit-appearance: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%23888' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: no-repeat; background-position: right 12px center;
   transition: border-color 0.2s;
 }
-.select:focus { border-color: rgba(14,165,233,0.5); }
+.select:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 
 .numInput {
   flex: 1; min-width: 0;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 11px 14px; font-size: 22px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  padding: 11px 14px; font-size: 22px; font-family: var(--font-sans); font-weight: 700;
   color: var(--text); outline: none; transition: border-color 0.2s;
   -moz-appearance: textfield; appearance: textfield;
 }
 .numInput::-webkit-inner-spin-button, .numInput::-webkit-outer-spin-button { -webkit-appearance: none; }
-.numInput:focus { border-color: rgba(14,165,233,0.5); }
+.numInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .numInput::placeholder { color: var(--muted); font-weight: 400; font-size: 15px; }
 
 /* ── 에러·빈 상태 ── */
@@ -120,12 +120,12 @@
 
 /* ── 결과 박스 ── */
 .resultBox {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.25); border-radius: 14px;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent); border-radius: var(--radius-card);
   padding: 20px 22px; animation: heraFadeUp 0.22s ease;
   display: flex; flex-direction: column; gap: 6px;
 }
 .resultBig {
-  font-family: 'Inter', system-ui, sans-serif; font-size: clamp(24px, 5vw, 36px);
+  font-family: var(--font-sans); font-size: clamp(24px, 5vw, 36px);
   font-weight: 800; color: var(--accent); letter-spacing: -1px; line-height: 1.1;
 }
 .resultSub { font-size: 14px; color: var(--muted); line-height: 1.6; }
@@ -135,18 +135,18 @@
 .numInputWide {
   flex: 1; min-width: 0;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 11px 14px; font-size: 22px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700;
+  padding: 11px 14px; font-size: 22px; font-family: var(--font-sans); font-weight: 700;
   color: var(--text); outline: none; transition: border-color 0.2s;
   -moz-appearance: textfield; appearance: textfield;
 }
 .numInputWide::-webkit-inner-spin-button, .numInputWide::-webkit-outer-spin-button { -webkit-appearance: none; }
-.numInputWide:focus { border-color: rgba(14,165,233,0.5); }
+.numInputWide:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .numInputWide::placeholder { color: var(--muted); font-weight: 400; font-size: 15px; }
 
 .bceToggle {
   position: relative;
   display: flex; align-items: center; gap: 6px;
-  padding: 10px 16px; border-radius: 20px; cursor: pointer;
+  padding: 10px 16px; border-radius: var(--radius-lg); cursor: pointer;
   background: var(--bg2); border: 1px solid var(--border);
   font-size: 13px; color: var(--muted); transition: all 0.15s; white-space: nowrap; flex-shrink: 0;
 }
@@ -154,11 +154,11 @@
   position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0;
   border: 0; clip-path: inset(50%); overflow: hidden; white-space: nowrap;
 }
-.bceToggle:focus-within { border-color: rgba(14,165,233,0.5); box-shadow: 0 0 0 2px rgba(14,165,233,0.25); }
+.bceToggle:focus-within { border-color: color-mix(in srgb, var(--accent) 50%, transparent); box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent); }
 @media (hover: hover) {
   .bceToggle:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.bceActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
+.bceActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
 
 /* ── 연호 테이블 ── */
 .eraTable { width: 100%; border-collapse: collapse; font-size: 13px; }
@@ -168,7 +168,7 @@
 }
 .eraTable td { padding: 9px 10px; border-bottom: 1px solid var(--border); color: var(--text); }
 .eraTable tr:last-child td { border-bottom: none; }
-.eraYear { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--accent); }
+.eraYear { font-family: var(--font-sans); font-weight: 700; color: var(--accent); }
 .eraGroup { font-size: 11px; color: var(--muted); white-space: nowrap; }
 
 /* ── Tab 3: 간지 피커 ── */
@@ -179,14 +179,14 @@
 .branchGrid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 4px; }
 
 .pickerBtn {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 8px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-s);
   padding: 8px 4px; cursor: pointer; transition: all 0.15s;
   display: flex; flex-direction: column; align-items: center; gap: 2px;
 }@media (hover: hover) {
   .pickerBtn:hover { border-color: var(--border-hover); }
 }
-.pickerActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4) !important; }
-.pickerKr { font-size: 16px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500; color: var(--text); line-height: 1.2; }
+.pickerActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; }
+.pickerKr { font-size: 16px; font-family: var(--font-sans); font-weight: 500; color: var(--text); line-height: 1.2; }
 .pickerActive .pickerKr { color: var(--accent); }
 .pickerHj { font-size: 11px; color: var(--muted); font-family: serif; line-height: 1; }
 .pickerAnimal { font-size: 11px; color: var(--muted); line-height: 1; }
@@ -195,12 +195,12 @@
 .yearList { display: flex; flex-direction: column; gap: 4px; margin-top: 8px; }
 .yearItem {
   display: flex; align-items: center; gap: 10px;
-  padding: 8px 12px; border-radius: 8px;
+  padding: 8px 12px; border-radius: var(--radius-s);
   background: var(--bg3); border: 1px solid var(--border);
 }
-.yearCurrent { background: var(--accent-dim); border-color: rgba(14,165,233,0.4); }
+.yearCurrent { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .yearFuture { border-color: rgba(15,23,42,0.04); }
-.yearNum { font-family: 'Inter', system-ui, sans-serif; font-size: 18px; font-weight: 700; color: var(--text); min-width: 50px; }
+.yearNum { font-family: var(--font-sans); font-size: 18px; font-weight: 700; color: var(--text); min-width: 50px; }
 .yearCurrent .yearNum { color: var(--accent); }
 .yearSub { font-size: 12px; color: var(--muted); flex: 1; min-width: 0; }
 .yearBadge {
@@ -215,20 +215,20 @@
 /* ── Tab 4: 필터 ── */
 .filterRow { display: flex; gap: 5px; flex-wrap: wrap; }
 .filterBtn {
-  padding: 7px 14px; border-radius: 20px; border: 1px solid var(--border);
+  padding: 7px 14px; border-radius: var(--radius-lg); border: 1px solid var(--border);
   background: var(--bg2); font-size: 12px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.15s;
 }@media (hover: hover) {
   .filterBtn:hover { border-color: var(--border-hover); color: var(--text); }
 }
-.filterActive { background: var(--accent-dim); border-color: rgba(14,165,233,0.4) !important; color: var(--accent) !important; }
+.filterActive { background: var(--accent-dim); border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important; color: var(--accent) !important; }
 
 .searchInput {
   width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  padding: 11px 14px; font-size: 16px; font-family: 'Noto Sans KR', sans-serif;
+  padding: 11px 14px; font-size: 16px; font-family: var(--font-sans);
   color: var(--text); outline: none; transition: border-color 0.2s;
 }
-.searchInput:focus { border-color: rgba(14,165,233,0.5); }
+.searchInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .searchInput::placeholder { color: var(--muted); }
 
 /* ── 타임라인 ── */
@@ -240,10 +240,10 @@
 .timelineRow:last-child { border-bottom: none; }
 .timelineLeft { display: flex; flex-direction: column; gap: 2px; align-items: flex-end; }
 .tlYear {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 13px; font-weight: 700; color: var(--text);
+  font-family: var(--font-sans); font-size: 13px; font-weight: 700; color: var(--text);
   line-height: 1.2; text-align: right; white-space: nowrap;
 }
-.tlGanjji { font-size: 11px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.tlGanjji { font-size: 11px; color: var(--muted); font-family: var(--font-sans); }
 .timelineLine {
   display: flex; flex-direction: column; align-items: center;
   padding-top: 4px; position: relative;

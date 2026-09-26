@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,14 +23,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -69,7 +69,7 @@ export default function PipePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />배관 규격 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -78,7 +78,7 @@ export default function PipePage() {
 
       <PipeClient />
 
-      <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 20, fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
+      <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 20, fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
         <p style={{ margin: '0 0 6px', fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>📐 데이터 기준 · 참고 표준</p>
         표시 치수는 KS·ASME·ISO <strong style={{ color: 'var(--text)' }}>표준 일반치 참고용</strong>입니다 (최종 점검 2026.6).
         <br />· <strong style={{ color: 'var(--text)' }}>호칭 체계</strong>: A호칭 KS B 1503 · 인치(B) ASME B36.10 · DN ISO 6708
@@ -113,12 +113,12 @@ export default function PipePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
             { t: 'A호칭 (한국·일본)', s: 'KS B 1503', d: '15A · 20A · 25A · 50A — mm 베이스 정수', c: 'var(--accent)' },
-            { t: 'B호칭 / 인치 (미국)', s: 'ASME B36.10', d: '1/2" · 3/4" · 1" · 2" — 분수 형태', c: '#0891B2' },
-            { t: 'DN (유럽·국제)', s: 'ISO 6708', d: 'DN15 · DN20 · DN25 · DN50 — Diametre Nominal', c: '#EA580C' },
+            { t: 'B호칭 / 인치 (미국)', s: 'ASME B36.10', d: '1/2" · 3/4" · 1" · 2" — 분수 형태', c: 'var(--cyan-600)' },
+            { t: 'DN (유럽·국제)', s: 'ISO 6708', d: 'DN15 · DN20 · DN25 · DN50 — Diametre Nominal', c: 'var(--orange-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
-              <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 6px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.s}</p>
+              <p style={{ fontSize: 11, color: 'var(--muted)', margin: '0 0 6px', fontFamily: 'var(--font-sans)' }}>{g.s}</p>
               <p style={{ fontSize: 12, color: 'var(--text)', margin: 0, lineHeight: 1.7 }}>{g.d}</p>
             </div>
           ))}
@@ -139,15 +139,15 @@ export default function PipePage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px' }}>15A 재질별 외경 차이</p>
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <tbody>
-              <tr><td style={{ padding: '4px 0' }}>강관 (SGP)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>21.7 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>PVC (VG1)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>22.0 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>PB</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>17.0 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>XL (PE-X)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>17.0 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>동관 (L)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>15.88 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>STS (Su)</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', textAlign: 'right' }}>19.05 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>강관 (SGP)</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>21.7 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>PVC (VG1)</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>22.0 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>PB</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>17.0 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>XL (PE-X)</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>17.0 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>동관 (L)</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>15.88 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>STS (Su)</td><td style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)', textAlign: 'right' }}>19.05 mm</td></tr>
             </tbody>
           </table>
-          <p style={{ fontSize: 12, color: '#D97706', margin: '10px 0 0', lineHeight: 1.7 }}>
+          <p style={{ fontSize: 12, color: 'var(--amber-600)', margin: '10px 0 0', lineHeight: 1.7 }}>
             → 같은 15A지만 외경이 <strong>15.88 ~ 22mm</strong> (약 6mm 차이).
             이종 재질 연결에는 <strong>이종 어댑터·이종조인</strong>이 필수입니다.
           </p>
@@ -160,13 +160,13 @@ export default function PipePage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
             { t: '🔩 강관 백관 (SGP)', d: '아연도금 처리. 부식 강함. 급수·소방·옥내 일반.', c: 'var(--accent)' },
-            { t: '🔩 강관 흑관 (SGP)', d: '도금 없음. 난방·기름·증기·공정. 옥외 노출 비추천.', c: '#EA580C' },
-            { t: '🔵 PVC VG1', d: '수도용 두꺼움. 1.0~1.6 MPa. 음용수 가능.', c: '#0891B2' },
-            { t: '🔵 PVC VG2', d: '배수용 얇음. 비압력. 통기·우수·하수.', c: '#0D9488' },
-            { t: '🔵 PVC HI-VG', d: 'VG1 + 내충격. 한랭지·노출 배관.', c: '#9B59B6' },
-            { t: '🟤 동관 K Type', d: '가장 두꺼움. 의료용 가스·고압.', c: '#D97706' },
-            { t: '🟤 동관 L Type', d: '중간. 가정용 가스·급수 표준.', c: '#DB2777' },
-            { t: '🟤 동관 M Type', d: '가장 얇음. 저압·일반 냉난방.', c: '#059669' },
+            { t: '🔩 강관 흑관 (SGP)', d: '도금 없음. 난방·기름·증기·공정. 옥외 노출 비추천.', c: 'var(--orange-600)' },
+            { t: '🔵 PVC VG1', d: '수도용 두꺼움. 1.0~1.6 MPa. 음용수 가능.', c: 'var(--cyan-600)' },
+            { t: '🔵 PVC VG2', d: '배수용 얇음. 비압력. 통기·우수·하수.', c: 'var(--teal-600)' },
+            { t: '🔵 PVC HI-VG', d: 'VG1 + 내충격. 한랭지·노출 배관.', c: 'var(--amethyst)' },
+            { t: '🟤 동관 K Type', d: '가장 두꺼움. 의료용 가스·고압.', c: 'var(--amber-600)' },
+            { t: '🟤 동관 L Type', d: '중간. 가정용 가스·급수 표준.', c: 'var(--pink-600)' },
+            { t: '🟤 동관 M Type', d: '가장 얇음. 저압·일반 냉난방.', c: 'var(--emerald-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '10px 14px' }}>
               <p style={{ fontSize: 12, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -192,12 +192,12 @@ export default function PipePage() {
               </tr>
             </thead>
             <tbody>
-              <tr><td style={{ padding: '4px 0' }}>15A · 20A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)' }}>10 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>25A · 32A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)' }}>15 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>40A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)' }}>20 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>50A · 65A · 80A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)' }}>25 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>100A · 125A</td><td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)' }}>30 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>150A 이상</td><td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)' }}>40 mm 이상</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>15A · 20A</td><td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--accent)' }}>10 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>25A · 32A</td><td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--accent)' }}>15 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>40A</td><td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--accent)' }}>20 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>50A · 65A · 80A</td><td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--accent)' }}>25 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>100A · 125A</td><td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--accent)' }}>30 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>150A 이상</td><td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', color: 'var(--accent)' }}>40 mm 이상</td></tr>
             </tbody>
           </table>
         </div>
@@ -322,7 +322,7 @@ export default function PipePage() {
           <Link key={t.href} href={t.href} style={{
             display: 'flex', alignItems: 'center', gap: 12,
             background: 'var(--bg2)', border: '1px solid var(--border)',
-            borderRadius: 12, padding: '14px 16px', textDecoration: 'none',
+            borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
           }}>
             <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
             <div>

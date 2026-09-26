@@ -889,8 +889,7 @@ function CircleChart({
           const pos = dayLabelPos(angle)
           return (
             <text key={day} x={pos.x} y={pos.y}
-              fontSize="14" fill="var(--text)" textAnchor="middle" dominantBaseline="middle"
-              fontFamily="Noto Sans KR" fontWeight={600}>
+              fontSize="14" fill="var(--text)" textAnchor="middle" dominantBaseline="middle" fontWeight={600}>
               {day}일
             </text>
           )
@@ -902,18 +901,17 @@ function CircleChart({
         <circle cx={spokeEnd.x} cy={spokeEnd.y} r={7}
           fill="var(--accent)" stroke="var(--bg2)" strokeWidth={2} />
         <text x={todayLabelPos.x} y={todayLabelPos.y}
-          fontSize="13" fill="var(--accent-ink)" textAnchor="middle" dominantBaseline="middle"
-          fontFamily="Noto Sans KR" fontWeight={800}>
+          fontSize="13" fill="var(--accent-ink)" textAnchor="middle" dominantBaseline="middle" fontWeight={800}>
           오늘 {result.dayInCycle}일
         </text>
 
         {/* 가운데 D-day + phase */}
         <text x={cx} y={cy - 4} fontSize="32" fill="var(--text)"
-          textAnchor="middle" dominantBaseline="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
+          textAnchor="middle" dominantBaseline="middle" fontWeight={800}>
           {result.daysToNextPeriod > 0 ? `D-${result.daysToNextPeriod}` : result.daysToNextPeriod === 0 ? 'D-DAY' : `D+${-result.daysToNextPeriod}`}
         </text>
         <text x={cx} y={cy + 24} fontSize="15" fill={PHASE_META[result.phase].ink}
-          textAnchor="middle" dominantBaseline="middle" fontFamily="Noto Sans KR" fontWeight={600}>
+          textAnchor="middle" dominantBaseline="middle" fontWeight={600}>
           {PHASE_META[result.phase].emoji} {PHASE_META[result.phase].label}
         </text>
       </svg>

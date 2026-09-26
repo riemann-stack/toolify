@@ -25,7 +25,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '12px',
@@ -39,7 +39,7 @@ const para: React.CSSProperties = {
 const strong: React.CSSProperties = { color: 'var(--text)' }
 const th: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }
 const tdLabel: React.CSSProperties = { padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }
-const tdVal: React.CSSProperties = { padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }
+const tdVal: React.CSSProperties = { padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }
 
 const FAQ_LD = [
   {
@@ -92,7 +92,7 @@ export default function YearEndTaxPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />연말정산 환급·추가납부 시뮬레이터
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -141,7 +141,7 @@ export default function YearEndTaxPage() {
               ['⑤ 세액공제', '근로소득·자녀·연금계좌·특별(의료·교육·기부·월세) 공제를 산출세액에서 직접 깎아 결정세액(소득세)이 나오고, 지방소득세 10%가 더해집니다.'],
             ].map(([k, v], i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 16px' }}>
-                <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-ink)', margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{k}</p>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent-ink)', margin: '0 0 4px', fontFamily: 'var(--font-sans)' }}>{k}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{v}</p>
               </div>
             ))}
@@ -248,7 +248,7 @@ export default function YearEndTaxPage() {
                 style={{
                   display: 'flex', alignItems: 'center', gap: '12px',
                   background: 'var(--bg2)', border: '1px solid var(--border)',
-                  borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                  borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
                 }}
               >
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>

@@ -5,9 +5,9 @@
 
 /* ── 메인 시계 카드 ── */
 .clockCard {
-  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 16px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   text-align: center;
 }
@@ -26,17 +26,17 @@
   font-weight: 700;
   background: var(--bg3);
   padding: 4px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
 }
 .syncBtn {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
   white-space: nowrap; /* 320px에서 "동기/화" 중간 개행 방지 */
   flex-shrink: 0;
@@ -47,12 +47,12 @@
 .syncBtn:disabled { opacity: 0.5; cursor: wait; }
 
 .clockTime {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   letter-spacing: -2px;
   line-height: 1;
   color: var(--accent);
-  text-shadow: 0 0 30px rgba(14,165,233,0.25);
+  text-shadow: 0 0 30px color-mix(in srgb, var(--accent) 25%, transparent);
   display: flex;
   align-items: baseline;
   justify-content: center;
@@ -69,7 +69,7 @@
 }
 
 .clockDate {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   color: var(--muted);
   margin-top: 6px;
@@ -81,12 +81,12 @@
   padding: 8px 12px;
   background: rgba(220, 38, 38, 0.10);
   border: 1px solid rgba(220, 38, 38, 0.35);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 12px;
   color: var(--danger);
   line-height: 1.6;
   text-align: left;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .clockMeta {
@@ -114,7 +114,7 @@
   font-weight: 600;
 }
 .metaValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -129,7 +129,7 @@
 .countdownCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .cardLabel {
@@ -152,9 +152,9 @@
 .targetInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
@@ -171,7 +171,7 @@
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .soundLabel input { accent-color: var(--accent); }
 
@@ -179,7 +179,7 @@
   font-size: 13px;
   color: var(--text);
   margin: 8px 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
 }
 .targetError {
@@ -196,7 +196,7 @@
   margin: 14px 0;
   padding: 14px;
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   transition: all 0.2s;
 }
 .cdUrgent {
@@ -213,7 +213,7 @@
   align-items: center;
 }
 .cdNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(36px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -233,7 +233,7 @@
   text-transform: uppercase;
 }
 .cdSep {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 7vw, 44px);
   font-weight: 800;
   color: var(--muted);
@@ -248,7 +248,7 @@
   margin-left: 2px;
 }
 .cdMsNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(16px, 4vw, 22px);
   font-weight: 700;
   color: var(--muted);
@@ -297,7 +297,7 @@
   color: var(--text);
   font-weight: 700;
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -313,9 +313,9 @@
 
 /* ── 외부 사이트 트래킹 카드 ── */
 .externalCard {
-  background: linear-gradient(140deg, rgba(8,145,178,0.14), rgba(155,62,255,0.04));
-  border: 1px solid rgba(8,145,178,0.25);
-  border-radius: 14px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--cyan-600) 14%, transparent), rgba(155,62,255,0.04));
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .extNote {
@@ -343,9 +343,9 @@
   min-width: 0;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   color: var(--text);
   outline: none;
@@ -355,12 +355,12 @@
   background: var(--accent-strong);
   color: #ffffff;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 0 16px;
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
   transition: opacity 0.15s;
 }
@@ -379,11 +379,11 @@
 .sitePresetBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 10px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
@@ -399,12 +399,12 @@
   margin-top: 14px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px;
   text-align: center;
 }
 .extLiveTime {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 10vw, 64px);
   font-weight: 800;
   color: var(--accent);
@@ -433,7 +433,7 @@
   margin: 8px 0 6px;
   word-break: break-all;
   text-align: left;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .extWarn {
   font-size: 12px;
@@ -456,7 +456,7 @@
 }
 .extErrorBox strong {
   display: block;
-  color: #DC2626;
+  color: var(--red-600);
   font-size: 13px;
   margin-bottom: 4px;
 }
@@ -475,7 +475,7 @@
 .tipCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .tipList {

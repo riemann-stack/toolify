@@ -54,7 +54,7 @@ export default function WindowTintPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>단위·변환</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="unit" />썬팅 투과율(VLT) 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
@@ -84,7 +84,7 @@ export default function WindowTintPage() {
 
         {/* ── 1. VLT란 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             VLT란? — 투과율·농도·차광률 정리
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
@@ -96,7 +96,7 @@ export default function WindowTintPage() {
               { t: '농도(%)', v: '낮을수록 짙음', d: '실무에선 투과율과 같은 숫자로 통용. ‘농도 15’ = 투과율 15%.' },
               { t: '차광률(%)', v: '100 − VLT', d: '막아내는 빛의 비율. 투과율 26%면 차광률 74%.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{c.t}</p>
                 <p style={{ fontSize: '14px', color: 'var(--accent-ink)', fontWeight: 800, marginBottom: '4px' }}>{c.v}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.d}</p>
@@ -110,13 +110,13 @@ export default function WindowTintPage() {
 
         {/* ── 2. 왜 곱셈인가 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             왜 더하지 않고 곱하나 — 75% × 35% ≈ 26%
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
             빛은 유리를 먼저 지나고, 살아남은 빛이 필름을 다시 지납니다. 원유리에서 75%가 통과하고 그중 35%가 필름을 통과하면 남는 건 <strong style={{ color: 'var(--text)' }}>75% × 35% = 26.25%</strong>입니다. 더해서 110%가 될 수는 없습니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', fontFamily: 'var(--font-sans)' }}>
             <p style={{ fontSize: '14px', color: 'var(--text)', lineHeight: 1.9 }}>
               들어온 빛 100 → 유리 통과 <strong>×0.75</strong> → 75 → 필름 통과 <strong>×0.35</strong> → <strong style={{ color: 'var(--accent-ink)' }}>26.25</strong>
             </p>
@@ -128,20 +128,20 @@ export default function WindowTintPage() {
 
         {/* ── 3. 표기 농도의 함정 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             표기 농도의 함정 — 자체값 vs 부착 후 값
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
             여기서 많이들 헷갈립니다. 제품 카탈로그·스펙표에 적힌 투과율이 <strong style={{ color: 'var(--text)' }}>필름 자체값</strong>인지, <strong style={{ color: 'var(--text)' }}>표준유리에 붙여 잰 합산값</strong>인지에 따라 계산이 달라집니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>① 필름 자체값으로 표기된 경우</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75 }}>
                 필름만의 투과율입니다. <strong style={{ color: 'var(--text)' }}>원유리 투과율과 곱해야</strong> 실제 차창 값이 나옵니다. 계산기의 &lsquo;필름 자체값&rsquo; 토글.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>② 부착 후 합산값으로 표기된 경우</p>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75 }}>
                 유리에 붙여 측정한 값이라 원유리를 또 곱하면 이중계산. <strong style={{ color: 'var(--text)' }}>내 차에서 실측한 값이면 그대로가 최종 투과율</strong>이지만, 제조사 카탈로그 값은 기준 유리 조건이라 실차와 차이 날 수 있습니다. &lsquo;부착 후 합산값&rsquo; 토글.
@@ -155,7 +155,7 @@ export default function WindowTintPage() {
 
         {/* ── 3b. VLT ≠ 열차단 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             VLT ≠ 열차단 — TSER·IR·UV는 별개 지표
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
@@ -167,7 +167,7 @@ export default function WindowTintPage() {
               { t: 'IR(적외선) 차단율', v: '열감의 주 요인', d: '측정 파장대가 제조사마다 달라 단순 숫자 비교가 어려움. 조건을 함께 확인.' },
               { t: 'UV(자외선) 차단율', v: '피부·내장재 보호', d: '대부분의 차량용 필름이 99% 수준을 표방. 제품 간 차이가 작은 편.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '4px' }}>{c.t}</p>
                 <p style={{ fontSize: '14px', color: 'var(--accent-ink)', fontWeight: 800, marginBottom: '4px' }}>{c.v}</p>
                 <p style={{ fontSize: '11px', color: 'var(--muted)', lineHeight: 1.6 }}>{c.d}</p>
@@ -181,7 +181,7 @@ export default function WindowTintPage() {
 
         {/* ── 4. 한국 법규 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 썬팅 법규 — 앞면 70% · 옆면 40%
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -204,7 +204,7 @@ export default function WindowTintPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.p}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.v}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '12px' }}>{r.n}</td>
                   </tr>
                 ))}
@@ -221,7 +221,7 @@ export default function WindowTintPage() {
 
         {/* ── 5. 농도별 야간 시인성 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             농도별 야간 시인성·안전
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '14px' }}>
@@ -245,7 +245,7 @@ export default function WindowTintPage() {
                   { v: '5~15%', f: '매우 짙음', n: '야간·후진 시야 크게 저하' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.v}</td>
+                    <td style={{ padding: '9px 10px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.v}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 500 }}>{r.f}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '12px' }}>{r.n}</td>
                   </tr>
@@ -260,7 +260,7 @@ export default function WindowTintPage() {
 
         {/* ── 6. 최종은 정기검사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             최종 확인은 측정기·정기검사로
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.8 }}>
@@ -278,7 +278,7 @@ export default function WindowTintPage() {
 
         {/* ── 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -295,7 +295,7 @@ export default function WindowTintPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

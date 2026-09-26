@@ -37,7 +37,7 @@ export default function PregnancyPage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />임신 주수 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -60,7 +60,7 @@ export default function PregnancyPage() {
 
         {/* ── 1. 네겔레 공식 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             출산 예정일 산출법 — 네겔레 공식
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
@@ -68,7 +68,7 @@ export default function PregnancyPage() {
             현재 전 세계 산부인과에서 가장 널리 사용되는 표준 방법입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.25)', borderRadius: '14px', padding: '20px 22px', marginBottom: '12px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.25)', borderRadius: 'var(--radius-card)', padding: '20px 22px', marginBottom: '12px' }}>
             <p style={{ fontSize: '12px', color: '#DB2777', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '14px' }}>
               네겔레 공식 (Naegele&apos;s Rule)
             </p>
@@ -89,13 +89,13 @@ export default function PregnancyPage() {
                   : <div key={i} style={{
                     background: item.isResult ? 'rgba(219,39,119,0.15)' : item.isInput ? 'var(--bg3)' : 'rgba(14,165,233,0.1)',
                     border: `1px solid ${item.isResult ? 'rgba(219,39,119,0.4)' : item.isInput ? 'var(--border)' : 'rgba(14,165,233,0.3)'}`,
-                    borderRadius: '8px', padding: '8px 12px', textAlign: 'center',
+                    borderRadius: 'var(--radius-s)', padding: '8px 12px', textAlign: 'center',
                     fontSize: '12px', fontWeight: 600, whiteSpace: 'pre-line', lineHeight: 1.4,
                     color: item.isResult ? '#DB2777' : item.isInput ? 'var(--text)' : 'var(--accent)',
                   }}>{item.label}</div>
               ))}
             </div>
-            <div style={{ background: 'var(--bg3)', borderRadius: '8px', padding: '12px 14px' }}>
+            <div style={{ background: 'var(--bg3)', borderRadius: 'var(--radius-s)', padding: '12px 14px' }}>
               <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9 }}>
                 📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 마지막 생리 시작일이 <strong style={{ color: 'var(--text)' }}>2026년 5월 1일</strong>이라면<br />
                 → 5월 1일 + 7일 = 5월 8일 → 5월 − 3개월 = 2월 8일 → + 1년 = 2027년 2월 8일 (네겔레 셈법)<br />
@@ -112,14 +112,14 @@ export default function PregnancyPage() {
 
         {/* ── 2. 삼분기별 변화 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>삼분기별 주요 변화</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>삼분기별 주요 변화</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { period: '1삼분기 (1~13주)', color: '#A16207', items: ['수정란 착상 → 배아 형성', '심장·뇌·척수 등 주요 장기 형성', '입덧 시작 (8~10주에 최고조)', '첫 산전 검사 및 기형아 1차 검사'] },
               { period: '2삼분기 (14~27주)', color: '#059669', items: ['입덧 감소, 안정기 진입', '태동 시작 (18~22주)', '성별 확인 가능 (초음파)', '정밀 초음파, 기형아 2차 검사'] },
               { period: '3삼분기 (28~40주)', color: '#EA580C', items: ['태아 급성장 (체중·폐 발달)', '분만 준비 교육 권장', 'GBS 검사, NST(태아심박동 검사)', '출산 준비 (입원 가방 등)'] },
             ].map((t, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${t.color}40`, borderRadius: '12px', padding: '16px 20px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${t.color}40`, borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: t.color, marginBottom: '10px' }}>{t.period}</p>
                 <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
                   {t.items.map((item, j) => (
@@ -133,7 +133,7 @@ export default function PregnancyPage() {
 
         {/* ── 3. 산전 검사 가이드 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             산전 검사 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
@@ -161,7 +161,7 @@ export default function PregnancyPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{row[1]}</td>
+                    <td style={{ padding: '9px 10px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{row[1]}</td>
                     <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{row[2]}</td>
                   </tr>
                 ))}
@@ -175,7 +175,7 @@ export default function PregnancyPage() {
 
         {/* ── 4. 태아 크기 비유 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             태아 크기 비유 가이드
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -187,7 +187,7 @@ export default function PregnancyPage() {
               return [`${wk}주`, `${f.emoji} ${f.size} (${f.length})`]
             }).map(([w, label], i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.25)', borderRadius: 10, padding: '10px 14px', display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
-                <span style={{ fontSize: 13, color: '#DB2777', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{w}</span>
+                <span style={{ fontSize: 13, color: '#DB2777', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{w}</span>
                 <span style={{ fontSize: 13, color: 'var(--text)' }}>{label}</span>
               </div>
             ))}
@@ -199,7 +199,7 @@ export default function PregnancyPage() {
 
         {/* ── 5. 출산 준비 체크리스트 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             삼분기별 출산 준비 체크리스트
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
@@ -217,7 +217,7 @@ export default function PregnancyPage() {
                 items: ['GBS 검사 (36~37주)', '출산 가방·신생아 용품', '아기침대·카시트', '산후조리원 예약', '분만 신호 학습', '응급 연락처 준비', '출산 휴가·육아 휴직 신청'],
               },
             ].map((t, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${t.color}40`, borderLeft: `4px solid ${t.color}`, borderRadius: '12px', padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${t.color}40`, borderLeft: `4px solid ${t.color}`, borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
                 <p style={{ fontSize: '13px', fontWeight: 700, color: t.color, marginBottom: '8px' }}>{t.period}</p>
                 <ul style={{ paddingLeft: '18px', margin: 0, display: 'flex', flexDirection: 'column', gap: '3px' }}>
                   {t.items.map((it, j) => (
@@ -234,7 +234,7 @@ export default function PregnancyPage() {
 
         {/* ── 6. 생리주기 보정 (NEW) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
             생리주기 보정의 중요성
           </h2>
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
@@ -250,7 +250,7 @@ export default function PregnancyPage() {
               { c: '35일 주기', d: '예정일 약 7일 늦음' },
             ].map((r, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 13px', display: 'flex', justifyContent: 'space-between' }}>
-                <span style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.c}</span>
+                <span style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.c}</span>
                 <span style={{ fontSize: 13, color: 'var(--text)' }}>{r.d}</span>
               </div>
             ))}
@@ -262,7 +262,7 @@ export default function PregnancyPage() {
 
         {/* ── 7. 임신 중 응급 신호 (NEW · 의료 필수 정보) ── */}
         <section>
-          <div style={{ background: 'rgba(220,38,38,0.08)', border: '2px solid #DC2626', borderRadius: 12, padding: '18px 22px' }}>
+          <div style={{ background: 'rgba(220,38,38,0.08)', border: '2px solid #DC2626', borderRadius: 'var(--radius-m)', padding: '18px 22px' }}>
             <p style={{ fontSize: '15px', fontWeight: 800, color: '#DC2626', marginBottom: '12px' }}>
               ⚠️ 임신 중 응급 신호 — 다음 증상 시 즉시 의료기관
             </p>
@@ -303,7 +303,7 @@ export default function PregnancyPage() {
 
         {/* ── 참고 출처 (기존 유지·확장) ── */}
         <section>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
             <p style={{ fontSize: '12px', fontWeight: 600, color: 'var(--muted)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '8px' }}>참고 출처</p>
             <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
               {[
@@ -320,7 +320,7 @@ export default function PregnancyPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',         icon: '📅', name: 'D-day 계산기',           desc: '출산 예정일 카운트다운' },
@@ -333,7 +333,7 @@ export default function PregnancyPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>

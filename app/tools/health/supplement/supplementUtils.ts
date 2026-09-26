@@ -37,28 +37,28 @@ export function analyzeOmega3(epa: number, dha: number): Omega3Analysis | null {
   if (total < OMEGA3_GUIDELINES.minDaily) {
     status = 'under'
     statusLabel = '🟡 목표 미달'
-    statusColor = '#A16207'
+    statusColor = 'var(--yellow-700)'
     interpretation = `${total}mg은 일반적 섭취 목표(250~500mg)에 못 미칩니다. EPA·DHA는 공식 권장량(RDA)이 없으며, 식사(등푸른 생선) 보충이나 용량 증가를 고려할 수 있습니다.`
   } else if (total <= OMEGA3_GUIDELINES.idealMax) {
     status = 'meet'
     statusLabel = '🟢 목표 범위'
-    statusColor = '#059669'
+    statusColor = 'var(--emerald-600)'
     interpretation = `${total}mg은 일반적 섭취 목표 범위(250~500mg) 안입니다.`
   } else if (total <= OMEGA3_GUIDELINES.supplementMax) {
     status = 'over'
     statusLabel = '🟡 목표보다 높음 (한도 이내)'
-    statusColor = '#EA580C'
+    statusColor = 'var(--orange-600)'
     interpretation = `${total}mg은 일반 목표보다 높지만 FDA의 보충제 권고 한도(2,000mg) 안입니다. 심혈관 목적의 고용량은 의사와 상담하세요.`
   } else if (total <= OMEGA3_GUIDELINES.upperLimit) {
     // 본 도구의 합계는 영양제(보충제)에서 온 양이므로 보충제 기준 2,000mg 초과부터 경고
     status = 'exceed'
     statusLabel = '🟠 보충제 권고 한도(2,000mg) 초과'
-    statusColor = '#EA580C'
+    statusColor = 'var(--orange-600)'
     interpretation = `${total}mg은 FDA가 권고하는 보충제 한도(2,000mg/일, 식품 포함 총 3,000mg)를 넘습니다. 식약처 건강기능식품 기준도 EPA+DHA 하루 0.5~2g입니다. 출혈 위험이 커질 수 있어 용량 조정이나 의사 상담을 권합니다.`
   } else {
     status = 'exceed'
     statusLabel = '🔴 권고 한도 초과'
-    statusColor = '#DC2626'
+    statusColor = 'var(--red-600)'
     interpretation = `${total}mg은 FDA 권고 한도(총 3,000mg)를 초과합니다 — 출혈 위험 ↑. 용량 조정·의사 상담을 권합니다.`
   }
 

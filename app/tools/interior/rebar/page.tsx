@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -24,14 +24,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -71,7 +71,7 @@ export default function RebarPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />철근 중량 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '20px' }}>
@@ -111,9 +111,9 @@ export default function RebarPage() {
           호칭의 D 뒤 숫자는 <strong>공칭 직경(mm)</strong>을 의미하며, 단위중량은 다음 공식으로 계산됩니다.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', lineHeight: 1.9 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'var(--font-sans)', lineHeight: 1.9 }}>
             단위중량 (kg/m) = 단면적(mm²) × <strong style={{ color: 'var(--accent)' }}>7.85</strong> ÷ 1000<br />
-            <span style={{ fontFamily: 'Noto Sans KR, sans-serif', fontSize: 12, color: 'var(--muted)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontSize: 12, color: 'var(--muted)' }}>
               (강의 비중 7.85 g/cm³ 기준)
             </span>
           </p>
@@ -136,14 +136,14 @@ export default function RebarPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
             { t: 'SD300', d: '항복 300 MPa · 저층·소형', c: '#9B9B9B', p: '×0.95' },
-            { t: 'SD400', d: '항복 400 MPa · 한국 일반 표준', c: '#0D9488', p: '×1.00' },
-            { t: 'SD500', d: '항복 500 MPa · 대형·고층·교량', c: '#D97706', p: '×1.10' },
-            { t: 'SD600', d: '항복 600 MPa · 초고층·내진·플랜트', c: '#DB2777', p: '×1.20' },
+            { t: 'SD400', d: '항복 400 MPa · 한국 일반 표준', c: 'var(--teal-600)', p: '×1.00' },
+            { t: 'SD500', d: '항복 500 MPa · 대형·고층·교량', c: 'var(--amber-600)', p: '×1.10' },
+            { t: 'SD600', d: '항복 600 MPa · 초고층·내진·플랜트', c: 'var(--pink-600)', p: '×1.20' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
-              <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.t}</p>
+              <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px', fontFamily: 'var(--font-sans)' }}>{g.t}</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 6px', lineHeight: 1.6 }}>{g.d}</p>
-              <p style={{ fontSize: 11, color: 'var(--accent)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>가격 보정 {g.p}</p>
+              <p style={{ fontSize: 11, color: 'var(--accent)', margin: 0, fontFamily: 'var(--font-sans)', fontWeight: 600 }}>가격 보정 {g.p}</p>
             </div>
           ))}
         </div>
@@ -180,9 +180,9 @@ export default function RebarPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
             { t: '🚐 1톤 (포터)', d: '적재 길이 한도는 차 길이의 110%(약 5.6m). 6m 철근은 경찰서장 허가 또는 절단 필요. 결박 필수.', c: 'var(--accent)' },
-            { t: '🛻 5톤 카고', d: '12m 철근 운반에 주로 쓰임(장축 차량). 적재길이 한도 확인, 결박 강하게.', c: '#0891B2' },
-            { t: '🚜 11톤', d: '13.7m·대형 현장. 크레인·지게차 하역 권장.', c: '#EA580C' },
-            { t: '⚠️ 굵은 철근', d: 'D29 이상은 1m당 5kg 이상 — 인력 하역 위험, 크레인 권장.', c: '#DB2777' },
+            { t: '🛻 5톤 카고', d: '12m 철근 운반에 주로 쓰임(장축 차량). 적재길이 한도 확인, 결박 강하게.', c: 'var(--cyan-600)' },
+            { t: '🚜 11톤', d: '13.7m·대형 현장. 크레인·지게차 하역 권장.', c: 'var(--orange-600)' },
+            { t: '⚠️ 굵은 철근', d: 'D29 이상은 1m당 5kg 이상 — 인력 하역 위험, 크레인 권장.', c: 'var(--pink-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -302,21 +302,21 @@ export default function RebarPage() {
       {/* 인테리어 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/interior/wire" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/interior/wire" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>⚡</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>전선 굵기·허용전류</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             KEC 2021 + 가전 12프리셋
           </p>
         </Link>
-        <Link href="/tools/interior/pipe" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/interior/pipe" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔧</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>배관 규격 변환기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             A호칭·인치·DN + 6재질
           </p>
         </Link>
-        <Link href="/tools/interior/bolt-wrench" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/interior/bolt-wrench" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔧</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>볼트·너트 스패너</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

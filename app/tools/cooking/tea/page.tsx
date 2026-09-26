@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,14 +23,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -69,7 +69,7 @@ export default function TeaPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         요리·식품
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="cooking" />차 우리기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -125,7 +125,7 @@ export default function TeaPage() {
                   {row.map((cell, j) => (
                     <td key={j} style={{
                       padding: '9px 12px',
-                      fontFamily: j === 0 ? 'Noto Sans KR, sans-serif' : 'Inter, "Noto Sans KR", system-ui, sans-serif',
+                      fontFamily: j === 0 ? 'var(--font-sans)' : 'var(--font-sans)',
                       color: j === 1 ? 'var(--accent)' : 'var(--text)',
                       fontWeight: j === 0 ? 700 : 600,
                     }}>{cell}</td>
@@ -142,7 +142,7 @@ export default function TeaPage() {
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
           많은 사람이 <strong>&quot;차가 연하다&quot;고 우림 시간을 늘리는데, 이건 가장 잘못된 선택</strong>입니다.
-          시간을 길게 하면 <strong style={{ color: '#DB2777' }}>탄닌(떫음)·쓴맛이 폭증</strong>해 마실 수 없게 돼요.
+          시간을 길게 하면 <strong style={{ color: 'var(--pink-600)' }}>탄닌(떫음)·쓴맛이 폭증</strong>해 마실 수 없게 돼요.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
           <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, margin: '0 0 8px' }}>✅ 올바른 진하게 마시기</p>
@@ -154,7 +154,7 @@ export default function TeaPage() {
           </ul>
         </div>
         <div style={{ background: 'rgba(219, 39, 119, 0.06)', borderRadius: 10, padding: '14px 16px', marginTop: 10, border: '1px solid rgba(219, 39, 119, 0.3)' }}>
-          <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 6px' }}>❌ 피해야 할 것</p>
+          <p style={{ fontSize: 13, color: 'var(--pink-600)', fontWeight: 700, margin: '0 0 6px' }}>❌ 피해야 할 것</p>
           <p style={{ fontSize: 13, color: 'var(--muted)', margin: 0, lineHeight: 1.8 }}>
             우림 시간을 권장 대비 1.5배 이상 늘리면 떫음·쓴맛이 비선형적으로 폭증합니다.
             특히 녹차·옥로는 시간보다 <strong style={{ color: 'var(--text)' }}>온도</strong>가 핵심이에요.
@@ -172,9 +172,9 @@ export default function TeaPage() {
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10, marginTop: 12 }}>
           {[
             { t: '💦 세차 (洗茶)',  d: '뜨거운 물로 10초 헹구고 첫 물은 버림. 잡내 제거 + 찻잎 깨움. 보이·우롱 필수.', c: '#9B9B9B' },
-            { t: '🍃 1탕',          d: '본 추출 시작. 가장 산뜻하고 풀향·꽃향이 강한 단계.',                            c: '#0D9488' },
-            { t: '🌿 2탕',          d: '풍미가 가장 균형잡힌 단계. 단맛·바디감 풍부.',                                  c: '#0891B2' },
-            { t: '🪴 3탕 이후',     d: '깊은 후미·은은한 마무리. 우롱은 5~8탕, 보이는 6~10탕까지 가능.',                          c: '#D97706' },
+            { t: '🍃 1탕',          d: '본 추출 시작. 가장 산뜻하고 풀향·꽃향이 강한 단계.',                            c: 'var(--teal-600)' },
+            { t: '🌿 2탕',          d: '풍미가 가장 균형잡힌 단계. 단맛·바디감 풍부.',                                  c: 'var(--cyan-600)' },
+            { t: '🪴 3탕 이후',     d: '깊은 후미·은은한 마무리. 우롱은 5~8탕, 보이는 6~10탕까지 가능.',                          c: 'var(--amber-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -322,21 +322,21 @@ export default function TeaPage() {
       {/* cooking 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/cooking/brew" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/cooking/brew" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>☕</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>커피 브루잉 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             6 추출법 + 푸어 스케줄
           </p>
         </Link>
-        <Link href="/tools/cooking/recipe" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/cooking/recipe" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>📐</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>레시피 비율·단위 변환</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             인분·큰술·g 환산
           </p>
         </Link>
-        <Link href="/tools/health/supplement" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/health/supplement" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💊</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>영양제 성분 체크</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

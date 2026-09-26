@@ -9,7 +9,7 @@
   padding: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 .tab {
   padding: 10px 12px;
@@ -20,7 +20,7 @@
   font-size: 13px;
   font-weight: 500;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
@@ -37,11 +37,11 @@
   padding: 24px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   min-width: 0;
 }
 @media (max-width: 540px) {
-  .panel { padding: 14px; gap: 20px; border-radius: 12px; }
+  .panel { padding: 14px; gap: 20px; border-radius: var(--radius-m); }
 }
 
 .label {
@@ -61,7 +61,7 @@
 .optionCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .gapTitle {
@@ -69,7 +69,7 @@
   color: var(--text);
   font-weight: 700;
   margin: 0 0 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 시나리오 카드 — 컴팩트 1줄형 (모바일도 2열) ── */
@@ -98,7 +98,7 @@
   .scenarioCard:hover { border-color: var(--accent); }
 }
 .scenarioCardActive {
-  background: rgba(14, 165, 233, 0.06);
+  background: color-mix(in srgb, var(--accent) 6%, transparent);
   border-color: var(--accent);
 }
 /* 이모지 + 라벨 한 줄 — 줄바꿈 X */
@@ -114,7 +114,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -139,8 +139,8 @@
 .scenarioTip {
   margin-top: 14px;
   padding: 14px 18px;
-  background: rgba(14, 165, 233, 0.05);
-  border: 1px solid rgba(14, 165, 233, 0.25);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
   border-radius: 10px;
   font-size: 13px;
   color: var(--text);
@@ -160,7 +160,7 @@
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   text-align: left;
 }@media (hover: hover) {
@@ -189,9 +189,9 @@
 }
 @media (max-width: 720px) { .summaryStackGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 6px; } }
 .summaryStackCard {
-  background: linear-gradient(135deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 12px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -207,7 +207,7 @@
   text-transform: uppercase;
 }
 .summaryStackName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 800;
   color: var(--accent);
@@ -235,16 +235,16 @@
 .selectField label {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .selectField select {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
   min-height: 40px;
@@ -258,7 +258,7 @@
   grid-column: 1 / -1;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
 }
 .checkLabel {
@@ -268,7 +268,7 @@
   font-size: 13px;
   cursor: pointer;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .checkLabel input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
 
@@ -281,15 +281,15 @@
 .weightChip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 4px 12px;
   font-size: 11px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .weightChip strong {
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   margin-left: 4px;
 }
 
@@ -305,7 +305,7 @@
 .recommendCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -326,14 +326,14 @@
   letter-spacing: 0.06em;
   text-transform: uppercase;
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .recommendPrimary {
   display: flex;
   gap: 12px;
   padding: 12px;
-  background: rgba(14, 165, 233, 0.04);
-  border: 1px solid rgba(14, 165, 233, 0.2);
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
   border-radius: 10px;
   min-width: 0;
 }
@@ -344,7 +344,7 @@
   font-weight: 800;
   color: var(--accent);
   margin: 0 0 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   word-break: keep-all;
   overflow-wrap: anywhere;
 }
@@ -360,14 +360,14 @@
   gap: 8px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .primaryKorea {
   font-size: 11px;
-  color: #0EA5E9;
+  color: var(--sky-500);
   margin: 6px 0 0;
   line-height: 1.5;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .cmdBox {
@@ -379,7 +379,7 @@
   display: flex;
   align-items: center;
   gap: 8px;
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   font-size: 11px;
   color: #C8FF9E;
   overflow-x: auto;
@@ -395,7 +395,7 @@
   font-size: 10px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   flex-shrink: 0;
 }@media (hover: hover) {
   .copyBtn:hover { color: var(--accent); }
@@ -414,8 +414,8 @@
   margin: 0 0 4px;
   letter-spacing: 0.04em;
 }
-.prosTitle { color: #059669; }
-.consTitle { color: #D97706; }
+.prosTitle { color: var(--emerald-600); }
+.consTitle { color: var(--amber-600); }
 .prosCons ul {
   margin: 0;
   padding-left: 16px;
@@ -453,7 +453,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .altDesc {
   font-size: 11px;
@@ -472,9 +472,9 @@
   .summaryGrid { grid-template-columns: minmax(0, 1fr); }
 }
 .summaryCard {
-  background: linear-gradient(135deg, rgba(8, 145, 178, 0.06) 0%, rgba(14, 165, 233, 0.03) 100%);
-  border: 1px solid rgba(8, 145, 178, 0.25);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--cyan-600) 6%, transparent) 0%, color-mix(in srgb, var(--accent) 3%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   text-align: center;
 }
@@ -486,7 +486,7 @@
   margin: 0 0 8px;
 }
 .summaryBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(28px, 5vw, 36px);
   font-weight: 800;
   color: var(--text);
@@ -513,14 +513,14 @@
   text-align: left;
   color: var(--muted);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .tradeoffTable td {
   padding: 10px 12px;
   border-bottom: 1px solid var(--border);
   color: var(--text);
   position: relative;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .scoreBar {
   display: block;
@@ -538,7 +538,7 @@
 .radarWrap {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px;
 }
 .radarSvg {
@@ -577,7 +577,7 @@
   font-weight: 800;
   color: var(--accent);
   margin: 0 0 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .guideSectionSub {
   font-size: 11px;
@@ -598,7 +598,7 @@
   text-align: left;
   color: var(--muted);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 .guideTable td {
@@ -611,7 +611,7 @@
 }
 .guideTable strong {
   display: block;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-bottom: 2px;
 }
@@ -638,12 +638,12 @@
   opacity: 0.6;
 }
 .scoreCellText {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 13px;
 }
 .cellPrice, .cellWeeks {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   color: var(--muted);
   white-space: nowrap;
 }
@@ -669,7 +669,7 @@
   font-weight: 700;
   color: var(--accent);
   margin: 0 0 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .koreaGuideDesc {
   font-size: 12px;
@@ -685,16 +685,16 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.9;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .antiList li { margin-bottom: 6px; }
-.antiList strong { color: #DC2626; }
+.antiList strong { color: var(--red-600); }
 
 /* 면책 */
 .disclaimer {
   background: rgba(217, 119, 6, 0.04);
   border: 1px solid rgba(217, 119, 6, 0.18);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -702,9 +702,9 @@
 }
 .disclaimer strong {
   display: block;
-  color: #D97706;
+  color: var(--amber-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

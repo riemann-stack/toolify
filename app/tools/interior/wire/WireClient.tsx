@@ -502,13 +502,13 @@ export default function WireClient() {
             <svg viewBox="0 0 400 60" width="100%" style={{ marginTop: 14, maxWidth: 480 }} role="img" aria-label="전압 강하율 게이지">
               <rect x="0" y="20" width="400" height="20" rx="10" fill="var(--bg3)" />
               <rect x="0" y="20" width={Math.min((dropPct / 5) * 400, 400)} height="20" rx="10"
-                fill={dropPct <= dropLimit ? '#0D9488' : dropPct <= 5 ? '#D97706' : '#DB2777'} />
+                fill={dropPct <= dropLimit ? 'var(--teal-600)' : dropPct <= 5 ? 'var(--amber-600)' : 'var(--pink-600)'} />
               {/* 한도 라인 */}
-              <line x1={(dropLimit / 5) * 400} y1="10" x2={(dropLimit / 5) * 400} y2="50" stroke="#D97706" strokeWidth="2" strokeDasharray="3,2" />
-              <text x={(dropLimit / 5) * 400} y="8" fill="#D97706" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>한도 {dropLimit}%</text>
+              <line x1={(dropLimit / 5) * 400} y1="10" x2={(dropLimit / 5) * 400} y2="50" stroke="var(--amber-600)" strokeWidth="2" strokeDasharray="3,2" />
+              <text x={(dropLimit / 5) * 400} y="8" fill="var(--amber-600)" fontSize="10" textAnchor="middle">한도 {dropLimit}%</text>
               {/* 0~5% 눈금 */}
               {[0, 1, 2, 3, 4, 5].map((v) => (
-                <text key={v} x={(v / 5) * 400} y="55" fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{v}%</text>
+                <text key={v} x={(v / 5) * 400} y="55" fill="var(--muted)" fontSize="10" textAnchor="middle">{v}%</text>
               ))}
             </svg>
           </div>
@@ -532,7 +532,7 @@ export default function WireClient() {
                       <td className={s.cellMono}>{dropSq} sq (현재)</td>
                       <td className={s.cellMono}>{fmt(dropV, 2)}</td>
                       <td className={s.cellMono}>{fmt(dropPct, 2)}%</td>
-                      <td className={s.cellMono} style={{ color: dropPct <= dropLimit ? 'var(--accent)' : '#DB2777' }}>
+                      <td className={s.cellMono} style={{ color: dropPct <= dropLimit ? 'var(--accent)' : 'var(--pink-600)' }}>
                         {dropPct <= dropLimit ? 'OK' : '초과'}
                       </td>
                     </tr>
@@ -540,7 +540,7 @@ export default function WireClient() {
                       <td className={s.cellMono}>{oneStepBigger} sq (한 단계 ↑)</td>
                       <td className={s.cellMono}>{fmt(oneStepDropV, 2)}</td>
                       <td className={s.cellMono}>{fmt(oneStepDropPct, 2)}%</td>
-                      <td className={s.cellMono} style={{ color: oneStepDropPct <= dropLimit ? 'var(--accent)' : '#DB2777' }}>
+                      <td className={s.cellMono} style={{ color: oneStepDropPct <= dropLimit ? 'var(--accent)' : 'var(--pink-600)' }}>
                         {oneStepDropPct <= dropLimit ? 'OK' : '초과'}
                       </td>
                     </tr>

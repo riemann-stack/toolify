@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -32,7 +32,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -42,18 +42,18 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
 }
-.tabActive { background: #0EA5E9; color: #ffffff; }
+.tabActive { background: var(--sky-500); color: #ffffff; }
 
 /* 토스트 */
 .toast {
@@ -68,7 +68,7 @@
   font-size: 13px;
   color: var(--text);
   z-index: 1000;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -78,9 +78,9 @@
   min-height: 180px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 13px;
   color: var(--text);
   outline: none;
@@ -88,7 +88,7 @@
   box-sizing: border-box;
   line-height: 1.6;
 }
-.inputArea:focus { border-color: #0EA5E9; }
+.inputArea:focus { border-color: var(--sky-500); }
 
 .smBtn {
   appearance: none;
@@ -100,26 +100,26 @@
   font-size: 12px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   min-height: 28px;
   white-space: nowrap;
 }@media (hover: hover) {
-  .smBtn:hover { color: #0EA5E9; border-color: #0EA5E9; }
+  .smBtn:hover { color: var(--sky-500); border-color: var(--sky-500); }
 }
 .smBtn:disabled { opacity: 0.4; cursor: not-allowed; }
 
 /* 오류·경고 */
 .errorBox {
   background: rgba(219, 39, 119, 0.08);
-  border: 1px solid #DB2777;
-  border-radius: 8px;
+  border: 1px solid var(--pink-600);
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
   color: var(--text);
   margin-top: 10px;
 }
-.errorBox strong { color: #DB2777; }
+.errorBox strong { color: var(--pink-600); }
 .errorSuggestions {
   margin: 8px 0 0;
   padding-left: 20px;
@@ -130,7 +130,7 @@
 .warnBox {
   background: rgba(255, 138, 62, 0.06);
   border: 1px solid rgba(255, 138, 62, 0.40);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
   color: var(--text);
@@ -147,11 +147,11 @@
   margin-top: 12px;
   padding: 10px 14px;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 12px;
 }
 .methodBadge {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   padding: 4px 10px;
   border-radius: 5px;
@@ -160,7 +160,7 @@
   letter-spacing: 0.05em;
 }
 .summaryUrl {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   color: var(--text);
   font-size: 12px;
   word-break: break-all;
@@ -170,7 +170,7 @@
 .summaryStat {
   color: var(--muted);
   font-size: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -199,16 +199,16 @@
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   min-height: 34px;
 }@media (hover: hover) {
-  .optBtn:hover { border-color: #0EA5E9; }
+  .optBtn:hover { border-color: var(--sky-500); }
 }
 .optBtnActive {
-  background: #0EA5E9;
+  background: var(--sky-500);
   color: #ffffff;
-  border-color: #0EA5E9;
+  border-color: var(--sky-500);
 }
 .optLabel {
   font-size: 12px;
@@ -227,13 +227,13 @@
   user-select: none;
   margin-top: 10px;
 }
-.checkLabel input { accent-color: #0EA5E9; cursor: pointer; }
+.checkLabel input { accent-color: var(--sky-500); cursor: pointer; }
 
 /* 코드 카드 */
 .codeCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 14px;
 }
 .codeHeader {
@@ -251,9 +251,9 @@
 .codeBlock {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 13px;
   color: var(--text);
   overflow-x: auto;
@@ -267,7 +267,7 @@
 
 /* METHOD 큰 배지 */
 .methodBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 28px;
   padding: 14px 24px;
@@ -282,9 +282,9 @@
 .urlBlock {
   display: block;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 13px;
   color: var(--text);
   word-break: break-all;
@@ -307,7 +307,7 @@
   background: var(--bg3);
   padding: 2px 6px;
   border-radius: 3px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 12px;
   color: var(--text);
 }
@@ -337,14 +337,14 @@
 }
 .kvTable tr:last-child td { border-bottom: none; }
 .kvKey {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-weight: 700;
-  color: #0EA5E9;
+  color: var(--sky-500);
   word-break: break-all;
   font-size: 13px;
 }
 .kvValue {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 12px;
   word-break: break-all;
 }
@@ -366,7 +366,7 @@
   border-radius: 3px;
   font-size: 10px;
   margin-left: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -379,11 +379,11 @@
 @media (max-width: 600px) { .authGrid { grid-template-columns: 1fr; } }
 .authGrid > div {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
 }
 .authGrid code {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   color: var(--text);
   font-size: 13px;
   word-break: break-all;
@@ -398,11 +398,11 @@
 .flagPill {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -415,7 +415,7 @@
 @media (max-width: 600px) { .statGrid { grid-template-columns: repeat(2, 1fr); } }
 .statGrid > div {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   display: flex;
   flex-direction: column;
@@ -429,10 +429,10 @@
   font-weight: 600;
 }
 .statGrid strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
-  color: #0EA5E9;
+  color: var(--sky-500);
 }
 
 /* 카테고리 */
@@ -446,20 +446,20 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }@media (hover: hover) {
-  .categoryBtn:hover { color: var(--text); border-color: #0EA5E9; }
+  .categoryBtn:hover { color: var(--text); border-color: var(--sky-500); }
 }
 .categoryBtnActive {
-  background: #0EA5E9;
+  background: var(--sky-500);
   color: #ffffff;
-  border-color: #0EA5E9;
+  border-color: var(--sky-500);
 }
 
 /* 예시 */
@@ -472,7 +472,7 @@
 .exampleCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -494,7 +494,7 @@
   background: var(--bg3);
   border-radius: 6px;
   padding: 8px 12px;
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   font-size: 11px;
   color: var(--text);
   margin: 0;
@@ -508,17 +508,17 @@
   appearance: none;
   -webkit-appearance: none;
   background: var(--bg3);
-  border: 1px solid #0EA5E9;
+  border: 1px solid var(--sky-500);
   border-radius: 6px;
   padding: 8px 12px;
   font-size: 12px;
-  color: #0EA5E9;
+  color: var(--sky-500);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-top: 4px;
 }@media (hover: hover) {
-  .applyBtn:hover { background: #0EA5E9; color: #ffffff; }
+  .applyBtn:hover { background: var(--sky-500); color: #ffffff; }
 }
 
 /* 가이드 */
@@ -552,16 +552,16 @@
 .guideTable tr:last-child td { border-bottom: none; }
 
 .codeMono {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   background: var(--bg3);
   padding: 2px 6px;
   border-radius: 3px;
   font-size: 12px;
-  color: #0EA5E9;
+  color: var(--sky-500);
   font-weight: 700;
 }
 .codeMonoSm {
-  font-family: 'Inter', 'SF Mono', Consolas, monospace;
+  font-family: var(--font-num);
   background: var(--bg3);
   padding: 1px 5px;
   border-radius: 3px;
@@ -572,7 +572,7 @@
 .warnBoxSolid {
   background: rgba(255, 138, 62, 0.06);
   border: 1px solid rgba(255, 138, 62, 0.40);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .warnTitle {
@@ -603,13 +603,13 @@
 
 .dangerBoxSolid {
   background: rgba(219, 39, 119, 0.06);
-  border: 2px solid #DB2777;
-  border-radius: 14px;
+  border: 2px solid var(--pink-600);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .dangerTitle {
   font-size: 16px;
-  color: #DB2777;
+  color: var(--pink-600);
   font-weight: 800;
   margin: 0 0 10px;
 }

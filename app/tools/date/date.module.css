@@ -9,7 +9,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
 }
 
@@ -35,13 +35,13 @@
   border-radius: 10px;
   padding: 12px 10px;
   font-size: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   outline: none;
   cursor: pointer;
   transition: border-color 0.2s;
 }
-.dateSelect:focus { border-color: rgba(14,165,233,0.5); }
+.dateSelect:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 
 /* ── DATE INPUT ── */
 .dateInputFull {
@@ -51,7 +51,7 @@
   border-radius: 10px;
   padding: 14px 16px;
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -59,8 +59,8 @@
   color-scheme: dark;
 }
 .dateInputFull:focus {
-  border-color: rgba(14,165,233,0.5);
-  box-shadow: 0 0 0 3px rgba(14,165,233,0.14);
+  border-color: color-mix(in srgb, var(--accent) 50%, transparent);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 /* ── SWAP DATE BTN ── */
@@ -73,7 +73,7 @@
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .swapDateBtn:hover { border-color: var(--border-hover); color: var(--text); }
@@ -82,8 +82,8 @@
 /* ── RESULT HERO ── */
 .resultHero {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
@@ -98,7 +98,7 @@
 }
 
 .resultHeroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(48px, 10vw, 72px);
   font-weight: 800;
   color: var(--accent);
@@ -128,13 +128,13 @@
 .infoCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 16px 12px;
   text-align: center;
 }
 
 .infoNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 700;
   color: var(--text);
@@ -154,9 +154,9 @@
 
 /* ── BIRTHDAY BANNER ── */
 .birthdayBanner {
-  background: rgba(14,165,233,0.18);
-  border: 1px solid rgba(14,165,233,0.4);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-radius: var(--radius-m);
   padding: 14px 20px;
   text-align: center;
   font-size: 15px;
@@ -175,7 +175,7 @@
 .ddayCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
   display: flex;
   align-items: center;
@@ -185,8 +185,8 @@
 }
 
 .ddayToday {
-  border-color: rgba(14,165,233,0.4);
-  background: rgba(14,165,233,0.14);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
 }
 
 .ddayPast {
@@ -196,7 +196,7 @@
 .ddayLeft { display: flex; align-items: center; gap: 14px; flex: 1; min-width: 0; }
 
 .ddayBadge {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 20px;
   font-weight: 800;
   color: var(--accent);
@@ -235,7 +235,7 @@
   align-items: center;
   justify-content: center;
 }@media (hover: hover) {
-  .removeBtn:hover { border-color: rgba(220,38,38,0.4); color: #DC2626; }
+  .removeBtn:hover { border-color: rgba(220,38,38,0.4); color: var(--red-600); }
 }
 
 /* ── ADD FORM ── */
@@ -251,14 +251,14 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   outline: none;
   transition: border-color 0.2s;
   min-width: 0;
 }
 .textInput::placeholder { color: var(--muted); }
-.textInput:focus { border-color: rgba(14,165,233,0.5); }
+.textInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 
 .dateInput {
   background: var(--bg3);
@@ -266,7 +266,7 @@
   border-radius: 10px;
   padding: 11px 12px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   outline: none;
   cursor: pointer;
@@ -274,7 +274,7 @@
   color-scheme: dark;
   transition: border-color 0.2s;
 }
-.dateInput:focus { border-color: rgba(14,165,233,0.5); }
+.dateInput:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 
 .addBtn {
   background: var(--accent-strong);
@@ -283,7 +283,7 @@
   padding: 11px 18px;
   font-size: 13px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: #ffffff;
   cursor: pointer;
   flex-shrink: 0;
@@ -301,7 +301,7 @@
   color: var(--muted);
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 /* ── 4 column info grid ── */

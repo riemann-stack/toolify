@@ -13,7 +13,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -23,14 +23,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -69,7 +69,7 @@ export default function WirePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />전선 굵기 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
@@ -104,7 +104,7 @@ export default function WirePage() {
         <ol style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 2 }}>
           <li>
             <strong style={{ color: 'var(--text)' }}>① 부하 W → 전류 I</strong>{' '}
-            <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--accent)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', color: 'var(--accent)' }}>
               I = P / (V × cosφ)
             </span>{' '}
             (삼상은 ÷ √3 추가)
@@ -179,8 +179,8 @@ export default function WirePage() {
               분전반 메인·간선용.
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #DB2777', borderRadius: 10, padding: '14px 16px' }}>
-            <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 6px' }}>누전차단기 (ELCB·RCBO)</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--pink-600)', borderRadius: 10, padding: '14px 16px' }}>
+            <p style={{ fontSize: 13, color: 'var(--pink-600)', fontWeight: 700, margin: '0 0 6px' }}>누전차단기 (ELCB·RCBO)</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               누전·감전 방지.<br />
               사람을 감전사로부터 보호.<br />
@@ -323,7 +323,7 @@ export default function WirePage() {
           <Link key={t.href} href={t.href} style={{
             display: 'flex', alignItems: 'center', gap: 12,
             background: 'var(--bg2)', border: '1px solid var(--border)',
-            borderRadius: 12, padding: '14px 16px', textDecoration: 'none',
+            borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
           }}>
             <span style={{ fontSize: 22, flexShrink: 0 }}>{t.icon}</span>
             <div>

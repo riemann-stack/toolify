@@ -154,11 +154,11 @@ export function calcTomorrowMorning(input: TomorrowInput): TomorrowResult {
   if (morningBAC >= BAC_THRESHOLDS.REVOKE) {
     status = 'revoke'; statusLabel = '🚨 면허취소 수준 — 절대 운전 금지'; statusColor = '#B91C1C'
   } else if (morningBAC >= BAC_THRESHOLDS.GENERAL_SUSPEND) {
-    status = 'suspend'; statusLabel = '❌ 면허정지 수준 — 운전 불가'; statusColor = '#DC2626'
+    status = 'suspend'; statusLabel = '❌ 면허정지 수준 — 운전 불가'; statusColor = 'var(--red-600)'
   } else if (morningBAC > 0) {
-    status = 'detected'; statusLabel = '⚠️ 측정 시 양성 가능 — 단속 위험'; statusColor = '#EA580C'
+    status = 'detected'; statusLabel = '⚠️ 측정 시 양성 가능 — 단속 위험'; statusColor = 'var(--orange-600)'
   } else {
-    status = 'safe'; statusLabel = '✅ 완전 분해 추정 (오차 가능)'; statusColor = '#059669'
+    status = 'safe'; statusLabel = '✅ 완전 분해 추정 (오차 가능)'; statusColor = 'var(--emerald-600)'
   }
 
   const suspendClearMin = input.peakBAC > BAC_THRESHOLDS.GENERAL_SUSPEND

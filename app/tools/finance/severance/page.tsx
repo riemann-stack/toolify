@@ -15,7 +15,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -25,14 +25,14 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -71,7 +71,7 @@ export default function SeverancePage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         금융·재테크
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="finance" />퇴직금 실수령액 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -104,7 +104,7 @@ export default function SeverancePage() {
       <h2 style={sectionTitle}>📐 퇴직금 계산 공식</h2>
       <div style={card}>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 0 }}>
-          <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, lineHeight: 2 }}>
+          <p style={{ fontSize: 14, color: 'var(--accent)', margin: 0, fontFamily: 'var(--font-sans)', fontWeight: 700, lineHeight: 2 }}>
             법정 퇴직금 = 1일 평균임금 × 30 × (재직일수 / 365)
           </p>
         </div>
@@ -124,16 +124,16 @@ export default function SeverancePage() {
           → 근로자에게 항상 유리한 큰 금액을 적용.
         </p>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: 10, marginTop: 12 }}>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #0891B2', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#0891B2', fontWeight: 700, margin: '0 0 4px' }}>📊 평균임금</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--cyan-600)', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: 'var(--cyan-600)', fontWeight: 700, margin: '0 0 4px' }}>📊 평균임금</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               3개월 임금 총액 ÷ 3개월 총일수<br />
               <strong>포함</strong>: 기본급·고정수당·상여금×3/12·연차수당×3/12<br />
               <strong>특징</strong>: 변동 임금 모두 반영해 더 큰 경향
             </p>
           </div>
-          <div style={{ background: 'var(--bg3)', borderTop: '3px solid #D97706', borderRadius: 10, padding: '12px 14px' }}>
-            <p style={{ fontSize: 13, color: '#D97706', fontWeight: 700, margin: '0 0 4px' }}>⏱️ 통상임금</p>
+          <div style={{ background: 'var(--bg3)', borderTop: '3px solid var(--amber-600)', borderRadius: 10, padding: '12px 14px' }}>
+            <p style={{ fontSize: 13, color: 'var(--amber-600)', fontWeight: 700, margin: '0 0 4px' }}>⏱️ 통상임금</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>
               월 통상임금 / 209시간 × 1일 소정시간<br />
               <strong>포함</strong>: 기본급·고정수당만 (변동성 X)<br />
@@ -151,7 +151,7 @@ export default function SeverancePage() {
           근속연수가 길수록 공제가 커지고, 환산급여로 누진세율을 분산해 부담을 줄여요.
         </p>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12 }}>
-          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', lineHeight: 2 }}>
+          <p style={{ fontSize: 13, color: 'var(--text)', margin: 0, fontFamily: 'var(--font-sans)', lineHeight: 2 }}>
             ① 환산급여 = (퇴직금 − 근속연수공제) × 12 / 근속연수<br />
             ② 과세표준 = 환산급여 − 환산급여공제<br />
             ③ 산출세액 = 과세표준 × 누진세율 (6~45%)<br />
@@ -172,10 +172,10 @@ export default function SeverancePage() {
       <div style={card}>
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
           {[
-            { t: '💼 일반 퇴직금', d: '근로기준법 기준 법정 퇴직금. 회사가 직접 지급. 14일 내 의무.', c: '#0D9488' },
-            { t: '🏦 DB형 퇴직연금', d: '확정급여형 — 평균임금 × 30 × 근속/365 (일반과 동일 계산). 회사가 적립·운용.', c: '#0891B2' },
-            { t: '📊 DC형 퇴직연금', d: '확정기여형 — 회사가 매년 임금총액의 1/12 이상 적립, 근로자 운용. 결과 변동.', c: '#D97706' },
-            { t: '🏛️ IRP', d: '300만원 초과 퇴직급여는 IRP 의무 이전(55세 미만). 연금 수령 시 절세 효과.', c: '#EA580C' },
+            { t: '💼 일반 퇴직금', d: '근로기준법 기준 법정 퇴직금. 회사가 직접 지급. 14일 내 의무.', c: 'var(--teal-600)' },
+            { t: '🏦 DB형 퇴직연금', d: '확정급여형 — 평균임금 × 30 × 근속/365 (일반과 동일 계산). 회사가 적립·운용.', c: 'var(--cyan-600)' },
+            { t: '📊 DC형 퇴직연금', d: '확정기여형 — 회사가 매년 임금총액의 1/12 이상 적립, 근로자 운용. 결과 변동.', c: 'var(--amber-600)' },
+            { t: '🏛️ IRP', d: '300만원 초과 퇴직급여는 IRP 의무 이전(55세 미만). 연금 수령 시 절세 효과.', c: 'var(--orange-600)' },
           ].map((g, i) => (
             <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
               <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
@@ -184,7 +184,7 @@ export default function SeverancePage() {
           ))}
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          ⚠️ <strong style={{ color: '#DB2777' }}>DC형은 별도 계산 필요</strong> — 운용 결과에 따라 법정 퇴직금과 다를 수 있음.
+          ⚠️ <strong style={{ color: 'var(--pink-600)' }}>DC형은 별도 계산 필요</strong> — 운용 결과에 따라 법정 퇴직금과 다를 수 있음.
           정확한 금액은 회사 인사팀·금융사 IRP 계좌에서 확인하세요.
         </p>
       </div>
@@ -319,21 +319,21 @@ export default function SeverancePage() {
       {/* finance 도구 크로스링크 */}
       <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/finance/salary" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/finance/salary" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💰</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>연봉 실수령액 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             4대보험·세금·시급
           </p>
         </Link>
-        <Link href="/tools/finance/savings" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/finance/savings" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>💰</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>월 저축가능 금액</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             저축률 + 6 항아리 + 절세
           </p>
         </Link>
-        <Link href="/tools/finance/4-insurance" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+        <Link href="/tools/finance/4-insurance" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 22, margin: '0 0 4px' }}>🏥</p>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>4대보험 계산기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>

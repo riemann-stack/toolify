@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--cyan-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,17 +20,17 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -38,13 +38,13 @@
   .tabBtn:hover { color: var(--text); }
 }
 .tabActive         { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveReverse  { background: rgba(161,98,7,0.18); color: #A16207; font-weight: 700; }
+.tabActiveReverse  { background: rgba(161,98,7,0.18); color: var(--yellow-700); font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   width: 100%;
   box-sizing: border-box;
@@ -61,23 +61,23 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
 
 /* ── 입력 ── */
 .numInput, .textInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   width: 100%;
   box-sizing: border-box;
 }
 .numInput {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -93,7 +93,7 @@
 .unit {
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 
@@ -107,11 +107,11 @@
 .toggleBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }@media (hover: hover) {
@@ -130,11 +130,11 @@
 .optionBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
   line-height: 1.4;
@@ -159,7 +159,7 @@
   gap: 10px;
   align-items: center;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .checkItem input { accent-color: var(--accent); width: 16px; height: 16px; cursor: pointer; }
@@ -167,7 +167,7 @@
 .checkItem small { color: var(--muted); font-size: 11px; }
 .checkItemActive { background: var(--accent-dim); border-color: var(--accent); }
 .checkAmount {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -176,7 +176,7 @@
 
 /* ── 히어로 ── */
 .hero {
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 26px 22px;
   text-align: center;
   border-width: 1px;
@@ -191,7 +191,7 @@
   margin-bottom: 6px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(44px, 11vw, 72px);
   letter-spacing: -2px;
@@ -199,8 +199,8 @@
   font-variant-numeric: tabular-nums;
 }
 .heroNumUnit { font-size: 0.36em; color: var(--text); margin-left: 6px; letter-spacing: 0; }
-.heroSub { font-size: 13px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
-.heroDesc { font-size: 13px; color: var(--muted); margin-top: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.heroSub { font-size: 13px; color: var(--text); margin-top: 10px; line-height: 1.6; font-family: var(--font-sans); font-weight: 600; }
+.heroDesc { font-size: 13px; color: var(--muted); margin-top: 6px; font-family: var(--font-sans); }
 
 /* ── 도넛 ── */
 .donutWrap {
@@ -218,10 +218,10 @@
   gap: 8px;
   align-items: center;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 12px;
 }
 .donutLegendItem i {
@@ -232,7 +232,7 @@
 }
 .donutLegendItem span { color: var(--text); }
 .donutLegendItem b {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -248,10 +248,10 @@
   align-items: baseline;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .deductionRow.headerRow {
   background: transparent; border: none;
@@ -261,22 +261,22 @@
 }
 .deductionRow span:first-child { color: var(--text); }
 .deductionRow span:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
 .deductionRowSection {
-  background: rgba(8,145,178,0.14);
-  border-color: rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border-color: color-mix(in srgb, var(--cyan-600) 30%, transparent);
   font-weight: 600;
 }
-.deductionRowSection span:not(:first-child) { color: #0891B2; }
+.deductionRowSection span:not(:first-child) { color: var(--cyan-600); }
 .deductionRowTax {
   background: rgba(234,88,12,0.14);
   border-color: rgba(234,88,12,0.30);
 }
-.deductionRowTax span:not(:first-child) { color: #EA580C; }
+.deductionRowTax span:not(:first-child) { color: var(--orange-600); }
 .deductionRowTotal {
   background: var(--accent-dim);
   border-color: var(--accent);
@@ -288,7 +288,7 @@
 .percentileBar {
   position: relative;
   height: 32px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   overflow: hidden;
   border: 1px solid var(--border);
   display: flex;
@@ -300,7 +300,7 @@
   justify-content: center;
   font-size: 10px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: rgba(0,0,0,0.65);
 }
 .percentileMarker {
@@ -316,7 +316,7 @@
   position: absolute;
   bottom: 0;
   transform: translateX(-50%);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 12px;
   color: var(--text);
@@ -340,10 +340,10 @@
   padding: 11px 14px;
   align-items: center;
 }
-.hourlyName { font-size: 13px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 600; }
+.hourlyName { font-size: 13px; color: var(--text); font-family: var(--font-sans); font-weight: 600; }
 .hourlyName small { display: block; color: var(--muted); font-size: 11px; font-weight: 400; margin-top: 2px; }
 .hourlyVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   font-size: 17px;
@@ -384,7 +384,7 @@
 }
 .sliderRow { display: flex; align-items: center; gap: 10px; }
 .sliderVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-size: 18px;
@@ -402,10 +402,10 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .targetRow.headerRow {
   background: transparent; border: none;
@@ -414,14 +414,14 @@
   font-weight: 700; padding: 3px 14px;
 }
 .targetRow span:first-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }
 .targetRow span:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -432,11 +432,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   text-align: center;
@@ -465,17 +465,17 @@
     z-index: 5;
     background: var(--bg2);
     border: 1px solid var(--accent);
-    border-radius: 12px;
+    border-radius: var(--radius-m);
     padding: 10px 14px;
   }
   .stickyBarLabel {
     font-size: 13px;
     color: var(--muted);
-    font-family: 'Noto Sans KR', sans-serif;
+    font-family: var(--font-sans);
     font-weight: 600;
   }
   .stickyBarValue {
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: var(--font-sans);
     font-weight: 800;
     font-size: 16px;
     color: var(--accent);
@@ -491,23 +491,23 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
 
 /* ── 정보 박스 ── */
 .infoBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.75;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.infoBox strong { color: #0891B2; }
+.infoBox strong { color: var(--cyan-600); }
 
 .warnBox {
   background: rgba(220,38,38,0.14);
@@ -517,6 +517,6 @@
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.warnBox strong { color: #DC2626; }
+.warnBox strong { color: var(--red-600); }

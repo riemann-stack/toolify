@@ -18,7 +18,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -26,13 +26,13 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '18px 20px',
 }
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -59,7 +59,7 @@ export default function ClimbingGradePage() {
   return (
     <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="sports" />클라이밍 등급 변환기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -117,7 +117,7 @@ export default function ClimbingGradePage() {
                 {BOULDER_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.v}</td>
-                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.font}</td>
+                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.font}</td>
                     <td style={td}>
                       <span style={{ ...bandDot, background: BANDS[r.band].color }} />
                       {BANDS[r.band].label}
@@ -152,8 +152,8 @@ export default function ClimbingGradePage() {
                 {ROUTE_ROWS.map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ ...td, fontWeight: 700 }}>{r.yds}</td>
-                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.french}</td>
-                    <td style={{ ...td, color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.uiaa}</td>
+                    <td style={{ ...td, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.french}</td>
+                    <td style={{ ...td, color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.uiaa}</td>
                     <td style={td}>
                       <span style={{ ...bandDot, background: BANDS[r.band].color }} />
                       {BANDS[r.band].label}
@@ -183,16 +183,16 @@ export default function ClimbingGradePage() {
                 <li>이 구간에서는 진도가 빠른 편</li>
               </ul>
             </div>
-            <div style={{ ...card, borderTop: '3px solid #0EA5E9' }}>
-              <p style={{ fontSize: '13px', color: '#0EA5E9', fontWeight: 700, marginBottom: '8px' }}>중급 · V3~V5 (Font 6A~6C+)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--sky-500)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--sky-500)', fontWeight: 700, marginBottom: '8px' }}>중급 · V3~V5 (Font 6A~6C+)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>어느 정도 꾸준히 다닌 동호인</li>
                 <li>근력이 붙고 쉬운 문제는 플래시(첫 시도 완등)</li>
                 <li>다양한 무브 레퍼토리가 생기는 시기</li>
               </ul>
             </div>
-            <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
-              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>상급 · V6+ (Font 7A~)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--orange-600)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--orange-600)', fontWeight: 700, marginBottom: '8px' }}>상급 · V6+ (Font 7A~)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>수년간 등반한 상위권 동호인 (V6~V8)</li>
                 <li>V9~V12는 전문 훈련 영역, 체육관 최상위권</li>
@@ -206,8 +206,8 @@ export default function ClimbingGradePage() {
         <div>
           <h2 style={sectionTitle}>🧗 볼더링 vs 루트 — 무엇이 다른가요?</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '12px' }}>
-            <div style={{ ...card, borderTop: '3px solid #A16207' }}>
-              <p style={{ fontSize: '13px', color: '#A16207', fontWeight: 700, marginBottom: '8px' }}>볼더링 (V · Font)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--yellow-700)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--yellow-700)', fontWeight: 700, marginBottom: '8px' }}>볼더링 (V · Font)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>짧고 강한 문제(보통 4~12동작)</li>
                 <li>로프 없이 매트 위에서</li>
@@ -215,8 +215,8 @@ export default function ClimbingGradePage() {
                 <li>실내 클라이밍 입문에 흔함</li>
               </ul>
             </div>
-            <div style={{ ...card, borderTop: '3px solid #EA580C' }}>
-              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>루트/리드 (YDS · French)</p>
+            <div style={{ ...card, borderTop: '3px solid var(--orange-600)' }}>
+              <p style={{ fontSize: '13px', color: 'var(--orange-600)', fontWeight: 700, marginBottom: '8px' }}>루트/리드 (YDS · French)</p>
               <ul style={{ margin: 0, paddingLeft: '18px', fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>길고 지속적인 벽(수 m~수십 m)</li>
                 <li>로프·확보 장비 사용</li>

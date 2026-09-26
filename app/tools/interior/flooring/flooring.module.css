@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,17 +20,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -47,7 +47,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -76,7 +76,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 공간 입력 ── */
@@ -93,16 +93,16 @@
   padding: 10px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); }
 }
-.modePyung { border-color: rgba(14,165,233,0.40); }
-.modeMeter { border-color: rgba(8,145,178,0.40); }
+.modePyung { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.modeMeter { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .modePyung.modeActive { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.modeMeter.modeActive { background: rgba(8,145,178,0.18); color: #0891B2;       border-color: #0891B2;     font-weight: 700; }
+.modeMeter.modeActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600);       border-color: var(--cyan-600);     font-weight: 700; }
 
 .pyungSelect {
   width: 100%;
@@ -111,7 +111,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -134,7 +134,7 @@
   gap: 8px;
   align-items: center;
 }
-.dimSep { color: var(--muted); font-size: 18px; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; text-align: center; }
+.dimSep { color: var(--muted); font-size: 18px; font-family: var(--font-sans); font-weight: 700; text-align: center; }
 
 .bigInput {
   width: 100%;
@@ -143,7 +143,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 18px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -162,7 +162,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
   outline: none;
@@ -180,7 +180,7 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   outline: none;
@@ -189,12 +189,12 @@
 .textInput:focus { border-color: var(--accent); }
 
 .inputRow { display: flex; align-items: center; gap: 10px; }
-.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: 'Noto Sans KR', sans-serif; }
+.unit { font-size: 13px; color: var(--muted); flex-shrink: 0; font-family: var(--font-sans); }
 .areaShow {
   font-size: 13px;
   color: var(--accent);
   margin-top: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 
@@ -213,12 +213,12 @@
 .flooringCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 14px;
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -236,41 +236,41 @@
 .flooringSpec {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .flooringBadge {
   display: inline-block;
   font-size: 11px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-top: 4px;
 }
 .flVinyl       { border-color: rgba(16,185,129,0.40); }
 .flLaminate    { border-color: var(--accent); }
 .flEngineered  { border-color: rgba(161,98,7,0.40); }
 .flHardwood    { border-color: rgba(155,89,182,0.40); }
-.flDecoTile    { border-color: rgba(8,145,178,0.40); }
+.flDecoTile    { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .flPorcelain   { border-color: rgba(220,38,38,0.40); }
 .flCustom      { border-color: var(--border); }
 
-.flVinyl.flActive       { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; }
+.flVinyl.flActive       { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); }
 .flLaminate.flActive    { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); }
-.flEngineered.flActive  { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; }
-.flHardwood.flActive    { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; }
-.flDecoTile.flActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; }
-.flPorcelain.flActive   { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; }
+.flEngineered.flActive  { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); }
+.flHardwood.flActive    { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); }
+.flDecoTile.flActive    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); }
+.flPorcelain.flActive   { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); }
 .flCustom.flActive      { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); }
 .flooringCard.flActive .flooringName { color: inherit; }
 
-.bgVinyl       { background: rgba(16,185,129,0.15); color: #059669; }
-.bgLaminate    { background: rgba(14,165,233,0.15); color: var(--accent); }
-.bgEngineered  { background: rgba(161,98,7,0.15);  color: #A16207; }
-.bgHardwood    { background: rgba(155,89,182,0.15); color: #9333EA; }
-.bgDecoTile    { background: rgba(8,145,178,0.15); color: #0891B2; }
-.bgPorcelain   { background: rgba(220,38,38,0.15); color: #DC2626; }
+.bgVinyl       { background: rgba(16,185,129,0.15); color: var(--emerald-600); }
+.bgLaminate    { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); }
+.bgEngineered  { background: rgba(161,98,7,0.15);  color: var(--yellow-700); }
+.bgHardwood    { background: rgba(155,89,182,0.15); color: var(--purple-600); }
+.bgDecoTile    { background: color-mix(in srgb, var(--cyan-600) 15%, transparent); color: var(--cyan-600); }
+.bgPorcelain   { background: rgba(220,38,38,0.15); color: var(--red-600); }
 
 /* 직접 입력 시 추가 입력 */
 .customSpecRow {
@@ -290,11 +290,11 @@
 .brandBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
@@ -302,15 +302,15 @@
   .brandBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .brandKcc        { border-color: rgba(220,38,38,0.40); }
-.brandLg         { border-color: rgba(14,165,233,0.40); }
-.brandHansol     { border-color: rgba(8,145,178,0.40); }
+.brandLg         { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
+.brandHansol     { border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .brandDonghwa    { border-color: rgba(161,98,7,0.40); }
 .brandPungsan    { border-color: rgba(155,89,182,0.40); }
-.brandKcc.brandActive       { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.brandKcc.brandActive       { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
 .brandLg.brandActive        { background: var(--accent-dim);      color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.brandHansol.brandActive    { background: rgba(8,145,178,0.18); color: #0891B2; border-color: #0891B2; font-weight: 700; }
-.brandDonghwa.brandActive   { background: rgba(161,98,7,0.18);  color: #A16207; border-color: #A16207; font-weight: 700; }
-.brandPungsan.brandActive   { background: rgba(155,89,182,0.12); color: #9333EA; border-color: #9B59B6; font-weight: 700; }
+.brandHansol.brandActive    { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); color: var(--cyan-600); border-color: var(--cyan-600); font-weight: 700; }
+.brandDonghwa.brandActive   { background: rgba(161,98,7,0.18);  color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
+.brandPungsan.brandActive   { background: rgba(155,89,182,0.12); color: var(--purple-600); border-color: var(--amethyst); font-weight: 700; }
 
 /* ── 시공 방식 4종 ── */
 .methodGrid {
@@ -328,7 +328,7 @@
   padding: 12px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -344,7 +344,7 @@
   display: block;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-top: 2px;
 }
@@ -352,10 +352,10 @@
 .mDiagonal    { border-color: var(--accent); }
 .mHerringbone { border-color: rgba(234,88,12,0.40); }
 .mChevron     { border-color: rgba(220,38,38,0.40); }
-.mParallel.mActive    { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.mParallel.mActive    { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
 .mDiagonal.mActive    { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.mHerringbone.mActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
-.mChevron.mActive     { background: rgba(220,38,38,0.18); color: #DC2626; border-color: #DC2626; font-weight: 700; }
+.mHerringbone.mActive { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
+.mChevron.mActive     { background: rgba(220,38,38,0.18); color: var(--red-600); border-color: var(--red-600); font-weight: 700; }
 
 /* ── 로스율 ── */
 .lossGrid {
@@ -370,42 +370,42 @@
   padding: 12px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
 }
-.lossBtn small { display: block; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; margin-bottom: 2px; }@media (hover: hover) {
+.lossBtn small { display: block; font-family: var(--font-sans); font-weight: 800; font-size: 16px; margin-bottom: 2px; }@media (hover: hover) {
   .lossBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .lossSafe { border-color: rgba(16,185,129,0.40); }
-.lossStd  { border-color: var(--accent); background: rgba(14,165,233,0.14); }
+.lossStd  { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 14%, transparent); }
 .lossWarn { border-color: rgba(234,88,12,0.40); }
-.lossSafe.lossActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.lossSafe.lossActive { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
 .lossStd.lossActive  { background: var(--accent-dim);     color: var(--accent); border-color: var(--accent); font-weight: 700; }
-.lossWarn.lossActive { background: rgba(234,88,12,0.18); color: #EA580C; border-color: #EA580C; font-weight: 700; }
+.lossWarn.lossActive { background: rgba(234,88,12,0.18); color: var(--orange-600); border-color: var(--orange-600); font-weight: 700; }
 
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
   border: 1px solid rgba(234,88,12,0.40);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
 }
 .heroLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.heroUnit { font-size: 18px; color: var(--muted); margin-left: 6px; vertical-align: middle; font-family: var(--font-sans); }
 .heroSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.heroSubAccent { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
+.heroSubAccent { font-family: var(--font-sans); color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -425,16 +425,16 @@
 .analysisTable td:first-child { color: var(--muted); }
 .analysisTable td:last-child {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
 }
-.analysisTable .addRow td:last-child { color: #0891B2; }
+.analysisTable .addRow td:last-child { color: var(--cyan-600); }
 .analysisTable .totalRow td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
 }
 .analysisTable .totalRow td:first-child { color: var(--accent); }
@@ -442,9 +442,9 @@
 
 /* ── 비용 카드 ── */
 .costCard {
-  background: rgba(14,165,233,0.14);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .costRow {
@@ -459,14 +459,14 @@
 .costRow:last-child { border-bottom: none; }
 .costRow.totalCost {
   border-bottom: none;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   margin-top: 6px;
   padding-top: 12px;
   font-size: 14px;
 }
 .costRow strong {
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .costRow.totalCost strong { color: var(--accent); font-size: 18px; }
@@ -476,7 +476,7 @@
   display: flex;
   justify-content: center;
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 18px;
 }
 .floorPlanSvg {
@@ -507,10 +507,10 @@
 .refTable td:first-child {
   color: var(--text);
   font-weight: 700;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .refTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
@@ -520,7 +520,7 @@
 .roomBlock {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   margin-bottom: 10px;
 }
@@ -535,7 +535,7 @@
   background: transparent;
   border: none;
   font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -546,13 +546,13 @@
 .removeRoomBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 10px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .removeRoomBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
+  .removeRoomBtn:hover { color: var(--red-600); border-color: rgba(220,38,38,0.4); }
 }
 
 .roomDimRow {
@@ -573,10 +573,10 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   outline: none;
   cursor: pointer;
@@ -605,7 +605,7 @@
 }
 .roomMiniResult > div p:first-child { color: var(--muted); font-size: 11px; }
 .roomMiniResult > div p:last-child  {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 15px;
   color: var(--accent);
@@ -615,11 +615,11 @@
 .addBtn {
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   width: 100%;
   margin-top: 8px;
@@ -649,13 +649,13 @@
   font-weight: 600;
 }
 .summaryTable td:not(:first-child):not(:nth-child(3)) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
 .summaryTotal td {
   background: var(--accent-dim);
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
   font-weight: 800;
 }
@@ -665,17 +665,17 @@
 .totalPyungLine {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   margin-top: 12px;
   font-size: 14px;
   color: var(--text);
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .totalPyungLine strong {
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
 }
@@ -700,29 +700,29 @@
   font-weight: 600;
 }
 .quoteTable td:not(:first-child) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   white-space: nowrap;
 }
-.selfRow td  { background: rgba(14,165,233,0.14); }
-.proRow td   { background: rgba(8,145,178,0.14); }
+.selfRow td  { background: color-mix(in srgb, var(--accent) 14%, transparent); }
+.proRow td   { background: color-mix(in srgb, var(--cyan-600) 14%, transparent); }
 .totalRowSelf td {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 30%, transparent);
   border-bottom: none;
 }
 .totalRowSelf td:first-child { color: var(--accent); }
 .totalRowSelf td:last-child  { color: var(--accent); font-size: 15px; }
 .totalRowPro td {
-  background: rgba(8,145,178,0.18);
+  background: color-mix(in srgb, var(--cyan-600) 18%, transparent);
   font-weight: 800;
-  border-top: 2px solid rgba(8,145,178,0.3);
+  border-top: 2px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-bottom: none;
 }
-.totalRowPro td:first-child { color: #0891B2; }
-.totalRowPro td:last-child  { color: #0891B2; font-size: 15px; }
+.totalRowPro td:first-child { color: var(--cyan-600); }
+.totalRowPro td:last-child  { color: var(--cyan-600); font-size: 15px; }
 
 /* 가격 가이드 표 */
 .priceGuideTable {
@@ -746,7 +746,7 @@
 }
 .priceGuideTable td:first-child { color: var(--text); font-weight: 700; }
 .priceGuideTable td:nth-child(2) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
 }
@@ -755,24 +755,24 @@
 .compareLine {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
   margin-top: 12px;
 }
-.compareLine strong { color: #EA580C; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.compareLine strong { color: var(--orange-600); font-family: var(--font-sans); font-weight: 800; }
 
 /* ── 결과 복사 ── */
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;

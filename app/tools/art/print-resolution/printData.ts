@@ -59,7 +59,7 @@ export const USE_CASES: UseCase[] = [
 
 /** tint = 점·막대 등 비텍스트용, ink = 텍스트용(AA 통과 토큰).
     예전에는 한 색을 배지 배경(흰 글자)과 큰 숫자 양쪽에 썼는데,
-    #0EA5E9는 흰 배경 대비 2.77:1로 큰 글씨 기준 3:1에도 미달했다. */
+    var(--sky-500)는 흰 배경 대비 2.77:1로 큰 글씨 기준 3:1에도 미달했다. */
 export interface QualityBand { min: number; label: string; tint: string; ink: string; desc: string }
 
 // effective DPI 기준 — 내림차순으로 첫 매치

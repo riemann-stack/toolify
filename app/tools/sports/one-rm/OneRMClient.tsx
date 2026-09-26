@@ -61,12 +61,12 @@ const INTENSITIES: { pct: number; reps: string; purpose: string; type: 'strong' 
 
 const PLATE_COLORS: Record<number, string> = {
   25:   '#FF4646',
-  20:   '#0891B2',
-  15:   '#A16207',
-  10:   '#EA580C',
-  5:    '#059669',
-  2.5:  '#0EA5E9',
-  1.25: '#9B59B6',
+  20:   'var(--cyan-600)',
+  15:   'var(--yellow-700)',
+  10:   'var(--orange-600)',
+  5:    'var(--emerald-600)',
+  2.5:  'var(--sky-500)',
+  1.25: 'var(--amethyst)',
   0.5:  '#FFFFFF',
 }
 const DEFAULT_PLATES = [25, 20, 15, 10, 5, 2.5, 1.25, 0.5]
@@ -719,10 +719,10 @@ function HistoryChart({ history }: { history: HistoryRecord[] }) {
         {sorted.map((r, i) => (
           <circle key={r.id} cx={xOf(i)} cy={yOf(r.oneRM)} r={3} fill="var(--accent)" />
         ))}
-        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmt(maxV, 0)}</text>
-        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmt(minV, 0)}</text>
-        <text x={padL} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{sorted[0].date.slice(5)}</text>
-        <text x={W - padR} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{sorted[sorted.length - 1].date.slice(5)}</text>
+        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{fmt(maxV, 0)}</text>
+        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{fmt(minV, 0)}</text>
+        <text x={padL} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="start">{sorted[0].date.slice(5)}</text>
+        <text x={W - padR} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="end">{sorted[sorted.length - 1].date.slice(5)}</text>
       </svg>
     </div>
   )
@@ -1283,7 +1283,7 @@ function PlateViz({ barKg, perSide }: { barKg: number; perSide: number[] }) {
         })}
 
         {/* 라벨 */}
-        <text x={W / 2} y={H - 10} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+        <text x={W / 2} y={H - 10} fill="var(--muted)" fontSize="11" textAnchor="middle">
           바 {fmt(barKg, 0)}kg
         </text>
       </svg>

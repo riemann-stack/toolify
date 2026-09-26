@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 리그 프리셋 ── */
 .leagueGrid {
@@ -29,7 +29,7 @@
   padding: 10px 8px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -39,15 +39,15 @@
   display: block;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   margin-top: 2px;
   opacity: 0.85;
 }@media (hover: hover) {
   .leagueBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.leagueKBO    { border-color: rgba(14,165,233,0.45); }
-.leagueMLB    { border-color: rgba(8,145,178,0.45); }
+.leagueKBO    { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
+.leagueMLB    { border-color: color-mix(in srgb, var(--cyan-600) 45%, transparent); }
 .leagueNPB    { border-color: rgba(220,38,38,0.40); }
 .leagueAmateur { border-color: var(--border); }
 .leagueCustom { border-color: var(--border); }
@@ -66,17 +66,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -93,7 +93,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -162,10 +162,10 @@
   color: var(--muted);
   letter-spacing: 0.04em;
   margin-bottom: 2px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .statLabel small {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   opacity: 0.7;
 }
@@ -174,7 +174,7 @@
   background: transparent;
   border: none;
   font-size: 19px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -187,12 +187,12 @@
 
 /* 색상 강조 (안타·홈런 등) */
 .cellH       { border-left: 3px solid var(--accent); }
-.cellHR      { border-left: 3px solid #A16207; }
-.cellWalk    { border-left: 3px solid #0891B2; }
-.cellOut     { border-left: 3px solid #EA580C; }
-.cellRun     { border-left: 3px solid #059669; }
-.cellWin     { border-left: 3px solid #059669; }
-.cellLoss    { border-left: 3px solid #DC2626; }
+.cellHR      { border-left: 3px solid var(--yellow-700); }
+.cellWalk    { border-left: 3px solid var(--cyan-600); }
+.cellOut     { border-left: 3px solid var(--orange-600); }
+.cellRun     { border-left: 3px solid var(--emerald-600); }
+.cellWin     { border-left: 3px solid var(--emerald-600); }
+.cellLoss    { border-left: 3px solid var(--red-600); }
 
 /* ── 고급 토글 ── */
 .advancedToggle {
@@ -202,7 +202,7 @@
   padding: 10px 14px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: left;
   transition: all 0.15s;
@@ -215,20 +215,20 @@
 /* ── 검증 메시지 ── */
 .validMsg {
   font-size: 12px;
-  color: #EA580C;
+  color: var(--orange-600);
   margin-top: 10px;
   padding: 8px 12px;
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   line-height: 1.6;
 }
 
 /* ── HERO ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.35);
-  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
@@ -240,7 +240,7 @@
   letter-spacing: 0.04em;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 9vw, 64px);
   font-weight: 800;
   color: var(--accent);
@@ -251,17 +251,17 @@
   display: inline-block;
   margin-top: 10px;
   padding: 5px 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 12px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.lvMVP    { background: rgba(161,98,7,0.15);   color: #A16207; }
+.lvMVP    { background: rgba(161,98,7,0.15);   color: var(--yellow-700); }
 .lvAllStar{ background: var(--accent-dim);       color: var(--accent); }
-.lvRegular{ background: rgba(16,185,129,0.15);  color: #059669; }
+.lvRegular{ background: rgba(16,185,129,0.15);  color: var(--emerald-600); }
 .lvAvg    { background: rgba(15,23,42,0.04); color: var(--muted); }
-.lvBelow  { background: rgba(234,88,12,0.15);  color: #EA580C; }
-.lvBackup { background: rgba(220,38,38,0.15); color: #DC2626; }
+.lvBelow  { background: rgba(234,88,12,0.15);  color: var(--orange-600); }
+.lvBackup { background: rgba(220,38,38,0.15); color: var(--red-600); }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -280,7 +280,7 @@
 .kpiCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 10px;
   text-align: center;
 }
@@ -291,7 +291,7 @@
   letter-spacing: 0.04em;
 }
 .kpiValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 30px;
   font-weight: 800;
   color: var(--text);
@@ -304,7 +304,7 @@
 .compareCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .compareRow {
@@ -320,10 +320,10 @@
 .compareTitle {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .compareValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 16px;
   color: var(--text);
@@ -332,7 +332,7 @@
   position: relative;
   height: 8px;
   background: rgba(15,23,42,0.04);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 .compareBarMine {
@@ -340,7 +340,7 @@
   top: 0; left: 0;
   height: 100%;
   background: var(--accent);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   transition: width 0.3s;
 }
 .compareBarLeague {
@@ -381,7 +381,7 @@
 .advCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
 .advLabel {
@@ -401,7 +401,7 @@
   line-height: 1.55;
 }
 .advValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
   color: var(--text);
@@ -452,7 +452,7 @@
   border-radius: 2px;
 }
 .pieRow strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
@@ -477,12 +477,12 @@
   text-transform: uppercase;
 }
 .legendTable td {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
 .legendTable td:first-child {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
 }
@@ -500,7 +500,7 @@
   align-items: center;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 16px;
   margin-bottom: 6px;
 }
@@ -513,36 +513,36 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .milestoneSub {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.milestoneSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.milestoneSub strong { color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 .milestoneBadge {
   font-size: 11px;
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
   white-space: nowrap;
   flex-shrink: 0;
 }
-.msReach    { background: rgba(16,185,129,0.15); color: #059669; }
-.msHard     { background: rgba(234,88,12,0.15); color: #EA580C; }
-.msImpossible { background: rgba(220,38,38,0.15); color: #DC2626; }
+.msReach    { background: rgba(16,185,129,0.15); color: var(--emerald-600); }
+.msHard     { background: rgba(234,88,12,0.15); color: var(--orange-600); }
+.msImpossible { background: rgba(220,38,38,0.15); color: var(--red-600); }
 
 /* 결과 복사 */
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
@@ -557,7 +557,7 @@
   padding: 14px 16px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
 }
 .plusHead {
   display: flex;
@@ -569,7 +569,7 @@
 .plusName { font-size: 14px; font-weight: 700; color: var(--text); }
 .plusName small { font-size: 11px; font-weight: 600; color: var(--muted); margin-left: 6px; }
 .plusVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 26px;
   font-weight: 800;
   letter-spacing: -0.02em;

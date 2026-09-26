@@ -742,7 +742,7 @@ function PaceTab({ now }: { now: Date }) {
               <div className={s.paceBarRow}>
                 <span className={s.paceBarLabel}>완료한 양</span>
                 <span className={s.paceBarTrack}>
-                  <span className={s.paceBarFill} style={{ width: `${pace.percent}%`, background: '#0891B2' }} />
+                  <span className={s.paceBarFill} style={{ width: `${pace.percent}%`, background: 'var(--cyan-600)' }} />
                 </span>
                 <span className={s.paceBarValue}>{doneN.toLocaleString()}</span>
               </div>
@@ -965,13 +965,13 @@ function BizTab({ now }: { now: Date }) {
         <div className={s.fieldRow}>
           <div>
             <span className={s.inlineLabel}>14일 후</span>
-            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 12px', fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: 'var(--text)' }}>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)' }}>
               {fmtDate(addDays(todayStr, 14, mode))}
             </div>
           </div>
           <div>
             <span className={s.inlineLabel}>30일 후</span>
-            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 12px', fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: 'var(--text)' }}>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '10px 12px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)' }}>
               {fmtDate(addDays(todayStr, 30, mode))}
             </div>
           </div>

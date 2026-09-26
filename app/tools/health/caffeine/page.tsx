@@ -21,7 +21,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -31,7 +31,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
 }
 const cell: React.CSSProperties = {
@@ -65,7 +65,7 @@ export default function CaffeinePage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="health" />카페인 잔존량 트래커
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -150,7 +150,7 @@ export default function CaffeinePage() {
               { name: '👶 청소년·어린이', color: '#EA580C', desc: '반감기 ≈ 4시간이지만 체중 대비 영향 큼. WHO·식약처 권장량 낮음' },
               { name: '👴 고령자', color: '#059669', desc: '간 기능 ↓로 약간 느려질 수 있음. 야간 깊은 수면 영향 ↑' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px' }}>{b.name}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{b.desc}</p>
               </div>
@@ -224,8 +224,8 @@ export default function CaffeinePage() {
               { range: '100~200mg', desc: '수면 질 큰 영향 · 다음날 피로', color: '#EA580C' },
               { range: '≥ 200mg', desc: '깊은 수면 차단 수준 · 심박 ↑', color: '#DC2626' },
             ].map((b, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: '12px', padding: '12px 14px' }}>
-                <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{b.range}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${b.color}44`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: '13px', color: b.color, fontWeight: 700, marginBottom: '6px', fontFamily: 'var(--font-sans)' }}>{b.range}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{b.desc}</p>
               </div>
             ))}
@@ -247,7 +247,7 @@ export default function CaffeinePage() {
           <div style={{
             background: 'rgba(217, 119, 6, 0.06)',
             border: '1px solid rgba(217, 119, 6, 0.25)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 22px',
             fontSize: '14px',
             color: 'var(--text)',

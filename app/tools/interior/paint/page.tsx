@@ -47,7 +47,7 @@ export default function PaintPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />페인트 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '20px' }}>
@@ -74,15 +74,15 @@ export default function PaintPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             페인트 소요량 핵심 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -91,7 +91,7 @@ export default function PaintPage() {
             <div><span style={{ color: 'var(--muted)' }}>필요 페인트 (L)</span> = (도장 면적 × 칠할 횟수) ÷ 1L당 도장 면적</div>
             <div><span style={{ color: 'var(--muted)' }}>여유분 포함</span> = 위 값 × (1 + 로스율 / 100)</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>예시:</strong> 도장 면적 28㎡, 2회 도장, 수성 페인트 (1L=10㎡)<br />
             • 면적 × 회수 = 28 × 2 = <strong style={{ color: 'var(--text)' }}>56㎡</strong><br />
             • 56 ÷ 10 = <strong style={{ color: 'var(--text)' }}>5.6L</strong><br />
@@ -101,7 +101,7 @@ export default function PaintPage() {
 
         {/* ── 2. 페인트 종류별 1L당 도장 면적 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 페인트 종류별 1L당 도장 면적
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -116,15 +116,15 @@ export default function PaintPage() {
               <tbody>
                 {[
                   { t: '수성 페인트',         a: '9~10㎡',  u: '실내 벽·천장',           c: 'var(--accent)' },
-                  { t: '유성 페인트',         a: '11~13㎡', u: '나무·금속',              c: '#EA580C' },
-                  { t: '에나멜',              a: '13~15㎡', u: '문·창틀·가구',          c: '#A16207' },
-                  { t: '외부용',              a: '7~9㎡',   u: '외벽·옥상',              c: '#0891B2' },
+                  { t: '유성 페인트',         a: '11~13㎡', u: '나무·금속',              c: 'var(--orange-600)' },
+                  { t: '에나멜',              a: '13~15㎡', u: '문·창틀·가구',          c: 'var(--yellow-700)' },
+                  { t: '외부용',              a: '7~9㎡',   u: '외벽·옥상',              c: 'var(--cyan-600)' },
                   { t: '프라이머',            a: '8~10㎡',  u: '밑칠 (도장 전 처리)',   c: '#E89757' },
-                  { t: '친환경 (저VOC)',      a: '9~10㎡',  u: '아이방·민감자',          c: '#059669' },
+                  { t: '친환경 (저VOC)',      a: '9~10㎡',  u: '아이방·민감자',          c: 'var(--emerald-600)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.a}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
                 ))}
@@ -135,7 +135,7 @@ export default function PaintPage() {
 
         {/* ── 2b. 진한 색 커버리지·조색 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎨 진한 색은 더 든다 — 커버리지와 조색
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
@@ -148,7 +148,7 @@ export default function PaintPage() {
 
         {/* ── 3. 평수별 빠른 참조표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             평수별 페인트 양 빠른 참조표
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '12px', lineHeight: 1.7 }}>
@@ -174,9 +174,9 @@ export default function PaintPage() {
                   { p: '30평',  a: '91㎡',  l: '20.1L', rec: '18L + 2L + 1L = 21L' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.a}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.l}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.l}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontSize: '12px' }}>{r.rec}</td>
                   </tr>
                 ))}
@@ -187,18 +187,18 @@ export default function PaintPage() {
 
         {/* ── 4. 시판 용량 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🥫 한국 페인트 시판 용량 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
             {[
-              { s: '1L',  c: '#A16207', t: '작은 면적·터치업·견본' },
-              { s: '2L',  c: '#0891B2', t: '1방 부분 도장' },
-              { s: '4L',  c: '#059669', t: '1방 전체 도장 (인기)' },
+              { s: '1L',  c: 'var(--yellow-700)', t: '작은 면적·터치업·견본' },
+              { s: '2L',  c: 'var(--cyan-600)', t: '1방 부분 도장' },
+              { s: '4L',  c: 'var(--emerald-600)', t: '1방 전체 도장 (인기)' },
               { s: '18L', c: 'var(--accent)', t: '집 전체 도장 (대용량, 약 10~15% 저렴)' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 16px', textAlign: 'center' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 26, fontWeight: 800, color: s.c, marginBottom: 4 }}>{s.s}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px', textAlign: 'center' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 26, fontWeight: 800, color: s.c, marginBottom: 4 }}>{s.s}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{s.t}</p>
               </div>
             ))}
@@ -210,17 +210,17 @@ export default function PaintPage() {
 
         {/* ── 5. 면 종류별 흡수율 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🧱 면 종류별 흡수율 (도장 면적 보정)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { i: '🧱', t: '벽지 위 도장',     d: '1L당 면적 약 10% 감소',   color: '#EA580C' },
-              { i: '🏗️', t: '시멘트 벽',        d: '첫 회 흡수율 매우 높음, 프라이머 필수', color: '#DC2626' },
+              { i: '🧱', t: '벽지 위 도장',     d: '1L당 면적 약 10% 감소',   color: 'var(--orange-600)' },
+              { i: '🏗️', t: '시멘트 벽',        d: '첫 회 흡수율 매우 높음, 프라이머 필수', color: 'var(--red-600)' },
               { i: '🪵', t: '나무 표면',        d: '흡수율 높음, 1.5배 가량 더 필요', color: '#E89757' },
-              { i: '🔩', t: '금속·플라스틱',    d: '흡수율 거의 없음, 1L당 면적 1.2배', color: '#0891B2' },
+              { i: '🔩', t: '금속·플라스틱',    d: '흡수율 거의 없음, 1L당 면적 1.2배', color: 'var(--cyan-600)' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{s.i}</p>
                 <p style={{ fontSize: 13, color: s.color, fontWeight: 700, marginBottom: 4 }}>{s.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{s.d}</p>
@@ -234,17 +234,17 @@ export default function PaintPage() {
 
         {/* ── 5b. 칠하기 전 체크 — 벽지 위 도장·곰팡이 벽 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ✅ 칠하기 전 체크 — 벽지 위 도장·곰팡이 벽
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 6 }}>🧻 벽지 위에 칠해도 되나 — 합지 vs 실크</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
                 LX하우시스 공식 구분으로 <strong style={{ color: 'var(--text)' }}>합지벽지는 종이 위에 종이를 붙인 종이 벽지</strong>, <strong style={{ color: 'var(--text)' }}>실크벽지는 종이 위에 PVC(염화비닐수지)를 코팅한 비닐 벽지</strong>입니다(물걸레로 닦아도 되는 쪽이 실크). 통용 시공 관행으로는 들뜸·기포 없이 밀착된 합지는 그 위에 바로 도장하는 경우가 많고, 표면이 PVC인 실크벽지는 수성 페인트가 잘 붙지 않아 부착용 프라이머(젯소)를 먼저 칠하거나 벽지를 제거한 뒤 도장하는 쪽이 권장됩니다. 1L당 면적 보정은 위 &lsquo;면 종류별 흡수율&rsquo;을 참고하세요.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--danger)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--danger)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--danger)', fontWeight: 700, marginBottom: 6 }}>🦠 곰팡이 벽 — 페인트로 바로 덮지 않기</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
                 통용 시공 원칙은 <strong style={{ color: 'var(--text)' }}>제거 → 건조 → 원인 해결 → 도장</strong> 순서입니다. 곰팡이 위에 바로 칠하면 도막 아래에서 재발하기 쉬우므로, 곰팡이를 먼저 제거하고 벽을 완전히 말린 뒤 결로·누수 같은 원인을 잡고 나서 도장하세요. 곰팡이 방지 기능성 도료를 쓰더라도 제거·건조가 선행돼야 한다는 것이 업계 공통 안내입니다.
@@ -255,7 +255,7 @@ export default function PaintPage() {
 
         {/* ── 6. 시공 단계 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             📋 페인트 시공 6단계 가이드
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
@@ -268,7 +268,7 @@ export default function PaintPage() {
               { n: '6', t: '2회 도장',      d: '균일한 색상·내구성 확보, 1회보다 훨씬 깨끗한 마감' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 16px', display: 'flex', gap: 14, alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--accent)', minWidth: 24 }}>{s.n}</span>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: 'var(--accent)', minWidth: 24 }}>{s.n}</span>
                 <div>
                   <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 2 }}>{s.t}</p>
                   <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{s.d}</p>
@@ -280,11 +280,11 @@ export default function PaintPage() {
 
         {/* ── 7. 셀프 vs 전문 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🛠️ 셀프 페인트 vs 전문 시공
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🔧 셀프 페인트</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>24평 집 전체 약 35~40만원 (재료비, 페인트 약 30~36L 기준)</li>
@@ -293,8 +293,8 @@ export default function PaintPage() {
                 <li>페인트는 도배보다 셀프 진입 쉬움</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cyan-600)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: 14, color: 'var(--cyan-600)', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>24평 기준 약 80~120만원</li>
                 <li>시간: 1~2일 (빠르게)</li>
@@ -310,20 +310,20 @@ export default function PaintPage() {
 
         {/* ── 7b. 남은 페인트 폐기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ♻️ 남은 페인트, 어떻게 버리나
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
             남은 페인트는 일반 쓰레기가 아니라 환경부 <strong style={{ color: 'var(--text)' }}>「생활계 유해폐기물 관리지침」</strong>이 정한 생활계 유해폐기물 관리 대상입니다(폐농약·폐의약품 등과 함께 — 2023년 12월 개정판 기준). 공식 배출 경로는 다음 두 가지가 대표적입니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--success)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--success)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--success)', fontWeight: 700, marginBottom: 6 }}>① 유역환경청 소량 지정폐기물 수거</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
                 가정에서 나온 폐페인트·폐락카 등 <strong style={{ color: 'var(--text)' }}>소량 지정폐기물 7종</strong>을 전화 신청으로 방문 수거합니다. 처리비 <strong style={{ color: 'var(--text)' }}>kg당 600원</strong> + 방문 수거비 <strong style={{ color: 'var(--text)' }}>회당 1만~2만원</strong>(지역 안내마다 다름)이며, 지정 접수처로 직접 가져가면 방문비가 면제됩니다(10kg 미만 직접 운반 가능, 위험성이 낮으면 20kg까지). 서울권은 한강유역환경청, 세종권은 금강유역환경청 등 관할 유역환경청에 신청합니다. (서울 중구청·세종시·인천시 안내 기준)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 6 }}>② 서울시 — 특수규격마대 배출</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
                 서울시 분리배출 기준은 <strong style={{ color: 'var(--text)' }}>내용물이 남아 있는 페인트·락카 통</strong>을 일반 종량제봉투가 아니라 불연성 폐기물용 <strong style={{ color: 'var(--text)' }}>특수규격마대</strong>로 배출하도록 안내합니다. 폭발·화재 우려가 있는 경우에는 한강유역환경청에 수거를 신청해 별도 처리합니다.
@@ -345,7 +345,7 @@ export default function PaintPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -363,7 +363,7 @@ export default function PaintPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}

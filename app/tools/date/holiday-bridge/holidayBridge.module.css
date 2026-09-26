@@ -6,7 +6,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   width: 100%;
   box-sizing: border-box;
@@ -29,7 +29,7 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .fieldHint { font-size: 11px; color: var(--muted); font-weight: 400; }
 
@@ -41,7 +41,7 @@
   padding: 11px 13px;
   font-size: 16px;
   color: var(--text);
-  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-family: var(--font-mono);
   outline: none;
   width: 100%;
   min-width: 0;
@@ -49,7 +49,7 @@
   -webkit-appearance: none;
   appearance: none;
 }
-.dateInput { font-family: 'Noto Sans KR', sans-serif; }
+.dateInput { font-family: var(--font-sans); }
 .numInput:focus, .dateInput:focus {
   border-color: var(--accent);
   box-shadow: 0 0 0 3px var(--accent-dim);
@@ -79,11 +79,11 @@
   min-width: 56px;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -109,14 +109,14 @@
   padding: 10px 0;
 }
 .toggleText { display: flex; flex-direction: column; gap: 2px; }
-.toggleLabel { font-size: 13px; color: var(--text); font-weight: 600; font-family: 'Noto Sans KR', sans-serif; }
+.toggleLabel { font-size: 13px; color: var(--text); font-weight: 600; font-family: var(--font-sans); }
 .toggleHint { font-size: 11px; color: var(--muted); }
 .switch {
   position: relative;
   flex: 0 0 auto;
   width: 44px;
   height: 26px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1px solid var(--border);
   background: var(--bg3);
   cursor: pointer;
@@ -130,7 +130,7 @@
   left: 2px;
   width: 20px;
   height: 20px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #fff;
   transition: transform 0.15s;
 }
@@ -144,11 +144,11 @@
   gap: 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 5px 10px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .chipX {
   background: none;
@@ -169,7 +169,7 @@
   padding: 0 16px;
   font-size: 13px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .addBtn:disabled { opacity: 0.45; cursor: not-allowed; }
@@ -178,13 +178,13 @@
 .hero {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
 }
-.heroTop { font-size: 13px; color: var(--muted); margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; }
+.heroTop { font-size: 13px; color: var(--muted); margin-bottom: 8px; font-family: var(--font-sans); }
 .heroNum {
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(44px, 11vw, 72px);
   font-weight: 800;
   line-height: 1;
@@ -200,14 +200,14 @@
   margin-top: 14px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .heroSub strong { color: var(--text); font-weight: 700; }
 .heroEmpty { font-size: 15px; color: var(--muted); padding: 8px 0; }
 
 /* ── 플랜 카드 ── */
 .sectionTitle {
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
@@ -223,14 +223,14 @@
   padding: 10px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
 }
 .pastNote strong { color: var(--text); font-weight: 700; }
 .planList { display: flex; flex-direction: column; gap: 10px; }
 .planCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   display: flex;
   flex-direction: column;
@@ -238,14 +238,14 @@
 }
 .planCardActive { border-color: var(--accent); box-shadow: 0 0 0 2px var(--accent-dim); }
 .planTop { display: flex; align-items: baseline; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
-.planRange { font-size: 15px; font-weight: 700; color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.planRange { font-size: 15px; font-weight: 700; color: var(--text); font-family: var(--font-sans); }
 .planRank {
   flex: 0 0 auto;
   font-size: 11px;
   font-weight: 700;
   color: var(--accent);
   background: var(--accent-dim);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 2px 8px;
   letter-spacing: 0.04em;
 }
@@ -258,20 +258,20 @@
   font-weight: 700;
   color: var(--accent-ink);
   background: var(--accent-dim);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 4px 9px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .planActions { display: flex; gap: 8px; flex-wrap: wrap; }
 .ghostBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 12px;
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 @media (hover: hover) { .ghostBtn:hover { border-color: var(--accent); } }
@@ -288,9 +288,9 @@
   border-radius: 10px;
   padding: 10px 12px;
 }
-.freeDays { font-size: 18px; font-weight: 800; color: var(--success); font-family: 'Inter', sans-serif; }
+.freeDays { font-size: 18px; font-weight: 800; color: var(--success); font-family: var(--font-sans); }
 .freeDays span { font-size: 12px; font-weight: 600; }
-.freeName { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 2px; font-family: 'Noto Sans KR', sans-serif; }
+.freeName { font-size: 12px; color: var(--text); font-weight: 600; margin-top: 2px; font-family: var(--font-sans); }
 .freeRange { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 /* ── 캘린더 ── */
@@ -302,8 +302,8 @@
   min-width: 660px;
 }
 @media (max-width: 720px) { .calMonths { grid-template-columns: repeat(2, minmax(200px, 1fr)); min-width: 440px; } }
-.calMonth { background: var(--bg2); border: 1px solid var(--border); border-radius: 12px; padding: 10px 12px; }
-.calMonthTitle { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.calMonth { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m); padding: 10px 12px; }
+.calMonthTitle { font-size: 13px; font-weight: 700; color: var(--text); margin-bottom: 6px; font-family: var(--font-sans); }
 .calGrid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 2px; }
 .calDow { font-size: 10px; color: var(--muted); text-align: center; padding: 2px 0; font-weight: 600; }
 .calCell {
@@ -312,7 +312,7 @@
   padding: 4px 0;
   border-radius: 6px;
   color: var(--text);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--font-mono);
   line-height: 1.2;
 }
 .calHoliday { color: var(--danger); font-weight: 700; }
@@ -335,9 +335,9 @@
   font-size: 13px;
   font-weight: 600;
   padding: 10px 18px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   z-index: 50;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   box-shadow: 0 6px 20px rgba(0,0,0,0.2);
 }
 
@@ -353,6 +353,6 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 9px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .remainBar strong { color: var(--accent-ink); font-weight: 800; }

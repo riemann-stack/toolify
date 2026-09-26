@@ -575,8 +575,8 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
         {/* 일몰 마커 */}
         {sunsetX !== null && (
           <>
-            <line x1={sunsetX} y1={padT-10} x2={sunsetX} y2={H-padB+10} stroke="#DC2626" strokeWidth="2" strokeDasharray="4 3" />
-            <text x={sunsetX} y={padT-12} fill="#DC2626" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
+            <line x1={sunsetX} y1={padT-10} x2={sunsetX} y2={H-padB+10} stroke="var(--red-600)" strokeWidth="2" strokeDasharray="4 3" />
+            <text x={sunsetX} y={padT-12} fill="var(--red-600)" fontSize="10" textAnchor="middle" fontWeight="700">
               🌅 일몰 {fmtHHMM(sunsetMinutes)}
             </text>
           </>
@@ -586,13 +586,13 @@ function TimelineSvg({ timeline, sunsetMinutes, startMinutes }: { timeline: Time
         {timeline.map((step, i) => {
           const x = xOf(step.km)
           const isEdge = i === 0 || i === timeline.length - 1
-          const fill = step.isSummit ? '#0EA5E9' : isEdge ? '#0891B2' : 'var(--muted)'
+          const fill = step.isSummit ? 'var(--sky-500)' : isEdge ? 'var(--cyan-600)' : 'var(--muted)'
           const r = step.isSummit ? 7 : isEdge ? 6 : 4
           return (
             <g key={i}>
               <circle cx={x} cy={H/2} r={r} fill={fill} stroke="#0B0B0B" strokeWidth="2" />
               {(step.isSummit || isEdge) && (
-                <text x={x} y={H/2 + 22} fill="var(--text)" fontSize="10" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight="700">
+                <text x={x} y={H/2 + 22} fill="var(--text)" fontSize="10" textAnchor="middle" fontWeight="700">
                   {fmtHHMM(step.arrivalAtMinutes)}
                 </text>
               )}

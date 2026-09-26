@@ -50,15 +50,15 @@ export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProp
         data-ad-slot-id={slotId}
         style={{
           minHeight,
-          background: 'rgba(14,165,233,0.04)',
-          border: '1px dashed rgba(14,165,233,0.25)',
-          borderRadius: 12,
+          background: 'color-mix(in srgb, var(--accent) 4%, transparent)',
+          border: '1px dashed color-mix(in srgb, var(--accent) 25%, transparent)',
+          borderRadius: 'var(--radius-m)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: 'var(--muted)',
           fontSize: 12,
-          fontFamily: "'Noto Sans KR', sans-serif",
+          fontFamily: 'var(--font-sans)',
           letterSpacing: '0.04em',
           margin: '24px 0',
         }}

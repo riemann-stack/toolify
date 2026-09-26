@@ -44,11 +44,11 @@ const catMeta = (k: Category) => CATEGORIES.find(c => c.key === k) ?? CATEGORIES
 
 // 카테고리별 SVG 색상 (CSS dot 색상과 일치)
 const CATEGORY_COLORS: Record<Category, string> = {
-  flour:  '#0EA5E9',
-  liquid: '#0891B2',
-  salt:   '#D97706',
-  yeast:  '#9B59B6',
-  sugar:  '#EA580C',
+  flour:  'var(--sky-500)',
+  liquid: 'var(--cyan-600)',
+  salt:   'var(--amber-600)',
+  yeast:  'var(--amethyst)',
+  sugar:  'var(--orange-600)',
   fat:    '#E8B947',
   other:  '#94A3B8',
 }
@@ -931,10 +931,10 @@ export default function BakerPercentClient() {
                 <div className={s.gaugeWrap}>
                   <div className={s.gaugeBar} style={{ position: 'relative' }}>
                     {/* 구간 라벨 — 게이지 안에 배치 */}
-                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
-                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
-                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
-                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
+                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
+                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
+                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
+                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
                     <div className={s.gaugeMarker} style={{ left: `${gaugePct(analysis1.hydration)}%` }} />
                   </div>
                   {/* 구간 경계 숫자 — 정확한 위치에 표시 */}
@@ -947,7 +947,7 @@ export default function BakerPercentClient() {
                   </div>
                 </div>
                 <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 16, lineHeight: 1.7 }}>
-                  현재 <strong style={{ color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
+                  현재 <strong style={{ color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
                 </p>
               </div>
 
@@ -1030,8 +1030,8 @@ export default function BakerPercentClient() {
                 onChange={e => setFlourAndRecalc(Math.max(0, Number(e.target.value) || 0))}
                 style={{
                   width: 80, padding: '6px 10px', background: 'var(--bg3)',
-                  border: '1px solid var(--border)', borderRadius: 8,
-                  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14,
+                  border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
+                  fontFamily: 'var(--font-sans)', fontSize: 14,
                   fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
                 }}
               />
@@ -1228,8 +1228,8 @@ export default function BakerPercentClient() {
                 onChange={e => setTargetTotal(Math.max(0, Number(e.target.value) || 0))}
                 style={{
                   width: 80, padding: '6px 10px', background: 'var(--bg3)',
-                  border: '1px solid var(--border)', borderRadius: 8,
-                  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14,
+                  border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
+                  fontFamily: 'var(--font-sans)', fontSize: 14,
                   fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
                 }}
               />

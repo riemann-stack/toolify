@@ -5,38 +5,38 @@
 .tabs {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 4px;
+  border-radius: var(--radius-m); padding: 4px;
 }
 .tabBtn {
-  padding: 10px 4px; border-radius: 8px; border: none;
-  font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  padding: 10px 4px; border-radius: var(--radius-s); border: none;
+  font-size: 12px; font-family: var(--font-sans); font-weight: 600;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
+.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 
 /* ── 히어로 (3축 점수 위) ── */
 .heroCard {
-  border-radius: 16px; padding: 28px 22px; text-align: center;
+  border-radius: var(--radius-card); padding: 28px 22px; text-align: center;
   border: 1.5px solid; animation: fadeUp 0.3s ease;
 }
 .heroLabel { font-size: 11px; color: var(--muted); letter-spacing: 0.08em; text-transform: uppercase; margin-bottom: 8px; }
-.heroScore { font-family: 'Inter', system-ui, sans-serif; font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: -2px; }
+.heroScore { font-family: var(--font-sans); font-size: 64px; font-weight: 800; line-height: 1; letter-spacing: -2px; }
 .heroUnit { font-size: 22px; font-weight: 700; margin-left: 4px; }
 .heroRiskBadge {
   display: inline-block; margin-top: 12px; padding: 6px 16px;
-  border-radius: 999px; border: 1px solid; font-size: 13px; font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill); border: 1px solid; font-size: 13px; font-weight: 700;
+  font-family: var(--font-sans);
 }
 
 /* ── 3축 게이지 ── */
 .gaugeRow { display: flex; flex-direction: column; gap: 6px; margin-bottom: 14px; }
 .gaugeRow:last-child { margin-bottom: 0; }
 .gaugeLabel { display: flex; justify-content: space-between; align-items: baseline; font-size: 13px; color: var(--text); font-weight: 600; }
-.gaugeVal { font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 16px; }
-.gaugeBar { height: 12px; background: var(--bg3); border-radius: 999px; overflow: hidden; border: 1px solid var(--border); }
-.gaugeFill { height: 100%; transition: width 0.4s; border-radius: 999px; }
+.gaugeVal { font-family: var(--font-sans); font-weight: 800; font-size: 16px; }
+.gaugeBar { height: 12px; background: var(--bg3); border-radius: var(--radius-pill); overflow: hidden; border: 1px solid var(--border); }
+.gaugeFill { height: 100%; transition: width 0.4s; border-radius: var(--radius-pill); }
 
 /* ── 원인 유형 카드 ── */
 .causeList { display: flex; flex-direction: column; gap: 8px; }
@@ -55,12 +55,12 @@
 .altPickGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(110px, 1fr)); gap: 6px; }
 .altHint { font-size: 12px; color: var(--muted); margin-top: 12px; line-height: 1.6; }
 .altCard {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 .altHead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 .altEmoji { font-size: 26px; }
-.altTitle { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.altTitle { font-family: var(--font-sans); font-size: 15px; font-weight: 700; color: var(--text); }
 .altOptionList { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 6px; }
 .altOption {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
@@ -71,15 +71,15 @@
 
 /* ── 증상 대처 탭 ── */
 .symCard {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 .symHead { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
 .symEmoji { font-size: 26px; }
-.symName { font-family: 'Inter', system-ui, sans-serif; font-size: 15px; font-weight: 700; color: var(--text); }
+.symName { font-family: var(--font-sans); font-size: 15px; font-weight: 700; color: var(--text); }
 .symGrid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 12px; }
 .symSubHead { font-size: 12px; font-weight: 700; margin-bottom: 6px; }
-.symDoctor { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; background: var(--bg3); border-radius: 8px; border-left: 3px solid #EA580C; }
+.symDoctor { display: flex; gap: 8px; align-items: flex-start; padding: 10px 12px; background: var(--bg3); border-radius: var(--radius-s); border-left: 3px solid var(--orange-600); }
 
 @media (max-width: 500px) {
   .tabBtn { font-size: 11px; padding: 9px 2px; }
@@ -91,33 +91,33 @@
 /* ── 위험 신호 카드 (★★★★) ── */
 .redFlagCard {
   background: rgba(220,38,38,0.14); border: 1px solid rgba(220,38,38,0.4);
-  border-radius: 14px; padding: 18px 22px;
+  border-radius: var(--radius-card); padding: 18px 22px;
 }
-.redFlagHead { font-size: 14px; font-weight: 700; color: #DC2626; margin-bottom: 12px; }
+.redFlagHead { font-size: 14px; font-weight: 700; color: var(--red-600); margin-bottom: 12px; }
 .redFlagList { margin: 0 0 12px 18px; padding: 0; font-size: 13px; color: var(--text); line-height: 1.9; }
-.redFlagFooter { background: var(--bg3); border-radius: 8px; padding: 12px 14px; font-size: 13px; color: var(--text); line-height: 1.9; }
+.redFlagFooter { background: var(--bg3); border-radius: var(--radius-s); padding: 12px 14px; font-size: 13px; color: var(--text); line-height: 1.9; }
 .redFlagFooter p { margin: 0; }
 .redFlagFooter strong { color: var(--accent); }
 
 /* ── 면책 강화 카드 (모든 탭 공통 하단) ── */
 .disclaimerCard {
-  background: var(--bg2); border: 1px dashed var(--border); border-radius: 12px;
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius-m);
   padding: 14px 18px; margin-top: 4px;
 }
-.disclaimerTitle { font-size: 13px; font-weight: 700; color: #EA580C; margin: 0 0 8px; }
+.disclaimerTitle { font-size: 13px; font-weight: 700; color: var(--orange-600); margin: 0 0 8px; }
 .disclaimerBody { font-size: 12px; color: var(--muted); line-height: 1.7; margin: 0; }
 
 /* ── 팁 카드 보조 ── */
 .tipSubHead { font-size: 12px; font-weight: 700; color: var(--text); margin: 0 0 6px; }
 .tipUl { margin: 0; padding-left: 18px; font-size: 13px; color: var(--text); line-height: 1.85; }
 .tipUl li { margin-bottom: 2px; }
-.tipWarn { font-size: 12px; color: #DC2626; margin-top: 12px; padding: 8px 12px; background: rgba(220,38,38,0.14); border-radius: 8px; line-height: 1.6; }
+.tipWarn { font-size: 12px; color: var(--red-600); margin-top: 12px; padding: 8px 12px; background: rgba(220,38,38,0.14); border-radius: var(--radius-s); line-height: 1.6; }
 
 
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -134,7 +134,7 @@
 .catGroup { margin-bottom: 18px; }
 .catGroup:last-child { margin-bottom: 0; }
 .catHead {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -155,7 +155,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 8px 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
@@ -166,7 +166,7 @@
   gap: 6px;
   text-align: center;
 }@media (hover: hover) {
-  .foodBtn:hover { border-color: rgba(14,165,233,0.3); }
+  .foodBtn:hover { border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
 }
 .foodEmoji { font-size: 18px; line-height: 1; }
 .foodActive {
@@ -181,11 +181,11 @@
   right: -6px;
   background: #FF6B4A;
   color: #fff;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 10px;
   font-weight: 800;
   padding: 2px 6px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   border: 1px solid #1a1a1a;
 }
 
@@ -206,11 +206,11 @@
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .condItem:hover { border-color: rgba(14,165,233,0.3); }
+  .condItem:hover { border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
 }
 .condActive {
-  background: rgba(14,165,233,0.14);
-  border-color: rgba(14,165,233,0.4);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 .condCheck {
   width: 18px;
@@ -228,7 +228,7 @@
 
 /* ── 결과 배지 ── */
 .charBadge {
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 28px 22px;
   text-align: center;
   border: 1.5px solid;
@@ -236,7 +236,7 @@
 }
 .charEmoji { font-size: 64px; line-height: 1; margin-bottom: 10px; }
 .charName {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 700;
   margin-bottom: 16px;
@@ -249,7 +249,7 @@
   margin-bottom: 4px;
 }
 .charScore {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 56px;
   font-weight: 800;
   line-height: 1;
@@ -257,12 +257,12 @@
 }
 .charUnit { font-size: 22px; font-weight: 700; margin-left: 4px; }
 
-.levelCalm    { background: rgba(16,185,129,0.15); border-color: #059669; }
-.levelCalm    .charName, .levelCalm .charScore { color: #059669; }
-.levelSlight  { background: rgba(14,165,233,0.15); border-color: #0EA5E9; }
-.levelSlight  .charName, .levelSlight .charScore { color: #0EA5E9; }
-.levelWarn    { background: rgba(234,88,12,0.15); border-color: #EA580C; }
-.levelWarn    .charName, .levelWarn .charScore { color: #EA580C; }
+.levelCalm    { background: rgba(16,185,129,0.15); border-color: var(--emerald-600); }
+.levelCalm    .charName, .levelCalm .charScore { color: var(--emerald-600); }
+.levelSlight  { background: color-mix(in srgb, var(--accent) 15%, transparent); border-color: var(--sky-500); }
+.levelSlight  .charName, .levelSlight .charScore { color: var(--sky-500); }
+.levelWarn    { background: rgba(234,88,12,0.15); border-color: var(--orange-600); }
+.levelWarn    .charName, .levelWarn .charScore { color: var(--orange-600); }
 .levelBomb    { background: rgba(255,70,70,0.15); border-color: #FF4646; }
 .levelBomb    .charName, .levelBomb .charScore { color: #FF4646; }
 
@@ -270,7 +270,7 @@
 .verdictCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
   font-size: 14px;
   color: var(--text);
@@ -282,11 +282,11 @@
 .topCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
 }
 .topHead {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   margin-bottom: 12px;
@@ -313,13 +313,13 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 800;
   color: #ffffff;
   flex-shrink: 0;
 }
-.rank1 { background: #A16207; }
+.rank1 { background: var(--yellow-700); }
 .rank2 { background: #C0C0C0; }
 .rank3 { background: #CD7F32; color: #fff; }
 .topEmoji { font-size: 22px; }
@@ -328,14 +328,14 @@
 .topScore {
   display: inline-block;
   margin-top: 6px;
-  background: rgba(14,165,233,0.15);
-  border: 1px solid rgba(14,165,233,0.3);
+  background: color-mix(in srgb, var(--accent) 15%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 12px;
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
 .topName { min-width: 0; word-break: keep-all; }
@@ -344,14 +344,14 @@
 .comboCard {
   background: rgba(255,70,70,0.06);
   border: 1px solid rgba(255,70,70,0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 22px;
 }
 .comboHead {
   font-size: 12px;
   letter-spacing: 0.04em;
   font-weight: 700;
-  color: #DC2626;
+  color: var(--red-600);
   margin-bottom: 10px;
   display: flex;
   align-items: center;
@@ -368,8 +368,8 @@
 }
 .comboItem:first-of-type { border-top: none; }
 .comboBonus {
-  color: #DC2626;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--red-600);
+  font-family: var(--font-sans);
   font-weight: 800;
 }
 
@@ -377,11 +377,11 @@
 .reasonCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .reasonHead {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 700;
   color: var(--muted);
@@ -413,16 +413,16 @@
 
 /* ── 완화 팁 ── */
 .tipCard {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.2);
-  border-radius: 14px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .tipHead {
   font-size: 12px;
   letter-spacing: 0.04em;
   font-weight: 700;
-  color: #0891B2;
+  color: var(--cyan-600);
   margin-bottom: 10px;
 }
 .tipList {
@@ -454,13 +454,13 @@
   border-radius: 10px;
   font-size: 14px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .shareBtn:hover { opacity: 0.88; }
 }
-.shareBtn.copied { background: #059669; }
+.shareBtn.copied { background: var(--emerald-600); }
 .resetBtn {
   background: var(--bg3);
   color: var(--text);
@@ -469,7 +469,7 @@
   border-radius: 10px;
   font-size: 14px;
   font-weight: 500;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -483,7 +483,7 @@
   color: var(--muted);
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 
 .disclaimer {
@@ -500,18 +500,18 @@
   appearance: none; -webkit-appearance: none;
   min-height: 44px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
-  font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 600;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 600;
   color: var(--text); cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
-  .portionBtn:hover { border-color: rgba(14,165,233,0.3); }
+  .portionBtn:hover { border-color: color-mix(in srgb, var(--accent) 30%, transparent); }
 }
 .portionActive { background: var(--accent-strong); color: #fff; border-color: var(--accent); }
 
 /* ── 안내 힌트 카드 ── */
 .hintCard {
-  background: rgba(14,165,233,0.08);
-  border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 12px; padding: 12px 16px;
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-m); padding: 12px 16px;
 }
 .hintItem { font-size: 13px; color: var(--text); line-height: 1.7; margin: 0; }
 .hintItem + .hintItem { margin-top: 6px; }

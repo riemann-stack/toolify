@@ -14,7 +14,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '22px',
   fontWeight: 700,
   marginBottom: '14px',
@@ -24,7 +24,7 @@ const sectionTitle: React.CSSProperties = {
 const card: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '14px',
+  borderRadius: 'var(--radius-card)',
   padding: '20px 22px',
   marginBottom: '14px',
 }
@@ -47,7 +47,7 @@ const headCell: React.CSSProperties = {
 const faqDetails: React.CSSProperties = {
   background: 'var(--bg2)',
   border: '1px solid var(--border)',
-  borderRadius: '12px',
+  borderRadius: 'var(--radius-m)',
   padding: '14px 18px',
   marginBottom: '8px',
 }
@@ -84,7 +84,7 @@ export default function RoofPage() {
   return (
     <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>주거·인테리어</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />지붕 면적 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
@@ -170,9 +170,9 @@ export default function RoofPage() {
               { m: '10물매', d: '45.0°', f: '×1.414', n: '매우 가파름' },
             ].map((r, i) => (
               <tr key={i}>
-                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.m}</td>
-                <td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.d}</td>
-                <td style={{ ...cell, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.f}</td>
+                <td style={{ ...cell, color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.m}</td>
+                <td style={{ ...cell, fontFamily: 'var(--font-sans)' }}>{r.d}</td>
+                <td style={{ ...cell, fontFamily: 'var(--font-sans)' }}>{r.f}</td>
                 <td style={{ ...cell, color: 'var(--muted)' }}>{r.n}</td>
               </tr>
             ))}
@@ -189,8 +189,8 @@ export default function RoofPage() {
           { len: '90cm~1.2m', use: '여유 (햇빛 차단·차양)', color: '#A16207' },
           { len: '1.2m+', use: '한옥·전통 (긴 처마)', color: '#EA580C' },
         ].map((p, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
-            <p style={{ fontSize: '15px', color: p.color, fontWeight: 700, marginBottom: '4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{p.len}</p>
+          <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${p.color}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+            <p style={{ fontSize: '15px', color: p.color, fontWeight: 700, marginBottom: '4px', fontFamily: 'var(--font-sans)' }}>{p.len}</p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{p.use}</p>
           </div>
         ))}
@@ -240,7 +240,7 @@ export default function RoofPage() {
           { t: '🌬️ 환기·결로 관리', d: '처마 흡기구 + 용마루 배기구로 지붕 속 공기가 흐르게 해야 여름 열기와 겨울 결로를 막습니다. 환기가 막히면 단열재가 젖고 데크가 썩습니다.' },
           { t: '🗑️ 철거·폐기물 비용', d: '기존 슁글·기와 철거물은 양이 많아(㎡당 약 10~20kg) 처리·운반비가 별도로 큽니다. 견적 받을 때 "철거·폐기물 처리 포함 여부"를 꼭 확인하세요.' },
         ].map((g, i) => (
-          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px' }}>
+          <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
             <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>{g.t}</p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>{g.d}</p>
           </div>

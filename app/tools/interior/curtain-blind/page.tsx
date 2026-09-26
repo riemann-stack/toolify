@@ -50,7 +50,7 @@ export default function CurtainBlindPage() {
       <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
         주거·인테리어
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+      <h1 style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />커튼 블라인드 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
@@ -67,15 +67,15 @@ export default function CurtainBlindPage() {
 
         {/* ── 1. 핵심 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             커튼·블라인드 사이즈 핵심 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -86,10 +86,10 @@ export default function CurtainBlindPage() {
             <div><span style={{ color: 'var(--muted)' }}>1패널당 폭</span> = 커튼 폭 ÷ 패널 수</div>
             <div><span style={{ color: 'var(--muted)' }}>커튼 길이(완성)</span> = 봉 위치 ~ 끝점</div>
             <div><span style={{ color: 'var(--muted)' }}>원단 주문 길이</span> = 완성 + 헴 10cm <span style={{ color: 'var(--muted)' }}>(재단·맞춤 시)</span></div>
-            <div style={{ marginTop: 14, color: '#0891B2', fontWeight: 700 }}>블라인드 (인사이드)</div>
+            <div style={{ marginTop: 14, color: 'var(--cyan-600)', fontWeight: 700 }}>블라인드 (인사이드)</div>
             <div><span style={{ color: 'var(--muted)' }}>폭</span> = 창문 안쪽 폭 − 1cm (좌우 0.5씩)</div>
             <div><span style={{ color: 'var(--muted)' }}>길이</span> = 창문 안쪽 높이 − 0.5cm</div>
-            <div style={{ marginTop: 14, color: '#EA580C', fontWeight: 700 }}>블라인드 (아웃사이드)</div>
+            <div style={{ marginTop: 14, color: 'var(--orange-600)', fontWeight: 700 }}>블라인드 (아웃사이드)</div>
             <div><span style={{ color: 'var(--muted)' }}>폭</span> = 창문 폭 + 10cm</div>
             <div><span style={{ color: 'var(--muted)' }}>길이</span> = 창문 높이 + 10cm</div>
           </div>
@@ -97,7 +97,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 2. 한국 표준 창문 크기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             한국 가정 표준 창문 크기
           </h2>
           <div style={{ overflowX: 'auto' }}>
@@ -120,8 +120,8 @@ export default function CurtainBlindPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.w}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.h}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.w}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.h}</td>
                   </tr>
                 ))}
               </tbody>
@@ -131,18 +131,18 @@ export default function CurtainBlindPage() {
 
         {/* ── 3. 주름 배수 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🎀 주름 배수 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
-              { p: '×1.5', c: '#0891B2', t: '가벼운 주름',     d: '미니멀, 시어 커튼' },
+              { p: '×1.5', c: 'var(--cyan-600)', t: '가벼운 주름',     d: '미니멀, 시어 커튼' },
               { p: '×2.0', c: 'var(--accent)', t: '한국 표준',  d: '풍성, 일반 거실·침실' },
-              { p: '×2.5', c: '#EA580C', t: '매우 풍성',       d: '호텔 스타일' },
-              { p: '×3.0', c: '#DC2626', t: '가장 풍성',       d: '고급 인테리어·암막' },
+              { p: '×2.5', c: 'var(--orange-600)', t: '매우 풍성',       d: '호텔 스타일' },
+              { p: '×3.0', c: 'var(--red-600)', t: '가장 풍성',       d: '고급 인테리어·암막' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: s.c, marginBottom: 4 }}>{s.p}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: s.c, marginBottom: 4 }}>{s.p}</p>
                 <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 2 }}>{s.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{s.d}</p>
               </div>
@@ -152,7 +152,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 3-1. 원단 소요량 감 잡기 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🧵 원단 소요량 감 잡기 — 폭 140cm 원단 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -161,9 +161,9 @@ export default function CurtainBlindPage() {
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -182,17 +182,17 @@ export default function CurtainBlindPage() {
 
         {/* ── 3-2. 헤딩 방식별 주문 기준 차이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🧷 아일릿·나비주름 — '주문 폭' 기준이 다릅니다
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 12, padding: '12px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--accent)', borderRadius: 'var(--radius-m)', padding: '12px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent-ink)', fontWeight: 700, marginBottom: 4 }}>나비주름 (핀치 플리트)</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
                 주름을 접어 박은 상태로 출고되는 방식. 상품 폭이 주름 잡힌 <strong style={{ color: 'var(--text)' }}>완성 폭</strong>으로 표기되는 경우가 많아, 봉·레일 길이에 맞는 완성 폭으로 주문합니다 — 주름 배수는 제작 단계에서 이미 반영(통용 관행).
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cat-interior)', borderRadius: 12, padding: '12px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cat-interior)', borderRadius: 'var(--radius-m)', padding: '12px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--cat-interior)', fontWeight: 700, marginBottom: 4 }}>아일릿 (펀칭)</p>
               <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>
                 원단에 링을 박아 봉에 직접 끼우는 방식. 주름이 고정되지 않아 <strong style={{ color: 'var(--text)' }}>원단 폭</strong> 그대로 표기되는 경우가 많고, 이때는 본 계산기처럼 배수를 곱해 폭을 정합니다. 봉 위로 원단이 올라가는 구조라 완성 길이의 기준점(봉 상단인지 링 하단인지)도 업체 안내로 확인하세요(통용 관행).
@@ -206,17 +206,17 @@ export default function CurtainBlindPage() {
 
         {/* ── 4. 커튼 길이 옵션 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             📏 커튼 길이 옵션 비교
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { i: '🪟', t: '창문형 (창문 + 10cm)',         d: '창문만 가리는 짧은 커튼. 작은 창문·주방·욕실에 적합.', c: '#0891B2' },
-              { i: '🦵', t: '무릎형 (바닥 ~ 무릎)',          d: '한국에서는 비추천. 가구가 많은 공간에서 사용.', c: '#EA580C' },
+              { i: '🪟', t: '창문형 (창문 + 10cm)',         d: '창문만 가리는 짧은 커튼. 작은 창문·주방·욕실에 적합.', c: 'var(--cyan-600)' },
+              { i: '🦵', t: '무릎형 (바닥 ~ 무릎)',          d: '한국에서는 비추천. 가구가 많은 공간에서 사용.', c: 'var(--orange-600)' },
               { i: '✨', t: '바닥형 (바닥 5cm 위) — 한국 표준', d: '깔끔한 인상, 청소 편함. 거실·침실 모두 적합.', c: 'var(--accent)' },
-              { i: '👑', t: '바닥 닿기 / 풀링 (+15cm)',     d: '호텔·고급 인테리어. 우아하지만 청소 어려움.', c: '#9B59B6' },
+              { i: '👑', t: '바닥 닿기 / 풀링 (+15cm)',     d: '호텔·고급 인테리어. 우아하지만 청소 어려움.', c: 'var(--amethyst)' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '12px 16px', display: 'flex', gap: 12, alignItems: 'flex-start' }}>
                 <span style={{ fontSize: 22 }}>{s.i}</span>
                 <div>
                   <p style={{ fontSize: 13, color: s.c, fontWeight: 700, marginBottom: 4 }}>{s.t}</p>
@@ -229,18 +229,18 @@ export default function CurtainBlindPage() {
 
         {/* ── 5. 설치 방식별 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🔧 설치 방식별 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px' }}>
             {[
-              { t: '🟪 천장 매립 (커튼박스)',  c: '#9B59B6', d: '신축 아파트에 자주 있음. 가장 깔끔, 천장이 높아 보임. 길이는 천장 ~ 바닥까지.' },
-              { t: '🟨 천장 부착',              c: '#A16207', d: '봉·레일을 천장에 직접. 콘크리트는 앵커, 석고보드는 보강 필수. 시각적으로 천장 높이 강조.' },
+              { t: '🟪 천장 매립 (커튼박스)',  c: 'var(--amethyst)', d: '신축 아파트에 자주 있음. 가장 깔끔, 천장이 높아 보임. 길이는 천장 ~ 바닥까지.' },
+              { t: '🟨 천장 부착',              c: 'var(--yellow-700)', d: '봉·레일을 천장에 직접. 콘크리트는 앵커, 석고보드는 보강 필수. 시각적으로 천장 높이 강조.' },
               { t: '⬜ 벽면 부착 (가장 일반적)', c: 'var(--accent)', d: '창문 위 벽에 봉·브래킷 설치. 창문 상단 +10~15cm 위 부착. 시공이 가장 쉬움.' },
-              { t: '🔷 창문틀 안 (인사이드)',   c: '#0891B2', d: '깔끔하고 미니멀. 창문틀 깊이 6cm 이상 필요. 빛이 좌우 가장자리로 새는 단점.' },
-              { t: '🔶 창문틀 밖 (아웃사이드)', c: '#EA580C', d: '빛 차단 효과 우수. 작은 창을 크게 보이게 함. 시각적 임팩트 큼.' },
+              { t: '🔷 창문틀 안 (인사이드)',   c: 'var(--cyan-600)', d: '깔끔하고 미니멀. 창문틀 깊이 6cm 이상 필요. 빛이 좌우 가장자리로 새는 단점.' },
+              { t: '🔶 창문틀 밖 (아웃사이드)', c: 'var(--orange-600)', d: '빛 차단 효과 우수. 작은 창을 크게 보이게 함. 시각적 임팩트 큼.' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: s.c, fontWeight: 700, marginBottom: 6 }}>{s.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{s.d}</p>
               </div>
@@ -250,13 +250,13 @@ export default function CurtainBlindPage() {
 
         {/* ── 6. 측정 시 주의사항 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             ⚠️ 측정 시 주의사항
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 20px',
             fontSize: '13px',
             color: 'var(--text)',
@@ -274,17 +274,17 @@ export default function CurtainBlindPage() {
 
         {/* ── 7. 커튼 vs 블라인드 vs 롤스크린 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🤔 어떤 걸 골라야 할까?
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { i: '🪟', t: '커튼',       c: 'var(--accent)', d: '거실·침실, 포근한 느낌, 풍성한 인테리어, 단열·방음 우수' },
-              { i: '🎚️', t: '블라인드',  c: '#0891B2',       d: '사무실·미니멀, 큰 창문(버티칼), 빛 양 세밀 조절' },
-              { i: '📜', t: '롤스크린',   c: '#A16207',       d: '욕실·주방·작은 창, 단순한 인테리어, 가성비' },
-              { i: '🧵', t: '로만쉐이드', c: '#9B59B6',       d: '커튼 분위기 + 블라인드 기능, 침실·소형 창문' },
+              { i: '🎚️', t: '블라인드',  c: 'var(--cyan-600)',       d: '사무실·미니멀, 큰 창문(버티칼), 빛 양 세밀 조절' },
+              { i: '📜', t: '롤스크린',   c: 'var(--yellow-700)',       d: '욕실·주방·작은 창, 단순한 인테리어, 가성비' },
+              { i: '🧵', t: '로만쉐이드', c: 'var(--amethyst)',       d: '커튼 분위기 + 블라인드 기능, 침실·소형 창문' },
             ].map((s, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 22, marginBottom: 4 }}>{s.i}</p>
                 <p style={{ fontSize: 14, color: s.c, fontWeight: 700, marginBottom: 4 }}>{s.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>{s.d}</p>
@@ -295,7 +295,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 7-1. 암막 등급 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             🌒 '1급 암막', 기준이 뭘까
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
@@ -318,7 +318,7 @@ export default function CurtainBlindPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{r.g}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 600 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 600 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.u}</td>
                   </tr>
                 ))}
@@ -346,7 +346,7 @@ export default function CurtainBlindPage() {
 
         {/* ── 9. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -365,7 +365,7 @@ export default function CurtainBlindPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
