@@ -2,55 +2,27 @@
    자동차 세금 종합 계산기 데이터·로직 (2026년 기준)
    ─────────────────────────────────────────────────────────── */
 
-/** 계산 기준 과세연도 — '경과 년수'로 등록연도(= 기준연도 − 경과 년수)와 차령을 산출.
- *  렌더 경로에서 new Date()를 쓰지 않도록 상수로 둔다(SSG hydration 안전). 매년 1월 갱신. */
-export const TAX_BASE_YEAR = 2026
+import {
+  VEHICLE_TAX_YEAR,
+  REGIONS, ACQUISITION_TAX_RATES,
+  EV_TAX_CAP, HYBRID_TAX_CAP, LIGHT_TAX_CAP, MULTI_CHILD_TAX_CAP, TWO_CHILD_TAX_RATE, TWO_CHILD_TAX_CAP,
+  CAR_TAX_PER_CC_NON_BUSINESS, annualTaxByCC, EV_ANNUAL_TAX, annualTaxAgeDiscount, carAgeFromYears,
+  ANNUAL_PREPAY_DISCOUNT, EDU_TAX_RATE, DIESEL_ENV_FEE_LAST_REG_YEAR, dieselEnvFeeApplies, bondRateFor,
+  type CarType, type FuelType, type RegionId, type RegionInfo,
+} from '@/lib/krVehicleTax'
 
-export type CarType = 'normal' | 'light' | 'business' | 'ev' | 'hybrid'
-export type FuelType = 'gasoline' | 'diesel' | 'lpg' | 'electric' | 'hybrid'
-export type RegionId = 'seoul' | 'busan' | 'daegu' | 'incheon' | 'gwangju' | 'daejeon' | 'ulsan' | 'sejong' | 'gyeonggi' | 'other'
-
-export interface RegionInfo {
-  id: RegionId
-  name: string
-  /** 차량가 대비 공채 매입 비율 (지방·도시철도채권) */
-  bondRate: number
+/* 법정 수치(취득세율·감면 한도·cc당 세액·차령 경감·연납 공제·지방교육세·공채 비율·환경개선부담금 대상 연식)는
+   lib/krVehicleTax.ts 단일 소스 — 근거·기준일은 lib 주석 참고. 기존 import 경로 유지를 위해 재수출한다. */
+export {
+  REGIONS, ACQUISITION_TAX_RATES,
+  EV_TAX_CAP, HYBRID_TAX_CAP, LIGHT_TAX_CAP, MULTI_CHILD_TAX_CAP, TWO_CHILD_TAX_RATE, TWO_CHILD_TAX_CAP,
+  annualTaxByCC, EV_ANNUAL_TAX, annualTaxAgeDiscount, carAgeFromYears,
+  ANNUAL_PREPAY_DISCOUNT, EDU_TAX_RATE, DIESEL_ENV_FEE_LAST_REG_YEAR, dieselEnvFeeApplies, bondRateFor,
 }
+export type { CarType, FuelType, RegionId, RegionInfo }
 
-/** 지역별 공채 매입 비율 (2025~2026 기준 — 도시철도채권/지역개발채권).
- *  서울은 배기량별로 다르다 → bondRateFor()를 거칠 것. 그 밖의 지역도 조례상 배기량별 차등이 있으나 약식(대표값). */
-export const REGIONS: RegionInfo[] = [
-  { id: 'seoul',    name: '서울',           bondRate: 0.12 },
-  { id: 'busan',    name: '부산',           bondRate: 0.04 },
-  { id: 'daegu',    name: '대구',           bondRate: 0.04 },
-  { id: 'incheon',  name: '인천',           bondRate: 0.04 },
-  { id: 'gwangju',  name: '광주',           bondRate: 0.04 },
-  { id: 'daejeon',  name: '대전',           bondRate: 0.04 },
-  { id: 'ulsan',    name: '울산',           bondRate: 0.04 },
-  { id: 'sejong',   name: '세종',           bondRate: 0.04 },
-  { id: 'gyeonggi', name: '경기·기타 광역', bondRate: 0.06 },
-  { id: 'other',    name: '도 (군·시)',     bondRate: 0.04 },
-]
-
-/* ─── 취득세 ─── */
-export const ACQUISITION_TAX_RATES: Record<CarType, number> = {
-  normal:   0.07,   // 일반 승용 7%
-  light:    0.04,   // 경차 4%
-  business: 0.04,   // 영업용 4%
-  ev:       0.07,   // 전기·수소 7% 적용 후 140만원 한도 면제
-  hybrid:   0.07,   // 하이브리드 (감면 종료, 일반과 동일)
-}
-
-/** 친환경차 취득세 감면 한도 (2025~2026) */
-export const EV_TAX_CAP = 1_400_000    // 전기·수소 140만원 한도 면제
-export const HYBRID_TAX_CAP = 0        // 하이브리드 감면 2024 종료
-/** 경차(비영업용 승용 경형) 취득세 면제 한도 — 지방세특례제한법 §67①, 2027-12-31까지 */
-export const LIGHT_TAX_CAP = 750_000
-/** 다자녀 취득세 감면 (지특법 §22의2, 18세 미만 자녀 양육 1대 · 2027-12-31까지) — 6인승 이하 승용 기준
- *  3자녀 이상: 면제(한도 140만) / 2자녀: 50% 경감(한도 70만, 2025.1 신설) */
-export const MULTI_CHILD_TAX_CAP = 1_400_000
-export const TWO_CHILD_TAX_RATE = 0.5
-export const TWO_CHILD_TAX_CAP = 700_000
+/** 계산 기준 과세연도 — 등록연도(= 기준연도 − 경과 년수)와 차령 산출용. lib VEHICLE_TAX_YEAR (매년 1월 갱신) */
+export const TAX_BASE_YEAR = VEHICLE_TAX_YEAR
 
 /** 공채 즉시 매도 시 할인율 (대략 10~15%) — 실비용 비율 */
 export const BOND_DISCOUNT_RATE = 0.12
@@ -58,51 +30,8 @@ export const BOND_DISCOUNT_RATE = 0.12
 /** 번호판 발급비 + 등록 수수료 */
 export const REGISTRATION_FEE = 15_000
 
-/* ─── 자동차세 (비영업용, cc당 단가, 원) ─── */
-export function annualTaxByCC(cc: number, isBusiness: boolean): number {
-  if (isBusiness) {
-    // 영업용
-    if (cc <= 1000) return cc * 18
-    if (cc <= 1600) return cc * 18
-    if (cc <= 2000) return cc * 19
-    if (cc <= 2500) return cc * 19
-    return cc * 24
-  }
-  // 비영업용
-  if (cc <= 1000) return cc * 80
-  if (cc <= 1600) return cc * 140
-  return cc * 200
-}
-
-/** 전기차 자동차세 본세 (정액, 2026 기준). 지방교육세 30% 별도 가산 → 합계 13만원 */
-export const EV_ANNUAL_TAX = 100_000
-
-/** 차령 경감률 — 지방세법 §127③·시행령 §125: 차령 = 과세연도 − 최초등록연도 + 1 (등록한 해 = 차령 1).
- *  차령 3부터 (차령 − 2) × 5%, 최대 50% (차령 12 이상). 인자는 '경과 년수'가 아니라 **차령**. */
-export function annualTaxAgeDiscount(carAge: number): number {
-  if (carAge < 3) return 0
-  const discount = (carAge - 2) * 0.05
-  return Math.min(0.5, discount)
-}
-
-/** 경과 년수(과세연도 − 등록연도, 신차 0) → 올해 차령 */
-export function carAgeFromYears(yearsSinceReg: number): number {
-  return Math.max(0, Math.floor(yearsSinceReg)) + 1
-}
-
-/** 자동차세 연납 할인 (2026년: 공제율 5% × 잔여 11개월/12 ≈ 4.58%) */
-export const ANNUAL_PREPAY_DISCOUNT = 0.0458
-
-/** 지방교육세 = 자동차세 × 30% */
-export const EDU_TAX_RATE = 0.30
-
 /* ─── 환경개선부담금 (경유차) ─── */
-/** 부과 대상: 배출가스 유로4 이하 경유차. 유로5·6 기준 차량(대략 2012년 이후 출고)은 부과 대상이 아니다
- *  (환경부: 2012년 3월 이후 새로 부과 대상이 되는 차량 없음). 등록연도로 유로4 이하 여부를 추정한다. */
-export const DIESEL_ENV_FEE_LAST_REG_YEAR = 2011
-export function dieselEnvFeeApplies(fuelType: FuelType, regYear: number): boolean {
-  return fuelType === 'diesel' && regYear <= DIESEL_ENV_FEE_LAST_REG_YEAR
-}
+/* 부과 대상 판정(DIESEL_ENV_FEE_LAST_REG_YEAR·dieselEnvFeeApplies)은 lib/krVehicleTax.ts */
 /** 경유차 연 부과액 (단순 추정치 — 실제는 배기량·차령·지역계수로 산정) */
 export function dieselEnvironmentFee(cc: number): number {
   // 경유 승용차 평균: 연 약 8만~25만 원
@@ -166,24 +95,6 @@ export interface CarTaxResult {
 
   /** 면제 효과 */
   exemptionSaved: number
-}
-
-/** 공채 매입 비율 — 경차(1,000cc 미만)는 매입 면제. 서울 도시철도채권은 비영업용 승용 배기량별
- *  (1,600cc 미만 9% · 2,000cc 미만 12% · 2,000cc 이상 20%, 서울시 도시철도공채 조례).
- *  ※ 서울 1,000~1,600cc 한시 면제(2023.3~2025.12)의 2026년 연장 여부는 확인되지 않아 조례 기본 비율로 둔다.
- *  전기차·영업용·그 밖의 지역은 지역 대표값(약식).
- *  ※ 친환경차(전기·수소·하이브리드) 조례상 채권 매입 감면(서울 등, 한도·기한 미확인)은 미반영 — page.tsx에 안내. */
-export function bondRateFor(regionId: RegionId, cc: number, carType: CarType): number {
-  if (carType === 'light') return 0
-  const region = REGIONS.find(r => r.id === regionId) ?? REGIONS[0]
-  if (carType === 'ev' || carType === 'business') return region.bondRate
-  if (cc < 1000) return 0
-  if (regionId === 'seoul') {
-    if (cc < 1600) return 0.09
-    if (cc < 2000) return 0.12
-    return 0.20
-  }
-  return region.bondRate
 }
 
 export function calcCarTax(inp: CarTaxInputs): CarTaxResult {
@@ -331,9 +242,9 @@ export const FUEL_TYPES: FuelType[] = ['gasoline', 'diesel', 'lpg', 'electric', 
 
 /* ─── 자동차세 cc별 단가표 (가이드용) ─── */
 export const TAX_TABLE_NON_BUSINESS = [
-  { range: '~ 1000cc',    perCC: 80,  example: '경차 998cc → 약 80,000원/년' },
-  { range: '~ 1600cc',    perCC: 140, example: '아반떼 1.6 → 약 224,000원/년' },
-  { range: '1600cc 초과', perCC: 200, example: '쏘나타 2.0 → 약 400,000원/년' },
+  { range: '~ 1000cc',    perCC: CAR_TAX_PER_CC_NON_BUSINESS[0].perCc, example: '경차 998cc → 약 80,000원/년' },
+  { range: '~ 1600cc',    perCC: CAR_TAX_PER_CC_NON_BUSINESS[1].perCc, example: '아반떼 1.6 → 약 224,000원/년' },
+  { range: '1600cc 초과', perCC: CAR_TAX_PER_CC_NON_BUSINESS[2].perCc, example: '쏘나타 2.0 → 약 400,000원/년' },
 ]
 
 /* ─── 양도 안내 ─── */

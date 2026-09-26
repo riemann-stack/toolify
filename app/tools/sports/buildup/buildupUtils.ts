@@ -1,10 +1,9 @@
 // ─────────────────────────────────────────────────────────────
 // 러닝 빌드업 훈련 — 곡선 계산 + 프로파일 + VDOT 매핑 + 안전성 체크
-// VDOT 함수는 race-predictor utils에서 재사용
+// VDOT 함수·Daniels 강도 계수는 lib/running.ts 단일 소스, 포맷터는 race-predictor utils 재사용
 // ─────────────────────────────────────────────────────────────
-import {
-  vdotFromRace, paceFromVdot, timeFromVdot, fmtPace, fmtHMS,
-} from '../race-predictor/racePredictorUtils'
+import { vdotFromRace, paceFromVdot, timeFromVdot, DANIELS_PCT } from '@/lib/running'
+import { fmtPace, fmtHMS } from '../race-predictor/racePredictorUtils'
 
 export { fmtPace, fmtHMS }
 
@@ -25,15 +24,15 @@ export const PROFILE_DESC: Record<Profile, string> = {
 }
 
 // ── 강도 라벨 (VDOT 페이스 대비) ────────
-// pct = Daniels %VO2max. paceFromVdot로 환산 시 Daniels 공식 훈련 페이스표 재현
+// pct = Daniels %VO2max (lib/running.ts DANIELS_PCT). paceFromVdot로 환산 시 Daniels 공식 훈련 페이스표 재현
 // (race-predictor PACE_ZONES와 동일 — VDOT 50 → M 4:30/T 4:15/I 3:56/R 3:39, 공식표 4:31/4:15/3:55/3:40와 일치)
 export type Intensity = 'E' | 'M' | 'T' | 'I' | 'R'
 export const INTENSITY_LABEL: Record<Intensity, { label: string; color: string; pct: number }> = {
-  'E': { label: 'Easy',       color: '#0D9488', pct: 0.59 },
-  'M': { label: 'Marathon',   color: '#059669', pct: 0.82 },
-  'T': { label: 'Threshold',  color: '#FFD93E', pct: 0.88 },
-  'I': { label: 'Interval',   color: '#EA580C', pct: 0.97 },
-  'R': { label: 'Repetition', color: '#DC2626', pct: 1.06 },
+  'E': { label: 'Easy',       color: '#0D9488', pct: DANIELS_PCT.E },
+  'M': { label: 'Marathon',   color: '#059669', pct: DANIELS_PCT.M },
+  'T': { label: 'Threshold',  color: '#FFD93E', pct: DANIELS_PCT.T },
+  'I': { label: 'Interval',   color: '#EA580C', pct: DANIELS_PCT.I },
+  'R': { label: 'Repetition', color: '#DC2626', pct: DANIELS_PCT.R },
 }
 
 // ── 프리셋 시작·끝 페이스 (VDOT 기반) ────

@@ -3,6 +3,7 @@
 import {
   calcHouseAcquisitionTax, calcNonHouseAcquisitionTax, type AcqTaxBreakdown,
 } from '@/lib/krAcquisitionTax'
+import * as loanRules from '@/lib/krLoanRules'
 
 export type PropertyType = 'apt' | 'villa' | 'house' | 'office' | 'shop' | 'land'
 export type OwnerType = 'live1' | 'own1' | 'multi2' | 'multi3' | 'corp'
@@ -94,7 +95,8 @@ export function acquisitionTaxBreakdown(
 ): AcqTaxBreakdown {
   const priceWon = Math.max(0, priceMan) * 10_000
   if (!isHouseType(property)) return calcNonHouseAcquisitionTax(priceWon)
-  const b = calcHouseAcquisitionTax({
+  // lowValue 라벨('시가표준액 1억(비수도권 2억) 이하 — …')은 lib가 제공
+  return calcHouseAcquisitionTax({
     price: priceWon,
     homeCount: owner === 'corp' ? 1 : (OWNER_HOME_COUNT[owner] ?? 1),
     corporate: owner === 'corp',
@@ -102,8 +104,6 @@ export function acquisitionTaxBreakdown(
     over85: false,
     lowValueHouse: lowValue,
   })
-  // lib 라벨은 '1억 이하'만 표기 — 이 도구는 비수도권 2억 확대까지 안내
-  return lowValue ? { ...b, label: '공시가격 1억(비수도권 2억) 이하 — 중과 제외, 표준세율' } : b
 }
 
 /** 취득세 + 지방교육세 (+ 비주택 농특세) 합계 — 만원 */
@@ -206,44 +206,42 @@ export interface LoanResult {
 }
 
 /* ─────────────────────────────────────────────
-   주택담보대출 규제 (2025.10.16 시행 10·15 주택시장 안정화 대책 기준, 경락잔금대출 동일 적용)
-   ※ 법정·정책 수치는 lib 단일 소스가 원칙 — 아직 lib에 대출규제 모듈이 없어 임시로 여기 둔다(후속: lib 이전).
-   출처: 금융위원회 10·15 대책 FAQ(fsc.go.kr)
-   · 규제지역(조정대상지역·투기과열지구 — 서울 전역·경기 12곳) LTV: 무주택자·처분조건부 1주택자 40%, 유주택자 추가 구입 0%
-   · 수도권·규제지역 주담대 금액 상한: 시가 15억 이하 6억 / 15~25억 4억 / 25억 초과 2억
-   · 스트레스 DSR: 수도권·규제지역 주담대 스트레스 금리 하한 3%p (그 외 수도권 1.5%p, 지방은 더 낮을 수 있음)
-   · 규제지역 생애최초 구입자는 LTV 70% 유지 (10·15 대책) — 명의 선택지로 구분하지 않아 사용자가 조정한다.
-   · 비규제지역 LTV: 무주택·1주택 70%, 다주택자(2주택 이상 보유)·주택임대·매매사업자(법인 포함) 60%
-     출처: 금융위원회 보도자료 「다주택자 규제지역 내 주택담보대출 허용」(2023.3.2 시행 은행업감독규정 개정)
-   · 수도권은 비규제지역이라도 6·27 대책(2025.6.28 시행) 이후 다주택자 추가 구입 주담대 금지(0%),
-     1주택자는 기존 주택 처분 조건부로만 허용 — 도구가 수도권 여부를 받지 않아 안내문으로만 알리고 사용자가 조정한다.
+   주택담보대출 규제 — 단일 소스 lib/krLoanRules.ts (2025.10.16 시행 10·15 대책 기준, 경락잔금대출 동일 적용)
+   LTV·스트레스 금리·주담대 금액 상한·DSR 한도 수치와 근거·출처는 lib에서 관리하고,
+   여기서는 이 도구의 지역(Region)·명의(OwnerType) 선택지를 lib 규칙 입력으로 바꾸기만 한다.
+   · 규제지역 생애최초 구입자(LTV 70%)는 명의 선택지로 구분하지 않아 사용자가 조정한다.
+   · 수도권 비규제지역 다주택자 추가 구입 금지(6·27 대책)는 도구가 수도권 여부를 받지 않아 안내문으로만 알리고 사용자가 조정한다.
    ───────────────────────────────────────────── */
-export const LTV_NON_REGULATED = 70
-export const LTV_NON_REGULATED_MULTI = 60
-export const LTV_REGULATED_NO_HOME = 40
-export const LTV_REGULATED_HAS_HOME = 0
-export const STRESS_RATE_REGULATED = 3.0
-export const STRESS_RATE_DEFAULT = 1.5
+export {
+  LTV_NON_REGULATED, LTV_NON_REGULATED_MULTI, LTV_REGULATED_NO_HOME, LTV_REGULATED_HAS_HOME,
+  STRESS_RATE_REGULATED, STRESS_RATE_DEFAULT,
+} from '@/lib/krLoanRules'
+
+/** 명의 → 취득 전 보유 주택 수 (live1 무주택 · own1 1채 · multi2 2채 · multi3 3채 이상). 법인은 사업자로 따로 판정 */
+const OWNER_HOMES_OWNED: Record<Exclude<OwnerType, 'corp'>, number> = {
+  live1: 0, own1: 1, multi2: 2, multi3: 3,
+}
+
+/** 투기과열지구는 조정대상지역과 함께 지정되므로 둘 다 규제지역 */
+const isRegulated = (region: Region): boolean => region !== 'normal'
 
 /** 지역·명의 기준 LTV 기본값(%) — 규제지역: 무주택 40 / 유주택·법인 0, 비규제: 70 (다주택·법인 60) */
 export function recommendLtv(region: Region, owner: OwnerType): number {
-  if (region === 'normal') {
-    return owner === 'multi2' || owner === 'multi3' || owner === 'corp' ? LTV_NON_REGULATED_MULTI : LTV_NON_REGULATED
-  }
-  return owner === 'live1' ? LTV_REGULATED_NO_HOME : LTV_REGULATED_HAS_HOME
+  return loanRules.recommendLtv({
+    regulated: isRegulated(region),
+    homesOwned: owner === 'corp' ? 0 : (OWNER_HOMES_OWNED[owner] ?? 1),   // 알 수 없는 값은 유주택으로(보수적)
+    business: owner === 'corp',
+  })
 }
 
 /** 지역 기준 스트레스 금리 가산(%p) 기본값 */
 export function recommendStressRate(region: Region): number {
-  return region === 'normal' ? STRESS_RATE_DEFAULT : STRESS_RATE_REGULATED
+  return loanRules.recommendStressRate(isRegulated(region))
 }
 
 /** 규제지역 주담대 금액 상한 (만원) — 담보가(낙찰가) 15억 이하 6억 / 15~25억 4억 / 25억 초과 2억. 비규제는 상한 없음 */
 export function mortgageCapMan(priceMan: number, region: Region): number {
-  if (region === 'normal') return Infinity
-  if (priceMan <= 150_000) return 60_000
-  if (priceMan <= 250_000) return 40_000
-  return 20_000
+  return loanRules.mortgageCapMan(priceMan, isRegulated(region))
 }
 
 /**
@@ -278,7 +276,7 @@ export function calcLoan(
   const ltvLimit = priceMan * (ltvPct / 100)
 
   /* DSR 가능 월 상환 */
-  const maxMonthlyDsr = Math.max(0, (annualIncomeMan * 0.40 / 12) - existingMonthlyMan)
+  const maxMonthlyDsr = Math.max(0, (annualIncomeMan * loanRules.DSR_LIMIT_RATIO / 12) - existingMonthlyMan)
   /* DSR 한도 원금 (역산: monthlyPayment의 역공식, 스트레스 금리 적용) */
   const r = (ratePct + Math.max(0, stressPct)) / 100 / 12
   const n = years * 12

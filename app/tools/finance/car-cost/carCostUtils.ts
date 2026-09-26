@@ -4,6 +4,9 @@
    ※ 본 도구는 일반 정보 제공이며 정확한 견적은 캐피탈·보험·정비 전문가 상담 권장.
    ────────────────────────────────────────────────────── */
 
+import { annualTaxByCC, EV_ANNUAL_TAX, EDU_TAX_RATE } from '@/lib/krVehicleTax'
+import { GASOLINE_PRICE, DIESEL_PRICE } from '@/lib/krFuelPrices'
+
 /* ─── 포맷 (★ "0억" 표기 버그 픽스) ─── */
 export function formatKoreanCurrency(amount: number): string {
   if (!isFinite(amount) || isNaN(amount) || amount === 0) return '0원'
@@ -78,17 +81,14 @@ export interface AutoTaxBracket {
   desc: string
 }
 
-/* 비영업용 승용차 자동차세 — 지방세법 §127①: cc당 1,000cc 이하 80원 / 1,600cc 이하 140원 / 1,600cc 초과 200원,
-   + 지방교육세 30% (지방세법 §151). finance/car-tax(carTaxData.annualTaxByCC)와 같은 규칙 — lib 이관 대상.
+/* 비영업용 승용차 자동차세 — cc당 세액(1,000cc 이하 80원 / 1,600cc 이하 140원 / 1,600cc 초과 200원)과
+   지방교육세 30%는 lib/krVehicleTax.ts 단일 소스(finance/car-tax와 공유).
    (기존 표는 구간 경계를 1,500cc로 잘못 나눠 1.6L 차량을 52만원 구간으로 안내했음) */
-export const CAR_TAX_PER_CC = { upTo1000: 80, upTo1600: 140, over1600: 200 } as const
-export const CAR_TAX_EDU_RATE = 0.30
 
 /** 배기량(cc) → 연 자동차세(지방교육세 포함, 차령 경감 전) */
 export function autoTaxYearlyForCC(cc: number): number {
   const c = Math.max(0, cc)
-  const perCc = c <= 1000 ? CAR_TAX_PER_CC.upTo1000 : c <= 1600 ? CAR_TAX_PER_CC.upTo1600 : CAR_TAX_PER_CC.over1600
-  return Math.round(c * perCc * (1 + CAR_TAX_EDU_RATE))
+  return Math.round(annualTaxByCC(c, false) * (1 + EDU_TAX_RATE))
 }
 
 // 빠른 선택 칩 — 구간 상한 배기량 기준 세액 (1,598cc 등 실제 배기량은 직접 입력하면 더 정확)
@@ -101,7 +101,7 @@ export const AUTO_TAX_BRACKETS: AutoTaxBracket[] = [
   { ccMax: 3500, yearly: autoTaxYearlyForCC(3500), desc: '대형 SUV 3.5L (3,500cc)' },      // 910,000
 ]
 
-export const EV_AUTO_TAX = 130_000   // 전기차 정액 (10만 + 교육세 3만)
+export const EV_AUTO_TAX = Math.round(EV_ANNUAL_TAX * (1 + EDU_TAX_RATE))   // 전기차 정액 (10만 + 교육세 3만 = 130,000)
 
 export function autoTaxByCC(cc: number): number {
   return autoTaxYearlyForCC(cc)
@@ -117,10 +117,10 @@ export interface FuelData {
 }
 
 export const FUEL_DATA_2026: FuelData[] = [
-  { id: 'gasoline',     name: '가솔린',          pricePerUnit: 1650, unit: 'L',   avgEfficiency: 12 },
-  { id: 'diesel',       name: '경유',            pricePerUnit: 1500, unit: 'L',   avgEfficiency: 14 },
+  { id: 'gasoline',     name: '가솔린',          pricePerUnit: GASOLINE_PRICE, unit: 'L',   avgEfficiency: 12 },
+  { id: 'diesel',       name: '경유',            pricePerUnit: DIESEL_PRICE, unit: 'L',   avgEfficiency: 14 },
   { id: 'lpg',          name: 'LPG',             pricePerUnit: 1000, unit: 'L',   avgEfficiency: 9 },
-  { id: 'hybrid',       name: '하이브리드',      pricePerUnit: 1650, unit: 'L',   avgEfficiency: 18 },
+  { id: 'hybrid',       name: '하이브리드',      pricePerUnit: GASOLINE_PRICE, unit: 'L',   avgEfficiency: 18 },
   { id: 'electric',     name: '전기 (가정 충전)', pricePerUnit:  200, unit: 'kWh', avgEfficiency: 5 },
   { id: 'electricFast', name: '전기 (급속)',     pricePerUnit:  350, unit: 'kWh', avgEfficiency: 5 },
 ]
@@ -179,7 +179,7 @@ export function calcMaintenance(input: MaintenanceInput): MaintenanceResult {
   // 연료비
   const fuelMonthly = input.fuelType === 'ev'
     ? (input.monthlyKm / Math.max(0.1, input.evEfficiency ?? 5)) * (input.chargePrice ?? 200)
-    : (input.monthlyKm / Math.max(0.1, input.efficiency ?? 12)) * (input.fuelPrice ?? 1650)
+    : (input.monthlyKm / Math.max(0.1, input.efficiency ?? 12)) * (input.fuelPrice ?? GASOLINE_PRICE)
 
   const insuranceMonthly = input.insuranceYearly / 12
   const carTaxMonthly = input.carTaxYearly / 12

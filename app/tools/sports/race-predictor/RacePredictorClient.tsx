@@ -5,6 +5,7 @@ import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import { todayStr } from '@/lib/date'
+import { DANIELS_PCT } from '@/lib/running'
 import styles from './race-predictor.module.css'
 import {
   DISTS, TARGETS, QUICK_TIMES,
@@ -30,14 +31,14 @@ const SUB_GOALS = [
   { label: '서브3',    sec: 3 * 3600 },
 ]
 
-// intensity = Daniels %VO2max. paceFromVdot로 환산 시 Daniels 공식 훈련 페이스 표 재현
+// intensity = Daniels %VO2max (단일 소스 lib/running.ts DANIELS_PCT). paceFromVdot로 환산 시 Daniels 공식 훈련 페이스 표 재현
 // (예: VDOT 50 → M 4:30 / T 4:15 / I 3:54 / R 3:39 — 공식표 4:31/4:15/3:55/3:40과 일치)
 const PACE_ZONES = [
-  { key: 'E', name: 'Easy',       desc: '회복·지구력 (회복일·LSD)',           intensity: 0.59, color: '#0891B2' },
-  { key: 'M', name: 'Marathon',   desc: '대회 페이스 (장거리 페이스 런)',      intensity: 0.82, color: '#0EA5E9' },
-  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: 0.88, color: '#A16207' },
-  { key: 'I', name: 'Interval',   desc: 'V̇O₂max (3~5분 인터벌·심화는 인터벌 도구)', intensity: 0.97, color: '#EA580C' },
-  { key: 'R', name: 'Repetition', desc: '스피드·러닝 이코노미 (200~600m)',     intensity: 1.06, color: '#DC2626' },
+  { key: 'E', name: 'Easy',       desc: '회복·지구력 (회복일·LSD)',           intensity: DANIELS_PCT.E, color: '#0891B2' },
+  { key: 'M', name: 'Marathon',   desc: '대회 페이스 (장거리 페이스 런)',      intensity: DANIELS_PCT.M, color: '#0EA5E9' },
+  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: DANIELS_PCT.T, color: '#A16207' },
+  { key: 'I', name: 'Interval',   desc: 'V̇O₂max (3~5분 인터벌·심화는 인터벌 도구)', intensity: DANIELS_PCT.I, color: '#EA580C' },
+  { key: 'R', name: 'Repetition', desc: '스피드·러닝 이코노미 (200~600m)',     intensity: DANIELS_PCT.R, color: '#DC2626' },
 ]
 
 // ─────────────────────────────────────────────────────────────

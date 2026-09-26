@@ -1,6 +1,9 @@
 // ─────────────────────────────────────────────────────────────
 // 마라톤 레이스 기록 예측 — 계산·환경 보정·연령/성별·기록 저장
 // ─────────────────────────────────────────────────────────────
+import {
+  vo2FromV, vFromVo2, pctVO2max, vdotFromRace, timeFromVdot, paceFromVdot, riegelTime,
+} from '@/lib/running'
 
 export type DistKey = '5k' | '10k' | 'half' | 'full' | 'custom'
 export type TargetKey = '3k' | '5k' | '10k' | '15k' | 'half' | '30k' | 'full'
@@ -58,44 +61,11 @@ export function secToHMS(totalSec: number): { h: number; m: number; s: number } 
   return { h: Math.floor(t / 3600), m: Math.floor((t % 3600) / 60), s: t % 60 }
 }
 
-// ── VDOT (Jack Daniels) ──────────────────
-export function vo2FromV(v: number): number {
-  return -4.60 + 0.182258 * v + 0.000104 * v * v
-}
-export function vFromVo2(vo2: number): number {
-  const a = 0.000104, b = 0.182258, c = -(4.60 + vo2)
-  return (-b + Math.sqrt(b * b - 4 * a * c)) / (2 * a)
-}
-export function pctVO2max(tMin: number): number {
-  return 0.8 + 0.1894393 * Math.exp(-0.012778 * tMin) + 0.2989558 * Math.exp(-0.1932605 * tMin)
-}
-export function vdotFromRace(distKm: number, timeSec: number): number {
-  const tMin = timeSec / 60
-  const v = (distKm * 1000) / tMin
-  return vo2FromV(v) / pctVO2max(tMin)
-}
-export function timeFromVdot(distKm: number, vdot: number): number {
-  let lo = 1, hi = 60 * 60 * 10
-  for (let i = 0; i < 80; i++) {
-    const mid = (lo + hi) / 2
-    const tMin = mid / 60
-    const v = (distKm * 1000) / tMin
-    const estVdot = vo2FromV(v) / pctVO2max(tMin)
-    if (estVdot > vdot) lo = mid
-    else hi = mid
-  }
-  return (lo + hi) / 2
-}
-export function paceFromVdot(vdot: number, intensity: number): number {
-  const vo2 = vdot * intensity
-  const v = vFromVo2(vo2)
-  return 60000 / v
-}
+// ── VDOT (Jack Daniels) · Riegel — 단일 소스 lib/running.ts ──
+// 기존 import 경로(RacePredictorClient 등)와의 호환을 위해 그대로 재수출한다.
+export { vo2FromV, vFromVo2, pctVO2max, vdotFromRace, timeFromVdot, paceFromVdot, riegelTime }
 
-// ── Riegel / Cameron ─────────────────────
-export function riegelTime(d1: number, t1: number, d2: number): number {
-  return t1 * Math.pow(d2 / d1, 1.06)
-}
+// ── Cameron ──────────────────────────────
 export function cameronA(dMi: number): number {
   return 13.49681 - 0.048865 * dMi + 2.438936 / Math.pow(dMi, 0.7905)
 }

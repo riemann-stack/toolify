@@ -3,6 +3,8 @@
    14개 분야 단위 변환기 — 한국 전통·생활 단위 포함
    ────────────────────────────────────────────────────── */
 
+import { WORK_HOURS_WEEK, MONTHLY_WORK_HOURS } from '@/lib/krInsuranceRates'
+
 export type CategoryId = 'length' | 'area' | 'weight' | 'volume' | 'temperature' | 'time' | 'speed' | 'pressure' | 'torque' | 'energy' | 'data' | 'brix' | 'concentration' | 'angle'
 
 export interface UnitDef {
@@ -94,9 +96,9 @@ const UNITS_VOLUME: UnitDef[] = [
 ]
 
 /* ─── 근무시간 기준 (근로기준법 제50조 주 40시간 · 주휴 포함 월 209시간 = 최저임금 월 환산 기준, 고용노동부) ───
-   TODO(lib): 월 209시간은 lib/krInsuranceRates.ts 등 lib/ 단일 소스로 이전 대상 */
-export const WORK_HOURS_WEEK = 40
-export const WORK_HOURS_MONTH = 209
+   단일 소스: lib/krInsuranceRates.ts (WORK_HOURS_WEEK · MONTHLY_WORK_HOURS) */
+export { WORK_HOURS_WEEK }
+export const WORK_HOURS_MONTH = MONTHLY_WORK_HOURS
 export const WORK_HOURS_YEAR = WORK_HOURS_MONTH * 12 // 2,508시간
 
 /* ─── 시간 (base: s) ─── */

@@ -90,7 +90,7 @@ export default function RealEstateClient() {
   const [adjusted, setAdjusted] = useState(false)        // 취득 주택이 조정대상지역
   const [over85, setOver85] = useState(false)            // 전용 85㎡ 초과 (농어촌특별세)
   const [tempTwoHomes, setTempTwoHomes] = useState(false) // 조정 2주택 중 일시적 2주택
-  const [lowValueHouse, setLowValueHouse] = useState(false) // 시가표준액 1억 이하(정비구역 외) → 중과 제외
+  const [lowValueHouse, setLowValueHouse] = useState(false) // 시가표준액 1억(비수도권 2억) 이하(정비구역 외) → 중과 제외
   const [acqStr, setAcqStr] = useState('0')
 
   /* ── 중개수수료 ── */
@@ -576,7 +576,7 @@ export default function RealEstateClient() {
                       onChange={e => setLowValueHouse(e.target.checked)}
                     />
                     <label htmlFor="re-low-value-house">
-                      시가표준액(공시가격) 1억원 이하 주택 (정비구역 외) → 중과 대신 표준세율
+                      시가표준액(공시가격) 1억원 이하 주택 (비수도권은 2억원 이하, 정비구역 외) → 중과 대신 표준세율
                     </label>
                   </div>
                 )}

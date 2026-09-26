@@ -2,6 +2,7 @@
 
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
+import { riegelTime } from '@/lib/running'
 import s from './lsd.module.css'
 
 // ─────────────────────────────────────────────
@@ -19,10 +20,10 @@ const pad = (n: number) => String(n).padStart(2, '0')
 const CARB_MIN_G_PER_H = 30
 const GEL_G = 25
 
-// Riegel 거리 환산: T2 = T1 × (D2/D1)^1.06
+// Riegel 거리 환산: T2 = T1 × (D2/D1)^1.06 — 공식은 lib/running.ts riegelTime 단일 소스
 function riegel(t1Sec: number, d1Km: number, d2Km: number): number {
   if (t1Sec <= 0 || d1Km <= 0) return 0
-  return t1Sec * Math.pow(d2Km / d1Km, 1.06)
+  return riegelTime(d1Km, t1Sec, d2Km)
 }
 
 function fmtPace(secPerKm: number): string {

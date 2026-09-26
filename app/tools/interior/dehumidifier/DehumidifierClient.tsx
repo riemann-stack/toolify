@@ -3,7 +3,7 @@
 import { useState, useMemo } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import {
-  HOME_TYPES, ENV_FACTORS, PRODUCT_TIERS, KEPCO_RESIDENTIAL_TIER_KRW, MAX_HOURS_PER_DAY,
+  HOME_TYPES, ENV_FACTORS, PRODUCT_TIERS, KEPCO_RESIDENTIAL_TIER_KRW, MAX_HOURS_PER_DAY, DEFAULT_WON_PER_KWH,
   calcDehumidifier, pyeongToSqm, sqmToPyeong,
 } from './dehumidifierData'
 import s from './dehumidifier.module.css'
@@ -16,7 +16,7 @@ export default function DehumidifierClient() {
   const [home, setHome] = useState('apt')
   const [env, setEnv] = useState('normal')
   const [hours, setHours] = useState('6')
-  const [won, setWon] = useState('160')
+  const [won, setWon] = useState(String(DEFAULT_WON_PER_KWH))
 
   const areaNum = parseFloat(area) || 0
   const areaSqm = unit === 'pyeong' ? pyeongToSqm(areaNum) : areaNum

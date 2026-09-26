@@ -9,7 +9,7 @@ import {
   type Intensity, type SchedRaceType, INTENSITY_PCT, E_FAST_PCT, VDOT_MIN, VDOT_MAX, isVdotInRange,
   calcVDOT, getPace, KOREA_RACES, raceTiming, SCHED_DIST_M, SCHED_DEFAULT_RECORD, convertRecord,
 } from './intervalUtils'
-import { paceFromVdot } from '../race-predictor/racePredictorUtils'
+import { paceFromVdot } from '@/lib/running'
 
 // localStorage 키 (VDOT 자동 저장) — 기존 키 유지(개명 시 데이터 유실)
 const STORAGE_KEY = 'youtil-interval-record-v1'

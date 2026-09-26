@@ -11,6 +11,11 @@
    - 소비전력은 시판 제품 등급별 대표 스펙(제조사 카탈로그 평균) — 모델마다 다름.
    ────────────────────────────────────────────────────── */
 
+import {
+  KEPCO_RESIDENTIAL_LOW_KRW_PER_KWH,
+  ELEC_DEHUMIDIFIER_DEFAULT_KRW_PER_KWH,
+} from '@/lib/krElectricityRates'
+
 export const SQM_PER_PYEONG = 3.305785
 
 /** 주거 유형 — 기본 제습 계수 (L/㎡·일) */
@@ -56,11 +61,11 @@ export const PRODUCT_TIERS: ProductTier[] = [
   { ratedL: 30, watt: 440, label: '30L급', space: '아파트 약 39평·주택 약 29평·지하 약 20평까지' },
 ]
 
-/* 한전 주택용(저압) 누진 구간별 전력량요금 (원/kWh) — 2023-05-16 조정분, 2026년 현재 적용.
-   기본요금·기후환경요금·연료비조정요금·부가세·전력기반기금 별도. 7~8월은 구간이 300/450kWh로 확대.
-   출처: 한국전력 주택용 전기요금표 https://home.kepco.co.kr/kepco/front/html/CY/E/E/CYEEHP00101.html
-   TODO(lib 이관): 전기요금은 lib/krElectricityRates.ts 단일 소스로 옮길 것 */
-export const KEPCO_RESIDENTIAL_TIER_KRW = { tier1: 120.0, tier2: 214.6, tier3: 307.3 } as const
+/* 한전 주택용(저압) 누진 구간별 전력량요금 (원/kWh)·입력칸 기본 단가 — lib/krElectricityRates.ts 단일 소스
+   (출처·기준일·별도 부과 항목은 lib 주석 참고) */
+export const KEPCO_RESIDENTIAL_TIER_KRW = KEPCO_RESIDENTIAL_LOW_KRW_PER_KWH
+/** 전기요금 단가 입력칸 기본값 (원/kWh) */
+export const DEFAULT_WON_PER_KWH = ELEC_DEHUMIDIFIER_DEFAULT_KRW_PER_KWH
 
 /** 하루 가동시간 상한 (시간) */
 export const MAX_HOURS_PER_DAY = 24

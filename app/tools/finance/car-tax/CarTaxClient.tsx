@@ -7,7 +7,7 @@ import {
   calcCarTax, REGIONS, CAR_TYPE_LABEL, FUEL_LABEL, EXEMPTION_LABEL,
   TAX_TABLE_NON_BUSINESS, TRANSFER_NOTE, SAVING_TIPS,
   EXEMPTION_KEYS, CAR_TYPES, FUEL_TYPES, TAX_BASE_YEAR, LIGHT_TAX_CAP,
-  bondRateFor, carAgeFromYears, annualTaxAgeDiscount, dieselEnvFeeApplies,
+  bondRateFor, carAgeFromYears, annualTaxAgeDiscount, dieselEnvFeeApplies, ACQUISITION_TAX_RATES,
   type CarType, type FuelType, type RegionId, type Exemption,
 } from './carTaxData'
 
@@ -315,7 +315,7 @@ export default function CarTaxClient() {
             <div>
               <strong>취득세</strong>
               <span className={s.taxSub}>
-                {(ACQUISITION_TAX_RATES_DISPLAY[carType] * 100).toFixed(0)}%
+                {(ACQUISITION_TAX_RATES[carType] * 100).toFixed(0)}%
                 {carType === 'ev' && ' (140만원 한도 면제)'}
                 {carType === 'light' && ` (${LIGHT_TAX_CAP / 10_000}만원 한도 면제)`}
                 {exemption !== 'none' && ' (감면 자격 · 중복 시 큰 감면 하나만)'}
@@ -485,9 +485,4 @@ export default function CarTaxClient() {
       </div>
     </div>
   )
-}
-
-// 차종별 취득세율 (display용)
-const ACQUISITION_TAX_RATES_DISPLAY: Record<CarType, number> = {
-  normal: 0.07, light: 0.04, business: 0.04, ev: 0.07, hybrid: 0.07,
 }

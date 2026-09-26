@@ -1,7 +1,8 @@
 /* ──────────────────────────────────────────────────────
    lib/krAcquisitionTax.ts
-   부동산 유상취득(매매·경매) 취득세 + 지방교육세 + 농어촌특별세 — 단일 소스 (2026년 시행 법령 기준)
-   사용처: finance/real-estate · finance/auction
+   부동산 유상취득(매매·경매)·주택 무상취득(증여) 취득세 + 지방교육세 + 농어촌특별세 — 단일 소스 (2026년 시행 법령 기준)
+   사용처: finance/real-estate · finance/auction (유상) · finance/inheritance (무상취득)
+   기준일: 2026-09 · 출처: 국가법령정보센터 지방세법·같은 법 시행령, 행정안전부·정책브리핑 보도자료
    ──────────────────────────────────────────────────────
 
    [법적 근거]
@@ -18,8 +19,12 @@
           ①3호 조정대상지역 1세대 3주택 이상 / 비조정 4주택 이상 ....... 12%
           · 시행령 §28의2 1호: 시가표준액(공시가격) 1억원 이하 주택은 중과 제외 → 표준세율
             (단, 도시정비법상 정비구역·소규모주택정비 사업구역 주택은 제외 대상 아님 — 이 lib는 판단하지 않음)
-            ※ [확인 필요] 2025년 이후 비수도권은 공시가격 2억원 이하로 확대됐다는 안내가 있음(auction FAQ).
-              법령 원문을 이번에 재확인하지 못해 lib는 가격 기준을 박제하지 않고 lowValueHouse 플래그로 호출부·사용자가 판단.
+            2025.1.2 이후 취득분부터 비수도권(서울·경기·인천 외) 주택은 기준이 시가표준액 2억원 이하로 완화
+            (정책브리핑 2025 「지방 저가주택 취득세 중과 기준 완화…1억 원 → 2억 원으로」 newsId=148942191,
+             https://www.korea.kr/news/policyNewsView.do?newsId=148942191 · 행정안전부 보도자료
+             「지방 저가주택 취득세 중과 기준 완화」 https://www.mois.go.kr/frt/bbs/type010/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000008&nttId=117228).
+            '지방' = 수도권정비계획법상 수도권(서울·경기·인천) 외 (2026-09 재확인: 정책브리핑·행안부 보도자료 검색 결과).
+            lib는 소재지·공시가격을 받지 않으므로 해당 여부는 lowValueHouse 플래그로 호출부·사용자가 판단.
       · 주택 외 유상취득(상가·오피스텔·토지 등) §11①7호 나목 ...... 4%
    2) 지방교육세 — 지방세법 §151①1호
       · 주택 유상거래(§11①8호): 취득세율 × 1/2 × 20% (= 취득세율의 10%: 1% → 0.1%, 1.67% → 0.167%, 3% → 0.3%)
@@ -40,9 +45,10 @@
 
    [가정·한계 — 계산하지 않는 것]
    · 주택 수는 '이번 취득 후 1세대 보유 주택 수'를 사용자가 입력(분양권·입주권·주거용 오피스텔 포함 여부 판단은 사용자 몫).
-     시가표준액 1억 이하 주택·일부 공시가격 기준 제외 주택의 주택 수 제외 규정은 반영하지 않음.
+     시가표준액 1억 이하 주택·비수도권 2억 이하 주택(2025.1.2 이후 취득) 등의 주택 수 제외 규정은 반영하지 않음.
    · 일시적 2주택 해당 여부(처분기한 3년 등)는 사용자가 선택. 사후 미처분 시 중과세 추징은 반영하지 않음.
-   · 생애최초(지특법 §36의3, 200만원 한도)·신혼·출산 등 감면, 무상취득(증여 3.5%·조정 12%)·원시취득·상속은 미반영.
+   · 생애최초(지특법 §36의3, 200만원 한도)·신혼·출산 등 감면, 원시취득·상속, 주택 외 무상취득은 미반영.
+     주택 무상취득(증여 3.5%·조정 12%)은 파일 끝 '무상취득' 섹션.
    · 국민주택규모(85㎡)는 수도권·도시지역 기준. 수도권 외 읍·면 지역은 100㎡ 기준이 적용될 수 있음.
    · 농지(3%)·법인의 사치성재산·과밀억제권역 중과는 미반영. 조정대상지역 여부는 취득일(계약일 특례 포함) 기준으로 사용자가 판단.
    ────────────────────────────────────────────────────── */
@@ -55,6 +61,8 @@ export type AcqTaxCategory =
   | 'surcharge8'    // 중과 8%
   | 'surcharge12'   // 중과 12%
   | 'nonHouse'      // 주택 외 4%
+  | 'gift'          // 주택 무상취득(증여) 3.5%
+  | 'giftHeavy'     // 주택 무상취득 조정대상지역 중과 12%
 
 export interface HouseAcqInput {
   /** 취득가액(원) — 매매가·낙찰가 */
@@ -69,7 +77,8 @@ export interface HouseAcqInput {
   temporaryTwoHomes?: boolean
   /** 법인 취득 → 12% */
   corporate?: boolean
-  /** 중과 제외 저가주택 — 시가표준액(공시가격) 1억원 이하(정비구역 외). 비수도권 2억 확대 여부는 호출부 판단 */
+  /** 중과 제외 저가주택 — 시가표준액(공시가격) 1억원 이하(비수도권은 2025.1.2 이후 취득분 2억원 이하, 정비구역 외).
+   *  소재지·공시가격 판단은 호출부(사용자 체크) 몫 */
   lowValueHouse?: boolean
 }
 
@@ -167,7 +176,7 @@ export function calcHouseAcquisitionTax(input: HouseAcqInput): AcqTaxBreakdown {
   const ruralPpm = input.over85 ? 2_000 : 0                         // 0.2%
   const n = normHomeCount(input.homeCount)
   const why = input.lowValueHouse
-    ? '시가표준액 1억 이하 — 중과 제외, 표준세율'
+    ? '시가표준액 1억(비수도권 2억) 이하 — 중과 제외, 표준세율'
     : input.corporate
       ? '표준세율'
       : n === 2 && input.adjusted && input.temporaryTwoHomes
@@ -180,4 +189,61 @@ export function calcHouseAcquisitionTax(input: HouseAcqInput): AcqTaxBreakdown {
 export function calcNonHouseAcquisitionTax(price: number): AcqTaxBreakdown {
   const p = Number.isFinite(price) ? Math.max(0, price) : 0
   return build(p, 'nonHouse', '주택 외 유상취득 4%', 40_000, 4_000, 2_000)
+}
+
+/* ─── 주택 무상취득(증여) ───
+   1) 취득세 — 지방세법 §12①2호 무상취득 3.5% (비영리사업자 2.8%는 미반영)
+      §13의2② · 시행령 §28의6: 조정대상지역 안 시가표준액 3억원 이상 주택 무상취득 → 12% 중과
+        단, 1세대 1주택자가 배우자·직계존비속에게 증여하면 중과 제외.
+        수증자의 주택 수는 요건이 아니며, 비조정지역 무상취득에는 8% 구간이 없다.
+   2) 지방교육세 §151①1호: (3.5% − 2%) × 20% = 0.3% / 중과 (표준세율 4% − 2%) × 20% = 0.4%
+   3) 농어촌특별세 (전용 85㎡ 초과만): 2% × 10% = 0.2% / 중과 (12% − 2%) × 10% = 1.0%
+      → 합계: 3.5% 기준 4.0%(85㎡ 이하 3.8%), 12% 중과 13.4%(85㎡ 이하 12.4%)
+   ※ 과세표준은 2023년부터 시가인정액(매매사례가액 등) — 평가는 호출부 입력값을 그대로 쓴다. */
+const GIFT_PPM = {
+  acq: 35_000, acqHeavy: 120_000,     // 3.5% / 12%
+  edu: 3_000, eduHeavy: 4_000,        // 0.3% / 0.4%
+  rural: 2_000, ruralHeavy: 10_000,   // 0.2% / 1.0% (85㎡ 초과만)
+} as const
+
+/** 주택 무상취득 취득세율 (소수) — 3.5% */
+export const GIFT_HOUSE_ACQ_RATE = GIFT_PPM.acq / 1_000_000
+/** 조정대상지역 시가표준액 3억원 이상 주택 무상취득 중과세율 (소수) — 12% */
+export const GIFT_HOUSE_ACQ_RATE_HEAVY = GIFT_PPM.acqHeavy / 1_000_000
+/** 무상취득 중과 대상 시가표준액 하한 (원, 이상) */
+export const GIFT_HOUSE_HEAVY_MIN_STD_VALUE = 300_000_000
+
+export interface GiftHouseAcqInput {
+  /** 조정대상지역 소재 */
+  adjusted: boolean
+  /** 시가표준액(공시가격) 3억원 이상 */
+  stdValueOver3eok: boolean
+  /** 1세대 1주택자가 배우자·직계존비속에게 증여 → 중과 제외 */
+  familyExempt: boolean
+}
+
+/** 무상취득 12% 중과 여부 */
+export function isGiftHouseHeavy(input: GiftHouseAcqInput): boolean {
+  return input.adjusted && input.stdValueOver3eok && !input.familyExempt
+}
+
+/** 주택 무상취득 취득세율 (소수, 본세만) — 0.035 또는 0.12 */
+export function giftHouseAcquisitionRate(input: GiftHouseAcqInput): number {
+  return isGiftHouseHeavy(input) ? GIFT_HOUSE_ACQ_RATE_HEAVY : GIFT_HOUSE_ACQ_RATE
+}
+
+/** 주택 무상취득(증여) 취득세·지방교육세·농어촌특별세 (세목별 10원 미만 절사) */
+export function calcGiftHouseAcquisitionTax(input: GiftHouseAcqInput & {
+  /** 과세표준(원) — 시가인정액 */
+  value: number
+  /** 전용면적 85㎡ 초과 (농어촌특별세 과세) */
+  over85: boolean
+}): AcqTaxBreakdown {
+  const value = Number.isFinite(input.value) ? Math.max(0, input.value) : 0
+  if (isGiftHouseHeavy(input)) {
+    return build(value, 'giftHeavy', '조정대상지역 시가표준액 3억 이상 무상취득 중과 12%',
+      GIFT_PPM.acqHeavy, GIFT_PPM.eduHeavy, input.over85 ? GIFT_PPM.ruralHeavy : 0)
+  }
+  return build(value, 'gift', '주택 무상취득(증여) 3.5%',
+    GIFT_PPM.acq, GIFT_PPM.edu, input.over85 ? GIFT_PPM.rural : 0)
 }

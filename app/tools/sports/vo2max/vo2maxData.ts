@@ -2,7 +2,7 @@
    VO2 Max 계산기 데이터
    ─────────────────────────────────────────────────────────── */
 
-import { timeFromVdot, paceFromVdot } from '../race-predictor/racePredictorUtils'
+import { timeFromVdot, paceFromVdot, DANIELS_PCT } from '@/lib/running'
 
 export type MethodId = 'cooper' | 'mile1_5' | 'rockport' | 'queens' | 'norway' | 'hrr'
 export type Sex = 'male' | 'female'
@@ -152,7 +152,7 @@ export interface RacePrediction {
   fullM: number
 }
 
-/** VO2max를 Daniels VDOT로 보고 거리별 예상 시간(초) 산출 (race-predictor의 검증된 VDOT 역산 재사용) */
+/** VO2max를 Daniels VDOT로 보고 거리별 예상 시간(초) 산출 (lib/running.ts의 검증된 VDOT 역산 재사용) */
 export function predictRaces(vo2: number): RacePrediction {
   if (vo2 <= 0) return { fiveK: 0, tenK: 0, halfM: 0, fullM: 0 }
   return {
@@ -201,13 +201,13 @@ export interface TrainingPaces {
 }
 export function trainingPaces(vo2: number): TrainingPaces {
   if (vo2 <= 0) return { E: 0, M: 0, T: 0, I: 0, R: 0 }
-  // VO2max를 VDOT로 보고 Daniels %VO2max 강도로 페이스 산출 (race-predictor·buildup과 동일 기준)
+  // VO2max를 VDOT로 보고 Daniels %VO2max 강도로 페이스 산출 (lib/running.ts DANIELS_PCT — race-predictor·buildup과 동일 기준)
   return {
-    E: paceFromVdot(vo2, 0.59),
-    M: paceFromVdot(vo2, 0.82),
-    T: paceFromVdot(vo2, 0.88),
-    I: paceFromVdot(vo2, 0.97),
-    R: paceFromVdot(vo2, 1.06),
+    E: paceFromVdot(vo2, DANIELS_PCT.E),
+    M: paceFromVdot(vo2, DANIELS_PCT.M),
+    T: paceFromVdot(vo2, DANIELS_PCT.T),
+    I: paceFromVdot(vo2, DANIELS_PCT.I),
+    R: paceFromVdot(vo2, DANIELS_PCT.R),
   }
 }
 

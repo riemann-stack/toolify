@@ -25,6 +25,14 @@ export const MIN_HOURLY_WAGE: Record<2025 | 2026, number> = {
   2026: 10_320,
 }
 
+/* 법정 근로시간 기준 — 근로기준법 §50 주 40시간(1일 8시간), 주휴(§55) 포함 월 209시간.
+   209 = (주 40시간 + 주휴 8시간) × 365일 ÷ 7일 ÷ 12개월 ≈ 208.57 → 올림. 고용노동부 최저임금 월 환산 고시 기준
+   (위 최저시급 × 209 = 월 환산액). 기준일 2026-09 — 주 40시간제가 바뀌지 않는 한 연도와 무관. */
+/** 법정 주 소정근로시간 (주휴 미포함) */
+export const WORK_HOURS_WEEK = 40
+/** 월 소정근로시간 — 주휴 포함, 최저임금 월 환산 기준 */
+export const MONTHLY_WORK_HOURS = 209
+
 export const INSURANCE_RATES: Record<2025 | 2026, RateSet> = {
   2025: {
     pension: { total: 9.0,  employee: 4.5,    employer: 4.5 },

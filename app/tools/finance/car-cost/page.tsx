@@ -2,6 +2,7 @@ import Link from 'next/link'
 import CarCostClient from './CarCostClient'
 import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import { GASOLINE_PRICE, FUEL_PRICE_AS_OF } from '@/lib/krFuelPrices'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
@@ -61,7 +62,7 @@ const FAQ_LD = [
           },
           {
             q: '1km당 유지비는 어떻게 계산하나요?',
-            a: '월 유지비 ÷ 월 주행거리로 계산합니다. 예) 월 50만원, 월 1,500km → 1km당 약 333원. 유류비만 따지면 연비 12km/L·유가 1,650원 기준 약 138원/km. 주행거리가 적을수록 1km당 비용이 높아지므로 월 800km 미만이면 카쉐어링 검토.',
+            a: `월 유지비 ÷ 월 주행거리로 계산합니다. 예) 월 50만원, 월 1,500km → 1km당 약 333원. 유류비만 따지면 연비 12km/L·유가 ${GASOLINE_PRICE.toLocaleString('ko-KR')}원(${FUEL_PRICE_AS_OF}) 기준 약 ${Math.round(GASOLINE_PRICE / 12)}원/km. 주행거리가 적을수록 1km당 비용이 높아지므로 월 800km 미만이면 카쉐어링 검토.`,
           },
           {
             q: '감가상각은 실제 나가는 돈인가요?',
@@ -112,7 +113,7 @@ export default function CarCostPage() {
         유류·보험·세금·소모품·감가까지 합한 <strong style={{ color: 'var(--text)' }}>연간 진짜 비용</strong>. 차종·전기차 손익분기 비교.
       </p>
 
-      <UpdatedMeta date="2026년 7월" basis="2026년 자동차세(배기량별 cc당 80/140/200원 + 지방교육세 30%, 전기차 13만원 정액)·유류세 반영 연료비 시세 기준" sources={[{"label":"위택스(자동차세)","href":"https://www.wetax.go.kr"},{"label":"오피넷 유가정보(한국석유공사)","href":"https://www.opinet.co.kr"}]} />
+      <UpdatedMeta date="2026년 9월" basis="2026년 자동차세(배기량별 cc당 80/140/200원 + 지방교육세 30%, 전기차 13만원 정액)·유류세 반영 연료비 시세 기준" sources={[{"label":"위택스(자동차세)","href":"https://www.wetax.go.kr"},{"label":"오피넷 유가정보(한국석유공사)","href":"https://www.opinet.co.kr"}]} />
 
       <CarCostClient />
 

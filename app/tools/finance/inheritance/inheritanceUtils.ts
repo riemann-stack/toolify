@@ -4,7 +4,26 @@
    ※ 본 도구는 단순 참고용이며 세무 자문 도구가 아닙니다.
    부동산·부담부증여는 매우 단순 추정만 제공합니다.
    정확한 신고는 세무사 필수 (한국세무사회 070-5008-1234).
+   법정 수치(세율·공제)는 lib/krInheritanceTax.ts, 무상취득 취득세율은 lib/krAcquisitionTax.ts 단일 소스
    ────────────────────────────────────────────────────── */
+
+import {
+  INHERITANCE_GIFT_TAX_BRACKETS,
+  inheritanceGiftTax,
+  inheritanceGiftBracket,
+  GIFT_DEDUCTION,
+  GENERATION_SKIP_SURCHARGE_RATE,
+  FILING_CREDIT_RATE,
+  funeralDeductionOf,
+  basicOrLumpSumDeduction,
+  spouseInheritanceDeduction,
+  financialAssetDeduction,
+  cohabitHomeDeduction,
+  type InheritanceGiftBracket,
+} from '@/lib/krInheritanceTax'
+import { giftHouseAcquisitionRate } from '@/lib/krAcquisitionTax'
+
+export { funeralDeductionOf }
 
 /* ─── 관계 ─── */
 export type Relation =
@@ -12,15 +31,15 @@ export type Relation =
   | '손자녀' | '며느리사위' | '기타친족' | '타인'
 
 export const RELATIONS: { key: Relation; label: string; cls: string; deduction: number; note?: string }[] = [
-  { key: '배우자',      label: '배우자',          cls: 'relSpouse',   deduction:   600_000_000 },  // 상증법 §53 — 6억 (기존 60억 오기)
-  { key: '성인자녀',    label: '성인 자녀',       cls: 'relAdult',    deduction:    50_000_000 },
-  { key: '미성년자녀',  label: '미성년 자녀',     cls: 'relMinor',    deduction:    20_000_000 },
-  { key: '부모',        label: '부모',            cls: 'relParent',   deduction:    50_000_000 },
-  { key: '조부모',      label: '조부모',          cls: 'relParent',   deduction:    50_000_000, note: '직계존속 합산 5천만 한도' },
-  { key: '손자녀',      label: '손자녀',          cls: 'relMinor',    deduction:    50_000_000, note: '세대생략 30% 가산' },
-  { key: '며느리사위',  label: '며느리·사위',     cls: 'relRelative', deduction:    10_000_000 },
-  { key: '기타친족',    label: '기타 친족',       cls: 'relRelative', deduction:    10_000_000 },
-  { key: '타인',        label: '타인',            cls: 'relOther',    deduction:             0 },
+  { key: '배우자',      label: '배우자',          cls: 'relSpouse',   deduction: GIFT_DEDUCTION.spouse },  // 상증법 §53 — 6억 (기존 60억 오기)
+  { key: '성인자녀',    label: '성인 자녀',       cls: 'relAdult',    deduction: GIFT_DEDUCTION.adultDescendant },
+  { key: '미성년자녀',  label: '미성년 자녀',     cls: 'relMinor',    deduction: GIFT_DEDUCTION.minorDescendant },
+  { key: '부모',        label: '부모',            cls: 'relParent',   deduction: GIFT_DEDUCTION.ascendant },
+  { key: '조부모',      label: '조부모',          cls: 'relParent',   deduction: GIFT_DEDUCTION.ascendant, note: '직계존속 합산 5천만 한도' },
+  { key: '손자녀',      label: '손자녀',          cls: 'relMinor',    deduction: GIFT_DEDUCTION.adultDescendant, note: '세대생략 30% 가산' },
+  { key: '며느리사위',  label: '며느리·사위',     cls: 'relRelative', deduction: GIFT_DEDUCTION.otherRelative },
+  { key: '기타친족',    label: '기타 친족',       cls: 'relRelative', deduction: GIFT_DEDUCTION.otherRelative },
+  { key: '타인',        label: '타인',            cls: 'relOther',    deduction: GIFT_DEDUCTION.none },
 ]
 
 /* 단순 lookup */
@@ -32,42 +51,11 @@ export function getDeduction(rel: Relation): number {
 export type AssetKind = '현금' | '주식' | '부동산' | '기타'
 export const ASSET_KINDS: AssetKind[] = ['현금', '주식', '부동산', '기타']
 
-/* ─── 누진세율 ─── */
-export interface Bracket {
-  min: number
-  max: number
-  rate: number
-  deduction: number
-}
-
-export const TAX_BRACKETS: Bracket[] = [
-  { min: 0,             max: 100_000_000,   rate: 0.10, deduction: 0           },
-  { min: 100_000_000,   max: 500_000_000,   rate: 0.20, deduction: 10_000_000  },
-  { min: 500_000_000,   max: 1_000_000_000, rate: 0.30, deduction: 60_000_000  },
-  { min: 1_000_000_000, max: 3_000_000_000, rate: 0.40, deduction: 160_000_000 },
-  { min: 3_000_000_000, max: Infinity,      rate: 0.50, deduction: 460_000_000 },
-]
-
-export function calcProgressiveTax(taxBase: number): number {
-  if (taxBase <= 0) return 0
-  let bracket: Bracket = TAX_BRACKETS[0]
-  for (const b of TAX_BRACKETS) {
-    if (taxBase > b.min) bracket = b
-  }
-  return Math.max(0, taxBase * bracket.rate - bracket.deduction)
-}
-
-export function findBracket(taxBase: number): { rate: number; deduction: number } {
-  let rate = 0
-  let deduction = 0
-  for (const b of TAX_BRACKETS) {
-    if (taxBase > b.min) {
-      rate = b.rate
-      deduction = b.deduction
-    }
-  }
-  return { rate, deduction }
-}
+/* ─── 누진세율 — lib/krInheritanceTax.ts (상증법 §26) ─── */
+export type Bracket = InheritanceGiftBracket
+export const TAX_BRACKETS: Bracket[] = INHERITANCE_GIFT_TAX_BRACKETS
+export const calcProgressiveTax = inheritanceGiftTax
+export const findBracket = inheritanceGiftBracket
 
 /* ─── 증여세 ─── */
 export interface GiftResult {
@@ -99,12 +87,12 @@ export function calcGiftTax(
   // 세대생략 가산세 30% (손자녀 증여)
   let surchargeAmount = 0
   if (isSkipGeneration && calculatedTax > 0) {
-    surchargeAmount = Math.round(calculatedTax * 0.30)
+    surchargeAmount = Math.round(calculatedTax * GENERATION_SKIP_SURCHARGE_RATE)
     calculatedTax += surchargeAmount
   }
 
   const { rate, deduction: bracketDeduction } = findBracket(taxableBase)
-  const filingDiscount = Math.round(calculatedTax * 0.03)
+  const filingDiscount = Math.round(calculatedTax * FILING_CREDIT_RATE)
   const finalTax = Math.max(0, calculatedTax - filingDiscount)
 
   return {
@@ -152,11 +140,7 @@ export function getSpouseLegalShare(childCount: number, parentsAlive: number): n
   return 1.0   // 단독 상속
 }
 
-/** 장례비 공제 (상증법 시행령 §9②): 장례비용은 500만원 미만이면 500만원, 1,000만원 초과면 1,000만원 +
- *  봉안시설·자연장지 비용 500만원 한도 별도 → 입력(합계)을 최소 500만 ~ 최대 1,500만으로 본다 */
-export function funeralDeductionOf(funeral: number): number {
-  return Math.max(5_000_000, Math.min(Math.max(0, funeral), 15_000_000))
-}
+/* 장례비 공제 funeralDeductionOf (상증법 시행령 §9② — 최소 500만 ~ 최대 1,500만)는 lib/krInheritanceTax.ts */
 
 /** 자녀가 있으면 부모는 상속인이 아니므로 0으로 본다 */
 function effectiveParents(childCount: number, parentsAlive?: number): number {
@@ -173,48 +157,31 @@ export function calcInheritanceTax(input: InheritInput): InheritResult {
   // 일괄공제 vs 기초공제 + 인적공제
   // 배우자 단독상속(자녀·직계존속 없음)은 일괄공제 5억을 쓸 수 없고 기초공제 2억 + 인적공제만 가능 (상증법 §21②)
   const spouseSole = hasSpouse && childCount === 0 && parents === 0
-  const baseDeduction = 200_000_000
-  const childDeduction = childCount * 50_000_000
-  const personalDeduction = baseDeduction + childDeduction
-  const lumpSum = 500_000_000
-  const appliedDeduction = spouseSole ? personalDeduction : Math.max(personalDeduction, lumpSum)
+  const appliedDeduction = basicOrLumpSumDeduction(childCount, spouseSole)
 
   // 배우자 상속공제: max(5억, min(법정한도, 30억, 실제 상속분))
   let spouseDeduction = 0
   let spouseLegalLimit = 0
   if (hasSpouse) {
     spouseLegalLimit = totalAsset * getSpouseLegalShare(childCount, parents)
-    const cap = Math.min(spouseLegalLimit, 3_000_000_000)
-    if (input.spouseActualShare !== undefined) {
-      // 실제 상속분 입력(0 포함): 법정한도·30억 한도 내, 최소 5억 보장
-      // 0원(상속포기)이라도 최소 5억은 공제되므로 0을 default 분기로 흘리지 않는다.
-      spouseDeduction = Math.max(500_000_000, Math.min(input.spouseActualShare, cap))
-    } else {
-      // 미입력 시 추정: 법정한도까지 취득한다고 가정(최소 5억 보장)
-      spouseDeduction = Math.max(500_000_000, cap)
-    }
+    // 실제 상속분 입력(0 포함): 법정한도·30억 한도 내, 최소 5억 보장 — 0원(상속포기)이라도 최소 5억.
+    // 미입력(undefined) 시 추정: 법정한도까지 취득한다고 가정(최소 5억 보장)
+    spouseDeduction = spouseInheritanceDeduction(spouseLegalLimit, input.spouseActualShare)
   }
 
   // 금융재산공제 (순금융재산 기준, 단계별):
   //  2천만 이하 → 전액 / 2천만~1억 → 2천만 정액 / 1억 초과 → 20%, 최대 2억
-  const fa = input.financialAsset !== undefined && input.financialAsset > 0 ? input.financialAsset : 0
-  const financialDeduction =
-    fa <= 0 ? 0
-      : fa <= 20_000_000 ? fa
-        : fa <= 100_000_000 ? 20_000_000
-          : Math.min(200_000_000, fa * 0.20)
+  const financialDeduction = financialAssetDeduction(input.financialAsset ?? 0)
 
   // 동거주택공제: 주택 가액의 100%, 최대 6억 (조건 충족 가정)
-  const homeDeduction = input.cohabitHomeValue !== undefined && input.cohabitHomeValue > 0
-    ? Math.min(600_000_000, input.cohabitHomeValue)
-    : 0
+  const homeDeduction = cohabitHomeDeduction(input.cohabitHomeValue ?? 0)
 
   const totalDeduction = appliedDeduction + spouseDeduction + financialDeduction + homeDeduction
   const taxableBase = Math.max(0, taxableValue - totalDeduction)
 
   const calculatedTax = calcProgressiveTax(taxableBase)
   const { rate, deduction: bracketDeduction } = findBracket(taxableBase)
-  const filingDiscount = Math.round(calculatedTax * 0.03)
+  const filingDiscount = Math.round(calculatedTax * FILING_CREDIT_RATE)
   const finalTax = Math.max(0, calculatedTax - filingDiscount)
 
   return {
@@ -373,12 +340,10 @@ export interface PropertyEstimate {
   warnings: string[]
 }
 
-/* 주택 무상취득(증여) 취득세율 — 지방세법 §12①2호(3.5%), §13의2②·시행령 §28의6(조정대상지역 중과 12%).
-   lib/krAcquisitionTax.ts는 유상취득만 다루므로 여기 둔다 (lib 이관 필요).
+/* 주택 무상취득(증여) 취득세율 — lib/krAcquisitionTax.ts 무상취득 섹션
+   (지방세법 §12①2호 3.5%, §13의2②·시행령 §28의6 조정대상지역 중과 12%).
    중과 12% 요건: 조정대상지역 + 시가표준액 3억원 이상 주택. 단 1세대 1주택자가 배우자·직계존비속에게 증여하면 제외.
    수증자의 주택 수는 요건이 아니며, 비조정지역 무상취득에는 8% 구간이 없다. */
-export const GIFT_ACQ_TAX_RATE = 0.035
-export const GIFT_ACQ_TAX_RATE_HEAVY = 0.12
 const LINEAL_OR_SPOUSE: Relation[] = ['배우자', '성인자녀', '미성년자녀', '부모', '조부모', '손자녀']
 
 export function estimatePropertyGift(
@@ -393,8 +358,7 @@ export function estimatePropertyGift(
   const giftValue = propertyValue * (shareRatio / 100)
   // 1세대 1주택자가 배우자·직계존비속에게 증여하면 중과 제외
   const familyExempt = !donorMultiHome && LINEAL_OR_SPOUSE.includes(recipient)
-  const heavy = isAdjustedZone && stdValueOver3eok && !familyExempt
-  const acquisitionTaxRate = heavy ? GIFT_ACQ_TAX_RATE_HEAVY : GIFT_ACQ_TAX_RATE
+  const acquisitionTaxRate = giftHouseAcquisitionRate({ adjusted: isAdjustedZone, stdValueOver3eok, familyExempt })
 
   const acquisitionTax = giftValue * acquisitionTaxRate
   const giftRes = calcGiftTax(giftValue, recipient, prevGift)

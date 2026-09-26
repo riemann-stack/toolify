@@ -160,7 +160,7 @@ export default function RealEstatePage() {
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
                 조정 2주택 · 비조정 3주택 → <strong style={{ color: 'var(--warning)' }}>8%</strong><br/>
                 조정 3주택+ · 비조정 4주택+ · 법인 → <strong style={{ color: 'var(--danger)' }}>12%</strong><br/>
-                비조정 2주택·일시적 2주택·시가표준액 1억 이하 → 표준세율<br/>
+                비조정 2주택·일시적 2주택·시가표준액 1억(비수도권 2억, 2025.1.2 이후 취득) 이하 → 표준세율<br/>
                 지방교육세 0.4% (중과 공통)
               </p>
             </div>

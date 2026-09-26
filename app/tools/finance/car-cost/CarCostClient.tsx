@@ -23,6 +23,7 @@ import {
   compareOwnVsShare,
   type Consumable,
 } from './carCostUtils'
+import { GASOLINE_PRICE } from '@/lib/krFuelPrices'
 
 type Mode = 'simple' | 'detail'
 type FuelTypeBasic = 'gas' | 'ev' | 'hybrid'
@@ -86,7 +87,7 @@ export default function CarCostClient() {
   const [fuelType, setFuelType] = useState<FuelTypeBasic>('gas')
   const [monthlyKm, setMonthlyKm] = useState(1500)
   const [efficiency, setEfficiency] = useState(12)
-  const [fuelPrice, setFuelPrice] = useState(1650)
+  const [fuelPrice, setFuelPrice] = useState<number>(GASOLINE_PRICE)   // 오피넷 전국 평균 휘발유 — lib/krFuelPrices.ts (unit/fuel-economy와 공유)
   const [evEff, setEvEff] = useState(5.5)
   const [chargePrice, setChargePrice] = useState(200)
 

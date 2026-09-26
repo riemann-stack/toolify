@@ -58,11 +58,16 @@ function formatTime(mins: number, baseDay = 0): string {
   return `${pad2(h)}:${pad2(m)}${suffix}`
 }
 
+/* 법정 BAC 기준 (도로교통법 제44조·제148조의2) — lib/krDrunkDriving.ts */
+const BAC_SUSPEND = BAC_THRESHOLDS.GENERAL_SUSPEND     // 0.03 면허정지
+const BAC_REVOKE = BAC_THRESHOLDS.REVOKE               // 0.08 면허취소
+const BAC_AGGRAVATED = BAC_THRESHOLDS.AGGRAVATED       // 0.2 가중처벌
+
 function getStatus(bac: number): { label: string; cls: string; heroCls: string; numCls: string } {
   if (bac <= 0)       return { label: '✅ 정상',         cls: s.statusSafe,    heroCls: '',          numCls: s.heroNumSafe }
-  if (bac < 0.03)     return { label: '⚠️ 소량 검출',    cls: s.statusCaution, heroCls: s.heroWarn,  numCls: '' }
-  if (bac < 0.08)     return { label: '🚫 면허정지 수준', cls: s.statusWarn,    heroCls: s.heroWarn,  numCls: s.heroNumWarn }
-  if (bac < 0.2)      return { label: '❌ 면허취소 수준', cls: s.statusDanger,  heroCls: s.heroDanger, numCls: s.heroNumDanger }
+  if (bac < BAC_SUSPEND) return { label: '⚠️ 소량 검출',    cls: s.statusCaution, heroCls: s.heroWarn,  numCls: '' }
+  if (bac < BAC_REVOKE)  return { label: '🚫 면허정지 수준', cls: s.statusWarn,    heroCls: s.heroWarn,  numCls: s.heroNumWarn }
+  if (bac < BAC_AGGRAVATED) return { label: '❌ 면허취소 수준', cls: s.statusDanger,  heroCls: s.heroDanger, numCls: s.heroNumDanger }
   return { label: '🚨 가중처벌 수준 (0.2+)', cls: s.statusCrit, heroCls: s.heroDanger, numCls: s.heroNumDanger }
 }
 
@@ -164,8 +169,8 @@ export default function BloodAlcoholClient() {
   const currentBAC = Math.max(0, peakBAC - decayRate * elapsedFromEndH)
 
   // 기준 도달 시각 (음주 종료 시점부터 계산)
-  const suspendHoursFromEnd = peakBAC > 0.03 ? (peakBAC - 0.03) / decayRate : 0
-  const revokeHoursFromEnd  = peakBAC > 0.08 ? (peakBAC - 0.08) / decayRate : 0
+  const suspendHoursFromEnd = peakBAC > BAC_SUSPEND ? (peakBAC - BAC_SUSPEND) / decayRate : 0
+  const revokeHoursFromEnd  = peakBAC > BAC_REVOKE  ? (peakBAC - BAC_REVOKE) / decayRate : 0
   const zeroHoursFromEnd    = peakBAC > 0    ? peakBAC / decayRate : 0
 
   const suspendTimeMin = endMin + suspendHoursFromEnd * 60
@@ -197,8 +202,8 @@ export default function BloodAlcoholClient() {
   }
   const linePath = `M ${linePoints.join(' L ')}`
 
-  const y003 = yFromBAC(0.03)
-  const y008 = yFromBAC(0.08)
+  const y003 = yFromBAC(BAC_SUSPEND)
+  const y008 = yFromBAC(BAC_REVOKE)
   const nowX = xFromHour(Math.min(elapsedFromEndH, maxHours))
 
   // 표준잔 (알코올 8g)
@@ -483,7 +488,7 @@ export default function BloodAlcoholClient() {
                 <div className={`${s.thresholdName} ${s.thresholdNameSuspend}`}>🚫 0.03 미만 추정 시점</div>
               </div>
               <div className={s.thresholdRight}>
-                {peakBAC <= 0.03 ? (
+                {peakBAC <= BAC_SUSPEND ? (
                   <div className={`${s.thresholdTime} ${s.thresholdMet}`}>이미 해당 없음</div>
                 ) : (
                   <>
@@ -500,7 +505,7 @@ export default function BloodAlcoholClient() {
                 <div className={`${s.thresholdName} ${s.thresholdNameRevoke}`}>❌ 0.08 미만 추정 시점</div>
               </div>
               <div className={s.thresholdRight}>
-                {peakBAC <= 0.08 ? (
+                {peakBAC <= BAC_REVOKE ? (
                   <div className={`${s.thresholdTime} ${s.thresholdMet}`}>이미 해당 없음</div>
                 ) : (
                   <>
@@ -538,7 +543,7 @@ export default function BloodAlcoholClient() {
               </p>
             ) : (
               <div className={s.liveGrid}>
-                {peakBAC > 0.03 && (
+                {peakBAC > BAC_SUSPEND && (
                   <div className={`${s.liveBox} ${remainSuspendMs === 0 ? s.liveBoxDone : s.liveBoxWarn}`}>
                     <div className={s.liveLabel}>🚫 0.03 미만 추정까지</div>
                     <div className={s.liveTime}>
@@ -546,7 +551,7 @@ export default function BloodAlcoholClient() {
                     </div>
                   </div>
                 )}
-                {peakBAC > 0.08 && (
+                {peakBAC > BAC_REVOKE && (
                   <div className={`${s.liveBox} ${remainRevokeMs === 0 ? s.liveBoxDone : s.liveBoxDanger}`}>
                     <div className={s.liveLabel}>❌ 0.08 미만 추정까지</div>
                     <div className={s.liveTime}>
@@ -1073,10 +1078,10 @@ function CumulativeTab({ weightKg, sex, foodMultiplier, decayRate }: {
           <div className={s.card}>
             <span className={s.cardLabel}>BAC 누적 곡선</span>
             <svg viewBox={`0 0 ${W} ${H}`} style={{ width: '100%', height: 200, display: 'block', background: 'var(--bg3)', borderRadius: 8 }}>
-              {[0.03, 0.08].map(t => (
+              {[BAC_SUSPEND, BAC_REVOKE].map(t => (
                 <g key={t}>
-                  <line x1={P} x2={W - P} y1={ys(t)} y2={ys(t)} stroke={t === 0.08 ? '#DC2626' : '#EA580C'} strokeWidth="1.5" strokeDasharray="4 4" />
-                  <text x={W - P - 4} y={ys(t) - 4} fill={t === 0.08 ? '#DC2626' : '#EA580C'} fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{t === 0.08 ? '0.08 취소' : '0.03 정지'}</text>
+                  <line x1={P} x2={W - P} y1={ys(t)} y2={ys(t)} stroke={t === BAC_REVOKE ? '#DC2626' : '#EA580C'} strokeWidth="1.5" strokeDasharray="4 4" />
+                  <text x={W - P - 4} y={ys(t) - 4} fill={t === BAC_REVOKE ? '#DC2626' : '#EA580C'} fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{t === BAC_REVOKE ? '0.08 취소' : '0.03 정지'}</text>
                 </g>
               ))}
               {/* 자리별 영역 */}

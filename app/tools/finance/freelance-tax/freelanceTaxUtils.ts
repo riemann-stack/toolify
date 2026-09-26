@@ -4,6 +4,10 @@
    ────────────────────────────────────────────────────── */
 
 import { BRACKETS_2026 } from '@/lib/krIncomeTax'
+import {
+  EXPENSE_RATES, SIMPLE_EXCESS_THRESHOLD, HUMAN_SERVICE_SIMPLE_LIMIT, HUMAN_SERVICE_BOOK_THRESHOLD,
+  simpleExcessRate, type ExpenseRate,
+} from '@/lib/krExpenseRates'
 
 /* ─── 종합소득세 누진세율 (2026년 기준) — lib/krIncomeTax에서 파생 ─── */
 export interface TaxBracket {
@@ -27,35 +31,12 @@ export const PROGRESSIVE_BRACKETS: TaxBracket[] = BRACKETS_2026.map((b, i) => ({
   label: BRACKET_LABELS[i],
 }))
 
-/* ─── 업종별 경비율 (국세청 「귀속 경비율 고시」) ───
-   ※ 법정 수치는 lib 단일 소스가 원칙 — lib/krExpenseRates.ts가 생기기 전까지 임시로 여기 둔다(후속: lib 이전).
-   출처: 국세청 경비율 고시·홈택스 「기준(단순)경비율 조회」. 2024년 귀속 고시 기준(940100은 2023년 귀속 확인값).
+/* ─── 업종별 경비율 (국세청 「귀속 경비율 고시」) — 단일 소스 lib/krExpenseRates.ts ───
+   귀속연도별 단순·기준경비율 표, 초과율 산식(4,000만원 초과분), 인적용역 기준금액(3,600만·7,500만)은 lib에서 관리.
    매년 3월 새 귀속연도 고시가 나오므로 신고 전 홈택스 조회값을 우선한다. 같은 코드에는 반드시 같은 율이 붙도록
-   업종 프리셋(INDUSTRIES)은 코드만 들고 율은 이 표에서 조회한다. */
-export interface ExpenseRate {
-  code: string
-  name: string        // 국세청 업종명
-  simpleRate: number  // 단순경비율 일반율 %
-  baseRate: number    // 기준경비율 %
-}
-
-export const EXPENSE_RATES: Record<string, ExpenseRate> = {
-  '940100': { code: '940100', name: '저술가(작가·번역가 등)',     simpleRate: 58.7, baseRate: 11.2 },
-  '940903': { code: '940903', name: '학원강사·강사·과외교습자',   simpleRate: 61.7, baseRate: 14.9 },
-  '940306': { code: '940306', name: '1인미디어콘텐츠창작자',      simpleRate: 64.1, baseRate: 12.1 },
-  '940906': { code: '940906', name: '보험설계사',                 simpleRate: 77.6, baseRate: 26.5 },
-  '940909': { code: '940909', name: '기타자영업(기타 인적용역)',  simpleRate: 64.1, baseRate: 17.0 },
-  '940913': { code: '940913', name: '대리운전기사',               simpleRate: 73.7, baseRate: 25.3 },
-  '940918': { code: '940918', name: '퀵서비스배달원',             simpleRate: 79.4, baseRate: 15.3 },
-  '940926': { code: '940926', name: '소프트웨어 프리랜서',        simpleRate: 64.1, baseRate: 20.9 },
-}
-
-/** 인적용역(940xxx) 단순경비율 초과율 — 수입금액 4,000만원 초과분에 적용.
- *  초과율 = 100 − (100 − 일반율) × 1.4 (예: 58.7 → 42.2, 64.1 → 49.7) */
-export const SIMPLE_EXCESS_THRESHOLD = 40_000_000
-export function simpleExcessRate(simpleRate: number): number {
-  return Math.max(0, Math.round((100 - (100 - simpleRate) * 1.4) * 10) / 10)
-}
+   업종 프리셋(INDUSTRIES)은 코드만 들고 율은 lib 표(EXPENSE_RATES)에서 조회한다. */
+export { EXPENSE_RATES, SIMPLE_EXCESS_THRESHOLD, simpleExcessRate }
+export type { ExpenseRate }
 
 /* ─── 업종 프리셋 (표시용 직군 → 국세청 업종코드) ─── */
 export interface IndustryPreset {
@@ -73,9 +54,6 @@ export interface IndustryPreset {
   yearEndSettlement?: boolean
   desc: string
 }
-
-const HUMAN_SERVICE_SIMPLE_LIMIT = 36_000_000
-const HUMAN_SERVICE_BOOK_THRESHOLD = 75_000_000
 
 function preset(
   id: string, code: string, name: string, category: IndustryPreset['category'], desc: string,

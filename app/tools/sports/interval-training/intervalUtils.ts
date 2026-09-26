@@ -1,17 +1,15 @@
 // ─────────────────────────────────────────────────────────────
 // 인터벌 훈련 — VDOT 강도 페이스·대회 일정 계산
-// VDOT·페이스 공식은 race-predictor(Daniels/Gilbert) 공용 함수를 그대로 쓴다.
+// VDOT·페이스 공식(Daniels/Gilbert)과 강도 계수는 lib/running.ts 단일 소스를 그대로 쓴다.
 // ─────────────────────────────────────────────────────────────
-import { vdotFromRace, paceFromVdot, timeFromVdot } from '../race-predictor/racePredictorUtils'
+import { vdotFromRace, paceFromVdot, timeFromVdot, DANIELS_PCT, E_FAST_PCT, type DanielsZone } from '@/lib/running'
 
-export type Intensity = 'E' | 'M' | 'T' | 'I' | 'R'
+export type Intensity = DanielsZone
 
-// Daniels %VO2max 강도 계수 — buildup(INTENSITY_LABEL)·vo2max(trainingPaces)와 같은 값.
-// E는 59~74% 범위라 느린 끝(0.59)과 빠른 끝(0.74)을 따로 둔다.
-export const INTENSITY_PCT: Record<Intensity, number> = {
-  E: 0.59, M: 0.82, T: 0.88, I: 0.97, R: 1.06,
-}
-export const E_FAST_PCT = 0.74
+// Daniels %VO2max 강도 계수 — buildup(INTENSITY_LABEL)·vo2max(trainingPaces)·race-predictor와 같은 lib 값.
+// E는 59~74% 범위라 느린 끝(DANIELS_PCT.E)과 빠른 끝(E_FAST_PCT)을 따로 둔다.
+export const INTENSITY_PCT: Readonly<Record<Intensity, number>> = DANIELS_PCT
+export { E_FAST_PCT }
 
 // 계산을 보여 줄 VDOT 범위 — 20 미만(5K 약 43분 초과)·85 초과(세계기록 수준 초과)는
 // 입력 오류이거나 공식 적용 범위 밖이라 결과 대신 경고를 띄운다.

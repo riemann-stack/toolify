@@ -9,7 +9,7 @@ import {
   alcoholGrams, calcPeakBAC, calcCumulativeBAC, fmtTimeMin, STANDARD_DRINK_G,
   DRUNK_DRIVING_PENALTIES, DRUNK_DRIVING_PENALTY_BY_ID, DRUNK_DRIVING_MAX_PENALTY, DRUNK_DRIVING_LAW_SINCE,
   DRUNK_DRIVING_REPEAT_PENALTIES, DRUNK_DRIVING_REPEAT_WINDOW_YEARS, LICENSE_DISQUALIFICATION_YEARS, BICYCLE_PM_FINES,
-  fmtPenaltyLong, fmtPenaltyShort, fmtManwonWon, fmtLawDate,
+  fmtPenaltyLong, fmtPenaltyShort, fmtManwonWon, fmtLawDate, BAC_THRESHOLDS,
 } from './bacUtils'
 
 export const metadata = buildMetadata({
@@ -27,9 +27,13 @@ export const metadata = buildMetadata({
 /* ── 본문 예시 수치: 도구와 같은 bacUtils로 빌드 시점에 계산 (70kg 남성·보통 식사·분해 0.015/h) ── */
 const EX_WEIGHT = 70
 const EX_DECAY = 0.015
+/* 법정 BAC 기준 (lib/krDrunkDriving.ts) */
+const BAC_SUSPEND = BAC_THRESHOLDS.GENERAL_SUSPEND   // 0.03
+const BAC_REVOKE = BAC_THRESHOLDS.REVOKE             // 0.08
+const BAC_AGGRAVATED = BAC_THRESHOLDS.AGGRAVATED     // 0.2
 const exPeak = (grams: number) => calcPeakBAC({ weightKg: EX_WEIGHT, sex: 'male', alcoholGrams: grams, foodMultiplier: 1 })
 const bacColor = (bac: number) =>
-  bac < 0.03 ? '#059669' : bac < 0.05 ? '#A16207' : bac < 0.08 ? '#EA580C' : bac < 0.15 ? '#DC2626' : '#B91C1C'
+  bac < BAC_SUSPEND ? '#059669' : bac < 0.05 ? '#A16207' : bac < BAC_REVOKE ? '#EA580C' : bac < 0.15 ? '#DC2626' : '#B91C1C'
 const BAC_EXAMPLES = [
   { label: '소주 1잔 (50ml)', ml: 50, abv: 16 },
   { label: '소주 반병 (180ml)', ml: 180, abv: 16 },
@@ -39,7 +43,7 @@ const BAC_EXAMPLES = [
 ].map(e => {
   const g = alcoholGrams(e.ml, e.abv)
   const peak = exPeak(g)
-  const hrs = peak > 0.03 ? (peak - 0.03) / EX_DECAY : 0
+  const hrs = peak > BAC_SUSPEND ? (peak - BAC_SUSPEND) / EX_DECAY : 0
   return [e.label, `약 ${g.toFixed(1)}g`, `약 ${peak.toFixed(3)}%`, hrs > 0 ? `약 ${hrs.toFixed(1)}시간` : '즉시 이하', bacColor(peak)]
 })
 
@@ -56,9 +60,9 @@ const CUMUL = calcCumulativeBAC({
 const CUMUL_TOTAL_G = Math.round(CUMUL.totalAlcoholGrams)
 const CUMUL_STD = (CUMUL.totalAlcoholGrams / STANDARD_DRINK_G).toFixed(1)
 const CUMUL_WHO_RATIO = (CUMUL.totalAlcoholGrams / 60).toFixed(1)
-const CUMUL_PEAK_LEVEL = CUMUL.peakBAC >= 0.2 ? '0.2% 이상 가중처벌 구간'
+const CUMUL_PEAK_LEVEL = CUMUL.peakBAC >= BAC_AGGRAVATED ? '0.2% 이상 가중처벌 구간'
   : CUMUL.peakBAC >= 0.18 ? '면허취소 구간, 0.2% 가중처벌 기준에 근접'
-  : CUMUL.peakBAC >= 0.08 ? '면허취소·형사처벌 구간' : '면허정지·형사처벌 구간'
+  : CUMUL.peakBAC >= BAC_REVOKE ? '면허취소·형사처벌 구간' : '면허정지·형사처벌 구간'
 
 // 다음날 아침 예시 — 소주 1병·2병, 음주 종료 자정(00:00)
 const EX1_GRAMS = alcoholGrams(360, 16)
@@ -67,7 +71,7 @@ const EX2_GRAMS = alcoholGrams(720, 16)
 const EX2 = exPeak(EX2_GRAMS)
 const EX2_AT8 = Math.max(0, EX2 - 8 * EX_DECAY)
 
-// 법정 수치 문구 — 모두 bacUtils 상수에서 생성 (단일 소스)
+// 법정 수치 문구 — 모두 lib/krDrunkDriving.ts 상수(bacUtils 재수출)에서 생성 (단일 소스)
 const PEN = DRUNK_DRIVING_PENALTY_BY_ID
 const DQ = LICENSE_DISQUALIFICATION_YEARS
 const BIKE = BICYCLE_PM_FINES.bicycle
@@ -82,7 +86,7 @@ const FAQ_LD = [
               { q: '음주 후 잠을 자면 더 빨리 깨나요?', a: '수면 자체가 알코올 분해를 빠르게 하지는 않습니다. 시간당 0.015 g/dL 감소율은 수면 중에도 동일하게 적용됩니다. 다만 수면 후에도 BAC가 여전히 높을 수 있으며, 아침에 운전하기 전 반드시 충분한 시간이 경과했는지 확인해야 합니다. 전날 과음한 경우 숙취 운전으로 단속되는 사례가 매우 많습니다.' },
               { q: "'숙취'가 없으면 술이 다 깬 건가요?", a: '아닙니다. 숙취 증상(두통, 구역질, 피로감)과 BAC는 별개입니다. 숙취가 없어도 혈중알코올이 단속 기준치 이상 남아있을 수 있습니다. 특히 대량 음주 후 다음 날 아침에는 여전히 단속 기준(0.03%)을 초과하는 경우가 많으므로, 반드시 시간 경과를 확인하고 불확실하면 대중교통을 이용하세요.' },
               { q: '음주 측정 거부 시 처벌은?', a: `음주 측정 거부는 그 자체로 형사처벌 대상입니다(도로교통법 제148조의2). 면허가 취소되고(결격기간 ${DQ.firstRevoke}년, 재위반·사고 시 더 길어짐) ${fmtPenaltyLong(PEN.refusal)}이 부과될 수 있습니다. 처벌 수위가 가장 무거운 0.2% 이상 음주(${fmtPenaltyShort(PEN.aggravated)})와 형량 범위가 상당 부분 겹칠 만큼 무겁지만 완전히 동일한 기준은 아닙니다. "측정하지 않으면 불리하지 않다"는 생각은 잘못된 통념입니다.` },
-              { q: '어제 12시까지 술 마셨는데 오늘 아침 운전 위험이 남아있나요?', a: `음주량과 신체 조건에 따라 다릅니다. 70kg 남성 + 소주 1병(약 ${Math.round(EX1_GRAMS)}g), 음주 종료 자정 가정: 최고 BAC 약 ${EX1.toFixed(3)} → 면허정지 기준(0.03) 미만 추정 ${fmtTimeMin((EX1 - 0.03) / EX_DECAY * 60)}, 완전 분해 추정 ${fmtTimeMin(EX1 / EX_DECAY * 60)}로 8시엔 거의 0입니다. 그러나 소주 2병(약 ${Math.round(EX2_GRAMS)}g)이면 8시에도 약 ${EX2_AT8.toFixed(2)}(면허취소 0.08에 근접), ALDH2 결손·공복 음주면 더 오래 남습니다. <strong>BAC가 낮게 추정되더라도, 그리고 계산값과 관계없이 음주 후 운전은 금지</strong>입니다 — 불확실하면 택시·지하철·대리운전. 본 도구의 「🌅 다음날 아침」 탭은 위험을 참고용으로 추정할 뿐입니다.` },
+              { q: '어제 12시까지 술 마셨는데 오늘 아침 운전 위험이 남아있나요?', a: `음주량과 신체 조건에 따라 다릅니다. 70kg 남성 + 소주 1병(약 ${Math.round(EX1_GRAMS)}g), 음주 종료 자정 가정: 최고 BAC 약 ${EX1.toFixed(3)} → 면허정지 기준(0.03) 미만 추정 ${fmtTimeMin((EX1 - BAC_SUSPEND) / EX_DECAY * 60)}, 완전 분해 추정 ${fmtTimeMin(EX1 / EX_DECAY * 60)}로 8시엔 거의 0입니다. 그러나 소주 2병(약 ${Math.round(EX2_GRAMS)}g)이면 8시에도 약 ${EX2_AT8.toFixed(2)}(면허취소 0.08에 근접), ALDH2 결손·공복 음주면 더 오래 남습니다. <strong>BAC가 낮게 추정되더라도, 그리고 계산값과 관계없이 음주 후 운전은 금지</strong>입니다 — 불확실하면 택시·지하철·대리운전. 본 도구의 「🌅 다음날 아침」 탭은 위험을 참고용으로 추정할 뿐입니다.` },
               { q: '1차·2차·3차 여러 자리 마셨는데 BAC 어떻게 계산하나요?', a: `본 도구의 「🔢 여러 자리 누적」 탭에서 자리별 시작·종료 시각과 음주 종류를 입력하면 시간 흐름에 따라 누적 BAC를 추정하고 곡선으로 보여줍니다. 예를 들어 1차 소주 1병과 맥주 500cc, 2차 맥주 500cc 2잔, 3차 양주 2샷을 마시면 알코올 약 ${CUMUL_TOTAL_G}g(표준잔 약 ${CUMUL_STD}잔)으로, WHO 과음 기준(한 번에 60g)의 약 ${CUMUL_WHO_RATIO}배입니다. 본인뿐 아니라 다른 사람에게도 위험합니다.` },
               { q: '자전거나 전동킥보드는 음주운전 단속 안 되나요?', a: `처벌 대상입니다. 자전거는 ${fmtLawDate(BIKE.since)}부터 음주운전(현재 BAC 0.03% 이상) 시 범칙금 ${fmtManwonWon(BIKE.fine)}(측정 불응 ${fmtManwonWon(BIKE.refusal)})이 부과됩니다. 전동킥보드 같은 개인형 이동장치는 ${fmtLawDate(PM.since)}부터 범칙금 ${fmtManwonWon(PM.fine)}(측정 불응 ${fmtManwonWon(PM.refusal)})이 부과되고, 운전면허 정지·취소 처분도 함께 받을 수 있습니다. 사고가 나면 별도로 처벌되며, 도심에서는 보행자 사고 위험도 큽니다.` },
               { q: '술이 빨리 깨는 방법이 있나요?', a: '의학적으로 「빨리 깨는 방법」 존재 X. 알코올 분해는 간이 시간당 약 0.015 g/dL로 일정. 다음은 효과 X 또는 미미: 커피·카페인 (각성만 ↑, BAC 그대로) / 차가운 물·샤워 (정신 차림만) / 운동 (효과 미미·심혈관 부담) / 콩나물국·해장국 (위장 보호만). 유일한 방법은 시간입니다. 본 도구의 시간별 BAC 곡선은 대략적인 추정치일 뿐입니다.' },
@@ -232,8 +236,8 @@ export default function BloodAlcoholPage() {
             <p style={{ fontSize: 13, color: '#EA580C', fontWeight: 700, marginBottom: 10 }}>📌 예시: 70kg 남성, 식후, 소주 2병 (약 {Math.round(EX2_GRAMS)}g), 음주 종료 자정(00:00)</p>
             <ul style={{ paddingLeft: 18, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
               <li>최고 BAC: <strong style={{ color: '#DC2626' }}>{EX2.toFixed(3)}</strong> (면허취소 수준)</li>
-              <li>면허취소 기준(0.08) 미만 추정: 익일 <strong>{fmtTimeMin((EX2 - 0.08) / EX_DECAY * 60)}</strong></li>
-              <li>면허정지 기준(0.03) 미만 추정: 익일 <strong>{fmtTimeMin((EX2 - 0.03) / EX_DECAY * 60)}</strong></li>
+              <li>면허취소 기준(0.08) 미만 추정: 익일 <strong>{fmtTimeMin((EX2 - BAC_REVOKE) / EX_DECAY * 60)}</strong></li>
+              <li>면허정지 기준(0.03) 미만 추정: 익일 <strong>{fmtTimeMin((EX2 - BAC_SUSPEND) / EX_DECAY * 60)}</strong></li>
               <li>알코올 잔존 추정 종료: 익일 <strong>{fmtTimeMin(EX2 / EX_DECAY * 60)}</strong></li>
               <li>익일 08:00 BAC: <strong style={{ color: '#DC2626' }}>약 {EX2_AT8.toFixed(3)}</strong> (면허정지 기준 0.03의 2배 이상 — 출근길 단속 시 면허정지·형사처벌 수준)</li>
             </ul>
