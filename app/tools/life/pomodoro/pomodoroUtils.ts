@@ -5,9 +5,9 @@
 export type Phase = 'focus' | 'short' | 'long'
 
 export const PHASES: Record<Phase, { label: string; color: string; defaultMin: number }> = {
-  focus: { label: '집중',     color: '#0EA5E9', defaultMin: 25 },
-  short: { label: '짧은 휴식', color: '#0891B2', defaultMin: 5  },
-  long:  { label: '긴 휴식',  color: '#EA580C', defaultMin: 15 },
+  focus: { label: '집중',     color: 'var(--sky-500)', defaultMin: 25 },
+  short: { label: '짧은 휴식', color: 'var(--cyan-600)', defaultMin: 5  },
+  long:  { label: '긴 휴식',  color: 'var(--orange-600)', defaultMin: 15 },
 }
 
 // ─────────────────────────────────────────────────────────────
@@ -99,13 +99,22 @@ export const SOUND_THEMES: SoundTheme[] = [
   { id: 'silent',   name: '🔇 무음',    desc: '소리 끄기 (브라우저 알림만)', freq: 0, type: 'sine', duration: 0, pulses: 0 },
 ]
 
+/* AudioContext는 모듈 싱글턴으로 재사용 — 알림음마다 새로 만들면 닫히지 않은 컨텍스트가 쌓인다 */
+let sharedCtx: AudioContext | null = null
+function getAudioContext(): AudioContext | null {
+  const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }
+  const Ctx = w.AudioContext || w.webkitAudioContext
+  if (!Ctx) return null
+  if (!sharedCtx || sharedCtx.state === 'closed') sharedCtx = new Ctx()
+  if (sharedCtx.state === 'suspended') sharedCtx.resume().catch(() => {})
+  return sharedCtx
+}
+
 export function playSound(theme: SoundTheme) {
   if (theme.id === 'silent' || theme.duration === 0) return
   try {
-    const w = window as unknown as { AudioContext?: typeof AudioContext; webkitAudioContext?: typeof AudioContext }
-    const Ctx = w.AudioContext || w.webkitAudioContext
-    if (!Ctx) return
-    const ctx = new Ctx()
+    const ctx = getAudioContext()
+    if (!ctx) return
     const pulses = Math.max(1, theme.pulses ?? 1)
     for (let i = 0; i < pulses; i++) {
       const start = ctx.currentTime + i * (theme.duration + 0.12)
@@ -125,14 +134,14 @@ export function playSound(theme: SoundTheme) {
 // 백색소음·앰비언트 (가이드용 추천 목록)
 // ─────────────────────────────────────────────────────────────
 export const AMBIENT_SOUNDS = [
-  { id: 'rain',    emoji: '🌧️', name: '빗소리',         desc: '집중·수면에 가장 효과적인 핑크 노이즈 계열' },
-  { id: 'cafe',    emoji: '☕', name: '카페 소음',       desc: '약 70dB 백색소음. 창의적 작업에 도움' },
-  { id: 'forest',  emoji: '🌲', name: '숲·새소리',       desc: '자연음은 코르티솔(스트레스 호르몬) 감소' },
+  { id: 'rain',    emoji: '🌧️', name: '빗소리',         desc: '핑크 노이즈 계열의 고른 소리. 독서·수면용으로 인기' },
+  { id: 'cafe',    emoji: '☕', name: '카페 소음',       desc: '약 70dB 주변 소음. 창의적 과제에 도움된다는 연구 보고' },
+  { id: 'forest',  emoji: '🌲', name: '숲·새소리',       desc: '자연음. 스트레스 후 회복을 돕는다는 연구 보고' },
   { id: 'wave',    emoji: '🌊', name: '파도소리',       desc: '리듬감 있는 저주파, 명상·휴식에 적합' },
   { id: 'fire',    emoji: '🔥', name: '장작 타는 소리', desc: '겨울철 따뜻한 분위기. ASMR 효과' },
-  { id: 'fan',     emoji: '💨', name: '선풍기·환풍기',   desc: '순수 백색소음. 외부 소음 차단에 강함' },
+  { id: 'fan',     emoji: '💨', name: '선풍기·환풍기',   desc: '고른 광대역 소음. 주변 소리를 가리는 데 유용' },
   { id: 'lofi',    emoji: '🎧', name: 'Lo-Fi 비트',     desc: '가사 없는 부드러운 비트. 학습·코딩에 인기' },
-  { id: 'silence', emoji: '🤫', name: '완전한 정적',     desc: '고도 집중 시 가장 효과적. 다만 산만함 ↑ 가능' },
+  { id: 'silence', emoji: '🤫', name: '완전한 정적',     desc: '암기·고난도 과제에 무난. 작은 소리에 더 민감해질 수 있음' },
 ]
 
 // ─────────────────────────────────────────────────────────────
@@ -155,15 +164,27 @@ export function newId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8)
 }
 
+function isSession(v: unknown): v is PomodoroSession {
+  if (!v || typeof v !== 'object') return false
+  const o = v as Record<string, unknown>
+  return typeof o.id === 'string'
+    && typeof o.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(o.date)
+    && typeof o.ts === 'number' && Number.isFinite(o.ts)
+    && typeof o.task === 'string'
+    && (o.phase === 'focus' || o.phase === 'short' || o.phase === 'long')
+    && typeof o.durationMin === 'number' && Number.isFinite(o.durationMin)
+    && (o.preset === undefined || typeof o.preset === 'string')
+}
+
 export function loadSessions(): PomodoroSession[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw) as PomodoroSession[]
+    const arr: unknown = JSON.parse(raw)
     if (!Array.isArray(arr)) return []
     const cutoff = Date.now() - KEEP_DAYS * 86400_000
-    return arr.filter(s => s.ts >= cutoff)
+    return arr.filter(isSession).filter(s => s.ts >= cutoff)
   } catch { return [] }
 }
 

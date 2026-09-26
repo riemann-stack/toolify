@@ -19,25 +19,31 @@ export function calcSoundSpeed(tempC: number): number {
        지구 둘레 40,075km가 "40.08 백만 km"로 1000배 과장됐다 — km 콤마 표기로 통일. */
 export function fmtDist(m: number): string {
   if (!Number.isFinite(m)) return '-'
-  if (Math.abs(m) >= 1_000_000) return `${Math.round(m / 1000).toLocaleString()} km`
-  if (Math.abs(m) >= 1000) return `${(m / 1000).toFixed(2)} km`
+  const a = Math.abs(m)
+  // 반올림 결과가 단위 경계에 닿으면 큰 단위로 — 999.99m가 '1000.0 m'로 나오지 않게
+  if (a >= 999_995) return `${Math.round(m / 1000).toLocaleString()} km`
+  if (Number(a.toFixed(1)) >= 1000) return `${(m / 1000).toFixed(2)} km`
   return `${m.toFixed(1)} m`
 }
 
+/** 시간 표기. 반올림한 값이 다음 단위 경계(1000·60)에 닿으면 큰 단위로 넘긴다.
+    ⚠️ 예전엔 초를 따로 반올림해 119.6초가 '1분 60초', 3599.6초가 '59분 60초'로 나왔다. */
 export function fmtTime(s: number): string {
   if (!Number.isFinite(s)) return '-'
-  if (s < 0.000001) return `${(s * 1e9).toFixed(2)} ns`
-  if (s < 0.001) return `${(s * 1_000_000).toFixed(2)} µs`
-  if (s < 1)     return `${(s * 1000).toFixed(2)} ms`
-  if (s < 60)    return `${s.toFixed(2)}초`
-  if (s < 3600)  return `${Math.floor(s / 60)}분 ${Math.round(s % 60)}초`
-  if (s < 86400) {
-    const h = Math.floor(s / 3600)
-    const m = Math.floor((s % 3600) / 60)
+  const r2 = (v: number) => Number(v.toFixed(2))
+  if (s < 0.000001 && r2(s * 1e9) < 1000) return `${(s * 1e9).toFixed(2)} ns`
+  if (s < 0.001 && r2(s * 1_000_000) < 1000) return `${(s * 1_000_000).toFixed(2)} µs`
+  if (s < 1 && r2(s * 1000) < 1000) return `${(s * 1000).toFixed(2)} ms`
+  if (r2(s) < 60) return `${s.toFixed(2)}초`
+  const total = Math.round(s)   // 초 단위로 먼저 반올림한 뒤 분·시·일로 나눈다
+  if (total < 3600) return `${Math.floor(total / 60)}분 ${total % 60}초`
+  if (total < 86400) {
+    const h = Math.floor(total / 3600)
+    const m = Math.floor((total % 3600) / 60)
     return `${h}시간 ${m}분`
   }
-  const d = Math.floor(s / 86400)
-  const h = Math.floor((s % 86400) / 3600)
+  const d = Math.floor(total / 86400)
+  const h = Math.floor((total % 86400) / 3600)
   return `${d}일 ${h}시간`
 }
 
@@ -84,7 +90,8 @@ export const VEHICLE_SPEEDS = [
   { name: '🚄 KTX',           kmh: 305,  isSuperSonic: false, officialMach: null },
   { name: '✈️ 여객기 (순항)',  kmh: 900,  isSuperSonic: false, officialMach: 0.85 },
   { name: '🛩️ F-16 (최고)',    kmh: 2120, isSuperSonic: true, officialMach: 2.0 },
-  { name: '🛩️ F-15 (최고)',    kmh: 3000, isSuperSonic: true, officialMach: 2.5 },
+  /* ⚠️ 예전 3,000km/h는 옆 열 '공인 마하 2.5'(고고도 295m/s 기준 ≈2,655km/h)와 맞지 않았다 */
+  { name: '🛩️ F-15 (최고)',    kmh: 2655, isSuperSonic: true, officialMach: 2.5 },
   { name: '🛸 SR-71 (최고)',   kmh: 3530, isSuperSonic: true, officialMach: 3.3 },
 ]
 /** 마하 표에서 음속 행을 끼울 위치(여객기 다음) */
@@ -142,6 +149,11 @@ export const ABSORPTION = {
 export type WallMat = keyof typeof ABSORPTION.wall
 export type FloorMat = keyof typeof ABSORPTION.floor
 export type CeilMat = keyof typeof ABSORPTION.ceiling
+
+/** 재질 한국어 이름 — 복사 문구에 영문 키(gypsum·panel)가 그대로 나가지 않게 */
+export const WALL_LABEL: Record<WallMat, string> = { concrete: '콘크리트', brick: '벽돌', wood: '나무', gypsum: '석고', panel: '흡음 패널' }
+export const FLOOR_LABEL: Record<FloorMat, string> = { concrete: '콘크리트', tile: '타일', wood: '원목/마루', carpet: '카펫' }
+export const CEIL_LABEL: Record<CeilMat, string> = { concrete: '콘크리트', gypsum: '석고', panel: '흡음 패널' }
 
 /** Sabine: RT60 = 0.161·V/A (미터법). 공기 흡음·가구·청중 미반영 간이 추정.
     음수·비유한 치수는 0으로 정리한다(클라이언트 draft가 막아도 순수 함수 자체가 안전해야). */

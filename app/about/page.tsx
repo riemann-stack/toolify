@@ -1,218 +1,149 @@
+/* app/about/page.tsx (server) — 운영자 소개 (adsense P1-3 · critique §3-5 · 스펙 §1.2 '익명성')
+   리만(필명)이 1인칭으로 쓰는 운영자 페이지. 규칙:
+   ─ 저장소에 이미 공개된 사실만 쓴다: 필명 리만·1인 운영, 도구 설명에 넣었던 운영자 경험(3356009 — GV70 공기압·연비·오일 교환,
+     밀양·고양 하프 기록, 집필 중인 만세력 책 323,364자), 검증 방식, 정정 기록(/updates), 광고로 운영비 충당, 수집 정보.
+   ─ 도구 설명에 있는 1인칭 노트: tire-pressure(GV70 공기압)·fuel-economy(FAQ 연비)·car-cost(엔진오일)·race-predictor(하프)·charcount(원고).
+     도구 쪽에서 문장이 빠지면 아래 '설명에도 적어 두었습니다' 링크를 같이 고칠 것.
+   ─ 광고: 현재 Google 자동 광고뿐(수동 슬롯·'광고' 라벨 없음) → 라벨·자리 약속을 쓰지 않는다(/ads-policy와 같은 사실).
+   ─ 자격·직장·학위·지어낸 경험 금지. 개인정보 보호책임자의 실명은 개인정보처리방침(법정 기재)에만 둔다.
+   ─ 운영자 표기는 SITE_OPERATOR(푸터·JSON-LD·바이라인과 같은 값). */
 import Link from 'next/link'
-import { categories, totalTools } from '@/lib/tools'
 import { buildMetadata } from '@/lib/seo'
+import { categories, totalTools } from '@/lib/tools'
+import { SITE_OPERATOR } from '@/components/SiteJsonLd'
 import CatIcon from '@/components/CatIcon'
+import TrustPage, { AuthorMeta, OperatorCard, dot } from '../_trust/TrustPage'
+import s from '../_trust/trust.module.css'
 
 export const metadata = buildMetadata({
   path: '/about',
-  title: 'Youtil 소개 | 자주 쓰는 계산기와 무료 온라인 도구 모음',
-  description: 'Youtil은 연봉 계산기, BMI, 날짜 계산, 텍스트 도구 등 일상과 업무 속 번거로운 계산을 가장 빠르고 정확하게 해결해 드리는 무료 서비스입니다.',
+  title: '소개 — Youtil을 혼자 만드는 리만입니다',
+  description: 'Youtil은 필명 리만이 혼자 만들고 운영하는 생활 계산기 사이트입니다. 계산기를 만들고 검산하는 방법, 틀린 것을 고치는 방법, 운영비(광고)와 수집하지 않는 정보를 운영자가 직접 설명합니다.',
 })
+
+/** 이 문서를 마지막으로 고친 날 */
+const UPDATED = '2026-09-26'
+
+const TOC = [
+  { id: 'why', label: 'Youtil은 무엇인가요' },
+  { id: 'me', label: '직접 겪어 본 것들' },
+  { id: 'method', label: '계산기를 만들고 확인하는 방법' },
+  { id: 'fix', label: '틀린 것을 고치는 방법' },
+  { id: 'money', label: '운영비와 광고' },
+  { id: 'data', label: '모으는 정보, 모으지 않는 정보' },
+  { id: 'tools', label: '분야별 도구' },
+]
 
 export default function AboutPage() {
   return (
-    <div style={{ background: 'var(--paper)' }}>
-    <div style={{ maxWidth: '720px', margin: '0 auto', padding: '60px 24px 80px' }}>
+    <TrustPage
+      path="/about"
+      eyebrow="소개"
+      icon="user"
+      title="Youtil을 혼자 만드는 리만입니다"
+      lead={<>Youtil은 제가 <strong>혼자 기획하고, 코드를 쓰고, 자료를 확인하고, 문의에 답하는</strong> 1인 사이트입니다. 편집팀이나 외부 필진은 없습니다. 이 페이지에는 제가 무엇을 알고 무엇을 모르는지, 계산기를 어떻게 만들고 고치는지 적었습니다.</>}
+      meta={[
+        <AuthorMeta key="a" />,
+        <>최종 업데이트 <time dateTime={UPDATED}>{dot(UPDATED)}</time></>,
+      ]}
+      toc={TOC}
+    >
+      <OperatorCard sub={<>필명을 쓰는 1인 운영자 · 2026년 4월 첫 배포 · 문의 <a href={`mailto:${SITE_OPERATOR.email}`}>{SITE_OPERATOR.email}</a></>} />
 
-      {/* ── 1. 도입부 ── */}
-      <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '12px' }}>
-        About Youtil
+      <h2 id="why">Youtil은 무엇인가요</h2>
+      <p>
+        Youtil(Your Utility)은 월급 실수령액, 대출 이자, 만 나이, 평수처럼 생활하면서 자주 마주치는 계산을 한곳에서 해 볼 수 있게 만든 사이트입니다.
+        지금은 {categories.length}개 분야에 {totalTools}개 도구가 있고, 로그인이나 설치 없이 브라우저에서 바로 계산합니다.
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 44px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '20px', lineHeight: 1.15 }}>
-        복잡한 계산은 Youtil에게,<br />
-        <span style={{ color: 'var(--paper-ink-soft)' }}>당신의 시간에 집중하세요.</span>
-      </h1>
-      <p style={{ fontSize: '15px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '12px' }}>
-        <strong style={{ color: 'var(--paper-ink)' }}>Youtil</strong>은 <strong style={{ color: 'var(--paper-ink)' }}>「Your Utility」</strong>의 약자로, 일상과 업무 속에서 마주하는 번거로운 계산들을 가장 빠르고 정확하게 해결해 드리기 위해 탄생했습니다.
-      </p>
-      <p style={{ fontSize: '15px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '48px' }}>
-        수많은 정보 속에서 믿을 수 있는 수치를 찾는 수고를 덜어드리는 것이 우리의 목표입니다. 단순한 도구 모음을 넘어, <strong style={{ color: 'var(--paper-ink)' }}>정확성과 편의성</strong>을 최우선으로 설계된 유틸리티 서비스입니다.
+      <p>
+        제가 가장 신경 쓰는 것은 숫자 옆에 <strong>근거</strong>를 두는 일입니다. 세율이나 보험료율처럼 법으로 정해진 숫자에는 어느 시점의 어떤 자료를 썼는지 적고,
+        그 자료가 바뀌면 계산기도 바꿉니다. 결과는 어디까지나 참고용 추정치이며, 세무·의료·법률 판단을 대신하지 않습니다(<Link href="/disclaimer">면책조항</Link>).
       </p>
 
-      {/* ── 2. 3가지 약속 ── */}
-      <section style={{ marginBottom: '56px' }}>
-        <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
-          Youtil만의 3가지 약속
-        </h2>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-          {[
-            {
-              title: '무설치·무로그인',
-              desc: '어떠한 가입 절차나 설치 없이 웹브라우저만 있으면 어디서든 즉시 실행됩니다. 사용자의 개인정보를 요구하지 않아 안전합니다.',
-              color: 'color-mix(in srgb, var(--cat-dev) 70%, var(--paper-ink))',
-            },
-            {
-              title: '지속 가능한 무료 서비스',
-              desc: 'Youtil의 모든 도구는 누구나 제한 없이 무료로 이용할 수 있습니다. 쾌적한 서비스 유지를 위해 최소한의 광고로 운영됩니다.',
-              color: 'color-mix(in srgb, var(--cat-health) 70%, var(--paper-ink))',
-            },
-            {
-              title: '데이터의 정확성',
-              desc: '최신 법령(만 나이 통일법, 2026년 4대보험 요율 등)과 신뢰할 수 있는 수식을 바탕으로 정밀한 계산 결과를 제공합니다.',
-              color: 'color-mix(in srgb, var(--cat-life) 70%, var(--paper-ink))',
-            },
-          ].map((item) => (
-            <div key={item.title} style={{
-              background: 'var(--paper-card)',
-              border: '1px solid var(--paper-line)',
-              borderRadius: '14px',
-              padding: '20px 22px',
-            }}>
-              <div>
-                <p style={{ fontSize: '15px', fontWeight: 700, color: item.color, marginBottom: '6px', fontFamily: 'Noto Sans KR, sans-serif' }}>
-                  {item.title}
-                </p>
-                <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.8 }}>
-                  {item.desc}
-                </p>
-              </div>
-            </div>
-          ))}
-        </div>
-      </section>
+      <h2 id="me">직접 겪어 본 것들</h2>
+      <p>
+        세금·보험·건강처럼 전문 분야의 숫자는 제 판단 대신 공식 자료를 따릅니다.
+        다만 제가 실제로 해 본 일은 이렇습니다.
+      </p>
+      <ul>
+        <li>
+          <strong>자동차</strong> — GV70(18인치 휠)을 탑니다. 도어 스티커 권장 공기압은 앞 33 / 뒤 36psi이고, 한참 달린 뒤 주유소에서 재면 타이어가 데워져
+          4~5psi쯤 높게 나옵니다. 그래서 공기압은 아침 첫 주행 전에 재라고 권합니다. 연비는 보통 카탈로그 복합연비보다 5%쯤 낮게 나오는데,
+          가장 크게 깎아 먹는 건 시내 정체였고 추운 날엔 더 떨어졌습니다. 엔진오일은 신차 무상 쿠폰 덕분에 5~6천 km 또는 6개월 중 먼저 오는 쪽에 갈고 있습니다(매뉴얼 기준은 1만 km).
+          공기압·연비·엔진오일 이야기는 각각 <Link href="/tools/unit/tire-pressure">타이어 계산기</Link>, <Link href="/tools/unit/fuel-economy">연비 변환기</Link>,
+          <Link href="/tools/finance/car-cost">자동차 유지비 계산기</Link> 설명에도 적어 두었습니다.
+        </li>
+        <li>
+          <strong>달리기</strong> — 하프마라톤을 뜁니다. 2026년 2월 밀양 하프(기온 20도 안팎, 오르막이 많은 코스)는 1시간 51분대, 2주 뒤 3월 고양 하프(0~3도, 평지)는 1시간 44분대였습니다.
+          2주 사이에 실력이 7분 늘었을 리는 없으니, 차이는 대부분 날씨와 코스 몫이었습니다. <Link href="/tools/sports/race-predictor">마라톤 기록 예측기</Link>에
+          &lsquo;예측값은 선선한 날씨·평탄한 코스 기준에 가깝다&rsquo;고 적은 이유입니다.
+        </li>
+        <li>
+          <strong>책 원고</strong> — 만세력(음력·간지 달력) 책을 쓰고 있습니다. 원고를 <Link href="/tools/art/charcount">글자 수 세기</Link>로 세어 보니 323,364자였고,
+          한 쪽에 1,000자쯤 들어간다고 보면 약 320쪽 분량입니다. 음력과 간지는 이 책의 주제이기도 합니다.
+          사이트의 <Link href="/tools/date/lunar">음력 변환기</Link>는 2026년 7월에 음력 표를 한국천문연구원 기준 데이터로 통째로 바꿨는데,
+          그 전에는 중국 역법 계열 표를 쓰고 있어 2027년 설날이 하루 틀리게 나왔습니다.
+        </li>
+      </ul>
+      <p>
+        반대로 제가 직접 해 보지 않은 분야(예: 제과·제빵)에는 경험담을 넣지 않고, 공식 자료와 널리 쓰이는 기준만 정리합니다.
+        경험을 지어내는 일은 하지 않습니다.
+      </p>
 
-      {/* ── 만든 사람 ── */}
-      <section style={{ marginBottom: '56px' }}>
-        <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
-          만든 사람
-        </h2>
-        <div style={{ background: 'var(--paper-card)', border: '1px solid var(--paper-line)', borderRadius: '14px', padding: '24px' }}>
-          <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '16px' }}>
-            Youtil은 <strong style={{ color: 'var(--paper-ink)' }}>리만</strong>이 혼자 만들고 운영하는 1인 무료 웹서비스입니다.
-            도구 제작부터 데이터 검증, 문의 응답까지 직접 담당합니다.
-          </p>
-          <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '12px' }}>
-            모든 도구는 같은 절차로 만들어집니다.
-          </p>
-          <ol style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, paddingLeft: '20px', marginBottom: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
-            <li><strong style={{ color: 'var(--paper-ink)' }}>공식 출처 확인</strong> — 국세청·식약처·WHO 등 공신력 있는 기관의 산식·기준을 먼저 확인합니다.</li>
-            <li><strong style={{ color: 'var(--paper-ink)' }}>교차 검증</strong> — 구현 후 공식 예시·자료와 결과를 대조해 검증합니다.</li>
-            <li><strong style={{ color: 'var(--paper-ink)' }}>지속 갱신</strong> — 법령·요율이 바뀌면 갱신하고, 주요 도구에는 최종 업데이트 시점을 표기합니다.</li>
-          </ol>
-          <p style={{ fontSize: '13px', color: 'var(--paper-ink-soft)', lineHeight: 1.8 }}>
-            잘못된 정보를 발견하셨다면{' '}
-            <a href="mailto:contact@youtil.kr" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>contact@youtil.kr</a>
-            로 알려주세요. 확인 후 바로 수정합니다.
-          </p>
-        </div>
-      </section>
+      <h2 id="method">계산기를 만들고 확인하는 방법</h2>
+      <ol className={s.steps}>
+        <li><b>공식 자료부터 확인합니다</b><span>법령·고시, 국세청·국민연금공단·한국천문연구원 같은 기관의 발표와 산식을 먼저 찾습니다. 세율·요율 같은 법정 수치는 공식 자료가 아니면 싣지 않습니다.</span></li>
+        <li><b>한 곳에서 관리합니다</b><span>소득세율, 4대보험 요율, 최저시급, 공휴일처럼 여러 계산기가 함께 쓰는 법정 수치는 사이트 전체가 파일 하나의 값을 씁니다. 그래서 개정이 있으면 관련 계산기가 한꺼번에 바뀝니다.</span></li>
+        <li><b>경계값을 따로 검산합니다</b><span>세율 구간이 바뀌는 지점, 월말·윤년 같은 날짜 경계를 별도 스크립트로 대조합니다. 연봉·4대보험·국민연금 같은 핵심 금융 계산은 기대값을 고정해 둔 자동 테스트를 만들어, 코드를 main에 올릴 때마다 CI에서 다시 돌립니다.</span></li>
+        <li><b>기준일과 출처를 적습니다</b><span>어떤 해의 요율을 썼는지, 어느 기관 자료인지 도구 페이지에 적습니다. 아직 기준일이나 출처 표기가 없는 도구는 차례로 보강하고 있습니다.</span></li>
+        <li><b>바뀌면 고칩니다</b><span>늦을 때도 있습니다. 국민연금 기준소득월액 상·하한은 매년 7월에 바뀌는데, 2026년 7월 개정을 제때 반영하지 못해 9월 26일에야 새 값(41만~659만 원)으로 고쳤고, 그 사이 계산이 틀렸다는 사실을 <Link href="/updates#national-pension">업데이트 기록</Link>에 남겼습니다. 이제는 이 값을 7월 기준 기간으로 관리합니다.</span></li>
+      </ol>
+      <p>
+        코드와 설명 초안, 오류 감사와 출처 대조에는 AI 도구의 도움을 받습니다. 법정 수치는 공식 자료와 대조한 뒤에 싣고, 그 최종 확인과 게시 여부·최종 문구는 제가 맡습니다.
+        자세한 원칙은 <Link href="/editorial-policy">편집·검산 원칙</Link>에 따로 적었습니다.
+      </p>
 
-      {/* ── 3. 제공 도구 목록 ── */}
-      <section style={{ marginBottom: '56px' }}>
-        <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-          제공 도구 — {totalTools}가지
-        </h2>
-        <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.8, marginBottom: '20px' }}>
-          금융·건강·요리·생활·단위·날짜·개발자까지, {categories.length}개 카테고리에 걸쳐 실생활에 꼭 필요한 도구들을 제공합니다.
-        </p>
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {categories.map(cat => (
-            <Link
-              key={cat.id}
-              href={`/tools/${cat.id}`}
-              style={{
-                background: 'var(--paper-card)',
-                border: '1px solid var(--paper-line)',
-                borderRadius: '14px',
-                padding: '16px 20px',
-                textDecoration: 'none',
-                display: 'block',
-              }}>
-              <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '10px' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', color: cat.color }} aria-hidden="true">
-                  <CatIcon id={cat.id} size={18} />
-                </span>
-                <span style={{ fontSize: '14px', fontWeight: 600, color: `color-mix(in srgb, ${cat.color} 70%, var(--paper-ink))` }}>
-                  {cat.name}
-                </span>
-                <span style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', marginLeft: 'auto' }}>
-                  {cat.tools.length}개 →
-                </span>
-              </div>
-              <div style={{ display: 'flex', flexWrap: 'wrap', gap: '6px' }}>
-                {cat.tools.map(tool => (
-                  <span key={tool.href} style={{
-                    fontSize: '12px',
-                    color: 'var(--paper-ink-soft)',
-                    background: 'var(--paper-dim)',
-                    border: '1px solid var(--paper-line)',
-                    borderRadius: '999px',
-                    padding: '3px 10px',
-                  }}>
-                    {tool.name}
-                  </span>
-                ))}
-              </div>
+      <h2 id="fix">틀린 것을 고치는 방법</h2>
+      <p>
+        혼자 만들다 보니 틀린 곳이 생깁니다. 지금까지도 음력 표, 군 전역일의 월말 계산, 조선 왕의 원년, 양도소득세 보유 기간 같은 오류를 고쳤고,
+        고친 내용은 <Link href="/updates">업데이트 기록</Link>에 무엇이 얼마나 틀렸는지와 함께 남겨 두었습니다.
+      </p>
+      <p>
+        결과가 이상하면 <a href={`mailto:${SITE_OPERATOR.email}?subject=${encodeURIComponent('[오류 제보] ')}`}>{SITE_OPERATOR.email}</a>로
+        도구 주소, 입력한 값, 기대한 결과를 알려 주세요. 평일 기준 1~3일 안에 답장합니다. 공식 자료와 대조해 틀린 것이 확인되면 고치고, 기록에 남깁니다.
+      </p>
+
+      <h2 id="money">운영비와 광고</h2>
+      <p>
+        Youtil은 무료이고, 운영비는 <strong>Google AdSense 광고</strong> 수익으로 충당하는 구조입니다. 유료 기능, 제휴(어필리에이트) 링크, 협찬을 받고 쓴 글은 없습니다.
+        광고는 도구 페이지에만 나옵니다. 이 페이지 같은 운영 문서에는 광고를 두지 않고, 지금은 홈과 분야 목록 페이지에도 두지 않습니다.
+        어디에 두고 어디에 두지 않는지는 <Link href="/ads-policy">광고 게재 원칙</Link>에 적었습니다.
+      </p>
+
+      <h2 id="data">모으는 정보, 모으지 않는 정보</h2>
+      <ul>
+        <li><strong>계산에 넣는 값</strong>은 대부분 브라우저 안에서만 계산되고 서버로 보내지 않습니다. 서버 시간 확인, 농산물 시세 조회처럼 외부 정보를 가져와야 하는 몇몇 도구만 예외이며, 그때도 건강·재무 같은 민감한 값은 보내지 않습니다.</li>
+        <li><strong>최근 본 도구와 즐겨찾기</strong>는 여러분의 브라우저(localStorage)에만 저장됩니다. 저는 이 목록을 볼 수 없습니다.</li>
+        <li><strong>방문 통계</strong>는 Google Analytics로, <strong>광고</strong>는 Google AdSense로 처리하며 이 과정에서 쿠키가 쓰입니다.</li>
+        <li><strong>회원가입</strong>이 없어 이름·전화번호 같은 개인정보를 받지 않습니다. 문의 메일을 보내면 답장을 위해 메일 주소와 내용만 씁니다.</li>
+      </ul>
+      <p>
+        법에 따른 자세한 내용과 개인정보 보호책임자는 <Link href="/privacy">개인정보처리방침</Link>에 있습니다.
+      </p>
+
+      <h2 id="tools">분야별 도구</h2>
+      <p>{categories.length}개 분야에 도구가 {totalTools}개 있습니다. 분야를 누르면 도구 목록과 분야 안내로 이동합니다.</p>
+      <ul className={s.cats}>
+        {categories.map(c => (
+          <li key={c.id}>
+            <Link href={`/tools/${c.id}`} data-cat={c.id}>
+              <span className="ui-chipIc ui-sm" aria-hidden="true"><CatIcon id={c.id} size={16} /></span>
+              {c.name}
+              <small>{c.tools.length}개</small>
             </Link>
-          ))}
-        </div>
-      </section>
-
-      {/* ── 4. 기술적 정체성 ── */}
-      <section style={{ marginBottom: '56px' }}>
-        <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '20px' }}>
-          지속적인 업데이트
-        </h2>
-        <div style={{ background: 'var(--paper-card)', border: '1px solid var(--paper-line)', borderRadius: '14px', padding: '24px' }}>
-          <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '16px' }}>
-            Youtil은 <strong style={{ color: 'var(--paper-ink)' }}>2026년 최신 데이터</strong>(국민연금 인상분, 개정 세법, 만 나이 통일법 등)를 지속적으로 반영하고 있습니다.
-            단순한 계산기를 넘어, 사용자의 삶에 실질적인 도움이 되는 유틸리티를 꾸준히 추가해 나가고 있습니다.
-          </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '10px' }}>
-            {[
-              { label: '2026년 기준', desc: '4대보험·세법 최신 반영' },
-              { label: '지속 개선',   desc: '사용자 피드백 반영' },
-              { label: '모바일 최적화', desc: '어떤 기기에서도 편리하게' },
-            ].map(item => (
-              <div key={item.label} style={{
-                background: 'var(--paper-dim)',
-                borderRadius: '10px',
-                padding: '14px',
-                textAlign: 'center',
-              }}>
-                <div style={{ fontSize: '13px', fontWeight: 600, color: 'var(--paper-ink)', marginBottom: '4px' }}>{item.label}</div>
-                <div style={{ fontSize: '12px', color: 'var(--paper-ink-soft)' }}>{item.desc}</div>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── 5. 사용자 소통 ── */}
-      <section style={{ marginBottom: '48px' }}>
-        <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '8px' }}>
-          사용자의 목소리로 성장합니다
-        </h2>
-        <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.9, marginBottom: '20px' }}>
-          Youtil은 사용자 여러분의 피드백을 통해 매일 더 똑똑해집니다.
-          필요한 도구가 없거나 개선이 필요한 부분이 있다면 언제든 편하게 연락해 주세요.
-          작은 의견 하나하나가 더 나은 Youtil을 만드는 원동력이 됩니다.
-        </p>
-        <a href="mailto:contact@youtil.kr" style={{
-          display: 'inline-flex',
-          alignItems: 'center',
-          background: 'var(--paper-ink)',
-          color: '#ffffff',
-          borderRadius: '12px',
-          padding: '14px 24px',
-          fontSize: '14px',
-          fontWeight: 700,
-          textDecoration: 'none',
-          fontFamily: 'Noto Sans KR, sans-serif',
-          transition: 'opacity 0.15s',
-        }}>
-          contact@youtil.kr 이메일 보내기
-        </a>
-      </section>
-
-      {/* ── 하단 링크 ── */}
-      <div style={{ borderTop: '1px solid var(--paper-line)', paddingTop: '24px', display: 'flex', gap: '20px', fontSize: '13px' }}>
-        <Link href="/tools"   style={{ color: 'var(--paper-ink-soft)' }}>전체 도구 보기</Link>
-        <Link href="/privacy" style={{ color: 'var(--paper-ink-soft)' }}>개인정보처리방침</Link>
-        <Link href="/terms"   style={{ color: 'var(--paper-ink-soft)' }}>이용약관</Link>
-      </div>
-
-    </div>
-    </div>
+          </li>
+        ))}
+      </ul>
+    </TrustPage>
   )
 }

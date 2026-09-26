@@ -230,11 +230,11 @@ function MiniGoldenRect({ A, B, unit }: { A: number; B: number; unit: string }) 
           fill="none" stroke="var(--accent)" strokeWidth={1.5} strokeLinecap="round"
         />
         {/* A 라벨 (가로 전체) */}
-        <text x={W / 2} y={H - 6} fill="var(--muted)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontSize="11" fontWeight={700} textAnchor="middle">
+        <text x={W / 2} y={H - 6} fill="var(--muted)" fontSize="11" fontWeight={700} textAnchor="middle">
           A = {A.toFixed(1)}{unit}
         </text>
         {/* B 라벨 (세로) */}
-        <text x={H / 2} y={14} fill="var(--accent)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontSize="11" fontWeight={700} textAnchor="middle">
+        <text x={H / 2} y={14} fill="var(--accent)" fontSize="11" fontWeight={700} textAnchor="middle">
           B = {B.toFixed(1)}{unit}
         </text>
       </svg>
@@ -371,6 +371,13 @@ function ConvertTab({ decimals }: { decimals: Decimals }) {
    분모 1~40 중 상대오차 0.5% 이내 최소 분모의 근사비(≈ 13:8)로 폴백.
    ×1000 정수화가 깨지는 입력(오버플로 Infinity·극소수 0)은 정확비를 건너뛰고 근사로 감 */
 function findSimpleRatio(w: number, h: number): { a: number; b: number; approx: boolean } {
+  /* 세로형은 뒤집어 가로형으로 구한 뒤 되돌린다.
+     ⚠️ 폴백은 분모 1~40만 보므로 r < 1/80이면 분자가 전부 0이 되어 초기값 1:1이 그대로 나왔다
+        (1×150 → '≈ 1:1', 2×101 → '≈ 1:40'). 가로형 1000×7은 143:1로 맞아 방향에 따라 결과가 달랐다. */
+  if (w < h) {
+    const t = findSimpleRatio(h, w)
+    return { a: t.b, b: t.a, approx: t.approx }
+  }
   const r = w / h
   const scale = 1000
   const W = Math.round(w * scale)
@@ -544,7 +551,6 @@ function SpiralTab() {
                   x={p.x + p.size / 2}
                   y={p.y + p.size / 2}
                   fill={textColor}
-                  fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                   fontWeight={700}
                   fontSize={Math.max(p.size * 0.22, 9)}
                   textAnchor="middle"

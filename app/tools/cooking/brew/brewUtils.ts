@@ -104,7 +104,7 @@ export const BREW_METHODS: BrewMethodMeta[] = [
   },
 ]
 
-export const getMethod = (id: BrewMethod) => BREW_METHODS.find((m) => m.id === id)!
+export const getMethod = (id: BrewMethod): BrewMethodMeta => BREW_METHODS.find((m) => m.id === id) ?? BREW_METHODS[0]
 
 /* 비율 프리셋 */
 export const RATIO_PRESETS = [12, 13, 15, 16, 17, 18, 20] as const
@@ -133,9 +133,11 @@ export interface RoastMeta {
 }
 
 export const ROASTS: RoastMeta[] = [
-  { id: 'light',  label: '라이트 (시나몬·시티)',     desc: '신맛·꽃향·과일향 강조',         ratioAdjust: '1:14~15 진하게 추출',       color: '#C9A77D' },
-  { id: 'medium', label: '미디엄 (시티·풀시티)',     desc: '균형 잡힌 단맛·바디',           ratioAdjust: '1:15~17 (SCA 골든 표준)',    color: '#7B4F2C' },
-  { id: 'dark',   label: '다크 (프렌치·이탈리안)',   desc: '쓴맛·캐러멜·초콜릿',            ratioAdjust: '1:16~18 약하게 (쓴맛 완화)', color: '#3A1E10' },
+  // 일본식 8단계 로스팅 명칭 기준 — 라이트·시나몬(약배전) / 미디엄·하이·시티(중배전~중강배전) / 풀시티·프렌치·이탈리안(강배전).
+  // (기존 '라이트 (시나몬·시티)'·'미디엄 (시티·풀시티)'는 시티가 두 단계에 겹쳐 있어 바로잡음)
+  { id: 'light',  label: '라이트 (라이트·시나몬)',   desc: '신맛·꽃향·과일향 강조',         ratioAdjust: '1:14~15 진하게 추출',       color: '#C9A77D' },
+  { id: 'medium', label: '미디엄 (미디엄·하이·시티)', desc: '균형 잡힌 단맛·바디',           ratioAdjust: '1:15~17 (핸드드립 표준)',    color: '#7B4F2C' },
+  { id: 'dark',   label: '다크 (풀시티·프렌치·이탈리안)', desc: '쓴맛·캐러멜·초콜릿',            ratioAdjust: '1:16~18 약하게 (쓴맛 완화)', color: '#3A1E10' },
 ]
 
 /* ─────────────────────────────────────────────
@@ -202,7 +204,7 @@ export function buildPourSchedule(coffeeG: number, totalWaterMl: number): PourSt
       startSec: 0, endSec: 30,
       waterMl: bloomMl, cumulativeMl: bloomMl,
       desc: `원두 무게 × 2 = ${bloomMl}ml의 물로 적셔 30초 휴지. CO₂ 가스가 빠지며 부풀어요.`,
-      color: '#0D9488',
+      color: 'var(--teal-600)',
     },
     {
       id: 'first',
@@ -211,7 +213,7 @@ export function buildPourSchedule(coffeeG: number, totalWaterMl: number): PourSt
       startSec: 30, endSec: 90,
       waterMl: second1st, cumulativeMl: target1st,
       desc: `누적 ${target1st}ml까지 (전체의 60%). 가운데서 원형으로 천천히.`,
-      color: '#0891B2',
+      color: 'var(--cyan-600)',
     },
     {
       id: 'second',
@@ -220,7 +222,7 @@ export function buildPourSchedule(coffeeG: number, totalWaterMl: number): PourSt
       startSec: 90, endSec: 150,
       waterMl: pour2nd, cumulativeMl: target2nd,
       desc: `누적 ${target2nd}ml까지 (전체의 100%). 안쪽 원만 따라.`,
-      color: '#EA580C',
+      color: 'var(--orange-600)',
     },
     {
       id: 'drain',
@@ -229,7 +231,7 @@ export function buildPourSchedule(coffeeG: number, totalWaterMl: number): PourSt
       startSec: 150, endSec: 210,
       waterMl: 0, cumulativeMl: target2nd,
       desc: '드리퍼의 물이 모두 빠질 때까지 대기. 총 추출 시간 2:30~3:30 권장.',
-      color: '#9B59B6',
+      color: 'var(--amethyst)',
     },
   ]
 }
@@ -249,10 +251,11 @@ export interface IntensityZone {
 }
 
 export const INTENSITY_ZONES: IntensityZone[] = [
-  { id: 'espresso', ratioMin: 0,  ratioMax: 12, label: '초고농축',            emoji: '💪', desc: '매우 진함 · 에스프레소·모카포트·콜드브루 농축', color: '#DB2777' },
-  { id: 'strong',   ratioMin: 12, ratioMax: 15, label: '스트롱',              emoji: '🔥', desc: '진한 추출 · 다크 로스팅·콜드브루 농축', color: '#D97706' },
-  { id: 'golden',   ratioMin: 15, ratioMax: 17, label: 'SCA 골든 컵 ⭐',       emoji: '🏆', desc: 'SCA 표준 · 균형 잡힌 추출 영역',      color: '#0D9488' },
-  { id: 'sig',      ratioMin: 17, ratioMax: 20, label: '시그니처·연함',        emoji: '🌿', desc: '연한 추출 · 산미·향 강조',            color: '#0891B2' },
+  { id: 'espresso', ratioMin: 0,  ratioMax: 12, label: '초고농축',            emoji: '💪', desc: '매우 진함 · 에스프레소·모카포트·콜드브루 농축', color: 'var(--pink-600)' },
+  { id: 'strong',   ratioMin: 12, ratioMax: 15, label: '스트롱',              emoji: '🔥', desc: '진한 추출 · 다크 로스팅·콜드브루 농축', color: 'var(--amber-600)' },
+  // SCA 골든컵 비율은 물 1L당 원두 55g ±10% (≈1:16.5~1:20, 중심 1:18). 1:15~17은 국내 핸드드립 통용 범위.
+  { id: 'golden',   ratioMin: 15, ratioMax: 17, label: '핸드드립 표준 ⭐',     emoji: '🏆', desc: '국내 핸드드립에서 흔히 쓰는 균형 영역 (SCA 골든컵보다 조금 진함)', color: 'var(--teal-600)' },
+  { id: 'sig',      ratioMin: 17, ratioMax: 20, label: '깔끔·SCA 기준',        emoji: '🌿', desc: '가볍고 깔끔한 추출 · SCA 골든컵 중심(물 1L당 원두 55g ≈ 1:18) 포함', color: 'var(--cyan-600)' },
   { id: 'weak',     ratioMin: 20, ratioMax: 99, label: '너무 묽음',            emoji: '💧', desc: '추출 부족 · 묽고 향 약함',            color: '#9B9B9B' },
 ]
 

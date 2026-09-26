@@ -67,11 +67,11 @@ export interface Co2Threshold {
 }
 
 export const CO2_THRESHOLDS: Co2Threshold[] = [
-  { max: 600,  level: 'excellent', label: '쾌적',     color: '#059669', desc: '실외 신선 공기 수준 (400~600 ppm)' },
-  { max: 800,  level: 'good',      label: '양호',     color: '#0891B2', desc: '일반 거주 환경 (600~800 ppm)' },
-  { max: 1000, level: 'moderate',  label: '보통',     color: '#A16207', desc: '환기 권장 (800~1,000 ppm)' },
-  { max: 1500, level: 'poor',      label: '미흡',     color: '#EA580C', desc: '집중력 저하 가능 (1,000~1,500 ppm)' },
-  { max: 2500, level: 'bad',       label: '나쁨',     color: '#DC2626', desc: '두통·졸음 가능 (1,500~2,500 ppm)' },
+  { max: 600,  level: 'excellent', label: '쾌적',     color: 'var(--emerald-600)', desc: '실외 신선 공기 수준 (400~600 ppm)' },
+  { max: 800,  level: 'good',      label: '양호',     color: 'var(--cyan-600)', desc: '일반 거주 환경 (600~800 ppm)' },
+  { max: 1000, level: 'moderate',  label: '보통',     color: 'var(--yellow-700)', desc: '환기 권장 (800~1,000 ppm)' },
+  { max: 1500, level: 'poor',      label: '미흡',     color: 'var(--orange-600)', desc: '집중력 저하 가능 (1,000~1,500 ppm)' },
+  { max: 2500, level: 'bad',       label: '나쁨',     color: 'var(--red-600)', desc: '두통·졸음 가능 (1,500~2,500 ppm)' },
   { max: 99999, level: 'severe',   label: '매우 나쁨', color: '#CC4444', desc: '즉시 환기 필요 (2,500 ppm 이상)' },
 ]
 
@@ -109,13 +109,13 @@ export interface DustLevel {
 }
 
 export const DUST_LEVELS: DustLevel[] = [
-  { id: 'good',      name: '좋음',     color: '#059669',
+  { id: 'good',      name: '좋음',     color: 'var(--emerald-600)',
     recommendation: '자유롭게 환기 가능 (10~15분)' },
-  { id: 'moderate',  name: '보통',     color: '#A16207',
+  { id: 'moderate',  name: '보통',     color: 'var(--yellow-700)',
     recommendation: '일반 환기 가능 (10분 이내)' },
-  { id: 'bad',       name: '나쁨',     color: '#EA580C',
+  { id: 'bad',       name: '나쁨',     color: 'var(--orange-600)',
     recommendation: '5~10분 짧은 환기 + 공기청정기 가동' },
-  { id: 'very-bad',  name: '매우 나쁨', color: '#DC2626',
+  { id: 'very-bad',  name: '매우 나쁨', color: 'var(--red-600)',
     recommendation: '5분 이내 짧은 환기 + 즉시 공기청정기' },
 ]
 
@@ -212,19 +212,19 @@ export function evaluateCurrentPerformance(
   const ratio = targetAch > 0 ? currentAch / targetAch : 0
   let efficiency: PerformanceResult['efficiency'] = 'adequate'
   let efficiencyLabel = '🟢 적정'
-  let efficiencyColor = '#059669'
+  let efficiencyColor = 'var(--emerald-600)'
   if (ratio < 0.7) {
     efficiency = 'low'
     efficiencyLabel = '🟠 부족'
-    efficiencyColor = '#EA580C'
+    efficiencyColor = 'var(--orange-600)'
   } else if (ratio < 1.0) {
     efficiency = 'low'
     efficiencyLabel = '🟡 다소 부족'
-    efficiencyColor = '#A16207'
+    efficiencyColor = 'var(--yellow-700)'
   } else if (ratio > 1.5) {
     efficiency = 'high'
     efficiencyLabel = '🔵 충분'
-    efficiencyColor = '#0891B2'
+    efficiencyColor = 'var(--cyan-600)'
   }
 
   return {

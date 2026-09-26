@@ -9,7 +9,7 @@ import {
   UNITS, KARATS, SCENARIOS, PRODUCT_DEFAULTS,
   toGram, fromGram, pureGoldGram, convertKarat,
   calculatePrice, koreaPremium, buildPriceTable,
-  nextAssetId,
+  nextAssetId, sanitizeAssets, isWeightUnit, isKaratKey, isGoldProduct,
   fmtKRW, fmtKRWFull,
 } from './goldUtils'
 
@@ -24,16 +24,36 @@ interface StoredState {
   assets: AssetItem[]
 }
 
+/* 기본 시세 — 2026년 9월 초 근사값(순금 1돈 살 때 약 77만원·VAT 포함 → 1g 약 18.7만원, 원/달러 약 1,340원, 국제 약 $4,300/oz).
+   실시간이 아니므로 화면에 기준 시점을 함께 표시하고 오늘 시세 입력을 안내한다. */
+const DEFAULT_PRICE_ASOF = '2026년 9월 초'
 const DEFAULT_PRICE: PriceInputs = {
   productType: 'bar',
-  pricePerGram24k: 145_000,
+  pricePerGram24k: 187_000,
   vatIncluded: false,
   spreadPercent: 7,
   feePercent: 1,
   craftFee: 0,
-  usdKrw: 1_350,
-  internationalOzUsd: 3_300,
+  usdKrw: 1_340,
+  internationalOzUsd: 4_300,
 }
+
+/** 저장된 시세 입력 복원 — 숫자 필드는 유한·0 이상만, enum·boolean은 타입 검증 */
+function sanitizePrice(raw: unknown): PriceInputs {
+  const out: PriceInputs = { ...DEFAULT_PRICE }
+  if (!raw || typeof raw !== 'object') return out
+  const o = raw as Record<string, unknown>
+  const nums = ['pricePerGram24k', 'spreadPercent', 'feePercent', 'craftFee', 'usdKrw', 'internationalOzUsd'] as const
+  for (const k of nums) {
+    const v = o[k]
+    if (typeof v === 'number' && Number.isFinite(v) && v >= 0) out[k] = v
+  }
+  if (isGoldProduct(o.productType)) out.productType = o.productType
+  if (typeof o.vatIncluded === 'boolean') out.vatIncluded = o.vatIncluded
+  return out
+}
+
+const MAX_WEIGHT = 100_000
 
 const PRODUCT_ORDER: GoldProduct[] = ['bar', 'krx', 'bankbook']
 
@@ -59,13 +79,14 @@ export default function GoldConverterClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const s = JSON.parse(raw) as Partial<StoredState>
+        const parsed: unknown = JSON.parse(raw)
+        const s = (parsed && typeof parsed === 'object' ? parsed : {}) as Record<keyof StoredState, unknown>
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (typeof s.weight === 'number') setWeight(s.weight)
-        if (s.unit) setUnit(s.unit)
-        if (s.karat) setKarat(s.karat)
-        if (s.price) setPrice({ ...DEFAULT_PRICE, ...s.price })
-        if (Array.isArray(s.assets)) setAssets(s.assets)
+        if (typeof s.weight === 'number' && Number.isFinite(s.weight) && s.weight >= 0) setWeight(Math.min(MAX_WEIGHT, s.weight))
+        if (isWeightUnit(s.unit)) setUnit(s.unit)
+        if (isKaratKey(s.karat)) setKarat(s.karat)
+        if (s.price) setPrice(sanitizePrice(s.price))
+        setAssets(sanitizeAssets(s.assets))
       }
     } catch { /* ignore */ }
     setMounted(true)
@@ -180,19 +201,17 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
 
       {/* 무게 + 단위 */}
       <section>
-        <label className={styles.label}>무게 입력</label>
+        <label className={styles.label} htmlFor="gold-weight">무게 입력</label>
         <div className={styles.weightInputRow}>
-          <input
-            type="text"
-            inputMode="decimal"
+          <DecimalField
+            id="gold-weight"
             className={styles.weightInput}
             value={weight}
-            onChange={(e) => {
-              const v = e.target.value.replace(/[^0-9.]/g, '')
-              setWeight(parseFloat(v) || 0)
-            }}
+            onChange={setWeight}
+            max={MAX_WEIGHT}
           />
           <select
+            aria-label="무게 단위"
             className={styles.unitSelect}
             value={unit}
             onChange={(e) => setUnit(e.target.value as WeightUnit)}
@@ -236,7 +255,7 @@ function ConvertTab({ weight, unit, karat, setWeight, setUnit, setKarat, grams }
         <label className={styles.label}>단위 변환 결과 <span className={styles.labelSub}>({grams.toLocaleString(undefined, { maximumFractionDigits: 4 })}g 기준)</span></label>
 
         <p className={styles.regionTitle}>한국 단위</p>
-        <div className={styles.unitGrid}>
+        <div className={styles.unitGrid} role="status" aria-label="한국 단위 변환 결과">
           {koreanUnits.map((u) => {
             const value = fromGram(grams, u.key)
             const isInput = u.key === unit
@@ -364,11 +383,11 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>24K 1g 시세 (KRW)</p>
         <p className={styles.note}>
-          오늘 시세는 <a href="https://www.koreagoldx.co.kr" target="_blank" rel="noreferrer">한국금거래소</a>·<a href="https://www.komsco.com" target="_blank" rel="noreferrer">한국조폐공사</a>·은행 사이트에서 확인 후 입력하세요.
+          오늘 시세는 <a href="https://www.koreagoldx.co.kr" target="_blank" rel="noreferrer">한국금거래소</a>·<a href="https://www.komsco.com" target="_blank" rel="noreferrer">한국조폐공사</a>·은행 사이트에서 확인 후 입력하세요. 처음 보이는 기본값은 {DEFAULT_PRICE_ASOF} 시세를 대략 맞춘 값이라 오늘 시세와 다를 수 있어요.
         </p>
         <div className={styles.numberRow}>
-          <label>1g 시세</label>
-          <CompactInput value={price.pricePerGram24k} onChange={(n) => updatePrice('pricePerGram24k', n)} />
+          <label htmlFor="gold-price-g">1g 시세</label>
+          <CompactInput id="gold-price-g" value={price.pricePerGram24k} onChange={(n) => updatePrice('pricePerGram24k', n)} />
         </div>
         <div className={styles.numberRow}>
           <label>1돈 시세 (자동)</label>
@@ -402,6 +421,7 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
             ))}
             <input
               type="number" inputMode="decimal" step={0.1} min={0} max={20}
+              aria-label="매수-매도 스프레드 직접 입력 (%)"
               className={styles.smallNumber}
               value={price.spreadPercent}
               onChange={(e) => updatePrice('spreadPercent', +e.target.value || 0)}
@@ -422,15 +442,15 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
           </div>
         </div>
         <div className={styles.numberRow}>
-          <label>세공비 (보석류)</label>
-          <CompactInput value={price.craftFee} onChange={(n) => updatePrice('craftFee', n)} placeholder="0" />
+          <label htmlFor="gold-craft">세공비 (보석류)</label>
+          <CompactInput id="gold-craft" value={price.craftFee} onChange={(n) => updatePrice('craftFee', n)} placeholder="0" />
         </div>
       </section>
 
       {/* 매수/매도 결과 */}
       <section>
         <label className={styles.label}>현재 입력 ({weight} {UNITS.find((u) => u.key === unit)?.short} {karat.toUpperCase()}) 매수·매도 가격</label>
-        <div className={styles.priceCardGrid}>
+        <div className={styles.priceCardGrid} role="status" aria-label="매수·매도 가격">
           <div className={`${styles.priceCard} ${styles.priceCardBuy}`}>
             <p className={styles.priceLabel}>매수 실비용</p>
             <p className={styles.priceBig}>{fmtKRW(result.buyCost)}</p>
@@ -499,12 +519,12 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>코리아 프리미엄 (한국 vs 국제 시세)</p>
         <div className={styles.numberRow}>
-          <label>USD/KRW 환율</label>
-          <CompactInput value={price.usdKrw} onChange={(n) => updatePrice('usdKrw', n)} decimal max={100_000} />
+          <label htmlFor="gold-usdkrw">USD/KRW 환율</label>
+          <CompactInput id="gold-usdkrw" value={price.usdKrw} onChange={(n) => updatePrice('usdKrw', n)} decimal max={100_000} />
         </div>
         <div className={styles.numberRow}>
-          <label>국제 1 oz 시세 (USD)</label>
-          <CompactInput value={price.internationalOzUsd} onChange={(n) => updatePrice('internationalOzUsd', n)} suffix="USD" decimal max={1_000_000} />
+          <label htmlFor="gold-intl-oz">국제 1 oz 시세 (USD)</label>
+          <CompactInput id="gold-intl-oz" value={price.internationalOzUsd} onChange={(n) => updatePrice('internationalOzUsd', n)} suffix="USD" decimal max={1_000_000} />
         </div>
         <div className={styles.premiumResult}>
           <div>
@@ -541,30 +561,32 @@ function PriceTab({ weight, unit, karat, grams, price, setPrice, assets, setAsse
           <div key={a.id} className={styles.assetRow}>
             <input
               type="text"
+              aria-label="자산 별명"
               className={styles.assetNickname}
               value={a.nickname}
               onChange={(e) => updateAsset(a.id, { nickname: e.target.value })}
               placeholder="별명 (예: 결혼반지)"
             />
-            <input
-              type="text"
-              inputMode="decimal"
+            <DecimalField
+              ariaLabel={`${a.nickname || '자산'} 무게 (g)`}
               className={styles.assetWeight}
               value={a.weightG}
-              onChange={(e) => updateAsset(a.id, { weightG: parseFloat(e.target.value.replace(/[^0-9.]/g, '')) || 0 })}
+              onChange={(n) => updateAsset(a.id, { weightG: n })}
+              max={MAX_WEIGHT}
             />
             <span className={styles.assetUnit}>g</span>
             <select
+              aria-label={`${a.nickname || '자산'} 순도`}
               className={styles.assetKarat}
               value={a.karat}
               onChange={(e) => updateAsset(a.id, { karat: e.target.value })}
             >
               {KARATS.map((k) => <option key={k.key} value={k.key}>{k.label}</option>)}
             </select>
-            <button className={styles.assetRemove} onClick={() => removeAsset(a.id)}>✕</button>
+            <button type="button" aria-label={`${a.nickname || '자산'} 삭제`} className={styles.assetRemove} onClick={() => removeAsset(a.id)}>✕</button>
           </div>
         ))}
-        <button className={styles.addBtn} onClick={addAsset}>+ 자산 추가</button>
+        <button type="button" className={styles.addBtn} onClick={addAsset}>+ 자산 추가</button>
         {assets.length > 0 && (
           <div className={styles.assetTotal}>
             <div>
@@ -599,7 +621,7 @@ function GuideTab() {
             {
               title: 'KRX 금현물',
               emoji: '📊',
-              color: '#059669',
+              color: 'var(--emerald-600)',
               recommend: '단기·중기 투자',
               vat: '면제 ✓',
               capitalGain: '비과세 ✓',
@@ -611,7 +633,7 @@ function GuideTab() {
             {
               title: '골드바',
               emoji: '🪙',
-              color: '#A16207',
+              color: 'var(--yellow-700)',
               recommend: '선물·증여·실물 보유',
               vat: '10% 부담 ✗',
               capitalGain: '비과세 ✓',
@@ -623,7 +645,7 @@ function GuideTab() {
             {
               title: '금통장 (KB·신한 등)',
               emoji: '💳',
-              color: '#0891B2',
+              color: 'var(--cyan-600)',
               recommend: '소액 적립·환금성',
               vat: '면제 ✓',
               capitalGain: '배당소득세 15.4% ✗',
@@ -710,8 +732,35 @@ function GuideTab() {
 }
 
 /* ─── 공통 입력 컴포넌트 ─── */
-function CompactInput({ value, onChange, placeholder, suffix = '원', decimal = false, max = 100_000_000_000 }: {
-  value: number; onChange: (n: number) => void; placeholder?: string; suffix?: string; decimal?: boolean; max?: number
+/** 소수 입력칸 — 편집 중 문자열 버퍼로 '1.'·'0.' 같은 중간 입력을 유지 (제어 컴포넌트가 숫자로 되돌려 소수점을 삼키는 버그 방지) */
+function DecimalField({ id, value, onChange, className, ariaLabel, max = MAX_WEIGHT }: {
+  id?: string; value: number; onChange: (n: number) => void; className?: string; ariaLabel?: string; max?: number
+}) {
+  const [buf, setBuf] = useState<string | null>(null)
+  const display = buf !== null ? buf : String(value)
+  return (
+    <input
+      id={id}
+      type="text"
+      inputMode="decimal"
+      aria-label={ariaLabel}
+      className={className}
+      value={display}
+      onChange={(e) => {
+        // 숫자·소수점 하나만 허용
+        const cleaned = e.target.value.replace(/[^0-9.]/g, '')
+        const dot = cleaned.indexOf('.')
+        const raw = dot === -1 ? cleaned : cleaned.slice(0, dot + 1) + cleaned.slice(dot + 1).replace(/\./g, '')
+        setBuf(raw)
+        onChange(Math.min(max, parseFloat(raw) || 0))
+      }}
+      onBlur={() => setBuf(null)}
+    />
+  )
+}
+
+function CompactInput({ id, value, onChange, placeholder, suffix = '원', decimal = false, max = 100_000_000_000 }: {
+  id?: string; value: number; onChange: (n: number) => void; placeholder?: string; suffix?: string; decimal?: boolean; max?: number
 }) {
   // 편집 중 임시 문자열 버퍼 — 소수점 입력("3300.") 유지, blur 시 재포맷
   const [buf, setBuf] = useState<string | null>(null)
@@ -719,6 +768,7 @@ function CompactInput({ value, onChange, placeholder, suffix = '원', decimal = 
   return (
     <div className={styles.compactInputWrap}>
       <input
+        id={id}
         type="text"
         inputMode={decimal ? 'decimal' : 'numeric'}
         className={styles.compactInput}

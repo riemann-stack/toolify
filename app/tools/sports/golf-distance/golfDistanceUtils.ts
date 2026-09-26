@@ -2,6 +2,8 @@
 // 골프 비거리 계산기 — 환경 보정·기록·단위 변환 헬퍼
 // ─────────────────────────────────────────────────────────────
 
+import { todayStr } from '@/lib/date'
+
 // 거리 단위
 export type DistanceUnit = 'm' | 'yard'
 export const M_TO_YARD = 1.0936
@@ -60,7 +62,7 @@ export type EnvInput = {
   elevation: number        // m
   windDirection: WindDirection
   windSpeed: number        // m/s
-  slopeAngle: number       // 도, 양수 = 오르막
+  slopeAngle: number       // 도, 양수 = 오르막 (공→타깃 고저차 각도)
   lieType: LieType
 }
 
@@ -72,6 +74,10 @@ export type EnvResult = {
   totalImpact: number
   changes: EnvChange[]
 }
+
+export const MPS_TO_MPH = 2.23694
+export const HEADWIND_PCT_PER_MPH = 0.01
+export const TAILWIND_PCT_PER_MPH = 0.005
 
 // 환경 보정 계산 (입력 단위 그대로 반환)
 export function calcEnvCorrected(input: EnvInput): EnvResult {
@@ -104,14 +110,16 @@ export function calcEnvCorrected(input: EnvInput): EnvResult {
     dist += elevImpact
   }
 
-  // 바람: 정면 -2m/s, 등 +1.5m/s, 옆 0
+  // 바람: 거리 비례 (TrackMan 경험칙 — 정면 1mph당 약 −1%, 순풍 1mph당 약 +0.5%), 옆바람 0
+  //   예전 고정값(정면 −2m·순풍 +1.5m per m/s)은 클럽 거리와 무관해 드라이버를 크게 과소 보정했다.
+  const mph = input.windSpeed * MPS_TO_MPH
   let windImpact = 0
   let windDescPart = ''
   if (input.windDirection === 'head' && input.windSpeed > 0) {
-    windImpact = -input.windSpeed * 2
-    windDescPart = `정면 ${input.windSpeed}m/s (강한 역풍)`
+    windImpact = -baseDist * HEADWIND_PCT_PER_MPH * mph
+    windDescPart = `정면 ${input.windSpeed}m/s (역풍)`
   } else if (input.windDirection === 'tail' && input.windSpeed > 0) {
-    windImpact = input.windSpeed * 1.5
+    windImpact = baseDist * TAILWIND_PCT_PER_MPH * mph
     windDescPart = `등 ${input.windSpeed}m/s (순풍)`
   } else if (input.windDirection === 'cross' && input.windSpeed > 0) {
     windImpact = 0
@@ -127,15 +135,15 @@ export function calcEnvCorrected(input: EnvInput): EnvResult {
     dist += windImpact
   }
 
-  // 경사: 1° 오르막 → -0.5m, 1° 내리막 → +0.7m
-  let slopeImpact = 0
-  if (input.slopeAngle > 0) slopeImpact = -input.slopeAngle * 0.5
-  else if (input.slopeAngle < 0) slopeImpact = -input.slopeAngle * 0.7
+  // 경사(공→타깃 고저차): 고저차 1m ≈ 거리 1m (plays-like 경험칙).
+  //   고저차 = 거리 × tan(각도). 오르막이면 그만큼 짧게, 내리막이면 길게 본다.
+  const rise = baseDist * Math.tan((input.slopeAngle * Math.PI) / 180)
+  const slopeImpact = -rise
   if (input.slopeAngle !== 0) {
     changes.push({
       factor: '⛰️ 경사',
       impact: slopeImpact,
-      desc: `${input.slopeAngle > 0 ? '오르막' : '내리막'} ${Math.abs(input.slopeAngle)}°`,
+      desc: `${input.slopeAngle > 0 ? '오르막' : '내리막'} ${Math.abs(input.slopeAngle)}° (타깃이 약 ${Math.abs(rise).toFixed(1)}m ${input.slopeAngle > 0 ? '높음' : '낮음'})`,
       tone: slopeImpact > 0 ? 'pos' : 'neg',
     })
     dist += slopeImpact
@@ -196,16 +204,48 @@ export function newId(): string {
   return Date.now().toString(36) + Math.random().toString(36).slice(2, 8)
 }
 
+const DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+
+/** 'YYYY-MM-DD' → 로컬 정오 ms (UTC 해석 방지 분해 파싱). 형식이 틀리면 NaN */
+export function dateToTs(date: string): number {
+  if (!DATE_RE.test(date)) return NaN
+  const [y, m, d] = date.split('-').map(Number)
+  return new Date(y, m - 1, d, 12).getTime()
+}
+
+const optPos = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) && v > 0 ? v : undefined)
+const optFinite = (v: unknown) => (typeof v === 'number' && Number.isFinite(v) ? v : undefined)
+
+/** 저장 항목 검증 — 날짜 없이 저장돼 ts가 null이 된 옛 기록은 date로 복구하거나 오늘로 둔다 */
+function toValidRecord(r: unknown): DistanceRecord | null {
+  if (typeof r !== 'object' || r === null) return null
+  const o = r as Record<string, unknown>
+  if (typeof o.id !== 'string') return null
+  if (typeof o.location !== 'string' || !Object.prototype.hasOwnProperty.call(LOCATION_LABEL, o.location)) return null
+  const driver = optPos(o.driver), iron7 = optPos(o.iron7)
+  if (driver === undefined && iron7 === undefined) return null
+  let date = typeof o.date === 'string' ? o.date : ''
+  let ts = typeof o.ts === 'number' && Number.isFinite(o.ts) ? o.ts : dateToTs(date)
+  if (!Number.isFinite(ts)) { date = todayStr(); ts = dateToTs(date) }
+  return {
+    id: o.id, date, ts, location: o.location as RecordLocation,
+    temperature: optFinite(o.temperature), windSpeed: optFinite(o.windSpeed),
+    driver, iron7,
+    notes: typeof o.notes === 'string' ? o.notes : undefined,
+  }
+}
+
 export function loadRecords(): DistanceRecord[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw) as DistanceRecord[]
+    const arr: unknown = JSON.parse(raw)
     if (!Array.isArray(arr)) return []
     const cutoff = Date.now() - KEEP_DAYS * 86400_000
     return arr
-      .filter(r => r.ts >= cutoff)
+      .map(toValidRecord)
+      .filter((r): r is DistanceRecord => r !== null && r.ts >= cutoff)
       .sort((a, b) => b.ts - a.ts)
   } catch { return [] }
 }
@@ -213,13 +253,6 @@ export function loadRecords(): DistanceRecord[] {
 export function saveRecords(arr: DistanceRecord[]) {
   if (typeof window === 'undefined') return
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(arr)) } catch {}
-}
-
-export function todayStr(d = new Date()): string {
-  const y = d.getFullYear()
-  const m = String(d.getMonth() + 1).padStart(2, '0')
-  const day = String(d.getDate()).padStart(2, '0')
-  return `${y}-${m}-${day}`
 }
 
 // 추세 분석

@@ -11,7 +11,7 @@ export default function SportsCategoryPage() {
   return (
     <CategoryView
       catId="sports"
-      description="러닝·골프·축구·웨이트 — VDOT·1RM·WHS 핸디캡까지 한국 대회 기준으로 정확하게."
+      description="러닝 페이스와 기록 예측, 근력 운동 중량, 골프 핸디캡처럼 운동 기록을 숫자로 관리하는 계산기입니다."
     />
   )
 }

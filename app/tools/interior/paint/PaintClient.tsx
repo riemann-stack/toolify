@@ -3,6 +3,7 @@
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState, type ReactNode } from 'react'
 import styles from './paint.module.css'
+import { recommendCans, parseClamp, EXTRA_AREA_MAX } from './paintUtils'
 
 /* ID 카운터 (모듈 레벨) */
 let _paintIdCounter = 0
@@ -75,7 +76,8 @@ const PAINT_TYPES: PaintType[] = [
   { id: 'custom',   name: '직접 입력',   coveragePerL: 10, badge: '',           badgeCls: 'bgWater',    cls: 'pntCustom',   defaultPrice: 10000 },
 ]
 
-/* 한국 브랜드 프리셋 */
+/* 한국 브랜드 프리셋 — 실내 수성 제품군 도포면적이라 수성·친환경 페인트에만 적용 */
+const BRAND_PAINT_IDS = ['water', 'eco']
 const BRANDS = [
   { id: 'samhwa',   label: '삼화 (홈앤톤즈)', coverage: 9.5,  cls: 'brandSamhwa' },
   { id: 'kcc',      label: 'KCC (숲으로)',     coverage: 10,   cls: 'brandKcc' },
@@ -136,60 +138,6 @@ function parseComma(s: string): number {
 }
 
 /* ─────────────────────────────────────────────────────────
- * 추천 구매 조합 알고리즘
- *  - requiredL 이상이면서 surplus 최소, 동률이면 통 수 최소
- *  - 추가 후보 2~3개도 함께 반환
- * ───────────────────────────────────────────────────────── */
-interface Combo { c18: number; c4: number; c2: number; c1: number; total: number; cans: number; surplus: number }
-function recommendCans(requiredL: number): { best: Combo | null; alts: Combo[] } {
-  if (requiredL <= 0) return { best: null, alts: [] }
-  // 비현실적 대용량(잘못된 입력)으로 조합 탐색 루프가 폭주해 UI가 멈추는 것을 방지 — 400L 상한
-  if (requiredL > 400) requiredL = 400
-
-  const candidates: Combo[] = []
-  const max18 = Math.floor(requiredL / 18) + 1
-  for (let c18 = 0; c18 <= max18; c18++) {
-    for (let c4 = 0; c4 <= 6; c4++) {
-      for (let c2 = 0; c2 <= 4; c2++) {
-        for (let c1 = 0; c1 <= 5; c1++) {
-          const total = c18 * 18 + c4 * 4 + c2 * 2 + c1 * 1
-          if (total < requiredL) continue
-          // 의미 없는 조합 (다른 사이즈로 대체 가능) 1차 필터
-          if (c1 >= 2 && c2 === 0) continue   // 1L 2통은 2L 1통과 동치
-          if (c2 >= 2 && c4 === 0 && c18 === 0) continue  // 2L 2통은 4L 1통과 동치
-          if (c4 >= 5 && c18 === 0) continue  // 4L 5통은 18L에 가까움
-          const cans = c18 + c4 + c2 + c1
-          if (cans === 0) continue
-          candidates.push({ c18, c4, c2, c1, total, cans, surplus: total - requiredL })
-        }
-      }
-    }
-  }
-  if (candidates.length === 0) return { best: null, alts: [] }
-
-  // 정렬: 1) surplus 최소, 2) 통 수 최소, 3) 큰 통 우선
-  candidates.sort((a, b) => {
-    if (a.surplus !== b.surplus) return a.surplus - b.surplus
-    if (a.cans !== b.cans) return a.cans - b.cans
-    return (b.c18 - a.c18) || (b.c4 - a.c4)
-  })
-
-  const best = candidates[0]
-  // 대안 — best와 다른 조합으로 surplus 큰 순 1~2개 (안전 마진)
-  const alts: Combo[] = []
-  for (const c of candidates) {
-    if (alts.length >= 2) break
-    if (c === best) continue
-    if (c.surplus <= best.surplus) continue
-    if (c.surplus >= best.surplus + 6) break
-    if (alts.find(a => a.total === c.total && a.cans === c.cans)) continue
-    alts.push(c)
-  }
-
-  return { best, alts }
-}
-
-/* ─────────────────────────────────────────────────────────
  * 메인
  * ───────────────────────────────────────────────────────── */
 type TabId = 'simple' | 'detail' | 'quote'
@@ -207,10 +155,12 @@ export default function PaintClient() {
   /* 공간 입력 */
   const [sizeMode, setSizeMode] = useState<SizeMode>('pyung')
   const [pyung, setPyung] = useState(15)
-  const [pyungCustom, setPyungCustom] = useState<number | null>(null)
+  const [pyungCustom, setPyungCustom] = useState<string | null>(null)
   const [widthM, setWidthM]   = useState('5.0')
   const [lengthM, setLengthM] = useState('4.0')
-  const [heightM, setHeightM] = useState(2.4)
+  // 천장 높이·평수 직접입력은 문자열로 보관하고 계산 시 클램프 — onChange 클램프는 '1.8' 입력을 1.58로 만든다
+  const [heightStr, setHeightStr] = useState('2.4')
+  const heightM = parseClamp(heightStr, 1.5, 5, 2.4)
 
   /* 칠할 부위 */
   const [paintWalls, setPaintWalls] = useState(true)
@@ -231,7 +181,7 @@ export default function PaintClient() {
   /* 페인트 종류 */
   const [paintId, setPaintId] = useState('water')
   const [brandId, setBrandId] = useState<string | null>(null)
-  const [customCoverage, setCustomCoverage] = useState(10)
+  const [customCoverage, setCustomCoverage] = useState('10')
   const [customName, setCustomName] = useState('직접 입력')
 
   /* 칠할 횟수 */
@@ -254,7 +204,7 @@ export default function PaintClient() {
   const [copied, setCopied] = useState(false)
 
   /* ─── 평수 ↔ 가로·세로 ─── */
-  const effectivePyung = pyungCustom ?? pyung
+  const effectivePyung = pyungCustom !== null ? parseClamp(pyungCustom, 1, 300) : pyung
   const tab1Dims = useMemo(() => {
     if (sizeMode === 'pyung') {
       const m2 = effectivePyung * PYUNG_TO_M2
@@ -268,9 +218,10 @@ export default function PaintClient() {
 
   /* 페인트 사양 */
   const pt = PAINT_TYPES.find(p => p.id === paintId)!
+  const brandApplies = BRAND_PAINT_IDS.includes(paintId)
   const coverage = paintId === 'custom'
-    ? n(customCoverage, 0.1)
-    : (brandId ? (BRANDS.find(b => b.id === brandId)?.coverage ?? pt.coveragePerL) : pt.coveragePerL)
+    ? parseClamp(customCoverage, 0.5, 50, 10)
+    : (brandId && brandApplies ? (BRANDS.find(b => b.id === brandId)?.coverage ?? pt.coveragePerL) : pt.coveragePerL)
   const paintName = paintId === 'custom' ? customName : pt.name
 
   /* 창문 프리셋 적용 */
@@ -296,7 +247,7 @@ export default function PaintClient() {
     const doorPaintArea = paintDoors ? doorCount * doorW * doorH * 2 : 0
     // 창틀 도장 — 창문 1개당 약 0.5㎡ 가정
     const windowFrameArea = paintFrame ? winCount * 0.5 : 0
-    const extraArea = parseComma(extraAreaStr)
+    const extraArea = Math.min(EXTRA_AREA_MAX, parseComma(extraAreaStr))
 
     const totalArea = netWallArea + ceilingArea + doorPaintArea + windowFrameArea + extraArea
     const totalAreaWithCoats = totalArea * coats
@@ -319,6 +270,7 @@ export default function PaintClient() {
     const rows: Array<{ roomId: string; roomName: string; part: string; area: number; coats: number; paintL: number }> = []
 
     rooms.forEach(r => {
+      const roomName = r.name.trim() || '이름 없는 방'
       // 벽 (벽별로 창문·문 차감 후 합산 — 한 벽보다 큰 개구부가 다른 벽을 깎지 않도록)
       if (r.paintWalls) {
         const wallNet = r.walls.reduce((s, w) => {
@@ -327,24 +279,24 @@ export default function PaintClient() {
           return s + Math.max(0, gross - openings)
         }, 0)
         const paintL = (wallNet * r.coats / coverage) * (1 + lossPct / 100)
-        rows.push({ roomId: r.id, roomName: r.name, part: '벽', area: wallNet, coats: r.coats, paintL })
+        rows.push({ roomId: r.id, roomName, part: '벽', area: wallNet, coats: r.coats, paintL })
       }
       // 천장
       if (r.paintCeiling) {
         const area = r.ceilingW * r.ceilingL
         const paintL = (area * r.coats / coverage) * (1 + lossPct / 100)
-        rows.push({ roomId: r.id, roomName: r.name, part: '천장', area, coats: r.coats, paintL })
+        rows.push({ roomId: r.id, roomName, part: '천장', area, coats: r.coats, paintL })
       }
       // 문 (양면)
       if (r.paintDoors && r.doorCount > 0) {
         const area = r.doorCount * 0.9 * 2.1 * 2
         const paintL = (area * r.coats / coverage) * (1 + lossPct / 100)
-        rows.push({ roomId: r.id, roomName: r.name, part: `문 양면 (${r.doorCount}개)`, area, coats: r.coats, paintL })
+        rows.push({ roomId: r.id, roomName, part: `문 양면 (${r.doorCount}개)`, area, coats: r.coats, paintL })
       }
       // 기타
       if (r.extraArea > 0) {
         const paintL = (r.extraArea * r.coats / coverage) * (1 + lossPct / 100)
-        rows.push({ roomId: r.id, roomName: r.name, part: '기타', area: r.extraArea, coats: r.coats, paintL })
+        rows.push({ roomId: r.id, roomName, part: '기타', area: r.extraArea, coats: r.coats, paintL })
       }
     })
     return rows
@@ -387,7 +339,7 @@ export default function PaintClient() {
     setBrandId(null)
     if (id !== 'custom') {
       const p = PAINT_TYPES.find(x => x.id === id)!
-      setCustomCoverage(p.coveragePerL)
+      setCustomCoverage(String(p.coveragePerL))
       setPricePerLStr(String(p.defaultPrice))
       setPriceTierId(null)
     }
@@ -442,7 +394,7 @@ export default function PaintClient() {
     if (tab === 'simple') {
       lines.push(
         '🎨 페인트 소요량 계산 결과',
-        `공간: ${effectivePyung}평 (${tab1Dims.width.toFixed(2)}m × ${tab1Dims.length.toFixed(2)}m × ${heightM}m)`,
+        `공간: ${fmt(tab1Dims.area / PYUNG_TO_M2, 1)}평 (${tab1Dims.width.toFixed(2)}m × ${tab1Dims.length.toFixed(2)}m × ${heightM}m)`,
         `페인트: ${paintName} (1L당 ${coverage}㎡)`,
         `시공 면적: ${fmt(t1.totalArea)}㎡ × ${coats}회 도장 + 로스율 ${lossPct}% = ${fmt(t1.requiredPaint, 2)}L 필요`,
       )
@@ -476,7 +428,7 @@ export default function PaintClient() {
     }
     lines.push('youtil.kr/tools/interior/paint')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -487,7 +439,7 @@ export default function PaintClient() {
     <div className={styles.wrap}>
 
       <Disclaimer
-        variant="safety"
+        variant="default"
         related={[
           { href: '/tools/interior/wallpaper', label: '도배 소요량' },
           { href: '/tools/interior/flooring', label: '바닥재 계산' },
@@ -516,7 +468,7 @@ export default function PaintClient() {
             {sizeMode === 'pyung' ? (
               <>
                 <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
-                  if (e.target.value === 'custom') { setPyungCustom(15) }
+                  if (e.target.value === 'custom') { setPyungCustom('15') }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
                   {pyungOptions.map(p => <option key={p} value={p}>{p}평</option>)}
@@ -526,7 +478,7 @@ export default function PaintClient() {
                   <div style={{ marginTop: 8 }}>
                     <input className={styles.smallInput} aria-label="평수 직접 입력" type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
-                      onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
+                      onChange={e => setPyungCustom(e.target.value)} />
                   </div>
                 )}
                 <p className={styles.areaShow}>약 {fmt(tab1Dims.area)}㎡ (정사각형 가정)</p>
@@ -545,12 +497,12 @@ export default function PaintClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightStr} onChange={e => setHeightStr(e.target.value)} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightStr(String(h))}>{h}m</button>
               ))}
             </div>
           </div>
@@ -599,11 +551,11 @@ export default function PaintClient() {
             </div>
           </div>
 
-          {paintWalls && (
+          {(paintWalls || paintDoors || paintFrame) && (
             <div className={styles.card}>
               <div className={styles.cardLabel}>
                 <span>창문 · 문</span>
-                <span className={styles.cardLabelHint}>벽 면적에서 차감</span>
+                <span className={styles.cardLabelHint}>{paintWalls ? '벽 면적에서 차감' : '문·창틀 도장 개수'}</span>
               </div>
               <span className={styles.subLabel}>창문 — 빠른 선택</span>
               <div className={styles.presetGrid}>
@@ -673,9 +625,9 @@ export default function PaintClient() {
               </button>
             </div>
 
-            {paintId !== 'custom' && (
+            {brandApplies && (
               <>
-                <span className={styles.subLabel} style={{ marginTop: 14 }}>한국 브랜드 프리셋 (선택, coverage 보정)</span>
+                <span className={styles.subLabel} style={{ marginTop: 14 }}>한국 브랜드 프리셋 (선택, 실내 수성 제품 도포면적 보정)</span>
                 <div className={styles.brandRow}>
                   {BRANDS.map(b => (
                     <button key={b.id} type="button" aria-pressed={brandId === b.id} className={`${styles.brandBtn} ${styles[b.cls]} ${brandId === b.id ? styles.brandActive : ''}`} onClick={() => selectBrand(b.id)}>
@@ -684,10 +636,15 @@ export default function PaintClient() {
                   ))}
                 </div>
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>1L당 {coverage}㎡</strong>
+                  현재 적용 — <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>1L당 {coverage}㎡</strong>
                   {brandId && ` (${BRANDS.find(b => b.id === brandId)?.label} 보정)`}
                 </p>
               </>
+            )}
+            {paintId !== 'custom' && !brandApplies && (
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.6 }}>
+                현재 적용 — <strong style={{ color: 'var(--text)' }}>1L당 {coverage}㎡</strong> ({pt.name} 평균). 제품마다 다르니 통 라벨의 도포면적을 확인하세요.
+              </p>
             )}
 
             {paintId === 'custom' && (
@@ -698,7 +655,7 @@ export default function PaintClient() {
                 </div>
                 <div>
                   <span className={styles.subLabel}>1L당 도장 면적 (㎡)</span>
-                  <input className={styles.smallInput} aria-label="1L당 도장 면적 (㎡)" type="number" inputMode="decimal" step={0.5} min={1} value={customCoverage} onChange={e => setCustomCoverage(n(e.target.value, 0.5))} />
+                  <input className={styles.smallInput} aria-label="1L당 도장 면적 (㎡)" type="number" inputMode="decimal" step={0.5} min={1} value={customCoverage} onChange={e => setCustomCoverage(e.target.value)} />
                 </div>
               </div>
             )}
@@ -804,7 +761,7 @@ export default function PaintClient() {
             <table className={styles.breakdownTable}>
               <tbody>
                 {t1.wallAreaGross > 0 && <tr><td>벽 면적 (둘레 × 높이)</td><td>{fmt(t1.wallAreaGross)}㎡</td></tr>}
-                {t1.windowArea > 0 && <tr className={styles.subRow}><td>창문 차감 ({winCount}개)</td><td>−{fmt(t1.windowArea)}㎡</td></tr>}
+                {t1.windowArea > 0 && paintWalls && <tr className={styles.subRow}><td>창문 차감 ({winCount}개)</td><td>−{fmt(t1.windowArea)}㎡</td></tr>}
                 {t1.doorAreaSubtract > 0 && paintWalls && <tr className={styles.subRow}><td>문 면적 차감 ({doorCount}개)</td><td>−{fmt(t1.doorAreaSubtract)}㎡</td></tr>}
                 {t1.ceilingArea > 0 && <tr className={styles.addRow}><td>천장 추가</td><td>+{fmt(t1.ceilingArea)}㎡</td></tr>}
                 {t1.doorPaintArea > 0 && <tr className={styles.addRow}><td>문 도장 (양면)</td><td>+{fmt(t1.doorPaintArea)}㎡</td></tr>}
@@ -817,7 +774,7 @@ export default function PaintClient() {
               </tbody>
             </table>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              💡 1L당 도장 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{coverage}㎡</strong> 기준 → 정확 필요량 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(t1.requiredPaint, 2)}L</strong>
+              💡 1L당 도장 면적 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{coverage}㎡</strong> 기준 → 정확 필요량 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{fmt(t1.requiredPaint, 2)}L</strong>
             </p>
           </div>
 
@@ -828,6 +785,9 @@ export default function PaintClient() {
               {(() => {
                 const VBW = 360, VBH = 240, padding = 40
                 const w = tab1Dims.width, l = tab1Dims.length
+                if (w <= 0 || l <= 0) {
+                  return <p style={{ padding: '24px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: 13, lineHeight: 1.6 }}>가로·세로를 입력하면 평면도가 표시됩니다.</p>
+                }
                 const ratio = w / l
                 let drawW = VBW - padding * 2
                 let drawH = VBH - padding * 2
@@ -839,23 +799,23 @@ export default function PaintClient() {
                   <svg className={styles.floorPlanSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
                     {/* 천장 도장 시 dim 표시 */}
                     <rect x={x0} y={y0} width={drawW} height={drawH}
-                      fill={paintCeiling ? 'rgba(8,145,178,0.10)' : 'rgba(234,88,12,0.05)'}
-                      stroke="#fff" strokeWidth={2} />
+                      fill={paintCeiling ? 'color-mix(in srgb, var(--cyan-600) 10%, transparent)' : 'rgba(234,88,12,0.05)'}
+                      stroke="var(--border-hover)" strokeWidth={2} />
                     {paintWalls && (
                       <rect x={x0 + 4} y={y0 + 4} width={drawW - 8} height={drawH - 8} fill="none" stroke="var(--accent)" strokeWidth={1} strokeDasharray="5 4" opacity={0.7} />
                     )}
                     <text x={x0 + drawW / 2} y={y0 - 10} textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="monospace">{w.toFixed(2)}m</text>
                     <text x={x0 - 8} y={y0 + drawH / 2} textAnchor="middle" fill="var(--muted)" fontSize="11" fontFamily="monospace" transform={`rotate(-90 ${x0 - 8} ${y0 + drawH / 2})`}>{l.toFixed(2)}m</text>
                     {paintCeiling && (
-                      <text x={x0 + drawW / 2} y={y0 + drawH / 2} textAnchor="middle" fill="#0891B2" fontSize="13" fontFamily="monospace" fontWeight={700}>천장 도장</text>
+                      <text x={x0 + drawW / 2} y={y0 + drawH / 2} textAnchor="middle" fill="var(--cyan-600)" fontSize="13" fontFamily="monospace" fontWeight={700}>천장 도장</text>
                     )}
                     {/* 창문 (위) */}
                     {winCount > 0 && winW > 0 && (
-                      <line x1={x0 + drawW * 0.3} y1={y0} x2={x0 + drawW * 0.7} y2={y0} stroke="#0891B2" strokeWidth={5} />
+                      <line x1={x0 + drawW * 0.3} y1={y0} x2={x0 + drawW * 0.7} y2={y0} stroke="var(--cyan-600)" strokeWidth={5} />
                     )}
                     {/* 문 (아래) */}
                     {doorCount > 0 && doorW > 0 && (
-                      <line x1={x0 + drawW * 0.7} y1={y0 + drawH} x2={x0 + drawW * 0.85} y2={y0 + drawH} stroke="#EA580C" strokeWidth={5} />
+                      <line x1={x0 + drawW * 0.7} y1={y0 + drawH} x2={x0 + drawW * 0.85} y2={y0 + drawH} stroke="var(--orange-600)" strokeWidth={5} />
                     )}
                     <text x={x0 + drawW / 2} y={y0 + drawH + 22} textAnchor="middle" fill="var(--accent)" fontSize="11" fontFamily="monospace" fontWeight={700}>둘레 {fmt(t1.perimeter, 2)}m</text>
                   </svg>
@@ -872,7 +832,7 @@ export default function PaintClient() {
           {rooms.map(r => (
             <div key={r.id} className={styles.roomBlock}>
               <div className={styles.roomHeader}>
-                <input className={styles.roomHeaderInput} aria-label="방 이름" type="text" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value || '방' })} />
+                <input className={styles.roomHeaderInput} aria-label="방 이름" type="text" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value })} />
                 {rooms.length > 1 && (
                   <button type="button" className={styles.removeRoomBtn} onClick={() => removeRoom(r.id)}>방 삭제</button>
                 )}
@@ -955,7 +915,7 @@ export default function PaintClient() {
               <div style={{ height: 10 }} />
               <span className={styles.subLabel}>기타 면적 (몰딩·걸레받이·가구) (㎡)</span>
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} aria-label="기타 면적 (몰딩·걸레받이·가구) (㎡)" type="number" inputMode="decimal" step={0.5} min={0} value={r.extraArea} onChange={e => updateRoom(r.id, { extraArea: n(e.target.value) })} />
+                <input className={styles.smallInput} aria-label="기타 면적 (몰딩·걸레받이·가구) (㎡)" type="number" inputMode="decimal" step={0.5} min={0} value={r.extraArea} onChange={e => updateRoom(r.id, { extraArea: Math.min(EXTRA_AREA_MAX, n(e.target.value)) })} />
                 <span className={styles.unit}>㎡</span>
               </div>
 
@@ -978,7 +938,7 @@ export default function PaintClient() {
               <span>방·면별 합계</span>
               <span className={styles.cardLabelHint}>{paintName} · 1L당 {coverage}㎡ · 로스율 {lossPct}%</span>
             </div>
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ overflowX: 'auto' }} role="status" aria-live="polite" aria-label="방·면별 페인트 합계">
               <table className={styles.summaryTable}>
                 <thead>
                   <tr><th scope="col">공간</th><th scope="col">부위</th><th scope="col">면적</th><th scope="col">회수</th><th scope="col">페인트</th></tr>
@@ -1051,7 +1011,7 @@ export default function PaintClient() {
               <span className={styles.cardLabelHint}>{tab === 'quote' ? `필요 ${fmt(usedPaintL, 1)}L · 구매 ${totalCans}L` : ''}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-              {quoteSource === 'detail' ? '상세' : '간편'} 계산 기준 — 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> · 필요 페인트 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedPaintL, 1)}L</strong> · 추천 구매 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{totalCans}L</strong>
+              {quoteSource === 'detail' ? '상세' : '간편'} 계산 기준 — 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{fmt(usedArea)}㎡</strong> · 필요 페인트 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{fmt(usedPaintL, 1)}L</strong> · 추천 구매 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{totalCans}L</strong>
             </p>
 
             <span className={styles.subLabel}>페인트 1L 가격</span>
@@ -1154,11 +1114,11 @@ export default function PaintClient() {
             </div>
           </div>
 
-          <div className={styles.compareLine}>
+          <div className={styles.compareLine} role="status" aria-live="polite">
             {floorPyung > 0 ? (
               <>
                 바닥 평당 비용 — 셀프 약 <strong>{fmt(selfPerFloorPyung, 0)}원/평</strong> · 전문 약 <strong>{fmt(proPerFloorPyung, 0)}원/평</strong> (바닥 {fmt(floorPyung, 1)}평 기준)
-                <br />한국 평균(바닥 평당): 셀프 5,000~10,000원(재료) · 전문 30,000~50,000원(인건비 포함)
+                <br />업계 평당 시세(전문 시공 약 33,000~50,000원, 인건비 포함)는 방이 여러 개인 집 전체 기준이라, 한 공간만 계산한 이 결과와 곧바로 비교하면 낮게 나옵니다.
               </>
             ) : (
               <>
@@ -1183,7 +1143,7 @@ export default function PaintClient() {
 function CanSvg({ size }: { size: number }) {
   // 사이즈별 크기 비례 (18L > 4L > 2L > 1L)
   const dim = size === 18 ? 56 : size === 4 ? 38 : size === 2 ? 30 : 24
-  const color = size === 18 ? '#0EA5E9' : size === 4 ? '#059669' : size === 2 ? '#0891B2' : '#A16207'
+  const color = size === 18 ? 'var(--sky-500)' : size === 4 ? 'var(--emerald-600)' : size === 2 ? 'var(--cyan-600)' : 'var(--yellow-700)'
   return (
     <svg width={dim} height={dim * 1.1} viewBox="0 0 50 56" aria-hidden="true">
       {/* 손잡이 */}
@@ -1192,7 +1152,7 @@ function CanSvg({ size }: { size: number }) {
       <rect x={6} y={10} width={38} height={42} rx={2} fill="rgba(255,255,255,0.04)" stroke={color} strokeWidth={2} />
       {/* 라벨 */}
       <rect x={10} y={20} width={30} height={20} rx={1.5} fill={color} opacity={0.18} />
-      <text x={25} y={34} textAnchor="middle" fill={color} fontSize="11" fontFamily="'Inter', system-ui, sans-serif" fontWeight={800}>{size}L</text>
+      <text x={25} y={34} textAnchor="middle" fill={color} fontSize="11" fontWeight={800}>{size}L</text>
     </svg>
   )
 }

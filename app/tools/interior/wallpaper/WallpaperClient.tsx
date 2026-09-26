@@ -3,6 +3,7 @@
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './wallpaper.module.css'
+import { calcWallpaper, stripsPerRollOf, parseClamp, TRIM_M } from './wallpaperUtils'
 
 /* ID 카운터 (모듈 레벨 — render purity 유지) */
 let _wpIdCounter = 0
@@ -63,7 +64,7 @@ interface WallpaperType {
 }
 const WALLPAPER_TYPES: WallpaperType[] = [
   { id: 'silk',   name: '실크벽지', width: 1.06, rollLength: 15.6, spec: '폭 106cm × 길이 15.6m', usage: '주거용 일반', cls: 'wpSilk',   badgeCls: 'wpSilkBadge',   defaultPrice: 25000 },
-  { id: 'sturdy', name: '합지벽지', width: 0.93, rollLength: 17.5, spec: '폭 93cm × 길이 17.5m',  usage: '저렴·셀프 입문', cls: 'wpSturdy', badgeCls: 'wpSturdyBadge', defaultPrice: 12000 },
+  { id: 'sturdy', name: '합지벽지', width: 0.93, rollLength: 17.75, spec: '폭 93cm × 길이 17.75m', usage: '저렴·셀프 입문', cls: 'wpSturdy', badgeCls: 'wpSturdyBadge', defaultPrice: 12000 },
   { id: 'pvc',    name: 'PVC벽지', width: 1.06, rollLength: 15.6, spec: '폭 106cm × 길이 15.6m', usage: '욕실·주방 방수', cls: 'wpPvc',    badgeCls: 'wpPvcBadge',    defaultPrice: 40000 },
   { id: 'custom', name: '직접 입력', width: 1.0,  rollLength: 15.0, spec: '폭·길이 직접',           usage: '',                cls: 'wpCustom',                          defaultPrice: 25000 },
 ]
@@ -119,49 +120,6 @@ function parseComma(s: string): number {
 }
 
 /* ─────────────────────────────────────────────────────────
- * 핵심 계산
- * ───────────────────────────────────────────────────────── */
-interface CalcInput {
-  width: number
-  length: number
-  height: number
-  windowCount: number
-  windowW: number
-  windowH: number
-  doorCount: number
-  doorW: number
-  doorH: number
-  wpWidth: number
-  rollLength: number
-  lossPct: number
-  includeCeiling: boolean
-}
-function calcWallpaper(i: CalcInput) {
-  const perimeter = (i.width + i.length) * 2
-  const totalWallArea = perimeter * i.height
-  const windowArea = i.windowCount * i.windowW * i.windowH
-  const doorArea = i.doorCount * i.doorW * i.doorH
-  const netWallArea = Math.max(0, totalWallArea - windowArea - doorArea)
-  const ceilingArea = i.includeCeiling ? i.width * i.length : 0
-  const totalArea = netWallArea + ceilingArea
-  const requiredArea = totalArea * (1 + i.lossPct / 100)
-  const areaPerRoll = i.wpWidth * i.rollLength
-  const exactRolls = areaPerRoll > 0 ? requiredArea / areaPerRoll : 0
-  const recommendedRolls = Math.ceil(exactRolls)
-  // 장 수 기준
-  const stripsPerRoll = Math.max(1, Math.floor(i.rollLength / Math.max(0.1, i.height)))
-  const totalStripsNeeded = Math.ceil(perimeter / Math.max(0.1, i.wpWidth))
-  const stripsRollsNeeded = Math.ceil(totalStripsNeeded / stripsPerRoll)
-  return {
-    perimeter, totalWallArea, windowArea, doorArea, netWallArea,
-    ceilingArea, totalArea, requiredArea, areaPerRoll,
-    exactRolls, recommendedRolls,
-    stripsPerRoll, totalStripsNeeded, stripsRollsNeeded,
-    finalRolls: Math.max(recommendedRolls, stripsRollsNeeded),
-  }
-}
-
-/* ─────────────────────────────────────────────────────────
  * 메인
  * ───────────────────────────────────────────────────────── */
 type TabId = 'simple' | 'detail' | 'quote'
@@ -181,10 +139,12 @@ export default function WallpaperClient() {
   /* 공통 입력 (탭 1·2 결과와 탭 3 견적 모두 공유) */
   const [sizeMode, setSizeMode] = useState<SizeMode>('pyung')
   const [pyung, setPyung] = useState(15)
-  const [pyungCustom, setPyungCustom] = useState<number | null>(null)
+  const [pyungCustom, setPyungCustom] = useState<string | null>(null)
   const [widthM, setWidthM]   = useState('5.0')
   const [lengthM, setLengthM] = useState('4.0')
-  const [heightM, setHeightM] = useState(2.4)
+  // 천장 높이·평수 직접입력은 문자열로 보관하고 계산 시 클램프 — onChange 클램프는 '1.8' 입력을 1.58로 만든다
+  const [heightStr, setHeightStr] = useState('2.4')
+  const heightM = parseClamp(heightStr, 1.5, 5, 2.4)
 
   const [winPreset, setWinPreset] = useState<WindowPresetId>('std')
   const [winCount, setWinCount] = useState(1)
@@ -195,8 +155,8 @@ export default function WallpaperClient() {
   const [doorH, setDoorH] = useState(2.1)
 
   const [wpId, setWpId] = useState('silk')
-  const [wpCustomW, setWpCustomW] = useState(1.0)
-  const [wpCustomLen, setWpCustomLen] = useState(15.0)
+  const [wpCustomW, setWpCustomW] = useState('1.0')
+  const [wpCustomLen, setWpCustomLen] = useState('15.0')
 
   const [lossPct, setLossPct] = useState(10)
   const [includeCeiling, setIncludeCeiling] = useState(false)
@@ -215,7 +175,7 @@ export default function WallpaperClient() {
   const [copied, setCopied] = useState(false)
 
   /* ─── 평수 ↔ 가로·세로 ─── */
-  const effectivePyung = pyungCustom ?? pyung
+  const effectivePyung = pyungCustom !== null ? parseClamp(pyungCustom, 1, 300) : pyung
 
   const tab1Dims = useMemo(() => {
     if (sizeMode === 'pyung') {
@@ -241,8 +201,8 @@ export default function WallpaperClient() {
 
   /* 벽지 사양 */
   const wp = WALLPAPER_TYPES.find(t => t.id === wpId)!
-  const wpWidth = wpId === 'custom' ? n(wpCustomW, 0.1) : wp.width
-  const rollLength = wpId === 'custom' ? n(wpCustomLen, 1) : wp.rollLength
+  const wpWidth = wpId === 'custom' ? parseClamp(wpCustomW, 0.1, 5, 1.0) : wp.width
+  const rollLength = wpId === 'custom' ? parseClamp(wpCustomLen, 1, 100, 15) : wp.rollLength
 
   /* ─── 탭 1 핵심 계산 ─── */
   const t1 = useMemo(() => calcWallpaper({
@@ -279,11 +239,11 @@ export default function WallpaperClient() {
       const areaRolls = areaPerRoll > 0 ? Math.ceil(requiredArea / areaPerRoll) : 0
       // 장 수(스트립) 기준 — 간편 탭과 일관되게 부족분 방지(둘레가 넓고 천장이 낮을 때 면적 기준만으론 모자랄 수 있음)
       const maxWallH = Math.max(0.1, ...wallsToUse.map(w => w.wallH))
-      const stripsPerRoll = Math.max(1, Math.floor(rollLength / maxWallH))
+      const stripsPerRoll = stripsPerRollOf(rollLength, maxWallH)
       const totalStrips = wallsToUse.reduce((s, w) => s + Math.ceil(w.wallW / Math.max(0.1, wpWidth)), 0)
       const stripRolls = stripsPerRoll > 0 ? Math.ceil(totalStrips / stripsPerRoll) : 0
       const rollsNeeded = Math.max(areaRolls, stripRolls)
-      return { id: r.id, name: r.name, totalArea, requiredArea, rollsNeeded }
+      return { id: r.id, name: r.name.trim() || '이름 없는 방', totalArea, requiredArea, rollsNeeded }
     })
   }, [rooms, wpWidth, rollLength, lossPct])
 
@@ -307,7 +267,7 @@ export default function WallpaperClient() {
     }
     const areaPerRoll = wpWidth * rollLength
     const areaRolls = areaPerRoll > 0 ? Math.ceil(netSum * (1 + lossPct / 100) / areaPerRoll) : 0
-    const stripsPerRoll = Math.max(1, Math.floor(rollLength / maxWallH))
+    const stripsPerRoll = stripsPerRollOf(rollLength, maxWallH)
     const stripRolls = Math.ceil(totalStrips / stripsPerRoll)
     const rolls = Math.max(areaRolls, stripRolls)
     return { area, rolls, roomRollSum }
@@ -428,7 +388,7 @@ export default function WallpaperClient() {
     }
     lines.push('youtil.kr/tools/interior/wallpaper')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -440,7 +400,7 @@ export default function WallpaperClient() {
     <div className={styles.wrap}>
 
       <Disclaimer
-        variant="safety"
+        variant="default"
         related={[
           { href: '/tools/interior/molding', label: '몰딩 계산' },
           { href: '/tools/interior/paint', label: '페인트 계산' },
@@ -471,7 +431,7 @@ export default function WallpaperClient() {
             {sizeMode === 'pyung' ? (
               <>
                 <select className={styles.pyungSelect} aria-label="방 크기 (평수 선택)" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
-                  if (e.target.value === 'custom') { setPyungCustom(15) }
+                  if (e.target.value === 'custom') { setPyungCustom('15') }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
                   {pyungOptions.map(p => <option key={p} value={p}>{p}평</option>)}
@@ -486,7 +446,7 @@ export default function WallpaperClient() {
                       min={1}
                       max={300}
                       value={pyungCustom}
-                      onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))}
+                      onChange={e => setPyungCustom(e.target.value)}
                     />
                   </div>
                 )}
@@ -510,12 +470,12 @@ export default function WallpaperClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightStr} onChange={e => setHeightStr(e.target.value)} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightStr(String(h))}>{h}m</button>
               ))}
             </div>
           </div>
@@ -600,11 +560,11 @@ export default function WallpaperClient() {
               <div className={styles.customWpRow}>
                 <div>
                   <span className={styles.subLabel}>폭 (m)</span>
-                  <input className={styles.smallInput} aria-label="벽지 폭 (m)" type="number" inputMode="decimal" step={0.01} min={0.1} value={wpCustomW} onChange={e => setWpCustomW(n(e.target.value, 0.1))} />
+                  <input className={styles.smallInput} aria-label="벽지 폭 (m)" type="number" inputMode="decimal" step={0.01} min={0.1} value={wpCustomW} onChange={e => setWpCustomW(e.target.value)} />
                 </div>
                 <div>
                   <span className={styles.subLabel}>1롤 길이 (m)</span>
-                  <input className={styles.smallInput} aria-label="벽지 1롤 길이 (m)" type="number" inputMode="decimal" step={0.1} min={1} value={wpCustomLen} onChange={e => setWpCustomLen(n(e.target.value, 1))} />
+                  <input className={styles.smallInput} aria-label="벽지 1롤 길이 (m)" type="number" inputMode="decimal" step={0.1} min={1} value={wpCustomLen} onChange={e => setWpCustomLen(e.target.value)} />
                 </div>
               </div>
             )}
@@ -693,9 +653,9 @@ export default function WallpaperClient() {
               <span className={styles.cardLabelHint}>면적 vs 장수 중 큰 값 채택</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              천장 높이 <strong style={{ color: 'var(--text)' }}>{heightM}m</strong> 기준 1롤에서 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{t1.stripsPerRoll}장</strong> 절단 가능 →
-              둘레 {fmt(t1.perimeter)}m ÷ 폭 {wpWidth}m = <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{t1.totalStripsNeeded}장</strong> 필요 →
-              장 수 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{t1.stripsRollsNeeded}롤</strong>
+              천장 높이 <strong style={{ color: 'var(--text)' }}>{heightM}m</strong> + 재단 여유 {Math.round(TRIM_M * 100)}cm 기준 1롤에서 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{t1.stripsPerRoll}장</strong> 절단 가능 →
+              둘레 {fmt(t1.perimeter)}m ÷ 폭 {wpWidth}m = <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{t1.totalStripsNeeded}장</strong> 필요 →
+              장 수 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{t1.stripsRollsNeeded}롤</strong>
             </p>
           </div>
 
@@ -708,6 +668,9 @@ export default function WallpaperClient() {
                 const padding = 40
                 const w = tab1Dims.width
                 const l = tab1Dims.length
+                if (w <= 0 || l <= 0) {
+                  return <p style={{ padding: '24px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: 13, lineHeight: 1.6 }}>가로·세로를 입력하면 평면도가 표시됩니다.</p>
+                }
                 const ratio = w / l
                 let drawW = VBW - padding * 2
                 let drawH = VBH - padding * 2
@@ -734,12 +697,12 @@ export default function WallpaperClient() {
                         y1={y0}
                         x2={x0 + drawW * 0.7}
                         y2={y0}
-                        stroke="#0891B2"
+                        stroke="var(--cyan-600)"
                         strokeWidth={5}
                       />
                     )}
                     {winCount > 0 && (
-                      <text x={x0 + drawW * 0.5} y={y0 + 18} textAnchor="middle" fill="#0891B2" fontSize="10" fontFamily="monospace">창</text>
+                      <text x={x0 + drawW * 0.5} y={y0 + 18} textAnchor="middle" fill="var(--cyan-600)" fontSize="10" fontFamily="monospace">창</text>
                     )}
                     {/* 문 (아래) */}
                     {doorCount > 0 && doorW > 0 && (
@@ -748,12 +711,12 @@ export default function WallpaperClient() {
                         y1={y0 + drawH}
                         x2={x0 + drawW * 0.85}
                         y2={y0 + drawH}
-                        stroke="#EA580C"
+                        stroke="var(--orange-600)"
                         strokeWidth={5}
                       />
                     )}
                     {doorCount > 0 && (
-                      <text x={x0 + drawW * 0.78} y={y0 + drawH - 8} textAnchor="middle" fill="#EA580C" fontSize="10" fontFamily="monospace">문</text>
+                      <text x={x0 + drawW * 0.78} y={y0 + drawH - 8} textAnchor="middle" fill="var(--orange-600)" fontSize="10" fontFamily="monospace">문</text>
                     )}
                   </svg>
                 )
@@ -774,7 +737,7 @@ export default function WallpaperClient() {
                   aria-label="방 이름"
                   type="text"
                   value={r.name}
-                  onChange={e => updateRoom(r.id, { name: e.target.value || '방' })}
+                  onChange={e => updateRoom(r.id, { name: e.target.value })}
                   placeholder="방 이름"
                 />
                 {rooms.length > 1 && (
@@ -883,7 +846,7 @@ export default function WallpaperClient() {
               <span>방별 합계</span>
               <span className={styles.cardLabelHint}>{wp.name} · 로스율 {lossPct}%</span>
             </div>
-            <div style={{ overflowX: 'auto' }}>
+            <div style={{ overflowX: 'auto' }} role="status" aria-live="polite" aria-label="방별 벽지 롤 수 합계">
               <table className={styles.summaryTable}>
                 <thead>
                   <tr><th scope="col">방</th><th scope="col">시공 면적</th><th scope="col">필요 롤</th></tr>
@@ -920,7 +883,7 @@ export default function WallpaperClient() {
               <span className={styles.cardLabelHint}>{`현재 ${usedRolls}롤 적용 (${quoteSource === 'detail' ? '상세' : '간편'} 계산 결과)`}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-              {quoteSource === 'detail' ? '상세' : '간편'} 계산 결과 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{usedRolls}롤</strong> · 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평)
+              {quoteSource === 'detail' ? '상세' : '간편'} 계산 결과 기준 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{usedRolls}롤</strong> · 시공 면적 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{fmt(usedArea)}㎡</strong> ({fmt(usedPyung, 1)}평)
             </p>
 
             <span className={styles.subLabel}>벽지 1롤 가격</span>
@@ -1032,11 +995,11 @@ export default function WallpaperClient() {
             </div>
           </div>
 
-          <div className={styles.compareLine}>
+          <div className={styles.compareLine} role="status" aria-live="polite">
             {floorPyung > 0 ? (
               <>
                 바닥 평당 비용 — 셀프 약 <strong>{fmt(selfPerFloorPyung, 0)}원/평</strong> · 전문 약 <strong>{fmt(proPerFloorPyung, 0)}원/평</strong> (바닥 {fmt(floorPyung, 1)}평 기준)
-                <br />한국 평균(바닥 평당): 셀프 5,000~10,000원 · 전문(실크) 15,000~25,000원
+                <br />업계 평당 시세(실크 약 5~8만원·합지 약 3~5만원, 시공비 포함)는 방이 여러 개인 아파트 전체 기준이라, 한 공간만 계산한 이 결과와 곧바로 비교하면 낮게 나옵니다.
               </>
             ) : (
               <>

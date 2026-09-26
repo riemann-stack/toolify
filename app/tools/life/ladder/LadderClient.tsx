@@ -9,7 +9,7 @@ import {
   MAX_PARTICIPANTS, MIN_PARTICIPANTS, CHARACTER_EMOJIS,
   ANIMATION_SPEEDS, DIFFICULTIES,
   generateLadderNoSelf, traceDest, shuffleArray,
-  segsToPathD, pathTotalLength,
+  segsToPathD, pathTotalLength, isValidLadder, sanitizeGame,
   loadGames, saveGames, newId,
   type AnimSpeed, type Difficulty, type SavedGame, type PathSeg,
 } from './ladderUtils'
@@ -17,7 +17,6 @@ import { LADDER_TEMPLATES, getTemplate } from './ladderTemplates'
 
 /* ─── SVG 상수 ─── */
 const SVG_W = 600
-const PAD_X = 50
 const ROW_H = 26
 
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
@@ -29,6 +28,8 @@ export default function LadderClient() {
   /* 옵션 */
   const [speed, setSpeed] = useState<AnimSpeed>('slow')
   const [difficulty, setDifficulty] = useState<Difficulty>('normal')
+  /* 자기 배정 피하기 (시크릿 산타) — 켰을 때만 이름=결과 매칭을 피해 가로줄을 만든다 */
+  const [avoidSelf, setAvoidSelf] = useState(false)
 
   /* 사다리·게임 상태 */
   const [regenKey, setRegenKey] = useState(0)
@@ -44,22 +45,27 @@ export default function LadderClient() {
     return Math.max(8, Math.ceil(count * diff.rowsMul))
   }, [count, difficulty])
   const svgH = rows * ROW_H
-  const colW = (SVG_W - PAD_X * 2) / Math.max(1, count - 1)
-  const colX = useCallback((i: number) => PAD_X + i * colW, [colW])
+  /* 세로줄 x = 이름·결과 태그(grid repeat(count, 1fr))의 칸 중앙 — 태그와 줄이 같은 좌표계를 쓰도록 */
+  const colW = SVG_W / Math.max(1, count)
+  const colX = useCallback((i: number) => (i + 0.5) * colW, [colW])
 
   /* 사다리 — 클라이언트에서만 생성 (Math.random hydration mismatch 방지)
      SSR·첫 렌더 시 빈 배열, mount 후 useEffect 로 가로줄 생성 */
   const [ladder, setLadder] = useState<boolean[][]>([])
   const pendingLadderRef = useRef<boolean[][] | null>(null)  // 저장된 게임 불러오기 시 그대로 복원
   useEffect(() => {
-    if (pendingLadderRef.current) {
-      setLadder(pendingLadderRef.current)
-      pendingLadderRef.current = null
+    const pending = pendingLadderRef.current
+    pendingLadderRef.current = null
+    // 저장된 가로줄은 현재 인원·행 수와 치수가 맞을 때만 복원 (안 맞으면 새로 생성)
+    if (pending && isValidLadder(pending, count, rows)) {
+      setLadder(pending)
       return
     }
     const diff = DIFFICULTIES.find(d => d.id === difficulty)!
-    // 시크릿 산타 등 이름=결과가 겹치면 자기 배정을 피해 생성 (안 겹치면 첫 시도 통과 → 일반 추첨 무영향)
-    setLadder(generateLadderNoSelf(count, rows, diff.rungProb, names, results))
+    // '자기 배정 피하기'를 켰을 때만 이름=결과 매칭을 피해 생성 (끄면 순수 균등 추첨)
+    setLadder(avoidSelf
+      ? generateLadderNoSelf(count, rows, diff.rungProb, names, results)
+      : generateLadderNoSelf(count, rows, diff.rungProb))
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [count, rows, difficulty, regenKey])
 
@@ -188,7 +194,7 @@ export default function LadderClient() {
     const text = `🪜 사다리타기 결과 (${count}명)\n──────────────\n${lines.join('\n')}\n\n— youtil.kr 사다리타기`
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true); setTimeout(() => setCopied(false), 1500)
-    })
+    }).catch(() => { /* 클립보드 권한 거부 등 */ })
   }
 
   const applyTemplate = (id: string) => {
@@ -198,6 +204,7 @@ export default function LadderClient() {
     const rs = t.results.length > 0 ? t.results : Array(ps.length).fill('꽝')
     setNames(ps)
     setResults(rs)
+    setAvoidSelf(!!t.mirror)   // 선물 교환(참가자=결과) 템플릿만 자기 배정 피하기를 켬
     setRegenKey(k => k + 1)
     setRevealed(new Set())
   }
@@ -304,7 +311,7 @@ export default function LadderClient() {
             </div>
           </div>
           <div>
-            <span className={s.subLabel}>가로줄 난이도 (많을수록 결과가 더 섞임)</span>
+            <span className={s.subLabel}>가로줄 난이도 (보이는 복잡도만 달라지고 확률은 같음)</span>
             <div className={s.optionRow} style={{ gridTemplateColumns: 'repeat(2, 1fr)' }} role="group" aria-label="가로줄 난이도 선택">
               {DIFFICULTIES.map(d => (
                 <button key={d.id}
@@ -315,6 +322,17 @@ export default function LadderClient() {
                   {d.name}
                 </button>
               ))}
+            </div>
+          </div>
+          <div>
+            <span className={s.subLabel}>자기 배정 피하기 (시크릿 산타)</span>
+            <div className={s.optionRow} style={{ gridTemplateColumns: '1fr' }}>
+              <button type="button"
+                aria-pressed={avoidSelf}
+                className={`${s.optionBtn} ${avoidSelf ? s.optionActive : ''}`}
+                onClick={() => { setAvoidSelf(v => !v); setRegenKey(k => k + 1) }}>
+                {avoidSelf ? '켜짐 — 참가자와 같은 이름의 결과는 본인에게 배정하지 않음' : '꺼짐 — 모든 배정이 같은 확률'}
+              </button>
             </div>
           </div>
         </div>
@@ -405,9 +423,12 @@ export default function LadderClient() {
         한 번에 공개하거나, 이름·결과를 클릭해 한 명씩 공개하세요.
       </div>
 
-      {hasSelfMatch && (
+      {avoidSelf && hasSelfMatch && (
         <div style={{ background: 'rgba(217,119,6,0.10)', border: '1px solid rgba(217,119,6,0.35)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.6 }}>
-          🎁 <strong>시크릿 산타 주의</strong> — 자기 배정을 자동으로 피하려 했지만, 중복 이름 등으로 본인에게 배정된 사람이 남아 있어요. 참가자·결과 이름을 서로 다르게 하면 해결됩니다.
+          🎁 <strong>시크릿 산타 주의</strong> — 지금 명단으로는 가로선이 아직 갱신되지 않아 본인에게 배정된 사람이 있어요. 아래 버튼을 누르면 본인에게 배정되지 않게 다시 만듭니다. (같은 이름이 여러 번 있으면 피하지 못할 수도 있어요.)
+          <div style={{ marginTop: 8 }}>
+            <button type="button" className={s.startBtnSecondary} onClick={handleNewRungs}>가로선 새로 만들기</button>
+          </div>
         </div>
       )}
 
@@ -535,15 +556,12 @@ function SavedGamesSection({
     const reader = new FileReader()
     reader.onload = e => {
       try {
-        const obj = JSON.parse(e.target?.result as string)
-        const list = Array.isArray(obj) ? obj : (Array.isArray(obj.games) ? obj.games : null)
+        const obj: unknown = JSON.parse(e.target?.result as string)
+        const games0 = obj && typeof obj === 'object' ? (obj as { games?: unknown }).games : undefined
+        const list = Array.isArray(obj) ? obj : (Array.isArray(games0) ? games0 : null)
         if (!list) { alert('잘못된 백업 파일입니다'); return }
-        const valid = (list as unknown[]).filter((g) => {
-          const x = g as SavedGame
-          return x && typeof x.id === 'string'
-            && Array.isArray(x.participants) && x.participants.length >= MIN_PARTICIPANTS && x.participants.length <= MAX_PARTICIPANTS
-            && Array.isArray(x.results)
-        }) as SavedGame[]
+        // 요소 단위 검증 — 가로줄 치수가 안 맞으면 가로줄만 버리고(불러올 때 새로 생성) 게임은 가져옴
+        const valid = (list as unknown[]).map(sanitizeGame).filter((g): g is SavedGame => g !== null)
         if (valid.length === 0) { alert('가져올 수 있는 유효한 게임이 없습니다 (참가자 2~16명·결과 배열 필요).'); return }
         // 취소 = 중단(기존 데이터 유지), 확인 = 현재 목록에 추가
         if (!confirm(`백업에서 ${valid.length}개 게임을 현재 목록에 추가합니다. 계속할까요?`)) return
@@ -581,29 +599,34 @@ function SavedGamesSection({
       )}
 
       {games.length > 0 && (
-        <>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 10 }}>
-            {games.map(g => (
-              <div key={g.id} className={s.savedRow}>
-                <div className={s.savedName}>
-                  {g.name}
-                  <small>{g.participants.length}명 · {new Date(g.updatedAt).toLocaleDateString('ko-KR')}</small>
-                </div>
-                <div className={s.miniRow}>
-                  <button className={s.miniBtn} onClick={() => onApply(g)}>불러오기</button>
-                  <button className={`${s.miniBtn} ${s.miniDanger}`} onClick={() => handleDelete(g.id)}>×</button>
-                </div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 5, marginTop: 10 }}>
+          {games.map(g => (
+            <div key={g.id} className={s.savedRow}>
+              <div className={s.savedName}>
+                {g.name}
+                <small>{g.participants.length}명 · {new Date(g.updatedAt).toLocaleDateString('ko-KR')}</small>
               </div>
-            ))}
-          </div>
-          <div className={s.miniRow} style={{ marginTop: 10 }}>
-            <button className={s.miniBtn} onClick={handleExport}>백업 다운로드</button>
-            <button className={s.miniBtn} onClick={() => fileRef.current?.click()}>가져오기</button>
-            <input ref={fileRef} type="file" accept=".json" hidden
-              onChange={e => { const f = e.target.files?.[0]; if (f) handleImport(f) }} />
-          </div>
-        </>
+              <div className={s.miniRow}>
+                <button className={s.miniBtn} onClick={() => onApply(g)}>불러오기</button>
+                <button className={`${s.miniBtn} ${s.miniDanger}`} onClick={() => handleDelete(g.id)}>×</button>
+              </div>
+            </div>
+          ))}
+        </div>
       )}
+      {/* 가져오기는 목록이 비어 있어도(캐시 삭제·새 기기) 복원할 수 있도록 항상 노출 */}
+      <div className={s.miniRow} style={{ marginTop: 10 }}>
+        {games.length > 0 && (
+          <button className={s.miniBtn} onClick={handleExport}>백업 다운로드</button>
+        )}
+        <button className={s.miniBtn} onClick={() => fileRef.current?.click()}>가져오기</button>
+        <input ref={fileRef} type="file" accept=".json" hidden
+          onChange={e => {
+            const f = e.target.files?.[0]
+            if (f) handleImport(f)
+            e.target.value = ''   // 같은 파일을 다시 골라도 onChange가 발생하도록
+          }} />
+      </div>
     </div>
   )
 }

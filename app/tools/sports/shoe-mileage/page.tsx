@@ -3,7 +3,10 @@ import ShoeMileageClient from './ShoeMileageClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { MIDSOLES, LANDINGS, ROTATION_FACTOR, calcShoeLife } from './shoeMileageData'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/shoe-mileage',
@@ -15,17 +18,22 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
+/* ── 소재 × 체중 예상 수명 — 계산기와 같은 함수(calcShoeLife)로 빌드 시 계산 (미드풋·로테이션 없음) ── */
+const MID = LANDINGS.find((l) => l.id === 'mid') ?? LANDINGS[0]
+const HEEL = LANDINGS.find((l) => l.id === 'heel') ?? LANDINGS[0]
+const BW_COLS = [55, 70, 80, 95]
+const LIFE_ROWS = MIDSOLES.map((m) => ({ m, km: BW_COLS.map((bw) => calcShoeLife(m, bw, MID, false, 0, 0).lifespanKm) }))
+/* 예시 — 계산기 기본값(EVA · 70kg · 미드풋 · 주 30km · 새 신발) */
+const EVA = MIDSOLES[0]
+const EX1 = calcShoeLife(EVA, 70, MID, false, 0, 30)
+const EX2 = calcShoeLife(EVA, 70, MID, true, 0, 30, 2)
+const EX3 = calcShoeLife(EVA, 85, HEEL, false, 200, 40)
+const wk = (w: number | null) => (w === null ? '—' : `${Math.round(w * 10) / 10}주`)
 
 const FAQ_LD = [
   {
     q: '러닝화는 몇 km에 바꿔야 하나요?',
-    a: '일반적으로 <strong>500~800km</strong>가 교체 기준으로 통용됩니다. 다만 이는 미드솔 소재·체중·주법에 따라 크게 달라집니다 — 일반 EVA 폼은 400~600km, 내구성 좋은 TPU·슈퍼폼(PEBA)은 500~700km 수준입니다. 위 계산기에 소재·체중·주간 거리를 넣으면 예상 수명과 교체 예상일이 나옵니다. 무엇보다 <strong>km는 참고치</strong>이며, 쿠션이 꺼진 느낌이나 통증이 있으면 수치와 상관없이 바꾸는 게 맞습니다.',
+    a: '일반적으로 <strong>500~800km</strong>가 교체 기준으로 통용됩니다. 다만 이는 미드솔 소재·체중·주법에 따라 크게 달라집니다 — 일반 EVA 폼은 400~600km, 내구성 좋은 TPU는 500~700km, 두툼한 슈퍼폼(PEBA) 데일리화는 450~650km 수준이고, 얇게 만든 카본 레이싱화는 300~500km로 더 짧게 봅니다. 위 계산기에 소재·체중·주간 거리를 넣으면 예상 수명과 교체 예상일이 나옵니다. 무엇보다 <strong>km는 참고치</strong>이며, 쿠션이 꺼진 느낌이나 통증이 있으면 수치와 상관없이 바꾸는 게 맞습니다.',
   },
   {
     q: '왜 미드솔이 닳으면 바꿔야 하나요?',
@@ -37,7 +45,7 @@ const FAQ_LD = [
   },
   {
     q: '카본화(슈퍼슈즈)는 왜 수명이 짧다고 하나요?',
-    a: 'PEBA 같은 <strong>슈퍼폼은 반발력이 뛰어난 대신, 레이싱용은 얇고 가볍게 만들어 반발 성능이 빨리 떨어진다</strong>는 인식이 있습니다. 실제 미드솔 내구 거리는 일반화 400~600km 수준으로 데일리화와 비슷하거나 조금 짧게 보기도 합니다. 다만 <strong>"레이스 반발감"이 필요한 대회용</strong>이라면, 내구 한계와 별개로 최고 성능이 유지되는 초반 구간에서 아껴 쓰는 사람이 많습니다. 데일리 슈퍼슈즈는 더 길게 쓸 수 있습니다.',
+    a: 'PEBA 같은 <strong>슈퍼폼은 반발력이 뛰어난 대신, 레이싱용은 얇고 가볍게 만들어 반발 성능이 빨리 떨어진다</strong>는 인식이 있습니다. 실사용 수명은 대략 300~600km로 알려져 있어, 이 계산기는 카본 레이싱화를 300~500km(기준 400km)로 데일리화보다 짧게 잡습니다. 다만 <strong>"레이스 반발감"이 필요한 대회용</strong>이라면, 내구 한계와 별개로 최고 성능이 유지되는 초반 구간에서 아껴 쓰는 사람이 많습니다. 폼을 두툼하게 쓴 데일리 슈퍼 트레이너는 이보다 길게(450~650km) 쓸 수 있습니다.',
   },
   {
     q: '체중이 무거우면 더 빨리 닳나요?',
@@ -60,16 +68,22 @@ const RELATED = [
 
 export default function ShoeMileagePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        스포츠
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/sports/shoe-mileage">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />러닝화 수명 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         주간 거리·체중·소재로 <strong style={{ color: 'var(--text)' }}>러닝화 예상 수명(km)과 교체 예상일</strong> + 로테이션 연장 효과.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="제조사 공식 교체 주기 안내(나이키·브룩스·아식스) 범위 안의 소재별 기준값 · 체중·착지·로테이션 보정은 관행 배수"
+        sources={[
+          { label: '나이키 코리아 — 러닝화 교체 주기', href: 'https://www.nike.com/kr/a/how-often-to-replace-running-shoes' },
+          { label: 'Verdejo & Mills, J Biomech 2004 (PubMed)', href: 'https://pubmed.ncbi.nlm.nih.gov/15275845/' },
+          { label: 'Malisoux 외, Scand J Med Sci Sports 2015', href: 'https://onlinelibrary.wiley.com/doi/10.1111/sms.12154' },
+        ]}
+      />
 
       <ShoeMileageClient />
 
@@ -78,62 +92,79 @@ export default function ShoeMileagePage() {
 
         {/* 1. 계산 방식 */}
         <section>
-          <h2 style={sectionTitle}>수명 계산 방식</h2>
+          <h2 className="g-h2">수명 계산 방식</h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
-            <div><span style={{ color: 'var(--muted)' }}>수명(km)</span> = 소재 기본 × 체중보정 × 로테이션</div>
-            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>소재: EVA 500 · TPU 600 · PEBA 600 (중앙값)</div>
+            <div><span style={{ color: 'var(--muted)' }}>수명(km)</span> = 소재 기본 × 체중보정 × 착지보정 × 로테이션</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>소재: EVA 500 · TPU 600 · PEBA 데일리 550 · 카본 레이싱 400 (중앙값)</div>
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>체중: ~60kg ×1.1 · ~75 ×1.0 · ~90 ×0.9 · 90+ ×0.8</div>
-            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>2족 로테이션 ×1.15</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>착지: 뒤꿈치 ×0.95 · 미드풋·앞발 ×1.0</div>
+            <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>2족 이상 로테이션 ×1.15 (주간 거리는 켤레 수로 나눔)</div>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 소재별 기본 수명은 브랜드 가이드·러닝 문헌의 통용 범위이며, 체중·로테이션 보정은 관행 배수입니다. 실제 수명은 노면·주법·보관에 따라 달라집니다.
+          <p className="g-note">
+            소재별 기본 수명은 브랜드 가이드·러닝 문헌의 통용 범위이며, 체중·로테이션 보정은 관행 배수입니다. 실제 수명은 노면·주법·보관에 따라 달라집니다.
+          </p>
+          <p className="g-p">
+            계산기 기본값(EVA · 체중 70kg · 미드풋 · 주 30km · 새 신발)을 넣으면 예상 수명은 <strong>{EX1.lifespanKm}km</strong>(범위 {EX1.lifeLo}~{EX1.lifeHi}km)이고,
+            주 30km씩이면 약 {wk(EX1.weeksLeft)}(≈{EX1.daysLeft}일) 뒤가 교체 예상일입니다. 같은 조건에서 2족을 번갈아 신으면 수명은 ×{ROTATION_FACTOR}로 <strong>{EX2.lifespanKm}km</strong>가 되고,
+            이 신발 한 켤레가 맡는 거리가 주 {EX2.weeklyPerShoe}km로 줄어 교체까지 약 {wk(EX2.weeksLeft)}(≈{EX2.daysLeft}일)로 늘어납니다.
+          </p>
+          <p className="g-p">
+            체중 85kg · 뒤꿈치 착지 · 주 40km로 이미 200km를 신은 EVA 신발이라면 수명은 500 × 0.9 × 0.95 ≈ <strong>{EX3.lifespanKm}km</strong>, 남은 거리는 {EX3.remainKm}km로
+            약 {wk(EX3.weeksLeft)}(≈{EX3.daysLeft}일)이면 교체 시점입니다. 수명이 짧게 나왔다면 로테이션을 먼저 고려하고, 아래 교체 신호가 보이면 남은 km와 관계없이 바꾸세요.
           </p>
         </section>
 
-        {/* 2. 소재별 표 */}
+        {/* 2. 소재별 표 — calcShoeLife로 계산 */}
         <section>
-          <h2 style={sectionTitle}>미드솔 소재별 수명 가이드</h2>
-          <div style={{ overflowX: 'auto' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
+          <h2 className="g-h2">미드솔 소재 × 체중별 예상 수명</h2>
+          <p className="g-p">
+            소재별 기준 범위와, 착지를 미드풋으로 두고 로테이션 없이 계산기에 넣었을 때 체중별로 나오는 예상 수명입니다. 뒤꿈치 착지라면 여기서 5%를 빼고, 2족 이상 로테이션이라면 {Math.round((ROTATION_FACTOR - 1) * 100)}%를 더하면 됩니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['소재', '수명', '특징'].map((h, i) => (
-                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: i === 1 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
+                  {['소재', '기준 범위', ...BW_COLS.map((bw) => `${bw}kg`)].map((h, i) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: i >= 2 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12, whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['EVA', '400~600km', '가장 흔한 데일리 트레이너 폼'],
-                  ['TPU (부스트 등)', '500~700km', '내구성·반발 좋은 발포폼'],
-                  ['PEBA (슈퍼폼)', '500~700km', '카본화·레이싱 슈퍼폼 (레이싱용은 짧게 보기도)'],
-                ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
+                {LIFE_ROWS.map(({ m, km }, i) => (
+                  <tr key={m.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', lineHeight: 1.5 }}>
+                      <strong>{m.name}</strong>
+                      <span style={{ display: 'block', fontSize: 12, color: 'var(--muted)' }}>{m.desc}</span>
+                    </td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>{m.range[0]}~{m.range[1]}km</td>
+                    {km.map((v, j) => (
+                      <td key={j} style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{v}km</td>
+                    ))}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <p className="g-note">
+            체중 보정은 60kg 미만 ×1.1 · 60~75kg ×1.0 · 75~90kg ×0.9 · 90kg 이상 ×0.8 구간이라, 경계(60·75·90kg)를 넘는 순간 값이 계단식으로 바뀝니다. 레이싱화는 가볍게 만들려고 폼을 얇게 쓴 만큼 같은 체중에서도 가장 짧게 나옵니다.
+          </p>
         </section>
 
         {/* 3. 교체 주기 근거 + 관리법 */}
         <section>
-          <h2 style={sectionTitle}>교체 주기 근거와 수명 늘리는 관리법</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+          <h2 className="g-h2">교체 주기 근거와 수명 늘리는 관리법</h2>
+          <p className="g-p">
             제조사 공식 안내는 하나로 모이지 않습니다. 같은 브랜드 안에서도 지역판·문서마다 권장치가 달라 출처를 나눠 봐야 정확합니다(2026년 7월 확인).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 540 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['출처 (기준 시점)', '권장 교체', '함께 제시한 기준'].map((h, i) => (
+                  {['출처 (기준 시점)', '제시 거리', '함께 제시한 기준'].map((h, i) => (
                     <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: i === 1 ? 'right' : 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 }}>{h}</th>
                   ))}
                 </tr>
@@ -141,7 +172,7 @@ export default function ShoeMileagePage() {
               <tbody>
                 {[
                   ['나이키 코리아 (2025년 7월 갱신)', '500~800km', '주 16km 미만 8~12개월 · 16~32km 5~8개월 · 32~64km 4~6개월 · 64km 이상 약 2~3개월'],
-                  ['나이키 품질 엔지니어팀', '200~300마일 (약 322~483km)', '"일반적인 권장 수명"으로 제시'],
+                  ['나이키 품질 엔지니어 (나이키 러닝화 관리 가이드)', '최소 200~300마일 (약 322~483km)', '대부분의 설계가 이 거리 이상 견디도록 테스트된다는 설명 — 권장 교체 거리가 아니라 최소 내구 기준'],
                   ['브룩스 고객지원', '300~500마일 (약 483~805km)', '정기적으로 신으면 4~6개월'],
                   ['아식스 미국판 (2021)', '300~500마일 (약 483~805km)', '주 15마일(약 24km) 러너는 5~8개월'],
                   ['아식스 영국판 (2021)', '400~500마일 (약 644~805km)', '심한 마모 신호가 없으면 더 신어도 된다고 안내'],
@@ -149,15 +180,15 @@ export default function ShoeMileagePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', lineHeight: 1.5 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)', lineHeight: 1.5 }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', lineHeight: 1.6 }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.8 }}>
-            ※ 마일 표기는 1마일 = 1.609km로 환산한 값입니다(원문은 마일 단위). 어느 수치가 정본인지 밝힌 공식 문서가 없어 하나로 합치지 않았습니다. 위 계산기의 소재별 기본값(EVA 400~600 · TPU/PEBA 500~700km)은 이 표에서 낮은 쪽 구간에 해당합니다. 실험 근거로는 EVA 미드솔이 500km 주행 시점에 최대 족저압이 평균 100% 늘고 750km에서는 폼에 주름·구멍 같은 구조 손상이 관찰됐다는 보고가 있습니다(Verdejo &amp; Mills, Journal of Biomechanics 2004). 출처:{' '}
+          <p className="g-note">
+            마일 표기는 1마일 = 1.609km로 환산한 값입니다(원문은 마일 단위). 어느 수치가 정본인지 밝힌 공식 문서가 없어 하나로 합치지 않았습니다. 위 계산기의 소재별 기본값(EVA 400~600km, TPU 500~700km, 카본 레이싱화는 300~500km)은 이 표에서 낮은 쪽 구간에 해당합니다. 실험 근거로는 EVA 미드솔이 500km 주행 시점에 최대 족저압이 평균 100% 늘고 750km에서는 폼에 주름·구멍 같은 구조 손상이 관찰됐다는 보고가 있습니다(Verdejo &amp; Mills, Journal of Biomechanics 2004). 출처:{' '}
             <a href="https://www.nike.com/kr/a/how-often-to-replace-running-shoes" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>나이키 코리아 러닝화 교체 주기 ↗</a>
             , 브룩스·아식스 공식 고객지원·어드바이스 페이지.
           </p>
@@ -166,10 +197,10 @@ export default function ShoeMileagePage() {
             {[
               { t: '세탁기·건조기에 넣지 않기', d: '아식스 영국판 케어 가이드는 세탁기 세탁, 표백제·가정용 세제, 건조기·라디에이터·직사광선 건조를 모두 금지합니다. 나이키도 세탁기 세탁을 권장하지 않으며, 고온이 접착제·본딩제를 상하게 한다는 것이 품질 엔지니어팀 설명입니다.' },
               { t: '손세척 후 실온 자연건조', d: '끈·인솔을 빼고 중성세제 15~30ml 푼 물로 아웃솔부터 솔질하고, 갑피는 젖은 스펀지로 닦습니다. 인솔은 담그면 폼과 모양이 상합니다. 종이타월을 채워 실온에 두며, 나이키 기준 러닝화는 완전히 마르는 데 최대 8시간이 걸립니다.' },
-              { t: '달린 뒤 24~48시간 쉬게 하기', d: '나이키 엔지니어는 폼 미드솔이 다시 펴지는 데 최소 24~48시간이 필요하다고 봅니다. 레크리에이션 러너 264명을 22주 추적한 연구에서도 여러 켤레를 병행한 쪽의 러닝 관련 부상 위험이 낮았습니다(HR 0.614, 95% CI 0.389~0.969).' },
+              { t: '달린 뒤 24~48시간 쉬게 하기', d: '나이키 엔지니어는 폼 미드솔이 다시 펴지는 데 최소 24~48시간이 필요하다고 봅니다. 레크리에이션 러너 264명을 22주 추적한 연구에서도 여러 켤레를 병행한 쪽의 러닝 관련 부상 위험이 낮았습니다(HR 0.614, 95% CI 0.389~0.969 — Malisoux 외, Scand J Med Sci Sports 2015).' },
               { t: '서늘·건조·통풍되는 곳에 보관', d: '브룩스는 신지 않은 신발도 시간이 지나면 특히 접착제가 열화한다며 서늘하고 건조한 통풍 장소를 권합니다. 나이키 코리아도 직사광선과 습기가 닿지 않는 곳에 두라고 안내합니다.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{c.d}</p>
               </div>
@@ -179,7 +210,7 @@ export default function ShoeMileagePage() {
 
         {/* 4. 교체 신호 */}
         <section>
-          <h2 style={sectionTitle}>이런 신호면 바로 교체하세요</h2>
+          <h2 className="g-h2">이런 신호면 바로 교체하세요</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {[
               { t: '쿠션이 꺼진 느낌', d: '착지가 딱딱해지고 반발이 사라짐' },
@@ -187,8 +218,8 @@ export default function ShoeMileagePage() {
               { t: '아웃솔 마모', d: '바닥 고무가 닳아 미끄럽거나 평평해짐' },
               { t: '미드솔 주름·갈라짐', d: '옆면 폼에 깊은 주름·크랙이 보임' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>⚠️ {c.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.d}</p>
               </div>
             ))}
@@ -197,11 +228,11 @@ export default function ShoeMileagePage() {
 
         {/* 5. 앱으로 거리 자동 누적 */}
         <section>
-          <h2 style={sectionTitle}>앱으로 신발 거리 자동 누적하기</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 14 }}>
+          <h2 className="g-h2">앱으로 신발 거리 자동 누적하기</h2>
+          <p className="g-p">
             누적 거리를 수첩에 적는 대신 앱에 신발(기어)을 등록해두면 러닝마다 자동으로 쌓입니다. 각 앱 공식 도움말에 안내된 경로입니다(2026년 7월 확인).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -227,7 +258,7 @@ export default function ShoeMileagePage() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 14, display: 'flex', flexDirection: 'column', gap: 8 }}>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--text)' }}>스트라바 알림</strong> — 기본값은 250마일이고 800마일까지 올릴 수 있으며, 설정은 웹에서만 됩니다(공식 문서는 마일 단위로만 표기). 임계값을 넘기면 그 신발을 지정한 러닝마다 알림이 계속 오므로, 신발을 은퇴시키거나 알림을 꺼야 멈춥니다. 스트라바가 특정 교체 거리를 권장하는 것은 아닙니다.
             </p>
@@ -248,10 +279,10 @@ export default function ShoeMileagePage() {
 
         {/* 7. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>
@@ -261,6 +292,6 @@ export default function ShoeMileagePage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

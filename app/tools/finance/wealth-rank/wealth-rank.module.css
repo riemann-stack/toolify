@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   box-sizing: border-box;
 }
@@ -18,7 +18,7 @@
 }
 @media (max-width: 600px) {
   .wrap { gap: 10px; }
-  .card { padding: 14px 14px; border-radius: 12px; }
+  .card { padding: 14px 14px; border-radius: var(--radius-m); }
   .cardLabel { margin-bottom: 10px; }
 }
 
@@ -28,7 +28,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -37,13 +37,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }
 @media (hover: hover) {
@@ -61,11 +61,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -79,11 +79,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 30px 10px 12px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
   text-overflow: ellipsis;
@@ -105,13 +105,13 @@
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 .helperToggle[aria-pressed='true'] { color: var(--accent); border-color: var(--accent); }
@@ -131,13 +131,13 @@
   min-width: 56px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 38px;
 }
 @media (hover: hover) {
@@ -149,22 +149,22 @@
   font-size: 13px;
   color: var(--accent);
   font-weight: 700;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .helperGrid { display: flex; flex-direction: column; gap: 12px; margin-top: 12px; }
 
 /* 히어로 */
 .hero {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.10) 0%, rgba(99, 102, 241, 0.06) 100%);
-  border: 1px solid rgba(14, 165, 233, 0.28);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent) 0%, rgba(99, 102, 241, 0.06) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 28%, transparent);
+  border-radius: var(--radius-card);
   padding: 22px 18px;
   text-align: center;
 }
-@media (max-width: 600px) { .hero { padding: 18px 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .hero { padding: 18px 14px; border-radius: var(--radius-m); } }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 6px; }
 .heroValue {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(26px, 6vw, 40px);
   font-weight: 700;
   color: var(--text);
@@ -173,18 +173,18 @@
 }
 .heroValue strong {
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
 }
 .heroSub { font-size: 13px; color: var(--muted); margin: 0; }
-.heroSub strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.heroSub strong { color: var(--text); font-family: var(--font-sans); }
 .estTag {
   display: inline-block;
   margin-left: 8px;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(217, 119, 6, 0.12);
-  color: #D97706;
+  color: var(--amber-600);
   font-size: 11px;
   font-weight: 700;
   vertical-align: middle;
@@ -197,7 +197,7 @@
   top: 26px; left: 0; right: 0;
   height: 12px;
   border-radius: 6px;
-  background: linear-gradient(90deg, var(--bg3) 0%, rgba(14, 165, 233, 0.30) 60%, #0EA5E9 100%);
+  background: linear-gradient(90deg, var(--bg3) 0%, color-mix(in srgb, var(--accent) 30%, transparent) 60%, var(--sky-500) 100%);
 }
 .barTick {
   position: absolute;
@@ -223,7 +223,7 @@
   font-weight: 700;
   color: var(--accent);
   white-space: nowrap;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .barAxis {
   display: flex;
@@ -249,7 +249,7 @@
 .refTable td:first-child { width: 52%; font-size: 13px; color: var(--muted); }
 .refTable td:nth-child(2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
   white-space: nowrap;
@@ -263,13 +263,13 @@
   align-items: center;
   gap: 8px;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.4;
 }
-.goal strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.goal strong { color: var(--accent); font-family: var(--font-sans); }
 .goalMark {
   flex-shrink: 0;
   width: 20px; height: 20px;
@@ -281,14 +281,14 @@
   font-weight: 700;
 }
 .goalDone { background: rgba(5, 150, 105, 0.08); }
-.goalDone .goalMark { background: rgba(5, 150, 105, 0.15); color: #059669; }
-.goalDone strong { color: #059669; }
+.goalDone .goalMark { background: rgba(5, 150, 105, 0.15); color: var(--emerald-600); }
+.goalDone strong { color: var(--emerald-600); }
 
 /* 보충 설명 */
 .noteCard {
   background: rgba(217, 119, 6, 0.05);
   border: 1px solid rgba(217, 119, 6, 0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 12px;
   color: var(--muted);

@@ -19,19 +19,27 @@ import {
   formatEok,
   parseAmount,
   fmtNumInput,
+  GEN_PCT,
+  WH_PCT,
+  THRESHOLD_MAN,
+  TOP_BRACKET_PCT,
   type Frequency,
   type PortfolioAsset,
 } from './dividendUtils'
+import { ratePct } from '@/lib/krFinancialIncomeTax'
+
+/* 종합과세 예시 세율 — 과표 5,000만~8,800만 구간(지방세 포함). lib/krIncomeTax 누진세율표에서 파생 (26.4) */
+const MID_BRACKET_PCT = ratePct(PROGRESSIVE_BRACKETS[2].rate)
 
 type TabId = 'goal' | 'reverse' | 'comprehensive' | 'portfolio' | 'savings'
 
 const MONTHLY_PRESETS = [500_000, 1_000_000, 2_000_000, 3_000_000, 5_000_000]
 const RATE_PRESETS = [3, 4, 4.5, 5, 6, 7]
 const TAX_PRESETS = [
-  { label: '국내주식', v: 15.4 },
+  { label: '국내주식', v: GEN_PCT },
   { label: '해외ETF', v: 15.0 },
-  { label: '종합과세 (24.2%)', v: 24.2 },
-  { label: '종합과세 (49.5%)', v: 49.5, warn: true },
+  { label: `종합과세 (${MID_BRACKET_PCT}%)`, v: MID_BRACKET_PCT },
+  { label: `종합과세 (${TOP_BRACKET_PCT}%)`, v: TOP_BRACKET_PCT, warn: true },
 ]
 const SAFETY_PRESETS = [
   { label: '100% 딱 맞게', v: 100 },
@@ -48,7 +56,7 @@ export default function DividendClient() {
   /* ── 공통: 탭1 → 다른 탭 자동 연동용 ── */
   const [monthly, setMonthly] = useState('1,000,000')
   const [rate, setRate]       = useState('4.5')
-  const [tax, setTax]         = useState('15.4')
+  const [tax, setTax]         = useState(String(GEN_PCT))
   const [safety, setSafety]   = useState(100)
   const [current, setCurrent] = useState('')
 
@@ -143,10 +151,10 @@ export default function DividendClient() {
 
   /* ── 탭 4: 포트폴리오 ── */
   const [assets, setAssets] = useState<PortfolioAsset[]>([
-    { id: '1', name: '국내 배당주',         amount: 50_000_000, yieldPct: 4.0, frequency: 'quarterly', taxRate: 15.4 },
+    { id: '1', name: '국내 배당주',         amount: 50_000_000, yieldPct: 4.0, frequency: 'quarterly', taxRate: GEN_PCT },
     { id: '2', name: '미국 ETF (SCHD)',     amount: 50_000_000, yieldPct: 3.5, frequency: 'quarterly', taxRate: 15.0 },
     { id: '3', name: '월배당 ETF (JEPI)',   amount: 30_000_000, yieldPct: 7.0, frequency: 'monthly',   taxRate: 15.0 },
-    { id: '4', name: '한국 리츠',           amount: 20_000_000, yieldPct: 6.0, frequency: 'quarterly', taxRate: 15.4 },
+    { id: '4', name: '한국 리츠',           amount: 20_000_000, yieldPct: 6.0, frequency: 'quarterly', taxRate: GEN_PCT },
   ])
 
   const updateAsset = (id: string, patch: Partial<PortfolioAsset>) => {
@@ -155,7 +163,7 @@ export default function DividendClient() {
   const removeAsset = (id: string) => setAssets(assets.filter(a => a.id !== id))
   const addAsset = () => {
     const id = String(Date.now())
-    setAssets([...assets, { id, name: '', amount: 10_000_000, yieldPct: 4, frequency: 'quarterly', taxRate: 15.4 }])
+    setAssets([...assets, { id, name: '', amount: 10_000_000, yieldPct: 4, frequency: 'quarterly', taxRate: GEN_PCT }])
   }
 
   const portfolioResult = useMemo(() => calcPortfolio(assets), [assets])
@@ -167,7 +175,9 @@ export default function DividendClient() {
 
   /* 환율 영향 — 미국 자산만 */
   const usAssets = assets.filter(a => Math.abs(a.taxRate - 15.0) < 0.1)
-  const usAnnualUSD = usAssets.reduce((s, a) => s + (a.amount * a.yieldPct / 100), 0) / 1300  // 가정 환율 1,300
+  const [fxBase, setFxBase] = useState('1380')  // 기준 환율 (원/$) — 사용자 입력
+  const fxBaseNum = Math.min(5000, Math.max(1, parseFloat(fxBase.replace(/,/g, '')) || 1380))
+  const usAnnualUSD = usAssets.reduce((s, a) => s + (a.amount * a.yieldPct / 100), 0) / fxBaseNum
 
   /* ── 탭 5: 절세 계좌 ── */
   const [savingsYears, setSavingsYears] = useState('30')
@@ -211,10 +221,10 @@ export default function DividendClient() {
             <g key={i}>
               <rect x={x} y={y} width={barW} height={h} fill="var(--accent)" rx="2" />
               <text x={x + barW / 2} y={H - 8} textAnchor="middle" fill="var(--muted)"
-                fontSize="10" fontFamily="Noto Sans KR, sans-serif">{i + 1}</text>
+                fontSize="10">{i + 1}</text>
               {v > max * 0.2 && (
                 <text x={x + barW / 2} y={y - 4} textAnchor="middle" fill="var(--accent)"
-                  fontSize="9" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="800">
+                  fontSize="9" fontWeight="800">
                   {Math.round(v / 10_000)}만
                 </text>
               )}
@@ -309,7 +319,7 @@ export default function DividendClient() {
           <label className={styles.cardLabel} htmlFor="dividend-income">배당소득세율</label>
           <div className={styles.inputRow}>
             <input id="dividend-income" className={styles.numInput} type="number" inputMode="decimal"
-              placeholder="15.4" step={0.1} min={0} max={99}
+              placeholder={String(GEN_PCT)} step={0.1} min={0} max={99}
               value={tax} onChange={e => setTax(e.target.value)} />
             <span className={styles.unit}>%</span>
           </div>
@@ -355,7 +365,7 @@ export default function DividendClient() {
 
           {valid && isFinite(required) && (
             <>
-              <div className={`${styles.hero} ${styles.heroAccent}`}>
+              <div className={`${styles.hero} ${styles.heroAccent}`} role="status">
                 <div className={styles.heroLead}>
                   월 <strong style={{ color: 'var(--text)' }}>{formatKRW(monthlyV)}</strong>의 배당금을 받으려면
                 </div>
@@ -387,7 +397,7 @@ export default function DividendClient() {
                   <label className={styles.cardLabel}>현재 {formatEok(currentV)} 투자 중이라면</label>
                   {additionalNeeded > 0 ? (
                     <>
-                      <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 22, fontWeight: 800, color: 'var(--accent)' }}>
+                      <div style={{ fontFamily: 'var(--font-sans)', fontSize: 22, fontWeight: 800, color: 'var(--accent)' }}>
                         추가 필요 {formatKRW(additionalNeeded)}원
                       </div>
                       <div style={{ fontSize: 13, color: 'var(--muted)', marginTop: 4 }}>
@@ -395,7 +405,7 @@ export default function DividendClient() {
                       </div>
                     </>
                   ) : (
-                    <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 20, fontWeight: 800, color: '#059669' }}>
+                    <div style={{ fontFamily: 'var(--font-sans)', fontSize: 20, fontWeight: 800, color: '#059669' }}>
                       🎉 이미 목표 달성!
                     </div>
                   )}
@@ -496,7 +506,7 @@ export default function DividendClient() {
 
           {reverseResult && (
             <>
-              <div className={`${styles.hero} ${styles.heroGold}`}>
+              <div className={`${styles.hero} ${styles.heroGold}`} role="status">
                 <div className={styles.heroLead}>
                   월배당 <strong style={{ color: 'var(--text)' }}>{formatKRW(monthlyV)}</strong> · {revYears}년 목표
                 </div>
@@ -606,7 +616,7 @@ export default function DividendClient() {
             </div>
           </div>
 
-          <div className={`${styles.hero} ${
+          <div role="status" className={`${styles.hero} ${
             compTaxResult.level === 'over' ? styles.heroRed :
             compTaxResult.level === 'near' ? styles.heroOrange :
             compTaxResult.level === 'caution' ? styles.heroGold : styles.heroAccent
@@ -660,7 +670,7 @@ export default function DividendClient() {
               ))}
             </div>
             <p className={styles.cardLabelHint} style={{ marginTop: 10 }}>
-              ※ 「안전 한도」는 종합과세 한도의 80% 도달 지점 (여유 200만 추가 자산 가능).
+              ※ 「안전 한도」는 종합과세 한도의 80% 도달 지점입니다 (연 금융소득 1,600만원 — 한도까지 400만원 여유).
             </p>
           </div>
 
@@ -671,16 +681,16 @@ export default function DividendClient() {
               <table className={styles.compareTable} style={{ minWidth: 420 }}>
                 <thead>
                   <tr>
-                    <th scope="col">금융소득 구간</th>
+                    <th scope="col">종합소득 과세표준</th>
                     <th scope="col">세율</th>
                   </tr>
                 </thead>
                 <tbody>
+                  {/* 구간은 금융소득 합계가 아니라 근로·사업소득 등을 합친 종합소득 과세표준으로 정해지므로 특정 행을 강조하지 않음 */}
                   {PROGRESSIVE_BRACKETS.slice(0, 8).map((b, i) => {
-                    const isActive = compTaxResult.bracket && b.min === compTaxResult.bracket.min
                     return (
-                      <tr key={i} className={isActive ? styles.bestRow : ''}>
-                        <td>{b.label.split('(')[0].trim()}{isActive && ' ⭐'}</td>
+                      <tr key={i}>
+                        <td>{b.label.split('(')[0].trim()}</td>
                         <td style={{ color: b.rate > 0.3 ? '#DC2626' : b.rate > 0.2 ? '#EA580C' : 'var(--text)' }}>
                           {(b.rate * 100).toFixed(1)}%
                         </td>
@@ -690,6 +700,9 @@ export default function DividendClient() {
                 </tbody>
               </table>
             </div>
+            <p className={styles.cardLabelHint} style={{ marginTop: 10 }}>
+              ※ 금융소득 중 {formatEok(COMPREHENSIVE_TAX_THRESHOLD)}까지는 {WH_PCT}%(지방세 포함 {GEN_PCT}%)가 유지되고, 초과분만 근로·사업소득 등과 합산해 위 세율이 적용됩니다. 다른 소득이 없으면 비교과세 때문에 실제 부담은 대체로 {GEN_PCT}% 근처에 머뭅니다.
+            </p>
           </div>
 
           <div className={styles.infoBox}>
@@ -697,6 +710,7 @@ export default function DividendClient() {
             <strong style={{ color: '#0891B2' }}>① ISA 계좌</strong> — 200~400만 비과세 + 9.9% 분리과세, <strong>종합과세 비포함</strong> · 연 2,000만 한도 / 총 1억<br />
             <strong style={{ color: '#0891B2' }}>② 연금저축·IRP</strong> — 5.5% 분리과세 (55세 이후) + 16.5% 세액공제<br />
             <strong style={{ color: '#0891B2' }}>③ 자산 분산</strong> — 부부 명의 분산, 자녀 명의(증여세 별도), 시점 분산<br />
+            <strong style={{ color: '#0891B2' }}>④ 고배당기업 배당 분리과세</strong> — 2026~2028년 요건을 갖춘 국내 상장사 배당은 종합과세 대신 14~30% 분리과세 선택 가능 (해외주식·ETF·리츠 제외)<br />
             본 도구의 「절세 계좌」 탭에서 정량 비교 가능합니다.
           </div>
         </>
@@ -723,7 +737,7 @@ export default function DividendClient() {
                 </select>
                 <select className={styles.assetSelect} value={a.taxRate}
                   onChange={e => updateAsset(a.id, { taxRate: parseFloat(e.target.value) })}>
-                  <option value={15.4}>국내 15.4%</option>
+                  <option value={GEN_PCT}>국내 {GEN_PCT}%</option>
                   <option value={15.0}>해외 15.0%</option>
                 </select>
                 <button className={styles.deleteBtn}
@@ -754,7 +768,7 @@ export default function DividendClient() {
           </div>
 
           {/* 종합 결과 */}
-          <div className={`${styles.hero} ${styles.heroCyan}`}>
+          <div className={`${styles.hero} ${styles.heroCyan}`} role="status">
             <div className={styles.heroLead}>
               총 자산 {formatEok(portfolioResult.totalAmount)} · 가중평균 {portfolioResult.weightedYieldPretax.toFixed(2)}% (세전)
             </div>
@@ -828,9 +842,9 @@ export default function DividendClient() {
           </div>
 
           {/* 종합과세 자동 경고 */}
-          {portfolioResult.annualPretax >= 18_000_000 && (
+          {portfolioResult.annualPretax >= COMPREHENSIVE_TAX_THRESHOLD * 0.9 && (
             <div className={styles.warnBox}>
-              <strong>⚠️ 연 배당 {formatEok(portfolioResult.annualPretax)} — 종합과세 한도(2,000만) 임박:</strong>
+              <strong>⚠️ 연 배당 {formatEok(portfolioResult.annualPretax)} — 종합과세 한도({THRESHOLD_MAN}) 임박:</strong>
               ISA·연금저축·IRP 절세 계좌 활용 권장. 「절세 계좌」 탭에서 비교.
             </div>
           )}
@@ -838,12 +852,17 @@ export default function DividendClient() {
           {/* 환율 변동 영향 */}
           {usAssets.length > 0 && usAnnualUSD > 0 && (
             <div className={styles.card}>
-              <label className={styles.cardLabel}>환율 변동 영향 — 미국 ETF (가정 1,300원/$)</label>
+              <label className={styles.cardLabel} htmlFor="dividend-fx-base">환율 변동 영향 — 미국 ETF (기준 환율 {fxBaseNum.toLocaleString()}원/$)</label>
+              <div className={styles.inputRow} style={{ marginBottom: 10 }}>
+                <input id="dividend-fx-base" className={styles.numInput} type="text" inputMode="decimal"
+                  value={fxBase} onChange={e => setFxBase(e.target.value.replace(/[^\d.]/g, ''))} />
+                <span className={styles.unit}>원/$</span>
+              </div>
               <div className={styles.fxTable}>
                 <div className={`${styles.fxRow} ${styles.headerRow}`}>
                   <span>변동</span><span>환율</span><span>원화 배당 (세전)</span>
                 </div>
-                {calcCurrencyImpact(usAnnualUSD, 1300, [-15, -10, -5, 0, 5, 10, 15]).map(row => (
+                {calcCurrencyImpact(usAnnualUSD, fxBaseNum, [-15, -10, -5, 0, 5, 10, 15]).map(row => (
                   <div key={row.deltaPct} className={`${styles.fxRow} ${row.deltaPct === 0 ? styles.fxRowBase : ''}`}>
                     <span className={`${styles.fxDelta} ${row.deltaPct > 0 ? styles.fxDeltaPos : row.deltaPct < 0 ? styles.fxDeltaNeg : styles.fxDeltaZero}`}>
                       {row.deltaPct > 0 ? `+${row.deltaPct}%` : `${row.deltaPct}%`}
@@ -894,7 +913,7 @@ export default function DividendClient() {
 
           {savingsCompare && bestSavings && (
             <>
-              <div className={`${styles.hero} ${styles.heroPurple}`}>
+              <div className={`${styles.hero} ${styles.heroPurple}`} role="status">
                 <div className={styles.heroLead}>
                   연 배당 {formatEok(annualDividendVal)} · {savingsYears}년 절세 비교
                 </div>
@@ -939,7 +958,7 @@ export default function DividendClient() {
               </div>
 
               <p className={styles.cardDesc} style={{ marginTop: 4 }}>
-                ※ ISA는 총 납입 한도(1억)·연금저축 연 600만·IRP 연 900만 등 <strong>납입 한도</strong>가 있어 큰 배당 흐름 전액을 절세 계좌에 담지 못합니다. 위 비교에서 ISA 한도(약 {formatEok(100_000_000 * rateV / 100)}/년) 초과분은 일반 15.4% 과세로 반영했습니다. 연금·IRP는 적립 한도 기준이라 별도 분산이 필요합니다.
+                ※ ISA는 총 납입 한도(1억)·연금저축 연 600만·IRP 연 900만 등 <strong>납입 한도</strong>가 있어 큰 배당 흐름 전액을 절세 계좌에 담지 못합니다. 위 비교에서 ISA 한도(약 {formatEok(100_000_000 * rateV / 100)}/년) 초과분은 일반 {GEN_PCT}% 과세로 반영했습니다. 연금·IRP는 적립 한도 기준이라 별도 분산이 필요합니다.
               </p>
 
               {/* 계좌별 상세 카드 */}
@@ -951,9 +970,9 @@ export default function DividendClient() {
                   return (
                     <div key={acc.id} className={`${styles.savingsCard} ${isBest ? styles.savingsCardWinner : ''}`}>
                       {isBest && <div className={styles.winnerBadge}>★ 최적</div>}
-                      <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4, fontFamily: 'Noto Sans KR, sans-serif' }}>{acc.name}</p>
+                      <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4, fontFamily: 'var(--font-sans)' }}>{acc.name}</p>
                       <p style={{ fontSize: 11, color: 'var(--muted)', marginBottom: 10, lineHeight: 1.6 }}>{acc.desc}</p>
-                      <div style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#059669' : 'var(--muted)' }}>
+                      <div style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 22, color: row.netBenefit > 0 ? '#059669' : 'var(--muted)' }}>
                         {row.netBenefit > 0 ? `+${formatEok(row.netBenefit)}` : '기준'}
                       </div>
                       <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 4 }}>{savingsYears}년 누적 이득</p>

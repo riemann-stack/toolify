@@ -14,6 +14,12 @@ export const EAG_SLOPE = 28.7
 export const EAG_INTERCEPT = 46.7
 export const MGDL_PER_MMOL = 18.0
 
+/** 입력 허용 범위 — 검사 보고 범위를 크게 벗어난 값(오타 등)은 변환하지 않고 안내만 */
+export const A1C_MIN = 3
+export const A1C_MAX = 20
+export const EAG_MIN = 40
+export const EAG_MAX = 500
+
 /** HbA1c(%) → 추정 평균혈당 eAG (mg/dL) */
 export function a1cToEag(a1c: number): number {
   return EAG_SLOPE * a1c - EAG_INTERCEPT
@@ -41,14 +47,18 @@ export interface A1cBand {
 }
 /** 진단 구간 (KDA/ADA, %) */
 export const A1C_BANDS: A1cBand[] = [
-  { id: 'normal', label: '정상',        a1cLo: 0,   a1cHi: 5.7, color: 'var(--success)',    note: '정상 범위 — 정기 검진 유지' },
+  { id: 'normal', label: '전단계 기준 미만', a1cLo: 0, a1cHi: 5.7, color: 'var(--success)', note: '당뇨병전단계 기준(5.7%)보다 낮음 — 정기 검진 유지' },
   { id: 'pre',    label: '당뇨 전단계', a1cLo: 5.7, a1cHi: 6.5, color: 'var(--warning)',    note: '생활습관 관리로 진행 예방이 중요한 구간' },
   { id: 'dm',     label: '당뇨병 범위', a1cLo: 6.5, a1cHi: null, color: 'var(--danger)',     note: '진단·치료는 의료진과 상의하세요' },
 ]
 
-/** HbA1c 값이 속하는 진단 구간 */
+/**
+ * HbA1c 값이 속하는 진단 구간.
+ * 검사 결과지처럼 소수 1자리로 반올림한 값으로 판정 — 화면 표시(6.5%)와 구간(당뇨병 범위)이 어긋나지 않게.
+ */
 export function bandForA1c(a1c: number): A1cBand {
-  return A1C_BANDS.find((b) => a1c < (b.a1cHi ?? Infinity)) ?? A1C_BANDS[A1C_BANDS.length - 1]
+  const v = roundScrub(a1c, 1)
+  return A1C_BANDS.find((b) => v < (b.a1cHi ?? Infinity)) ?? A1C_BANDS[A1C_BANDS.length - 1]
 }
 
 /** 참고 환산표 행 */

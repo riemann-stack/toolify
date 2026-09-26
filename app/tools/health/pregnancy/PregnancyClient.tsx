@@ -2,7 +2,7 @@
 
 /* eslint-disable react-hooks/set-state-in-effect */
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import styles from './pregnancy.module.css'
 import {
@@ -57,6 +57,8 @@ export default function PregnancyClient() {
 
   /* localStorage 자동 불러오기 */
   const [loadedFromStorage, setLoadedFromStorage] = useState(false)
+  const [hasStored, setHasStored] = useState(false)   // 저장본 존재 여부 (삭제 버튼 노출)
+  const [hydrated, setHydrated] = useState(false)     // 불러오기 완료 후에만 자동 저장
   useEffect(() => {
     const saved = loadProfile()
     if (saved) {
@@ -67,8 +69,26 @@ export default function PregnancyClient() {
       setIsMultiple(!!saved.isMultiple)
       setChecklistProgress(saved.checklistProgress ?? {})
       setLoadedFromStorage(true)
+      setHasStored(true)
     }
+    setHydrated(true)
   }, [])
+
+  /* 자동 저장 — 입력·체크 변경 시 0.4초 디바운스 (비어 있으면 저장하지 않음) */
+  useEffect(() => {
+    if (!hydrated) return
+    if (!date && !babyName && !Object.values(checklistProgress).some(Boolean)) return
+    const t = setTimeout(() => {
+      saveProfile({
+        inputMode, date, cycleLength, isMultiple,
+        babyName: babyName || undefined,
+        checklistProgress,
+        savedAt: new Date().toISOString(),
+      })
+      setHasStored(true)
+    }, 400)
+    return () => clearTimeout(t)
+  }, [hydrated, inputMode, date, cycleLength, isMultiple, babyName, checklistProgress])
 
   /* 메인 계산 */
   const result = useMemo(() => {
@@ -89,7 +109,14 @@ export default function PregnancyClient() {
     setChecklistProgress(next)
   }
 
-  /* 자동 저장 */
+  /* 즉시 저장 (자동 저장과 별개로 체크리스트 탭 버튼) */
+  const savedTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => {
+    if (savedTimer.current) clearTimeout(savedTimer.current)
+    if (copyTimer.current) clearTimeout(copyTimer.current)
+  }, [])
+
   const handleSave = () => {
     saveProfile({
       inputMode, date, cycleLength, isMultiple,
@@ -97,8 +124,10 @@ export default function PregnancyClient() {
       checklistProgress,
       savedAt: new Date().toISOString(),
     })
+    setHasStored(true)
     setSaved(true)
-    setTimeout(() => setSaved(false), 1600)
+    if (savedTimer.current) clearTimeout(savedTimer.current)
+    savedTimer.current = setTimeout(() => setSaved(false), 1500)
   }
 
   const handleClear = () => {
@@ -108,6 +137,7 @@ export default function PregnancyClient() {
     setDate('')
     setChecklistProgress({})
     setLoadedFromStorage(false)
+    setHasStored(false)
   }
 
   const [saved, setSaved] = useState(false)
@@ -117,7 +147,8 @@ export default function PregnancyClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+      copyTimer.current = setTimeout(() => setCopied(false), 1500)
     } catch { /* */ }
   }
 
@@ -223,10 +254,10 @@ export default function PregnancyClient() {
       </div>
 
       <div className={styles.card}>
-        <label className={styles.label}>
+        <label className={styles.label} htmlFor="pregnancy-date">
           {inputMode === 'lmp' ? '마지막 생리 시작일' : inputMode === 'conception' ? '수정일' : '출산 예정일'}
         </label>
-        <input className={styles.dateInput} type="date"
+        <input id="pregnancy-date" className={styles.dateInput} type="date"
           min={inputMode === 'duedate' ? undefined : (minDate || undefined)}
           max={inputMode === 'duedate' ? undefined : (maxDate || undefined)}
           value={date} onChange={e => setDate(e.target.value)} />
@@ -268,7 +299,7 @@ export default function PregnancyClient() {
         </div>
         {isMultiple && (
           <div className={styles.warnBox} style={{ marginTop: 8 }}>
-            ⚠️ <strong>쌍태아 임신은 검진 빈도가 더 잦고(2~3주 간격), 평균 분만 시기가 36~37주</strong>로 단태아와 다릅니다.
+            ⚠️ <strong>쌍태아 임신은 검진 빈도가 더 잦고(2~3주 간격), 절반 이상이 37주 전에 태어나는 등</strong> 단태아와 다릅니다.
             <strong> 본 도구의 예정일·산전 검사·마일스톤은 단태아 40주 기준 그대로 표시되며 쌍태아용으로 조정되지 않습니다</strong> — 실제 일정은 담당 산부인과 안내를 우선하세요.
           </div>
         )}
@@ -277,10 +308,12 @@ export default function PregnancyClient() {
       {!result && (
         <div style={{
           background: 'var(--bg2)', border: '1px dashed var(--border)',
-          borderRadius: 14, padding: '30px 20px', textAlign: 'center',
-          color: 'var(--muted)', fontSize: 13, fontFamily: 'Noto Sans KR, sans-serif',
+          borderRadius: 'var(--radius-card)', padding: '30px 20px', textAlign: 'center',
+          color: 'var(--muted)', fontSize: 13, fontFamily: 'var(--font-sans)',
         }}>
-          {inputMode === 'lmp' ? '마지막 생리 시작일' : inputMode === 'conception' ? '수정일' : '출산 예정일'}을 선택하면 임신 주수가 계산됩니다
+          {date
+            ? '입력한 날짜로는 아직 임신 기간이 시작되지 않아 주수를 계산할 수 없습니다. 날짜와 입력 방식을 확인하세요.'
+            : `${inputMode === 'lmp' ? '마지막 생리 시작일' : inputMode === 'conception' ? '수정일' : '출산 예정일'}을 선택하면 임신 주수가 계산됩니다`}
         </div>
       )}
 
@@ -292,7 +325,7 @@ export default function PregnancyClient() {
               ⚠️ <strong>임신 {result.currentWeek}주는 정상 분만 범위(보통 37~42주)를 벗어납니다.</strong> 입력한 날짜·입력 방식을 다시 확인하세요. 실제로 예정일이 지났다면 즉시 산부인과 진료가 필요합니다.
             </div>
           )}
-          <div className={styles.heroCard}>
+          <div className={styles.heroCard} role="status">
             <div className={styles.heroLabel}>
               {babyName ? `🤱 ${babyName}` : '현재 임신 주수'}
             </div>
@@ -327,7 +360,7 @@ export default function PregnancyClient() {
               </div>
               <div className={styles.triMarker} style={{ left: `${markerPos}%` }} />
             </div>
-            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, marginTop: 8 }}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', fontSize: 11, color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 700, marginTop: 8 }}>
               <span>0주</span><span>13주</span><span>27주</span><span>40주</span>
             </div>
           </div>
@@ -347,8 +380,8 @@ export default function PregnancyClient() {
               <div className={`${styles.statValue} ${styles.accentValue}`}>{fmtDateKo(result.dueDate)}</div>
             </div>
             <div className={styles.statCard}>
-              <div className={styles.statLabel}>임신 개월수 (의학)</div>
-              <div className={styles.statValue}>약 {result.monthsApprox}개월 ({TRIMESTERS.find(t => t.id === result.trimester)?.name})</div>
+              <div className={styles.statLabel}>임신 개월 (4주 = 1개월)</div>
+              <div className={styles.statValue}>임신 {result.monthsApprox}개월 ({TRIMESTERS.find(t => t.id === result.trimester)?.name})</div>
             </div>
           </div>
 
@@ -364,7 +397,7 @@ export default function PregnancyClient() {
                       <span className={styles.milestoneName}>{m.name}</span>
                       <span className={styles.milestoneWeek}>{m.week}주</span>
                       <span className={styles.milestoneDday}>
-                        {isPast ? `완료` : `D-${m.daysUntil}`}
+                        {isPast ? `지남` : `D-${m.daysUntil}`}
                       </span>
                     </div>
                   )
@@ -379,8 +412,8 @@ export default function PregnancyClient() {
               <div style={{ display: 'flex', alignItems: 'center', gap: 12, justifyContent: 'center' }}>
                 <span style={{ fontSize: 36 }}>{fetal.emoji}</span>
                 <div>
-                  <div style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, fontFamily: 'Noto Sans KR' }}>
-                    {result.currentWeek}주차 — <span style={{ color: '#DB2777' }}>{fetal.size} 크기 ({fetal.length})</span>
+                  <div style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>
+                    {result.currentWeek}주차 — <span style={{ color: 'var(--pink-600)' }}>{fetal.size} 크기 ({fetal.length})</span>
                   </div>
                   <div style={{ fontSize: 12, color: 'var(--muted)', marginTop: 3 }}>{fetal.development}</div>
                 </div>
@@ -390,7 +423,7 @@ export default function PregnancyClient() {
             </div>
           )}
 
-          {loadedFromStorage && (
+          {hasStored && (
             <button type="button" className={`${styles.miniBtn} ${styles.miniDanger}`} onClick={handleClear} style={{ alignSelf: 'flex-end' }}>
               저장된 정보 삭제
             </button>
@@ -419,10 +452,10 @@ export default function PregnancyClient() {
                   <div key={t.test.id} className={`${styles.testRow} ${cls}`}>
                     <div>
                       <div className={styles.testName}>
-                        {t.status === 'past' ? '✅' : t.status === 'current' ? '🟡' : '📅'}
+                        {t.status === 'past' ? '○' : t.status === 'current' ? '🟡' : '📅'}
                         {' '}{t.test.name}
                         {t.test.importance === 'essential' && (
-                          <span style={{ marginLeft: 6, fontSize: 10, color: '#EA580C', fontWeight: 700 }}>핵심</span>
+                          <span style={{ marginLeft: 6, fontSize: 11, color: 'var(--orange-600)', fontWeight: 700 }}>핵심</span>
                         )}
                       </div>
                       <div className={styles.testDesc}>{t.test.desc}</div>
@@ -433,7 +466,7 @@ export default function PregnancyClient() {
                       </div>
                       <div className={`${styles.testStatus} ${t.status === 'current' ? styles.testStatusCurrent : ''}`}>
                         {t.test.startWeek}~{t.test.endWeek}주 ·
-                        {' '}{t.status === 'past' ? '완료' :
+                        {' '}{t.status === 'past' ? '권장 시기 지남' :
                               t.status === 'current' ? '진행 중' :
                               t.daysUntil > 0 ? `D-${t.daysUntil}` : ''}
                       </div>
@@ -566,18 +599,18 @@ export default function PregnancyClient() {
                   background: 'var(--bg2)',
                   border: `1px solid ${isCurrentTri ? triInfo.color : 'var(--border)'}`,
                   borderLeft: `4px solid ${triInfo.color}`,
-                  borderRadius: 12,
+                  borderRadius: 'var(--radius-m)',
                   padding: '12px 14px',
                 }}>
                 <summary style={{
                   cursor: 'pointer',
                   fontSize: 13, fontWeight: 700,
                   color: isCurrentTri ? triInfo.color : 'var(--text)',
-                  fontFamily: 'Noto Sans KR, sans-serif',
+                  fontFamily: 'var(--font-sans)',
                   display: 'flex', justifyContent: 'space-between', alignItems: 'center',
                 }}>
                   <span>{triInfo.name} ({triInfo.startWeek}~{triInfo.endWeek}주){isCurrentTri && ' · 현재'}</span>
-                  <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>
+                  <span style={{ fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>
                     {triCompleted}/{items.length}
                   </span>
                 </summary>
@@ -630,6 +663,12 @@ export default function PregnancyClient() {
               onChange={e => setReverseDate(e.target.value)} />
           </div>
 
+          {reverseDate && !reverseResult && (
+            <div className={styles.warnBox}>
+              ⚠️ 입력한 예정일은 280일(40주) 넘게 남아 있어 아직 임신 기간이 시작되기 전입니다. 예정일을 다시 확인하세요.
+            </div>
+          )}
+
           {reverseResult && (
             <>
               {reverseOverdue && (
@@ -659,8 +698,8 @@ export default function PregnancyClient() {
                   <div className={styles.statValue}>{reverseResult.currentWeek}주 {reverseResult.currentDay}일 ({TRIMESTERS.find(t => t.id === reverseResult.trimester)?.name})</div>
                 </div>
                 <div className={styles.statCard}>
-                  <div className={styles.statLabel}>임신 개월수 (의학)</div>
-                  <div className={styles.statValue}>약 {reverseResult.monthsApprox}개월</div>
+                  <div className={styles.statLabel}>임신 개월 (4주 = 1개월)</div>
+                  <div className={styles.statValue}>임신 {reverseResult.monthsApprox}개월</div>
                 </div>
               </div>
 

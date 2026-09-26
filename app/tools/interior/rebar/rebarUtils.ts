@@ -48,9 +48,9 @@ export interface StrengthMeta {
 
 export const STRENGTH_META: Record<Strength, StrengthMeta> = {
   SD300: { id: 'SD300', yieldMpa: 300, use: '저층·소형 구조 (구형)',           priceFactor: 0.95, color: '#9B9B9B' },
-  SD400: { id: 'SD400', yieldMpa: 400, use: '한국 일반 표준 (공동주택·상가)',  priceFactor: 1.00, color: '#0D9488' },
-  SD500: { id: 'SD500', yieldMpa: 500, use: '대형·고층·교량',                   priceFactor: 1.10, color: '#D97706' },
-  SD600: { id: 'SD600', yieldMpa: 600, use: '초고층·내진·플랜트',               priceFactor: 1.20, color: '#DB2777' },
+  SD400: { id: 'SD400', yieldMpa: 400, use: '한국 일반 표준 (공동주택·상가)',  priceFactor: 1.00, color: 'var(--teal-600)' },
+  SD500: { id: 'SD500', yieldMpa: 500, use: '대형·고층·교량',                   priceFactor: 1.10, color: 'var(--amber-600)' },
+  SD600: { id: 'SD600', yieldMpa: 600, use: '초고층·내진·플랜트',               priceFactor: 1.20, color: 'var(--pink-600)' },
 }
 
 /* 트럭 종류 */
@@ -59,17 +59,20 @@ export interface TruckMeta {
   emoji: string
   label: string
   capacityKg: number
-  maxLengthM: number  // 적재 가능 최대 철근 길이
+  maxLengthM: number  // 적재 가능 최대 철근 길이 (현장 관행)
+  /* 법정 적재길이 한도(근사) — 도로교통법 시행령 제22조: 자동차 길이 + 그 길이의 1/10.
+     넘으면 출발지 관할 경찰서장 허가 필요. 차종별 전장 편차가 커서 대표 차종이 명확한 경우만 기입 */
+  legalLenM?: number
   costRange: string   // 수도권 일반
   note: string
 }
 
 export const TRUCKS: TruckMeta[] = [
-  { id: 't1',   emoji: '🚐', label: '1톤 (포터·봉고)',  capacityKg: 1000,  maxLengthM: 6,    costRange: '8~15만원',  note: '6m 철근까지, 소량 셀프 운반' },
-  { id: 't15',  emoji: '🚚', label: '1.5톤',             capacityKg: 1500,  maxLengthM: 6,    costRange: '12~20만원', note: '6m 철근, 중간 규모' },
-  { id: 't25',  emoji: '🚛', label: '2.5톤',             capacityKg: 2500,  maxLengthM: 8,    costRange: '15~25만원', note: '8m까지 가능' },
-  { id: 't5',   emoji: '🛻', label: '5톤 카고',           capacityKg: 5000,  maxLengthM: 12,   costRange: '25~40만원', note: '12m 철근 표준 운반차' },
-  { id: 't11',  emoji: '🚜', label: '11톤',               capacityKg: 11000, maxLengthM: 13.7, costRange: '40~70만원', note: '대형 현장·13.7m 가능' },
+  { id: 't1',   emoji: '🚐', label: '1톤 (포터·봉고)',  capacityKg: 1000,  maxLengthM: 6,    legalLenM: 5.6, costRange: '8~15만원',  note: '소량 운반용. 전장 약 5.1m라 법정 적재길이는 약 5.6m' },
+  { id: 't15',  emoji: '🚚', label: '1.5톤',             capacityKg: 1500,  maxLengthM: 6,    costRange: '12~20만원', note: '중간 규모. 차 길이에 따라 6m도 적재길이 한도를 넘을 수 있음' },
+  { id: 't25',  emoji: '🚛', label: '2.5톤',             capacityKg: 2500,  maxLengthM: 8,    costRange: '15~25만원', note: '8m는 차 길이×1.1 한도를 넘는 경우가 많아 차량 전장 확인' },
+  { id: 't5',   emoji: '🛻', label: '5톤 카고',           capacityKg: 5000,  maxLengthM: 12,   costRange: '25~40만원', note: '12m 철근 운반에 주로 쓰임(장축 차량). 적재길이 한도 확인' },
+  { id: 't11',  emoji: '🚜', label: '11톤',               capacityKg: 11000, maxLengthM: 13.7, costRange: '40~70만원', note: '대형 현장. 13.7m는 차 길이에 따라 허가 필요' },
 ]
 
 /* ─────────────────────────────────────────────
@@ -151,7 +154,7 @@ export const REBAR_PLANS: RebarPlan[] = [
     spacing: 200,
     cover: 50,
     perM2: 20,   // 양면 격자 = 1면 약 10m(가로5+세로5) × 2면
-    caution: '높이 1.5m 이상은 구조 설계 필수 (건축법)',
+    caution: '높이 1.5m 이상은 구조 설계 권장, 2m를 넘으면 공작물 축조신고 대상 (건축법 시행령 제118조)',
   },
   {
     id: 'foundation',
@@ -161,7 +164,7 @@ export const REBAR_PLANS: RebarPlan[] = [
     spec: 'D13 @200, 상하 더블 격자',
     size: 'D13',
     spacing: 200,
-    cover: 70,
+    cover: 75,   // KDS 14 20 50: 흙에 접해 타설·영구히 흙에 묻히는 콘크리트 최소 75mm
     perM2: 20,   // 더블레이어 = 약 20m
     caution: '주택은 구조기술사 도면 필수, 단순 슬래브에 한정',
   },
@@ -169,11 +172,11 @@ export const REBAR_PLANS: RebarPlan[] = [
     id: 'stair',
     emoji: '🪜',
     label: '콘크리트 계단',
-    desc: '참고용 짧은 계단 예시 (최대 5단).',
+    desc: '참고용 짧은 옥외 계단 예시 (최대 5단).',
     spec: 'D10 @150, 사선 배근',
     size: 'D10',
     spacing: 150,
-    cover: 30,
+    cover: 40,   // KDS 14 20 50: 옥외 공기·흙에 노출되는 D16 이하 최소 40mm
     perM2: 13,   // 단당 가로 + 사선
     caution: '5단 초과·외부 연결은 전문가 시공',
   },
@@ -185,7 +188,7 @@ export const REBAR_PLANS: RebarPlan[] = [
     spec: 'D10 @300, 격자 1단',
     size: 'D10',
     spacing: 300,
-    cover: 50,
+    cover: 75,   // 흙에 직접 타설하는 독립기초 — KDS 14 20 50 최소 75mm
     perM2: 7,    // 1단 격자
     caution: '바람·지진에 대한 앵커 볼트 별도 시공',
   },

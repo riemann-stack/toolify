@@ -27,55 +27,56 @@ const MONTH_OPTIONS = [2, 3, 4, 5, 6, 9, 10, 12, 18, 24, 36]
 // ─────────────────────────────────────────────
 type InstallType = 'free' | 'partial' | 'paid'
 
-function calcFree(amount: number, months: number) {
+type InstallResult = {
+  monthlyPayment: number // 1회차 납부액 (원금균등이라 가장 큼 — 이후 매월 감소)
+  lastPayment: number    // 마지막 회차 납부액
+  totalPayment: number
+  totalInterest: number
+}
+
+function calcFree(amount: number, months: number): InstallResult {
+  const m = months > 0 ? amount / months : 0
+  return { monthlyPayment: m, lastPayment: m, totalPayment: amount, totalInterest: 0 }
+}
+
+/* 한국 카드 할부 수수료 = 원금균등 분할 + 할부 잔액 × 연 수수료율 ÷ 12 (여신금융협회·카드사 안내 산식)
+   k회차 수수료 = (원금 − (k−1) × 원금/n) × r/12  →  1~N회차 수수료 합 = 원금 × r/12 × (N − N(N−1)/(2n))
+   전 회차 유이자(N = n)면 총 수수료 = 원금 × r/12 × (n+1)/2 */
+function feeSum(amount: number, months: number, annualRate: number, payMonths: number): number {
+  const N = Math.max(0, Math.min(months, Math.floor(payMonths)))
+  return amount * (annualRate / 100 / 12) * (N - (N * (N - 1)) / (2 * months))
+}
+
+function calcPaid(amount: number, months: number, annualRate: number): InstallResult {
+  return calcPartial(amount, months, months, annualRate)
+}
+
+/** 부분 무이자 — 카드사 관행대로 앞 회차(1~payMonths회차)만 고객이 수수료를 내고 뒤 회차는 면제 */
+function calcPartial(amount: number, months: number, payMonths: number, annualRate: number): InstallResult {
+  if (months <= 0 || amount <= 0) return { monthlyPayment: 0, lastPayment: 0, totalPayment: 0, totalInterest: 0 }
+  const N = Math.max(0, Math.min(months, Math.floor(payMonths)))
+  const principal = amount / months
+  const mr = annualRate / 100 / 12
+  const totalInterest = feeSum(amount, months, annualRate, N)
   return {
-    monthlyPayment: months > 0 ? amount / months : 0,
-    totalPayment: amount,
-    totalInterest: 0,
+    monthlyPayment: principal + (N >= 1 ? amount * mr : 0),
+    lastPayment: principal + (N >= months ? principal * mr : 0),
+    totalPayment: amount + totalInterest,
+    totalInterest,
   }
 }
 
-function calcPaid(amount: number, months: number, annualRate: number) {
-  if (months <= 0 || amount <= 0) return { monthlyPayment: 0, totalPayment: 0, totalInterest: 0 }
-  const monthlyRate = annualRate / 100 / 12
-  if (monthlyRate === 0) {
-    return { monthlyPayment: amount / months, totalPayment: amount, totalInterest: 0 }
-  }
-  const monthlyPayment =
-    (amount * (monthlyRate * Math.pow(1 + monthlyRate, months))) /
-    (Math.pow(1 + monthlyRate, months) - 1)
-  const totalPayment = monthlyPayment * months
-  const totalInterest = totalPayment - amount
-  return { monthlyPayment, totalPayment, totalInterest }
-}
-
-function calcPartial(amount: number, months: number, freeMonths: number, annualRate: number) {
-  if (freeMonths >= months) return calcFree(amount, months)
-  if (freeMonths <= 0) return calcPaid(amount, months, annualRate)
-  const freeAmount = (amount / months) * freeMonths
-  const paidAmount = amount - freeAmount
-  const paidMonths = months - freeMonths
-  const paid = calcPaid(paidAmount, paidMonths, annualRate)
-  const totalPayment = freeAmount + paid.totalPayment
-  return {
-    monthlyPayment: totalPayment / months,
-    totalPayment,
-    totalInterest: paid.totalInterest,
-  }
-}
-
-// 월별 상환 스케줄 (원리금균등 — 유이자만)
-function buildSchedule(amount: number, months: number, annualRate: number) {
+// 월별 상환 스케줄 (원금균등 — 1~payMonths회차만 수수료)
+function buildSchedule(amount: number, months: number, annualRate: number, payMonths: number = months) {
   if (amount <= 0 || months <= 0) return []
   const monthlyRate = annualRate / 100 / 12
-  const r = calcPaid(amount, months, annualRate)
+  const principal = amount / months
   let balance = amount
   const rows: { month: number; pay: number; principal: number; interest: number; balance: number }[] = []
   for (let i = 1; i <= months; i++) {
-    const interest = balance * monthlyRate
-    const principal = r.monthlyPayment - interest
+    const interest = i <= payMonths ? balance * monthlyRate : 0
     balance = Math.max(0, balance - principal)
-    rows.push({ month: i, pay: r.monthlyPayment, principal, interest, balance })
+    rows.push({ month: i, pay: principal + interest, principal, interest, balance })
   }
   return rows
 }
@@ -92,7 +93,8 @@ export default function CardInstallmentClient() {
   const [customMonth, setCustomMonth] = useState<string>('')
   const [installType, setInstallType] = useState<InstallType>('paid')
   const [rate, setRate] = useState<string>('19.9')
-  const [freeMonths, setFreeMonths] = useState<string>('4')
+  // 부분 무이자: 고객이 수수료를 내는 앞쪽 회차 수 (예: 12개월 중 1~4회차 고객부담, 5~12회차 면제)
+  const [payMonths, setPayMonths] = useState<string>('4')
   const [cashDiscount, setCashDiscount] = useState<string>('0')
   const [rewardPoints, setRewardPoints] = useState<string>('0')
 
@@ -120,11 +122,11 @@ export default function CardInstallmentClient() {
   const calc = useMemo(() => {
     const amt = parseComma(amount)
     const r = parseFloat(rate) || 0
-    const fm = parseComma(freeMonths)
+    const pm = Math.min(effMonths, Math.max(0, parseComma(payMonths)))
     if (installType === 'free')   return calcFree(amt, effMonths)
-    if (installType === 'partial') return calcPartial(amt, effMonths, fm, r)
+    if (installType === 'partial') return calcPartial(amt, effMonths, pm, r)
     return calcPaid(amt, effMonths, r)
-  }, [amount, effMonths, installType, rate, freeMonths])
+  }, [amount, effMonths, installType, rate, payMonths])
 
   const cashPrice = useMemo(() => {
     const amt = parseComma(amount)
@@ -137,11 +139,12 @@ export default function CardInstallmentClient() {
   const hasCashAdjust = (parseFloat(cashDiscount) || 0) > 0 || parseComma(rewardPoints) > 0
 
   const schedule = useMemo(() => {
-    if (installType !== 'paid') return []
+    if (installType === 'free') return []
     const amt = parseComma(amount)
     const r = parseFloat(rate) || 0
-    return buildSchedule(amt, effMonths, r)
-  }, [amount, effMonths, rate, installType])
+    const pm = installType === 'partial' ? Math.min(effMonths, Math.max(0, parseComma(payMonths))) : effMonths
+    return buildSchedule(amt, effMonths, r, pm)
+  }, [amount, effMonths, rate, installType, payMonths])
 
   // 해석 문구 — 일시불 실결제액(할인·포인트 반영) 대비 할부 총액의 추가 부담
   const interpretation = useMemo(() => {
@@ -233,7 +236,7 @@ export default function CardInstallmentClient() {
     if (amt <= 0) return null
     if (tblIsFree) return { text: '무이자 할부는 가능한 최장 개월을 선택해도 비용 부담이 없습니다. 다만 24개월 이상 무이자는 부분 무이자일 가능성이 높으니 약관을 꼭 확인하세요.' }
     if (amt < 500000) return { text: `구매금액이 50만원 미만이라면 일시불 또는 6개월 이내 짧은 할부를 권장합니다. 유이자 할부는 부담 대비 이자 비용이 크지 않지만, 카드 포인트·캐시백을 활용한 일시불이 가장 효율적입니다.` }
-    if (amt < 2000000) return { text: `50만~200만원 구매는 무이자 6~12개월이 가장 합리적입니다. 무이자 불가 시 6개월 이내(이자 2% 이내) 할부를 선택하세요.` }
+    if (amt < 2000000) return { text: `50만~200만원 구매는 무이자 6~12개월이 가장 합리적입니다. 무이자가 안 되면 6개월 이내 할부를 고르세요(연 19.9%면 총 수수료가 원금의 약 6% 이하).` }
     return { text: `200만원을 초과하는 구매는 일시불 + 캐시백 카드 활용을 우선 검토하세요. 유이자 할부 시 24개월 이상은 총 이자가 원금의 20%를 넘어 부담이 큽니다. 가능하면 무이자 12~24개월을 활용하세요.` }
   }, [tblAmount, tblIsFree])
 
@@ -249,7 +252,7 @@ export default function CardInstallmentClient() {
         `할부: ${effMonths}개월 (${installType === 'free' ? '무이자' : installType === 'partial' ? '부분 무이자' : '유이자'})`,
         installType !== 'free' ? `연 수수료율: ${rate}%` : '',
         ``,
-        `월 납부액: ${fmtKRW(calc.monthlyPayment)}`,
+        installType === 'free' ? `월 납부액: ${fmtKRW(calc.monthlyPayment)}` : `월 납부액: 1회차 ${fmtKRW(calc.monthlyPayment)} → 마지막 ${fmtKRW(calc.lastPayment)}`,
         `총 납부액: ${fmtKRW(calc.totalPayment)}`,
         `총 이자: ${fmtKRW(calc.totalInterest)}`,
         ``,
@@ -262,7 +265,7 @@ export default function CardInstallmentClient() {
         ``,
         `🟢 일시불 (${cmpDiscount}% 할인): ${fmtKRW(cmpCalc.cash)}`,
         `🟡 무이자 ${cmpFreeMonths}개월: ${fmtKRW(cmpCalc.free.total)} (월 ${fmtKRW(cmpCalc.free.monthlyPayment)})`,
-        `🔴 유이자 ${cmpPaidMonths}개월 (${cmpRate}%): ${fmtKRW(cmpCalc.paid.total)} (월 ${fmtKRW(cmpCalc.paid.monthlyPayment)})`,
+        `🔴 유이자 ${cmpPaidMonths}개월 (${cmpRate}%): ${fmtKRW(cmpCalc.paid.total)} (1회차 ${fmtKRW(cmpCalc.paid.monthlyPayment)})`,
         ``,
         `해석: ${cmpInterpretation.text}`,
         ``,
@@ -273,7 +276,7 @@ export default function CardInstallmentClient() {
         `[개월수별 할부 비교]`,
         `구매금액: ${fmtKRW(parseComma(tblAmount))} · ${tblIsFree ? '무이자' : `연 ${tblRate}% 유이자`}`,
         ``,
-        ...tableRows.map(r => `${r.months}개월: 월 ${fmtKRW(r.monthlyPayment)} / 총 ${fmtKRW(r.totalPayment)} / 이자 ${fmtKRW(r.totalInterest)}`),
+        ...tableRows.map(r => `${r.months}개월: 1회차 ${fmtKRW(r.monthlyPayment)} / 총 ${fmtKRW(r.totalPayment)} / 이자 ${fmtKRW(r.totalInterest)}`),
         ``,
         `https://youtil.kr/tools/finance/installment`,
       ].join('\n')
@@ -281,7 +284,7 @@ export default function CardInstallmentClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -309,7 +312,7 @@ export default function CardInstallmentClient() {
               y={padT + innerH - h}
               width={barW}
               height={h}
-              fill="#DC2626"
+              fill="var(--danger)"
               opacity={0.55}
             />
           )
@@ -334,7 +337,7 @@ export default function CardInstallmentClient() {
         {tableRows.map((r, i) => {
           const cx = padL + (innerW / tableRows.length) * (i + 0.5)
           return (
-            <text key={`l-${i}`} x={cx} y={H - 8} fontSize="9" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+            <text key={`l-${i}`} x={cx} y={H - 8} fontSize="9" fill="var(--muted)" textAnchor="middle" fontWeight={700}>
               {r.months}
             </text>
           )
@@ -385,6 +388,7 @@ export default function CardInstallmentClient() {
                 className={s.bigInput}
                 type="text"
                 inputMode="numeric"
+                aria-label="구매금액 (원)"
                 value={amount}
                 onChange={e => setAmount(fmtComma(e.target.value))}
                 placeholder="1,000,000"
@@ -422,8 +426,8 @@ export default function CardInstallmentClient() {
             </div>
             {months === 0 && (
               <div className={s.monthCustomRow}>
-                <span className={s.subLabel}>개월 수 직접 입력</span>
-                <input
+                <label htmlFor="inst-custom-month" className={s.subLabel}>개월 수 직접 입력</label>
+                <input id="inst-custom-month"
                   className={s.smallInput}
                   type="number"
                   inputMode="numeric"
@@ -475,9 +479,9 @@ export default function CardInstallmentClient() {
 
             {installType !== 'free' && (
               <div className={s.rateRow}>
-                <span className={s.subLabel}>연 수수료율 (%)</span>
+                <label htmlFor="inst-rate" className={s.subLabel}>연 수수료율 (%)</label>
                 <div className={s.inputRow}>
-                  <input
+                  <input id="inst-rate"
                     className={s.smallInput}
                     type="number"
                     inputMode="decimal"
@@ -497,20 +501,24 @@ export default function CardInstallmentClient() {
 
             {installType === 'partial' && (
               <div className={s.rateRow}>
-                <span className={s.subLabel}>무이자 회차 (앞쪽 N회까지)</span>
+                <label htmlFor="inst-pay-months" className={s.subLabel}>고객부담 회차 (1회차부터 N회차까지 수수료 부담)</label>
                 <div className={s.inputRow}>
                   <input
+                    id="inst-pay-months"
                     className={s.smallInput}
                     type="number"
                     inputMode="numeric"
-                    min="1"
-                    max={effMonths - 1}
+                    min="0"
+                    max={effMonths}
                     step="1"
-                    value={freeMonths}
-                    onChange={e => setFreeMonths(e.target.value)}
+                    value={payMonths}
+                    onChange={e => setPayMonths(e.target.value)}
                   />
                   <span className={s.unit}>회 / {effMonths}회 중</span>
                 </div>
+                <p className={s.rateHint}>
+                  카드사 부분 무이자는 보통 앞 회차에 수수료를 내고 뒤 회차가 면제됩니다(예: 12개월 중 1~4회차 고객부담, 5~12회차 면제).
+                </p>
               </div>
             )}
           </div>
@@ -523,16 +531,16 @@ export default function CardInstallmentClient() {
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
               <div>
-                <span className={s.subLabel}>일시불 할인율 (%)</span>
+                <label htmlFor="inst-cash-discount" className={s.subLabel}>일시불 할인율 (%)</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="number" inputMode="decimal" min="0" max="30" step="0.5" value={cashDiscount} onChange={e => setCashDiscount(e.target.value)} />
+                  <input id="inst-cash-discount" className={s.smallInput} type="number" inputMode="decimal" min="0" max="30" step="0.5" value={cashDiscount} onChange={e => setCashDiscount(e.target.value)} />
                   <span className={s.unit}>%</span>
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>카드 포인트·캐시백 (원)</span>
+                <label htmlFor="inst-points" className={s.subLabel}>카드 포인트·캐시백 (원)</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="text" inputMode="numeric" value={rewardPoints} onChange={e => setRewardPoints(fmtComma(e.target.value))} placeholder="0" />
+                  <input id="inst-points" className={s.smallInput} type="text" inputMode="numeric" value={rewardPoints} onChange={e => setRewardPoints(fmtComma(e.target.value))} placeholder="0" />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
@@ -543,7 +551,7 @@ export default function CardInstallmentClient() {
           <div role="status">
           {parseComma(amount) > 0 && (
             <div className={s.hero}>
-              <p className={s.heroLead}>월 납부액</p>
+              <p className={s.heroLead}>{installType === 'free' ? '월 납부액' : '월 납부액 (1회차)'}</p>
               <div>
                 <span className={s.heroNum}>{fmt(Math.round(calc.monthlyPayment))}</span>
                 <span className={s.heroUnit}>원</span>
@@ -551,9 +559,12 @@ export default function CardInstallmentClient() {
               <p className={s.heroSub}>
                 {fmtKRW(parseComma(amount))} / {effMonths}개월 /
                 {' '}<span className={s.heroSubAccent}>
-                  {installType === 'free' ? '무이자' : installType === 'partial' ? `부분 무이자 (${freeMonths}/${effMonths})` : `연 ${rate}%`}
+                  {installType === 'free' ? '무이자' : installType === 'partial' ? (() => { const pm = Math.min(effMonths, Math.max(0, Math.floor(parseComma(payMonths)))); return pm > 0 ? `부분 무이자 (1~${pm}회차 고객부담)` : '부분 무이자 (고객부담 회차 없음)' })() : `연 ${rate}%`}
                 </span>
               </p>
+              {installType !== 'free' && calc.totalInterest > 0 && (
+                <p className={s.heroSub}>잔액이 줄면서 수수료도 줄어 마지막 회차는 {fmtKRW(calc.lastPayment)}입니다.</p>
+              )}
               {calc.totalInterest > 0 && (
                 <p className={s.heroInterest}>
                   +{fmtKRW(calc.totalInterest)}
@@ -575,7 +586,11 @@ export default function CardInstallmentClient() {
                   <tr><td>구매금액 (원금)</td><td>{fmtKRW(parseComma(amount))}</td></tr>
                   <tr><td>할부 개월</td><td>{effMonths}개월</td></tr>
                   {installType !== 'free' && <tr><td>연 이자율</td><td>{rate}%</td></tr>}
-                  <tr><td>월 납부액</td><td>{fmtKRW(calc.monthlyPayment)}</td></tr>
+                  {installType === 'free' ? (
+                    <tr><td>월 납부액</td><td>{fmtKRW(calc.monthlyPayment)}</td></tr>
+                  ) : (
+                    <tr><td>월 납부액 (1회차 → 마지막)</td><td>{fmtKRW(calc.monthlyPayment)} → {fmtKRW(calc.lastPayment)}</td></tr>
+                  )}
                   <tr className={s.totalRow}><td>총 납부액</td><td>{fmtKRW(calc.totalPayment)}</td></tr>
                   {calc.totalInterest > 0 && (
                     <tr className={s.interestRow}><td>총 이자</td><td>+{fmtKRW(calc.totalInterest)}</td></tr>
@@ -684,35 +699,35 @@ export default function CardInstallmentClient() {
         <>
           <div className={s.card}>
             <div className={s.cardLabel}><span>비교 입력</span></div>
-            <span className={s.subLabel}>구매금액 (원)</span>
+            <label htmlFor="inst-cmp-amount" className={s.subLabel}>구매금액 (원)</label>
             <div className={s.inputRow}>
-              <input className={s.bigInput} type="text" inputMode="numeric" value={cmpAmount} onChange={e => setCmpAmount(fmtComma(e.target.value))} />
+              <input id="inst-cmp-amount" className={s.bigInput} type="text" inputMode="numeric" value={cmpAmount} onChange={e => setCmpAmount(fmtComma(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
               <div>
-                <span className={s.subLabel}>일시불 할인율 (%)</span>
+                <label htmlFor="inst-cmp-discount" className={s.subLabel}>일시불 할인율 (%)</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="number" inputMode="decimal" min="0" max="30" step="0.5" value={cmpDiscount} onChange={e => setCmpDiscount(e.target.value)} />
+                  <input id="inst-cmp-discount" className={s.smallInput} type="number" inputMode="decimal" min="0" max="30" step="0.5" value={cmpDiscount} onChange={e => setCmpDiscount(e.target.value)} />
                   <span className={s.unit}>%</span>
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>유이자 할부 연 수수료율 (%)</span>
+                <label htmlFor="inst-cmp-rate" className={s.subLabel}>유이자 할부 연 수수료율 (%)</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="number" inputMode="decimal" min="0" max="30" step="0.1" value={cmpRate} onChange={e => setCmpRate(e.target.value)} />
+                  <input id="inst-cmp-rate" className={s.smallInput} type="number" inputMode="decimal" min="0" max="30" step="0.1" value={cmpRate} onChange={e => setCmpRate(e.target.value)} />
                   <span className={s.unit}>%</span>
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>무이자 가능 개월</span>
-                <select className={s.smallInput} value={cmpFreeMonths} onChange={e => setCmpFreeMonths(parseInt(e.target.value))}>
+                <label htmlFor="inst-cmp-free-months" className={s.subLabel}>무이자 가능 개월</label>
+                <select id="inst-cmp-free-months" className={s.smallInput} value={cmpFreeMonths} onChange={e => setCmpFreeMonths(parseInt(e.target.value))}>
                   {[2, 3, 4, 5, 6, 9, 10, 12, 18, 24].map(m => (<option key={m} value={m}>{m}개월</option>))}
                 </select>
               </div>
               <div>
-                <span className={s.subLabel}>유이자 할부 개월</span>
-                <select className={s.smallInput} value={cmpPaidMonths} onChange={e => setCmpPaidMonths(parseInt(e.target.value))}>
+                <label htmlFor="inst-cmp-paid-months" className={s.subLabel}>유이자 할부 개월</label>
+                <select id="inst-cmp-paid-months" className={s.smallInput} value={cmpPaidMonths} onChange={e => setCmpPaidMonths(parseInt(e.target.value))}>
                   {[3, 6, 9, 12, 18, 24, 36].map(m => (<option key={m} value={m}>{m}개월</option>))}
                 </select>
               </div>
@@ -751,8 +766,8 @@ export default function CardInstallmentClient() {
                 <p className={s.compareTotalValue}>{fmtKRW(cmpCalc.paid.total)}</p>
                 <div className={s.compareDetail}>
                   초기 부담: 0원<br />
-                  월 부담: <strong>{fmtKRW(cmpCalc.paid.monthlyPayment)}</strong> × {cmpPaidMonths}개월<br />
-                  총 이자: <strong style={{ color: '#DC2626' }}>+{fmtKRW(cmpCalc.paid.totalInterest)}</strong>
+                  월 부담: 1회차 <strong>{fmtKRW(cmpCalc.paid.monthlyPayment)}</strong> → 마지막 {fmtKRW(cmpCalc.paid.lastPayment)}<br />
+                  총 이자: <strong style={{ color: 'var(--red-600)' }}>+{fmtKRW(cmpCalc.paid.totalInterest)}</strong>
                 </div>
               </div>
             </div>
@@ -793,9 +808,9 @@ export default function CardInstallmentClient() {
               </p>
               <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: 6, marginBottom: 12 }}>
                 <div>
-                  <span className={s.subLabel}>파킹통장 연이율 (%)</span>
+                  <label htmlFor="inst-parking-rate" className={s.subLabel}>파킹통장 연이율 (%)</label>
                   <div className={s.inputRow}>
-                    <input className={s.smallInput} type="number" inputMode="decimal" min="0" max="10" step="0.1" value={parkingRate} onChange={e => setParkingRate(e.target.value)} />
+                    <input id="inst-parking-rate" className={s.smallInput} type="number" inputMode="decimal" min="0" max="10" step="0.1" value={parkingRate} onChange={e => setParkingRate(e.target.value)} />
                     <span className={s.unit}>%</span>
                   </div>
                 </div>
@@ -836,9 +851,9 @@ export default function CardInstallmentClient() {
         <>
           <div className={s.card}>
             <div className={s.cardLabel}><span>개월수별 비교 입력</span></div>
-            <span className={s.subLabel}>구매금액 (원)</span>
+            <label htmlFor="inst-tbl-amount" className={s.subLabel}>구매금액 (원)</label>
             <div className={s.inputRow}>
-              <input className={s.bigInput} type="text" inputMode="numeric" value={tblAmount} onChange={e => setTblAmount(fmtComma(e.target.value))} />
+              <input id="inst-tbl-amount" className={s.bigInput} type="text" inputMode="numeric" value={tblAmount} onChange={e => setTblAmount(fmtComma(e.target.value))} />
               <span className={s.unit}>원</span>
             </div>
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
@@ -851,9 +866,9 @@ export default function CardInstallmentClient() {
               </div>
               {!tblIsFree && (
                 <div>
-                  <span className={s.subLabel}>연 수수료율 (%)</span>
+                  <label htmlFor="inst-tbl-rate" className={s.subLabel}>연 수수료율 (%)</label>
                   <div className={s.inputRow}>
-                    <input className={s.smallInput} type="number" inputMode="decimal" min="0" max="30" step="0.1" value={tblRate} onChange={e => setTblRate(e.target.value)} />
+                    <input id="inst-tbl-rate" className={s.smallInput} type="number" inputMode="decimal" min="0" max="30" step="0.1" value={tblRate} onChange={e => setTblRate(e.target.value)} />
                     <span className={s.unit}>%</span>
                   </div>
                 </div>
@@ -866,14 +881,14 @@ export default function CardInstallmentClient() {
             <div className={s.card}>
               <div className={s.cardLabel}>
                 <span>개월수별 비교</span>
-                <span className={s.cardLabelHint}>월 부담률 = 월 납부액 / 원금</span>
+                <span className={s.cardLabelHint}>부담률 = {tblIsFree ? '월 납부액' : '1회차 납부액'} / 원금</span>
               </div>
               <div>
                 <table className={s.compareTable}>
                   <thead>
                     <tr>
                       <th scope="col">개월</th>
-                      <th scope="col">월 납부액</th>
+                      <th scope="col">{tblIsFree ? '월 납부액' : '1회차 납부액'}</th>
                       <th scope="col">총 납부액</th>
                       <th scope="col">총 이자</th>
                       <th scope="col">부담률</th>
@@ -914,11 +929,11 @@ export default function CardInstallmentClient() {
             <div className={s.card}>
               <div className={s.cardLabel}>
                 <span>월 납부액 vs 총 이자</span>
-                <span className={s.cardLabelHint}>━━ 월 납부액(좌) · ▮ 총 이자(우)</span>
+                <span className={s.cardLabelHint}>━━ 1회차 납부액(좌) · ▮ 총 이자(우)</span>
               </div>
               <div className={s.graphWrap}>{graph}</div>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7, textAlign: 'center' }}>
-                개월이 길수록 <strong style={{ color: 'var(--text)' }}>월 부담은 줄지만</strong>, <strong style={{ color: '#DC2626' }}>총 이자는 급증</strong>합니다.
+                개월이 길수록 <strong style={{ color: 'var(--text)' }}>월 부담은 줄지만</strong>, <strong style={{ color: 'var(--red-600)' }}>총 이자는 급증</strong>합니다.
               </p>
             </div>
           )}

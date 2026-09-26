@@ -1,0 +1,17 @@
+/* components/UpdatedMeta.module.css — (과도기) 86개 페이지의 박스형 메타를 ToolHeader 메타 한 줄 모양으로 제자리 재스타일 (스펙 §10.13)
+   날짜는 '사람이 적은 점검 시점'이라 검산 배지처럼 보이지 않게 의미색(success) 대신 muted-strong으로 둔다(검산 표기는 ToolByline의 shield만).
+   바로 위 리드 <p>의 marginBottom(18~40px)이 제각각이라 -12px로 당겨 리드와 한 덩어리로 읽히게 한다(최소 6px 간격). */
+.um { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 14px; margin: -12px 0 24px; font-size: 13px; line-height: 1.6; color: var(--muted); word-break: keep-all; font-variant-numeric: normal; }
+.um > span { display: inline-flex; align-items: center; gap: 4px; }
+.umDate { color: var(--muted-strong); font-weight: 600; font-variant-numeric: tabular-nums; }
+.umDate svg { color: var(--muted); }
+.umBasis { min-width: 0; overflow-wrap: break-word; }
+/* 긴 적용 기준(최대 240자대)은 마우스 환경에서만 2줄로 접는다(title로 전문). 터치 기기는 title을 볼 수 없으므로 접지 않는다.
+   .um > span(inline-flex)보다 뒤·같은 특이도 이상이어야 display가 덮인다 */
+@media (hover: hover) and (pointer: fine) {
+  .um > .umBasis { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 2; line-clamp: 2; overflow: hidden; }
+}
+.umSrc { flex-wrap: wrap; }
+.um a { color: var(--muted-strong); font-weight: 500; text-decoration: underline; text-decoration-color: var(--border-hover); text-underline-offset: 3px; }
+@media (hover: hover) { .um a:hover { color: var(--accent-ink); text-decoration-color: currentColor; } }
+@media (max-width: 640px) { .um { gap: 4px 12px; } }

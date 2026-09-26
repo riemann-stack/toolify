@@ -2,6 +2,8 @@
 // 공모주 증거금 계산기 — 5사6입 · 청약단위 · 메모 storage
 // ─────────────────────────────────────────────────────────────
 
+import { todayStr } from '@/lib/date'
+
 // ── 청약단위 자동 매핑 (구간별) ────────────
 // 한국 증권사 일반 패턴 — 종목·증권사별 다를 수 있음
 export interface SubscriptionUnitRange {
@@ -220,9 +222,27 @@ export function loadMemos(): IpoMemo[] {
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw) as IpoMemo[]
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isIpoMemo) : []
   } catch { return [] }
+}
+
+const ISO_DATE_RE = /^\d{4}-\d{2}-\d{2}$/
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
+const optNum = (v: unknown) => v === undefined || v === null || isFiniteNum(v)
+const optDate = (v: unknown) => v === undefined || v === null || v === '' || (typeof v === 'string' && ISO_DATE_RE.test(v))
+const optStr = (v: unknown) => v === undefined || v === null || typeof v === 'string'
+
+/** 저장된 메모 요소 검증 — 손상·구버전 요소는 버린다 (무검증 as 캐스팅 금지) */
+export function isIpoMemo(v: unknown): v is IpoMemo {
+  if (!v || typeof v !== 'object' || Array.isArray(v)) return false
+  const m = v as Record<string, unknown>
+  return typeof m.id === 'string'
+    && typeof m.ticker === 'string' && m.ticker.trim() !== ''
+    && isFiniteNum(m.publicPrice) && isFiniteNum(m.myDeposit)
+    && optNum(m.competition) && optNum(m.expectedAllocation)
+    && optDate(m.subscriptionDate) && optDate(m.paymentDate) && optDate(m.refundDate) && optDate(m.listingDate)
+    && optStr(m.notes) && typeof m.createdAt === 'string'
 }
 export function saveMemos(memos: IpoMemo[]): void {
   if (typeof window === 'undefined') return
@@ -252,15 +272,16 @@ export function memosToCSV(memos: IpoMemo[]): string {
   return [head, ...lines].join('\n')
 }
 
-/** 오늘 날짜 (KST 기준) YYYY-MM-DD — UTC 자정 직후 하루 밀림 방지 */
+/** 오늘 날짜 YYYY-MM-DD — lib/date todayStr(기기 로컬) 단일 소스. toISOString().slice(0,10) 금지 */
 export function todayKST(): string {
-  return new Date(Date.now() + 9 * 60 * 60 * 1000).toISOString().slice(0, 10)
+  return todayStr()
 }
 
-// D-day 계산
+// D-day 계산 — 'YYYY-MM-DD'를 연·월·일로 분해해 로컬 자정으로 파싱 (new Date('YYYY-MM-DD')는 UTC 해석)
 export function dDay(target?: string): { label: string; diff: number } | null {
-  if (!target) return null
-  const t = new Date(target).getTime()
+  if (!target || !ISO_DATE_RE.test(target)) return null
+  const [y, mo, d] = target.split('-').map(Number)
+  const t = new Date(y, mo - 1, d).getTime()
   if (isNaN(t)) return null
   const now = new Date()
   const today = new Date(now.getFullYear(), now.getMonth(), now.getDate()).getTime()

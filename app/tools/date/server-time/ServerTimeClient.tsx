@@ -443,7 +443,7 @@ export default function ServerTimeClient() {
           <div className={s.metaItem}>
             <span className={s.metaLabel}>마지막 동기화</span>
             <span className={s.metaValue}>
-              {lastSyncAt ? new Date(lastSyncAt).toLocaleTimeString('ko-KR') : '—'}
+              {lastSyncAt ? fmtKstTime(lastSyncAt + offsetMs, false) : '—'}
             </span>
           </div>
         </div>
@@ -528,7 +528,7 @@ export default function ServerTimeClient() {
               <div className={s.metaItem}>
                 <span className={s.metaLabel}>마지막 측정</span>
                 <span className={s.metaValue}>
-                  {new Date(extResult.measuredAt).toLocaleTimeString('ko-KR')}
+                  {fmtKstTime(extResult.measuredAt + offsetMs, false)}
                 </span>
               </div>
               <div className={s.metaItem}>

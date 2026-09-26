@@ -4,7 +4,8 @@
    ──────────────────────────────────────────────────────
    근거·주의
    - 미드솔 소재별 기본 수명은 브랜드 가이드·러닝 문헌의 통용 범위(참고값):
-     EVA 400~600 / TPU 500~700 / PEBA(슈퍼폼) 500~700 km.
+     EVA 400~600 / TPU 500~700 / PEBA 데일리 슈퍼트레이너 450~650 / 카본 레이싱(얇은 PEBA) 300~500 km.
+     레이싱화는 가볍게 만들려고 폼을 얇게 써 반발 성능이 빨리 떨어진다(Outside Online 등 — 실사용 약 300~600km).
    - 체중·착지·로테이션 보정은 '관행 배수' — 정밀 측정 상수가 아님.
    - 실제 교체 시점은 쿠션 꺼짐·통증·아웃솔 마모로 판단하는 것이 우선.
    ────────────────────────────────────────────────────── */
@@ -23,7 +24,8 @@ export interface Midsole {
 export const MIDSOLES: Midsole[] = [
   { id: 'eva',  name: 'EVA (일반)',      base: 500, range: [400, 600], desc: '대부분의 데일리 트레이너' },
   { id: 'tpu',  name: 'TPU (부스트 등)', base: 600, range: [500, 700], desc: '내구성 좋은 발포폼' },
-  { id: 'peba', name: 'PEBA (슈퍼폼)',   base: 600, range: [500, 700], desc: '카본화 레이싱·데일리 슈퍼슈즈' },
+  { id: 'peba-daily', name: 'PEBA 데일리 (슈퍼 트레이너)', base: 550, range: [450, 650], desc: '두툼한 슈퍼폼 데일리화' },
+  { id: 'peba-race',  name: '카본 레이싱화 (얇은 PEBA)',  base: 400, range: [300, 500], desc: '대회용 — 가볍게 만든 만큼 수명이 짧음' },
 ]
 
 /** 체중 구간별 보정 (무거울수록 미드솔 압축 빨라 수명 ↓) */
@@ -48,12 +50,18 @@ export const LANDINGS: Landing[] = [
 
 /** 2족 이상 번갈아 신으면 미드솔이 회복(감압)할 시간이 생겨 수명 연장 */
 export const ROTATION_FACTOR = 1.15
+export const ROTATION_PAIRS_MIN = 2
+export const ROTATION_PAIRS_MAX = 5
+/** 교체 예상일 표시 상한 — 이보다 멀면 날짜 대신 '10년 이상'으로 표기 */
+export const MAX_DAYS_SHOWN = 3650
 
 export interface ShoeResult {
   lifespanKm: number
   lifeLo: number
   lifeHi: number
   remainKm: number
+  /** 이 신발 한 켤레의 주간 거리 (로테이션 시 총거리 ÷ 켤레 수) */
+  weeklyPerShoe: number
   weeksLeft: number | null
   daysLeft: number | null
 }
@@ -65,6 +73,8 @@ export function calcShoeLife(
   rotate: boolean,
   currentKm: number,
   weeklyKm: number,
+  /** 로테이션 켤레 수 — 주간 총거리를 켤레 수만큼 나눠 이 신발의 주간 거리로 본다 */
+  pairs: number = ROTATION_PAIRS_MIN,
 ): ShoeResult {
   const wf = weightFactor(weightKg)
   const rf = rotate ? ROTATION_FACTOR : 1
@@ -77,11 +87,12 @@ export function calcShoeLife(
   const cur = Math.max(0, currentKm)
   const remainKm = Math.max(0, lifespanKm - cur)
 
-  const wk = Math.max(0, weeklyKm)
+  const share = rotate ? Math.min(ROTATION_PAIRS_MAX, Math.max(ROTATION_PAIRS_MIN, Math.round(pairs) || ROTATION_PAIRS_MIN)) : 1
+  const wk = Math.max(0, weeklyKm) / share
   const weeksLeft = wk > 0 ? remainKm / wk : null
   const daysLeft = weeksLeft !== null ? Math.round(weeksLeft * 7) : null
 
-  return { lifespanKm, lifeLo, lifeHi, remainKm, weeksLeft, daysLeft }
+  return { lifespanKm, lifeLo, lifeHi, remainKm, weeklyPerShoe: wk, weeksLeft, daysLeft }
 }
 
 /** 교체 예상일 = 오늘 + daysLeft (로컬 기준) */

@@ -1,58 +1,33 @@
 'use client'
 
-import { useState, useMemo, useEffect, useRef } from 'react'
+import { useState, useMemo, useEffect, useRef, useId } from 'react'
 import styles from './drake.module.css'
+import { calcDistance, PRESETS, type DrakeParams, type PresetId } from './drakeUtils'
 
 /* prefers-reduced-motion 사용자는 트윈 생략 — 값 즉시 적용 */
 function prefersReducedMotion(): boolean {
   return typeof window !== 'undefined' && window.matchMedia('(prefers-reduced-motion: reduce)').matches
 }
 
-/* ──────────────────────── 타입 & 프리셋 ──────────────────────── */
-type DrakeParams = {
-  rStar: number
-  fp:    number
-  ne:    number
-  fl:    number
-  fi:    number
-  fc:    number
-  L:     number
-}
-
-type PresetId = 'optimistic' | 'realistic' | 'pessimistic' | null
-
-const PRESETS: Record<Exclude<PresetId, null>, DrakeParams> = {
-  optimistic:  { rStar: 10, fp: 0.9, ne: 2,   fl: 0.9,   fi: 0.9,  fc: 0.9,  L: 1_000_000 },
-  realistic:   { rStar: 3,  fp: 0.5, ne: 1,   fl: 0.5,   fi: 0.5,  fc: 0.1,  L: 10_000    },
-  pessimistic: { rStar: 1,  fp: 0.2, ne: 0.5, fl: 0.001, fi: 0.01, fc: 0.01, L: 100       },
-}
-
 const MILKY_WAY_STARS = 300_000_000_000 // 3000억
 
-/* 거리 계산 — 우리 은하를 디스크로 가정 */
-const GALAXY_RADIUS_LY = 50_000          // 광년 (반경)
-const GALAXY_THICKNESS_LY = 1_000        // 광년 (디스크 두께)
-const GALAXY_VOLUME_LY3 = Math.PI * GALAXY_RADIUS_LY * GALAXY_RADIUS_LY * GALAXY_THICKNESS_LY
-const STARS_IN_RADIO_RANGE = 28_000      // 126광년(인류 전파권) 내 별 약 28,000개 ≈ 100ly 내 ~14,000 × (126/100)³
-
-type DistanceEstimate = {
-  averageDistance: number
-  nearestDistance: number
-  roundTripCommYears: number
-  potentialContactsInRange: number
-  rangeLabel: 'low' | 'medium' | 'high'
+/* 공유 URL 파라미터 → 초기값. 범위는 슬라이더 [min,max]와 일치 — 벗어난 값은 무시 */
+function parseNumParam(v: string | null, min: number, max: number): number | undefined {
+  if (!v) return undefined
+  const n = parseFloat(v)
+  if (!isFinite(n) || n < min || n > max) return undefined
+  return n
 }
-
-function calcDistance(N: number): DistanceEstimate | null {
-  if (!isFinite(N) || N <= 0) return null
-  const averageDistance = Math.pow(GALAXY_VOLUME_LY3 / N, 1 / 3)
-  const nearestDistance = averageDistance * 0.55  // Poisson 통계 근사
-  const roundTripCommYears = nearestDistance * 2
-  const potentialContactsInRange = N * (STARS_IN_RADIO_RANGE / MILKY_WAY_STARS)
-  const rangeLabel: DistanceEstimate['rangeLabel'] =
-    potentialContactsInRange > 1 ? 'high'
-      : potentialContactsInRange > 0.1 ? 'medium' : 'low'
-  return { averageDistance, nearestDistance, roundTripCommYears, potentialContactsInRange, rangeLabel }
+function parseShareParams(sp: URLSearchParams): Partial<DrakeParams> {
+  const out: Partial<DrakeParams> = {}
+  const rStar = parseNumParam(sp.get('r'), 1, 10);           if (rStar !== undefined) out.rStar = rStar
+  const fp    = parseNumParam(sp.get('fp'), 0.1, 1);         if (fp    !== undefined) out.fp    = fp
+  const ne    = parseNumParam(sp.get('ne'), 0.1, 5);         if (ne    !== undefined) out.ne    = ne
+  const fl    = parseNumParam(sp.get('fl'), 0.001, 1);       if (fl    !== undefined) out.fl    = fl
+  const fi    = parseNumParam(sp.get('fi'), 0.001, 1);       if (fi    !== undefined) out.fi    = fi
+  const fc    = parseNumParam(sp.get('fc'), 0.001, 1);       if (fc    !== undefined) out.fc    = fc
+  const L     = parseNumParam(sp.get('l'), 1, 100_000_000);  if (L     !== undefined) out.L     = L
+  return out
 }
 
 function fmtLy(ly: number): string {
@@ -92,7 +67,7 @@ const FERMI_HYPOTHESES: FermiHypothesis[] = [
   },
   {
     id: 'too-loud', emoji: '📡', title: '우리가 너무 시끄러움',
-    desc: '인류 전파는 약 126광년만 도달. 다른 문명은 더 멀리 있어 신호가 아직 미도달.',
+    desc: '인류 전파는 약 {R}광년만 도달. 다른 문명은 더 멀리 있어 신호가 아직 미도달.',
     weight: n => n < 100 ? 0.3 : n < 100_000 ? 0.85 : 0.6,
   },
   {
@@ -150,15 +125,15 @@ function formatN(n: number): string {
   if (n < 1)     return n.toFixed(3)
   if (n < 100)   return n.toFixed(1)
   if (n < 1_000_000)       return Math.round(n).toLocaleString('ko-KR')
-  if (n < 100_000_000)     return (n / 1_000_000).toFixed(2) + '백만'      // 1e6 ~ 1e8
+  if (n < 99_995_000)      return Math.round(n / 10_000).toLocaleString('ko-KR') + '만'  // 1e6 ~ 1e8 (예: 1,312만) — 반올림 시 1억이 되는 구간은 억으로
   if (n < 1_000_000_000_000) return (n / 100_000_000).toFixed(2) + '억'    // 1억(1e8) ~ 1조
   return n.toExponential(2)
 }
 
 function formatL(L: number): string {
   if (L < 1000) return `${Math.round(L).toLocaleString()}년`
-  if (L < 1_000_000) return `${(L / 1000).toFixed(1)}천년`
-  if (L < 100_000_000) return `${(L / 1_000_000).toFixed(2)}백만년`
+  if (L < 10_000) return `${(L / 1000).toFixed(1)}천년`
+  if (L < 99_995_000) return `${(L / 10_000).toLocaleString('ko-KR', { maximumFractionDigits: L < 100_000 ? 1 : 0 })}만년`  // 1만~10만년은 소수 1자리(1.5만년)
   return `${(L / 100_000_000).toFixed(2)}억년`
 }
 
@@ -199,15 +174,21 @@ const VARIABLES = [
 type VarId = typeof VARIABLES[number]['id']
 
 /* ──────────────────────── 메인 ──────────────────────── */
-export default function DrakeEquationClient({ initial }: { initial?: Partial<DrakeParams> } = {}) {
-  const [params, setParams] = useState<DrakeParams>(() => ({
-    ...PRESETS.realistic,
-    ...initial,
-  }))
-  const [activePreset, setActivePreset] = useState<PresetId>(
-    initial && Object.keys(initial).length > 0 ? null : 'realistic'
-  )
-  const [shareCopied, setShareCopied] = useState(false)
+export default function DrakeEquationClient({ radioRangeLy }: { radioRangeLy: number }) {
+  const [params, setParams] = useState<DrakeParams>(() => ({ ...PRESETS.realistic }))
+  const [activePreset, setActivePreset] = useState<PresetId>('realistic')
+  const [shareState, setShareState] = useState<'idle' | 'copied' | 'failed'>('idle')
+
+  // 공유 링크(?r=&fp=…)로 진입 시 초기값 적용 — 페이지를 정적(SSG)으로 두기 위해 서버 searchParams 대신 마운트 후 읽는다
+  useEffect(() => {
+    try {
+      const shared = parseShareParams(new URLSearchParams(window.location.search))
+      if (Object.keys(shared).length === 0) return
+      // eslint-disable-next-line react-hooks/set-state-in-effect
+      setParams(p => ({ ...p, ...shared }))
+      setActivePreset(null)
+    } catch { /* URL 파싱 실패 시 기본값 유지 */ }
+  }, [])
 
   /* 프리셋 적용 (부드러운 전환) */
   const animRef = useRef<number | null>(null)
@@ -255,7 +236,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
   const { msg, tone } = getMessage(N)
   const ratioPct = (N / MILKY_WAY_STARS) * 100
   const highlightCount = Math.min(50, Math.max(0, Math.floor(Math.log10(N + 1) * 15)))
-  const distance = useMemo(() => calcDistance(N), [N])
+  const distance = useMemo(() => calcDistance(N, radioRangeLy), [N, radioRangeLy])
   const fermiTop = useMemo(() => suggestFermi(N), [N])
   const badge = getBadge(N)
 
@@ -307,9 +288,11 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
       `${shareUrl}`
     try {
       await navigator.clipboard.writeText(text)
-      setShareCopied(true)
-      setTimeout(() => setShareCopied(false), 2000)
-    } catch {}
+      setShareState('copied')
+      setTimeout(() => setShareState('idle'), 1500)
+    } catch {
+      setShareState('failed')  // 다음 클릭 전까지 안내 유지
+    }
   }
 
   return (
@@ -324,7 +307,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
         >
           <span className={styles.presetEmoji}>🌌</span>
           <span className={styles.presetName}>낙관론</span>
-          <span className={styles.presetSub}>칼 세이건 추정</span>
+          <span className={styles.presetSub}>낙관 가정 (예시)</span>
         </button>
         <button
           type="button"
@@ -408,7 +391,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
         <CountUp value={N} />
         <div className={styles.heroUnit}>개의 문명</div>
         <p className={styles.heroMsg}>{msg}</p>
-        <span aria-live="polite" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
+        <span role="status" style={{ position: 'absolute', width: 1, height: 1, padding: 0, margin: -1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap', border: 0 }}>
           은하 내 교신 가능 문명 약 {formatN(N)}개 · {badge.label}
         </span>
       </div>
@@ -447,17 +430,17 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
                 </div>
                 <div className={styles.distItem}>
                   <div className={styles.distItemLabel}>가장 가까운 문명</div>
-                  <div className={styles.distItemValue} style={{ color: '#DC2626' }}>{fmtLy(distance.nearestDistance)}</div>
+                  <div className={styles.distItemValue} style={{ color: 'var(--danger)' }}>{fmtLy(distance.nearestDistance)}</div>
                 </div>
                 <div className={styles.distItem}>
                   <div className={styles.distItemLabel}>왕복 통신 시간</div>
                   <div className={styles.distItemValue}>{fmtYears(distance.roundTripCommYears)}</div>
                 </div>
                 <div className={styles.distItem}>
-                  <div className={styles.distItemLabel}>인류 전파권 (126광년) 내</div>
+                  <div className={styles.distItemLabel}>인류 전파권 ({radioRangeLy}광년) 내</div>
                   <div className={styles.distItemValue} style={{
-                    color: distance.rangeLabel === 'high' ? '#059669'
-                      : distance.rangeLabel === 'medium' ? '#FFD93E' : '#EA580C',
+                    color: distance.rangeLabel === 'high' ? 'var(--success)'
+                      : distance.rangeLabel === 'medium' ? 'var(--warning)' : 'var(--orange-600)',
                   }}>
                     {distance.potentialContactsInRange < 0.001
                       ? distance.potentialContactsInRange.toExponential(2)
@@ -469,8 +452,8 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
                 {distance.rangeLabel === 'high'
                   ? '🟢 인류 전파(1900~) 도달권 안에 외계 문명이 존재할 가능성 — 신호를 기다리거나 보내볼 만한 시기.'
                   : distance.rangeLabel === 'medium'
-                  ? '🟡 인류 전파권 안에 문명이 있을 확률은 낮지만 가능. 가장 가까운 문명도 광년 단위로 멀음.'
-                  : '🔴 인류 전파(현재 126광년)는 가장 가까운 문명에 아직 도달하지 못함. 균등 분포 가정의 한계 — 실제는 나선팔 집중 가능성.'}
+                  ? '🟡 가장 가까운 문명이 인류 전파권 바로 바깥 — 권 안에 있을 확률은 낮지만 가능.'
+                  : `🔴 인류 전파(현재 약 ${radioRangeLy}광년)는 가장 가까운 문명에 아직 도달하지 못함. 균등 분포 가정의 한계 — 실제는 나선팔 집중 가능성.`}
               </p>
             </>
           )}
@@ -487,7 +470,7 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
                 <span className={styles.fermiRank}>{i === 0 ? '1순위' : '2순위'}</span>
                 <div style={{ flex: 1 }}>
                   <div className={styles.fermiTitle}>{h.emoji} {h.title}</div>
-                  <div className={styles.fermiDesc}>{h.desc}</div>
+                  <div className={styles.fermiDesc}>{h.desc.replace('{R}', String(radioRangeLy))}</div>
                 </div>
               </div>
             ))}
@@ -539,8 +522,10 @@ export default function DrakeEquationClient({ initial }: { initial?: Partial<Dra
 
       {/* 공유 */}
       <div className={styles.shareRow}>
-        <button type="button" className={`${styles.shareBtn} ${shareCopied ? styles.shareBtnDone : ''}`} onClick={handleShare}>
-          {shareCopied ? '✓ 링크와 결과가 복사되었습니다' : '결과 공유하기'}
+        <button type="button" className={`${styles.shareBtn} ${shareState === 'copied' ? styles.shareBtnDone : ''}`} onClick={handleShare}>
+          {shareState === 'copied' ? '✓ 링크와 결과가 복사되었습니다'
+            : shareState === 'failed' ? '복사하지 못했어요 — 주소창의 링크를 직접 복사해 주세요'
+            : '결과 공유하기'}
         </button>
       </div>
     </div>
@@ -593,6 +578,7 @@ function CountUp({ value }: { value: number }) {
 
 /* ──────────────────────── 은하 SVG ──────────────────────── */
 function Galaxy({ highlightCount }: { highlightCount: number }) {
+  const gradId = `galaxyCore-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
   // 씨드 고정 — 별 위치가 재렌더마다 변하지 않도록
   const stars = useMemo(() => {
     const s: { x: number; y: number; r: number; o: number }[] = []
@@ -673,14 +659,14 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
   return (
     <svg className={styles.galaxySvg} viewBox="0 0 300 300" width="300" height="300" aria-hidden>
       <defs>
-        <radialGradient id="galaxyCore" cx="50%" cy="50%" r="50%">
+        <radialGradient id={gradId} cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#ffffff" stopOpacity="0.3" />
           <stop offset="30%" stopColor="#ffffff" stopOpacity="0.05" />
           <stop offset="100%" stopColor="#000000" stopOpacity="0" />
         </radialGradient>
       </defs>
       <rect width="300" height="300" fill="#000000" />
-      <circle cx="150" cy="150" r="140" fill="url(#galaxyCore)" />
+      <circle cx="150" cy="150" r="140" fill={`url(#${gradId})`} />
       <path d={spiralPath(0)}         stroke="#ffffff" strokeOpacity="0.08" strokeWidth="14" fill="none" strokeLinecap="round" />
       <path d={spiralPath(Math.PI)}   stroke="#ffffff" strokeOpacity="0.08" strokeWidth="14" fill="none" strokeLinecap="round" />
       {stars.map((s, i) => (
@@ -690,7 +676,7 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
         <circle
           key={`h-${i}`}
           cx={h.x} cy={h.y} r={2.2}
-          fill="#0EA5E9"
+          fill="var(--sky-500)"
           className={styles.highlightStar}
           style={{ animationDelay: `${(i % 10) * 0.15}s` }}
         />
@@ -698,22 +684,22 @@ function Galaxy({ highlightCount }: { highlightCount: number }) {
 
       {/* 인류 전파권 (태양 중심 원) */}
       <circle cx={SUN_X} cy={SUN_Y} r={RADIO_RANGE_R}
-        fill="rgba(8,145,178,0.08)" stroke="#0891B2" strokeWidth={0.8}
+        fill="color-mix(in srgb, var(--cyan-600) 8%, transparent)" stroke="var(--cyan-600)" strokeWidth={0.8}
         strokeDasharray="2,2" />
 
       {/* 가장 가까운 문명 라인 + 강조 */}
       {nearest && nearest !== undefined && (
         <>
           <line x1={SUN_X} y1={SUN_Y} x2={nearest.x} y2={nearest.y}
-            stroke="#DC2626" strokeWidth={0.6} strokeDasharray="2,2" opacity={0.55} />
+            stroke="var(--red-600)" strokeWidth={0.6} strokeDasharray="2,2" opacity={0.55} />
           <circle cx={nearest.x} cy={nearest.y} r={3}
-            fill="#DC2626" stroke="#fff" strokeWidth={0.5} />
+            fill="var(--red-600)" stroke="#fff" strokeWidth={0.5} />
         </>
       )}
 
       {/* 태양 (지구 위치) */}
-      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="#A16207" />
-      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="#A16207" strokeWidth={0.6} opacity={0.6} />
+      <circle cx={SUN_X} cy={SUN_Y} r={2.4} fill="var(--yellow-700)" />
+      <circle cx={SUN_X} cy={SUN_Y} r={4} fill="none" stroke="var(--yellow-700)" strokeWidth={0.6} opacity={0.6} />
     </svg>
   )
 }

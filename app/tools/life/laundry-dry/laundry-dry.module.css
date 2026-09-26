@@ -5,18 +5,20 @@
 .tabs {
   display: grid; grid-template-columns: repeat(3, 1fr); gap: 4px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 12px; padding: 4px; margin-bottom: 2px;
+  border-radius: var(--radius-m); padding: 4px; margin-bottom: 2px;
 }
 .tabBtn {
-  padding: 10px 4px; border-radius: 8px; border: none;
-  font-size: 12px; font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  padding: 10px 4px; border-radius: var(--radius-s); border: none;
+  font-size: 12px; font-family: var(--font-sans); font-weight: 600;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.15s;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid rgba(14,165,233,0.3); }
+.tabBtnActive { background: var(--bg3); color: var(--accent) !important; border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent); }
 
 .tabContent { display: flex; flex-direction: column; gap: 10px; }
+.panel { display: flex; flex-direction: column; gap: 10px; }
+.panel[hidden] { display: none; }
 
 /* ── 장비 카드 그리드 ── */
 .eqGrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(135px, 1fr)); gap: 6px; }
@@ -24,34 +26,34 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 8px; cursor: pointer; text-align: center; transition: all 0.15s;
   display: flex; flex-direction: column; align-items: center; gap: 3px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .eqCard:hover { border-color: var(--accent); }
 }
-.eqCardActive { background: rgba(14,165,233,0.1); border-color: var(--accent); }
+.eqCardActive { background: color-mix(in srgb, var(--accent) 10%, transparent); border-color: var(--accent); }
 .eqIcon { font-size: 22px; line-height: 1; }
 .eqName { font-size: 12px; color: var(--text); font-weight: 600; }
-.eqMeta { font-family: 'Inter', system-ui, sans-serif; font-size: 11px; color: var(--accent); }
-.eqDesc { font-size: 10px; color: var(--muted); line-height: 1.4; min-height: 14px; }
+.eqMeta { font-family: var(--font-sans); font-size: 11px; color: var(--accent); }
+.eqDesc { font-size: 11px; color: var(--muted); line-height: 1.4; min-height: 14px; }
 
 /* 장비 칩 (히어로 안) */
 .eqChip {
   display: inline-flex; align-items: center; gap: 4px;
-  background: rgba(14,165,233,0.1); border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 8px; padding: 4px 10px; font-size: 12px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  background: color-mix(in srgb, var(--accent) 10%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-s); padding: 4px 10px; font-size: 12px; color: var(--text);
+  font-family: var(--font-sans); font-weight: 600;
 }
 
 /* ── 비교 표 ── */
 .compareTable { width: 100%; border-collapse: collapse; font-size: 12px; }
 .compareTable th { padding: 8px 10px; text-align: left; color: var(--muted); font-weight: 500; font-size: 11px; border-bottom: 1px solid var(--border); }
 .compareTable td { padding: 8px 10px; border-bottom: 1px solid var(--border); }
-.tableNum { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text); text-align: right; }
+.tableNum { font-family: var(--font-sans); font-weight: 700; color: var(--text); text-align: right; }
 
 /* ── 빈 상태 ── */
 .empty {
   padding: 32px; text-align: center; font-size: 14px; color: var(--muted);
-  background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius-card);
 }
 
 
@@ -59,7 +61,7 @@
 /* ── 카드 공통 ── */
 .card {
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 18px 20px; box-sizing: border-box;
+  border-radius: var(--radius-card); padding: 18px 20px; box-sizing: border-box;
 }
 .cardLabel {
   display: block; font-size: 11px; color: var(--muted);
@@ -70,11 +72,11 @@
   margin-bottom: 10px;
 }
 .rowValue {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 22px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 22px;
   color: var(--text); letter-spacing: -0.5px;
 }
 .note      { font-size: 11px; color: var(--muted); line-height: 1.7; margin: 10px 0 0; }
-.noteWarn  { font-size: 12px; color: #EA580C; line-height: 1.6; margin: 10px 0 0; font-weight: 500; }
+.noteWarn  { font-size: 12px; color: var(--orange-600); line-height: 1.6; margin: 10px 0 0; font-weight: 500; }
 
 /* ── 환경 버튼 3개 ── */
 .envRow {
@@ -82,44 +84,44 @@
 }
 .envBtn {
   display: flex; flex-direction: column; align-items: center; gap: 2px;
-  padding: 14px 6px; border-radius: 12px;
+  padding: 14px 6px; border-radius: var(--radius-m);
   background: var(--bg2); border: 1px solid var(--border);
   color: var(--text); cursor: pointer; transition: all 0.18s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .envIcon { font-size: 22px; line-height: 1; margin-bottom: 4px; }
 .envName { font-size: 13px; font-weight: 700; line-height: 1; }
-.envSub  { font-size: 10px; color: var(--muted); letter-spacing: 0.02em; }
+.envSub  { font-size: 11px; color: var(--muted); letter-spacing: 0.02em; }
 
-.envBtn_indoor  { border-color: rgba(8,145,178,0.35); }@media (hover: hover) {
-  .envBtn_indoor:hover  { background: rgba(8,145,178,0.14); }
+.envBtn_indoor  { border-color: color-mix(in srgb, var(--cyan-600) 35%, transparent); }@media (hover: hover) {
+  .envBtn_indoor:hover  { background: color-mix(in srgb, var(--cyan-600) 14%, transparent); }
 }
-.envBtn_indoor.envBtnActive { background: rgba(8,145,178,0.18); border-color: #0891B2; }
-.envBtn_indoor.envBtnActive .envName { color: #0891B2; }
+.envBtn_indoor.envBtnActive { background: color-mix(in srgb, var(--cyan-600) 18%, transparent); border-color: var(--cyan-600); }
+.envBtn_indoor.envBtnActive .envName { color: var(--cyan-600); }
 
-.envBtn_balcony { border-color: rgba(14,165,233,0.35); }@media (hover: hover) {
-  .envBtn_balcony:hover { background: rgba(14,165,233,0.14); }
+.envBtn_balcony { border-color: color-mix(in srgb, var(--accent) 35%, transparent); }@media (hover: hover) {
+  .envBtn_balcony:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
 }
-.envBtn_balcony.envBtnActive { background: rgba(14,165,233,0.18); border-color: var(--accent); }
+.envBtn_balcony.envBtnActive { background: color-mix(in srgb, var(--accent) 18%, transparent); border-color: var(--accent); }
 .envBtn_balcony.envBtnActive .envName { color: var(--accent); }
 
 .envBtn_outdoor { border-color: rgba(161,98,7,0.4); }@media (hover: hover) {
   .envBtn_outdoor:hover { background: rgba(161,98,7,0.14); }
 }
-.envBtn_outdoor.envBtnActive { background: rgba(161,98,7,0.18); border-color: #A16207; }
-.envBtn_outdoor.envBtnActive .envName { color: #A16207; }
+.envBtn_outdoor.envBtnActive { background: rgba(161,98,7,0.18); border-color: var(--yellow-700); }
+.envBtn_outdoor.envBtnActive .envName { color: var(--yellow-700); }
 
 /* ── 슬라이더 ── */
 .slider {
   -webkit-appearance: none; appearance: none;
-  width: 100%; height: 6px; border-radius: 999px;
+  width: 100%; height: 6px; border-radius: var(--radius-pill);
   outline: none; cursor: pointer; margin: 4px 0 12px;
 }
 .sliderTemp {
-  background: linear-gradient(90deg, #3EA0FF 0%, #0891B2 20%, #059669 45%, #0EA5E9 65%, #EA580C 100%);
+  background: linear-gradient(90deg, #3EA0FF 0%, var(--cyan-600) 20%, var(--emerald-600) 45%, var(--sky-500) 65%, var(--orange-600) 100%);
 }
 .sliderHumid {
-  background: linear-gradient(90deg, #0EA5E9 0%, #059669 25%, #FFE33E 55%, #EA580C 80%, #DC2626 100%);
+  background: linear-gradient(90deg, var(--sky-500) 0%, var(--emerald-600) 25%, #FFE33E 55%, var(--orange-600) 80%, var(--red-600) 100%);
 }
 .slider::-webkit-slider-thumb {
   -webkit-appearance: none; appearance: none;
@@ -147,25 +149,25 @@
   padding: 8px 4px; border-radius: 10px;
   background: var(--bg3); border: 1px solid var(--border);
   color: var(--muted); cursor: pointer; transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .pBtn:hover { color: var(--text); border-color: var(--accent); }
 }
 .pBtnActive {
-  background: rgba(14,165,233,0.18) !important;
+  background: color-mix(in srgb, var(--accent) 18%, transparent) !important;
   border-color: var(--accent) !important; color: var(--accent) !important;
 }
 .pBtnLabel { font-size: 11px; font-weight: 500; line-height: 1; }
-.pBtnVal   { font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 12px; letter-spacing: -0.2px; }
+.pBtnVal   { font-family: var(--font-sans); font-weight: 700; font-size: 12px; letter-spacing: -0.2px; }
 
 /* 값 색상 */
 .valCold        { color: #3EA0FF !important; }
-.valCool        { color: #0891B2 !important; }
-.valGood        { color: #059669 !important; }
+.valCool        { color: var(--cyan-600) !important; }
+.valGood        { color: var(--emerald-600) !important; }
 .valGoodAccent  { color: var(--accent) !important; }
 .valWarn        { color: #FFE33E !important; }
-.valHot         { color: #EA580C !important; }
-.valBad         { color: #DC2626 !important; }
+.valHot         { color: var(--orange-600) !important; }
+.valBad         { color: var(--red-600) !important; }
 
 /* ── 세그먼트 (바람·햇빛·소재·두께 등) ── */
 .segRow3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; }
@@ -175,7 +177,7 @@
   padding: 10px 4px; border-radius: 10px;
   background: var(--bg3); border: 1px solid var(--border);
   color: var(--muted); cursor: pointer; transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif; font-size: 13px; font-weight: 500;
+  font-family: var(--font-sans); font-size: 13px; font-weight: 500;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px;
 }@media (hover: hover) {
   .segBtn:hover:not(:disabled) { color: var(--text); border-color: var(--accent); }
@@ -194,14 +196,14 @@
   position: relative;
   min-height: 82px; padding: 8px 4px;
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px;
-  background: var(--bg3); border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg3); border: 1px solid var(--border); border-radius: var(--radius-m);
   color: var(--text); cursor: pointer; transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .itemBtn:hover { border-color: var(--accent); }
 }
 .itemBtnActive {
-  background: rgba(14,165,233,0.18) !important;
+  background: color-mix(in srgb, var(--accent) 18%, transparent) !important;
   border-color: var(--accent) !important;
 }
 .itemIcon { font-size: 26px; line-height: 1; }
@@ -211,7 +213,7 @@
   position: absolute; top: 4px; right: 6px;
   width: 16px; height: 16px; border-radius: 50%;
   background: var(--accent-strong); color: #ffffff;
-  font-size: 10px; font-weight: 800;
+  font-size: 11px; font-weight: 800;
   display: flex; align-items: center; justify-content: center;
 }
 
@@ -219,23 +221,23 @@
 .optList { display: flex; flex-direction: column; gap: 6px; }
 .toggleRow {
   display: flex; align-items: center; gap: 12px;
-  padding: 12px 14px; border-radius: 12px;
+  padding: 12px 14px; border-radius: var(--radius-m);
   background: var(--bg3); border: 1px solid var(--border);
   cursor: pointer; transition: all 0.15s;
   text-align: left; width: 100%; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .toggleRow:hover { border-color: var(--accent); }
 }
 .toggleRowOn {
-  background: rgba(14,165,233,0.14); border-color: rgba(14,165,233,0.4);
+  background: color-mix(in srgb, var(--accent) 14%, transparent); border-color: color-mix(in srgb, var(--accent) 40%, transparent);
 }
 .toggleIcon { font-size: 20px; line-height: 1; flex-shrink: 0; }
 .toggleBody { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
 .toggleLabel { font-size: 13px; font-weight: 600; color: var(--text); }
 .toggleSub   { font-size: 11px; color: var(--muted); }
 .toggle {
-  position: relative; width: 40px; height: 22px; border-radius: 999px;
+  position: relative; width: 40px; height: 22px; border-radius: var(--radius-pill);
   background: var(--bg2); border: 1px solid var(--border);
   flex-shrink: 0; transition: background 0.2s, border-color 0.2s;
 }
@@ -249,8 +251,8 @@
 
 /* ── 히어로 ── */
 .hero {
-  background: var(--bg2); border: 1px solid rgba(14,165,233,0.35);
-  border-radius: 16px; padding: 24px 22px;
+  background: var(--bg2); border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius-card); padding: 24px 22px;
   display: flex; flex-direction: column; gap: 16px;
   animation: fadeUp 0.25s ease;
 }
@@ -274,19 +276,19 @@
   text-transform: uppercase; font-weight: 600;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
+  font-family: var(--font-sans); font-weight: 800;
   font-size: clamp(22px, 5.5vw, 32px);
   color: var(--text); line-height: 1.1; letter-spacing: -0.5px;
   text-align: center; overflow-wrap: anywhere;
 }
 .heroNumMain {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800;
+  font-family: var(--font-sans); font-weight: 800;
   font-size: clamp(28px, 7vw, 44px);
   color: var(--accent); line-height: 1.1; letter-spacing: -1px;
   text-align: center; overflow-wrap: anywhere;
 }
 .heroRange {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 11px;
+  font-family: var(--font-sans); font-size: 11px;
   color: var(--muted); letter-spacing: -0.2px;
 }
 .heroTime {
@@ -300,9 +302,9 @@
 }
 .speedBadge {
   align-self: center;
-  padding: 8px 16px; border-radius: 999px;
+  padding: 8px 16px; border-radius: var(--radius-pill);
   background: var(--bg3); border: 1px solid;
-  font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; font-family: var(--font-sans);
 }
 .speedBadge strong { font-weight: 700; }
 
@@ -312,17 +314,17 @@
   padding: 8px 4px 4px;
 }
 .timeline {
-  position: relative; height: 12px; border-radius: 999px;
+  position: relative; height: 12px; border-radius: var(--radius-pill);
   background: var(--bg3); overflow: visible;
 }
 .timelineSurface {
   position: absolute; top: 0; left: 0; height: 100%;
-  background: linear-gradient(90deg, #0891B2, #0EA5E9);
+  background: linear-gradient(90deg, var(--cyan-600), var(--sky-500));
   border-radius: 999px 0 0 999px;
 }
 .timelineFull {
   position: absolute; top: 0; height: 100%;
-  background: linear-gradient(90deg, #0EA5E9, #059669);
+  background: linear-gradient(90deg, var(--sky-500), var(--emerald-600));
   border-radius: 0 999px 999px 0;
 }
 .timelineMarker {
@@ -335,13 +337,13 @@
 }
 .timelineMarkerLabelTop {
   position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
-  font-size: 10px; color: var(--text); white-space: nowrap;
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 11px; color: var(--text); white-space: nowrap;
+  font-family: var(--font-sans); font-weight: 500;
 }
 .timelineMarkerLabelBottom {
   position: absolute; top: 22px; left: 50%; transform: translateX(-50%);
-  font-size: 10px; color: var(--accent); white-space: nowrap;
-  font-family: 'Noto Sans KR', sans-serif; font-weight: 600;
+  font-size: 11px; color: var(--accent); white-space: nowrap;
+  font-family: var(--font-sans); font-weight: 600;
 }
 .timelineCursor {
   position: absolute; top: -6px; width: 3px; height: 24px;
@@ -352,7 +354,7 @@
 }
 .timelineLegend {
   display: flex; justify-content: space-between;
-  font-family: 'Inter', system-ui, sans-serif; font-size: 11px;
+  font-family: var(--font-sans); font-size: 11px;
   color: var(--muted); padding: 16px 0 0; letter-spacing: 0.02em;
 }
 
@@ -362,17 +364,17 @@
   display: flex; justify-content: space-between; align-items: center;
   padding: 10px 12px; border-radius: 10px;
   background: var(--bg3); border: 1px solid var(--border);
-  font-size: 12px; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 12px; font-family: var(--font-sans);
 }
 .impactLabel { color: var(--text); font-weight: 500; }
 .impactVal {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; font-size: 13px;
+  font-family: var(--font-sans); font-weight: 700; font-size: 13px;
   letter-spacing: -0.2px;
 }
 .impactGood { border-color: rgba(16,185,129,0.3); }
-.impactGood .impactVal { color: #059669; }
+.impactGood .impactVal { color: var(--emerald-600); }
 .impactBad  { border-color: rgba(234,88,12,0.3); }
-.impactBad .impactVal { color: #EA580C; }
+.impactBad .impactVal { color: var(--orange-600); }
 .impactNeutral .impactVal { color: var(--muted); }
 
 /* ── 팁 ── */
@@ -397,12 +399,12 @@
   .envRow { gap: 6px; }
   .envBtn { padding: 12px 4px; }
   .envName { font-size: 12px; }
-  .envSub { font-size: 9px; }
+  .envSub { font-size: 11px; }
   .itemGrid { grid-template-columns: repeat(2, 1fr); }
   .itemBtn { min-height: 76px; }
   .segRow5 { grid-template-columns: repeat(3, 1fr); }
   .presetRow { grid-template-columns: repeat(4, 1fr); }
-  .pBtnLabel { font-size: 10px; }
+  .pBtnLabel { font-size: 11px; }
   .pBtnVal { font-size: 11px; }
   .heroRow { grid-template-columns: 1fr; gap: 10px; }
   .heroDivider { width: 60%; height: 1px; justify-self: center; }

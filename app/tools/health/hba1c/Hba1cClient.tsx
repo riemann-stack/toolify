@@ -4,6 +4,7 @@ import { useState, useMemo } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import {
   a1cToEag, eagToA1c, mgdlToMmol, bandForA1c, buildRefTable, roundScrub,
+  A1C_MIN, A1C_MAX, EAG_MIN, EAG_MAX,
 } from './hba1cData'
 import s from './hba1c.module.css'
 
@@ -20,7 +21,13 @@ export default function Hba1cClient() {
   const a1cNum = parseFloat(a1c)
   const eagNum = parseFloat(eag)
 
+  // 범위 밖 입력(예: 6.0을 60으로 오타)은 변환하지 않고 안내
+  const outOfRange = mode === 'a1c'
+    ? isFinite(a1cNum) && a1cNum > 0 && (a1cNum < A1C_MIN || a1cNum > A1C_MAX)
+    : isFinite(eagNum) && eagNum > 0 && (eagNum < EAG_MIN || eagNum > EAG_MAX)
+
   const result = useMemo(() => {
+    if (outOfRange) return null
     if (mode === 'a1c') {
       if (!isFinite(a1cNum) || a1cNum <= 0) return null
       const mg = a1cToEag(a1cNum)
@@ -32,7 +39,7 @@ export default function Hba1cClient() {
       if (a <= 0) return null
       return { a1c: a, eagMg: eagNum, eagMmol: mgdlToMmol(eagNum) }
     }
-  }, [mode, a1cNum, eagNum])
+  }, [mode, a1cNum, eagNum, outOfRange])
 
   const band = result ? bandForA1c(result.a1c) : null
 
@@ -60,7 +67,7 @@ export default function Hba1cClient() {
           <div className={s.inputBlock}>
             <label className={s.fieldLabel} htmlFor="hb-a1c">당화혈색소 (HbA1c)</label>
             <div className={s.inputRow}>
-              <input id="hb-a1c" type="number" inputMode="decimal" min={0} max={20} step={0.1}
+              <input id="hb-a1c" type="number" inputMode="decimal" min={A1C_MIN} max={A1C_MAX} step={0.1}
                 className={s.input} value={a1c}
                 onChange={(e) => setA1c(e.target.value)} aria-label="당화혈색소(%)" />
               <span className={s.unit}>%</span>
@@ -70,7 +77,7 @@ export default function Hba1cClient() {
           <div className={s.inputBlock}>
             <label className={s.fieldLabel} htmlFor="hb-eag">추정 평균혈당 (eAG)</label>
             <div className={s.inputRow}>
-              <input id="hb-eag" type="number" inputMode="decimal" min={0} step={1}
+              <input id="hb-eag" type="number" inputMode="decimal" min={EAG_MIN} max={EAG_MAX} step={1}
                 className={s.input} value={eag}
                 onChange={(e) => setEag(e.target.value)} aria-label="추정 평균혈당(mg/dL)" />
               <span className={s.unit}>mg/dL</span>
@@ -108,7 +115,13 @@ export default function Hba1cClient() {
         </div>
       ) : (
         <div className={s.card} role="status">
-          <p className={s.emptyNote}>0보다 큰 값을 입력하면 당화혈색소와 추정 평균혈당을 서로 변환합니다.</p>
+          <p className={s.emptyNote}>
+            {outOfRange
+              ? (mode === 'a1c'
+                ? `당화혈색소는 ${A1C_MIN}~${A1C_MAX}% 사이로 입력하세요. 결과지의 소수점 위치를 한 번 더 확인해 주세요.`
+                : `평균혈당은 ${EAG_MIN}~${EAG_MAX}mg/dL 사이로 입력하세요.`)
+              : '값을 입력하면 당화혈색소와 추정 평균혈당을 서로 변환합니다.'}
+          </p>
         </div>
       )}
 
@@ -117,13 +130,13 @@ export default function Hba1cClient() {
         <p className={s.groupLabel}>진단 구간 (대한당뇨병학회·ADA)</p>
         <div className={s.bandList}>
           {[
-            { l: '정상', r: 'HbA1c 5.7% 미만', c: 'var(--success)' },
-            { l: '당뇨 전단계', r: '5.7 ~ 6.4%', c: 'var(--warning)' },
-            { l: '당뇨병', r: '6.5% 이상', c: 'var(--danger)' },
-          ].map((b, i) => (
-            <div key={i} className={s.bandRow}
+            { id: 'normal', l: '전단계 기준 미만', r: 'HbA1c 5.7% 미만', c: 'var(--success)' },
+            { id: 'pre', l: '당뇨 전단계', r: '5.7 ~ 6.4%', c: 'var(--warning)' },
+            { id: 'dm', l: '당뇨병', r: '6.5% 이상', c: 'var(--danger)' },
+          ].map((b) => (
+            <div key={b.id} className={s.bandRow}
               style={{ borderLeftColor: b.c }}
-              data-active={band?.label.startsWith(b.l) ? 'true' : undefined}>
+              data-active={band?.id === b.id ? 'true' : undefined}>
               <span className={s.bandRowLabel} style={{ color: b.c }}>{b.l}</span>
               <span className={s.bandRowRange}>{b.r}</span>
             </div>

@@ -4,11 +4,11 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   box-sizing: border-box;
 }
-@media (max-width: 600px) { .card { padding: 14px; border-radius: 12px; } }
+@media (max-width: 600px) { .card { padding: 14px; border-radius: var(--radius-m); } }
 
 .cardLabel {
   display: flex;
@@ -44,7 +44,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;  /* iOS Safari 포커스 자동 확대 방지 (<16px) */
   font-weight: 600;
   color: var(--text);
@@ -58,7 +58,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 12px;
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;  /* iOS 줌 방지 */
   font-weight: 600;
   color: var(--text);
@@ -73,7 +73,7 @@
   border-radius: 10px;
   padding: 10px 16px;
   color: #fff;
-  font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   cursor: pointer;
@@ -89,7 +89,7 @@
 /* 기준 시각 안내·경고 */
 .baseNotice {
   margin: 10px 0 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--muted);
   line-height: 1.6;
@@ -97,10 +97,10 @@
 .baseWarn {
   margin: 10px 0 0;
   padding: 8px 12px;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   background: rgba(245,158,11,0.10);
   border: 1px solid rgba(245,158,11,0.35);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   color: var(--text);
   line-height: 1.7;
@@ -128,7 +128,7 @@
 .resCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 14px;
   display: flex;
   flex-direction: column;
@@ -138,7 +138,7 @@
 }
 .resCardBase {
   border-color: var(--accent);
-  background: linear-gradient(135deg, rgba(14,165,233,0.10), rgba(14,165,233,0.03));
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 10%, transparent), color-mix(in srgb, var(--accent) 3%, transparent));
 }
 .resCardBucketSleep   { border-left: 4px solid #6366F1; }
 .resCardBucketMorning { border-left: 4px solid #F59E0B; }
@@ -156,7 +156,7 @@
   display: flex;
   align-items: center;
   gap: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
@@ -178,7 +178,7 @@
 @media (hover: hover) { .resRemove:hover { color: var(--danger); background: rgba(220,38,38,0.08); } }
 
 .resTime {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 800;
   color: var(--text);
@@ -190,7 +190,7 @@
 @media (max-width: 540px) { .resTime { font-size: 20px; } }
 
 .resDate {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
@@ -198,7 +198,7 @@
 .resDateOffset {
   margin-left: 5px;
   padding: 1px 6px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: rgba(220,38,38,0.10);
   color: var(--danger);
   font-weight: 700;
@@ -219,7 +219,7 @@
   margin-top: 2px;
 }
 .resAbbr {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
@@ -249,7 +249,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 10px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;  /* iOS 줌 방지 */
   color: var(--text);
   outline: none;
@@ -268,10 +268,10 @@
 .cityChip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 10px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--text);
   display: flex;
@@ -285,7 +285,7 @@
 .cityChipFlag { font-size: 14px; flex-shrink: 0; }
 .cityChipName { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .cityChipOff {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--muted);
   margin-left: auto;
@@ -299,7 +299,7 @@
   gap: 8px 14px;
   align-items: center;
   margin-bottom: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--muted);
 }
@@ -324,7 +324,7 @@
   border: 1px solid var(--border);
   border-radius: 6px;
   padding: 4px 7px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;  /* iOS 줌 방지 */
   color: var(--text);
   outline: none;
@@ -345,7 +345,7 @@
   display: flex;
   align-items: center;
   gap: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 600;
   color: var(--text);
@@ -377,7 +377,7 @@
 .barCellQRed    { background: #E5E7EB; }
 .barCellMarker {
   background: var(--accent);
-  box-shadow: inset 0 0 0 1px rgba(14,165,233,0.9);
+  box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--accent) 90%, transparent);
 }
 
 /* 도시 바 색상(생활 시간대) 범례 */
@@ -386,7 +386,7 @@
   flex-wrap: wrap;
   gap: 4px 12px;
   margin-top: 2px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--muted);
 }
@@ -411,8 +411,8 @@
 .hourScaleLabels {
   display: grid;
   grid-template-columns: repeat(24, 1fr);
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: 11px;
   color: var(--muted);
   font-weight: 600;
 }
@@ -435,9 +435,9 @@
   gap: 10px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
 }
 .bestSlotGreen { border-color: rgba(16,185,129,0.5); background: rgba(16,185,129,0.06); }
@@ -445,7 +445,7 @@
 .bestSlotPartial { border-style: dashed; }
 .bestNote {
   margin: 0 0 2px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   color: var(--muted);
   line-height: 1.6;
@@ -456,22 +456,22 @@
   flex-wrap: wrap;
   gap: 3px 10px;
   margin-top: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   font-variant-numeric: tabular-nums;
 }
 .cityTimeOk { color: var(--success); font-weight: 700; }
 .cityTimeOff { color: var(--muted); font-weight: 600; }
 .bestSlotRank {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 800;
   color: var(--accent);
 }
 .bestSlotTime { color: var(--text); font-weight: 600; }
-.bestSlotTime b { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; }
+.bestSlotTime b { color: var(--accent); font-family: var(--font-sans); }
 .bestSlotMeta {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   color: var(--muted);
   font-weight: 600;
@@ -480,10 +480,10 @@
 .noSlots {
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 16px;
   text-align: center;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--muted);
   line-height: 1.7;
@@ -498,9 +498,9 @@
 .shareBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 600;
   color: var(--text);

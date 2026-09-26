@@ -1,4 +1,20 @@
-/* 관부가세 계산기 — 데이터·계산 유틸 */
+/* 관부가세 계산기 — 데이터·계산 유틸
+   법정 수치(소액면세 한도·품목 관세율·부가세·개소세·주세·교육세율)는 lib/krCustoms.ts 단일 소스 */
+
+import {
+  DUTY_FREE_LIMIT_USD,
+  US_LIST_CLEARANCE_LIMIT_USD,
+  NON_LISTED_DUTY_FREE_LIMIT_USD,
+  dutyFreeLimitUsd,
+  CUSTOMS_ITEM_DUTY_RATE_PCT as DUTY,
+  IMPORT_VAT_RATE,
+  LUXURY_EXCISE,
+  JEWELRY_EXCISE,
+  EXCISE_EDU_TAX_RATIO,
+  WINE_LIQUOR_TAX_PCT,
+  LIQUOR_EDU_TAX_RATIO,
+  LIQUOR_DUTY_EXEMPT,
+} from '@/lib/krCustoms'
 
 export type CountryId = 'us' | 'cn' | 'eu' | 'jp' | 'uk' | 'other'
 export type UsageType = 'personal' | 'business'
@@ -19,7 +35,8 @@ export interface CountryMeta {
   /** 1 통화 = N 원 (참고치) */
   defaultRate: number
   defaultRateBase?: number
-  /** USD로 환산 시 환율 (해당 통화 1당 USD) */
+  /** USD로 환산 시 환율 (해당 통화 1당 USD) — 참고 표시용.
+   *  면세 판정은 calcCustoms에서 '원화 환산액 ÷ USD 환율'로 구함(입력 환율 반영). */
   toUsdRate: number
   popular: string
   shipDays: string
@@ -29,31 +46,32 @@ export interface CountryMeta {
 export const COUNTRIES: CountryMeta[] = [
   {
     id: 'us', flag: '🇺🇸', name: '미국 (United States)', shortName: '미국',
-    dutyFreeUsd: 200,
+    dutyFreeUsd: US_LIST_CLEARANCE_LIMIT_USD,
     currency: 'USD', currencyUnit: '$', defaultRate: 1400, toUsdRate: 1,
-    popular: 'Amazon · iHerb · eBay · Shein',
+    popular: 'Amazon · eBay · Best Buy · iHerb(영양제는 $150)',
     shipDays: '7~14일',
-    recommend: '노트북·핸드폰·영양제·운동화·가전 (200달러 면세 활용)',
+    recommend: '노트북·핸드폰·운동화·가전 ($200 면세는 목록통관 물품만, 영양제·식품은 $150)',
   },
   {
     id: 'cn', flag: '🇨🇳', name: '중국·홍콩 (China·HK)', shortName: '중국·홍콩',
-    dutyFreeUsd: 150,
+    dutyFreeUsd: DUTY_FREE_LIMIT_USD,
     currency: 'CNY', currencyUnit: '¥', defaultRate: 192, toUsdRate: 0.137,
-    popular: 'AliExpress · TaoBao · Temu · 京东',
+    popular: 'AliExpress · Temu · Shein · TaoBao',
     shipDays: '5~14일 (국내배송 포함)',
     recommend: '생활용품·소품·의류 (150달러 이내 분할 권장)',
   },
   {
     id: 'eu', flag: '🇪🇺', name: '유럽 (Europe)', shortName: '유럽',
-    dutyFreeUsd: 150,
-    currency: 'EUR', currencyUnit: '€', defaultRate: 1500, toUsdRate: 1.07,
+    dutyFreeUsd: DUTY_FREE_LIMIT_USD,
+    /* 기본 환율은 USD 1,400원 기준으로 EUR/USD 약 1.14(2026년 9월 시세 근사)에 맞춘 참고치 */
+    currency: 'EUR', currencyUnit: '€', defaultRate: 1600, toUsdRate: 1.14,
     popular: 'Matchesfashion · Farfetch · Mytheresa · 24S',
     shipDays: '5~10일 (DHL 빠름)',
     recommend: '명품·가방·신발 (대부분 과세 — 한도 무관)',
   },
   {
     id: 'jp', flag: '🇯🇵', name: '일본 (Japan)', shortName: '일본',
-    dutyFreeUsd: 150,
+    dutyFreeUsd: DUTY_FREE_LIMIT_USD,
     currency: 'JPY', currencyUnit: '¥', defaultRate: 9.5, defaultRateBase: 1, toUsdRate: 0.0067,
     popular: 'Rakuten · Amazon JP · ZOZOTOWN · 무인양품',
     shipDays: '5~10일',
@@ -61,15 +79,16 @@ export const COUNTRIES: CountryMeta[] = [
   },
   {
     id: 'uk', flag: '🇬🇧', name: '영국 (United Kingdom)', shortName: '영국',
-    dutyFreeUsd: 150,
-    currency: 'GBP', currencyUnit: '£', defaultRate: 1750, toUsdRate: 1.27,
+    dutyFreeUsd: DUTY_FREE_LIMIT_USD,
+    /* GBP/USD 약 1.33(2026년 9월 시세 근사) × USD 1,400원 */
+    currency: 'GBP', currencyUnit: '£', defaultRate: 1860, toUsdRate: 1.33,
     popular: 'Selfridges · Matches · Lookfantastic · ASOS',
     shipDays: '5~10일',
     recommend: '뷰티·향수·디자이너 의류',
   },
   {
     id: 'other', flag: '🌏', name: '기타 국가', shortName: '기타',
-    dutyFreeUsd: 150,
+    dutyFreeUsd: DUTY_FREE_LIMIT_USD,
     currency: 'USD', currencyUnit: '$', defaultRate: 1400, toUsdRate: 1,
     popular: '직구 사이트별 다름',
     shipDays: '7~21일',
@@ -77,7 +96,12 @@ export const COUNTRIES: CountryMeta[] = [
   },
 ]
 
-export const getCountry = (id: CountryId) => COUNTRIES.find((c) => c.id === id)!
+export const isCountryId = (v: unknown): v is CountryId =>
+  typeof v === 'string' && COUNTRIES.some((c) => c.id === v)
+export const getCountry = (id: CountryId) => COUNTRIES.find((c) => c.id === id) ?? COUNTRIES[0]
+
+/** 면세 판정용 USD 환율 기본값 (미국 기본 환율과 동일) */
+export const DEFAULT_USD_KRW = 1400
 
 /* ─────────────────────────────────────────────
    품목 데이터
@@ -90,57 +114,62 @@ export interface ItemMeta {
   shortLabel: string
   dutyRate: number          // 관세율 (%)
   isListed: boolean         // 목록통관(간이절차) 가능 품목 여부 — 면세 자격과 별개
-  dutyFreeExcluded?: boolean // 소액면세 배제 품목 (주류·담배 등) — 한도와 무관하게 과세
+  dutyFreeExcluded?: boolean // 소액면세(관세·부가세 면제) 배제 품목 — 주류는 1병·$150 이하면 관세만 면제(liquor 참고)
   excise?: { threshold: number; rate: number }   // 개별소비세 (가방·시계 등)
   liquor?: { rate: number }  // 주류: 주세율 (%) — 와인 등
   hsCode: string
   note?: string
 }
 
+/* 관세율: 관세율표 기본세율(관세법 별표) 기준 간이값 — 관세법령정보포털(unipass) 세율표로 확인, 2026-09 검토.
+   ITA(정보기술협정) 품목(8471 컴퓨터·입출력장치, 8517 휴대폰, 8528.52 컴퓨터 모니터, 8525.89 디지털카메라)은 0%.
+   비디오게임 콘솔(9504.50)은 기본세율 8%이나 WTO 협정세율 0%가 우선 적용돼 0%로 둠.
+   신발류(64류)는 소재와 관계없이 13%. FTA 협정세율·원산지는 반영하지 않음.
+   세율 값은 lib/krCustoms.ts CUSTOMS_ITEM_DUTY_RATE_PCT (id 키) */
 export const ITEMS: ItemMeta[] = [
   /* 의류·신발·가방 */
-  { id: 'cloth_knit', emoji: '👕', label: '의류 (편직물·니트)',     shortLabel: '의류 (니트)', dutyRate: 13, isListed: true, hsCode: '6109~6111' },
-  { id: 'cloth_woven',emoji: '👔', label: '의류 (직물·셔츠·바지)',  shortLabel: '의류',        dutyRate: 13, isListed: true, hsCode: '6203·6204' },
-  { id: 'shoe_sport', emoji: '👟', label: '운동화 (합성)',           shortLabel: '운동화',     dutyRate: 13, isListed: true, hsCode: '6402' },
-  { id: 'shoe_leather',emoji: '👞', label: '가죽 신발',              shortLabel: '가죽화',     dutyRate: 8,  isListed: true, hsCode: '6403' },
-  { id: 'bag',        emoji: '👜', label: '가방·핸드백 (가죽)',     shortLabel: '가방',        dutyRate: 8,  isListed: true,
-    excise: { threshold: 2000000, rate: 20 }, hsCode: '4202', note: '200만원 초과분 개별소비세 20%' },
-  { id: 'wallet',     emoji: '👛', label: '지갑·소품',               shortLabel: '지갑',        dutyRate: 8,  isListed: true, hsCode: '4202' },
-  { id: 'jewelry',    emoji: '💍', label: '주얼리·보석',             shortLabel: '주얼리',     dutyRate: 8,  isListed: true,
-    excise: { threshold: 2000000, rate: 20 }, hsCode: '7113·7117', note: '200만원 초과분 개소세' },
-  { id: 'watch',      emoji: '⌚', label: '시계',                    shortLabel: '시계',        dutyRate: 8,  isListed: true,
-    excise: { threshold: 2000000, rate: 20 }, hsCode: '9101·9102', note: '200만원 초과분 개소세' },
-  { id: 'sunglasses', emoji: '👓', label: '선글라스',                shortLabel: '선글라스',   dutyRate: 8,  isListed: true, hsCode: '9004' },
-  { id: 'backpack',   emoji: '🎒', label: '백팩',                    shortLabel: '백팩',        dutyRate: 8,  isListed: true, hsCode: '4202' },
+  { id: 'cloth_knit', emoji: '👕', label: '의류 (편직물·니트)',     shortLabel: '의류 (니트)', dutyRate: DUTY.cloth_knit, isListed: true, hsCode: '6109~6111' },
+  { id: 'cloth_woven',emoji: '👔', label: '의류 (직물·셔츠·바지)',  shortLabel: '의류',        dutyRate: DUTY.cloth_woven, isListed: true, hsCode: '6203·6204' },
+  { id: 'shoe_sport', emoji: '👟', label: '운동화 (합성)',           shortLabel: '운동화',     dutyRate: DUTY.shoe_sport, isListed: true, hsCode: '6402' },
+  { id: 'shoe_leather',emoji: '👞', label: '가죽 신발',              shortLabel: '가죽화',     dutyRate: DUTY.shoe_leather, isListed: true, hsCode: '6403', note: '신발류(64류)는 소재와 관계없이 기본세율 13%' },
+  { id: 'bag',        emoji: '👜', label: '가방·핸드백 (가죽)',     shortLabel: '가방',        dutyRate: DUTY.bag,  isListed: true,
+    excise: LUXURY_EXCISE, hsCode: '4202', note: '1개당 200만원 초과분 개별소비세 20%' },
+  { id: 'wallet',     emoji: '👛', label: '지갑·소품',               shortLabel: '지갑',        dutyRate: DUTY.wallet,  isListed: true, hsCode: '4202' },
+  { id: 'jewelry',    emoji: '💍', label: '주얼리·보석',             shortLabel: '주얼리',     dutyRate: DUTY.jewelry,  isListed: true,
+    excise: JEWELRY_EXCISE, hsCode: '7113·7117', note: '보석·귀금속 제품은 1개당 500만원 초과분 개소세 20%' },
+  { id: 'watch',      emoji: '⌚', label: '시계',                    shortLabel: '시계',        dutyRate: DUTY.watch,  isListed: true,
+    excise: LUXURY_EXCISE, hsCode: '9101·9102', note: '1개당 200만원 초과분 개소세 20%' },
+  { id: 'sunglasses', emoji: '👓', label: '선글라스',                shortLabel: '선글라스',   dutyRate: DUTY.sunglasses,  isListed: true, hsCode: '9004' },
+  { id: 'backpack',   emoji: '🎒', label: '백팩',                    shortLabel: '백팩',        dutyRate: DUTY.backpack,  isListed: true, hsCode: '4202' },
 
   /* 뷰티 */
-  { id: 'cosmetic',   emoji: '💄', label: '화장품',                  shortLabel: '화장품',     dutyRate: 6.5, isListed: true, hsCode: '3304' },
-  { id: 'haircare',   emoji: '🧴', label: '헤어·바디 케어',          shortLabel: '헤어바디',   dutyRate: 6.5, isListed: true, hsCode: '3305·3307' },
-  { id: 'perfume',    emoji: '🌸', label: '향수',                    shortLabel: '향수',        dutyRate: 8,  isListed: true, hsCode: '3303' },
+  { id: 'cosmetic',   emoji: '💄', label: '화장품',                  shortLabel: '화장품',     dutyRate: DUTY.cosmetic, isListed: true, hsCode: '3304' },
+  { id: 'haircare',   emoji: '🧴', label: '헤어·바디 케어',          shortLabel: '헤어바디',   dutyRate: DUTY.haircare, isListed: true, hsCode: '3305·3307' },
+  { id: 'perfume',    emoji: '🌸', label: '향수',                    shortLabel: '향수',        dutyRate: DUTY.perfume,  isListed: true, hsCode: '3303' },
 
   /* 영양제·건강 */
-  { id: 'supplement', emoji: '💊', label: '영양제 (오메가3·비타민)', shortLabel: '영양제',     dutyRate: 8,  isListed: true, hsCode: '2106·3004', note: '150ml/300g 이하 목록통관' },
+  { id: 'supplement', emoji: '💊', label: '영양제 (오메가3·비타민)', shortLabel: '영양제',     dutyRate: DUTY.supplement,  isListed: false, hsCode: '2106·3004', note: '건강기능식품은 목록통관 배제 → 수입신고 대상이라 면세 한도가 $150(미국발도 동일)이고, 자가사용은 6병까지 인정됩니다' },
 
   /* 전자 */
-  { id: 'laptop',     emoji: '💻', label: '노트북·태블릿',           shortLabel: '노트북',      dutyRate: 0,  isListed: true, hsCode: '8471', note: '⭐ 무관세 (한도 초과 시 부가세 10%)' },
-  { id: 'phone',      emoji: '📱', label: '스마트폰',                shortLabel: '스마트폰',   dutyRate: 0,  isListed: true, hsCode: '8517', note: '⭐ 무관세 (한도 초과 시 부가세 10%)' },
-  { id: 'monitor',    emoji: '🖥️', label: '모니터',                  shortLabel: '모니터',     dutyRate: 8,  isListed: true, hsCode: '8528' },
-  { id: 'earphone',   emoji: '🎧', label: '이어폰·헤드폰',           shortLabel: '이어폰',     dutyRate: 8,  isListed: true, hsCode: '8518' },
-  { id: 'keyboard',   emoji: '⌨️', label: '키보드·마우스',           shortLabel: '키보드',     dutyRate: 8,  isListed: true, hsCode: '8471' },
-  { id: 'camera',     emoji: '📷', label: '카메라',                  shortLabel: '카메라',     dutyRate: 8,  isListed: true, hsCode: '9006' },
-  { id: 'console',    emoji: '🎮', label: '게임기·콘솔',             shortLabel: '게임기',     dutyRate: 8,  isListed: true, hsCode: '9504' },
+  { id: 'laptop',     emoji: '💻', label: '노트북·태블릿',           shortLabel: '노트북',      dutyRate: DUTY.laptop,  isListed: true, hsCode: '8471', note: '⭐ 무관세 (한도 초과 시 부가세 10%)' },
+  { id: 'phone',      emoji: '📱', label: '스마트폰',                shortLabel: '스마트폰',   dutyRate: DUTY.phone,  isListed: true, hsCode: '8517', note: '⭐ 무관세 (한도 초과 시 부가세 10%)' },
+  { id: 'monitor',    emoji: '🖥️', label: '컴퓨터 모니터',           shortLabel: '모니터',     dutyRate: DUTY.monitor,  isListed: true, hsCode: '8528.52', note: '⭐ 컴퓨터용 모니터는 정보기술협정(ITA) 품목이라 무관세. TV 수신 기능이 있으면 TV로 분류돼 8%' },
+  { id: 'earphone',   emoji: '🎧', label: '이어폰·헤드폰',           shortLabel: '이어폰',     dutyRate: DUTY.earphone,  isListed: true, hsCode: '8518' },
+  { id: 'keyboard',   emoji: '⌨️', label: '키보드·마우스',           shortLabel: '키보드',     dutyRate: DUTY.keyboard,  isListed: true, hsCode: '8471.60', note: '⭐ 컴퓨터 입출력장치(ITA 품목)라 무관세 (한도 초과 시 부가세 10%)' },
+  { id: 'camera',     emoji: '📷', label: '디지털카메라',            shortLabel: '카메라',     dutyRate: DUTY.camera,  isListed: true, hsCode: '8525.89', note: '⭐ 디지털카메라 본체는 ITA 품목이라 무관세. 교환렌즈 단품(9002)은 8%' },
+  { id: 'console',    emoji: '🎮', label: '게임기·콘솔',             shortLabel: '게임기',     dutyRate: DUTY.console,  isListed: true, hsCode: '9504.50', note: '⭐ 비디오게임 콘솔은 기본세율 8%지만 WTO 협정세율 0%가 적용돼 무관세 (한도 초과 시 부가세 10%). 완구(9503)로 분류되는 제품은 8%' },
 
   /* 기타 */
-  { id: 'toy',        emoji: '🧸', label: '완구',                    shortLabel: '완구',        dutyRate: 8,  isListed: true, hsCode: '9503' },
-  { id: 'book',       emoji: '📚', label: '도서',                    shortLabel: '도서',        dutyRate: 0,  isListed: true, hsCode: '4901', note: '⭐ 무관세 + 부가세 면제' },
-  { id: 'sports',     emoji: '🏋️', label: '운동기구·용품',           shortLabel: '운동용품',   dutyRate: 8,  isListed: true, hsCode: '9506' },
-  { id: 'baby',       emoji: '👶', label: '유아 의류·용품',          shortLabel: '유아용품',   dutyRate: 13, isListed: true, hsCode: '6111' },
-  { id: 'art',        emoji: '🎨', label: '미술용품',                shortLabel: '미술',        dutyRate: 8,  isListed: true, hsCode: '9608' },
+  { id: 'toy',        emoji: '🧸', label: '완구',                    shortLabel: '완구',        dutyRate: DUTY.toy,  isListed: true, hsCode: '9503' },
+  { id: 'book',       emoji: '📚', label: '도서',                    shortLabel: '도서',        dutyRate: DUTY.book,  isListed: true, hsCode: '4901', note: '⭐ 무관세 + 부가세 면제' },
+  { id: 'sports',     emoji: '🏋️', label: '운동기구·용품',           shortLabel: '운동용품',   dutyRate: DUTY.sports,  isListed: true, hsCode: '9506' },
+  { id: 'baby',       emoji: '👶', label: '유아 의류·용품',          shortLabel: '유아용품',   dutyRate: DUTY.baby, isListed: true, hsCode: '6111' },
+  { id: 'art',        emoji: '🎨', label: '미술용품',                shortLabel: '미술',        dutyRate: DUTY.art,  isListed: true, hsCode: '9608' },
 
   /* 식품·주류 */
-  { id: 'snack',      emoji: '🍫', label: '초콜릿·과자',             shortLabel: '과자',        dutyRate: 8,  isListed: true, hsCode: '1806', note: '식품 가공 8~30% 다양' },
-  { id: 'cheese',     emoji: '🧀', label: '치즈',                    shortLabel: '치즈',        dutyRate: 36, isListed: false, hsCode: '0406', note: '치즈 36% 고세율' },
-  { id: 'wine',       emoji: '🍷', label: '와인',                    shortLabel: '와인',        dutyRate: 15, isListed: false, dutyFreeExcluded: true, liquor: { rate: 30 }, hsCode: '2204', note: '소액면세 배제(주류) · 관세 15% + 주세 30% + 교육세 — 주류는 통관·검역·자가소비 한도 별도, 관세청 확인 필수' },
+  { id: 'snack',      emoji: '🍫', label: '초콜릿·과자',             shortLabel: '과자',        dutyRate: DUTY.snack,  isListed: false, hsCode: '1806', note: '식품류는 목록통관 배제 → 수입신고 대상이라 면세 한도 $150(미국발도 동일). 가공식품 관세율은 품목에 따라 8~30%로 다양' },
+  { id: 'cheese',     emoji: '🧀', label: '치즈',                    shortLabel: '치즈',        dutyRate: DUTY.cheese, isListed: false, hsCode: '0406', note: '치즈 36% 고세율' },
+  { id: 'wine',       emoji: '🍷', label: '와인',                    shortLabel: '와인',        dutyRate: DUTY.wine, isListed: false, dutyFreeExcluded: true, liquor: { rate: WINE_LIQUOR_TAX_PCT }, hsCode: '2204', note: `소액면세 배제(주류) — 1병(${LIQUOR_DUTY_EXEMPT.maxLiters}L 이하)·물품가격 $${LIQUOR_DUTY_EXEMPT.maxUsd} 이하면 관세만 면제되고 주세 30%·교육세·부가세는 과세. $${LIQUOR_DUTY_EXEMPT.maxUsd} 초과면 관세 15%까지 모두 과세. 도구는 1병으로 보고 계산하므로 여러 병이면 관세청(125)에 확인하세요` },
 ]
 
 export const getItem = (id: string) => ITEMS.find((i) => i.id === id) ?? ITEMS[0]
@@ -157,6 +186,8 @@ export interface CustomsInputs {
   exchangeRate: number    // 1 통화 = N 원 (만약 defaultRateBase=100이면 100엔 = N원)
   rateBase: number
   toUsdRate: number
+  /** 면세 판정용 USD 환율 (1$ = N원). 주면 원화 환산액 ÷ usdKrw로 USD를 구함 */
+  usdKrw?: number
   usage: UsageType
 }
 
@@ -167,9 +198,11 @@ export interface CustomsResult {
   totalUsd: number            // 상품+배송 USD 환산 (참고)
   productUsd: number          // 물품가격 USD (배송 제외) — 면세 한도 판정 기준
   /* 면세 판단 */
-  dutyFreeLimit: number       // USD
+  dutyFreeLimit: number       // USD (목록통관 배제 품목은 미국발도 150)
+  nearLimit: boolean          // 한도 ±5% 이내 — 고시 환율에 따라 판정이 바뀔 수 있음
   isDutyFree: boolean         // 면세 여부
   isListedClearance: boolean  // 목록통관(간이절차) 가능
+  liquorDutyExempt: boolean   // 주류 1병·$150 이하 — 관세만 면제(주세·교육세·부가세 과세)
   reason: string              // 판단 이유
   /* 세금 (원) */
   duty: number                // 관세
@@ -195,29 +228,53 @@ export function calcCustoms(inp: CustomsInputs): CustomsResult {
 
   const totalLocal = productLocal + shipLocal
   const totalKrw = (totalLocal * exchange) / base          // 과세가격(CIF): 상품+배송
-  const totalUsd = totalLocal * inp.toUsdRate              // 참고용
+  /* USD 환산: 원화 환산액 ÷ USD 환율 (관세청도 과세환율로 교차 환산).
+     usdKrw가 없으면 고정 교차환율(toUsdRate)로 폴백 */
+  const usdKrw = inp.usdKrw && inp.usdKrw > 0 ? inp.usdKrw : 0
+  /* 달러 표시 가격은 환율과 무관하게 그대로 한도와 비교. 그 외 통화는 센트 단위로 반올림해
+     부동소수 오차(예: 200.00000000000003)로 한도 경계에서 과세로 뒤집히는 일을 막음 */
+  const toUsd = (local: number) => {
+    if (country.currency === 'USD') return local
+    const v = usdKrw > 0 ? (local * exchange) / base / usdKrw : local * inp.toUsdRate
+    return Math.round(v * 100) / 100
+  }
+  const totalUsd = toUsd(totalLocal)                       // 참고용
   /* 면세 한도는 '물품가격'(운임·보험 제외) 기준 — 관세청 소액면세 규정 */
-  const productUsd = productLocal * inp.toUsdRate
+  const productUsd = toUsd(productLocal)
 
-  const dutyFreeLimit = country.dutyFreeUsd
+  /* 소액면세 한도: 관세법 시행규칙 제45조 물품가격 $150, 미국발 특송 목록통관 물품은 $200
+     (특송물품 수입통관 사무처리에 관한 고시). 목록통관 배제(건강기능식품·식품 등 수입신고) 물품은 미국발도 $150.
+     — lib/krCustoms.ts dutyFreeLimitUsd */
+  const dutyFreeLimit = dutyFreeLimitUsd(country.dutyFreeUsd, item.isListed)
+  /* 한도 ±5% 구간: 관세청 고시 과세환율에 따라 판정이 바뀔 수 있음 */
+  const nearLimit = productUsd >= dutyFreeLimit * 0.95 && productUsd <= dutyFreeLimit * 1.05
 
   /* 면세 판단 — 소액면세는 목록통관/일반신고 무관하게 자가사용+한도 이하면 적용 (주류 등 배제 품목 제외) */
   let isDutyFree = false
   let isListedClearance = false
+  let liquorDutyExempt = false
   let reason = ''
 
   if (inp.usage === 'business') {
     reason = '🚫 사업자 직구는 면세 X — 일반통관 (관세·부가세 부과)'
+  } else if (item.liquor && productUsd <= LIQUOR_DUTY_EXEMPT.maxUsd) {
+    /* 주류 자가사용 인정기준: 1병(1L 이하)·$150 이하 → 관세 면제, 내국세(주세·교육세·부가세) 과세. 입력을 1병으로 봄 */
+    liquorDutyExempt = true
+    reason = `⚠️ 주류 1병(${LIQUOR_DUTY_EXEMPT.maxLiters}L 이하) · 물품가격 $${productUsd.toFixed(2)} ≤ $${LIQUOR_DUTY_EXEMPT.maxUsd} → 관세만 면제, 주세·교육세·부가세는 과세 (1병 기준 계산)`
   } else if (item.dutyFreeExcluded) {
-    reason = `⚠️ ${item.label}은(는) 소액면세 배제 품목(주류·담배 등) — 한도와 무관하게 과세`
+    reason = item.liquor
+      ? `❌ 주류 물품가격 $${productUsd.toFixed(2)} > $${LIQUOR_DUTY_EXEMPT.maxUsd} → 관세 면제 불가, 관세·주세·교육세·부가세 모두 과세`
+      : `⚠️ ${item.label}은(는) 소액면세 배제 품목 — 한도와 무관하게 과세`
   } else if (productUsd <= dutyFreeLimit) {
     isDutyFree = true
     isListedClearance = item.isListed
     reason = item.isListed
       ? `✅ 물품가격 $${productUsd.toFixed(2)} ≤ ${country.shortName} 면세 한도 $${dutyFreeLimit} + 자가사용 + 목록통관 품목 → 면세 (배송비 제외 기준)`
-      : `✅ 물품가격 $${productUsd.toFixed(2)} ≤ 한도 $${dutyFreeLimit} + 자가사용 → 소액면세 (목록통관 외 품목이라 일반(간이)신고 절차)`
+      : `✅ 물품가격 $${productUsd.toFixed(2)} ≤ 한도 $${dutyFreeLimit} + 자가사용 → 소액면세 (목록통관 배제 품목이라 수입신고 절차)`
   } else {
-    reason = `❌ 물품가격 $${productUsd.toFixed(2)}가 면세 한도 $${dutyFreeLimit} 초과 → 과세 (배송비 제외 물품가격 기준)`
+    reason = item.isListed || country.dutyFreeUsd <= NON_LISTED_DUTY_FREE_LIMIT_USD
+      ? `❌ 물품가격 $${productUsd.toFixed(2)}가 면세 한도 $${dutyFreeLimit} 초과 → 과세 (배송비 제외 물품가격 기준)`
+      : `❌ 물품가격 $${productUsd.toFixed(2)}가 면세 한도 $${dutyFreeLimit} 초과 → 과세 (목록통관 배제 품목은 미국발도 $150 한도)`
   }
 
   /* 세금 계산 (수입 과세 적층: 관세 → 개소세/주세 → 교육세 → 부가세) */
@@ -227,23 +284,24 @@ export function calcCustoms(inp: CustomsInputs): CustomsResult {
   let liquorTax = 0
   let eduTax = 0
   if (!isDutyFree) {
-    duty = totalKrw * (item.dutyRate / 100)
+    duty = liquorDutyExempt ? 0 : totalKrw * (item.dutyRate / 100)
     if (item.liquor) {
-      /* 주류: 주세 = (과세가격 + 관세) × 주세율, 교육세 = 주세의 10% (주세율 70% 미만) */
+      /* 주류: 주세 = (과세가격 + 관세) × 주세율, 교육세 = 주세의 10% (주세율 70% 미만). 관세 면제 시 과세가격이 주세 과세표준 */
       liquorTax = (totalKrw + duty) * (item.liquor.rate / 100)
-      eduTax = liquorTax * 0.10
+      eduTax = liquorTax * LIQUOR_EDU_TAX_RATIO
     } else if (item.excise) {
-      /* 개별소비세: 기준가격(200만원) 초과분 — 과세표준 = 과세가격 + 관세 */
+      /* 개별소비세: 기준가격(가방·시계 200만원, 보석·귀금속 500만원 — 1개당) 초과분 — 과세표준 = 과세가격 + 관세.
+         입력 금액을 물품 1개로 보고 계산 */
       const exciseBase = totalKrw + duty
       if (exciseBase > item.excise.threshold) {
         excise = (exciseBase - item.excise.threshold) * (item.excise.rate / 100)
       }
       /* 교육세 = 개별소비세의 30% */
-      eduTax = excise * 0.30
+      eduTax = excise * EXCISE_EDU_TAX_RATIO
     }
     /* 부가세 10% — 과세표준 = 과세가격 + 관세 + 개소세/주세 + 교육세 (도서는 면제) */
     if (item.id !== 'book') {
-      vat = (totalKrw + duty + excise + liquorTax + eduTax) * 0.10
+      vat = (totalKrw + duty + excise + liquorTax + eduTax) * IMPORT_VAT_RATE
     }
   }
   const totalTax = duty + vat + excise + liquorTax + eduTax
@@ -260,14 +318,14 @@ export function calcCustoms(inp: CustomsInputs): CustomsResult {
 
   return {
     totalLocal, totalKrw, totalUsd, productUsd,
-    dutyFreeLimit, isDutyFree, isListedClearance, reason,
+    dutyFreeLimit, nearLimit, isDutyFree, isListedClearance, liquorDutyExempt, reason,
     duty, vat, excise, liquorTax, eduTax, totalTax, finalKrw,
     domesticEstimate, saving,
   }
 }
 
 /* ─────────────────────────────────────────────
-   목록통관 21개 품목 정보
+   목록통관 가능 품목 예시 (건강기능식품·식품류는 배제대상이라 제외)
    ───────────────────────────────────────────── */
 
 export const LISTED_CATEGORIES = [
@@ -275,8 +333,7 @@ export const LISTED_CATEGORIES = [
   '💍 액세서리·주얼리', '⌚ 시계', '👓 선글라스',
   '🧸 완구', '✏️ 문구', '🏋️ 운동용품',
   '💄 화장품', '🌸 향수', '🧴 헤어·바디',
-  '💊 영양제 (150ml/300g 이하)',
-  '🍫 가공식품', '📚 도서', '💿 CD·DVD',
+  '📚 도서', '💿 CD·DVD',
   '🎵 악기', '🔧 공구', '⚡ 전기제품',
   '🧹 생활용품',
 ]
@@ -302,7 +359,7 @@ export const SCENARIOS: CustomsScenario[] = [
     id: 'amazon',
     emoji: '🛒',
     title: '아마존 (미국·전자)',
-    desc: '노트북·헤드폰·영양제 — 200달러 면세 활용',
+    desc: '노트북·헤드폰 — 200달러 면세 활용',
     countryId: 'us',
     itemId: 'laptop',
     productPrice: 999,
@@ -318,7 +375,7 @@ export const SCENARIOS: CustomsScenario[] = [
     itemId: 'cloth_knit',
     productPrice: 50,
     shippingFee: 5,
-    notes: ['💡 대부분 150달러 이하 → 면세', '⚠️ 합산 과세 주의 (2일 내)', '📦 알리 표준 5~14일'],
+    notes: ['💡 대부분 150달러 이하 → 면세', '⚠️ 같은 날·같은 판매자 구매분은 합산', '📦 알리 표준 5~14일'],
   },
   {
     id: 'matchesfashion',
@@ -329,7 +386,7 @@ export const SCENARIOS: CustomsScenario[] = [
     itemId: 'bag',
     productPrice: 1500,
     shippingFee: 30,
-    notes: ['⚠️ 명품은 거의 과세 (한도 초과)', '💎 200만원 초과분 개소세 20%', '🇰🇷 한국 백화점 대비 30~50% 절감'],
+    notes: ['⚠️ 명품은 거의 과세 (한도 초과)', '💎 1개당 200만원 초과분 개소세 20%', '🇰🇷 국내가와 비교는 A/S·반품 조건까지 함께'],
   },
   {
     id: 'rakuten',
@@ -343,15 +400,15 @@ export const SCENARIOS: CustomsScenario[] = [
     notes: ['⚠️ 환율 ↑ 시 빠르게 한도 도달', '💡 의류 13% 관세 + 부가세', '📦 EMS 5~7일'],
   },
   {
-    id: 'shein',
+    id: 'us_apparel',
     emoji: '👚',
-    title: '셰인·로미라이 (미국 의류)',
-    desc: '저가 의류 대량 — 분할 권장',
+    title: '미국 발송 의류 (아마존 등)',
+    desc: '미국에서 발송되는 의류 — $200까지 면세',
     countryId: 'us',
     itemId: 'cloth_knit',
     productPrice: 180,
     shippingFee: 0,
-    notes: ['💡 200달러 이하 → 면세', '⚠️ 같은 날 추가 구매 시 합산 위험', '📦 무료배송 多'],
+    notes: ['💡 미국 발송 목록통관 물품은 200달러 이하 → 면세', '⚠️ 셰인처럼 중국 창고에서 발송되면 150달러 한도', '⚠️ 같은 날·같은 판매자 추가 구매 시 합산'],
   },
   {
     id: 'phone_laptop',
@@ -362,7 +419,7 @@ export const SCENARIOS: CustomsScenario[] = [
     itemId: 'phone',
     productPrice: 999,
     shippingFee: 30,
-    notes: ['⭐ 노트북·핸드폰은 관세 0%', '💡 부가세 10%만 부담', '🇰🇷 한국 출시가 대비 20~30% 절감 가능'],
+    notes: ['⭐ 노트북·핸드폰은 관세 0%', '💡 부가세 10%만 부담', '🔌 국내 A/S 가능 여부·전파인증은 구매 전 확인'],
   },
 ]
 

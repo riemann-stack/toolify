@@ -13,7 +13,7 @@
   padding: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 @media (max-width: 700px) {
   .tabs { grid-template-columns: repeat(2, 1fr); }
@@ -29,7 +29,7 @@
   cursor: pointer;
   transition: all .15s;
   white-space: nowrap;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
@@ -46,7 +46,7 @@
   padding: 24px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
 }
 
 /* 라벨 */
@@ -65,18 +65,18 @@
   line-height: 1.7;
   margin: 8px 0 0;
 }
-.note strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.note strong { color: var(--text); font-family: var(--font-sans); }
 .warn {
   font-size: 12px;
-  color: #D97706;
+  color: var(--amber-600);
   background: rgba(217, 119, 6, 0.08);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
   margin-top: 10px;
   line-height: 1.6;
 }
-.warn strong { color: #D97706; }
+.warn strong { color: var(--amber-600); }
 .smallNote { color: var(--muted); font-size: 11px; font-weight: 400; }
 .intro {
   font-size: 13px;
@@ -96,7 +96,7 @@
   padding: 12px 14px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
   min-height: 48px;
@@ -115,7 +115,7 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--text);
@@ -142,10 +142,10 @@
 .quickChip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 14px;
   font-size: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--muted);
   cursor: pointer;
@@ -169,14 +169,14 @@
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: center;
   min-height: 44px;
 }@media (hover: hover) {
   .pill:hover { color: var(--text); }
 }
 .pillActive {
-  background: rgba(14, 165, 233, 0.08);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -186,7 +186,7 @@
 .optionCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .gapTitle {
@@ -194,7 +194,7 @@
   color: var(--text);
   font-weight: 700;
   margin: 0 0 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 입력 행 */
@@ -206,7 +206,7 @@
   font-size: 13px;
   cursor: pointer;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .checkLabel input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
 .numberRow {
@@ -219,7 +219,7 @@
 .numberRow label {
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .numberRow span {
   font-size: 12px;
@@ -230,8 +230,8 @@
   padding: 8px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -244,8 +244,8 @@
   padding: 8px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -260,9 +260,9 @@
 
 /* 결과 메인 */
 .resultMain {
-  background: linear-gradient(135deg, rgba(14,165,233,0.14) 0%, rgba(8,145,178,0.14) 100%);
-  border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 14px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent) 0%, color-mix(in srgb, var(--cyan-600) 14%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 24px 20px;
   text-align: center;
   margin-bottom: 14px;
@@ -275,15 +275,15 @@
   margin: 0 0 8px;
 }
 .resultBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(32px, 6vw, 48px);
   font-weight: 800;
   letter-spacing: -0.02em;
   line-height: 1;
   margin: 0 0 8px;
 }
-.refundPos { color: #059669; }
-.refundNeg { color: #DC2626; }
+.refundPos { color: var(--emerald-600); }
+.refundNeg { color: var(--red-600); }
 .resultSub {
   font-size: 13px;
   color: var(--muted);
@@ -307,7 +307,7 @@
   letter-spacing: 0.04em;
 }
 .resultMetrics strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   color: var(--text);
   font-weight: 700;
@@ -326,12 +326,12 @@
   padding: 10px 14px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 13px;
 }
 .flowRowSum {
-  background: rgba(14, 165, 233, 0.04);
-  border-color: rgba(14, 165, 233, 0.25);
+  background: color-mix(in srgb, var(--accent) 4%, transparent);
+  border-color: color-mix(in srgb, var(--accent) 25%, transparent);
 }
 .flowRowTotal {
   background: rgba(220, 38, 38, 0.04);
@@ -340,11 +340,11 @@
 }
 .flowLabel { color: var(--text); }
 .flowValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
 }
-.flowValueMinus { color: #DC2626; }
+.flowValueMinus { color: var(--red-600); }
 .flowRowSum .flowValue { color: var(--accent); }
 
 /* 시나리오 비교 */
@@ -357,39 +357,39 @@
   position: relative;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 16px 14px;
   display: flex;
   flex-direction: column;
   gap: 4px;
 }
 .scenarioCardCurrent {
-  background: rgba(8, 145, 178, 0.05);
-  border-color: rgba(8, 145, 178, 0.3);
+  background: color-mix(in srgb, var(--cyan-600) 5%, transparent);
+  border-color: color-mix(in srgb, var(--cyan-600) 30%, transparent);
 }
 .scenarioCardBest {
-  background: linear-gradient(135deg, rgba(14, 165, 233, 0.08) 0%, rgba(16, 185, 129, 0.05) 100%);
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 8%, transparent) 0%, rgba(16, 185, 129, 0.05) 100%);
   border-color: var(--accent);
 }
 .bestBadge, .currentBadge {
   position: absolute;
   top: 10px;
   right: 10px;
-  font-family: 'Inter', system-ui, sans-serif;
-  font-size: 10px;
+  font-family: var(--font-sans);
+  font-size: 11px;
   font-weight: 800;
   padding: 2px 8px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   letter-spacing: 0.08em;
 }
 .bestBadge { background: var(--accent-strong); color: #ffffff; }
-.currentBadge { background: rgba(8, 145, 178, 0.2); color: #0891B2; }
+.currentBadge { background: color-mix(in srgb, var(--cyan-600) 20%, transparent); color: var(--cyan-600); }
 .scenarioLabel {
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   padding-right: 50px;
 }
 .scenarioDesc {
@@ -403,7 +403,7 @@
   margin: 0;
 }
 .scenarioRefund strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
 }
@@ -411,10 +411,10 @@
   font-size: 12px;
   font-weight: 700;
   margin: 4px 0 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
-.diffPos { color: #059669; }
-.diffNeg { color: #DC2626; }
+.diffPos { color: var(--emerald-600); }
+.diffNeg { color: var(--red-600); }
 .scenarioMini {
   display: flex;
   justify-content: space-between;
@@ -451,17 +451,17 @@
   padding: 6px 10px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   transition: border-color .2s;
 }
 .bracketBarActive {
   border-color: var(--accent);
-  background: rgba(14, 165, 233, 0.05);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
 }
 .bracketLabel {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .bracketBarActive .bracketLabel { color: var(--accent); font-weight: 700; }
 .bracketTrack {
@@ -472,7 +472,7 @@
 }
 .bracketFill {
   height: 100%;
-  background: linear-gradient(90deg, rgba(14,165,233,0.3), rgba(234,88,12,0.5));
+  background: linear-gradient(90deg, color-mix(in srgb, var(--accent) 30%, transparent), rgba(234,88,12,0.5));
   border-radius: 4px;
   display: flex;
   align-items: center;
@@ -480,10 +480,10 @@
   padding-right: 6px;
 }
 .bracketBarActive .bracketFill {
-  background: linear-gradient(90deg, var(--accent), #EA580C);
+  background: linear-gradient(90deg, var(--accent), var(--orange-600));
 }
 .bracketRate {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 11px;
   font-weight: 800;
   color: var(--text);
@@ -504,7 +504,7 @@
 .simRow {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   margin-bottom: 10px;
 }
@@ -513,10 +513,10 @@
   justify-content: space-between;
   font-size: 13px;
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .simHead span { color: var(--text); font-weight: 600; }
-.simHead strong { color: var(--accent); font-family: 'Inter', system-ui, sans-serif; font-size: 14px; }
+.simHead strong { color: var(--accent); font-family: var(--font-sans); font-size: 14px; }
 .slider {
   width: 100%;
   height: 4px;
@@ -553,8 +553,8 @@
   flex-wrap: wrap;
 }
 .simSaving {
-  color: #059669;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--emerald-600);
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
 }
@@ -582,7 +582,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0 0 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .tipDesc {
   font-size: 12px;
@@ -591,10 +591,10 @@
   margin: 0;
 }
 .tipSaving {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
-  color: #059669;
+  color: var(--emerald-600);
   white-space: nowrap;
   flex-shrink: 0;
   align-self: center;
@@ -602,9 +602,9 @@
 
 /* D-day */
 .ddayCard {
-  background: linear-gradient(135deg, rgba(14,165,233,0.14) 0%, rgba(8,145,178,0.14) 100%);
-  border: 1px solid rgba(14,165,233,0.3);
-  border-radius: 16px;
+  background: linear-gradient(135deg, color-mix(in srgb, var(--accent) 14%, transparent) 0%, color-mix(in srgb, var(--cyan-600) 14%, transparent) 100%);
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 20px;
   text-align: center;
 }
@@ -616,7 +616,7 @@
   margin: 0 0 8px;
 }
 .ddayBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 8vw, 56px);
   font-weight: 800;
   color: var(--accent);
@@ -643,11 +643,11 @@
 .checklist li {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 단계 카드 */
@@ -671,7 +671,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
 }
@@ -680,7 +680,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0 0 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .stepDesc {
   font-size: 12px;
@@ -691,7 +691,7 @@
 .stepLink {
   font-size: 11px;
   color: var(--accent);
-  font-family: 'JetBrains Mono', monospace;
+  font-family: var(--font-mono);
   text-decoration: none;
 }@media (hover: hover) {
   .stepLink:hover { text-decoration: underline; }
@@ -724,7 +724,7 @@
 .disclaimer {
   background: rgba(217, 119, 6, 0.04);
   border: 1px solid rgba(217, 119, 6, 0.18);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -732,9 +732,9 @@
 }
 .disclaimer strong {
   display: block;
-  color: #D97706;
+  color: var(--amber-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

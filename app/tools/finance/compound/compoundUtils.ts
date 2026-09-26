@@ -8,8 +8,8 @@
 /* ─── 인플레이션 프리셋 ─── */
 export const INFLATION_PRESETS = [
   { rate: 1.5, label: '낮음 (1.5%)' },
-  { rate: 2.0, label: '한국은행 목표 (2.0%)' },
-  { rate: 2.5, label: '평균 (2.5%, 한국 10년)' },
+  { rate: 2.0, label: '한국은행 목표 · 최근 10년 평균 수준 (2.0%)' }, // 소비자물가 2016~2025 연평균 약 2.1%
+  { rate: 2.5, label: '다소 높음 (2.5%)' },
   { rate: 3.0, label: '높음 (3.0%)' },
   { rate: 4.0, label: '매우 높음 (4.0%)' },
 ]
@@ -25,10 +25,10 @@ export interface ReturnScenario {
 }
 
 export const RETURN_SCENARIOS: ReturnScenario[] = [
-  { id: 'conservative', name: '보수적', rate: 4,  desc: '예금·채권 중심',          color: '#0891B2' },
-  { id: 'moderate',     name: '기준',   rate: 7,  desc: 'S&P500 100년 평균',       color: 'var(--accent)' },
-  { id: 'optimistic',   name: '낙관적', rate: 10, desc: '주식형 펀드 장기 평균',    color: '#A16207' },
-  { id: 'aggressive',   name: '공격적', rate: 13, desc: '성장주 (고위험·고수익)',  color: '#EA580C', warning: '큰 변동성' },
+  { id: 'conservative', name: '보수적', rate: 4,  desc: '예금·채권 중심',          color: 'var(--cyan-600)' },
+  { id: 'moderate',     name: '기준',   rate: 7,  desc: '주식·채권 분산투자 장기 가정', color: 'var(--accent)' },
+  { id: 'optimistic',   name: '낙관적', rate: 10, desc: 'S&P500 명목 장기 평균',    color: 'var(--yellow-700)' },
+  { id: 'aggressive',   name: '공격적', rate: 13, desc: '성장주 (고위험·고수익)',  color: 'var(--orange-600)', warning: '큰 변동성' },
 ]
 
 /* ─── 주기 ─── */
@@ -60,6 +60,16 @@ export interface CompoundInput {
   years: number
   annualIncreaseRate?: number    // 매년 증액률 (%)
   feeRate?: number               // 수수료율 (%)
+  /** true면 annualRate를 '실효 연수익률'로 본다 (월 수익률 입력을 (1+월)^12−1로 환산한 값 등).
+   *  이때 복리 주기당 이율 = (1+실효)^(1/주기) − 1 → 복리 주기와 무관하게 1년 성장률이 정확히 실효율과 같다.
+   *  false(기본)면 명목 연이율 ÷ 복리 주기 (예금·적금 표시 금리 관행) */
+  rateIsEffective?: boolean
+}
+
+/** 복리 주기당 이율 (소수). 명목이면 연이율/주기, 실효면 (1+연이율)^(1/주기)−1 */
+function periodRateOf(annualRatePct: number, periodsPerYear: number, rateIsEffective?: boolean): number {
+  if (rateIsEffective) return Math.pow(1 + annualRatePct / 100, 1 / periodsPerYear) - 1
+  return annualRatePct / 100 / periodsPerYear
 }
 
 export interface YearBreakdown {
@@ -83,7 +93,7 @@ export function calcCompound(input: CompoundInput): CompoundResult {
   const cf = COMPOUND_FREQUENCIES.find(f => f.id === input.compoundFreqId) ?? COMPOUND_FREQUENCIES[1]
   const ctf = CONTRIBUTION_FREQUENCIES.find(f => f.id === input.contributionFreqId) ?? CONTRIBUTION_FREQUENCIES[0]
 
-  const periodRate = input.annualRate / 100 / cf.periodsPerYear
+  const periodRate = periodRateOf(input.annualRate, cf.periodsPerYear, input.rateIsEffective)
   const periodFee = (input.feeRate ?? 0) / 100 / cf.periodsPerYear
   const netRate = periodRate - periodFee
 
@@ -158,6 +168,7 @@ export interface ReverseInput {
   contributionFreqId: string
   compoundFreqId: string
   annualIncreaseRate?: number
+  rateIsEffective?: boolean
 }
 
 export interface ReverseResult {
@@ -177,13 +188,13 @@ export function reverseCalcContribution(input: ReverseInput): ReverseResult | nu
     principal: input.principal, contribution: 0,
     contributionFreqId: input.contributionFreqId, compoundFreqId: input.compoundFreqId,
     annualRate: input.annualRate, years: input.years,
-    annualIncreaseRate: input.annualIncreaseRate,
+    annualIncreaseRate: input.annualIncreaseRate, rateIsEffective: input.rateIsEffective,
   })
   if (noContrib.finalValue >= input.goal) {
     return {
       requiredMonthly: 0, requiredYearly: 0,
       feasibility: 'easy', feasibilityLabel: '🟢 추가 적립 불필요',
-      feasibilityColor: '#059669',
+      feasibilityColor: 'var(--emerald-600)',
       feasibilityNote: '현재 자산만으로 목표 도달 가능 (추가 적립 0)',
     }
   }
@@ -197,7 +208,7 @@ export function reverseCalcContribution(input: ReverseInput): ReverseResult | nu
       principal: input.principal, contribution: mid,
       contributionFreqId: input.contributionFreqId, compoundFreqId: input.compoundFreqId,
       annualRate: input.annualRate, years: input.years,
-      annualIncreaseRate: input.annualIncreaseRate,
+      annualIncreaseRate: input.annualIncreaseRate, rateIsEffective: input.rateIsEffective,
     })
     if (r.finalValue < input.goal) low = mid
     else high = mid
@@ -210,19 +221,19 @@ export function reverseCalcContribution(input: ReverseInput): ReverseResult | nu
   let feasibilityNote: string
   if (requiredMonthly < 200_000) {
     feasibility = 'easy'; feasibilityLabel = '🟢 매우 합리적'
-    feasibilityColor = '#059669'
+    feasibilityColor = 'var(--emerald-600)'
     feasibilityNote = '월 소득의 5% 미만 수준 — 충분히 도달 가능'
   } else if (requiredMonthly < 600_000) {
     feasibility = 'reasonable'; feasibilityLabel = '🔵 합리적'
-    feasibilityColor = '#0891B2'
+    feasibilityColor = 'var(--cyan-600)'
     feasibilityNote = '월 소득의 10~15% 수준 — 일반 직장인 가능'
   } else if (requiredMonthly < 1_500_000) {
     feasibility = 'tight'; feasibilityLabel = '🟡 도전적'
-    feasibilityColor = '#A16207'
+    feasibilityColor = 'var(--yellow-700)'
     feasibilityNote = '월 소득의 25% 이상 — 검토 필요'
   } else {
     feasibility = 'unrealistic'; feasibilityLabel = '🔴 비현실적'
-    feasibilityColor = '#DC2626'
+    feasibilityColor = 'var(--red-600)'
     feasibilityNote = '월 소득 50%+ — 기간 늘리거나 목표 조정 권장'
   }
 
@@ -270,14 +281,20 @@ export function formatEok(n: number): string {
     return man > 0 ? `${sign}${eok}억 ${man.toLocaleString()}만원` : `${sign}${eok}억원`
   }
   if (Math.abs(n) >= 10_000) {
-    return `${Math.round(n / 10_000).toLocaleString('ko-KR')}만원`
+    const man = Math.round(n / 10_000)
+    // 99,995,000처럼 반올림하면 1억이 되는 값은 '10,000만원' 대신 '1억원'
+    if (Math.abs(man) >= 10_000) return `${n < 0 ? '-' : ''}1억원`
+    return `${man.toLocaleString('ko-KR')}만원`
   }
   return won(n)
 }
 
+/** 금액 입력 상한 (만원 단위 입력 기준 1,000억원) */
+export const AMOUNT_MAX = 10_000_000
+
+/** 콤마·소수점 금액 문자열 → 숫자. 소수점을 보존한다 (예: '0.5' → 0.5, 기존 구현은 5로 읽어 10배 오류) */
 export function parseAmount(s: string): number {
   if (!s) return 0
-  const cleaned = s.replace(/[^\d]/g, '')
-  const n = parseInt(cleaned, 10)
-  return Number.isFinite(n) ? n : 0
+  const n = parseFloat(s.replace(/[^\d.]/g, ''))
+  return Number.isFinite(n) ? Math.min(AMOUNT_MAX, Math.max(0, n)) : 0
 }

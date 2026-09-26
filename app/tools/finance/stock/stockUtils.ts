@@ -70,10 +70,10 @@ export interface ConcentrationLevel {
 }
 
 export const CONCENTRATION_LEVELS: ConcentrationLevel[] = [
-  { min: 0,  max: 10, level: 'safe',   label: '🟢 안전',       color: '#059669', note: '한 종목 10% 이내 — 분산 투자 적정' },
-  { min: 10, max: 20, level: 'warn',   label: '🟡 주의',       color: '#A16207', note: '한 종목 10~20% — 약간 집중' },
-  { min: 20, max: 30, level: 'risk',   label: '🟠 집중 위험',  color: '#EA580C', note: '20% 이상 — 추가 매수는 신중히' },
-  { min: 30, max: Infinity, level: 'danger', label: '🔴 매우 위험', color: '#DC2626', note: '30% 이상 — 분산 권장 / 추가 매수 비권장' },
+  { min: 0,  max: 10, level: 'safe',   label: '🟢 안전',       color: 'var(--emerald-600)', note: '한 종목 10% 이내 — 분산 투자 적정' },
+  { min: 10, max: 20, level: 'warn',   label: '🟡 주의',       color: 'var(--yellow-700)', note: '한 종목 10~20% — 약간 집중' },
+  { min: 20, max: 30, level: 'risk',   label: '🟠 집중 위험',  color: 'var(--orange-600)', note: '20% 이상 — 추가 매수는 신중히' },
+  { min: 30, max: Infinity, level: 'danger', label: '🔴 매우 위험', color: 'var(--red-600)', note: '30% 이상 — 분산 권장 / 추가 매수 비권장' },
 ]
 
 export function getConcentrationLevel(pct: number): ConcentrationLevel {
@@ -432,7 +432,10 @@ export function formatEok(n: number): string {
     return man > 0 ? `${sign}${eok}억 ${man.toLocaleString()}만원` : `${sign}${eok}억원`
   }
   if (abs >= 10_000) {
-    return `${sign}${Math.round(abs / 10_000).toLocaleString('ko-KR')}만원`
+    const man = Math.round(abs / 10_000)
+    // 99,995,000처럼 반올림하면 1억이 되는 값은 '10,000만원' 대신 '1억원'
+    if (man >= 10_000) return `${sign}1억원`
+    return `${sign}${man.toLocaleString('ko-KR')}만원`
   }
   return won(n)
 }

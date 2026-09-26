@@ -45,12 +45,12 @@ export const MATERIALS: MaterialMeta[] = [
 export type Engagement = 50 | 75 | 85
 
 export const ENGAGEMENT_LABEL: Record<Engagement, string> = {
-  50: '50% (얕은 탭·분리 쉬움)',
-  75: '75% (표준)',
-  85: '85% (깊은 탭·강한 결합)',
+  50: '50% (단단한 소재·깊은 막힌 구멍)',
+  75: '75% (표준 · 외경−피치)',
+  85: '85% (얇은 판)',
 }
 
-/** ISO 표준 — engagementPct → 피치 곱계수 */
+/** 현장 관행 계수(ISO 규정값 아님) — engagementPct → 피치 곱계수. 75% = 외경 − 피치(ISO 2306 계열 탭드릴 표와 같은 값) */
 function engagementFactor(pct: Engagement): number {
   // 75% 표준 = ~1.0 (대략 D - P)
   // 50% = 더 큰 드릴 (작은 곱계수)
@@ -73,7 +73,8 @@ export interface MetricScrewSpec {
   clearanceNormal: number
   clearanceLoose: number
   hexWrench: number      // 육각렌치 (mm)
-  spanner: number        // 스패너 이면대각 (mm)
+  spanner: number        // 스패너 대변거리 (mm) — 구 DIN 933·KS 부속서(국내 유통품 다수) 기준
+  spannerISO?: number    // 현행 ISO 4014/4017 값이 다를 때만 (M10 16·M12 18·M14 21)
 }
 
 export const METRIC_SCREWS: MetricScrewSpec[] = [
@@ -84,9 +85,9 @@ export const METRIC_SCREWS: MetricScrewSpec[] = [
   { diameter: 5,  pitchCoarse: 0.8,  pitchFine: 0.5,       tapDrill75: 4.2,  clearanceTight: 5.3, clearanceNormal: 5.5, clearanceLoose: 5.8, hexWrench: 4,   spanner: 8 },
   { diameter: 6,  pitchCoarse: 1.0,  pitchFine: 0.75,      tapDrill75: 5.0,  clearanceTight: 6.4, clearanceNormal: 6.6, clearanceLoose: 7.0, hexWrench: 5,   spanner: 10 },
   { diameter: 8,  pitchCoarse: 1.25, pitchFine: 1.0,       tapDrill75: 6.8,  clearanceTight: 8.4, clearanceNormal: 9.0, clearanceLoose: 10.0,hexWrench: 6,   spanner: 13 },
-  { diameter: 10, pitchCoarse: 1.5,  pitchFine: 1.25,      tapDrill75: 8.5,  clearanceTight: 10.5,clearanceNormal: 11.0,clearanceLoose: 12.0,hexWrench: 8,   spanner: 17 },
-  { diameter: 12, pitchCoarse: 1.75, pitchFine: 1.5,       tapDrill75: 10.2, clearanceTight: 13.0,clearanceNormal: 13.5,clearanceLoose: 14.5,hexWrench: 10,  spanner: 19 },
-  { diameter: 14, pitchCoarse: 2.0,  pitchFine: 1.5,       tapDrill75: 12.0, clearanceTight: 15.0,clearanceNormal: 15.5,clearanceLoose: 16.5,hexWrench: 12,  spanner: 22 },
+  { diameter: 10, pitchCoarse: 1.5,  pitchFine: 1.25,      tapDrill75: 8.5,  clearanceTight: 10.5,clearanceNormal: 11.0,clearanceLoose: 12.0,hexWrench: 8,   spanner: 17, spannerISO: 16 },
+  { diameter: 12, pitchCoarse: 1.75, pitchFine: 1.5,       tapDrill75: 10.2, clearanceTight: 13.0,clearanceNormal: 13.5,clearanceLoose: 14.5,hexWrench: 10,  spanner: 19, spannerISO: 18 },
+  { diameter: 14, pitchCoarse: 2.0,  pitchFine: 1.5,       tapDrill75: 12.0, clearanceTight: 15.0,clearanceNormal: 15.5,clearanceLoose: 16.5,hexWrench: 12,  spanner: 22, spannerISO: 21 },
   { diameter: 16, pitchCoarse: 2.0,  pitchFine: 1.5,       tapDrill75: 14.0, clearanceTight: 17.0,clearanceNormal: 17.5,clearanceLoose: 18.5,hexWrench: 14,  spanner: 24 },
   { diameter: 18, pitchCoarse: 2.5,  pitchFine: 1.5,       tapDrill75: 15.5, clearanceTight: 19.0,clearanceNormal: 20.0,clearanceLoose: 21.0,hexWrench: 14,  spanner: 27 },
   { diameter: 20, pitchCoarse: 2.5,  pitchFine: 1.5,       tapDrill75: 17.5, clearanceTight: 21.0,clearanceNormal: 22.0,clearanceLoose: 24.0,hexWrench: 17,  spanner: 30 },
@@ -128,6 +129,8 @@ export const UNIFIED_SCREWS: UnifiedScrewSpec[] = [
 ]
 
 // ── PT 파이프 나사 ───────────────────
+// 탭드릴: PT(Rc, JIS B 0203/KS B 0222 테이퍼)는 탭 제조사 통용 권장값(스트레이트 드릴, 리머 미사용),
+//        NPT는 ANSI 권장 드릴(1/8 R·1/4 7/16″·3/8 37/64″·1/2 23/32″·3/4 59/64″·1 1-5/32″)의 mm 환산
 export interface PipeScrewSpec {
   label: string
   threadsPerInch: number  // 산둘레
@@ -138,17 +141,17 @@ export interface PipeScrewSpec {
 
 export const PT_SCREWS: PipeScrewSpec[] = [
   { label: 'PT 1/8',  threadsPerInch: 28, outerDiameterMm: 9.7,  tapDrillMm: 8.5,  system: 'pt' },
-  { label: 'PT 1/4',  threadsPerInch: 19, outerDiameterMm: 13.2, tapDrillMm: 11.5, system: 'pt' },
+  { label: 'PT 1/4',  threadsPerInch: 19, outerDiameterMm: 13.2, tapDrillMm: 11.2, system: 'pt' },
   { label: 'PT 3/8',  threadsPerInch: 19, outerDiameterMm: 16.7, tapDrillMm: 14.8, system: 'pt' },
-  { label: 'PT 1/2',  threadsPerInch: 14, outerDiameterMm: 20.9, tapDrillMm: 18.5, system: 'pt' },
-  { label: 'PT 3/4',  threadsPerInch: 14, outerDiameterMm: 26.4, tapDrillMm: 24.0, system: 'pt' },
-  { label: 'PT 1',    threadsPerInch: 11, outerDiameterMm: 33.2, tapDrillMm: 30.5, system: 'pt' },
+  { label: 'PT 1/2',  threadsPerInch: 14, outerDiameterMm: 20.9, tapDrillMm: 18.3, system: 'pt' },
+  { label: 'PT 3/4',  threadsPerInch: 14, outerDiameterMm: 26.4, tapDrillMm: 23.8, system: 'pt' },
+  { label: 'PT 1',    threadsPerInch: 11, outerDiameterMm: 33.2, tapDrillMm: 30.0, system: 'pt' },
   { label: 'NPT 1/8', threadsPerInch: 27, outerDiameterMm: 10.3, tapDrillMm: 8.6,  system: 'npt' },
-  { label: 'NPT 1/4', threadsPerInch: 18, outerDiameterMm: 13.7, tapDrillMm: 11.2, system: 'npt' },
-  { label: 'NPT 3/8', threadsPerInch: 18, outerDiameterMm: 17.1, tapDrillMm: 14.5, system: 'npt' },
-  { label: 'NPT 1/2', threadsPerInch: 14, outerDiameterMm: 21.3, tapDrillMm: 17.9, system: 'npt' },
-  { label: 'NPT 3/4', threadsPerInch: 14, outerDiameterMm: 26.7, tapDrillMm: 23.0, system: 'npt' },
-  { label: 'NPT 1',   threadsPerInch: 11.5, outerDiameterMm: 33.4, tapDrillMm: 28.8, system: 'npt' },
+  { label: 'NPT 1/4', threadsPerInch: 18, outerDiameterMm: 13.7, tapDrillMm: 11.1, system: 'npt' },
+  { label: 'NPT 3/8', threadsPerInch: 18, outerDiameterMm: 17.1, tapDrillMm: 14.7, system: 'npt' },
+  { label: 'NPT 1/2', threadsPerInch: 14, outerDiameterMm: 21.3, tapDrillMm: 18.3, system: 'npt' },
+  { label: 'NPT 3/4', threadsPerInch: 14, outerDiameterMm: 26.7, tapDrillMm: 23.4, system: 'npt' },
+  { label: 'NPT 1',   threadsPerInch: 11.5, outerDiameterMm: 33.4, tapDrillMm: 29.4, system: 'npt' },
 ]
 
 // ── 목재·석고 피스 파일럿홀 ──────────
@@ -266,11 +269,13 @@ export const STD_MM_SIZES = [1, 2, 3, 4, 5, 6, 8, 10, 12, 16, 20, 25, 32]
 
 // ── 일반 토크 가이드 (참고만, 8.8 등급 기준) ──
 export function generalTorque(diameter: number): { min: number; max: number } | null {
-  // N·m 일반 범위 — 8.8 등급 기준 참고값
+  // N·m 일반 범위 — 8.8 등급 기준 참고값.
+  // 상단은 볼트·스패너 탭의 참고치(boltWrenchUtils BOLT_DATA.torque8_8, μ=0.14 가정)를 포함해야 한다 —
+  // M6 이상은 원래 포함, M3~M5는 상한이 그 값보다 낮아 한 화면에 두 값이 어긋나던 것을 상한만 올려 맞춤(2026-09-26)
   const map: Record<number, [number, number]> = {
-    3:  [0.6, 1.0],
-    4:  [1.6, 2.5],
-    5:  [3.5, 5.0],
+    3:  [0.6, 1.3],
+    4:  [1.6, 3.0],
+    5:  [3.5, 6.0],
     6:  [6.0, 10.0],
     8:  [15, 25],
     10: [30, 50],

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useId } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './roof.module.css'
@@ -44,8 +44,8 @@ export default function RoofClient() {
   const [lossPct, setLossPct] = useState<number>(10)
 
   // ── 자재 견적 ──────────────────────
-  const [selectedMaterials, setSelectedMaterials] = useState<Record<string, number>>({})
-  // key → user-input 단가 (원/㎡)
+  const [selectedMaterials, setSelectedMaterials] = useState<Record<string, string>>({})
+  // key → user-input 단가 (원/㎡) — 입력 문자열 그대로 보관(지우고 다시 입력 가능), 계산 시 파싱
 
   // ── 파싱·계산 ────────────────────
   const numL = Math.max(0, parseFloat(L) || 0)
@@ -87,11 +87,11 @@ export default function RoofClient() {
         return next
       }
       // 기본값 = 일반 단가 중간값
-      return { ...prev, [m.key]: Math.round((m.priceMin + m.priceMax) / 2) }
+      return { ...prev, [m.key]: String(Math.round((m.priceMin + m.priceMax) / 2)) }
     })
   }
-  const setMaterialPrice = (key: string, price: number) => {
-    setSelectedMaterials((prev) => ({ ...prev, [key]: Math.max(0, price) }))
+  const setMaterialPrice = (key: string, price: string) => {
+    setSelectedMaterials((prev) => ({ ...prev, [key]: price }))
   }
 
   return (
@@ -105,7 +105,7 @@ export default function RoofClient() {
           { href: '/tools/interior/room-area', label: '방 면적 계산' }
         ]}
       >
-        본 도구는 일반 가이드입니다 면적 계산: 표준 형태 기준. 복잡한 형태(혼합·돌출·천창)는 실측 권장. 도면 vs 실측 ±5~10% 차이 가능 자재 단가: 일반 가격 범위 — 실제 ±30% 변동. 정확한 가격은 단가 비교·시공사 견적 본 도구는 <strong>특정 브랜드·시공사 추천 X · 구조 안전 보장 X · 시공 가이드 X · 태양광 발전량 X · 단열/방습 진단 X</strong>
+        본 도구는 일반 가이드입니다. 면적은 표준 형태 기준이라 혼합·돌출·천창이 있는 복잡한 지붕은 실측을 권장하며, 도면과 실측은 ±5~10% 차이가 날 수 있습니다. 자재 단가는 일반 가격 범위로 실제로는 ±30% 변동하니 정확한 가격은 시공사 견적으로 확인하세요. <strong>특정 브랜드·시공사 추천, 구조 안전, 시공 방법, 태양광 발전량, 단열·방습 진단은 다루지 않습니다.</strong>
       </Disclaimer>
 
       {/* 탭 */}
@@ -132,7 +132,7 @@ export default function RoofClient() {
               ))}
             </div>
             <p className={s.fieldHint} style={{ marginTop: 10 }}>
-              💡 경사형 4종(박공·모임·외쪽·맞배)은 같은 치수·물매면 <strong>표면적이 동일</strong>합니다(수평투영 면적 정리). 형태는 능선 디테일·통상 물매·자투리(로스) 차이일 뿐이며, 로스율은 ⑤에서 직접 조정하세요.
+              💡 경사형 4종(박공·모임·외쪽·팔작)은 같은 치수·물매면 <strong>표면적이 동일</strong>합니다(수평투영 면적 정리). 형태는 능선 디테일·통상 물매·자투리(로스) 차이일 뿐이며, 로스율은 ⑤에서 직접 조정하세요.
             </p>
           </div>
 
@@ -385,8 +385,12 @@ export default function RoofClient() {
                     </span>
                     <div className={s.materialList}>
                       {items.map((m) => {
-                        const selected = selectedMaterials[m.key] !== undefined
-                        const userPrice = selectedMaterials[m.key] ?? Math.round((m.priceMin + m.priceMax) / 2)
+                        const raw = selectedMaterials[m.key]
+                        const selected = raw !== undefined
+                        const parsed = raw !== undefined ? parseFloat(raw) : NaN
+                        const userPrice = raw === undefined
+                          ? Math.round((m.priceMin + m.priceMax) / 2)
+                          : (Number.isFinite(parsed) ? Math.min(10_000_000, Math.max(0, parsed)) : 0)
                         const totalCost = result.materialArea * userPrice
                         return (
                           <div key={m.key}
@@ -408,14 +412,14 @@ export default function RoofClient() {
                                   <label htmlFor={`roof-price-${m.key}`}>실제 단가 (원/㎡)</label>
                                   <input id={`roof-price-${m.key}`} type="number" inputMode="numeric" min={0}
                                     className={s.input}
-                                    value={userPrice}
-                                    onChange={(e) => setMaterialPrice(m.key, parseInt(e.target.value) || 0)} />
+                                    value={raw ?? ''}
+                                    onChange={(e) => setMaterialPrice(m.key, e.target.value)} />
                                 </div>
                                 <div className={s.quickRow} style={{ marginTop: 6 }}>
                                   {PRICE_PER_SQM_QUICK.map((p) => (
                                     <button key={p} type="button" aria-pressed={userPrice === p}
                                       className={`${s.quickChip} ${userPrice === p ? s.quickChipActive : ''}`}
-                                      onClick={() => setMaterialPrice(m.key, p)}>
+                                      onClick={() => setMaterialPrice(m.key, String(p))}>
                                       {fmtKrwShort(p)}/㎡
                                     </button>
                                   ))}
@@ -464,6 +468,8 @@ export default function RoofClient() {
 // 시각화 — 평면도 + 측면도
 // ─────────────────────────────────────────────────────────────
 function RoofVisualization({ input }: { input: RoofInput }) {
+  // SVG marker id — 인스턴스별 고유화
+  const arrowId = `arrowhead${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
   const W_view = 480
   const H_view = 240
   // 평면도 영역: 왼쪽 절반 (240x240)
@@ -503,7 +509,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
   const elevBaseY = 180  // 지면
   const wallHeight = 60
   const wallTopY = elevBaseY - wallHeight
-  // 지붕 높이 — 박공·모임·맞배는 능선이 중앙이라 (W/2)×tan, 외쪽(shed)은 한 사면이
+  // 지붕 높이 — 박공·모임·팔작은 능선이 중앙이라 (W/2)×tan, 외쪽(shed)은 한 사면이
   // 전체 폭에 걸쳐 상승하므로 W×tan. (면적 계산은 별개 — 시각화 정확성용)
   const tanPitch = Math.tan(input.pitchDeg * Math.PI / 180)
   const rawRidge = input.type === 'shed' ? elevWidth * tanPitch : (elevWidth / 2) * tanPitch
@@ -514,8 +520,8 @@ function RoofVisualization({ input }: { input: RoofInput }) {
     <div className={s.vizWrap}>
       <svg viewBox={`0 0 ${W_view} ${H_view}`} className={s.vizSvg} preserveAspectRatio="xMidYMid meet" aria-hidden="true">
         {/* 영역 라벨 */}
-        <text x={planArea.cx} y={20} fontSize="12" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR">평면도 (위에서 본)</text>
-        <text x={elevArea.cx} y={20} fontSize="12" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR">측면도</text>
+        <text x={planArea.cx} y={20} fontSize="12" fill="var(--muted)" textAnchor="middle">평면도 (위에서 본)</text>
+        <text x={elevArea.cx} y={20} fontSize="12" fill="var(--muted)" textAnchor="middle">측면도</text>
 
         {/* 영역 구분선 */}
         <line x1={240} y1={30} x2={240} y2={H_view - 10} stroke="var(--border)" strokeWidth="1" strokeDasharray="3 3" />
@@ -525,7 +531,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {(eaveL + eaveR + eaveT + eaveB) > 0 && (
           <rect x={planX1 - eaveL} y={planY1 - eaveT}
             width={planW + eaveL + eaveR} height={planH + eaveT + eaveB}
-            fill="rgba(14,165,233,0.05)"
+            fill="color-mix(in srgb, var(--accent) 5%, transparent)"
             stroke="var(--accent)" strokeWidth="1.2" strokeDasharray="4 3" />
         )}
         {/* 건물 외곽 */}
@@ -535,21 +541,17 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {/* 형태별 능선 표시 */}
         {input.type === 'gable' && (
           <line x1={planX1} y1={planArea.cy} x2={planX2} y2={planArea.cy}
-            stroke="#EA580C" strokeWidth="2" />
+            stroke="var(--orange-600)" strokeWidth="2" />
         )}
-        {input.type === 'maetbae' && (
-          <line x1={planX1} y1={planArea.cy} x2={planX2} y2={planArea.cy}
-            stroke="#EA580C" strokeWidth="2" />
-        )}
-        {input.type === 'hip' && (
+        {(input.type === 'hip' || input.type === 'paljak') && (
           <>
             <line x1={planX1} y1={planY1} x2={planX2} y2={planY2}
-              stroke="#EA580C" strokeWidth="1.5" />
+              stroke="var(--orange-600)" strokeWidth="1.5" />
             <line x1={planX2} y1={planY1} x2={planX1} y2={planY2}
-              stroke="#EA580C" strokeWidth="1.5" />
+              stroke="var(--orange-600)" strokeWidth="1.5" />
             <line x1={planX1 + planW * 0.25} y1={planArea.cy}
               x2={planX1 + planW * 0.75} y2={planArea.cy}
-              stroke="#EA580C" strokeWidth="2" />
+              stroke="var(--orange-600)" strokeWidth="2" />
           </>
         )}
         {input.type === 'shed' && (
@@ -557,7 +559,7 @@ function RoofVisualization({ input }: { input: RoofInput }) {
           <g>
             <line x1={planX1 + 10} y1={planY1 + 10}
               x2={planX2 - 10} y2={planY1 + 10}
-              stroke="#EA580C" strokeWidth="2" markerEnd="url(#arrowhead)" />
+              stroke="var(--orange-600)" strokeWidth="2" markerEnd={`url(#${arrowId})`} />
             <text x={planArea.cx} y={planY1 + planH + 22} fontSize="10" fill="var(--muted)" textAnchor="middle">
               ← 낮음 / 높음 →
             </text>
@@ -565,26 +567,26 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         )}
         {input.type === 'flat' && (
           <text x={planArea.cx} y={planArea.cy + 4} fontSize="12" fill="var(--muted)"
-            textAnchor="middle" fontFamily="Noto Sans KR">평면</text>
+            textAnchor="middle">평면</text>
         )}
 
         {/* 치수 라벨 */}
-        <text x={planArea.cx} y={planY2 + 22} fontSize="11" fill="var(--text)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+        <text x={planArea.cx} y={planY2 + 22} fontSize="11" fill="var(--text)" textAnchor="middle">
           {input.L.toFixed(1)}m
         </text>
-        <text x={planX1 - 8} y={planArea.cy + 4} fontSize="11" fill="var(--text)" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+        <text x={planX1 - 8} y={planArea.cy + 4} fontSize="11" fill="var(--text)" textAnchor="end">
           {input.W.toFixed(1)}m
         </text>
         {(eaveL + eaveR + eaveT + eaveB) > 0 && (
-          <text x={planArea.cx} y={H_view - 8} fontSize="10" fill="var(--accent)" textAnchor="middle" fontFamily="Noto Sans KR">
+          <text x={planArea.cx} y={H_view - 8} fontSize="10" fill="var(--accent)" textAnchor="middle">
             점선 = 처마 포함
           </text>
         )}
 
         {/* 화살표 정의 */}
         <defs>
-          <marker id="arrowhead" markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
-            <polygon points="0 0, 8 3, 0 6" fill="#EA580C" />
+          <marker id={arrowId} markerWidth="8" markerHeight="6" refX="6" refY="3" orient="auto">
+            <polygon points="0 0, 8 3, 0 6" fill="var(--orange-600)" />
           </marker>
         </defs>
 
@@ -600,29 +602,25 @@ function RoofVisualization({ input }: { input: RoofInput }) {
         {/* 지붕 형태별 측면 */}
         {input.type === 'gable' && (
           <polygon points={`${elevX1},${wallTopY} ${elevArea.cx},${wallTopY - ridgeHeightScaled} ${elevX2},${wallTopY}`}
-            fill="rgba(234,88,12,0.18)" stroke="#EA580C" strokeWidth="1.5" />
+            fill="rgba(234,88,12,0.18)" stroke="var(--orange-600)" strokeWidth="1.5" />
         )}
-        {input.type === 'maetbae' && (
-          <polygon points={`${elevX1},${wallTopY} ${elevArea.cx},${wallTopY - ridgeHeightScaled} ${elevX2},${wallTopY}`}
-            fill="rgba(234,88,12,0.18)" stroke="#EA580C" strokeWidth="1.5" />
-        )}
-        {input.type === 'hip' && (
+        {(input.type === 'hip' || input.type === 'paljak') && (
           <polygon points={`${elevX1 + elevWidth * 0.2},${wallTopY - ridgeHeightScaled} ${elevX2 - elevWidth * 0.2},${wallTopY - ridgeHeightScaled} ${elevX2},${wallTopY} ${elevX1},${wallTopY}`}
-            fill="rgba(234,88,12,0.18)" stroke="#EA580C" strokeWidth="1.5" />
+            fill="rgba(234,88,12,0.18)" stroke="var(--orange-600)" strokeWidth="1.5" />
         )}
         {input.type === 'shed' && (
           <polygon points={`${elevX1},${wallTopY} ${elevX2},${wallTopY - ridgeHeightScaled} ${elevX2},${wallTopY}`}
-            fill="rgba(234,88,12,0.18)" stroke="#EA580C" strokeWidth="1.5" />
+            fill="rgba(234,88,12,0.18)" stroke="var(--orange-600)" strokeWidth="1.5" />
         )}
         {input.type === 'flat' && (
           <line x1={elevX1} y1={wallTopY} x2={elevX2} y2={wallTopY}
-            stroke="#EA580C" strokeWidth="3" />
+            stroke="var(--orange-600)" strokeWidth="3" />
         )}
 
         {/* 경사각 표기 */}
         {input.type !== 'flat' && (
-          <text x={elevArea.cx} y={Math.max(wallTopY - ridgeHeightScaled - 8, 16)} fontSize="11" fill="#EA580C"
-            textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+          <text x={elevArea.cx} y={Math.max(wallTopY - ridgeHeightScaled - 8, 16)} fontSize="11" fill="var(--orange-600)"
+            textAnchor="middle" fontWeight={700}>
             {input.pitchDeg.toFixed(1)}° ({fmtMoemae(degToMoemae(input.pitchDeg))})
           </text>
         )}

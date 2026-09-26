@@ -17,29 +17,29 @@ export interface BmiCategory {
 
 export const BMI_CATEGORIES: Record<Standard, BmiCategory[]> = {
   WHO: [
-    { id: 'underweight', min: 0,    max: 18.5, name: '저체중',   color: '#0891B2',
+    { id: 'underweight', min: 0,    max: 18.5, name: '저체중',   color: 'var(--cyan-600)',
       desc: '영양 부족 위험. 적정 영양 섭취 권장.' },
-    { id: 'normal',      min: 18.5, max: 25.0, name: '정상',     color: '#059669',
+    { id: 'normal',      min: 18.5, max: 25.0, name: '정상',     color: 'var(--emerald-600)',
       desc: '건강 체중 범위. 균형 잡힌 식단 + 규칙적 운동 유지.' },
-    { id: 'overweight',  min: 25.0, max: 30.0, name: '과체중',   color: '#A16207',
+    { id: 'overweight',  min: 25.0, max: 30.0, name: '과체중',   color: 'var(--yellow-700)',
       desc: '대사질환 위험 약간 증가. 체중 관리 권장.' },
-    { id: 'obese-1',     min: 30.0, max: 35.0, name: '비만 1단계', color: '#EA580C',
+    { id: 'obese-1',     min: 30.0, max: 35.0, name: '비만 1단계', color: 'var(--orange-600)',
       desc: '대사질환·심혈관 위험 증가.' },
-    { id: 'obese-2',     min: 35.0, max: 40.0, name: '비만 2단계', color: '#DC2626',
+    { id: 'obese-2',     min: 35.0, max: 40.0, name: '비만 2단계', color: 'var(--red-600)',
       desc: '건강 위험 매우 높음. 의료 상담 권장.' },
     { id: 'obese-3',     min: 40.0, max: 999,  name: '비만 3단계', color: '#CC4444',
       desc: '고도 비만. 의료 전문가 상담 필수.' },
   ],
   KOREA: [
-    { id: 'underweight', min: 0,    max: 18.5, name: '저체중',   color: '#0891B2',
+    { id: 'underweight', min: 0,    max: 18.5, name: '저체중',   color: 'var(--cyan-600)',
       desc: '영양 부족 위험.' },
-    { id: 'normal',      min: 18.5, max: 23.0, name: '정상',     color: '#059669',
+    { id: 'normal',      min: 18.5, max: 23.0, name: '정상',     color: 'var(--emerald-600)',
       desc: '건강 체중 범위 (한국 기준).' },
-    { id: 'overweight',  min: 23.0, max: 25.0, name: '과체중',   color: '#A16207',
+    { id: 'overweight',  min: 23.0, max: 25.0, name: '과체중',   color: 'var(--yellow-700)',
       desc: '한국인 기준 건강 위험 시작 구간.' },
-    { id: 'obese-1',     min: 25.0, max: 30.0, name: '비만 1단계', color: '#EA580C',
+    { id: 'obese-1',     min: 25.0, max: 30.0, name: '비만 1단계', color: 'var(--orange-600)',
       desc: '대사질환 위험 증가.' },
-    { id: 'obese-2',     min: 30.0, max: 35.0, name: '비만 2단계', color: '#DC2626',
+    { id: 'obese-2',     min: 30.0, max: 35.0, name: '비만 2단계', color: 'var(--red-600)',
       desc: '건강 위험 매우 높음.' },
     { id: 'obese-3',     min: 35.0, max: 999,  name: '비만 3단계', color: '#CC4444',
       desc: '고도 비만.' },
@@ -72,6 +72,22 @@ export function classifyBMI(bmi: number, standard: Standard): BmiCategory {
   return list.find(c => bmi >= c.min && bmi < c.max) ?? list[list.length - 1]
 }
 
+/* 표시·분류 공통 BMI (소수 1자리 반올림).
+   화면에 보이는 값으로 분류해야 '23.0 정상' 같은 모순이 생기지 않는다(weightloss 도구와 동일 기준). */
+export function roundBMI(bmi: number): number {
+  return Math.round(bmi * 10) / 10
+}
+
+/* 반올림 BMI가 cut 이상이 되는 경계 체중(연속값) = (cut − 0.05) × 키² */
+function cutoffWeight(cut: number, heightSq: number): number {
+  return (cut - 0.05) * heightSq
+}
+
+/* 0.1kg 단위 올림 (부동소수 오차 흡수) */
+function ceil1(v: number): number {
+  return Math.ceil(v * 10 - 1e-9) / 10
+}
+
 export interface WeightRange {
   id: string
   name: string
@@ -80,6 +96,7 @@ export interface WeightRange {
   maxWeight: number | null  // null = 무한
 }
 
+/* 구간별 체중(0.1kg 단위, 겹치지 않게): 해당 분류가 되는 첫 체중 ~ 다음 분류 직전 체중 */
 export function getWeightRanges(height: number, standard: Standard): WeightRange[] {
   const heightM = height / 100
   const heightSq = heightM * heightM
@@ -87,8 +104,8 @@ export function getWeightRanges(height: number, standard: Standard): WeightRange
     id: cat.id,
     name: cat.name,
     color: cat.color,
-    minWeight: cat.min === 0 ? 0 : Math.round(cat.min * heightSq * 10) / 10,
-    maxWeight: cat.max >= 999 ? null : Math.round(cat.max * heightSq * 10) / 10,
+    minWeight: cat.min === 0 ? 0 : ceil1(cutoffWeight(cat.min, heightSq)),
+    maxWeight: cat.max >= 999 ? null : Math.round((ceil1(cutoffWeight(cat.max, heightSq)) - 0.1) * 10) / 10,
   }))
 }
 
@@ -111,35 +128,43 @@ export function calcRichResult(
   if (height <= 0 || weight <= 0) return null
   const heightM = height / 100
   const heightSq = heightM * heightM
-  const bmi = calcBMI(height, weight)
+  const bmi = roundBMI(calcBMI(height, weight))   // 표시값 = 분류 기준값
   const category = classifyBMI(bmi, standard)
   const ranges = BMI_CATEGORIES[standard]
+  const weightRanges = getWeightRanges(height, standard)
 
   const normal = ranges.find(c => c.id === 'normal')!
-  const normalMin = Math.round(normal.min * heightSq * 10) / 10
-  const normalMax = Math.round(normal.max * heightSq * 10) / 10
+  const normalRange = weightRanges.find(r => r.id === 'normal')!
+  const normalMin = normalRange.minWeight
+  const normalMax = normalRange.maxWeight ?? 0
 
   let nextStage: RichResult['nextStage'] = null
   for (const cat of ranges) {
     if (cat.min > bmi) {
       nextStage = {
         name: cat.name,
-        weight: Math.round(cat.min * heightSq * 10) / 10,
+        weight: ceil1(cutoffWeight(cat.min, heightSq)),
         bmi: cat.min,
       }
       break
     }
   }
 
-  // 방향은 실제 분류(category)와 일치시킨다 — 반올림된 체중 경계로 비교하면
-  // BMI 23.01(과체중)인데 "정상까지 범위 내"가 되는 모순이 생긴다.
-  // kg은 반올림 없는 정상 경계(BMI×키²)와의 차이로 계산.
+  // 방향은 실제 분류(category)와 일치시킨다. kg은 반올림 BMI가 정상 구간에
+  // 들어오는 경계 체중((기준−0.05)×키²)까지의 차이를 0.1kg 단위로 올림.
   let toNormal: RichResult['toNormal'] = { direction: 'in', kg: 0 }
   if (category.id !== 'normal') {
-    if (bmi < normal.min)
-      toNormal = { direction: 'gain', kg: Math.round(Math.max(0, normal.min * heightSq - weight) * 10) / 10 }
-    else
-      toNormal = { direction: 'lose', kg: Math.round(Math.max(0, weight - normal.max * heightSq) * 10) / 10 }
+    const direction = bmi < normal.min ? 'gain' : 'lose'
+    let kg = Math.max(0, direction === 'gain'
+      ? ceil1(cutoffWeight(normal.min, heightSq) - weight)
+      : ceil1(weight - cutoffWeight(normal.max, heightSq)))
+    // 경계값 정확히 일치(반올림 half-up) 시 0.1kg 더 필요 — 실제 분류로 확인
+    for (let i = 0; i < 3; i++) {
+      const w2 = direction === 'gain' ? weight + kg : weight - kg
+      if (classifyBMI(roundBMI(w2 / heightSq), standard).id === 'normal') break
+      kg = Math.round((kg + 0.1) * 10) / 10
+    }
+    toNormal = { direction, kg }
   }
 
   // BMI 22 까지
@@ -152,9 +177,9 @@ export function calcRichResult(
   const bmiPerKg = Math.round(heightSq * 10) / 10
 
   return {
-    bmi: Math.round(bmi * 10) / 10,
+    bmi,
     category,
-    weightRanges: getWeightRanges(height, standard),
+    weightRanges,
     normalMin, normalMax,
     nextStage,
     toNormal,
@@ -174,17 +199,17 @@ export interface WHtRResult {
 
 export function calcWaistHeightRatio(waist: number, height: number): WHtRResult {
   if (height <= 0 || waist <= 0) {
-    return { ratio: 0, category: 'normal', name: '정상', color: '#059669', desc: '입력 필요' }
+    return { ratio: 0, category: 'normal', name: '정상', color: 'var(--emerald-600)', desc: '입력 필요' }
   }
   // Ashwell 보더라인 차트 — 0.5("허리 < 키의 절반")를 핵심 기준으로 4구간
   const ratio = waist / height
   if (ratio < 0.40)
-    return { ratio: round2(ratio), category: 'underweight', name: '매우 마름', color: '#0891B2', desc: '허리가 매우 가는 편. 영양·근육 상태 점검을 권장합니다.' }
+    return { ratio: round2(ratio), category: 'underweight', name: '매우 마름', color: 'var(--cyan-600)', desc: '허리가 매우 가는 편. 영양·근육 상태 점검을 권장합니다.' }
   if (ratio < 0.50)
-    return { ratio: round2(ratio), category: 'ideal',       name: '건강 범위', color: '#059669', desc: '이상적인 범위. 허리둘레가 키의 절반 미만 — 현재 상태 유지를 권장합니다.' }
+    return { ratio: round2(ratio), category: 'ideal',       name: '건강 범위', color: 'var(--emerald-600)', desc: '이상적인 범위. 허리둘레가 키의 절반 미만 — 현재 상태 유지를 권장합니다.' }
   if (ratio < 0.60)
-    return { ratio: round2(ratio), category: 'warning',     name: '복부비만 주의', color: '#EA580C', desc: '허리가 키의 절반을 넘었습니다. 복부 지방 관리(식단·유산소)를 권장합니다.' }
-  return     { ratio: round2(ratio), category: 'obese',       name: '복부비만', color: '#DC2626', desc: '복부비만 위험 구간. 의료 전문가 상담을 권장합니다.' }
+    return { ratio: round2(ratio), category: 'warning',     name: '복부비만 주의', color: 'var(--orange-600)', desc: '허리가 키의 절반을 넘었습니다. 복부 지방 관리(식단·유산소)를 권장합니다.' }
+  return     { ratio: round2(ratio), category: 'obese',       name: '복부비만', color: 'var(--red-600)', desc: '복부비만 위험 구간. 의료 전문가 상담을 권장합니다.' }
 }
 
 function round2(n: number): number { return Math.round(n * 100) / 100 }
@@ -202,12 +227,12 @@ export function classifyAbdominal(waist: number, gender: Gender): AbdominalResul
   const std = WAIST_STANDARDS[gender]
   const limit = gender === 'male' ? '90cm' : '85cm'
   if (waist < std.warning)
-    return { isObese: false, category: 'normal', name: '정상', color: '#059669',
+    return { isObese: false, category: 'normal', name: '정상', color: 'var(--emerald-600)',
              desc: `정상 범위 (${gender === 'male' ? '남성' : '여성'} ${limit} 미만).` }
   if (waist < std.obese)
-    return { isObese: true, category: 'mild', name: '경도 복부비만', color: '#EA580C',
+    return { isObese: true, category: 'mild', name: '경도 복부비만', color: 'var(--orange-600)',
              desc: '경도 복부비만. 식단·운동 관리 권장.' }
-  return     { isObese: true, category: 'severe', name: '중증 복부비만', color: '#DC2626',
+  return     { isObese: true, category: 'severe', name: '중증 복부비만', color: 'var(--red-600)',
              desc: '중증 복부비만. 의료 전문가 상담 권장.' }
 }
 
@@ -232,10 +257,10 @@ export function combinedJudgment(
     if (isAbdominalObese)
       return { kind: 'skinny-fat', emoji: '⚠️', title: '마른 비만 가능성',
                desc: 'BMI는 낮지만 허리둘레가 높습니다. 근육량 부족 + 복부 지방이 의심되니 근력 운동 + 균형 잡힌 식단을 권장합니다.',
-               color: '#A16207' }
+               color: 'var(--yellow-700)' }
     return { kind: 'underweight', emoji: '🔵', title: '저체중',
              desc: 'BMI가 정상보다 낮습니다. 허리둘레는 정상 범위지만, 충분한 영양 섭취와 근력 운동으로 건강 체중 회복을 권장합니다.',
-             color: '#0891B2' }
+             color: 'var(--cyan-600)' }
   }
 
   // 정상 (18.5 ~ 정상 상한). 한국 18.5~22.9 / WHO 18.5~24.9
@@ -244,10 +269,10 @@ export function combinedJudgment(
     if (!isAbdominalObese)
       return { kind: 'healthy', emoji: '✅', title: '건강한 체형',
                desc: 'BMI·허리둘레 모두 정상 범위. 현재 상태 유지를 권장합니다.',
-               color: '#059669' }
+               color: 'var(--emerald-600)' }
     return { kind: 'skinny-fat', emoji: '⚠️', title: '마른 비만 가능성',
              desc: 'BMI는 정상이지만 허리둘레가 높습니다. 근육 부족 + 복부 지방 가능성이 있어 근력 운동 + 식단 점검을 권장합니다.',
-             color: '#A16207' }
+             color: 'var(--yellow-700)' }
   }
 
   // 과체중/비만 전단계 (정상 상한 ~ 비만 시작). 한국 23~24.9 / WHO 25~29.9
@@ -255,20 +280,20 @@ export function combinedJudgment(
     if (!isAbdominalObese)
       return { kind: 'overweight', emoji: '⚠️', title: '과체중 (경계)',
                desc: 'BMI가 과체중(비만 전단계) 범위입니다. 허리둘레는 정상이지만, 식습관·활동량을 점검해 정상 체중 유지를 권장합니다.',
-               color: '#A16207' }
+               color: 'var(--yellow-700)' }
     return { kind: 'overweight', emoji: '🟠', title: '과체중 + 복부비만',
              desc: 'BMI가 과체중이고 허리둘레도 높습니다. 대사질환 위험이 커지기 전에 체중·복부 지방 관리를 권장합니다.',
-             color: '#EA580C' }
+             color: 'var(--orange-600)' }
   }
 
   // 비만 (비만 시작 이상)
   if (!isAbdominalObese)
     return { kind: 'muscular', emoji: '⚠️', title: '근육 우세형 가능성',
              desc: 'BMI는 비만 범위지만 허리둘레가 정상입니다. 근육량이 많은 운동선수형일 수 있으니 체성분 검사로 정확한 판정을 권장합니다.',
-             color: '#0891B2' }
+             color: 'var(--cyan-600)' }
   return     { kind: 'combined-obese', emoji: '🔴', title: '종합 비만',
              desc: '체중과 복부 지방 모두 관리가 필요합니다. 대사질환 위험이 높으니 의료 전문가 상담을 권장합니다.',
-             color: '#DC2626' }
+             color: 'var(--red-600)' }
 }
 
 /* ─── 체지방률 (Navy 공식) ─── */
@@ -312,11 +337,11 @@ export function classifyBodyFat(bf: number, gender: Gender): {
   name: string; color: string; rangeText: string
 } {
   const r = BODY_FAT_RANGES[gender]
-  if (bf < r.excellent)    return { name: '우수',     color: '#0891B2', rangeText: gender === 'male' ? '<10%' : '<18%' }
-  if (bf < r.good)         return { name: '좋음',     color: '#059669', rangeText: gender === 'male' ? '10~15%' : '18~23%' }
-  if (bf < r.average)      return { name: '평균',     color: '#A16207', rangeText: gender === 'male' ? '15~20%' : '23~28%' }
-  if (bf < r.aboveAverage) return { name: '평균 이상', color: '#EA580C', rangeText: gender === 'male' ? '20~25%' : '28~33%' }
-  if (bf < r.poor)         return { name: '높음',     color: '#DC2626', rangeText: gender === 'male' ? '25~30%' : '33~38%' }
+  if (bf < r.excellent)    return { name: '우수',     color: 'var(--cyan-600)', rangeText: gender === 'male' ? '<10%' : '<18%' }
+  if (bf < r.good)         return { name: '좋음',     color: 'var(--emerald-600)', rangeText: gender === 'male' ? '10~15%' : '18~23%' }
+  if (bf < r.average)      return { name: '평균',     color: 'var(--yellow-700)', rangeText: gender === 'male' ? '15~20%' : '23~28%' }
+  if (bf < r.aboveAverage) return { name: '평균 이상', color: 'var(--orange-600)', rangeText: gender === 'male' ? '20~25%' : '28~33%' }
+  if (bf < r.poor)         return { name: '높음',     color: 'var(--red-600)', rangeText: gender === 'male' ? '25~30%' : '33~38%' }
   return                          { name: '위험',     color: '#CC4444', rangeText: gender === 'male' ? '>30%' : '>38%' }
 }
 
@@ -339,12 +364,12 @@ export function simulateWeightChange(
   if (!milestones.includes(totalWeeks)) milestones.push(totalWeeks)
   for (const w of milestones) {
     const wt = Math.max(20, currentWeight + perWeek * w)
-    const bmi = calcBMI(height, wt)
+    const bmi = roundBMI(calcBMI(height, wt))
     const cat = classifyBMI(bmi, standard)
     steps.push({
       weeks: w,
       weight: Math.round(wt * 10) / 10,
-      bmi: Math.round(bmi * 10) / 10,
+      bmi,
       category: cat.name,
       color: cat.color,
     })
@@ -365,13 +390,25 @@ export interface BmiRecord {
 
 const STORAGE_KEY = 'youtil_bmi_history_v1'
 
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
+
+function isBmiRecord(v: unknown): v is BmiRecord {
+  if (!v || typeof v !== 'object') return false
+  const r = v as Record<string, unknown>
+  return typeof r.id === 'string'
+    && typeof r.date === 'string' && !Number.isNaN(new Date(r.date).getTime())
+    && isFiniteNum(r.height) && isFiniteNum(r.weight) && isFiniteNum(r.bmi)
+    && (r.waist === undefined || isFiniteNum(r.waist))
+    && (r.bodyFat === undefined || isFiniteNum(r.bodyFat))
+}
+
 export function loadBmiHistory(): BmiRecord[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isBmiRecord) : []
   } catch { return [] }
 }
 

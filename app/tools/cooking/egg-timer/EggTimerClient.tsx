@@ -22,6 +22,22 @@ const DEFAULT_INPUTS: CalcInputs = {
 
 type TimerPhase = 'idle' | 'cooking' | 'releasing' | 'cooling'
 
+/* 저장값 검증 — id는 목록에 있는 값만, 숫자는 슬라이더 범위 안의 값만 반영 */
+function sanitizeStored(raw: unknown): Partial<CalcInputs> {
+  if (!raw || typeof raw !== 'object' || Array.isArray(raw)) return {}
+  const o = raw as Record<string, unknown>
+  const out: Partial<CalcInputs> = {}
+  const pickId = (v: unknown, list: { id: string }[]) =>
+    typeof v === 'string' && list.some((x) => x.id === v) ? v : undefined
+  const d = pickId(o.donenessId, DONENESS); if (d) out.donenessId = d
+  const sz = pickId(o.sizeId, SIZES); if (sz) out.sizeId = sz
+  const t = pickId(o.tempId, START_TEMPS); if (t) out.tempId = t
+  const m = pickId(o.methodId, METHODS); if (m) out.methodId = m
+  if (typeof o.count === 'number' && Number.isInteger(o.count) && o.count >= 1 && o.count <= 24) out.count = o.count
+  if (typeof o.altitudeM === 'number' && Number.isFinite(o.altitudeM) && o.altitudeM >= 0 && o.altitudeM <= 3000) out.altitudeM = o.altitudeM
+  return out
+}
+
 export default function EggTimerClient() {
   const [inputs, setInputs] = useState<CalcInputs>(DEFAULT_INPUTS)
   const [activeRecipe, setActiveRecipe] = useState<string | null>(null)
@@ -36,6 +52,7 @@ export default function EggTimerClient() {
   const phaseTimeoutRef = useRef<ReturnType<typeof setTimeout> | null>(null)  // 800ms 페이즈 전환 예약 — 리셋 시 취소용
   const audioCtxRef = useRef<AudioContext | null>(null)
   const lastTickRef = useRef<number>(0)
+  const remainingRef = useRef(0)  // 타이머 effect 시작 시점의 남은 초 (종료 예약용)
   const isInstapotRunRef = useRef(false)  // 타이머 시작 시 인스턴트팟 여부 고정 (5-5-5 자연감압 단계)
   const wakeLockRef = useRef<WakeLockSentinel | null>(null)  // 화면 자동 잠금 방지
   const origTitleRef = useRef<string | null>(null)           // 완료 시 탭 제목 원복용
@@ -45,7 +62,7 @@ export default function EggTimerClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const parsed = JSON.parse(raw)
+        const parsed = sanitizeStored(JSON.parse(raw))
         setInputs((prev) => ({ ...prev, ...parsed }))
       }
     } catch { /* ignore */ }
@@ -169,6 +186,9 @@ export default function EggTimerClient() {
     }
   }, [])
 
+  // 남은 시간을 ref로 동기화 — 아래 타이머 effect보다 먼저 선언해 같은 커밋에서 최신 값을 읽게 함
+  useEffect(() => { remainingRef.current = remaining }, [remaining])
+
   /* 타이머 동작 */
   useEffect(() => {
     if (!running) {
@@ -179,11 +199,12 @@ export default function EggTimerClient() {
       return
     }
     lastTickRef.current = Date.now()
-    intervalRef.current = setInterval(() => {
+    const tick = () => {
       const t = Date.now()
       const delta = (t - lastTickRef.current) / 1000
       lastTickRef.current = t
       setRemaining((prev) => {
+        if (prev <= 0) return 0  // 종료 예약과 interval이 겹쳐도 완료 처리는 한 번만
         const next = prev - delta
         if (next <= 0) {
           setRunning(false)
@@ -242,9 +263,13 @@ export default function EggTimerClient() {
         }
         return next
       })
-    }, 100)
+    }
+    intervalRef.current = setInterval(tick, 100)
+    // 백그라운드 탭에서는 반복 interval이 분 단위로 늦춰질 수 있어, 종료 시각에 한 번 더 확인하는 단발 예약을 둔다
+    const endTimeout = setTimeout(tick, Math.max(0, remainingRef.current * 1000) + 50)
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
+      clearTimeout(endTimeout)
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [running, phase])
@@ -379,7 +404,7 @@ export default function EggTimerClient() {
             </button>
           ))}
         </div>
-        <p className={styles.note}>특란 (마트 표준) 기준. 크기에 따라 ±15~45초 보정.</p>
+        <p className={styles.note}>특란(XL, 마트 표준) 기준. 크기에 따라 ±15~45초 보정.</p>
       </section>
 
       <section className={styles.optionCard}>
@@ -426,13 +451,13 @@ export default function EggTimerClient() {
         <div className={styles.optionCompact}>
           <div className={styles.optionRowInline}>
             <span className={styles.optionLabel}>개수</span>
-            <input type="range" min={1} max={24} step={1} value={inputs.count}
+            <input type="range" min={1} max={24} step={1} value={inputs.count} aria-label="계란 개수" aria-valuetext={`${inputs.count}개`}
               onChange={(e) => update('count', +e.target.value)} className={styles.sliderInline} />
             <strong className={styles.optionValue}>{inputs.count}개</strong>
           </div>
           <div className={styles.optionRowInline}>
             <span className={styles.optionLabel}>고도</span>
-            <input type="range" min={0} max={3000} step={100} value={inputs.altitudeM}
+            <input type="range" min={0} max={3000} step={100} value={inputs.altitudeM} aria-label="고도(m)" aria-valuetext={`${inputs.altitudeM}m`}
               onChange={(e) => update('altitudeM', +e.target.value)} className={styles.sliderInline} />
             <strong className={styles.optionValue}>{inputs.altitudeM}m</strong>
           </div>
@@ -447,7 +472,7 @@ export default function EggTimerClient() {
         <div className={styles.resultMain}>
           <div className={styles.resultLeft}>
             <p className={styles.resultLabel}>추천 시간</p>
-            <p className={styles.resultBig}>{fmtMS(result.totalSec)}</p>
+            <p className={styles.resultBig} role="status">{fmtMS(result.totalSec)}</p>
             <p className={styles.resultSub}>
               {inputs.methodId === 'instapot'
                 ? '인스턴트팟 5-5-5 룰 — 압력 5분 → 자연 감압 5분 → 얼음물 5분 (약 15분)'
@@ -518,6 +543,7 @@ export default function EggTimerClient() {
         {/* 식히기 안내 */}
         <div className={styles.coolingHint}>
           <p>❄️ <strong>완성 직후 즉시 얼음물에 5분</strong> — 노른자 회녹색 변색 방지 + 껍질 벗기기 쉬워짐</p>
+          <p style={{ marginTop: 4, color: 'var(--muted)' }}>다른 앱으로 넘어가거나 화면을 끄면 브라우저가 타이머를 멈추거나 늦출 수 있어요. 조리 중에는 이 화면을 켜 두세요.</p>
         </div>
       </section>
 
@@ -540,10 +566,10 @@ export default function EggTimerClient() {
       <section className={styles.optionCard}>
         <p className={styles.gapTitle}>단백질 응고 온도 (왜 이 시간들인가)</p>
         <div className={styles.scienceGrid}>
-          <ScienceBar label="흰자 응고 시작"  temp={62} color="#FFFFFF" />
+          <ScienceBar label="흰자 응고 시작"  temp={62} color="var(--gray-400)" />
           <ScienceBar label="노른자 응고 시작" temp={65} color="#FFD460" />
           <ScienceBar label="잼 노른자"       temp={70} color="#FFCC55" />
-          <ScienceBar label="흰자 완전 응고"   temp={80} color="#FFFFFF" />
+          <ScienceBar label="흰자 완전 응고"   temp={80} color="var(--gray-400)" />
           <ScienceBar label="노른자 완전 응고" temp={78} color="#F5DC8A" />
         </div>
         <p className={styles.note}>

@@ -11,7 +11,7 @@ export default function DevCategoryPage() {
   return (
     <CategoryView
       catId="dev"
-      description="JSON·정규식·해시·cURL부터 회선 진단까지 — 개발자가 매일 찾는 유틸리티 모음."
+      description="JSON·정규식·Base64·JWT·cron처럼 개발 중 자주 찾는 변환과 검사를 설치 없이 브라우저에서 처리합니다."
     />
   )
 }

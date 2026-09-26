@@ -88,12 +88,12 @@ const STANDARDS: FlightStandard[] = [
       s === 'safe'
         ? 'FAA 연방 규정상 개수 제한 없음(개인용). 단 아메리칸·델타는 1인당 2개, 사우스웨스트는 1개로 제한.'
         : s === 'warning'
-          ? '항공사 승인 필요 · 1인당 최대 2개.'
+          ? 'FAA 기준으로는 항공사 승인 시 1인당 최대 2개. 단 아메리칸·델타·사우스웨스트는 보조배터리를 개당 100Wh 이하만 허용해 100~160Wh 보조배터리는 승인과 무관하게 반입할 수 없으니 탑승 항공사 규정을 꼭 확인하세요.'
           : '',
     rules: [
       '100Wh 이하: FAA 연방 개수 제한 없음(개인용)',
-      '아메리칸·델타: 1인당 2개 (100Wh 이하, 2026-05-01~) · 사우스웨스트: 1개',
-      '100~160Wh: 항공사 승인 + 1인당 최대 2개',
+      '아메리칸·델타: 보조배터리 1인 2개·개당 100Wh 이하 (2026-05-01~) · 사우스웨스트: 1개·100Wh 이하 (2026-04-20~)',
+      '100~160Wh: FAA 기준 항공사 승인 + 1인당 최대 2개 — 아메리칸·델타·사우스웨스트는 보조배터리 반입 불가',
       '160Wh 초과: 반입 불가',
       '기내 충전 금지는 FAA 연방 규정이 아닌 항공사 정책 — 선반 보관 금지·사용 시 노출 등',
       '위탁 수하물 절대 금지 — 기내 휴대만 허용',
@@ -192,12 +192,12 @@ export default function BatteryClient() {
       .map(v => ({ v, wh: calcWh(result.mAh, v) }))
   }, [result.mAh, effectiveV])
 
-  function handleCopy(key: string, val: number) {
-    if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
+  async function handleCopy(key: string, val: number) {
+    try {
+      await navigator.clipboard.writeText(formatNumber(val).replace(/,/g, ''))
       setCopied(key)
-      setTimeout(() => setCopied(null), 1200)
-    }
+      setTimeout(() => setCopied(null), 1500)
+    } catch { /* 클립보드 권한 거부 등 — 복사됨 표시 안 함 */ }
   }
 
   const refRows = [5000, 10000, 20000, 27000, 30000, 40000, 50000].map(m => {

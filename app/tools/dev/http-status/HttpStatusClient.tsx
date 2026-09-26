@@ -44,12 +44,16 @@ export default function HttpStatusClient() {
 
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const j = JSON.parse(raw)
-        if (typeof j.query === 'string') setQuery(j.query)
-        if (j.filter) setFilter(j.filter)
+        const j: unknown = JSON.parse(raw)
+        const o = (j && typeof j === 'object' ? j : {}) as { query?: unknown; filter?: unknown }
+        if (typeof o.query === 'string') setQuery(o.query)
+        // 저장값은 알려진 카테고리 id만 복원 (모르는 값이면 결과 0건·선택 없음 상태가 됨)
+        const f = CATEGORIES.find((c) => c.id === o.filter)
+        if (f) setFilter(f.id)
       }
       const favRaw = localStorage.getItem(FAV_KEY)
       if (favRaw) {
@@ -379,7 +383,7 @@ export default function HttpStatusClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>표준 vs 비표준 출처</span>
             <ul className={s.warnList}>
-              <li><strong>표준 (RFC)</strong>: 7231 (HTTP/1.1)·6585 (추가)·8297 (103)·7235 (인증)·7232 (조건부)·7538 (308)·7540 (HTTP/2)·4918 (WebDAV)·9110 (HTTP 의미론, 최신)</li>
+              <li><strong>표준 (RFC)</strong>: 9110 (HTTP 의미론, 2022 — 7231·7232·7233·7235·7538 대체)·6585 (추가)·8297 (103)·4918 (WebDAV)</li>
               <li><strong>Cloudflare 5xx (520~530)</strong>: Cloudflare 자체 정의 — Origin 서버 통신 문제</li>
               <li><strong>nginx (444·494·499)</strong>: nginx 내부 코드 — 클라이언트 종료·헤더 크기·차단</li>
               <li><strong>Microsoft IIS</strong>: 440 (Login Time-out), 449 (Retry With), 451 (Redirect)</li>
@@ -411,7 +415,6 @@ export default function HttpStatusClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>참고 링크</span>
             <ul className={s.linkList}>
-              <li><a href="https://datatracker.ietf.org/doc/html/rfc7231" target="_blank" rel="noopener noreferrer">RFC 7231 — HTTP/1.1 의미론</a></li>
               <li><a href="https://datatracker.ietf.org/doc/html/rfc9110" target="_blank" rel="noopener noreferrer">RFC 9110 — HTTP 의미론 (최신, 2022)</a></li>
               <li><a href="https://developer.mozilla.org/ko/docs/Web/HTTP/Status" target="_blank" rel="noopener noreferrer">MDN HTTP Status Codes</a></li>
               <li><a href="https://developers.cloudflare.com/support/troubleshooting/http-status-codes/" target="_blank" rel="noopener noreferrer">Cloudflare HTTP Status Codes</a></li>
@@ -435,14 +438,18 @@ function CodeCard({ code, color, isFav, onClick, onToggleFav }: {
     <div
       className={s.codeCard}
       onClick={onClick}
-      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() } }}
+      onKeyDown={(e) => {
+        // 안쪽 즐겨찾기 버튼에서 올라온 키 입력은 무시 — 버튼 자체 동작(토글)이 실행되게
+        if (e.target !== e.currentTarget) return
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); onClick() }
+      }}
       role="button"
       tabIndex={0}
       style={{ borderColor: color + '40' }}
     >
       <div className={s.codeCardHead}>
         <span className={s.codeBig} style={{ color }}>{code.code}</span>
-        <button type="button" className={s.favBtn} onClick={onToggleFav} aria-label="즐겨찾기">
+        <button type="button" className={s.favBtn} onClick={onToggleFav} aria-label={isFav ? '즐겨찾기 해제' : '즐겨찾기 추가'} aria-pressed={isFav}>
           {isFav ? '⭐' : '☆'}
         </button>
       </div>

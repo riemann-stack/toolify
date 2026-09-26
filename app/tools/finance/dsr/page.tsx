@@ -4,8 +4,11 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import { calcDsr, principalFromAnnual, appliedStressRate, fmtManwon, type RateType } from './dsrUtils'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/finance/dsr',
@@ -19,8 +22,30 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
-const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }
+
+/* ── 본문 예시·표 — 계산기와 같은 엔진(dsrUtils)으로 빌드 시점 계산 ── 금액 단위: 만원 */
+const approx = (man: number) => `약 ${fmtManwon(Math.round(man / 100) * 100)}`
+/** 본문 예시: 연소득 6,000만 · 기존 대출 연 300만 · 집값 5억 · 4.5% · 30년 · 변동형 · 3단계(기준 1.5%p) · DSR 40% · LTV 70% */
+const EX = calcDsr({
+  annualIncome: 6_000, existingAnnual: 300, homePrice: 50_000, loanAmount: 30_000, ratePct: 4.5, years: 30,
+  method: 'equal', rateType: 'variable', dsrLimitPct: 40, ltvLimitPct: 70, baseStressPct: 1.5, phaseRatio: 1,
+})
+/** 스트레스 가산으로 줄어드는 한도 비율 — 변동형 3단계(+1.5%p), 명목 4.0%·30년 */
+const STRESS_CUT_PCT = (1 - principalFromAnnual(100, 4.0 + 1.5, 30, 'equal') / principalFromAnnual(100, 4.0, 30, 'equal')) * 100
+/** 연소득별 한도 표 — 명목 4.0% · 40년 · 원리금균등 · 기존 대출 0 · DSR 40% · 기준 스트레스 1.5%p · 3단계 */
+const MATRIX_RATE = 4.0
+const MATRIX_YEARS = 40
+const MATRIX_INCOMES = [4_000, 6_000, 8_000]
+const MATRIX_TYPES: { t: RateType; label: string }[] = [
+  { t: 'variable', label: '변동형 — 가산 전액' },
+  { t: 'mixed', label: '혼합형 — 대표 60%' },
+  { t: 'periodic', label: '주기형 — 대표 30%' },
+]
+const MATRIX = MATRIX_TYPES.map(({ t, label }) => {
+  const rate = MATRIX_RATE + appliedStressRate(1.5, 1, t)
+  return { label, rate, cells: MATRIX_INCOMES.map((inc) => principalFromAnnual(inc * 0.4, rate, MATRIX_YEARS, 'equal')) }
+})
 
 const FAQ_LD = [
               {
@@ -29,7 +54,7 @@ const FAQ_LD = [
               },
               {
                 q: '스트레스 DSR이 적용되면 한도가 얼마나 줄어드나요?',
-                a: '같은 조건에서 변동형 + 3단계(가산 +1.5%p) 기준 대략 <strong>14~16% 정도 한도가 감소</strong>합니다(만기 30년 기준). 만기가 길수록, 가산금리가 클수록, 금리 변동 위험이 큰 상품(변동형)일수록 감소폭이 커집니다. 순수 고정금리는 스트레스 가산이 0이라 한도 손해가 없습니다.',
+                a: `같은 조건에서 변동형 + 3단계(가산 +1.5%p)면 대략 <strong>15% 안팎 한도가 감소</strong>합니다. 예를 들어 명목금리 4.0%·만기 30년·원리금균등이면 한도가 약 ${STRESS_CUT_PCT.toFixed(1)}% 줄어듭니다(계산기 엔진 기준). 만기가 길수록, 가산금리가 클수록, 금리 변동 위험이 큰 상품(변동형)일수록 감소폭이 커집니다. 순수 고정금리는 스트레스 가산이 0이라 한도 손해가 없습니다.`,
               },
               {
                 q: '왜 LTV는 충분한데 대출이 안 나오나요?',
@@ -41,7 +66,7 @@ const FAQ_LD = [
               },
               {
                 q: '계산기의 기본값(DSR 40%·LTV 70%·스트레스 1.5%p)을 믿어도 되나요?',
-                a: '기본값은 <strong>비규제지역 일반 기준과 일치</strong>합니다 — DSR 40%는 은행업감독규정, 스트레스 1.5%p는 3단계 기준 스트레스 금리(2025.7.1 시행)가 근거입니다. 다만 수도권·규제지역 주담대는 스트레스 금리 3.0%p·LTV 40%·주택가격별 한도(6억/4억/2억)가 별도 적용되는 등 지역·상품에 따라 달라지므로, 정확한 본인 적용값은 거래 은행이나 금융위 공시로 확인하고 [규제 기준값 수정]에서 직접 넣어 보세요.',
+                a: '기본값은 <strong>비규제지역 일반 기준과 일치</strong>합니다 — DSR 40%는 은행업감독규정, 스트레스 1.5%p는 3단계 기준 스트레스 금리(2025.7.1 시행)가 근거입니다. 다만 수도권·규제지역 주담대는 스트레스 금리 3.0%p·LTV 40%·주택가격별 한도(6억/4억/2억)가 별도 적용되는 등 지역·상품에 따라 달라지므로, 정확한 본인 적용값은 거래 은행이나 금융위 공시로 확인하고 [규제 기준값 수정]에서 직접 넣어 보세요. 주택가격별 한도는 「수도권·규제지역 주택 구입 목적 주담대」를 체크하면 함께 반영됩니다.',
               },
               {
                 q: '전세자금대출도 DSR에 들어가나요?',
@@ -51,12 +76,11 @@ const FAQ_LD = [
 
 export default function DsrPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>금융·재테크</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/finance/dsr">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />DSR·LTV·스트레스DSR 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         연소득·기존 대출·집값·금리를 <strong style={{ color: 'var(--text)' }}>한 번만 입력</strong>하면 DSR·LTV·스트레스 DSR을 동시에 계산하고,
         세 기준 중 가장 빡빡한 쪽으로 <strong style={{ color: 'var(--text)' }}>예상 최대 대출 한도</strong>를 알려드려요.
         <br /><span style={{ fontSize: '13px' }}>※ 혼합·주기형의 스트레스 적용률은 고정기간 비중에 따라 달라져 본 계산기는 <strong style={{ color: 'var(--text)' }}>대표값(60%/30%)</strong>을 씁니다. 수도권·규제지역 주담대는 기준 스트레스 금리가 3.0%p로 다르니 [규제 기준값 수정]에서 직접 바꿔 보세요.</span>
@@ -74,25 +98,25 @@ export default function DsrPage() {
       <AdSlot position="in-article" minHeight={200} />
 
       <GuideDivider />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
+      <div>
 
         {/* 1. 세 가지 개념 */}
         <section>
-          <h2 style={h2}>DSR · LTV · 스트레스 DSR — 3분 정리</h2>
+          <h2 className="g-h2">DSR · LTV · 스트레스 DSR — 3분 정리</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
             {[
               {
-                t: 'DSR — 소득 대비 빚 갚는 부담', c: '#059669',
+                t: 'DSR — 소득 대비 빚 갚는 부담', c: 'var(--emerald-600)',
                 d: '총부채원리금상환비율. 내 연소득에서 「모든 대출의 1년치 원리금」이 차지하는 비율입니다. 주택담보대출뿐 아니라 신용대출·자동차할부·카드론까지 전부 합산해요.',
                 f: 'DSR(%) = (모든 대출 연간 원리금 ÷ 연소득) × 100  ·  은행 40% / 2금융권 50% 이내',
               },
               {
-                t: 'LTV — 집값 대비 빌릴 수 있는 한도', c: '#0891B2',
+                t: 'LTV — 집값 대비 빌릴 수 있는 한도', c: 'var(--cyan-600)',
                 d: '담보인정비율. 담보로 잡는 주택 가격 대비 대출 가능 비율입니다. 규제지역·주택 수·생애최초 여부에 따라 한도가 달라집니다.',
                 f: 'LTV(%) = (대출금 ÷ 주택가격) × 100  ·  비규제 70% / 생애최초 최대 80% / 규제지역 40%(2025.10 대책) 등',
               },
               {
-                t: '스트레스 DSR — 금리 오를 걸 미리 반영', c: '#D97706',
+                t: '스트레스 DSR — 금리 오를 걸 미리 반영', c: 'var(--amber-600)',
                 d: '변동금리로 빌리면 나중에 금리가 오를 수 있으니, DSR을 계산할 때 실제 금리에 「스트레스 가산금리」를 더해 더 보수적으로 한도를 잡는 제도입니다. 그만큼 빌릴 수 있는 금액이 줄어듭니다.',
                 f: '스트레스 DSR = 실제금리 + 스트레스 가산금리(변동형일수록 큼)로 원리금을 재계산한 DSR',
               },
@@ -100,7 +124,7 @@ export default function DsrPage() {
               <div key={i} style={{ ...card, borderLeft: `4px solid ${x.c}` }}>
                 <p style={{ fontSize: 15, fontWeight: 700, color: x.c, marginBottom: 6 }}>{x.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, marginBottom: 8 }}>{x.d}</p>
-                <p style={{ fontSize: 13, color: 'var(--text)', background: 'var(--bg3)', borderRadius: 8, padding: '8px 12px', lineHeight: 1.7, fontFamily: "'Noto Sans KR', sans-serif" }}>{x.f}</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', background: 'var(--bg3)', borderRadius: 'var(--radius-s)', padding: '8px 12px', lineHeight: 1.7, fontFamily: 'var(--font-sans)' }}>{x.f}</p>
               </div>
             ))}
           </div>
@@ -108,30 +132,31 @@ export default function DsrPage() {
 
         {/* 2. 한도는 셋 중 가장 작은 값 */}
         <section>
-          <h2 style={h2}>실제 한도 = 셋 중 가장 작은 값</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 14 }}>
+          <h2 className="g-h2">실제 한도 = 셋 중 가장 작은 값</h2>
+          <p className="g-p">
             대출 한도는 LTV와 (스트레스)DSR을 <strong style={{ color: 'var(--text)' }}>각각 계산한 뒤 더 작은 쪽</strong>으로 정해집니다.
             집값이 비싸 LTV 여유가 있어도 소득이 적으면 DSR에서 막히고, 반대로 소득이 충분해도 집값 대비 대출이 크면 LTV에서 막혀요.
-            본 계산기는 둘을 모두 따져 「최종 한도」와 어디에 묶였는지(LTV/DSR)를 함께 보여줍니다.
+            수도권·규제지역에서 집을 사는 주담대라면 여기에 주택가격별 한도(15억 이하 6억 · 25억 이하 4억 · 초과 2억)가 더해져 셋 중 가장 작은 값이 한도가 됩니다.
+            본 계산기는 이 값들을 모두 따져 「최종 한도」와 어디에 묶였는지(LTV/DSR/가격별 한도)를 함께 보여줍니다.
           </p>
           <div style={{ ...card }}>
-            <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-              📌 <strong>예시</strong> — 연소득 6,000만원 / 기존 대출 연 300만원 / 집값 5억 / 금리 4.5% / 30년 / 변동형
-              <br />• LTV 70% → 최대 3.5억
-              <br />• 스트레스 DSR 40%(가산 +1.5%p 반영) → 약 2.9억
-              <br />→ <strong style={{ color: '#059669' }}>실제 한도 ≈ 2.9억 (DSR에 묶임)</strong>
+            <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85 }}>
+              <strong>예시</strong> — 연소득 6,000만원 / 기존 대출 연 300만원 / 집값 5억 / 금리 4.5% / 30년 / 변동형
+              <br />• LTV 70% → 최대 {fmtManwon(EX.ltvMaxLoan)}
+              <br />• 스트레스 DSR 40%(가산 +1.5%p → 심사금리 6.0%) → 신규 대출에 쓸 연 상환여력 {fmtManwon(EX.dsrCapacityAnnual)} → {approx(EX.stressMaxLoan)}
+              <br />→ <strong style={{ color: 'var(--success)' }}>실제 한도 {approx(EX.finalMaxLoan)} ({EX.binding === 'DSR' ? 'DSR' : 'LTV'}에 묶임)</strong>
             </p>
           </div>
         </section>
 
         {/* 3. 스트레스 DSR 단계 */}
         <section>
-          <h2 style={h2}>스트레스 DSR — 단계와 가산금리</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 14 }}>
+          <h2 className="g-h2">스트레스 DSR — 단계와 가산금리</h2>
+          <p className="g-p">
             기준 스트레스 금리는 「과거 5년 중 최고 월별 가계대출 가중평균금리 − 현재 금리」로 산정하되 <strong style={{ color: 'var(--text)' }}>하한 1.5%p·상한 3.0%p</strong>를 둡니다(금융위원회).
             여기에 단계별 적용률과 금리유형별 적용비율을 곱한 값이 실제 가산금리 — 단계가 올라갈수록, 금리 변동 위험이 클수록(변동형 &gt; 혼합형 &gt; 주기형 &gt; 고정형) 가산폭이 커져 한도가 줄어듭니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -147,16 +172,16 @@ export default function DsrPage() {
                   ['3단계', '100%', '+1.50%p', '2025.7.1 — 전 업권 사실상 모든 가계대출'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', color: '#D97706', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{row[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--amber-600)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 13 }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.75 }}>
+          <p className="g-note">
             ※ 가산치는 각 단계 시행 당시 실제 적용된 변동형 기준 확정 수치입니다(금융위 보도자료).
             신용대출은 <strong style={{ color: 'var(--text)' }}>잔액이 1억원을 초과하는 경우에만</strong> 스트레스 금리가 부과되며, 가산금리는 한도 산정에만 쓰이고 실제 대출금리에는 붙지 않습니다.
             혼합형·주기형의 적용비율은 만기 중 고정(금리변동주기) 기간 비중에 따라 달라져(예: 만기 30년·고정 5~9년 혼합형은 100%가 아닌 80%) 본 계산기는 대표값 60%/30%를 기본값으로 씁니다 —
@@ -166,13 +191,13 @@ export default function DsrPage() {
 
         {/* 3-1. 연소득별 한도 매트릭스 */}
         <section>
-          <h2 style={h2}>연소득별 한도 감 잡기</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 14 }}>
+          <h2 className="g-h2">연소득별 한도 감 잡기</h2>
+          <p className="g-p">
             같은 소득이라도 금리 유형에 따라 스트레스 가산이 달라 한도가 벌어집니다. 아래는{' '}
             <strong style={{ color: 'var(--text)' }}>명목금리 연 4.0% · 만기 40년 · 원리금균등 · 기존 대출 0원 · DSR 40% · 스트레스 3단계(기준 1.5%p)</strong>{' '}
             조건에서 본 계산기와 같은 엔진으로 산출한 스트레스 DSR 기준 최대 한도입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -182,32 +207,28 @@ export default function DsrPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['변동형 — 가산 전액 (5.50%)', '약 2억 5,900만', '약 3억 8,800만', '약 5억 1,700만'],
-                  ['혼합형 — 대표 60% (4.90%)', '약 2억 8,000만', '약 4억 2,100만', '약 5억 6,100만'],
-                  ['주기형 — 대표 30% (4.45%)', '약 2억 9,900만', '약 4억 4,800만', '약 5억 9,700만'],
-                ].map((row, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
-                    {row.slice(1).map((cell, j) => (
-                      <td key={j} style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{cell}</td>
+                {MATRIX.map((row, i) => (
+                  <tr key={row.label} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700, textAlign: 'left' }}>{row.label} ({row.rate.toFixed(2)}%)</th>
+                    {row.cells.map((v, j) => (
+                      <td key={j} style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, fontVariantNumeric: 'tabular-nums' }}>{approx(v)}</td>
                     ))}
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.75 }}>
+          <p className="g-note">
             ※ 스트레스 DSR 한도만 따진 예시입니다. 실제 한도는 LTV·규제지역·은행 심사에 따라 달라지며,
             특히 수도권·규제지역 주담대는 기준 스트레스 금리 3.0%p·주택가격별 한도(6억/4억/2억)·<strong style={{ color: 'var(--text)' }}>만기 최장 30년 제한</strong>이 별도로 적용돼
-            위 40년 만기 표는 그 외 지역 기준입니다. 검산: 변동형·연소득 6,000만이면 연 상환여력 2,400만(월 200만) → 5.5%·40년 원리금균등 역산 시 3억 8,777만원.
+            위 40년 만기 표는 그 외 지역 기준입니다. 검산: 변동형·연소득 6,000만이면 연 상환여력 2,400만(월 200만) → {MATRIX[0].rate.toFixed(1)}%·40년 원리금균등 역산 시 {fmtManwon(MATRIX[0].cells[1])}.
           </p>
         </section>
 
         {/* 3-2. 현행 규제 요약 */}
         <section>
-          <h2 style={h2}>현행 대출 규제 한눈에 (2026년 7월 기준)</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 14 }}>
+          <h2 className="g-h2">현행 대출 규제 한눈에 (2026년 7월 기준)</h2>
+          <p className="g-p">
             2024년 2월 1단계로 시작한 스트레스 DSR은 2025년 7월 1일 3단계로 전면 시행됐고,
             이후 6.27 가계부채 관리 방안과 10.15 대출수요 관리 방안이 더해지면서 현재는 기준 스트레스 금리가
             <strong style={{ color: 'var(--text)' }}> 「일반 / 수도권·규제지역 / 지방」으로 3원화</strong>된 상태입니다.
@@ -246,8 +267,8 @@ export default function DsrPage() {
 
         {/* 3-3. 대출 종류별 DSR 산정방식 */}
         <section>
-          <h2 style={h2}>대출 종류별 DSR 산정방식 (시행세칙 별표18 〈표 3〉)</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 14 }}>
+          <h2 className="g-h2">대출 종류별 DSR 산정방식 (시행세칙 별표18 〈표 3〉)</h2>
+          <p className="g-p">
             DSR을 계산할 때 대출별로 원금을 몇 년에 나눠 잡는지(이른바 「산정만기」)는 은행들의 통용 관행이 아니라{' '}
             <strong style={{ color: 'var(--text)' }}>규정으로 정해진 값</strong>입니다.
             은행업감독업무시행세칙 [별표18] 제12-2호 바목은 「총부채원리금상환비율 산출시 부채산정방식은 〈표3〉에서 정한 바에 따른다」고 규정하고,
@@ -255,7 +276,7 @@ export default function DsrPage() {
             금융위원회 규정이 아니라 <strong style={{ color: 'var(--text)' }}>금융감독원장이 정하는 시행세칙</strong>이라는 점이 인용 시 자주 헷갈리는 부분이고,
             2026년 7월 기준 현행 세칙(시행 2026.6.30)에도 같은 값이 그대로 실려 있습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -287,7 +308,7 @@ export default function DsrPage() {
                   { t: '기타대출 (주7 — 할부대출(자동차할부 등), 리스, 단기카드대출, 학자금대출, 대부업대출 등)', m: ['상환방식 무관'], f: ['향후 1년간 실제 상환액'] },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, lineHeight: 1.6 }}>{row.t}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700, lineHeight: 1.6 }}>{row.t}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', lineHeight: 1.9 }}>
                       {row.m.map((x, k) => <span key={k} style={{ display: 'block' }}>{x}</span>)}
                     </td>
@@ -299,7 +320,7 @@ export default function DsrPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.75 }}>
+          <p className="g-note">
             ※ <strong style={{ color: 'var(--text)' }}>이자는 전 항목 공통으로 「실제 부담액」</strong>입니다 — 〈표 3〉의 이자 열이 표 전체를 관통하는 하나의 병합 항목이라,
             원금이 「불포함」인 전세자금대출·예적금담보대출·보험계약대출도 〈표 3〉 자체가 이자까지 빠진다고 정하고 있지는 않습니다.
             <br />※ 전세자금대출(원금 불포함)과 전세보증금담보대출(대출총액 ÷ 4년)은 서로 다른 항목입니다(구분 기준은 주2에 규정) — 이름이 비슷해 혼동하기 쉽습니다.
@@ -311,31 +332,28 @@ export default function DsrPage() {
             두 항목을 반드시 함께 보시고, 본인 대출이 실제로 어떻게 잡히는지는 거래 금융회사에 확인하세요.
           </p>
 
-          <div style={{ ...card, borderLeft: '4px solid var(--warning)', marginTop: 14 }}>
-            <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>⚠️ 마이너스통장 — 쓰지 않은 한도까지 부채로 잡힙니다</p>
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8 }}>
+          <Callout tone="warn" title="마이너스통장 — 쓰지 않은 한도까지 부채로 잡힙니다">
+            <p>
               〈표 3〉 주1)은 「한도대출인 경우에는 원금 및 이자 산정시 대출총액을 한도금액으로 적용」한다고 정합니다.
-              마이너스통장처럼 한도만 열어 두고 실제로는 거의 쓰지 않는 대출도, DSR에서는 <strong style={{ color: 'var(--text)' }}>잔액이 아니라 한도금액 전액</strong>이 대출총액이 됩니다.
-              여기에 신용대출 「분할상환 외」 산정방식(대출총액 ÷ 5년)이 얹히면 —
-              <br />→ 한도 5,000만원짜리 마이너스통장을 한 푼도 쓰지 않았어도 <strong style={{ color: 'var(--text)' }}>연 1,000만원(5,000만 ÷ 5년)</strong>이 원금으로 잡힙니다.
+              마이너스통장처럼 한도만 열어 두고 실제로는 거의 쓰지 않는 대출도, DSR에서는 <strong>잔액이 아니라 한도금액 전액</strong>이 대출총액이 됩니다.
+              여기에 신용대출 「분할상환 외」 산정방식(대출총액 ÷ 5년)이 얹히면, 한도 5,000만원짜리 마이너스통장을 한 푼도 쓰지 않았어도 <strong>연 1,000만원(5,000만 ÷ 5년)</strong>이 원금으로 잡힙니다.
               연소득 6,000만원 차주라면 이 한 줄만으로 DSR 40% 한도인 연 2,400만원 중 약 41.7%가 먼저 나가는 셈입니다(이자 실제 부담액은 여기에 별도로 더해집니다).
-              <br />
-              <span style={{ fontSize: 12 }}>
-                ※ 〈표 3〉에 「마이너스통장」이라는 별도 행이 있는 것은 아니고, 주1)의 한도대출 규정과 신용대출 항목이 결합된 결과입니다.
-                금융위원회 「가계부채 관리방안」(2021.4.29) 과제별 세부내용도 「5년만기로 1년마다 갱신되는 구조의 한도성 여신(마이너스 통장)」을 신용대출 산정만기 사례로 직접 들고 있습니다.
-                다만 개별 금융회사 실제 취급 기준은 상품설명서·창구로 확인하세요.
-              </span>
             </p>
-          </div>
+            <p>
+              〈표 3〉에 「마이너스통장」이라는 별도 행이 있는 것은 아니고, 주1)의 한도대출 규정과 신용대출 항목이 결합된 결과입니다.
+              금융위원회 「가계부채 관리방안」(2021.4.29) 과제별 세부내용도 「5년만기로 1년마다 갱신되는 구조의 한도성 여신(마이너스 통장)」을 신용대출 산정만기 사례로 직접 들고 있습니다.
+              다만 개별 금융회사 실제 취급 기준은 상품설명서·창구로 확인하세요.
+            </p>
+          </Callout>
 
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginTop: 14 }}>
-            📌 <strong style={{ color: 'var(--text)' }}>이 표를 계산기와 연결하는 법</strong> — 본 계산기는 기존 대출의 부담을 자동으로 추정하지 않고,
+          <p className="g-p">
+            <strong>이 표를 계산기와 연결하는 법</strong> — 본 계산기는 기존 대출의 부담을 자동으로 추정하지 않고,
             사용자가 「기존 대출 연 상환액」 칸에 <strong style={{ color: 'var(--text)' }}>연 원리금을 직접 입력</strong>하는 구조입니다.
             그 값을 스스로 만들 때 위 표를 쓰면 됩니다. 보유한 대출을 종류별로 나눠 표의 원금 산정방식대로 계산한 금액에 실제 부담 이자를 더해 모두 합산한 뒤,
             만원 단위로 바꿔 넣으면 은행이 보는 숫자에 가까워집니다. 마이너스통장이 있다면 잔액이 아니라 <strong style={{ color: 'var(--text)' }}>한도금액</strong> 기준으로 넣어야 합니다.
           </p>
 
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 12, lineHeight: 1.75 }}>
+          <p className="g-note">
             ※ <strong style={{ color: 'var(--text)' }}>산정만기 축소 이력</strong> — 신용대출 10년 → 7년(’21.7.1) → 5년, 비주택담보대출 10년 → 8년으로 줄어든 이력이
             규정 안의 경과조치 표 〈표 3-1〉(총부채원리금상환비율 부채산정방식에 대한 경과조치)에 그대로 남아 있습니다.
             〈표 3-1〉은 신용대출을 「’21.6.30일 이전 → 대출총액 / 10년」, 「’21.7.1일 부터 ’22.1.2일 까지 → 대출총액 / 7년」, 비주택담보대출을 「’22.1.2일 이전 → 대출총액 / 10년」으로 정하고 있고,
@@ -347,13 +365,13 @@ export default function DsrPage() {
 
         {/* 4. 한도 늘리는 법 */}
         <section>
-          <h2 style={h2}>대출 한도를 늘리는 현실적인 방법</h2>
+          <h2 className="g-h2">대출 한도를 늘리는 현실적인 방법</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '🗓️ 만기를 늘린다', d: '30년 → 40년으로 늘리면 연 원리금이 줄어 DSR 한도가 올라갑니다. 단 총이자는 늘고, 수도권·규제지역 주담대는 만기 최장 30년 제한(6.27 대책)이 있어요.' },
-              { t: '💳 기존 대출을 줄인다', d: '신용대출·카드론·자동차할부도 전부 DSR에 잡힙니다. 먼저 갚으면 주담대 여력이 커져요.' },
-              { t: '🔒 고정·혼합금리 선택', d: '순수 고정형은 스트레스 가산이 0, 혼합형은 변동형보다 작아 같은 조건에서 한도가 더 나옵니다.' },
-              { t: '👫 소득 합산', d: '부부 합산 소득으로 신청하면 DSR 분모(연소득)가 커져 한도가 늘어납니다.' },
+              { t: '만기를 늘린다', d: '30년 → 40년으로 늘리면 연 원리금이 줄어 DSR 한도가 올라갑니다. 단 총이자는 늘고, 수도권·규제지역 주담대는 만기 최장 30년 제한(6.27 대책)이 있어요.' },
+              { t: '기존 대출을 줄인다', d: '신용대출·카드론·자동차할부도 전부 DSR에 잡힙니다. 먼저 갚으면 주담대 여력이 커져요.' },
+              { t: '고정·혼합금리 선택', d: '순수 고정형은 스트레스 가산이 0, 혼합형은 변동형보다 작아 같은 조건에서 한도가 더 나옵니다.' },
+              { t: '소득 합산', d: '은행이 배우자 소득 합산을 인정하면 DSR 분모(연소득)가 커져 한도가 늘어납니다. 이때 배우자의 기존 대출도 함께 합산되니 두 사람 부채를 모두 넣어 계산해 보세요.' },
             ].map((x, i) => (
               <div key={i} style={{ ...card }}>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{x.t}</p>
@@ -366,22 +384,11 @@ export default function DsrPage() {
         <AdSlot position="between-tools" minHeight={250} />
 
         {/* 5. FAQ */}
-        <section>
-          <h2 style={h2}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ ...card, padding: '12px 16px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
-                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />
-              </details>
-            ))}
-          </div>
-        </section>
+        <Faq items={FAQ_LD} />
 
         {/* 6. 관련 도구 */}
         <section>
-          <h2 style={h2}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             {[
               { href: '/tools/finance/loan', icon: '💳', name: '대출이자 계산기', desc: '원리금균등·원금균등 월 상환액' },
@@ -401,6 +408,6 @@ export default function DsrPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

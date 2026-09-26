@@ -3,8 +3,10 @@ import GlycemicLoadClient from './GlycemicLoadClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/health/glycemic-load',
@@ -15,13 +17,6 @@ export const metadata = buildMetadata({
     '혈당 스파이크 음식', 'GI GL 차이', '혈당지수 계산기', '식품 GI',
   ],
 })
-
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
 
 type GiRow =
   | { group: string }
@@ -107,7 +102,7 @@ const RICE_ROWS: RiceRow[] = [
 const FAQ_LD = [
   {
     q: 'GI와 GL(당부하지수)의 차이가 뭔가요?',
-    a: '<strong>GI(혈당지수)</strong>는 그 음식의 탄수화물이 <strong>얼마나 빨리 혈당을 올리는지</strong>를 포도당(100) 기준으로 나타낸 값입니다. 하지만 GI는 "실제로 얼마나 먹는지"를 반영하지 못합니다. 대표적으로 <strong>수박은 GI가 72로 높지만</strong> 한 쪽에 든 탄수화물이 적어 실제 혈당 영향은 작습니다. 이를 보완한 것이 <strong>GL(당부하지수) = 탄수화물량 × GI ÷ 100</strong>으로, 먹는 양까지 반영해 더 현실적입니다.',
+    a: '<strong>GI(혈당지수)</strong>는 그 음식의 탄수화물이 <strong>얼마나 빨리 혈당을 올리는지</strong>를 포도당(100) 기준으로 나타낸 값입니다. 하지만 GI는 "실제로 얼마나 먹는지"를 반영하지 못합니다. 대표적인 예가 수박입니다. 국제 GI 표 2008판에서는 <strong>GI 76으로 높게</strong> 보고됐지만(2021판은 약 50), 한 쪽에 든 탄수화물이 적어 GL은 한 자릿수로 낮고 실제 혈당 영향도 작습니다. 이를 보완한 것이 <strong>GL(당부하지수) = 탄수화물량 × GI ÷ 100</strong>으로, 먹는 양까지 반영해 더 현실적입니다.',
   },
   {
     q: 'GL은 얼마부터 높은 건가요?',
@@ -142,14 +137,11 @@ const RELATED = [
 
 export default function GlycemicLoadPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        건강·웰빙
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/health/glycemic-load">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />당부하지수(GL) 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         음식·섭취량으로 <strong style={{ color: 'var(--text)' }}>당부하지수(GL)를 계산</strong>하고 한 끼 총 GL 합산 + 식품별 GI 조회표.
       </p>
 
@@ -172,10 +164,10 @@ export default function GlycemicLoadPage() {
 
         {/* 1. 공식 */}
         <section>
-          <h2 style={sectionTitle}>당부하지수(GL) 계산 공식</h2>
+          <h2 className="g-h2">당부하지수(GL) 계산 공식</h2>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>GL</span> = 1회 섭취 탄수화물(g) × GI ÷ 100</div>
@@ -183,14 +175,14 @@ export default function GlycemicLoadPage() {
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>예: 흰쌀밥 1공기 = 66g × 70 ÷ 100 ≈ 46 (고)</div>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ GI가 높아도 실제 먹는 양의 탄수화물이 적으면 GL은 낮습니다(예: 수박). 그래서 <strong style={{ color: 'var(--text)' }}>양까지 반영한 GL</strong>이 혈당 영향을 더 현실적으로 보여줍니다.
+            ※ GI가 높아도 실제 먹는 양의 탄수화물이 적으면 GL은 낮습니다(예: 2008판 기준 GI 76인 수박). 그래서 <strong style={{ color: 'var(--text)' }}>양까지 반영한 GL</strong>이 혈당 영향을 더 현실적으로 보여줍니다.
           </p>
         </section>
 
         {/* 2. GI vs GL 대표 예 */}
         <section>
-          <h2 style={sectionTitle}>GI는 높은데 GL은 낮은 음식</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">GI와 GL이 다르게 보이는 음식</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -201,7 +193,7 @@ export default function GlycemicLoadPage() {
               </thead>
               <tbody>
                 {[
-                  ['수박 (1쪽)', '50', '11g', '5.5', '낮음', 'var(--success)'],
+                  ['수박 (1쪽 150g)', '50~76', '11g', '6~8', '낮음', 'var(--success)'],
                   ['흰쌀밥 (1공기)', '70', '66g', '46', '높음', 'var(--danger)'],
                   ['사과 (중 1개)', '36', '25g', '9', '낮음', 'var(--success)'],
                   ['감자 찐 (중 1개)', '94', '24g', '23', '높음', 'var(--danger)'],
@@ -210,7 +202,7 @@ export default function GlycemicLoadPage() {
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[3]}</td>
                     <td style={{ padding: '10px 12px', color: r[5], fontWeight: 700 }}>{r[4]}</td>
                   </tr>
                 ))}
@@ -218,20 +210,20 @@ export default function GlycemicLoadPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            수박·사과는 GI만 보면 오해할 수 있지만, 실제 먹는 양 기준 GL은 낮습니다. 반대로 흰쌀밥·감자는 GI도 높고 양도 많아 GL이 큽니다.
-            GI는 아래 조회표와 같은 값(흰쌀밥·찐감자는 국내 인체시험, 수박·사과는 국제표)을 쓰며, 조리법·숙성도에 따라 달라질 수 있습니다.
+            수박은 국제표 2008판 기준 GI 76의 고GI 식품이지만(2021판은 약 50) 1쪽에 든 탄수화물이 적어 어느 값을 써도 GL은 낮습니다. 사과는 GI와 GL이 모두 낮은 쪽이고, 반대로 흰쌀밥·감자는 GI도 높고 양도 많아 GL이 큽니다.
+            흰쌀밥·찐감자는 국내 인체시험, 수박·사과는 국제표 값이며(계산기의 수박은 2021판 50 적용), 조리법·숙성도에 따라 달라질 수 있습니다.
           </p>
         </section>
 
         {/* 3. 한국 상용 식품 GI 조회표 */}
         <section>
-          <h2 style={sectionTitle}>한국 상용 식품 GI 조회표</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
+          <h2 className="g-h2">한국 상용 식품 GI 조회표</h2>
+          <p className="g-p">
             국제 GI 표(2008·2021판)와 한국인을 대상으로 한 국내 인체시험 값을 <strong style={{ color: 'var(--text)' }}>출처를 나눠 그대로</strong> 실었습니다.
             국제표 2008판 부록(정상 내당능 1,879항목)과 2021판 ISO 26642 준수 표(약 2,100항목)에서 한국에서 시험된 식품 항목은 확인되지 않아,
             밥·떡·국수처럼 한국 식단 고유 항목은 국내 연구 값을 별도 행으로 병기했습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -250,7 +242,7 @@ export default function GlycemicLoadPage() {
                 ) : (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.food}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: r.tone ? TONE_COLOR[r.tone] : 'var(--text)' }}>{r.gi}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', fontWeight: 700, fontFamily: 'var(--font-sans)', color: r.tone ? TONE_COLOR[r.tone] : 'var(--text)' }}>{r.gi}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.src}</td>
                   </tr>
                 ))}
@@ -262,13 +254,13 @@ export default function GlycemicLoadPage() {
             <br />출처 — 국제표: Atkinson FS 등, <em>Diabetes Care</em> 2008;31(12):2281-2283 및 온라인 부록 Table A1 / Atkinson FS 등, <em>Am J Clin Nutr</em> 2021;114(5):1625-1632 및 ISO 26642:2010 준수 Supplemental Table 1.
             한국(학회지): 김도연 등, 「탄수화물 간식류 식품 및 조리방법에 따른 혈당지수 및 혈당부하지수」, 한국식품영양과학회지 44(1):14-23(2015) — 건강 남성 60명 인체시험.
             한국(농진청): 「탄수화물 다소비 식품의 당지수 관련 분석 및 평가」(농촌진흥청 발주·경희대학교 수행, 2015) — 건강 성인 151명, 13종을 50가지 조리 형태로 측정.
-            <br />⚠️ GI는 <strong style={{ color: 'var(--text)' }}>시험 조건에 따라 변동</strong>하는 값입니다 — 품종·도정·불림·가열 시간·측정 실험실이 달라지면 같은 식품도 값이 크게 바뀌므로(국제표의 개별 백미 항목만 해도 GI 38~93 분포), 표의 값은 확정치가 아니라 대표 참고치로만 쓰세요.
+            <br />주의 — GI는 <strong style={{ color: 'var(--text)' }}>시험 조건에 따라 변동</strong>하는 값입니다 — 품종·도정·불림·가열 시간·측정 실험실이 달라지면 같은 식품도 값이 크게 바뀌므로(국제표의 개별 백미 항목만 해도 GI 38~93 분포), 표의 값은 확정치가 아니라 대표 참고치로만 쓰세요.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 12 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 12 }}>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>
               <strong style={{ color: 'var(--text)' }}>※1 현미밥</strong> — 국제표는 65(2021판 현미 평균)~68±4(2008판)인데 국내 인체시험은 87.6±12.0으로 20 이상 벌어집니다. 품종·조리 조건에 따라 연구 간 차이가 커서 어느 값이 한국 현미밥을 대표하는지 확정할 수 없어 두 값을 함께 적었습니다.<br />
               <strong style={{ color: 'var(--text)' }}>※2 생바나나</strong> — 숙성도에 따라 덜 익은 것 39, 잘 익은 것 47±5, 과숙 57±8(2021판)로 달라집니다.<br />
-              <strong style={{ color: 'var(--text)' }}>※3 수박</strong> — 2008판 대표값은 여러 연구 평균 76±4(개별 호주 시험 72±13·80±3), 2021판은 말레이시아 ISO 준수 시험 4건 평균 약 50입니다. 다만 1회 120 g의 이용가능 탄수화물이 6 g뿐이어서 <strong style={{ color: 'var(--text)' }}>GL은 4~5로 낮다</strong>는 결론은 양쪽이 같습니다.
+              <strong style={{ color: 'var(--text)' }}>※3 수박</strong> — 2008판 대표값은 여러 연구 평균 76±4(개별 호주 시험 72±13·80±3), 2021판은 말레이시아 ISO 준수 시험 4건 평균 약 50입니다. 다만 1회 120 g의 이용가능 탄수화물이 6 g뿐이어서 <strong style={{ color: 'var(--text)' }}>GL은 4~5로 낮다</strong>는 결론은 양쪽이 같습니다. 이 페이지의 표와 계산기는 1쪽 150 g(탄수화물 11 g)을 1회분으로 잡기 때문에 GL이 6~8(계산기는 GI 50 기준 약 6)로 조금 높게 나오지만, 역시 낮음 구간입니다.
             </p>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.8 }}>
@@ -281,18 +273,15 @@ export default function GlycemicLoadPage() {
 
         {/* 4. 한국 기능성 쌀 품종 — in vitro 예측 GI */}
         <section>
-          <h2 style={sectionTitle}>한국 기능성 쌀 품종 — 이건 GI가 아니라 「개발 지표」입니다</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.8, margin: '0 0 14px' }}>
+          <h2 className="g-h2">한국 기능성 쌀 품종 — 이건 GI가 아니라 「개발 지표」입니다</h2>
+          <p className="g-p">
             농촌진흥청은 도담쌀을 <strong style={{ color: 'var(--text)' }}>&ldquo;저항전분이 많고 혈당지수가 낮은 쌀 품종&rdquo;</strong>이라고 설명합니다.
             이런 국산 기능성 쌀에는 GI처럼 보이는 숫자가 붙어 다니는데, 원 논문을 열어 보면 그 값은 <strong style={{ color: 'var(--text)' }}>사람에게 먹여 잰 값이 아니라 시험관(in vitro) 소화 실험에서 나온 예측치</strong>입니다.
             표를 보기 전에 이 구분부터 짚습니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', marginBottom: 16 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--warning)', margin: '0 0 8px' }}>
-              ⚠️ 먼저 — 아래 표의 값은 GI가 아닙니다
-            </p>
-            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
+          <Callout tone="warn" title="먼저 — 아래 표의 값은 GI가 아닙니다">
+            <p style={{ margin: 0 }}>
               ① GI 측정의 국제 표준인 <strong style={{ color: 'var(--text)' }}>ISO 26642:2010</strong>은 서문에서, 시험관 방법으로 소화율·가수분해 지수를 얻을 수는 있어도
               그 결과를 <strong style={{ color: 'var(--text)' }}>&ldquo;GI 값이라고 불러서는 안 된다&rdquo;</strong>(the results should not be referred to as GI values)고 못박습니다.<br />
               ② 같은 표준은 GI 측정 자체를 <strong style={{ color: 'var(--text)' }}>사람 지원자(human volunteers)</strong>의 혈당 반응을 재는 것으로 정의하고(2.7항),
@@ -304,9 +293,9 @@ export default function GlycemicLoadPage() {
               → 그래서 아래 표는 위 GI 조회표(인체시험·국제표 값)와 <strong style={{ color: 'var(--text)' }}>같은 줄에 놓고 비교할 수 없습니다</strong>.
               품종을 고르고 개량하기 위한 실험실 지표로만 읽으세요. 아래 표에 저·중·고 색을 입히지 않은 것도 같은 이유입니다.
             </p>
-          </div>
+          </Callout>
 
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -325,9 +314,9 @@ export default function GlycemicLoadPage() {
                 ) : (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.name}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.amylose}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.rs}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.pgi}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.amylose}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.rs}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r.pgi}</td>
                   </tr>
                 ))}
               </tbody>
@@ -351,7 +340,7 @@ export default function GlycemicLoadPage() {
             시험 중 섭취량이 위장 불편을 일으킬 만큼 저항전분이 많은 식품은 <strong style={{ color: 'var(--text)' }}>GI 시험에 적합하지 않다</strong>고 봅니다. 고저항전분 쌀은 애초에 GI 시험 설계가 까다로운 대상입니다.
           </p>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 16 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 16 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>도담쌀은 어떤 쌀인가</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
               농촌진흥청이 <strong style={{ color: 'var(--text)' }}>2013년 개발</strong>한 품종으로, 고아미와 고아미2호를 교배해 얻은 자포니카 계통입니다.
@@ -366,7 +355,7 @@ export default function GlycemicLoadPage() {
             </p>
           </div>
 
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 10 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px', marginTop: 10 }}>
             <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' }}>사람 대상 시험은 있습니다 — 다만 GI 측정이 아닙니다</p>
             <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.85, margin: 0 }}>
               농촌진흥청은 차병원과 공동으로, 농진청 기술이 적용된 <strong style={{ color: 'var(--text)' }}>도담쌀 선식</strong>을 비만 환자에게 적용한 인체적용시험을 수행해
@@ -393,7 +382,7 @@ export default function GlycemicLoadPage() {
 
         {/* 5. GL 낮추기 */}
         <section>
-          <h2 style={sectionTitle}>혈당 스파이크 줄이는 실전 습관</h2>
+          <h2 className="g-h2">혈당 스파이크 줄이는 실전 습관</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {[
               { t: '먹는 순서 바꾸기', d: '채소·단백질 먼저 → 밥·면 나중에. 식후 혈당 상승이 완만해집니다.' },
@@ -401,8 +390,8 @@ export default function GlycemicLoadPage() {
               { t: '주스보다 생과일', d: '갈거나 즙을 내면 GI가 올라갑니다. 통째로 씹어 먹기.' },
               { t: '식후 10분 걷기', d: '가벼운 활동만으로도 식후 혈당이 낮아집니다.' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>✅ {c.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>{c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.d}</p>
               </div>
             ))}
@@ -416,10 +405,10 @@ export default function GlycemicLoadPage() {
 
         {/* 7. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>
@@ -429,6 +418,6 @@ export default function GlycemicLoadPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

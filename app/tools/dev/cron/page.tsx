@@ -4,12 +4,15 @@ import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/cron',
   title: 'Cron 표현식 생성기·해석기 — 한국어 해석 + 다음 실행 시각',
-  description: '크론 표현식을 한국어로 해석하고 다음 실행 시각을 KST로 계산. 빌더·프리셋·요일/월 별칭·일·요일 OR 규칙 지원.',
+  description: '크론 표현식을 한국어로 해석하고 다음 실행 시각을 이 기기 시간(한국이면 KST)으로 계산. 빌더·프리셋·@별칭·요일/월 영문 이름·일·요일 OR 규칙 지원.',
   keywords: ['크론 표현식', '크론 생성기', 'cron 해석기', '크론 다음 실행', '크론탭', '스케줄 표현식', '크론 평일'],
 })
 
@@ -32,7 +35,7 @@ const FAQ_LD = [
   },
   {
     q: '요일에서 0과 7의 차이는?',
-    a: '둘 다 <strong>일요일</strong>입니다. 표준 cron(Vixie)은 요일을 0~7로 받고, 0과 7을 모두 일요일로 취급합니다(0~6이 일~토, 7은 0의 별칭). 따라서 <code>0 0 * * 0</code>과 <code>0 0 * * 7</code>은 동일하게 매주 일요일 자정입니다. 이 도구는 입력의 7을 내부적으로 0으로 바꿔 처리합니다.',
+    a: '둘 다 <strong>일요일</strong>입니다. 리눅스에서 쓰는 Vixie·cronie cron은 요일을 0~7로 받고, 0과 7을 모두 일요일로 취급합니다(0~6이 일~토, 7은 0의 별칭). 따라서 <code>0 0 * * 0</code>과 <code>0 0 * * 7</code>은 동일하게 매주 일요일 자정이며, 이 도구도 입력의 7을 내부적으로 0으로 바꿔 처리합니다. 다만 POSIX 규격은 0~6(0=일)만 정의하고 Kubernetes CronJob 문서도 0~6으로 안내하므로, 여러 환경에서 쓸 표현식이라면 0을 쓰는 편이 안전합니다.',
   },
   {
     q: '일과 요일을 동시에 지정하면 어떻게 되나요?',
@@ -40,23 +43,57 @@ const FAQ_LD = [
   },
 ]
 
-const H2 = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' } as const
-const CARD = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 } as const
+const CARD = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 } as const
 const CODE = { background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)', color: 'var(--text)' } as const
+const TH = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12 } as const
+
+/* KST(UTC+9, 서머타임 없음) 5필드 → UTC 5필드. 9시간을 빼 전날로 넘어가면 요일도 하루 당긴다.
+   일(日) 필드가 제한된 상태에서 전날로 넘어가면 '매월 1일 → 전달 말일'처럼 표준 문법으로 표현할 수 없어 null. */
+function shiftDow(field: string): string {
+  if (field === '*') return field
+  return field.split(',').map((part) => {
+    const [a, b] = part.split('-').map((x) => (Number(x) + 6) % 7)
+    return b === undefined ? String(a) : a <= b ? `${a}-${b}` : `${a}-6,0-${b}`
+  }).join(',')
+}
+function kstToUtc(expr: string): string | null {
+  const [mi, h, dom, mon, dow] = expr.split(' ')
+  let hh = Number(h) - 9
+  if (hh >= 0) return [mi, String(hh), dom, mon, dow].join(' ')
+  hh += 24
+  if (dom !== '*') return null
+  return [mi, String(hh), dom, mon, shiftDow(dow)].join(' ')
+}
+const KST_ROWS = [
+  { want: '매일 오전 9시', kst: '0 9 * * *' },
+  { want: '평일 오전 9시', kst: '0 9 * * 1-5' },
+  { want: '평일 오전 8시 30분', kst: '30 8 * * 1-5' },
+  { want: '매주 월요일 오전 7시', kst: '0 7 * * 1' },
+  { want: '매일 자정', kst: '0 0 * * *' },
+  { want: '매월 1일 오전 3시', kst: '0 3 1 * *' },
+].map((r) => ({ ...r, utc: kstToUtc(r.kst) }))
 
 export default function CronPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        개발자
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/dev/cron">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />Cron 표현식 생성기·해석기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         크론 표현식을 입력하면 <strong style={{ color: 'var(--text)' }}>한국어 한 줄 해석</strong>과 다음 실행 시각을 보여줍니다.
         반대로 빌더에서 분·시·일·월·요일을 골라 표현식을 만들 수도 있습니다.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="표준 cron 5필드(Vixie·cronie crontab(5)) · Kubernetes CronJob·AWS EventBridge 공식 문서의 필드·요일 규칙"
+        sources={[
+          { label: 'crontab(5) 매뉴얼', href: 'https://man7.org/linux/man-pages/man5/crontab.5.html' },
+          { label: 'POSIX crontab', href: 'https://pubs.opengroup.org/onlinepubs/9799919799/utilities/crontab.html' },
+          { label: 'Kubernetes CronJob', href: 'https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/' },
+          { label: 'AWS EventBridge 일정 표현식', href: 'https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-scheduled-rule-pattern.html' },
+        ]}
+      />
 
       <CronClient />
 
@@ -67,12 +104,12 @@ export default function CronPage() {
 
         {/* ── 1. 5필드 구조 ── */}
         <div>
-          <h2 style={H2}>cron 5필드 구조</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+          <h2 className="g-h2">cron 5필드 구조</h2>
+          <p className="g-p">
             표준 cron은 공백으로 구분된 5개 필드로 시각을 표현합니다. 왼쪽부터 분·시·일·월·요일 순서입니다.
           </p>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
             padding: '16px 18px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)', lineHeight: 2, overflowX: 'auto',
           }}>
             <div style={{ whiteSpace: 'pre' }}><span style={{ color: 'var(--accent)' }}>┌─</span> 분    (0-59)</div>
@@ -80,18 +117,18 @@ export default function CronPage() {
             <div style={{ whiteSpace: 'pre' }}><span style={{ color: 'var(--accent)' }}>│ │ ┌─</span> 일  (1-31)</div>
             <div style={{ whiteSpace: 'pre' }}><span style={{ color: 'var(--accent)' }}>│ │ │ ┌─</span> 월 (1-12)</div>
             <div style={{ whiteSpace: 'pre' }}><span style={{ color: 'var(--accent)' }}>│ │ │ │ ┌─</span> 요일 (0-7, 0·7=일)</div>
-            <div style={{ whiteSpace: 'pre', color: '#EA580C' }}>* * * * *</div>
+            <div style={{ whiteSpace: 'pre', color: 'var(--orange-600)' }}>* * * * *</div>
           </div>
           <div style={{ ...CARD, marginTop: 12 }}>
             예: <code style={CODE}>0 9 * * 1-5</code> = 분 0, 시 9, 일 매일, 월 매월, 요일 월~금 → <strong style={{ color: 'var(--text)' }}>평일 오전 9시</strong>.
-            초(second) 필드는 표준 cron에 없습니다(6필드는 Quartz·일부 라이브러리 확장).
+            초(second) 필드는 표준 cron에 없습니다(6필드는 Quartz·일부 라이브러리 확장). 요일 7(=일요일)은 Vixie·cronie 등 리눅스 cron의 확장이고, POSIX 규격은 0-6(0=일)만 정의합니다.
           </div>
         </div>
 
         {/* ── 2. 특수문자 ── */}
         <div>
-          <h2 style={H2}>특수문자 (* / , -) 의미</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">특수문자 (* / , -) 의미</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -125,8 +162,8 @@ export default function CronPage() {
 
         {/* ── 3. 요일·월 별칭 ── */}
         <div>
-          <h2 style={H2}>요일·월 별칭과 @-축약</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+          <h2 className="g-h2">요일·월 별칭과 @-축약</h2>
+          <p className="g-p">
             자주 쓰는 주기는 <code style={CODE}>@</code> 별칭으로 줄여 쓸 수 있습니다. 이 도구는 입력 시 자동으로 5필드로 풀어 해석합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
@@ -138,7 +175,7 @@ export default function CronPage() {
               { a: '@yearly', e: '0 0 1 1 *', d: '매년 1/1 0시 (=@annually)' },
               { a: '@reboot', e: '—', d: '부팅 시 1회 (시각 계산 불가)' },
             ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--accent)', fontWeight: 700 }}>{r.a}</p>
                 <p style={{ fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--muted)', margin: '2px 0 4px' }}>{r.e}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{r.d}</p>
@@ -146,36 +183,34 @@ export default function CronPage() {
             ))}
           </div>
           <div style={{ ...CARD, marginTop: 12 }}>
-            요일은 숫자만 표준입니다(0~7). <code style={CODE}>MON</code>·<code style={CODE}>SUN</code> 같은 영문 약어와
+            요일은 숫자만 표준입니다(POSIX 0~6, 리눅스 cron은 7도 일요일로 허용). <code style={CODE}>MON</code>·<code style={CODE}>SUN</code> 같은 영문 약어와
             <code style={CODE}>JAN</code>~<code style={CODE}>DEC</code> 월 약어는 일부 구현만 지원하므로, 호환을 위해 숫자 사용을 권장합니다.
+            이 도구는 해석할 때 영문 약어도 숫자로 바꿔 읽습니다.
           </div>
         </div>
 
         {/* ── 4. OR 규칙 ── */}
         <div>
-          <h2 style={H2}>일과 요일 동시 지정 시 OR 규칙</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            일(3번째)과 요일(5번째)을 <strong style={{ color: 'var(--text)' }}>둘 다</strong> <code style={CODE}>*</code>가 아닌 값으로 지정하면,
+          <h2 className="g-h2">일과 요일 동시 지정 시 OR 규칙</h2>
+          <p className="g-p">
+            일(3번째)과 요일(5번째)을 <strong style={{ color: 'var(--text)' }}>둘 다</strong> <code style={CODE}>*</code>로 시작하지 않는 값으로 지정하면,
             표준 cron은 두 조건을 <strong style={{ color: 'var(--text)' }}>OR</strong>로 묶습니다 — 둘 중 하나라도 맞으면 실행합니다.
+            반대로 한쪽이 <code style={CODE}>*/2</code>처럼 <code style={CODE}>*</code>로 시작하면 Vixie·cronie는 그 칸을 &lsquo;제한 없음&rsquo;으로 보고 AND로 판정하며, 이 도구도 같은 규칙을 따릅니다(구현마다 다를 수 있음).
           </p>
-          <div style={{
-            background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12,
-            padding: '14px 18px', fontSize: 13, color: 'var(--text)', lineHeight: 1.9,
-          }}>
-            <code style={CODE}>0 0 13 * 5</code> → 매월 <strong>13일</strong> <em>또는</em> 매주 <strong>금요일</strong> 자정.
-            <br />결과적으로 13일과 금요일이 모두 트리거되며, 13일의 금요일에만 도는 것이 아닙니다.
-            <br /><span style={{ color: 'var(--muted)' }}>둘 중 하나만 쓰려면 다른 칸을 <code style={{ ...CODE, color: 'var(--muted)' }}>*</code>로 두세요.</span>
-          </div>
+          <Callout tone="warn" title="0 0 13 * 5 는 '13일의 금요일'이 아닙니다">
+            매월 <strong>13일</strong> <em>또는</em> 매주 <strong>금요일</strong> 자정에 실행됩니다. 13일과 모든 금요일이 각각 트리거되므로 한 달에 4~6번 돕니다(13일이 금요일이면 한 번으로 겹침).
+            둘 중 하나만 쓰려면 다른 칸을 <code style={CODE}>*</code>로 두세요.
+          </Callout>
           <div style={{ ...CARD, marginTop: 12 }}>
-            "둘 다 만족(AND)"하는 조건, 예를 들어 "13일이면서 금요일"은 cron 한 줄로 표현할 수 없습니다.
+            &lsquo;둘 다 만족(AND)&rsquo;하는 조건, 예를 들어 &lsquo;13일이면서 금요일&rsquo;은 cron 한 줄로 표현할 수 없습니다.
             크론은 트리거만 담당하고, 실제 스크립트 첫 줄에서 <code style={CODE}>요일을 다시 확인</code>해 빠져나가는 방식이 일반적입니다.
           </div>
         </div>
 
         {/* ── 5. Quartz·클라우드 차이 ── */}
         <div>
-          <h2 style={H2}>Quartz·클라우드와 다른 점</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">Quartz·클라우드와 다른 점</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -186,11 +221,11 @@ export default function CronPage() {
               </thead>
               <tbody>
                 {[
-                  { e: '표준 cron (이 도구)', f: '5', d: '0-7 (0·7=일)', n: '일·요일 OR, 초 없음' },
+                  { e: '표준 cron (이 도구)', f: '5', d: '0-7 (0·7=일, 7은 Vixie·cronie 확장 — POSIX는 0-6)', n: '일·요일 OR, 초 없음' },
                   { e: 'Quartz (Java)', f: '6~7', d: '1-7 (1=일)', n: '초 필수, L·W·# 지원, 일·요일에 ? 필요' },
-                  { e: 'Spring @Scheduled', f: '6', d: '0-7', n: '맨 앞에 초 필드 추가' },
-                  { e: 'AWS EventBridge', f: '6', d: '1-7 (1=일)', n: '연도 필드, 일·요일 중 하나는 ?' },
-                  { e: 'Kubernetes CronJob', f: '5', d: '0-7', n: '표준과 동일, UTC 기본' },
+                  { e: 'Spring @Scheduled', f: '6', d: '0-7 (0·7=일)', n: '맨 앞에 초 필드 추가, Spring 5.3+는 L·W·# 지원' },
+                  { e: 'AWS EventBridge 규칙', f: '6', d: '1-7 (1=일)', n: '초 없음·끝에 연도 필드, 일·요일 중 하나는 ?, 항상 UTC' },
+                  { e: 'Kubernetes CronJob', f: '5', d: '0-6 (7 불가)', n: '시간대는 kube-controller-manager 기준(관리형은 대개 UTC), 1.27+ spec.timeZone 지정 가능' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 600 }}>{r.e}</td>
@@ -204,22 +239,63 @@ export default function CronPage() {
           </div>
           <div style={{ ...CARD, marginTop: 12 }}>
             가장 큰 차이는 <strong style={{ color: 'var(--text)' }}>초 필드 유무</strong>와 <strong style={{ color: 'var(--text)' }}>요일 번호 기준</strong>입니다.
-            Quartz·EventBridge는 요일이 1=일요일이라 표준 cron의 숫자를 그대로 옮기면 하루씩 어긋납니다.
-            또 클라우드 스케줄러는 보통 <code style={CODE}>UTC</code>가 기본이므로, KST 기준으로 9시간을 빼서 등록해야 합니다.
+            Quartz·EventBridge는 요일이 1=일요일이라 표준 cron의 숫자를 그대로 옮기면 하루씩 어긋나고(표준의 <code style={CODE}>1-5</code> 월~금 → <code style={CODE}>2-6</code>),
+            Kubernetes는 7을 일요일로 받지 않으므로 <code style={CODE}>0</code>을 쓰세요. 또 클라우드 스케줄러는 보통 <code style={CODE}>UTC</code> 기준이라 KST 시각을 그대로 적으면 9시간 늦게 실행됩니다 — 아래 표 참고.
+          </div>
+        </div>
+
+        {/* ── 5-1. KST → UTC 환산 ── */}
+        <div>
+          <h2 className="g-h2">KST 시각을 UTC 스케줄러에 옮기는 법</h2>
+          <p className="g-p">
+            한국 표준시(KST)는 UTC+9이고 서머타임이 없어 늘 9시간을 빼면 됩니다. 함정은 <strong style={{ color: 'var(--text)' }}>오전 9시 이전</strong>입니다 —
+            UTC로는 전날이 되므로 요일도 하루 앞당겨야 합니다. 아래 표는 표준 5필드 기준으로 환산한 값으로, Kubernetes(컨트롤러가 UTC일 때)·GitHub Actions 같은 UTC 스케줄러에 그대로 쓸 수 있습니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['원하는 실행 (KST)', 'KST 표현식', 'UTC 표현식', '비고'].map((h) => (
+                    <th scope="col" key={h} style={TH}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {KST_ROWS.map((r, i) => (
+                  <tr key={r.kst} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, fontSize: 12 }}>{r.want}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-mono)', fontSize: 12, whiteSpace: 'nowrap' }}>{r.kst}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-mono)', fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap' }}>{r.utc ?? '표현 불가'}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>
+                      {r.utc === null
+                        ? 'UTC로는 전달 말일 18시 — 표준 cron엔 말일(L)이 없어 28-31일 트리거 + 날짜 조건이 필요. EventBridge는 cron(0 18 L * ? *)로 가능'
+                        : Number(r.kst.split(' ')[1]) >= 9 ? '같은 날 — 시만 9 빼기'
+                          : r.kst.endsWith('* * *') ? 'UTC로는 전날 — 요일·일 제한이 없어 시만 바꾸면 됨' : 'UTC로는 전날 — 요일 숫자를 하루 당김'}
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <div style={{ ...CARD, marginTop: 12 }}>
+            UTC 표현식 열은 KST 표현식에서 시를 9 빼고, 음수가 되면 24를 더한 뒤 요일 숫자를 하나씩 줄여(0이면 6) 계산한 값입니다.
+            Kubernetes 1.27 이상이면 변환 대신 <code style={CODE}>spec.timeZone: Asia/Seoul</code>을 지정하는 편이 실수가 적고,
+            EventBridge Scheduler(규칙이 아닌 스케줄러)도 시간대를 직접 고를 수 있습니다. 반대로 서버 crontab은 그 서버의 시스템 시간대를 따르므로
+            <code style={CODE}>timedatectl</code>로 시간대부터 확인하세요.
           </div>
         </div>
 
         {/* ── 6. crontab 실무 등록·디버깅 ── */}
         <div>
-          <h2 style={H2}>crontab 등록과 디버깅 — cron에서만 안 될 때</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+          <h2 className="g-h2">crontab 등록과 디버깅 — cron에서만 안 될 때</h2>
+          <p className="g-p">
             리눅스에서는 <code style={CODE}>crontab -e</code>로 편집기를 열어 한 줄 추가하고 저장하면 즉시 등록됩니다.
             <code style={CODE}>crontab -l</code>로 목록을 확인하고, <code style={CODE}>crontab -r</code>은 확인 질문 없이
-            전체 삭제되므로 주의하세요. "터미널에서 직접 실행하면 되는데 cron에서만 안 된다"면 대부분 환경변수 차이가 원인입니다 —
+            전체 삭제되므로 주의하세요. &lsquo;터미널에서 직접 실행하면 되는데 cron에서만 안 된다&rsquo;면 대부분 환경변수 차이가 원인입니다 —
             cron은 로그인 셸이 아니라 <code style={CODE}>SHELL=/bin/sh</code>, <code style={CODE}>PATH=/usr/bin:/bin</code>의
             최소 환경으로 명령을 실행합니다(crontab(5) 기준).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -246,7 +322,7 @@ export default function CronPage() {
           </div>
           <div style={{ ...CARD, marginTop: 12 }}>
             cron은 명령이 출력(stdout·stderr)을 내면 그 내용을 메일로 보내려 시도합니다. crontab 상단에
-            <code style={CODE}>MAILTO=me@example.com</code>을 적으면 수신 주소를 지정하고, <code style={CODE}>MAILTO=""</code>는
+            <code style={CODE}>MAILTO=me@example.com</code>을 적으면 수신 주소를 지정하고, <code style={CODE}>{'MAILTO=""'}</code>는
             메일 발송을 끕니다. 실행 여부 자체는 <code style={CODE}>grep CRON /var/log/syslog</code>(데비안·우분투)나
             <code style={CODE}>journalctl -u cron</code>(RHEL 계열은 crond)으로 확인할 수 있습니다.
           </div>
@@ -254,12 +330,12 @@ export default function CronPage() {
 
         {/* ── 7. 비자명 주기 레시피 ── */}
         <div>
-          <h2 style={H2}>한 줄로 안 되는 주기 — 실무 레시피</h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            "매월 마지막 날"이나 "2주마다"는 표준 5필드 문법만으로 표현할 수 없습니다. 이럴 땐 트리거를
+          <h2 className="g-h2">한 줄로 안 되는 주기 — 실무 레시피</h2>
+          <p className="g-p">
+            &lsquo;매월 마지막 날&rsquo;이나 &lsquo;2주마다&rsquo;는 표준 5필드 문법만으로 표현할 수 없습니다. 이럴 땐 트리거를
             조금 넓게 걸어 두고, 명령 앞에서 날짜 조건을 확인해 아니면 빠져나가는 패턴을 씁니다(GNU date 기준).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -302,7 +378,7 @@ export default function CronPage() {
 
         {/* ── 관련 도구 ── */}
         <div>
-          <h2 style={H2}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/dev/json', icon: '📋', name: 'JSON 포맷터', desc: 'JSON 정렬·압축·트리·검증' },
@@ -317,7 +393,7 @@ export default function CronPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -331,6 +407,6 @@ export default function CronPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

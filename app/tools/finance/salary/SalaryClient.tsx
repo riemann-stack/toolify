@@ -1,7 +1,9 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useMemo, useState, useSyncExternalStore } from 'react'
+import { todayStr } from '@/lib/date'
+import { pensionBaseAt } from '@/lib/krInsuranceRates'
 import styles from './salary.module.css'
 import {
   NON_TAXABLE_ITEMS, MIN_HOURLY_WAGE_2026,
@@ -18,6 +20,14 @@ const wn = (n: number) => Math.round(n).toLocaleString('ko-KR')
 const comma = (v: string): string => {
   const n = v.replace(/[^\d]/g, '')
   return n ? parseInt(n, 10).toLocaleString('ko-KR') : ''
+}
+
+/* 기준일 — 국민연금 기준소득월액 상·하한(매년 7월 개정) 구간 선택용.
+   SSG와 hydration 첫 렌더는 page.tsx가 넘긴 빌드일을 같이 쓰고(불일치 없음), 직후 기기 날짜로 재평가
+   (4-insurance · national-pension과 같은 패턴) */
+const noopSubscribe = () => () => {}
+function useAsOfDate(buildDate: string): string {
+  return useSyncExternalStore(noopSubscribe, todayStr, () => buildDate)
 }
 
 type Tab = 'main' | 'reverse'
@@ -38,8 +48,10 @@ const PRESETS = [
   { label: '1.5억',   value: 150_000_000 },
 ]
 
-export default function SalaryClient() {
+export default function SalaryClient({ buildDate }: { buildDate?: string }) {
   const [tab, setTab] = useState<Tab>('main')
+  const asOf = useAsOfDate(buildDate ?? todayStr())
+  const pensionBase = useMemo(() => pensionBaseAt(asOf), [asOf])
 
   /* 공통 입력 */
   const [annualMan, setAnnualMan] = useState('5,000')
@@ -72,9 +84,9 @@ export default function SalaryClient() {
     if (!valid) return null
     return calcSalary({
       grossYearly: annualGross, dependents, childrenCount,
-      nonTaxableMonthly, isInsured: true,
+      nonTaxableMonthly, isInsured: true, pensionBase,
     })
-  }, [valid, annualGross, dependents, childrenCount, nonTaxableMonthly])
+  }, [valid, annualGross, dependents, childrenCount, nonTaxableMonthly, pensionBase])
 
   const percentile = useMemo(() => getSalaryPercentile(annualGross), [annualGross])
 
@@ -84,13 +96,13 @@ export default function SalaryClient() {
   const reverseResult = useMemo(() => {
     if (targetNetMonthly < 500_000) return null
     return reverseCalcSalary({
-      targetNetMonthly, dependents, childrenCount, nonTaxableMonthly,
+      targetNetMonthly, dependents, childrenCount, nonTaxableMonthly, pensionBase,
     })
-  }, [targetNetMonthly, dependents, childrenCount, nonTaxableMonthly])
+  }, [targetNetMonthly, dependents, childrenCount, nonTaxableMonthly, pensionBase])
 
   const targetTable = useMemo(
-    () => buildNetTargetTable(dependents, childrenCount, nonTaxableMonthly),
-    [dependents, childrenCount, nonTaxableMonthly],
+    () => buildNetTargetTable(dependents, childrenCount, nonTaxableMonthly, pensionBase),
+    [dependents, childrenCount, nonTaxableMonthly, pensionBase],
   )
 
   /* 실수령액 탭 — 체감 시급 옵션 (통합) */
@@ -114,7 +126,7 @@ export default function SalaryClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
+      setTimeout(() => setCopied(false), 1500)
     } catch { /* */ }
   }
 
@@ -129,11 +141,11 @@ export default function SalaryClient() {
     const takeHomeTaxable = Math.max(0, result.netMonthly - result.nonTaxableMonthly)
     const segments = [
       { name: hasNonTax ? '실수령(과세분)' : '실수령', value: takeHomeTaxable, color: 'var(--accent)' },
-      { name: '4대보험', value: result.totalInsurance, color: '#0891B2' },
-      { name: '세금',    value: result.totalTax,       color: '#EA580C' },
+      { name: '4대보험', value: result.totalInsurance, color: 'var(--cyan-600)' },
+      { name: '세금',    value: result.totalTax,       color: 'var(--orange-600)' },
     ]
     if (hasNonTax) {
-      segments.push({ name: '비과세 수당', value: result.nonTaxableMonthly, color: '#059669' })
+      segments.push({ name: '비과세 수당', value: result.nonTaxableMonthly, color: 'var(--emerald-600)' })
     }
     // 합계 = 과세실수령 + 비과세 + 4대보험 + 세금 = grossMonthly
     const sumForDonut = segments.reduce((s, x) => s + x.value, 0)
@@ -264,7 +276,7 @@ export default function SalaryClient() {
             기타 비과세 직접 입력
           </summary>
           <div className={styles.inputRow} style={{ marginTop: 8 }}>
-            <input className={styles.numInput} type="text" inputMode="numeric"
+            <input id="salary-extra-nontax" aria-label="기타 비과세 금액 (원/월)" className={styles.numInput} type="text" inputMode="numeric"
               placeholder="0" value={extraNonTaxable} onChange={e => setExtraNonTaxable(comma(e.target.value))} />
             <span className={styles.unit}>원/월</span>
           </div>
@@ -289,8 +301,8 @@ export default function SalaryClient() {
       {/* ─────────── 탭 1: 실수령액 ─────────── */}
       {tab === 'main' && result && (
         <>
-          <div className={styles.hero}
-            style={{ borderColor: 'rgba(14,165,233,0.30)', background: 'rgba(14,165,233,0.06)' }}>
+          <div className={styles.hero} role="status"
+            style={{ borderColor: 'color-mix(in srgb, var(--accent) 30%, transparent)', background: 'color-mix(in srgb, var(--accent) 6%, transparent)' }}>
             <div className={styles.heroLabel}>월 실수령액</div>
             <div className={styles.heroNum} style={{ color: 'var(--accent)' }}>
               {wn(result.netMonthly)}<span className={styles.heroNumUnit}>원</span>
@@ -313,8 +325,8 @@ export default function SalaryClient() {
                     <path key={i} d={a.d} fill={a.color} stroke="var(--bg2)" strokeWidth="1" />
                   ))}
                   <circle cx="80" cy="80" r="32" fill="var(--bg2)" />
-                  <text x="80" y="78" textAnchor="middle" fontSize="11" fill="var(--muted)" fontFamily="Noto Sans KR">월급</text>
-                  <text x="80" y="92" textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--text)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{Math.round(result.grossMonthly / 10_000)}만</text>
+                  <text x="80" y="78" textAnchor="middle" fontSize="11" fill="var(--muted)">월급</text>
+                  <text x="80" y="92" textAnchor="middle" fontSize="13" fontWeight="800" fill="var(--text)">{Math.round(result.grossMonthly / 10_000)}만</text>
                 </svg>
                 <div className={styles.donutLegend}>
                   {donut.arcs.map((a, i) => {
@@ -348,8 +360,8 @@ export default function SalaryClient() {
               {result.nonTaxableMonthly > 0 && (
                 <div className={styles.deductionRow} style={{ background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.30)' }}>
                   <span>비과세</span>
-                  <span style={{ color: '#059669' }}>−{wn(result.nonTaxableMonthly)}</span>
-                  <span style={{ color: '#059669' }}>−{wn(result.nonTaxableMonthly * 12)}</span>
+                  <span style={{ color: 'var(--emerald-600)' }}>−{wn(result.nonTaxableMonthly)}</span>
+                  <span style={{ color: 'var(--emerald-600)' }}>−{wn(result.nonTaxableMonthly * 12)}</span>
                 </div>
               )}
               <div className={styles.deductionRow}>
@@ -405,10 +417,10 @@ export default function SalaryClient() {
             <label className={styles.cardLabel}>한국 직장인 연봉 분포 위치 (참고)</label>
             <div style={{ position: 'relative', paddingBottom: 36, marginTop: 8 }}>
               <div className={styles.percentileBar}>
-                <div className={styles.percentileSeg} style={{ background: '#EA580C' }}>하위 10%</div>
-                <div className={styles.percentileSeg} style={{ background: '#A16207' }}>25%</div>
-                <div className={styles.percentileSeg} style={{ background: '#0891B2' }}>50%</div>
-                <div className={styles.percentileSeg} style={{ background: '#059669' }}>75%</div>
+                <div className={styles.percentileSeg} style={{ background: 'var(--orange-600)' }}>하위 10%</div>
+                <div className={styles.percentileSeg} style={{ background: 'var(--yellow-700)' }}>25%</div>
+                <div className={styles.percentileSeg} style={{ background: 'var(--cyan-600)' }}>50%</div>
+                <div className={styles.percentileSeg} style={{ background: 'var(--emerald-600)' }}>75%</div>
                 <div className={styles.percentileSeg} style={{ background: 'var(--accent)' }}>상위 10%</div>
               </div>
               <div className={styles.percentileMarker} style={{ left: `${Math.min(98, percentile.percentile)}%`, top: '50%' }} />
@@ -476,7 +488,7 @@ export default function SalaryClient() {
               <div className={styles.hero}
                 style={{ borderColor: 'rgba(234,88,12,0.30)', background: 'rgba(234,88,12,0.06)' }}>
                 <div className={styles.heroLabel}>체감 시급 (출퇴근 포함)</div>
-                <div className={styles.heroNum} style={{ color: '#EA580C' }}>
+                <div className={styles.heroNum} style={{ color: 'var(--orange-600)' }}>
                   {wn(hourly.perceivedHourlyNet)}<span className={styles.heroNumUnit}>원</span>
                 </div>
                 <div className={styles.heroSub}>
@@ -491,10 +503,10 @@ export default function SalaryClient() {
                 <label className={styles.cardLabel}>4가지 시급 비교</label>
                 <div className={styles.hourlyTable}>
                   {[
-                    { name: '세전 시급',          desc: '연봉 ÷ (12 × 209시간)', val: hourly.baseHourlyGross,    color: 'var(--muted)',  ratio: 1 },
-                    { name: '세후 시급',          desc: '실수령 ÷ 209시간',       val: hourly.baseHourlyNet,      color: 'var(--accent)', ratio: hourly.baseHourlyNet / hourly.baseHourlyGross },
-                    { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: '#A16207',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
-                    { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 시간',       val: hourly.perceivedHourlyNet, color: '#EA580C',       ratio: hourly.perceivedHourlyNet / hourly.baseHourlyGross },
+                    { name: '세전 시급',          desc: `연봉 ÷ (12 × ${hourly.baseMonthlyHours.toLocaleString('ko-KR')}시간)`, val: hourly.baseHourlyGross,    color: 'var(--muted)',  ratio: 1 },
+                    { name: '세후 시급',          desc: `실수령 ÷ ${hourly.baseMonthlyHours.toLocaleString('ko-KR')}시간`,       val: hourly.baseHourlyNet,      color: 'var(--accent)', ratio: hourly.baseHourlyNet / hourly.baseHourlyGross },
+                    { name: '야근 포함',          desc: '실수령 ÷ (근무 + 야근)', val: hourly.realHourlyNet,      color: 'var(--yellow-700)',       ratio: hourly.realHourlyNet / hourly.baseHourlyGross },
+                    { name: '체감 (출퇴근 포함)', desc: '실수령 ÷ 총 시간',       val: hourly.perceivedHourlyNet, color: 'var(--orange-600)',       ratio: hourly.perceivedHourlyNet / hourly.baseHourlyGross },
                   ].map((row, i) => (
                     <div key={i} className={styles.hourlyRow}>
                       <div>
@@ -517,7 +529,7 @@ export default function SalaryClient() {
               )}
 
               <div className={styles.infoBox}>
-                💡 <strong>참고</strong> — 2026년 최저시급 {won(MIN_HOURLY_WAGE_2026)} · OECD 평균 연 1,750시간 / 한국 평균 약 1,950시간. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 체감 시급이 약 8% 차이날 수 있습니다.
+                💡 <strong>참고</strong> — 2026년 최저시급 {won(MIN_HOURLY_WAGE_2026)} · 연간 노동시간은 최근 OECD 통계 기준 한국 1,800시간대로 OECD 평균(약 1,750시간)보다 깁니다. 같은 연봉이라도 출퇴근 30분 vs 90분 차이로 체감 시급이 약 8% 차이날 수 있습니다.
               </div>
             </>
           )}
@@ -561,7 +573,7 @@ export default function SalaryClient() {
               <div className={styles.hero}
                 style={{ borderColor: 'rgba(161,98,7,0.30)', background: 'rgba(161,98,7,0.06)' }}>
                 <div className={styles.heroLabel}>필요 세전 연봉</div>
-                <div className={styles.heroNum} style={{ color: '#A16207' }}>
+                <div className={styles.heroNum} style={{ color: 'var(--yellow-700)' }}>
                   {formatEok(reverseResult.grossYearly)}
                 </div>
                 <div className={styles.heroSub}>

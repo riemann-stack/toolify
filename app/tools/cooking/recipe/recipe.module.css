@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--cyan-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,34 +20,34 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 540px) { .tabs { grid-template-columns: repeat(2, 1fr); } }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveConvert{ background: rgba(161,98,7,0.18);  color: #A16207; font-weight: 700; }
-.tabActiveSaved  { background: rgba(234,88,12,0.18); color: #EA580C; font-weight: 700; }
-.tabActiveShop   { background: rgba(16,185,129,0.18); color: #059669; font-weight: 700; }
+.tabActive       { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
+.tabActiveConvert{ background: rgba(161,98,7,0.18);  color: var(--yellow-700); font-weight: 700; }
+.tabActiveSaved  { background: rgba(234,88,12,0.18); color: var(--orange-600); font-weight: 700; }
+.tabActiveShop   { background: rgba(16,185,129,0.18); color: var(--emerald-600); font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   width: 100%;
   box-sizing: border-box;
@@ -64,7 +64,7 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 6px; font-family: var(--font-sans); letter-spacing: 0.04em; text-transform: uppercase; font-weight: 600; }
 
 /* ── 인분 입력 (모바일에서도 좌우 1줄 유지) ── */
 .servingsGrid {
@@ -82,7 +82,7 @@
   font-size: 22px;
   color: var(--accent);
   padding-top: 30px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .inputRow {
   display: flex;
@@ -90,7 +90,7 @@
   gap: 8px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 4px 12px;
 }
 .inputRow:focus-within { border-color: var(--accent); }
@@ -102,12 +102,12 @@
   padding: 8px 0;
   font-size: 18px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
 }
 .servingInput::-webkit-outer-spin-button, .servingInput::-webkit-inner-spin-button { -webkit-appearance: none; }
-.unitSuffix { font-size: 13px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; }
+.unitSuffix { font-size: 13px; color: var(--muted); font-family: var(--font-sans); }
 
 .presets {
   display: flex;
@@ -122,7 +122,7 @@
   padding: 4px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.12s;
@@ -130,17 +130,17 @@
 }@media (hover: hover) {
   .presetBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.presetActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); }
+.presetActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); }
 
 .ratioBadge {
   margin-top: 12px;
   text-align: center;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .ratioBadge strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
   color: var(--accent);
@@ -157,17 +157,17 @@
 .catChip {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
 }@media (hover: hover) {
   .catChip:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.catActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.catActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .presetGrid {
   display: grid;
@@ -188,7 +188,7 @@
   .presetCard:hover { transform: translateY(-2px); border-color: var(--accent); }
 }
 .presetCardEmoji { font-size: 28px; line-height: 1; margin-bottom: 4px; }
-.presetCardName { font-size: 12px; color: var(--text); font-family: 'Noto Sans KR', sans-serif; font-weight: 700; }
+.presetCardName { font-size: 12px; color: var(--text); font-family: var(--font-sans); font-weight: 700; }
 .presetCardMeta { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 /* ── 재료 입력 ── */
@@ -201,7 +201,7 @@
 .countBadge {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -211,14 +211,14 @@
   gap: 6px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   letter-spacing: 0.04em;
   text-transform: uppercase;
   padding: 0 4px 6px;
 }
 @media (max-width: 540px) {
-  .colLabels { grid-template-columns: 1.4fr 60px 80px 26px; gap: 4px; font-size: 10px; }
+  .colLabels { grid-template-columns: 1.4fr 60px 80px 26px; gap: 4px; font-size: 11px; }
 }
 
 .ingredientList {
@@ -243,14 +243,14 @@
   padding: 8px 10px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   width: 100%;
   box-sizing: border-box;
 }
 .nameInput:focus, .amountInput:focus, .unitSelect:focus { border-color: var(--accent); }
 .amountInput {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -270,18 +270,18 @@
   cursor: pointer;
   transition: all 0.12s;
 }@media (hover: hover) {
-  .removeBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.30); }
+  .removeBtn:hover { color: var(--red-600); border-color: rgba(220,38,38,0.30); }
 }
 .removeBtn:disabled { opacity: 0.3; cursor: not-allowed; }
 
 .addBtn {
   background: transparent;
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   margin-top: 8px;
   width: 100%;
@@ -297,7 +297,7 @@
   gap: 8px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   margin-bottom: 8px;
 }
@@ -317,7 +317,7 @@
   accent-color: var(--accent);
 }
 .sliderValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   text-align: right;
@@ -341,10 +341,10 @@
   gap: 3px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.12s;
 }
 @media (hover: hover) {
@@ -364,14 +364,14 @@
   background: var(--accent-dim);
   border-color: var(--accent);
 }
-.seasonLevelActive .seasonLevelLabel { color: var(--accent); }
-.seasonLevelActive .seasonLevelHint  { color: var(--accent); opacity: 0.85; }
+.seasonLevelActive .seasonLevelLabel { color: var(--accent-ink); }
+.seasonLevelActive .seasonLevelHint  { color: var(--accent-ink); opacity: 0.85; }
 
 /* ── 결과 카드 ── */
 .resultCard {
-  background: linear-gradient(140deg, rgba(14,165,233,0.14), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 14px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 14%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 16px 18px;
 }
 .resultHeader {
@@ -382,7 +382,7 @@
   gap: 10px;
 }
 .resultTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
@@ -392,7 +392,7 @@
   font-size: 12px;
   color: var(--muted);
   margin-top: 2px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .resultList {
@@ -407,29 +407,29 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 13px;
 }
 .resultName {
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .resultName small { color: var(--muted); font-weight: 400; margin-left: 4px; font-size: 11px; }
 .resultBaseTag {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-family: var(--font-mono);
 }
 .resultVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-size: 14px;
   font-variant-numeric: tabular-nums;
 }
-.resultVal small { color: var(--muted); font-weight: 400; font-family: 'JetBrains Mono', monospace; font-size: 11px; margin-left: 6px; }
+.resultVal small { color: var(--muted); font-weight: 400; font-family: var(--font-mono); font-size: 11px; margin-left: 6px; }
 
 .resultRowSeasoned {
   background: rgba(234,88,12,0.14);
@@ -438,10 +438,10 @@
 .seasonBadge {
   display: inline-block;
   background: rgba(234,88,12,0.18);
-  color: #EA580C;
-  border-radius: 999px;
+  color: var(--orange-600);
+  border-radius: var(--radius-pill);
   padding: 2px 7px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   margin-left: 6px;
 }
@@ -457,17 +457,17 @@
 .resultBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
 }@media (hover: hover) {
   .resultBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.resultBtnDone { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.resultBtnDone { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 .seasoningInterp {
   margin-top: 12px;
@@ -478,9 +478,9 @@
   font-size: 12px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.seasoningInterp strong { color: #EA580C; }
+.seasoningInterp strong { color: var(--orange-600); }
 
 .empty {
   text-align: center;
@@ -489,8 +489,8 @@
   padding: 30px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle { font-size: 15px; color: var(--text); font-weight: 700; margin-bottom: 6px; }
 
@@ -520,17 +520,17 @@
   transition: all 0.12s;
   text-align: center;
 }@media (hover: hover) {
-  .convertBox:hover { border-color: #A16207; }
+  .convertBox:hover { border-color: var(--yellow-700); }
 }
 .convertBoxValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 22px;
-  color: #A16207;
+  color: var(--yellow-700);
   font-variant-numeric: tabular-nums;
 }
-.convertBoxUnit { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; margin-top: 2px; }
-.convertApprox { font-size: 10px; color: var(--muted); margin-top: 2px; }
+.convertBoxUnit { font-size: 12px; color: var(--muted); font-family: var(--font-sans); margin-top: 2px; }
+.convertApprox { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
 .quickRefTable {
   width: 100%;
@@ -541,7 +541,7 @@
   padding: 8px 10px;
   text-align: left;
   border-bottom: 1px solid var(--border);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .quickRefTable th {
   font-size: 11px;
@@ -551,9 +551,9 @@
   font-weight: 700;
 }
 .quickRefTable td:nth-child(2), .quickRefTable td:nth-child(3) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
-  color: #A16207;
+  color: var(--yellow-700);
   font-variant-numeric: tabular-nums;
 }
 
@@ -568,19 +568,19 @@
 .savedCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-left: 4px solid #EA580C;
-  border-radius: 12px;
+  border-left: 4px solid var(--orange-600);
+  border-radius: var(--radius-m);
   padding: 14px 16px;
 }
 .savedCardTitle {
-  font-family: 'Noto Sans KR', sans-serif;
-  font-size: 14.5px;
+  font-family: var(--font-sans);
+  font-size: 14px;
   font-weight: 700;
   color: var(--text);
   margin-bottom: 4px;
 }
-.savedCardMeta { font-size: 12px; color: var(--muted); font-family: 'Noto Sans KR', sans-serif; margin-bottom: 8px; }
-.savedCardNote { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; font-family: 'Noto Sans KR', sans-serif; }
+.savedCardMeta { font-size: 12px; color: var(--muted); font-family: var(--font-sans); margin-bottom: 8px; }
+.savedCardNote { font-size: 12px; color: var(--muted); line-height: 1.6; margin-bottom: 10px; font-family: var(--font-sans); }
 
 .miniRow { display: flex; gap: 5px; flex-wrap: wrap; }
 .miniBtn {
@@ -590,28 +590,28 @@
   padding: 5px 10px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
-  .miniDanger:hover { background: rgba(220,38,38,0.18); border-color: #DC2626; }
+.miniDanger { color: var(--red-600); border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(220,38,38,0.18); border-color: var(--red-600); }
 }
-.miniPrimary { color: #EA580C; border-color: rgba(234,88,12,0.40); }@media (hover: hover) {
-  .miniPrimary:hover { background: rgba(234,88,12,0.18); border-color: #EA580C; }
+.miniPrimary { color: var(--orange-600); border-color: rgba(234,88,12,0.40); }@media (hover: hover) {
+  .miniPrimary:hover { background: rgba(234,88,12,0.18); border-color: var(--orange-600); }
 }
 
 .savedForm {
   background: var(--bg2);
-  border: 1px solid #EA580C;
-  border-radius: 12px;
+  border: 1px solid var(--orange-600);
+  border-radius: var(--radius-m);
   padding: 16px 18px;
   display: flex;
   flex-direction: column;
   gap: 12px;
 }
-.savedFormTitle { font-size: 13px; color: #EA580C; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-family: 'Noto Sans KR', sans-serif; }
+.savedFormTitle { font-size: 13px; color: var(--orange-600); font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; font-family: var(--font-sans); }
 
 .fieldRow { display: grid; grid-template-columns: 2fr 1fr 60px; gap: 6px; }
 @media (max-width: 480px) { .fieldRow { grid-template-columns: 1fr; } }
@@ -619,11 +619,11 @@
 .textInput, .textarea, .selectInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   width: 100%;
   box-sizing: border-box;
@@ -637,15 +637,15 @@
   border-radius: 10px;
   padding: 12px 18px;
   font-size: 13px;
-  color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--accent-ink);
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .bigBtn:hover { background: rgba(14,165,233,0.18); }
+  .bigBtn:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
 }
 
 .backupRow {
@@ -657,27 +657,27 @@
 .backupBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .backupBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.backupDanger { color: #DC2626; border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
+.backupDanger { color: var(--red-600); border-color: rgba(220,38,38,0.30); }@media (hover: hover) {
   .backupDanger:hover { background: rgba(220,38,38,0.18); }
 }
 
 .searchInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   width: 100%;
   box-sizing: border-box;
@@ -706,17 +706,17 @@
   align-items: center;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .shopEntry strong { color: var(--text); font-weight: 700; }
 .shopEntry small { color: var(--muted); margin-left: 6px; }
 .shopEntryPeople {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
-  color: #059669;
+  color: var(--emerald-600);
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -725,10 +725,10 @@
   margin-bottom: 12px;
 }
 .shopGroupTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
-  color: #059669;
+  color: var(--emerald-600);
   margin-bottom: 6px;
   letter-spacing: 0.04em;
 }
@@ -747,18 +747,18 @@
   border-radius: 7px;
   padding: 8px 12px;
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 .shopItemChecked { opacity: 0.45; }
 .shopItemChecked .shopItemName { text-decoration: line-through; }
-.shopItemCheck { width: 16px; height: 16px; accent-color: #059669; cursor: pointer; }
+.shopItemCheck { width: 16px; height: 16px; accent-color: var(--emerald-600); cursor: pointer; }
 .shopItemName { color: var(--text); font-weight: 600; }
 .shopItemName small { display: block; color: var(--muted); font-size: 11px; margin-top: 2px; font-weight: 400; }
 .shopItemAmt {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
-  color: #059669;
+  color: var(--emerald-600);
   font-size: 13px;
   font-variant-numeric: tabular-nums;
 }

@@ -22,20 +22,25 @@ export default function OgPreviewClient() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
+  const [copyFailed, setCopyFailed] = useState(false)
 
   // localStorage
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const j = JSON.parse(raw)
-        if (j.mode) setMode(j.mode)
-        if (typeof j.urlInput === 'string') setUrlInput(j.urlInput)
-        if (typeof j.htmlInput === 'string') setHtmlInput(j.htmlInput)
+        const j: unknown = JSON.parse(raw)
+        if (!j || typeof j !== 'object') return
+        const o = j as { mode?: unknown; urlInput?: unknown; htmlInput?: unknown }
+        if (o.mode === 'url' || o.mode === 'html') setMode(o.mode)
+        if (typeof o.urlInput === 'string') setUrlInput(o.urlInput)
+        if (typeof o.htmlInput === 'string') setHtmlInput(o.htmlInput)
       }
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ mode, urlInput, htmlInput })) } catch {}
   }, [mode, urlInput, htmlInput])
 
@@ -52,6 +57,8 @@ export default function OgPreviewClient() {
 
   const baseForImage = meta.url || fetchedUrl || urlInput
   const imageUrl = meta.image ? absoluteUrl(meta.image, baseForImage) : ''
+  /* 카카오·Facebook·LinkedIn은 og:image만 읽음 — twitter:image 폴백을 보여주지 않음 */
+  const ogImageUrl = meta.ogImage ? absoluteUrl(meta.ogImage, baseForImage) : ''
   const twitterImageUrl = meta.twitterImage ? absoluteUrl(meta.twitterImage, baseForImage) : imageUrl
 
   const handleFetch = async () => {
@@ -82,6 +89,9 @@ export default function OgPreviewClient() {
     navigator.clipboard.writeText(generatedCode).then(() => {
       setCopied(true)
       setTimeout(() => setCopied(false), 1500)
+    }).catch(() => {
+      setCopyFailed(true)
+      setTimeout(() => setCopyFailed(false), 1500)
     })
   }
 
@@ -98,7 +108,7 @@ export default function OgPreviewClient() {
           { href: '/tools/dev/token-counter', label: 'AI 토큰 카운터' },
         ]}
       >
-        미리보기는 실제 카드에 가깝게 시뮬레이션한 결과이며, 각 플랫폼의 알고리즘·캐시 정책에 따라 다르게 표시될 수 있습니다. 카카오톡은 한번 캐시되면 약 48시간 유지되므로 변경 후 <strong>카카오톡 캐시 초기화 도구</strong>에서 새로고침 권장.
+        미리보기는 실제 카드에 가깝게 시뮬레이션한 결과이며, 각 플랫폼의 알고리즘·캐시 정책에 따라 다르게 표시될 수 있습니다. 카카오톡은 한 번 수집한 미리보기를 일정 기간(기간 비공개) 캐시하므로 메타태그를 바꾼 뒤에는 <strong>카카오톡 캐시 초기화 도구</strong>에서 새로고침하세요.
       </Disclaimer>
 
       {/* 모드 토글 */}
@@ -120,7 +130,9 @@ export default function OgPreviewClient() {
         {mode === 'url' ? (
           <>
             <div className={s.urlRow}>
+              <label htmlFor="og-url-input" className="srOnly">미리볼 페이지 URL</label>
               <input
+                id="og-url-input"
                 type="url"
                 placeholder="https://example.com/article"
                 className={s.urlInput}
@@ -135,11 +147,13 @@ export default function OgPreviewClient() {
             <p className={s.note}>
               ⓘ 서버를 통해 페이지를 받아와 메타태그를 추출합니다. 일부 사이트는 봇 차단으로 실패할 수 있으니, 그럴 땐 <strong>HTML 붙여넣기</strong> 모드를 사용하세요.
             </p>
-            {error && <div className={s.errBox}>⚠️ {error}</div>}
+            {error && <div className={s.errBox} role="alert">⚠️ {error}</div>}
           </>
         ) : (
           <>
+            <label htmlFor="og-html-input" className="srOnly">메타태그가 든 HTML</label>
             <textarea
+              id="og-html-input"
               className={s.htmlInput}
               placeholder='<head>의 일부 또는 전체를 붙여넣으세요. 예: <meta property="og:title" content="..." />'
               value={htmlInput}
@@ -157,7 +171,7 @@ export default function OgPreviewClient() {
           {/* 검증 결과 */}
           <div className={s.card}>
             <span className={s.cardLabel}>메타태그 검증</span>
-            <div className={s.issueList}>
+            <div className={s.issueList} role="status">
               {issues.map((iss, i) => (
                 <div key={i} className={`${s.issue} ${s['issue_' + iss.severity]}`}>
                   <span className={s.issueIcon}>
@@ -174,10 +188,10 @@ export default function OgPreviewClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>플랫폼별 미리보기</span>
             <div className={s.previewGrid}>
-              <KakaoPreview meta={meta} image={imageUrl} domain={domain} />
-              <FacebookPreview meta={meta} image={imageUrl} domain={domain} />
+              <KakaoPreview meta={meta} image={ogImageUrl} domain={domain} />
+              <FacebookPreview meta={meta} image={ogImageUrl} domain={domain} />
               <TwitterPreview meta={meta} image={twitterImageUrl} domain={domain} />
-              <LinkedInPreview meta={meta} image={imageUrl} domain={domain} />
+              <LinkedInPreview meta={meta} image={ogImageUrl} domain={domain} />
               <SlackPreview meta={meta} image={imageUrl} domain={domain} />
             </div>
           </div>
@@ -187,7 +201,7 @@ export default function OgPreviewClient() {
             <div className={s.cardHead}>
               <span className={s.cardLabel}>완성된 메타태그 코드</span>
               <button className={`${s.copyBtn} ${copied ? s.copyBtnDone : ''}`} onClick={copyCode}>
-                {copied ? '✓ 복사됨' : '복사'}
+                {copied ? '✓ 복사됨' : copyFailed ? '복사 실패 — 직접 선택해 복사' : '복사'}
               </button>
             </div>
             <pre className={s.code}>{generatedCode}</pre>

@@ -3,8 +3,8 @@
 import { useState, useMemo } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import {
-  QUANTS, MODELS, CTX_OPTIONS, KV_TYPES, GPUS, OVERHEAD_GB, MAC_GPU_RATIO,
-  calcVram, fitGpu,
+  QUANTS, MODELS, CTX_OPTIONS, KV_TYPES, GPUS, OVERHEAD_GB, GIB,
+  calcVram, fitGpu, macGpuRatio,
   type KvTypeId, type ModelSpec, type FitLevel,
 } from './llmVramData'
 import s from './llm-vram.module.css'
@@ -50,9 +50,11 @@ export default function LlmVramClient() {
   }, [model, quant, effCtx, kvInfo])
 
   const gpu = GPUS.find((g) => g.id === gpuId)!
-  const gpuGb = gpu.id === 'mac'
-    ? Math.max(0, Math.min(parseFloat(macRam) || 0, 512)) * MAC_GPU_RATIO
-    : gpu.gb
+  const macRamGb = Math.max(0, Math.min(parseFloat(macRam) || 0, 512))
+  const macRatio = macGpuRatio(macRamGb)
+  // gpuGb는 GiB 단위(카드 표기·Mac RAM 표기와 같음). 화면에는 필요량과 같은 10진 GB로 환산해 보여줌
+  const gpuGb = gpu.id === 'mac' ? macRamGb * macRatio : gpu.gb
+  const gpuDecGb = (gpuGb * GIB) / 1e9
   const fit = result && gpuGb > 0 ? fitGpu(result.totalBytes, gpuGb) : null
 
   const quantTable = useMemo(() => {
@@ -75,7 +77,7 @@ export default function LlmVramClient() {
             <button key={m.id} type="button"
               className={`${s.modelBtn} ${m.id === modelId ? s.on : ''}`}
               aria-pressed={m.id === modelId}
-              onClick={() => setModelId(m.id)}>
+              onClick={() => { setModelId(m.id); if (ctx > m.maxCtx) setCtx(m.maxCtx) }}>
               <span className={s.modelName}>{m.name}</span>
               <span className={s.modelMeta}>{m.paramsB}B{m.tag ? ` · ${m.tag}` : ''}</span>
             </button>
@@ -198,13 +200,13 @@ export default function LlmVramClient() {
               <input className={s.numInput} type="text" inputMode="numeric" value={macRam}
                 onChange={(e) => setMacRam(e.target.value.replace(/[^0-9]/g, ''))}
                 aria-label="Mac 통합메모리 (기가바이트)" />
-              <span className={s.miniLabel}>GB RAM → GPU 가용 약 {fmtGB(gpuGb, 0)}GB (75%)</span>
+              <span className={s.miniLabel}>GB RAM → GPU 가용 약 {fmtGB(gpuGb)}GiB ≈ {fmtGB(gpuDecGb)}GB (RAM의 {Math.round(macRatio * 100)}%)</span>
             </span>
           )}
         </div>
         {result && fit && (
           <p className={s.fitLine}>
-            필요 {fmtGB(result.totalGB)}GB / 가용 {fmtGB(gpuGb, 0)}GB →{' '}
+            필요 {fmtGB(result.totalGB)}GB / 가용 {fmtGB(gpuDecGb)}GB ({gpu.id === 'mac' ? fmtGB(gpuGb) : gpuGb}GiB) →{' '}
             <strong className={s[FIT_LABEL[fit].cls]}>
               {fit === 'ok' ? '✅ 여유 있게 구동 가능' : fit === 'tight' ? '⚠️ 빠듯함 — 컨텍스트·KV 축소 권장' : '❌ 초과 — 더 작은 양자화·모델 필요'}
             </strong>
@@ -237,6 +239,7 @@ export default function LlmVramClient() {
         <p className={s.groupNote}>
           총 필요 = 가중치 + KV 캐시({fmtCtx(effCtx)}·{kvInfo.label.split(' ')[0]}) + 오버헤드 {OVERHEAD_GB}GB.
           실효 bpw는 모델별 ±1~2% 편차가 있어(대형 모델은 소폭 과대) &lsquo;약&rsquo;으로 보세요.
+          GB는 모두 10진 GB(10<sup>9</sup>바이트)이며, 카드 표기 용량은 GiB라 12GB 카드는 약 12.9GB로 비교합니다.
         </p>
       </div>
 
@@ -244,7 +247,7 @@ export default function LlmVramClient() {
         variant="default"
         related={[
           { href: '/tools/dev/token-counter', label: 'AI 토큰 카운터' },
-          { href: '/tools/dev/tech-stack', label: '기술 스택 추천기' },
+          { href: '/tools/dev/curl', label: 'cURL 변환기' },
           { href: '/tools/unit/converter', label: '단위 변환기' },
         ]}
         sources={[

@@ -9,7 +9,7 @@
     radial-gradient(ellipse at 82% 70%, rgba(62,91,255,0.13), transparent 60%),
     linear-gradient(180deg, #0a0a2e 0%, #1a0a3e 100%);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   overflow: hidden;
 }
@@ -41,34 +41,34 @@
 .disclaimer {
   background: rgba(155,89,182,0.06);
   border: 1px solid rgba(155,89,182,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #9333EA; }
+.disclaimer strong { color: var(--purple-600); }
 
 /* ── 현재 우주 시간 헤더 ── */
 .cosmicNow {
   background:
     radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.10), transparent 60%),
     var(--bg2);
-  border: 1px solid #0D9488;
-  border-radius: 14px;
+  border: 1px solid var(--teal-600);
+  border-radius: var(--radius-card);
   padding: 16px 22px;
   text-align: center;
 }
 .cosmicNowLabel {
   font-size: 11px;
-  color: #0F766E;
+  color: var(--teal-700);
   letter-spacing: 0.08em;
   text-transform: uppercase;
   font-weight: 700;
   margin-bottom: 6px;
 }
 .cosmicNowDate {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(18px, 4.5vw, 24px);
   color: var(--text);
@@ -89,7 +89,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 600px) {
@@ -98,12 +98,12 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 6px;
   min-height: 44px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -112,7 +112,7 @@
 }
 .tabActive {
   background: rgba(13,148,136,0.10);
-  color: #0F766E;
+  color: var(--teal-700);
   font-weight: 700;
 }
 
@@ -120,7 +120,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -149,7 +149,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 입력 ── */
@@ -159,7 +159,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -168,7 +168,7 @@
 }
 .bigInput { font-size: 18px; padding: 12px 14px; }
 .smallInput { font-size: 15px; }
-.bigInput:focus, .smallInput:focus { border-color: #0D9488; }
+.bigInput:focus, .smallInput:focus { border-color: var(--teal-600); }
 .bigInput::-webkit-outer-spin-button,
 .bigInput::-webkit-inner-spin-button,
 .smallInput::-webkit-outer-spin-button,
@@ -182,13 +182,13 @@
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 15px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   outline: none;
   box-sizing: border-box;
 }
-.textInput:focus { border-color: #0D9488; }
+.textInput:focus { border-color: var(--teal-600); }
 
 .gridTwo { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 @media (max-width: 480px) { .gridTwo { grid-template-columns: 1fr; } }
@@ -197,14 +197,14 @@
 .unitCard {
   background: rgba(155,89,182,0.05);
   border: 1px solid rgba(155,89,182,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
-  font-family: "JetBrains Mono", Menlo, monospace;
+  font-family: var(--font-mono);
   font-size: 13px;
   color: var(--text);
   line-height: 2;
 }
-.unitCard strong { color: #9333EA; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.unitCard strong { color: var(--purple-600); font-family: var(--font-sans); font-weight: 800; }
 
 /* ── 인터랙티브 타임라인 (탭 1·2) ── */
 .tlStage {
@@ -214,7 +214,7 @@
     radial-gradient(ellipse at 82% 70%, rgba(62,91,255,0.13), transparent 60%),
     linear-gradient(180deg, #0a0a2e 0%, #1a0a3e 100%);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 18px 18px 14px;
   overflow: visible;            /* 팝업이 잘리지 않도록 */
 }
@@ -240,7 +240,7 @@
   left: 0; right: 0; top: 14px;
   height: 4px;
   border-radius: 4px;
-  background: linear-gradient(90deg, #9B59B6 0%, #0891B2 50%, #059669 78%, #0D9488 100%);
+  background: linear-gradient(90deg, var(--amethyst) 0%, var(--cyan-600) 50%, var(--emerald-600) 78%, var(--teal-600) 100%);
 }
 
 /* 강조 구간 (인류는 여기부터) */
@@ -257,9 +257,9 @@
   transform: translateX(-50%);
   margin-bottom: 3px;
   white-space: nowrap;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 눈금 */
@@ -278,10 +278,10 @@
 }
 .tlTickLabel {
   margin-top: 4px;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 700;
   color: rgba(255,255,255,0.55);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 
@@ -320,14 +320,14 @@
   top: -7px; right: -7px;
   min-width: 15px; height: 15px;
   padding: 0 3px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   background: #fff;
   color: #0a0a2e;
-  font-size: 10px;
+  font-size: 11px;
   font-weight: 800;
   line-height: 15px;
   text-align: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   box-shadow: 0 1px 3px rgba(0,0,0,0.4);
 }
 
@@ -338,7 +338,7 @@
   width: 230px;
   background: #12123a;
   border: 1px solid rgba(255,255,255,0.18);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 10px 12px;
   box-shadow: 0 8px 28px rgba(0,0,0,0.5);
   opacity: 0;
@@ -363,7 +363,7 @@
   font-weight: 700;
   color: rgba(255,255,255,0.65);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .tlPopScroll {
   max-height: 168px;
@@ -388,7 +388,7 @@
 }
 .tlPopMeta {
   font-size: 11px;
-  color: #0F766E;
+  color: var(--teal-700);
   font-weight: 600;
   margin-top: 2px;
 }
@@ -411,7 +411,7 @@
 .monthCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 10px 14px;
   text-align: center;
   cursor: default;
@@ -419,17 +419,17 @@
 }@media (hover: hover) {
   .monthCard:hover { border-color: rgba(13,148,136,0.50); }
 }
-.monthCardActive { border-color: #0D9488; background: rgba(13,148,136,0.14); }
+.monthCardActive { border-color: var(--teal-600); background: rgba(13,148,136,0.14); }
 .monthCardLabel {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 14px;
-  color: #0F766E;
+  color: var(--teal-700);
   letter-spacing: -0.5px;
   margin-bottom: 6px;
 }
 .monthCardCount {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 22px;
   color: var(--text);
@@ -437,14 +437,15 @@
 }
 .monthCardCount small {
   display: block;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted-strong);
   font-weight: 500;
   margin-top: 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.monthCardEmpty { opacity: 0.45; }
-.monthCardEmpty .monthCardCount { color: var(--muted); }
+/* 사건 없는 달 — 흐리게(opacity)가 아니라 배경으로 구분: 글자는 AA 유지 */
+.monthCardEmpty { background: var(--bg3); }
+.monthCardEmpty .monthCardLabel, .monthCardEmpty .monthCardCount, .monthCardEmpty small { color: var(--muted); }
 
 .monthEvents {
   display: flex;
@@ -453,7 +454,7 @@
   margin-top: 8px;
   font-size: 11px;
   text-align: left;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .monthEventItem {
   background: var(--bg3);
@@ -468,13 +469,13 @@
 .monthEventItem span:first-child { font-size: 14px; flex-shrink: 0; }
 
 /* 카테고리 색상 텍스트 */
-.catCosmic       { color: #9333EA; }
-.catSolar        { color: #A16207; }
-.catEarth        { color: #0891B2; }
-.catLife         { color: #059669; }
-.catHuman        { color: #EA580C; }
-.catCivilization { color: #DC2626; }
-.catNow          { color: #0F766E; }
+.catCosmic       { color: var(--purple-600); }
+.catSolar        { color: var(--yellow-700); }
+.catEarth        { color: var(--cyan-600); }
+.catLife         { color: var(--emerald-600); }
+.catHuman        { color: var(--orange-600); }
+.catCivilization { color: var(--red-600); }
+.catNow          { color: var(--teal-700); }
 
 /* 이벤트 카드 (상세) */
 .eventCard {
@@ -486,30 +487,30 @@
   display: flex;
   align-items: flex-start;
   gap: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.eventCard.borderCosmic       { border-left-color: #9B59B6; }
-.eventCard.borderSolar        { border-left-color: #A16207; }
-.eventCard.borderEarth        { border-left-color: #0891B2; }
-.eventCard.borderLife         { border-left-color: #059669; }
-.eventCard.borderHuman        { border-left-color: #EA580C; }
-.eventCard.borderCivilization { border-left-color: #DC2626; }
-.eventCard.borderNow          { border-left-color: #0D9488; }
+.eventCard.borderCosmic       { border-left-color: var(--amethyst); }
+.eventCard.borderSolar        { border-left-color: var(--yellow-700); }
+.eventCard.borderEarth        { border-left-color: var(--cyan-600); }
+.eventCard.borderLife         { border-left-color: var(--emerald-600); }
+.eventCard.borderHuman        { border-left-color: var(--orange-600); }
+.eventCard.borderCivilization { border-left-color: var(--red-600); }
+.eventCard.borderNow          { border-left-color: var(--teal-600); }
 
 .eventDot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; margin-top: 6px; }
 .eventBody { flex: 1; min-width: 0; }
 .eventName { font-size: 14px; font-weight: 700; color: var(--text); margin-bottom: 4px; line-height: 1.4; }
 .eventDate {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 12px;
-  color: #0F766E;
+  color: var(--teal-700);
   margin-bottom: 4px;
 }
 .eventReal {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   margin-bottom: 6px;
 }
@@ -526,14 +527,14 @@
   background:
     radial-gradient(ellipse at 80% 50%, rgba(13,148,136,0.10), transparent 60%),
     rgba(13,148,136,0.14);
-  border: 1px solid #0D9488;
-  border-radius: 14px;
+  border: 1px solid var(--teal-600);
+  border-radius: var(--radius-card);
   padding: 18px 22px;
 }
 .dec31BannerTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
-  color: #0F766E;
+  color: var(--teal-700);
   font-size: 15px;
   margin-bottom: 6px;
 }
@@ -543,15 +544,15 @@
   line-height: 1.85;
   margin-bottom: 10px;
 }
-.dec31BannerText strong { color: #0F766E; font-family: 'Inter', system-ui, sans-serif; font-weight: 800; }
+.dec31BannerText strong { color: var(--teal-700); font-family: var(--font-sans); font-weight: 800; }
 .dec31BannerBtn {
   background: rgba(13,148,136,0.10);
-  border: 1px solid #0D9488;
+  border: 1px solid var(--teal-600);
   border-radius: 10px;
   padding: 9px 16px;
   font-size: 13px;
-  color: #0F766E;
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--teal-700);
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
@@ -564,7 +565,7 @@
   display: flex;
   justify-content: center;
   background: rgba(0,0,0,0.25);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px;
 }
 .clockSvg {
@@ -587,25 +588,25 @@
   padding: 10px 6px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .zoomBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.zoomActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
+.zoomActive { background: rgba(13,148,136,0.10); color: var(--teal-700); border-color: var(--teal-600); font-weight: 700; }
 
 /* ── 충격 카드 ── */
 .shockCard {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 .shockTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
-  color: #DC2626;
+  color: var(--red-600);
   font-size: 14px;
   margin-bottom: 10px;
 }
@@ -618,8 +619,8 @@
   line-height: 1.85;
 }
 .shockList strong {
-  color: #DC2626;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--red-600);
+  font-family: var(--font-sans);
   font-weight: 800;
 }
 
@@ -640,7 +641,7 @@
 }
 .compareBarLabel {
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .compareBarTrack {
@@ -656,7 +657,7 @@
   transition: width 0.4s ease;
 }
 .compareBarValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   text-align: right;
@@ -667,20 +668,20 @@
 /* ── 칼 세이건 인용 ── */
 .saganQuote {
   background: rgba(155,89,182,0.06);
-  border-left: 4px solid #9B59B6;
-  border-radius: 8px;
+  border-left: 4px solid var(--amethyst);
+  border-radius: var(--radius-s);
   padding: 16px 20px;
   font-style: italic;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   font-size: 14px;
   line-height: 1.85;
 }
 .saganQuote::before {
   content: '"';
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 28px;
-  color: #9333EA;
+  color: var(--purple-600);
   font-weight: 800;
   margin-right: 4px;
   vertical-align: -8px;
@@ -692,7 +693,7 @@
   font-size: 12px;
   color: var(--muted-strong);
   font-style: normal;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 
@@ -720,24 +721,24 @@
   background:
     radial-gradient(ellipse at 50% 30%, rgba(13,148,136,0.10), transparent 60%),
     var(--bg2);
-  border: 1px solid #0D9488;
-  border-radius: 16px;
+  border: 1px solid var(--teal-600);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
 }
 .myLifeLead { font-size: 13px; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.04em; }
 .myLifeNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 9vw, 56px);
   font-weight: 800;
-  color: #0F766E;
+  color: var(--teal-700);
   letter-spacing: -2px;
   line-height: 1;
 }
-.myLifeUnit { font-size: 18px; color: var(--muted); margin-left: 4px; vertical-align: middle; font-family: 'Noto Sans KR', sans-serif; }
+.myLifeUnit { font-size: 18px; color: var(--muted); margin-left: 4px; vertical-align: middle; font-family: var(--font-sans); }
 .myLifeSub { font-size: 13px; color: var(--muted); margin-top: 12px; line-height: 1.7; }
-.myLifeSub strong { font-family: 'Inter', system-ui, sans-serif; color: var(--text); font-weight: 700; }
+.myLifeSub strong { font-family: var(--font-sans); color: var(--text); font-weight: 700; }
 
 @keyframes fadeUp {
   from { opacity: 0; transform: translateY(8px); }
@@ -750,7 +751,7 @@
     radial-gradient(ellipse at 30% 20%, rgba(13,148,136,0.10), transparent 55%),
     radial-gradient(ellipse at 70% 80%, rgba(155,89,182,0.18), transparent 60%),
     #0a0e1a;
-  border: 1px solid #0D9488;
+  border: 1px solid var(--teal-600);
   border-radius: 18px;
   padding: 24px 22px;
   position: relative;
@@ -770,10 +771,10 @@
 }
 .shareCard > * { position: relative; }
 .shareTitle {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 18px;
-  color: #0F766E;
+  color: var(--teal-700);
   text-align: center;
   margin-bottom: 6px;
   letter-spacing: -0.5px;
@@ -783,17 +784,17 @@
   font-size: 13px;
   color: rgba(255,255,255,0.85);
   margin-bottom: 18px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .shareBig {
   text-align: center;
   margin-bottom: 16px;
 }
 .shareBigNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(44px, 11vw, 64px);
   font-weight: 800;
-  color: #0F766E;
+  color: var(--teal-700);
   letter-spacing: -2px;
   line-height: 1;
 }
@@ -802,7 +803,7 @@
   margin-top: 4px;
   font-size: 13px;
   color: rgba(255,255,255,0.85);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .shareList {
   display: flex;
@@ -815,14 +816,14 @@
   font-size: 13px;
   color: rgba(255,255,255,0.85);
   padding: 4px 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.shareListItem strong { color: #fff; font-family: 'Inter', system-ui, sans-serif; font-weight: 700; }
+.shareListItem strong { color: #fff; font-family: var(--font-sans); font-weight: 700; }
 .shareWatermark {
   position: absolute;
   bottom: 10px;
   right: 16px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 11px;
   color: rgba(13,148,136,0.6);
@@ -843,7 +844,7 @@
   padding: 12px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -856,7 +857,7 @@
   margin-top: 3px;
   opacity: 0.8;
 }
-.compressionActive { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
+.compressionActive { background: rgba(13,148,136,0.10); color: var(--teal-700); border-color: var(--teal-600); font-weight: 700; }
 
 /* 탭 4 사건 표 */
 .compressionTable {
@@ -880,16 +881,16 @@
 .compressionTable td:first-child {
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .compressionTable td:nth-child(2) {
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
 }
 .compressionTable td:last-child {
-  color: #0F766E;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--teal-700);
+  font-family: var(--font-sans);
   font-weight: 800;
   white-space: nowrap;
 }
@@ -898,19 +899,19 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .copyBtn:hover { border-color: #0D9488; color: #0F766E; }
+  .copyBtn:hover { border-color: var(--teal-600); color: var(--teal-700); }
 }
-.copied { background: rgba(13,148,136,0.10); color: #0F766E; border-color: #0D9488; font-weight: 700; }
+.copied { background: rgba(13,148,136,0.10); color: var(--teal-700); border-color: var(--teal-600); font-weight: 700; }
 
 /* 월 카드 '+N개 더' 확장 버튼 */
 .monthMoreBtn {
@@ -921,9 +922,9 @@
   min-height: 30px;
   font-size: 11px;
   font-weight: 700;
-  color: var(--edu-ink, #0F766E);
+  color: var(--edu-ink, var(--teal-700));
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   border-radius: 6px;
 }
 @media (hover: hover) { .monthMoreBtn:hover { background: rgba(13,148,136,0.10); } }

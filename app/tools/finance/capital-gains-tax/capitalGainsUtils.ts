@@ -1,5 +1,5 @@
 /* 1세대1주택 양도소득세 계산 (2026 국세청 기준). 양도세 전용 — 누진세율은 lib/krIncomeTax 재사용.
-   범위: 1주택 비과세(12억)·고가주택 안분·장기보유특별공제(표1/표2)·단기 중과(70/60%)·지방소득세 10%.
+   범위: 1주택 비과세(12억)·고가주택 안분·장기보유특별공제(표1/표2)·단기 중과(70/60%)·분양권 단일세율(70/60%)·지방소득세 10%.
    범위 외(면책): 다주택 중과·일시적2주택·겸용주택·부수토지·비교과세 정밀·상생임대인 특례. */
 
 import { progressiveTax } from '@/lib/krIncomeTax'
@@ -9,6 +9,7 @@ export const CG_BASIC_DEDUCTION = 2_500_000 // 양도소득기본공제 연 250�
 export const CG_LOCAL_TAX_RATE = 0.1 // 지방소득세 = 산출세액 × 10%
 export const CG_SHORT_UNDER1_RATE = 0.7 // 보유 1년 미만 단기 중과(주택·입주권·분양권)
 export const CG_SHORT_UNDER2_RATE = 0.6 // 보유 1년~2년 미만 단기 중과(주택·입주권)
+export const CG_PRESALE_RATE = 0.6 // 분양권 보유 1년 이상 — 기간 무관 단일세율 (소득세법 §104①, 2021.6.1 이후 양도)
 
 export type PropertyType = 'house' | 'presale' // 주택·조합원입주권 / 분양권
 
@@ -52,7 +53,7 @@ export interface CapitalGainsResult {
   ltsd: number             // 장기보유특별공제액
   gainIncome: number       // 양도소득금액 Y
   taxBase: number          // 과세표준 TB
-  shortTerm: 'under1' | 'under2' | null // 단기 중과 구분
+  shortTerm: 'under1' | 'under2' | 'presale' | null // 단일세율 구분 (presale = 분양권 1년 이상 60%)
   appliedRate: number      // 적용세율(단기율 또는 한계세율 표기용)
   computedTax: number      // 산출세액
   localTax: number         // 지방소득세
@@ -101,19 +102,24 @@ export function calcCapitalGains(input: CapitalGainsInput): CapitalGainsResult {
   const taxBase = Math.max(0, gainIncome - CG_BASIC_DEDUCTION)
 
   // 4) 세율 (보유기간 구간 직접 적용 — 비교과세 단순화)
-  let shortTerm: 'under1' | 'under2' | null = null
+  //    분양권은 보유기간과 무관하게 1년 미만 70%, 1년 이상 60% 단일세율 (기본 누진세율 구간 없음)
+  let shortTerm: 'under1' | 'under2' | 'presale' | null = null
   let appliedRate = 0
   let computedTax = 0
   if (input.holdYears < 1) {
     shortTerm = 'under1'
     appliedRate = CG_SHORT_UNDER1_RATE
     computedTax = Math.round(taxBase * CG_SHORT_UNDER1_RATE)
+  } else if (isPresale) {
+    shortTerm = 'presale'
+    appliedRate = CG_PRESALE_RATE
+    computedTax = Math.round(taxBase * CG_PRESALE_RATE)
   } else if (input.holdYears < 2) {
     shortTerm = 'under2'
     appliedRate = CG_SHORT_UNDER2_RATE
     computedTax = Math.round(taxBase * CG_SHORT_UNDER2_RATE)
   } else {
-    // 보유 2년 이상 → 기본 누진세율 (분양권 2년 이상도 본 도구는 기본세율로 단순화)
+    // 주택·입주권 보유 2년 이상 → 기본 누진세율
     computedTax = Math.round(progressiveTax(taxBase))
     appliedRate = taxBase > 0 ? computedTax / taxBase : 0 // 표기용 평균세율(한계세율은 UI에서 marginalRate)
   }

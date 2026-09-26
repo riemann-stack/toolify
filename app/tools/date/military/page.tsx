@@ -3,16 +3,18 @@ import MilitaryClient from './MilitaryClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
+import Callout from '@/components/Callout'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/military',
   title: '군대 전역일 계산기 — 복무율·D-day·진급·말년 (2026년 최신)',
   description:
-    '입대일과 복무 형태로 전역일·복무율·D-day를 계산합니다. 월말 입영 예외(민법 제160조)까지 반영하고, 진급 시점은 군인사법 시행규칙 제32조 기준으로 표시합니다.',
+    '입대일과 복무 형태로 전역일·복무율·D-day를 계산합니다. 월말 입영 예외(민법 제160조)까지 반영하고, 진급 시점은 군인사법 시행규칙 제32조 최저복무기간과 매월 1일 진급 기준으로 표시합니다.',
   keywords: ['군대 전역일 계산기', '복무율 계산기', '말년 시작일', '입대 100일', '사회복무요원 전역일', '일병 진급 시기', '포상휴가 전역일'],
 })
 
@@ -47,7 +49,7 @@ const FAQ_LD = [
               },
               {
                 q: '입대 100일이 일병 진급일인가요?',
-                a: '<strong>아닙니다.</strong> 「군인사법 시행규칙」 제32조제2항은 일등병 진급 최저복무기간을 <strong>「이등병으로서 2개월」</strong>로 정하므로, 일병 진급은 <strong>입대 후 약 60일</strong>에 가능해집니다. 입대 100일차는 이미 진급하고 <strong>40일쯤 지난 시점</strong>입니다. 「100일 = 일병 진급」은 이등병 기간이 3개월이던 2019년 8월 개정(2019-09-01 시행) 이전의 통념이 남은 것입니다.<br/><br/>그럼에도 100일이 의미 있는 이유는 <strong>문화</strong>입니다 — 신병교육과 자대 적응을 마치고 군 생활이 익숙해지는 첫 분기점으로 보아 가족이 <strong>100일 면회·선물·휴가</strong>를 챙기는 풍습이 정착돼 있습니다. 본 계산기는 100일을 진급일이 아닌 문화적 기념일로 표시하고, 진급은 별도 마일스톤(2·8·14개월)으로 계산합니다.',
+                a: '<strong>아닙니다.</strong> 「군인사법 시행규칙」 제32조제2항은 일등병 진급 최저복무기간을 <strong>「이등병으로서 2개월」</strong>로 정하고 병 진급은 매월 1일 자로 시행하므로, 일병 진급은 <strong>입대 후 약 60~90일</strong> 사이에 이뤄집니다(1일 입대면 약 60일, 2일 이후 입대면 2개월을 채운 뒤 돌아오는 첫 1일). 그래서 입대 100일차에는 <strong>이미 일병</strong>입니다. 「100일 = 일병 진급」은 이등병 기간이 3개월이던 2019년 8월 개정(2019-09-01 시행) 이전의 통념이 남은 것입니다.<br/><br/>그럼에도 100일이 의미 있는 이유는 <strong>문화</strong>입니다 — 신병교육과 자대 적응을 마치고 군 생활이 익숙해지는 첫 분기점으로 보아 가족이 <strong>100일 면회·선물·휴가</strong>를 챙기는 풍습이 정착돼 있습니다. 본 계산기는 100일을 진급일이 아닌 문화적 기념일로 표시하고, 진급은 별도 마일스톤(2·8·14개월)으로 계산합니다.',
               },
               {
                 q: '"말년", "왕고"는 정확히 언제부터인가요?',
@@ -65,12 +67,11 @@ const FAQ_LD = [
 
 export default function MilitaryPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/date/military">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="date" />군대 전역일 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         입대일 기준 <strong style={{ color: 'var(--text)' }}>전역일과 복무율</strong>을 시각화.
       </p>
 
@@ -96,10 +97,10 @@ export default function MilitaryPage() {
 
         {/* ── 2. 복무 기간·형태 통합표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             2026년 기준 병역 복무 형태 한눈에 보기
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             본 계산기가 지원하는 10가지 복무 형태입니다. 육·해·공·해병대 현역 기간은 <strong style={{ color: 'var(--text)' }}>국방개혁 2.0</strong>에 따라
             2018년 10월 1일 전역자부터 2주 단위로 1일씩 점진 단축되어 <strong style={{ color: 'var(--text)' }}>2021년 12월 14일에 완료</strong>됐습니다.
             병무청 「병역이행안내」의 복무제도 분류는 이보다 넓어 예술체육요원·승선근무예비역·공중보건의사 등도 포함합니다(본 계산기는 미지원 — 직접 입력을 쓰세요).
@@ -128,23 +129,23 @@ export default function MilitaryPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', color: r.c, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: r.c, fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontSize: '12px' }}>{r.note}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ <strong style={{ color: 'var(--text)' }}>의무경찰·의무소방·해양경찰</strong> 제도는 2023년 모두 폐지되어 신규 선발이 종료되었습니다. 이전 복무자는 본 계산기의 <strong style={{ color: 'var(--text)' }}>「직접 입력」</strong>으로 복무 기간을 지정해 사용하세요.
           </p>
         </div>
 
         {/* ── 3. 군 복무 마일스톤 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            🎯 군 복무 주요 마일스톤 가이드
+          <h2 className="g-h2">
+            군 복무 주요 마일스톤 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
@@ -155,7 +156,7 @@ export default function MilitaryPage() {
               { i: '🔥', t: '전역 D-100',        d: '"말년" 시작 — 18개월 기준 약 82%',   color: 'var(--warning)' },
               { i: '👑', t: '전역 D-30',         d: '"왕고" 시기',                        color: 'var(--danger)' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${m.color}`, borderRadius: 12, padding: '12px 14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${m.color}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <p style={{ fontSize: 18, marginBottom: 4 }}>{m.i}</p>
                 <p style={{ fontSize: 13, color: m.color, fontWeight: 700, marginBottom: 2 }}>{m.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6 }}>{m.d}</p>
@@ -166,16 +167,16 @@ export default function MilitaryPage() {
 
         {/* ── 4. 휴가·징계와 전역일 영향 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             무엇이 전역일을 바꾸나 — 휴가·징계·병가
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             현역병의 전역일은 <strong style={{ color: 'var(--text)' }}>입영일 + 복무기간</strong>으로 고정됩니다. 이를 바꾸는 사유는
             「병역법」 제18조제3항이 <strong style={{ color: 'var(--text)' }}>딱 세 가지만 한정해서 열거</strong>하고 있고, 셋 다 복무기간에
             산입되지 않아 <strong style={{ color: 'var(--text)' }}>전역일이 그만큼 뒤로 밀립니다</strong>. 전역일을 앞당기는 조항은 병역법에 없습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--danger)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--danger)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--danger)', fontWeight: 700, marginBottom: 6 }}>📉 전역이 밀리는 3가지 (법정)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>징역·금고·구류형의 <strong>집행일수</strong></li>
@@ -186,7 +187,7 @@ export default function MilitaryPage() {
                 해당 일수 <strong style={{ color: 'var(--text)' }}>전부</strong>가 미산입입니다 — 면제되는 하한(예: 며칠 이내)은 없습니다.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--success)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--success)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--success)', fontWeight: 700, marginBottom: 6 }}>= 모든 휴가 (영향 없음)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>정기휴가 · 공가</li>
@@ -198,7 +199,7 @@ export default function MilitaryPage() {
                 <strong style={{ color: 'var(--text)' }}> 포상휴가를 많이 받아도 전역일은 당겨지지 않습니다</strong> — 나가는 휴가 일수가 늘 뿐입니다.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cat-health)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cat-health)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 6 }}>🏥 병가 — 신분에 따라 다름</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li><strong>현역병</strong>: 청원휴가로 산입 → 전역일 불변</li>
@@ -208,7 +209,7 @@ export default function MilitaryPage() {
                 병가는 「병역법」 제18조제3항의 미산입 3사유에 <strong style={{ color: 'var(--text)' }}>포함되지 않습니다</strong>.
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--warning)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--warning)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--warning)', fontWeight: 700, marginBottom: 6 }}>⚠️ 군기교육 (영창 대체)</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 <li>2020년 8월 영창 폐지 → 군기교육으로 대체</li>
@@ -217,7 +218,7 @@ export default function MilitaryPage() {
               </ul>
             </div>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ 이 밖에 「병역법」 제18조제4항의 <strong style={{ color: 'var(--text)' }}>전역 보류</strong>(형사사건 구속, 공상 입원치료 계속, 중요 작전·훈련 수행)에 해당하면
             의무복무 만료일 이후로 전역이 미뤄질 수 있습니다.
           </p>
@@ -225,10 +226,10 @@ export default function MilitaryPage() {
 
         {/* ── 5. 계급 진급 시점 (육군 18개월 기준) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            🎖️ 현역병 계급 진급 시점
+          <h2 className="g-h2">
+            현역병 계급 진급 시점
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             근거는 <strong style={{ color: 'var(--text)' }}>「군인사법 시행규칙」 제32조</strong>(병의 진급 등)입니다. 최저복무기간이 지나면
             <strong style={{ color: 'var(--text)' }}> 진급심사를 거쳐</strong> 1계급씩 진급합니다(제1항, 2024-02-29 개정 — 이전에는 심사 없이 진급했습니다).
             같은 조 제2항의 표에는 <strong style={{ color: 'var(--text)' }}>군별 구분이 없어</strong> 육·해·공·해병대의 진급 시점이 같습니다.
@@ -251,16 +252,16 @@ export default function MilitaryPage() {
                   { r: '병장',   t: '상등병으로서 6개월',      d: '14개월차~', c: 'var(--warning)',    note: '18개월 기준 복무율 약 78%' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: r.c, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', color: r.c, fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.t}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: '12px' }}>{r.note}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ 위는 <strong style={{ color: 'var(--text)' }}>최저</strong> 기간이라 실제 진급일은 <strong style={{ color: 'var(--text)' }}>빨라질 수도 늦어질 수도</strong> 있습니다.
             <strong style={{ color: 'var(--text)' }}> 빨라지는 쪽</strong> — 같은 조 제3항은 근무성적 우수자(해당 계급 진급인원의 10분의 1 이내)에게
             상병 4개월·병장 5개월로 단축을 허용하고, 제4항은 그 인원을 전투부대 10분의 2·경계부대 10분의 3까지 넓힙니다(개정 2025-10-24).
@@ -269,7 +270,11 @@ export default function MilitaryPage() {
             <strong style={{ color: 'var(--text)' }}> 늦어지는 쪽</strong> — 제2항 단서는 참모총장이 국방부장관 승인을 받아 1개월 범위에서 연장할 수 있게 하고,
             제36조는 유죄판결·징계 시 1~3개월의 진급제한기간을 둡니다. 정확한 진급일은 인사담당자에게 확인하세요.
           </p>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.7 }}>
+          <p className="g-note">
+            ※ 병 진급은 <strong style={{ color: 'var(--text)' }}>매월 1일 자로 시행</strong>합니다. 1일에 입대하지 않았다면 최저복무기간을 채운 뒤 돌아오는 첫 1일에 진급합니다.
+            예를 들어 5월 1일 입대자는 7월 1일에, 5월 2일 입대자는 8월 1일에 일병이 됩니다. 위 계산기의 진급 마일스톤도 이 기준으로 표시합니다.
+          </p>
+          <p className="g-note">
             ※ 계급은 <strong style={{ color: 'var(--text)' }}>현역병·상근예비역</strong>에만 해당합니다. 사회복무요원·산업기능요원·전문연구요원·대체복무요원은 병 계급이 없어
             위 진급 마일스톤이 적용되지 않으며, 계산기도 해당 복무 형태에서는 진급 항목을 표시하지 않습니다.
           </p>
@@ -277,10 +282,10 @@ export default function MilitaryPage() {
 
         {/* ── 5-1. 한국 군 복무 기간 단축 역사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            📜 한국 군 복무 기간 단축 역사
+          <h2 className="g-h2">
+            한국 군 복무 기간 단축 역사
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             육군 기준 복무 기간은 6·25 직후 36개월에서 시작해 현재 <strong style={{ color: 'var(--text)' }}>18개월</strong>까지 줄었습니다.
             다만 <strong style={{ color: 'var(--text)' }}>단조 감소가 아닙니다</strong> — 1968년 1·21 사태 직후에는 오히려 연장됐습니다.
           </p>
@@ -304,8 +309,8 @@ export default function MilitaryPage() {
                   ['2021',  '18개월', '20개월', '21개월', '국방개혁 2.0 완료 (현재)'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '8px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '8px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '8px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '8px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[1]}</td>
                     <td style={{ padding: '8px 12px', textAlign: 'center', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '8px 12px', textAlign: 'center', color: 'var(--muted)' }}>{r[3]}</td>
                     <td style={{ padding: '8px 12px', color: 'var(--muted)', fontSize: 12 }}>{r[4]}</td>
@@ -314,19 +319,23 @@ export default function MilitaryPage() {
               </tbody>
             </table>
           </div>
+          <p className="g-note">
+            ※ 주요 전환점만 추린 표입니다. 1968년 연장과 1993년 26개월 사이에도 1970~80년대에 단계적 조정이 있었고, 해군·공군 기간은 시기별로 1~2개월씩 차이 나는 기록이 있어 표에서는 생략하거나 대표값으로 적었습니다.
+            현재 기간(2021년 행)만 본 계산기의 기준입니다.
+          </p>
         </div>
 
         {/* ── 6. 직접 계산 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             전역일 직접 계산 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -335,24 +344,23 @@ export default function MilitaryPage() {
             <div><span style={{ color: 'var(--muted)' }}>총 복무 일수</span> = 전역일 − 입대일 + 1  <span style={{ color: 'var(--muted)' }}>(양 끝 포함)</span></div>
             <div><span style={{ color: 'var(--muted)' }}>복무율 (%)</span> = (오늘 − 입대일 + 1) ÷ 총 복무 일수 × 100</div>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12 }}>
+          <p className="g-p" style={{ marginTop: 12 }}>
             예시: 2026년 1월 15일에 18개월 육군으로 입대 → 전역일은 <strong style={{ color: 'var(--accent-ink)' }}>2027년 7월 14일</strong>, 총 546일.
             입대일과 전역일을 <strong style={{ color: 'var(--text)' }}>모두 복무 일수에 넣습니다</strong> — 입대 당일이 1일차, 전역 당일이 100%입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--warning)', borderRadius: 12, padding: '14px 18px', marginTop: 12 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>월말에 입영했다면 — 「−1일」이 그대로 통하지 않습니다</p>
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              8월 31일에 18개월로 입영하면 「+18개월」이 <strong style={{ color: 'var(--text)' }}>2월 31일</strong>이라 존재하지 않습니다.
-              「병역법」에는 만료일 계산 규칙이 없어 <strong style={{ color: 'var(--text)' }}>「민법」 제155조</strong>에 따라 민법 기간 규정이 준용되는데,
-              제160조제2항은 해당일이 있으면 <strong style={{ color: 'var(--text)' }}>그 전일</strong>에(= 통념 공식의 −1일), 제160조제3항은 해당일이 없으면
-              <strong style={{ color: 'var(--text)' }}> 그 달의 말일</strong>에 기간이 만료한다고 정합니다. 즉 <strong style={{ color: 'var(--text)' }}>2월 말일이 곧 전역일</strong>이며
+          <Callout tone="warn" title="월말에 입영했다면 — 「−1일」이 그대로 통하지 않습니다">
+            <p>
+              8월 31일에 18개월로 입영하면 「+18개월」이 <strong>2월 31일</strong>이라 존재하지 않습니다.
+              「병역법」에는 만료일 계산 규칙이 없어 <strong>「민법」 제155조</strong>에 따라 민법 기간 규정이 준용되는데,
+              제160조제2항은 해당일이 있으면 <strong>그 전일</strong>에(= 통념 공식의 −1일), 제160조제3항은 해당일이 없으면
+              <strong> 그 달의 말일</strong>에 기간이 만료한다고 정합니다. 즉 <strong>2월 말일이 곧 전역일</strong>이며
               여기서 다시 1일을 빼지 않습니다. 본 계산기는 이 규정대로 산정합니다.
             </p>
-            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-              ※ 병무청은 공식 전역일 계산기를 제공하지 않아 <strong style={{ color: 'var(--text)' }}>월말 입영 사례의 실무 처리를 1차출처로 확인하지 못했습니다</strong>.
+            <p>
+              ※ 병무청은 공식 전역일 계산기를 제공하지 않아 <strong>월말 입영 사례의 실무 처리를 1차출처로 확인하지 못했습니다</strong>.
               위는 민법 규정에 따른 산정이므로, 월말 입영자는 소속 부대·병무청에 확인하시기 바랍니다.
             </p>
-          </div>
+          </Callout>
         </div>
 
         {/* FAQ 직후 광고 슬롯 */}
@@ -360,28 +368,12 @@ export default function MilitaryPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -389,7 +381,7 @@ export default function MilitaryPage() {
               { href: '/tools/date/dday',      icon: '📅', name: 'D-Day 계산기', desc: '두 날짜 사이·페이스 통합' },
               { href: '/tools/date/age',       icon: '🎂', name: '만 나이 계산기',    desc: '법 개정 기준 만 나이' },
               { href: '/tools/date/jet-lag',   icon: '✈️', name: '시차 적응 계산기',  desc: '여행 시차 적응 일정' },
-              { href: '/tools/date/life-time', icon: '⏳', name: '생애 시간 계산기',  desc: '기대수명 기준 시간 환산' },
+              { href: '/tools/date/age?tab=life', icon: '⏳', name: '생애 시간 보기',  desc: '기대수명 기준 시간 환산' },
             ].map((t, i) => (
               <Link
                 key={i}
@@ -399,7 +391,7 @@ export default function MilitaryPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -427,6 +419,6 @@ export default function MilitaryPage() {
         </Disclaimer>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

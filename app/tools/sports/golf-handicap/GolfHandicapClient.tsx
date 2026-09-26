@@ -2,18 +2,36 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useEffect, useState, useMemo } from 'react'
+import { useEffect, useState, useMemo, useRef } from 'react'
+import { todayStr } from '@/lib/date'
 import s from './golf-handicap.module.css'
 import {
-  loadRounds, saveRounds, loadCourses, saveCourses, newId, todayStr,
+  loadRounds, saveRounds, loadCourses, saveCourses, newId, dateToTs,
   calcHandicapIndex, getProgressPoints, analyzeProgress, downloadCsv,
   getUsedCount, handicapIndexFromDiffs, lowRoundAdjustment,
+  calcDifferential, looksLike18HoleCr, NINE_HOLE_CR_MAX,
+  parseRoundsCsv, importRounds, MAX_ROUNDS,
   TEE_LABEL, WEATHER_LABEL,
   type RoundRecord, type SavedCourse, type TeeColor, type Weather,
 } from './golfHandicapUtils'
 
+/** 9홀↔18홀 전환 시 CR을 같이 환산 (18홀 CR을 9홀에 그대로 두면 디퍼런셜이 −50대로 무너짐) */
+function convertCrForHoles(cr: string, to9: boolean): string {
+  const n = parseFloat(cr)
+  if (!(n > 0)) return cr
+  if (to9 && n > NINE_HOLE_CR_MAX) return (n / 2).toFixed(1)
+  if (!to9 && n <= NINE_HOLE_CR_MAX) return (n * 2).toFixed(1)
+  return cr
+}
+
+/** WHS 표기 — 0 미만 지수는 '+'를 붙인 절댓값으로 보여 준다(-3.3 → +3.3). 계산에는 음수 원값을 그대로 쓴다 */
+function fmtIndex(v: number): string {
+  return v < 0 ? `+${Math.abs(v).toFixed(1)}` : v.toFixed(1)
+}
+
 function getGrade(index: number): { label: string; cls: string } {
-  if (index <= 0) return { label: '스크래치', cls: s.gradeScratch }
+  if (index < 0) return { label: '플러스 핸디캐퍼', cls: s.gradeScratch }
+  if (index === 0) return { label: '스크래치', cls: s.gradeScratch }
   if (index < 10) return { label: '로우 핸디캐퍼', cls: s.gradeLow }
   if (index < 19) return { label: '미드 핸디캐퍼', cls: s.gradeMid }
   if (index < 29) return { label: '하이 핸디캐퍼', cls: s.gradeHigh }
@@ -73,6 +91,11 @@ function HandicapIndexTab({
     setRounds(rounds.map(r => r.id === id ? { ...r, [field]: value } : r))
   }
 
+  // 홀 수를 바꾸면 CR도 9홀/18홀 값으로 환산
+  const setHoles = (id: number, holes: 18 | 9) => {
+    setRounds(rounds.map(r => r.id === id && r.holes !== holes ? { ...r, holes, cr: convertCrForHoles(r.cr, holes === 9) } : r))
+  }
+
   const loadSample = () => {
     setRounds(SAMPLE_ROUNDS.map((r, i) => ({ ...r, id: i + 1 })))
   }
@@ -84,15 +107,9 @@ function HandicapIndexTab({
   // 디퍼런셜 계산
   const roundsWithDiff = useMemo(() => {
     return rounds.map(r => {
-      const gross = parseFloat(r.gross)
-      const cr = parseFloat(r.cr)
-      const sr = parseFloat(r.sr)
-      if (!gross || !cr || !sr) return { ...r, diff: null as number | null }
-      // 9홀은 18홀로 환산 (단순 2배)
-      const adjustedGross = r.holes === 9 ? gross * 2 : gross
-      const adjustedCr = r.holes === 9 ? cr * 2 : cr
-      const diff = (adjustedGross - adjustedCr) * 113 / sr
-      return { ...r, diff }
+      // 9홀은 18홀로 환산 (단순 2배 근사) — '내 기록' 탭과 같은 함수 사용
+      const diff = calcDifferential(parseFloat(r.gross), parseFloat(r.cr), parseFloat(r.sr), r.holes === 9)
+      return { ...r, diff: Number.isFinite(diff) ? diff : null }
     })
   }, [rounds])
 
@@ -120,7 +137,7 @@ function HandicapIndexTab({
           <div className={s.hero}>
             <div className={s.heroLeft}>
               <div className={s.heroLabel}>Handicap Index</div>
-              <div className={s.heroNum}>{handicapIndex.toFixed(1)}</div>
+              <div className={s.heroNum}>{fmtIndex(handicapIndex)}</div>
               <div className={s.heroSub}>
                 {validRounds.length}라운드 중 최저 {usedCount}개 평균
                 {lowRoundAdjustment(validRounds.length) !== 0 ? ` ${lowRoundAdjustment(validRounds.length).toFixed(1)} 보정` : ''} (WHS)
@@ -137,7 +154,7 @@ function HandicapIndexTab({
       <div className={s.card}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
           <span className={s.cardLabel} style={{ margin: 0 }}>라운드 기록 ({rounds.length}/20)</span>
-          <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>
+          <span style={{ fontSize: '11px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>
             사용 {validRounds.length > 0 ? usedCount : 0}개
           </span>
         </div>
@@ -150,8 +167,8 @@ function HandicapIndexTab({
                 <div className={s.roundNum}>#{idx + 1}</div>
 
                 <div>
-                  <label className={s.roundInputLabel}>그로스</label>
-                  <input
+                  <label className={s.roundInputLabel} htmlFor={`gh-r${r.id}-gross`}>그로스</label>
+                  <input id={`gh-r${r.id}-gross`}
                     type="number" inputMode="numeric" className={s.roundInput}
                     aria-label={`${idx + 1}번 라운드 그로스 스코어`}
                     value={r.gross} onChange={e => updateRound(r.id, 'gross', e.target.value)}
@@ -160,18 +177,18 @@ function HandicapIndexTab({
                 </div>
 
                 <div>
-                  <label className={s.roundInputLabel}>코스 레이팅</label>
-                  <input
+                  <label className={s.roundInputLabel} htmlFor={`gh-r${r.id}-cr`}>{r.holes === 9 ? '9홀 CR' : '코스 레이팅'}</label>
+                  <input id={`gh-r${r.id}-cr`}
                     type="number" inputMode="decimal" step="0.1" className={s.roundInput}
-                    aria-label={`${idx + 1}번 라운드 코스 레이팅`}
+                    aria-label={`${idx + 1}번 라운드 ${r.holes === 9 ? '9홀 ' : ''}코스 레이팅`}
                     value={r.cr} onChange={e => updateRound(r.id, 'cr', e.target.value)}
-                    placeholder="72.0"
+                    placeholder={r.holes === 9 ? '36.0' : '72.0'}
                   />
                 </div>
 
                 <div>
-                  <label className={s.roundInputLabel}>슬로프</label>
-                  <input
+                  <label className={s.roundInputLabel} htmlFor={`gh-r${r.id}-sr`}>슬로프</label>
+                  <input id={`gh-r${r.id}-sr`}
                     type="number" inputMode="numeric" className={s.roundInput}
                     aria-label={`${idx + 1}번 라운드 슬로프 레이팅`}
                     value={r.sr} onChange={e => updateRound(r.id, 'sr', e.target.value)}
@@ -179,23 +196,26 @@ function HandicapIndexTab({
                   />
                 </div>
 
-                <button className={s.roundDelete} onClick={() => removeRound(r.id)} aria-label="삭제">×</button>
+                <button type="button" className={s.roundDelete} onClick={() => removeRound(r.id)} aria-label={`${idx + 1}번 라운드 삭제`}>×</button>
 
                 <div style={{ gridColumn: '1 / -1' }} className={s.roundMeta}>
                   <div className={s.holeToggle}>
                     <button type="button" aria-pressed={r.holes === 18}
                       className={`${s.holeBtn} ${r.holes === 18 ? s.holeBtnActive : ''}`}
-                      onClick={() => updateRound(r.id, 'holes', 18)}
+                      onClick={() => setHoles(r.id, 18)}
                     >18홀</button>
                     <button type="button" aria-pressed={r.holes === 9}
                       className={`${s.holeBtn} ${r.holes === 9 ? s.holeBtnActive : ''}`}
-                      onClick={() => updateRound(r.id, 'holes', 9)}
+                      onClick={() => setHoles(r.id, 9)}
                     >9홀</button>
                   </div>
                   <span style={{ fontSize: '11px', color: 'var(--muted)' }}>디퍼런셜</span>
                   <span className={`${s.roundDiff} ${r.diff !== null ? getDiffClass(r.diff) : ''}`}>
                     {r.diff !== null ? r.diff.toFixed(1) : '—'}
                   </span>
+                  {looksLike18HoleCr(parseFloat(r.cr), r.holes === 9) && (
+                    <span style={{ fontSize: '11px', color: 'var(--warning)' }}>18홀 CR로 보고 계산</span>
+                  )}
                 </div>
               </div>
             )
@@ -214,7 +234,7 @@ function HandicapIndexTab({
         </div>
 
         {rounds.length > 0 && rounds.length < 3 && (
-          <p style={{ fontSize: '12px', color: '#EA580C', marginTop: '10px', textAlign: 'center' }}>
+          <p style={{ fontSize: '12px', color: 'var(--warning)', marginTop: '10px', textAlign: 'center' }}>
             핸디캡 지수 계산에는 최소 3라운드가 필요합니다. ({3 - rounds.length}라운드 더 입력)
           </p>
         )}
@@ -222,11 +242,12 @@ function HandicapIndexTab({
 
       {handicapIndex !== null && (
         <button
+          type="button"
           onClick={() => onSetIndex(handicapIndex)}
           style={{
-            background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.3)',
-            borderRadius: '10px', padding: '12px', color: 'var(--accent)',
-            fontSize: '13px', fontFamily: 'Noto Sans KR', cursor: 'pointer',
+            background: 'var(--bg2)', border: '1px solid var(--accent)',
+            borderRadius: '10px', padding: '12px', color: 'var(--accent-ink)',
+            fontSize: '13px', fontFamily: 'var(--font-sans)', cursor: 'pointer',
             fontWeight: 500,
           }}
         >
@@ -261,16 +282,19 @@ function CourseHandicapTab({
   const crN = parseFloat(cr)
   const parN = parseFloat(par)
 
-  const courseHandicap = useMemo(() => {
-    if (!idx && idx !== 0) return null
+  // 반올림 전 코스 핸디캡 — WHS 2024 개정: 플레잉 핸디캡은 이 값에 허용률을 곱한 뒤 한 번만 반올림
+  const courseHandicapRaw = useMemo(() => {
+    if (!Number.isFinite(idx)) return null
     if (!srN || !crN || !parN) return null
-    return Math.round(idx * (srN / 113) + (crN - parN))
+    return idx * (srN / 113) + (crN - parN)
   }, [idx, srN, crN, parN])
 
+  const courseHandicap = courseHandicapRaw === null ? null : Math.round(courseHandicapRaw)
+
   const playingHandicap = useMemo(() => {
-    if (courseHandicap === null) return null
-    return Math.round(courseHandicap * 0.95)
-  }, [courseHandicap])
+    if (courseHandicapRaw === null) return null
+    return Math.round(courseHandicapRaw * 0.95)
+  }, [courseHandicapRaw])
 
   const grossN = parseFloat(gross)
   const netScore = useMemo(() => {
@@ -287,9 +311,9 @@ function CourseHandicapTab({
   return (
     <div className={s.section}>
       <div className={s.card}>
-        <span className={s.cardLabel}>핸디캡 지수</span>
+        <label className={s.cardLabel} htmlFor="golf-handicap-index">핸디캡 지수</label>
         <div className={s.inputRow}>
-          <input
+          <input id="golf-handicap-index"
             type="number" inputMode="decimal" step="0.1"
             className={s.bigInput}
             value={indexValue} onChange={e => setIndexValue(e.target.value)}
@@ -304,7 +328,7 @@ function CourseHandicapTab({
         <div className={s.presetRow}>
           {COURSE_PRESETS.map((p, i) => (
             <button
-              key={p.name}
+              key={p.name} type="button" aria-pressed={activePreset === i}
               className={`${s.presetBtn} ${activePreset === i ? s.presetActive : ''}`}
               onClick={() => applyPreset(p)}
             >{p.name}</button>
@@ -349,7 +373,7 @@ function CourseHandicapTab({
       </div>
 
       {courseHandicap !== null && (
-        <div className={s.resultGrid}>
+        <div className={s.resultGrid} role="status">
           <div className={s.resultCard}>
             <div className={s.resultTitle}>코스 핸디캡</div>
             <div className={s.resultNum}>{courseHandicap}</div>
@@ -371,7 +395,7 @@ function CourseHandicapTab({
       <div className={s.infoBox}>
         <strong style={{ color: 'var(--text)' }}>공식</strong><br/>
         코스 핸디캡 = 핸디캡지수 × (슬로프 ÷ 113) + (코스레이팅 − 파)<br/>
-        플레잉 핸디캡 = 코스 핸디캡 × 0.95 (스트로크 플레이 기준)
+        플레잉 핸디캡 = 반올림 전 코스 핸디캡 × 0.95 (스트로크 플레이 기준, WHS 2024 — 마지막에 한 번만 반올림)
       </div>
     </div>
   )
@@ -464,8 +488,8 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
             />
           </div>
           <div>
-            <label className={s.fieldLabel}>파 (Par)</label>
-            <input
+            <label className={s.fieldLabel} htmlFor="golf-handicap-score-par">파 (Par)</label>
+            <input id="golf-handicap-score-par"
               type="number" inputMode="numeric"
               className={s.bigInput}
               value={parTotal} onChange={e => setParTotal(e.target.value)}
@@ -477,9 +501,9 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
       {mode === 'stroke' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>그로스 스코어 (18홀 총 타수)</span>
+            <label className={s.cardLabel} htmlFor="golf-handicap-score-gross">그로스 스코어 (18홀 총 타수)</label>
             <div className={s.inputRow}>
-              <input
+              <input id="golf-handicap-score-gross"
                 type="number" inputMode="numeric"
                 className={s.bigInput}
                 value={totalGross} onChange={e => setTotalGross(e.target.value)}
@@ -504,7 +528,7 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
               <div className={s.resultCard}>
                 <div className={s.resultTitle}>파 대비</div>
                 <div className={s.resultNum} style={{
-                  color: netScore < parN ? '#059669' : netScore > parN ? '#DC2626' : 'var(--accent)',
+                  color: netScore < parN ? 'var(--success)' : netScore > parN ? 'var(--danger)' : 'var(--accent-ink)',
                 }}>
                   {netScore === parN ? '이븐' : netScore < parN ? `${parN - netScore}↓` : `${netScore - parN}↑`}
                 </div>
@@ -691,10 +715,12 @@ function RecordsTab() {
     const grossN = parseFloat(grossScore); const crN = parseFloat(cr)
     const slopeN = parseFloat(slope); const parN = parseFloat(par)
     if (!grossN || !crN || !slopeN || !parN) return
+    // 날짜 칸을 비우면 ts가 NaN이 되어 정렬·추이 차트가 깨지므로 오늘로 대체
+    const roundDate = Number.isFinite(dateToTs(date)) ? date : todayStr()
     const r: RoundRecord = {
       id: newId(),
-      date,
-      ts: new Date(date + 'T12:00:00').getTime(),
+      date: roundDate,
+      ts: dateToTs(roundDate),
       course: courseInput.trim() || (courseSelect ? courses.find(c => c.id === courseSelect)?.name : undefined),
       tee, cr: crN, slope: slopeN, par: parN,
       grossScore: grossN,
@@ -705,8 +731,33 @@ function RecordsTab() {
     const updated = [r, ...records]
     setRecords(updated); saveRounds(updated)
     // 폼 리셋 (날짜·코스 정보는 유지)
-    setGrossScore(''); setNotes(''); setWeather('')
+    setGrossScore(''); setNotes(''); setWeather(''); setDate(roundDate)
   }
+
+  const [importMsg, setImportMsg] = useState('')
+  const fileRef = useRef<HTMLInputElement>(null)
+  const handleImportCsv = async (file: File | undefined) => {
+    if (!file) return
+    try {
+      const parsed = parseRoundsCsv(await file.text())
+      if (!parsed) { setImportMsg('이 도구에서 내보낸 CSV 형식이 아니에요.'); return }
+      const { next, added, kept, dropped } = importRounds(records, parsed.rounds)
+      setRecords(next); saveRounds(next)
+      const dup = parsed.rounds.length - added
+      setImportMsg(`${kept}개 라운드를 가져왔어요${dup > 0 ? ` (중복 ${dup}개 제외)` : ''}${parsed.skipped > 0 ? ` · 형식 오류 ${parsed.skipped}행 건너뜀` : ''}${dropped > 0 ? ` · 최근 ${MAX_ROUNDS}개만 보관해 오래된 라운드 ${dropped}개는 목록에서 빠졌어요` : ''}.`)
+    } catch {
+      setImportMsg('파일을 읽지 못했어요.')
+    }
+  }
+  const importControl = (
+    <>
+      <button type="button" className={s.smallActionBtn} onClick={() => fileRef.current?.click()}>
+        CSV 가져오기
+      </button>
+      <input ref={fileRef} type="file" accept=".csv,text/csv" hidden aria-label="라운드 CSV 파일 선택"
+        onChange={e => { void handleImportCsv(e.target.files?.[0]); e.target.value = '' }} />
+    </>
+  )
 
   const handleDeleteRound = (id: string) => {
     const updated = records.filter(r => r.id !== id)
@@ -766,18 +817,18 @@ function RecordsTab() {
             <div className={s.chartStats}>
               <div>
                 <span className={s.statLabel}>시작 핸디캡</span>
-                <span className={s.statValue}>{stats.startIndex.toFixed(1)}</span>
+                <span className={s.statValue}>{fmtIndex(stats.startIndex)}</span>
               </div>
               <div>
                 <span className={s.statLabel}>현재 핸디캡</span>
-                <span className={s.statValue} style={{ color: 'var(--accent)' }}>
-                  {stats.currentIndex.toFixed(1)}
+                <span className={s.statValue} style={{ color: 'var(--accent-ink)' }}>
+                  {fmtIndex(stats.currentIndex)}
                 </span>
               </div>
               <div>
                 <span className={s.statLabel}>변화</span>
                 <span className={s.statValue} style={{
-                  color: (stats.change ?? 0) <= 0 ? '#059669' : '#EA580C',
+                  color: (stats.change ?? 0) <= 0 ? 'var(--success)' : 'var(--warning)',
                 }}>
                   {stats.change !== null ? `${stats.change > 0 ? '+' : ''}${stats.change.toFixed(1)}` : '—'}
                 </span>
@@ -804,7 +855,7 @@ function RecordsTab() {
         <div className={s.hero}>
           <div className={s.heroLeft}>
             <div className={s.heroLabel}>현재 핸디캡 지수 (저장된 {records.length}라운드 기준)</div>
-            <div className={s.heroNum}>{currentIndex.toFixed(1)}</div>
+            <div className={s.heroNum}>{fmtIndex(currentIndex)}</div>
           </div>
         </div>
       )}
@@ -860,21 +911,25 @@ function RecordsTab() {
             </select>
           </div>
           <div>
-            <label className={s.fieldLabel}>홀</label>
-            <div className={s.holeToggle}>
-              <button className={`${s.holeBtn} ${!is9Holes ? s.holeBtnActive : ''}`}
-                onClick={() => setIs9Holes(false)}>18홀</button>
-              <button className={`${s.holeBtn} ${is9Holes ? s.holeBtnActive : ''}`}
-                onClick={() => setIs9Holes(true)}>9홀</button>
+            <span className={s.fieldLabel}>홀</span>
+            <div className={s.holeToggle} role="group" aria-label="홀 수">
+              <button type="button" aria-pressed={!is9Holes} className={`${s.holeBtn} ${!is9Holes ? s.holeBtnActive : ''}`}
+                onClick={() => { if (is9Holes) { setIs9Holes(false); setCr(v => convertCrForHoles(v, false)) } }}>18홀</button>
+              <button type="button" aria-pressed={is9Holes} className={`${s.holeBtn} ${is9Holes ? s.holeBtnActive : ''}`}
+                onClick={() => { if (!is9Holes) { setIs9Holes(true); setCr(v => convertCrForHoles(v, true)) } }}>9홀</button>
             </div>
           </div>
         </div>
 
         <div className={s.grid2} style={{ marginTop: 10 }}>
           <div>
-            <label className={s.fieldLabel} htmlFor="golf-handicap-cr-2">코스 레이팅 (CR)</label>
+            <label className={s.fieldLabel} htmlFor="golf-handicap-cr-2">{is9Holes ? '9홀 코스 레이팅 (CR)' : '코스 레이팅 (CR)'}</label>
             <input id="golf-handicap-cr-2" type="text" inputMode="decimal" className={s.bigInput}
-              value={cr} onChange={e => setCr(e.target.value.replace(/[^0-9.]/g, ''))} />
+              value={cr} onChange={e => setCr(e.target.value.replace(/[^0-9.]/g, ''))}
+              placeholder={is9Holes ? '36.0' : '72.0'} />
+            {looksLike18HoleCr(parseFloat(cr), is9Holes) && (
+              <p className={s.helperText} style={{ color: 'var(--warning)', marginTop: 4 }}>18홀 CR로 보여 그대로 계산합니다. 9홀 CR이 있으면 그 값을 넣으세요.</p>
+            )}
           </div>
           <div>
             <label className={s.fieldLabel} htmlFor="golf-handicap-f11">슬로프</label>
@@ -909,8 +964,8 @@ function RecordsTab() {
             </select>
           </div>
           <div>
-            <label className={s.fieldLabel}>메모 (선택)</label>
-            <input type="text" className={s.bigInput}
+            <label className={s.fieldLabel} htmlFor="golf-handicap-notes">메모 (선택)</label>
+            <input id="golf-handicap-notes" type="text" className={s.bigInput}
               value={notes} onChange={e => setNotes(e.target.value)}
               placeholder="컨디션·동반자 등" maxLength={60} />
           </div>
@@ -928,7 +983,7 @@ function RecordsTab() {
           위 입력한 CR·슬로프·파·티 값을 골프장 이름과 함께 저장. 다음 라운드 입력 시 한 번의 선택으로 자동 입력됩니다.
         </p>
         <div style={{ display: 'flex', gap: 8 }}>
-          <input type="text" className={s.bigInput}
+          <input type="text" className={s.bigInput} aria-label="저장할 골프장 이름"
             placeholder="골프장 이름 (예: 스카이힐 청주)"
             value={newCourseName}
             onChange={e => setNewCourseName(e.target.value)}
@@ -952,7 +1007,7 @@ function RecordsTab() {
                     </div>
                   </div>
                   <button type="button" className={s.smallDelBtn}
-                    onClick={() => handleDeleteCourse(c.id)} aria-label="삭제">×</button>
+                    onClick={() => handleDeleteCourse(c.id)} aria-label={`${c.name} 삭제`}>×</button>
                 </div>
               ))}
             </div>
@@ -970,12 +1025,14 @@ function RecordsTab() {
                 className={s.smallActionBtn}>
                 CSV
               </button>
+              {importControl}
               <button type="button" onClick={handleClearAll}
-                className={s.smallActionBtn} style={{ color: '#DC2626' }}>
+                className={s.smallActionBtn} style={{ color: 'var(--danger)' }}>
                 전체 삭제
               </button>
             </div>
           </div>
+          {importMsg && <p className={s.helperText} role="status" style={{ marginBottom: 8 }}>{importMsg}</p>}
           <div style={{ overflowX: 'auto' }}>
             <table className={s.recordsTable}>
               <thead>
@@ -989,21 +1046,20 @@ function RecordsTab() {
               </thead>
               <tbody>
                 {records.slice(0, 30).map(r => {
-                  const diff = (r.is9Holes ? r.grossScore * 2 : r.grossScore) - (r.is9Holes ? r.cr * 2 : r.cr)
-                  const d = diff * 113 / r.slope
+                  const d = calcDifferential(r.grossScore, r.cr, r.slope, r.is9Holes)
                   return (
                     <tr key={r.id}>
-                      <td style={{ fontSize: 12, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: 'var(--muted)' }}>
-                        {r.date}
-                        {r.is9Holes && <span style={{ marginLeft: 4, color: '#EA580C', fontSize: 10 }}>9H</span>}
+                      <td style={{ fontSize: 12, fontFamily: 'var(--font-sans)', color: 'var(--muted)' }}>
+                        {r.date || '—'}
+                        {r.is9Holes && <span style={{ marginLeft: 4, color: 'var(--warning)', fontSize: 11 }}>9H</span>}
                       </td>
                       <td style={{ fontSize: 12, color: 'var(--text)' }}>{r.course ?? '—'}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.grossScore}</td>
-                      <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)' }}>
-                        {d.toFixed(1)}
+                      <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.grossScore}</td>
+                      <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--accent-ink)' }}>
+                        {Number.isFinite(d) ? d.toFixed(1) : '—'}
                       </td>
                       <td>
-                        <button type="button"
+                        <button type="button" aria-label={`${r.date || '날짜 없음'} ${r.course ?? ''} 라운드 삭제`}
                           onClick={() => handleDeleteRound(r.id)}
                           style={{ background: 'transparent', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: 14 }}>×</button>
                       </td>
@@ -1018,6 +1074,8 @@ function RecordsTab() {
         <div className={s.empty}>
           <strong>아직 저장된 라운드가 없습니다</strong>
           위에서 첫 라운드를 추가해 보세요. WHS 핸디캡은 20라운드 누적 시 안정화됩니다.
+          <div style={{ marginTop: 10 }}>{importControl}</div>
+          {importMsg && <p className={s.helperText} role="status" style={{ marginTop: 8 }}>{importMsg}</p>}
         </div>
       )}
     </div>
@@ -1038,7 +1096,8 @@ function ProgressChart({ points }: { points: ReturnType<typeof getProgressPoints
     // 디퍼런셜만 표시
     const diffs = points.map(p => p.differential)
     const maxV = Math.max(...diffs, 30) * 1.05
-    const minV = Math.max(0, Math.min(...diffs) * 0.95)
+    // 음수 디퍼런셜(플러스 핸디캡)도 그려지도록 0 하한을 두지 않음
+    const minV = Math.min(0, Math.min(...diffs) - 1)
     const toX = (i: number) => padX + (i / Math.max(1, points.length - 1)) * plotW
     const toY = (v: number) => padY + plotH - ((v - minV) / (maxV - minV)) * plotH
     const path = points.map((p, i) => `${i === 0 ? 'M' : 'L'}${toX(i).toFixed(1)},${toY(p.differential).toFixed(1)}`).join(' ')
@@ -1053,8 +1112,9 @@ function ProgressChart({ points }: { points: ReturnType<typeof getProgressPoints
   }
 
   const handicaps = validPoints.map(p => p.handicapAtTime)
-  const maxV = Math.max(...handicaps) * 1.1 + 1
-  const minV = Math.max(0, Math.min(...handicaps) - 1)
+  const hiMax = Math.max(...handicaps)
+  const maxV = hiMax + Math.max(1, Math.abs(hiMax) * 0.1)
+  const minV = Math.min(...handicaps) - 1
   const toX = (i: number) => padX + (i / Math.max(1, validPoints.length - 1)) * plotW
   const toY = (v: number) => padY + plotH - ((v - minV) / (maxV - minV)) * plotH
 
@@ -1068,7 +1128,7 @@ function ProgressChart({ points }: { points: ReturnType<typeof getProgressPoints
       {yTicks.map(y => (
         <g key={y}>
           <line x1={padX} x2={W - padX} y1={toY(y)} y2={toY(y)}
-            stroke="rgba(255,255,255,0.06)" strokeDasharray="2,2" />
+            stroke="var(--border)" strokeDasharray="2,2" />
           <text x={padX - 4} y={toY(y) + 4} textAnchor="end" fontSize="10" fill="var(--muted)">{y}</text>
         </g>
       ))}

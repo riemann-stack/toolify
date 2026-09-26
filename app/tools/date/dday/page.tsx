@@ -2,8 +2,12 @@ import DdayClient from './DdayClient'
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import Callout from '@/components/Callout'
+import { addDays, calcBusinessDays, calcWeekdays, fmtDateKo } from './ddayUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/date/dday',
@@ -41,20 +45,60 @@ const FAQ_LD = [
               },
               {
                 q: '"날짜 차이 계산기"는 어디로 갔나요?',
-                a: '<strong>본 도구의 [두 날짜 사이] 탭으로 통합</strong>되었습니다. 기존 <code>/tools/date/diff</code> 주소는 자동으로 본 페이지로 redirect 되며, 두 날짜 사이의 일수·평일·영업일·공휴일·년월일 차이를 모두 한곳에서 계산할 수 있습니다.',
+                a: '<strong>본 도구의 [두 날짜 차이] 탭으로 통합</strong>되었습니다. 기존 <code>/tools/date/diff</code> 주소는 자동으로 본 페이지로 redirect 되며, 두 날짜 사이의 일수·평일·영업일·공휴일·년월일 차이를 모두 한곳에서 계산할 수 있습니다.',
               },
             ]
 
+/* 기념일 셈법 표 — 빌드 시 ddayUtils로 계산 (계산기와 같은 함수). 기준 시작일은 예시일 뿐 */
+const ANNIV_START = '2026-03-01'
+const ANNIV_ROWS = [
+  { label: '100일', n: 99 },
+  { label: '200일', n: 199 },
+  { label: '300일', n: 299 },
+  { label: '1주년', n: 365 },
+  { label: '500일', n: 499 },
+  { label: '1000일', n: 999 },
+].map(r => ({ ...r, date: fmtDateKo(addDays(ANNIV_START, r.n, 'calendar')) }))
+
+/* 월별 평일·영업일 — 빌드 시 ddayUtils(lib/krHolidays 공휴일 데이터)로 계산 */
+const BIZ_YEARS = [2026, 2027] as const
+const BIZ_MONTHS = Array.from({ length: 12 }, (_, i) => {
+  const m = i + 1
+  const cells = BIZ_YEARS.map(y => {
+    const mm = String(m).padStart(2, '0')
+    const last = new Date(y, m, 0).getDate()
+    const from = `${y}-${mm}-01`
+    const to = `${y}-${mm}-${String(last).padStart(2, '0')}`
+    return { weekdays: calcWeekdays(from, to), biz: calcBusinessDays(from, to) }
+  })
+  return { m, cells }
+})
+const BIZ_TOTALS = BIZ_YEARS.map((y, yi) => ({
+  y,
+  weekdays: BIZ_MONTHS.reduce((s, r) => s + r.cells[yi].weekdays, 0),
+  biz: BIZ_MONTHS.reduce((s, r) => s + r.cells[yi].biz, 0),
+}))
+
 export default function DdayPage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={880} slug="/tools/date/dday">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="date" />D-Day 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         여러 D-day 저장 + <strong style={{ color: 'var(--text)' }}>진행률·평일·영업일</strong> 페이스 + 반복 D-day.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="시험 일정은 시행기관 공고 기준 · 공휴일 2026~2030년 반영"
+        sources={[
+          { label: '국가법령정보센터(관공서의 공휴일에 관한 규정)', href: 'https://www.law.go.kr' },
+          { label: '공휴일에 관한 법률 — 국가법령정보센터', href: 'https://www.law.go.kr/법령/공휴일에관한법률' },
+          { label: '한국산업인력공단 Q-Net', href: 'https://www.q-net.or.kr' },
+          { label: '한국교육과정평가원 수능', href: 'https://www.suneung.re.kr' },
+        ]}
+      />
 
       <DdayClient />
 
@@ -63,8 +107,8 @@ export default function DdayPage() {
 
         {/* 1. D-day vs D+ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>D-day와 D+의 차이</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">D-day와 D+의 차이</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>D-day</strong>는 목표 날짜까지 남은 일수, <strong style={{ color: 'var(--text)' }}>D+</strong>는 지난 날짜로부터 경과한 일수입니다. 본 도구는 둘 다 자동 표시합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
@@ -72,10 +116,10 @@ export default function DdayPage() {
               { label: 'D-30',  desc: '시험까지 30일 남음 (미래 카운트다운)' },
               { label: 'D-day', desc: '오늘이 목표 날짜 (D-0과 동일)' },
               { label: 'D+1',   desc: '어제가 목표 날짜였음' },
-              { label: 'D+100', desc: '입사 100일째, 결혼 100일 등 경과 기록' },
+              { label: 'D+99', desc: '시작일을 1일째로 세는 「100일」(연애·백일·입사 100일)' },
             ].map((it, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '12px 14px' }}>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', color: 'var(--accent)', fontWeight: 800 }}>{it.label}</p>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '20px', color: 'var(--accent)', fontWeight: 800 }}>{it.label}</p>
                 <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '4px', lineHeight: 1.6 }}>{it.desc}</p>
               </div>
             ))}
@@ -84,11 +128,11 @@ export default function DdayPage() {
 
         {/* 2. 주요 시험·이벤트 D-day (확정 일정) */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>주요 시험·이벤트 D-day (확정 일정)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">주요 시험·이벤트 D-day (확정 일정)</h2>
+          <p className="g-p">
             시행기관이 공고한 <strong style={{ color: 'var(--text)' }}>확정 일정</strong>만 모았습니다. 날짜를 상단 계산기의 목표 날짜에 그대로(<code>YYYY-MM-DD</code>) 입력하면 남은 달력일·평일·영업일이 즉시 계산되고, D-day로 저장하면 매일 자동 갱신됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -99,8 +143,6 @@ export default function DdayPage() {
               </thead>
               <tbody>
                 {[
-                  ['토익 제578회 정기시험',        '2026-09-06 (일)', '한국토익위원회',        '오전 9:20 입실'],
-                  ['제29회 주택관리사보 2차 시험',  '2026-09-19 (토)', '한국산업인력공단',      '합격자 발표 12/2'],
                   ['한국사능력검정 제80회',        '2026-10-17 (토)', '국사편찬위원회',        '심화만 시행 · 접수 9/15~9/22'],
                   ['제37회 공인중개사 자격시험',    '2026-10-31 (토)', '한국산업인력공단(Q-Net)', '1·2차 동시 · 합격자 발표 12/2'],
                   ['토익 제581회 정기시험',        '2026-10-31 (토)', '한국토익위원회',        '토요일 시행 회차'],
@@ -109,7 +151,7 @@ export default function DdayPage() {
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap', fontFamily: 'JetBrains Mono, monospace' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700, whiteSpace: 'nowrap', fontFamily: 'var(--font-mono)' }}>{row[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>{row[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
@@ -117,15 +159,15 @@ export default function DdayPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, marginTop: '10px' }}>
+          <p className="g-note">
             시행기관 공고 기준(2026-07 확인). 시험 일정은 변경될 수 있으니 응시 전 반드시 시행기관 원문 공고를 재확인하세요. 수능처럼 학습량이 걸린 시험은 남은 <strong style={{ color: 'var(--text)' }}>평일 수</strong>에 아래 페이스 계산을 결합하면 하루 학습량까지 나옵니다.
           </p>
         </section>
 
         {/* 3. 평일 vs 영업일 vs 달력일 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>평일·영업일·달력일 차이</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">평일·영업일·달력일 차이</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -169,39 +211,78 @@ export default function DdayPage() {
 
         {/* 4. 한국 공휴일 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 공휴일 (2026~2030 자동 반영)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">한국 공휴일 (2026~2030 자동 반영)</h2>
+          <p className="g-p">
             본 도구는 영업일 계산 시 <strong style={{ color: 'var(--text)' }}>한국 법정 공휴일</strong>을 자동 반영합니다 — 신정·설날(3일)·삼일절·노동절(5/1, 2026~)·어린이날·부처님오신날·현충일·제헌절(7/17, 2026~)·광복절·추석(3일)·개천절·한글날·성탄절 + 대체 공휴일.
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.30)', borderRadius: 10, padding: '12px 14px' }}>
-            ⚠️ <strong style={{ color: 'var(--danger)' }}>임시 공휴일</strong>(정부 발표)·회사별 공휴일은 자동 반영되지 않습니다. 노동절(2026-05-01 시행)과 제헌절(2026-05-11 시행)은 대통령령 제36290호로 관공서 공휴일에 편입됐고, 토·일이나 다른 공휴일과 겹치면 대체공휴일이 부여됩니다.
+          <Callout tone="warn" title="임시공휴일·회사 휴무일은 자동 반영되지 않습니다">
+            <strong>임시공휴일</strong>(정부 발표)·회사별 공휴일은 계산에 들어가지 않습니다. 노동절(2026-05-01 시행)과 제헌절(2026-05-11 시행)은 대통령령 제36290호로 관공서 공휴일에 편입됐고, 토·일이나 다른 공휴일과 겹치면 대체공휴일이 부여됩니다.
+          </Callout>
+          <h3 className="g-h3">월별 평일·영업일 수 (2026·2027)</h3>
+          <p className="g-p">
+            계산기와 같은 공휴일 데이터로 각 달 1일~말일(양 끝 포함)을 센 값입니다. 월 단위 업무 일정, 일할 계산, 배송·처리 기한을 가늠할 때 기준으로 쓸 수 있습니다.
+            설·추석이 평일에 걸린 달은 평일과 영업일의 차이가 2~3일로 벌어집니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 360 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>월</th>
+                  {BIZ_YEARS.map(y => (
+                    <th scope="col" key={y} style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>{y}년 평일 / 영업일</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {BIZ_MONTHS.map((r, i) => (
+                  <tr key={r.m} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '8px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 600 }}>{r.m}월</th>
+                    {r.cells.map((c, j) => (
+                      <td key={j} style={{ padding: '8px 12px', textAlign: 'center', color: 'var(--text)' }}>
+                        {c.weekdays} / <strong style={{ color: c.biz < c.weekdays ? 'var(--accent-ink)' : 'var(--text)' }}>{c.biz}</strong>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+                <tr style={{ borderTop: '2px solid var(--border)' }}>
+                  <th scope="row" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 700 }}>연간</th>
+                  {BIZ_TOTALS.map(t => (
+                    <td key={t.y} style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontWeight: 700 }}>{t.weekdays} / {t.biz}</td>
+                  ))}
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            ※ 영업일 = 월~금 중 법정공휴일·대체공휴일·전국 선거일이 아닌 날. 2026년은 5월 노동절·6월 지방선거일이 포함됩니다. 노동절(2027년은 토요일이라 대체공휴일 5/3)에 정상 근무하는 사업장이라면 그만큼 5월 영업일을 더해서 보세요.
           </p>
         </section>
 
         {/* 5. 진행률 계산 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>진행률 계산</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '10px' }}>
+          <h2 className="g-h2">진행률 계산</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>시작일 + 목표일 + 오늘</strong>로 진행률(%)을 계산합니다:
           </p>
-          <pre style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 14px', fontFamily: 'JetBrains Mono, monospace', fontSize: 13, color: 'var(--text)' }}>
+          <pre style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 14px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)' }}>
 {`진행률 = (오늘 - 시작일) / (목표일 - 시작일) × 100`}
           </pre>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}>
+          <p className="g-p">
+            진행률의 분모는 시작일과 목표일의 날짜 차이(시작일 제외)라, 시작일 당일은 0%, 목표일 당일은 100%입니다. 오늘이 시작일보다 앞이면 0%, 목표일을 지나면 100%로 고정됩니다.
             활용 예: 프로젝트 진행 상황 · 학습 목표 달성률 · 다이어트·금연 등 장기 목표 · 임신 주수 · 군 복무 진행률.
           </p>
         </section>
 
         {/* 6. 페이스 계산 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>페이스 계산 — 목표 달성 도구</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">페이스 계산 — 목표 달성 도구</h2>
+          <p className="g-p">
             <strong style={{ color: 'var(--text)' }}>목표 + 총량 + 현재 완료량</strong>으로 일일 페이스를 자동 산출합니다.
           </p>
-          <pre style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 14px', fontFamily: 'JetBrains Mono, monospace', fontSize: 12, color: 'var(--text)', lineHeight: 1.8 }}>
+          <pre style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '12px 14px', fontFamily: 'var(--font-mono)', fontSize: 12, color: 'var(--text)', lineHeight: 1.8 }}>
 {`일일 목표  = 남은 분량 / 남은 일수
 현재 페이스 = 완료량 / 경과 일수
-예상 완료량 = 현재 페이스 × 남은 일수
+예상 완료량 = 완료량 + 현재 페이스 × 남은 일수
 부족분     = 목표 − 예상 완료량`}
           </pre>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px', marginTop: '12px' }}>
@@ -209,7 +290,7 @@ export default function DdayPage() {
               { case: '시험 교재', detail: '600페이지 / 30일 → 일일 20페이지' },
               { case: '외국어 단어', detail: '1,000개 / 100일 → 일일 10개' },
               { case: '저축 목표', detail: '1,000만원 / 12개월 → 월 83만원' },
-              { case: '마라톤 훈련', detail: '50km / 12주 → 주간 4.2km' },
+              { case: '러닝 누적 거리', detail: '300km / 12주 → 주간 25km' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '4px' }}>{c.case}</p>
@@ -221,8 +302,8 @@ export default function DdayPage() {
 
         {/* 7. 반복 D-day */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>반복 D-day</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">반복 D-day</h2>
+          <p className="g-p">
             매년·매월·매주 반복되는 D-day는 자동으로 다음 발생일을 갱신합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
@@ -241,52 +322,47 @@ export default function DdayPage() {
           </div>
         </section>
 
-        {/* 8. D+ 활용 */}
+        {/* 8. D+ 활용 — 기념일 셈법 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>D+ 활용 — 지난 날짜 기록</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            의미 있는 시작 시점을 기록하면 매일 D+가 늘어나며 동기 부여가 됩니다. 유튜버·블로거가 자주 활용하는 패턴입니다.
+          <h2 className="g-h2">D+ 활용 — 「100일」은 D+99</h2>
+          <p className="g-p">
+            이 계산기의 <strong>D+N은 시작일로부터 N일이 지났다</strong>는 뜻입니다(시작일 당일 = D-day, 다음 날 = D+1). 반면 한국에서 연애 100일·아기 백일·입대 100일처럼 부르는 기념일은 <strong>시작일을 1일째로 세는</strong> 관행이라, 100일째는 시작일 + 99일 = <strong>D+99</strong>입니다.
+            1주년처럼 「년」 단위 기념일은 다음 해 같은 날짜라 D+365(윤일 2월 29일이 끼면 D+366)입니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '8px' }}>
-            {[
-              '입사·창업 D+',
-              '금연·금주 D+',
-              '운동·다이어트 시작 D+',
-              '연애·결혼 D+',
-              '블로그·유튜브 시작 D+',
-              '새 도시 이사 D+',
-            ].map((d, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '10px', padding: '10px 14px', fontSize: '13px', color: 'var(--text)' }}>
-                {d}
-              </div>
-            ))}
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['기념일', '계산기 표시', `날짜 (시작일 ${fmtDateKo(ANNIV_START)})`].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {ANNIV_ROWS.map((r, i) => (
+                  <tr key={r.label} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.label}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>D+{r.n}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.date}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+          <p className="g-p">
+            헷갈리면 [두 날짜 차이] 탭에 시작일과 기념일을 넣어 보세요. 「차이」는 시작일을 뺀 값(D+와 같음), 「양 끝 포함」은 시작일을 1일째로 센 값이라 100일째 날짜에서 양 끝 포함이 100일로 나옵니다.
+            금연·운동·블로그 시작일처럼 매일 늘어나는 기록을 저장해 두면 목록에서 D+가 자동으로 올라갑니다.
+          </p>
         </section>
 
         {/* 9. FAQ */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 관련 도구 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '8px' }}>
             {[
               { href: '/tools/date/age',             icon: '🎂', name: '나이 계산기',           desc: '생일까지 D-day, 인생 통계' },
@@ -294,9 +370,9 @@ export default function DdayPage() {
               { href: '/tools/date/military',        icon: '🎖️', name: '군대 전역일 계산기',   desc: '입대일·전역일·복무율' },
               { href: '/tools/date/lunar',           icon: '🌙', name: '음양력 변환기',         desc: '띠·세시풍속' },
               { href: '/tools/date/jet-lag',         icon: '✈️', name: '시차 계산기',           desc: '도시 간 시차·도착 시간' },
-              { href: '/tools/date/life-time',       icon: '⏳', name: '인생 시간 계산기',      desc: '남은 인생을 구체적으로' },
+              { href: '/tools/date/holiday-bridge',  icon: '🏖️', name: '징검다리 연휴 플래너',  desc: '공휴일 사이 연차 배치 추천' },
             ].map((tool, i) => (
-              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
+              <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
                 <span style={{ fontSize: '22px' }}>{tool.icon}</span>
                 <div>
                   <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--text)', marginBottom: '2px' }}>{tool.name}</p>
@@ -309,7 +385,7 @@ export default function DdayPage() {
 
         {/* 참고 자료 */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>참고 자료</h2>
+          <h2 className="g-h2">참고 자료</h2>
           <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
             <li><strong style={{ color: 'var(--text)' }}>관공서의 공휴일에 관한 규정</strong> — 대통령령 (대체공휴일 제3조·2013 개정 도입, 제헌절·노동절 편입 2026 개정 = 대통령령 제36290호)</li>
             <li><strong style={{ color: 'var(--text)' }}>공휴일에 관한 법률</strong> — 법률 제18291호 (2021 제정·2022 시행, 대체공휴일 법제화)</li>
@@ -320,6 +396,6 @@ export default function DdayPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

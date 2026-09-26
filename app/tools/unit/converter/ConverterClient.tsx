@@ -40,8 +40,16 @@ export default function ConverterClient() {
 
   const visibleResults = useMemo(() => {
     if (showKorean) return results
-    return results.filter(r => !r.unit.isKorean)
+    // 한국 단위를 숨겨도 입력(기준) 단위 행은 유지
+    return results.filter(r => !r.unit.isKorean || r.isSource)
   }, [results, showKorean])
+
+  // 절대영도(0K = -273.15℃) 미만 입력 경고
+  const belowAbsZero = useMemo(() => {
+    if (categoryId !== 'temperature') return false
+    const k = category.units.find(u => u.id === 'K')
+    return !!k && convert(value, fromUnit, k, categoryId) < -1e-9
+  }, [categoryId, category, fromUnit, value])
 
   const handleCategoryChange = (id: CategoryId) => {
     const newCat = CATEGORIES.find(c => c.id === id)!
@@ -119,6 +127,11 @@ export default function ConverterClient() {
                 : '💡 N:1 비율은 N을 입력하세요 (예: 20:1 → 20 입력).'}
           </p>
         )}
+        {belowAbsZero && (
+          <p className={styles.inputHint}>
+            ⚠️ 절대영도(0K = -273.15℃ = -459.67℉)보다 낮은 온도는 물리적으로 존재하지 않습니다. 입력값을 확인하세요.
+          </p>
+        )}
       </div>
 
       {/* 결과 */}
@@ -127,7 +140,7 @@ export default function ConverterClient() {
           변환 결과
           <span className={styles.cardLabelHint}>{value} {fromUnit.shortName} 입력 기준</span>
         </div>
-        <div className={styles.resultGrid}>
+        <div className={styles.resultGrid} role="status">
           {visibleResults.map(r => (
             <button key={r.unit.id} type="button"
               className={`${styles.resultRow} ${r.isSource ? styles.resultRowSource : r.unit.isKorean ? styles.resultRowKorean : ''}`}
@@ -150,7 +163,7 @@ export default function ConverterClient() {
         {category.units.some(u => u.isKorean) && showKorean && (
           <div className={styles.koreanNote}>
             <strong>한국 전통·생활 단위 안내</strong> — 보라색으로 표시된 단위는 한국 전통(자·척·근·돈·홉·되·평) 또는 생활(종이컵·소주잔·밥숟가락) 단위입니다.
-            {categoryId === 'weight' && ' 1근의 경우 시대·용도에 따라 400g·500g·600g으로 다르게 사용되며, 본 도구는 한국 시장 관행 600g을 기준으로 합니다.'}
+            {categoryId === 'weight' && ' 1근은 품목에 따라 달라 고기는 600g, 채소·과일은 375g(시장에선 400g으로 어림)이고, 중국 1근은 500g입니다.'}
             {categoryId === 'length' && ' 한국 1리(393m)는 일본 1리(3,927m)와 다르므로 옛 문헌 해석 시 주의가 필요합니다.'}
           </div>
         )}
@@ -184,12 +197,12 @@ export default function ConverterClient() {
       )}
       {categoryId === 'time' && (
         <div className={styles.infoBox}>
-          ⏱️ <strong>근무시간 변환</strong> — 한국 표준 주 40시간 / 월 209시간(주휴 포함) / 연 2,508시간. 시급 환산은 <a href="/tools/finance/salary" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>연봉 실수령액 계산기</a>의 &#39;체감 시급 보기&#39; 옵션 활용을 권장합니다.
+          ⏱️ <strong>근무시간 변환</strong> — 근무주는 법정 주 40시간, 근무월은 주휴를 포함한 월 209시간, 근무년은 2,508시간(209시간 × 12)으로 환산합니다. 예를 들어 근무시간 209를 입력하면 근무월 1이 나옵니다. 시급 환산은 <a href="/tools/finance/salary" style={{ color: 'var(--accent)', textDecoration: 'underline' }}>연봉 실수령액 계산기</a>의 &#39;체감 시급 보기&#39; 옵션 활용을 권장합니다.
         </div>
       )}
       {categoryId === 'brix' && (
         <div className={styles.infoBox}>
-          🍯 <strong>당도·염도 활용 가이드</strong> — <strong>잼/청 14~18°Bx</strong>(저당) · <strong>22~28°Bx</strong>(일반) · <strong>50~65°Bx</strong>(보존용 풀당). <strong>김치 절임 7~10염%</strong>(배추 무게 대비 소금) · <strong>장아찌 15~20염%</strong> · <strong>오이지 10~12염%</strong> · <strong>음료수 8~12°Bx</strong> · <strong>해수 약 3.5염%(35‰)</strong>. 모든 값은 수용액 가정(밀도 1 g/mL)이며, 고농도 시럽·꿀은 밀도 보정이 필요할 수 있습니다.
+          🍯 <strong>당도·염도 활용 가이드</strong> — <strong>잼/청 실온 보관용 65°Bx 이상</strong>(시판 잼은 60~68°Bx) · 그보다 낮은 수제는 냉장 보관. <strong>김치 절임 7~10염%</strong>(배추 무게 대비 소금) · <strong>장아찌 15~20염%</strong> · <strong>오이지 10~12염%</strong> · <strong>음료수 8~12°Bx</strong> · <strong>해수 약 3.5염%(35‰)</strong>. 모든 값은 수용액 가정(밀도 1 g/mL)이며, 고농도 시럽·꿀은 밀도 보정이 필요할 수 있습니다.
         </div>
       )}
       {categoryId === 'concentration' && (
@@ -197,7 +210,7 @@ export default function ConverterClient() {
           <div className={styles.infoBox}>
             🧪 <strong>농도 단위 한눈에</strong> — <strong>1% = 10,000 ppm = 10,000,000 ppb = 10 g/L = 10,000 mg/L</strong> (수용액 가정). <strong>해수 35‰</strong> · <strong>수돗물 잔류염소 0.1~0.5 ppm</strong> · <strong>비료 EC 1.5~3.0 mS/cm(약 1,000~2,000 ppm)</strong>. <strong>mol/L</strong>은 분자량이 필요해 본 도구에는 없으며, 아래 FAQ에 g/L→mol/L 환산 공식을 정리했습니다.
           </div>
-          <div style={{ background: 'rgba(255,138,62,0.06)', border: '1px solid rgba(255,138,62,0.40)', borderRadius: 10, padding: '11px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.75, fontFamily: "'Noto Sans KR', sans-serif" }}>
+          <div style={{ background: 'rgba(255,138,62,0.06)', border: '1px solid rgba(255,138,62,0.40)', borderRadius: 10, padding: '11px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.75, fontFamily: 'var(--font-sans)' }}>
             ⚠️ <strong style={{ color: 'var(--warning)' }}>약품·소독액 안전 안내</strong> — 락스(차아염소산나트륨)·과산화수소·산성 세제 등은 농도가 낮아도 피부·호흡기 자극을 일으킬 수 있습니다. 환기·장갑·고글 착용 필수, 산성 + 염소계 혼합 절대 금지(유독가스 발생). 정확한 사용 농도·반응 시간은 제조사 표기 또는 식약처·질병청 가이드를 따르세요.
           </div>
         </>

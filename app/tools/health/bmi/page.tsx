@@ -4,8 +4,24 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
+import Callout from '@/components/Callout'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
+import { getWeightRanges, calcRichResult } from './bmiUtils'
+import ToolPage from '@/components/ToolPage'
+
+/* 키별 체중 구간 — 계산기와 같은 getWeightRanges(대한비만학회 기준)로 빌드 시 생성 */
+const rangeOf = (h: number, id: string) => getWeightRanges(h, 'KOREA').find(r => r.id === id)!
+const HEIGHT_TABLE = [150, 155, 160, 165, 170, 175, 180, 185].map(h => {
+  const n = rangeOf(h, 'normal'), o = rangeOf(h, 'overweight'), ob = rangeOf(h, 'obese-1')
+  const perBmi = Math.round((h / 100) ** 2 * 10) / 10   // BMI 1 변화에 해당하는 체중(kg) = 키(m)²
+  return [`${h}cm`, `${n.minWeight} ~ ${n.maxWeight}kg`, `${o.minWeight} ~ ${o.maxWeight}kg`, `${ob.minWeight}kg 이상`, `${perBmi}kg`]
+})
+const N170 = rangeOf(170, 'normal')
+/* 결과 카드 예시(170cm·75kg) — 계산기의 calcRichResult 값 그대로 */
+const EX_BMI = calcRichResult(170, 75, 'KOREA')!
+const EX_OW_MAX = rangeOf(170, 'overweight').maxWeight!
+const EX_TO_OW = Math.round((75 - EX_OW_MAX) * 10) / 10
 
 export const metadata = buildMetadata({
   path: '/tools/health/bmi',
@@ -47,7 +63,7 @@ const FAQ_LD = [
               },
               {
                 q: '임산부는 BMI를 어떻게 해석해야 하나요?',
-                a: '임신 중에는 체중이 자연스럽게 증가하므로 일반 BMI 기준을 그대로 적용하기 어렵습니다. <strong>임신 전 BMI</strong>를 기준으로 저체중(18.5 미만)은 12~18kg, 정상(18.5~24.9)은 11~16kg, 과체중(25 이상)은 7~11kg 증가를 권장합니다. 구체적인 목표는 담당 의사와 상담하세요.',
+                a: '임신 중에는 체중이 자연스럽게 증가하므로 일반 BMI 기준을 그대로 적용하기 어렵습니다. <strong>임신 전 BMI</strong>를 기준으로 한 미국 IOM(2009) 권고는 저체중(18.5 미만) 12.5~18kg, 정상(18.5~24.9) 11.5~16kg, 과체중(25~29.9) 7~11.5kg, 비만(30 이상) 5~9kg 증가입니다(단태아, WHO BMI 구간 기준). 한국인에게 그대로 적용할지는 연구가 이어지고 있으므로 구체적인 목표는 담당 의사와 상담하세요.',
               },
               {
                 q: 'BMI만으로 건강을 판단해도 될까요?',
@@ -55,7 +71,7 @@ const FAQ_LD = [
               },
               {
                 q: '키별 정상 체중 범위는 어떻게 계산하나요?',
-                a: '본 도구는 입력한 키에 따라 자동으로 계산합니다 — 저체중(BMI 18.5 미만)·정상(18.5~22.9 한국 / 18.5~24.9 WHO)·과체중·비만 모든 구간을 본인 키 기준 kg 범위로 변환해 표시합니다. 예: 키 170cm → 정상 53.5~66.5kg (한국 기준). 결과 화면의 <strong>"키별 체중 구간 표"</strong>에서 모든 구간이 한눈에 보입니다.',
+                a: `본 도구는 입력한 키에 따라 자동으로 계산합니다 — 저체중(BMI 18.5 미만)·정상(18.5~22.9 한국 / 18.5~24.9 WHO)·과체중·비만 모든 구간을 본인 키 기준 kg 범위로 변환해 표시합니다. 예: 키 170cm → 정상 ${N170.minWeight}~${N170.maxWeight}kg (한국 기준, 소수 첫째 자리 BMI 18.5~22.9). 결과 화면의 <strong>"키별 체중 구간 표"</strong>에서 모든 구간이 한눈에 보입니다.`,
               },
               {
                 q: '허리-신장비는 무엇이며 어떻게 활용하나요?',
@@ -77,16 +93,15 @@ const FAQ_LD = [
 
 export default function BmiPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>건강·웰빙</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/health/bmi">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="health" />BMI 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         키·몸무게로 비만도와 정상 체중 범위. <strong style={{ color: 'var(--text)' }}>허리둘레·체지방률 추정</strong>까지 한 화면에.
       </p>
 
-      <UpdatedMeta date="2026년 7월" basis="BMI = 체중(kg) ÷ 키(m)² · 비만 기준 한국(대한비만학회) BMI 25·복부비만 허리둘레 남 90/여 85cm, WHO BMI 30 · 체지방률은 미 해군(U.S. Navy) 추정식" sources={[{ label: '대한비만학회 비만 진료지침(2022)', href: 'https://general.kosso.or.kr/html/user/core/view/reaction/main/kosso/inc/data/guideline2022_vol8.pdf' }, { label: 'WHO — Obesity and overweight', href: 'https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight' }]} />
+      <UpdatedMeta date="2026년 9월" basis="BMI = 체중(kg) ÷ 키(m)² · 비만 기준 한국(대한비만학회) BMI 25·복부비만 허리둘레 남 90/여 85cm(갈비뼈 아래~장골능 중간 측정), WHO BMI 30 · 체지방률은 미 해군(U.S. Navy) 추정식 · 임신 중 체중 증가는 미국 IOM 2009" sources={[{ label: '대한비만학회 비만 진료지침(2022)', href: 'https://general.kosso.or.kr/html/user/core/view/reaction/main/kosso/inc/data/guideline2022_vol8.pdf' }, { label: '대한비만학회 — 비만 진단(허리둘레 측정법)', href: 'https://general.kosso.or.kr/html/?pmode=obesityDiagnosis' }, { label: 'WHO — Obesity and overweight', href: 'https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight' }, { label: 'IOM(2009) 임신 중 체중 증가 지침', href: 'https://www.nationalacademies.org/read/12584/chapter/2' }]} />
 
       <BmiClient />
 
@@ -95,50 +110,55 @@ export default function BmiPage() {
 
         {/* ── 1. BMI 공식 (기존 유지·보완) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             BMI 체질량지수 산출 공식
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             BMI(Body Mass Index)는 체중(kg)을 키(m)의 제곱으로 나눈 값입니다.
-            1832년 벨기에 통계학자 아돌프 케틀레가 개발한 지표로, 현재 WHO와 전 세계 의료 기관에서
-            비만도 판정의 표준 지표로 사용됩니다.
+            1830년대 벨기에 통계학자 아돌프 케틀레가 고안한 &lsquo;케틀레 지수&rsquo;를 1972년 미국 생리학자 앤설 키스가
+            &lsquo;BMI&rsquo;라는 이름으로 비만 지표로 제안했고, 지금은 WHO와 각국 의료 기관이 비만도 선별의 표준 지표로 씁니다.
             한국인을 포함한 아시아인은 서양인보다 같은 BMI에서 체지방률이 높아
             대한비만학회에서는 별도 기준을 적용합니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '20px 22px', textAlign: 'center' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '20px 22px', textAlign: 'center' }}>
             <p style={{ fontSize: '12px', color: 'var(--accent)', letterSpacing: '0.06em', textTransform: 'uppercase', marginBottom: '12px' }}>BMI 계산 공식</p>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 800, color: 'var(--text)', marginBottom: '8px' }}>
               BMI = 체중(kg) ÷ 키(m)²
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)' }}>
-              예시: 키 170cm, 체중 65kg → BMI = 65 ÷ (1.7 × 1.7) = <strong style={{ color: 'var(--accent)' }}>22.5</strong> (정상)
+              예시: 키 170cm, 체중 65kg → BMI = 65 ÷ (1.7 × 1.7) = <strong style={{ color: 'var(--accent-ink)' }}>22.5</strong> (정상)
             </p>
           </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            계산기의 기본값(170cm·65kg)이 바로 이 예시입니다. 분류는 BMI를 소수 첫째 자리로 반올림한 값으로 하므로, 22.96처럼 경계에 걸린 값은 23.0(과체중·비만 전단계)으로 판정됩니다.
+            키를 제곱해 나누기 때문에 같은 1kg이라도 키가 작을수록 BMI가 더 크게 움직입니다 — 아래 키별 표의 &lsquo;BMI 1 변화&rsquo; 열이 그 크기입니다.
+            BMI는 인구 집단의 비만 위험을 선별하는 도구이지 개인의 체지방을 재는 값이 아니므로, 허리둘레와 함께 보는 것이 대한비만학회·WHO의 공통 권고입니다.
+          </p>
         </section>
 
         {/* ── 2. WHO vs 대한비만학회 기준표 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             BMI 기준표 — WHO vs 대한비만학회
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>분류</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>WHO 기준</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontWeight: 700 }}>대한비만학회 기준</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent-ink)', fontWeight: 700 }}>대한비만학회 기준</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>건강 위험도</th>
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['저체중',     '18.5 미만',   '18.5 미만',   '낮음 (영양불량 위험)', '#0891B2'],
-                  ['정상',       '18.5 ~ 24.9', '18.5 ~ 22.9', '보통',                '#059669'],
-                  ['과체중',     '25.0 ~ 29.9', '23.0 ~ 24.9', '약간 높음',           '#A16207'],
-                  ['비만 1단계', '30.0 ~ 34.9', '25.0 ~ 29.9', '높음',                '#EA580C'],
-                  ['비만 2단계', '35.0 ~ 39.9', '30.0 ~ 34.9', '매우 높음',           '#DC2626'],
-                  ['비만 3단계', '40.0 이상',   '35.0 이상',   '고도 위험',           '#CC4444'],
+                  ['저체중',     '18.5 미만',   '18.5 미만',   '낮음 (영양불량 위험)', 'var(--cyan-600)'],
+                  ['정상',       '18.5 ~ 24.9', '18.5 ~ 22.9', '보통',                'var(--success)'],
+                  ['과체중 (비만 전단계)', '25.0 ~ 29.9', '23.0 ~ 24.9', '약간 높음', 'var(--warning)'],
+                  ['비만 1단계', '30.0 ~ 34.9', '25.0 ~ 29.9', '높음',                'var(--orange-600)'],
+                  ['비만 2단계', '35.0 ~ 39.9', '30.0 ~ 34.9', '매우 높음',           'var(--danger)'],
+                  ['비만 3단계', '40.0 이상',   '35.0 이상',   '고도 위험',           'var(--red-600)'],
                 ].map(([label, who, korea, risk, color], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: color as string, fontWeight: 700 }}>{label}</td>
@@ -150,17 +170,18 @@ export default function BmiPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ 본 도구는 두 기준을 모두 토글로 지원합니다. 한국인은 같은 BMI에서 체지방률이 더 높고 복부비만 경향이 강해 대한비만학회 기준을 권장합니다.
+          <p className="g-note">
+            대한비만학회 2022 지침은 23~24.9를 &lsquo;비만 전단계(과체중)&rsquo;로 부릅니다. WHO도 2004년 전문가 자문에서 아시아인은 더 낮은 BMI에서 위험이 오른다고 보고 23·27.5 같은 추가 경계를 제시한 바 있습니다.
+            본 도구는 두 기준을 모두 토글로 지원하며, 한국인에게는 대한비만학회 기준을 기본값으로 씁니다.
           </p>
         </section>
 
         {/* ── 3. 키별 정상 체중 범위 (기존 유지·확장) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             키별 정상 체중 범위 (대한비만학회 기준)
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -168,73 +189,71 @@ export default function BmiPage() {
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>정상 체중 범위</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>과체중 기준</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>비만 기준</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>BMI 1 변화</th>
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['150cm', '41.6 ~ 51.5kg', '51.6 ~ 56.2kg', '56.3kg 이상'],
-                  ['155cm', '44.4 ~ 55.0kg', '55.1 ~ 60.1kg', '60.2kg 이상'],
-                  ['160cm', '47.4 ~ 58.6kg', '58.7 ~ 64.0kg', '64.1kg 이상'],
-                  ['165cm', '50.3 ~ 62.3kg', '62.4 ~ 68.1kg', '68.2kg 이상'],
-                  ['170cm', '53.5 ~ 66.2kg', '66.3 ~ 72.3kg', '72.4kg 이상'],
-                  ['175cm', '56.7 ~ 70.2kg', '70.3 ~ 76.6kg', '76.7kg 이상'],
-                  ['180cm', '59.9 ~ 74.2kg', '74.3 ~ 81.0kg', '81.1kg 이상'],
-                  ['185cm', '63.3 ~ 78.4kg', '78.5 ~ 85.6kg', '85.7kg 이상'],
-                ].map(([height, normal, over, obese], i) => (
+                {HEIGHT_TABLE.map(([height, normal, over, obese, perBmi], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontWeight: 700 }}>{height}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#059669' }}>{normal}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#A16207' }}>{over}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: '#DC2626' }}>{obese}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{height}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--success)' }}>{normal}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--warning)' }}>{over}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--danger)' }}>{obese}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{perBmi}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ 본 도구의 결과 화면은 입력한 키 기준으로 모든 구간을 자동 표시합니다.
+          <p className="g-note">
+            계산기와 같은 함수로 만든 표이며, BMI를 소수 첫째 자리로 반올림해 분류한 기준입니다(정상 18.5~22.9). &lsquo;BMI 1 변화&rsquo;는 키(m)²으로, 그 키에서 BMI를 1 낮추거나 올리는 데 필요한 체중입니다.
+            결과 화면은 입력한 키 기준으로 모든 구간을 자동 표시합니다.
           </p>
         </section>
 
         {/* ── 4. 풍부한 결과 활용 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             풍부한 결과 활용 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 결과 카드는 다음 정보를 포함합니다 — &lsquo;내가 어디쯤인지&rsquo;, &lsquo;얼마나 더/덜 가야 하는지&rsquo;를 한눈에 파악할 수 있습니다.
           </p>
-          <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li>· <strong style={{ color: 'var(--text)' }}>현재 BMI + 분류</strong> — 정상·과체중·비만 등 색상 코딩</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>BMI 게이지</strong> — 0~40 구간에서 현재 위치 시각화</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>키별 체중 구간</strong> — 본인 키 기준 저체중·정상·과체중·비만 자동 계산</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>정상 범위까지 거리</strong> — kg 단위로 부족·여유 표시</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>다음 단계 시작 체중</strong> — 과체중·비만 진입 경계</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>BMI 22까지 필요 감량</strong> — 한국 권장 BMI 도달까지</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>BMI 1 변화 = ?kg</strong> — 본인 키에서 BMI 1 단위 변화에 필요한 체중</li>
+          <ul className="g-list">
+            <li><strong>현재 BMI + 분류</strong> — 정상·과체중·비만 등 색상 코딩</li>
+            <li><strong>BMI 게이지</strong> — 0~40 구간에서 현재 위치 시각화</li>
+            <li><strong>키별 체중 구간</strong> — 본인 키 기준 저체중·정상·과체중·비만 자동 계산</li>
+            <li><strong>정상 범위까지 거리</strong> — kg 단위로 부족·여유 표시</li>
+            <li><strong>다음 단계 시작 체중</strong> — 과체중·비만 진입 경계</li>
+            <li><strong>BMI 22까지 필요 감량·증량</strong> — BMI 22는 한국 정상 범위(18.5~22.9) 안의 위쪽 값으로, 국내 임상에서 남성 표준체중(키² × 22, 여성은 × 21)을 잡을 때 흔히 쓰는 값</li>
+            <li><strong>BMI 1 변화 = ?kg</strong> — 본인 키에서 BMI 1 단위 변화에 필요한 체중</li>
           </ul>
+          <p className="g-p" style={{ marginTop: 12 }}>
+            예를 들어 170cm·75kg이면 BMI {EX_BMI.bmi.toFixed(1)}으로 대한비만학회 기준 1단계 비만이고, 정상 범위(BMI 22.9 이하)로 들어오려면 약 {EX_BMI.toNormal.kg}kg({EX_BMI.normalMax}kg까지), 비만 전단계(BMI 23~24.9)로 내려가려면 약 {EX_TO_OW}kg({EX_OW_MAX}kg까지)을 줄여야 합니다.
+            같은 사람이 WHO 기준으로 보면 &lsquo;과체중&rsquo;이므로, 두 기준을 토글해 보면 판정이 왜 달라지는지 바로 확인할 수 있습니다.
+          </p>
         </section>
 
         {/* ── 5. 허리둘레와 복부비만 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             허리둘레와 복부비만 — BMI의 한계 보완
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <p className="g-p">
             BMI의 가장 큰 약점은 <strong style={{ color: 'var(--text)' }}>체지방 분포를 반영하지 못한다</strong>는 점입니다.
             근육 우세형(운동선수)·마른 비만 모두 BMI 단독으로는 구분할 수 없습니다. 본 도구는 허리둘레로 이를 보완합니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px', marginBottom: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#EA580C', marginBottom: '6px' }}>📐 허리둘레 기준 (대한비만학회)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--orange-600)', marginBottom: '6px' }}>허리둘레 기준 (대한비만학회)</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 남성: <strong style={{ color: 'var(--text)' }}>90cm 이상</strong> = 복부비만</li>
                 <li>· 여성: <strong style={{ color: 'var(--text)' }}>85cm 이상</strong> = 복부비만</li>
-                <li>· 측정: 배꼽 위 2cm, 호흡 후 자연 자세</li>
+                <li>· 측정: 갈비뼈 맨 아래와 골반뼈(장골능) 맨 위의 중간을, 숨을 편히 내쉰 상태에서 수평으로</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.30)', borderRadius: 12, padding: '14px 18px' }}>
-              <p style={{ fontSize: '14px', fontWeight: 700, color: '#0891B2', marginBottom: '6px' }}>📏 허리-신장비 (WHtR)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+              <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--cyan-600)', marginBottom: '6px' }}>허리-신장비 (WHtR)</p>
               <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, listStyle: 'none', padding: 0, margin: 0 }}>
                 <li>· 허리(cm) ÷ 키(cm)</li>
                 <li>· <strong style={{ color: 'var(--text)' }}>0.5 미만</strong> 권장</li>
@@ -242,32 +261,53 @@ export default function BmiPage() {
               </ul>
             </div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '8px' }}>BMI + 허리둘레 종합 — 4가지 경우</p>
-            <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '6px', fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>
-              <p>✅ <strong style={{ color: '#059669' }}>BMI 정상 + 허리 정상</strong> — 건강한 체형. 현재 상태 유지 권장.</p>
-              <p>⚠️ <strong style={{ color: '#A16207' }}>BMI 정상 + 허리 비만</strong> — 마른 비만 가능성. 근력 운동 + 식단 점검.</p>
-              <p>⚠️ <strong style={{ color: '#0891B2' }}>BMI 비만 + 허리 정상</strong> — 근육 우세형 가능성. 체성분 검사 권장.</p>
-              <p>🔴 <strong style={{ color: '#DC2626' }}>BMI 비만 + 허리 비만</strong> — 종합 비만. 의료 상담 필요.</p>
-            </div>
+          <p className="g-p">
+            줄자는 배꼽 높이가 아니라 <strong>갈비뼈 맨 아래와 골반뼈 맨 위의 중간</strong>에 둡니다(대한비만학회·국가건강검진 방식). 양발을 25~30cm 벌리고 서서
+            숨을 편히 내쉰 순간에 재고, 두꺼운 옷 위에서 재거나 배에 힘을 주면 수 cm씩 달라지므로 매번 같은 조건으로 재는 것이 중요합니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+              <caption style={{ captionSide: 'top', textAlign: 'left', fontSize: '13px', fontWeight: 700, color: 'var(--text)', padding: '0 0 8px' }}>BMI + 허리둘레 종합 — 4가지 경우</caption>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>BMI</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>허리둘레</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>해석과 권장</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['정상', '정상', '건강한 체형 — 현재 상태 유지', 'var(--success)'],
+                  ['정상', '복부비만', '마른 비만 가능성 — 근력 운동 + 식단 점검, 혈압·혈당 확인', 'var(--warning)'],
+                  ['비만', '정상', '근육 우세형 가능성 — 체성분 검사로 확인', 'var(--cyan-600)'],
+                  ['비만', '복부비만', '복부비만을 동반한 비만 — 동반 질환 위험이 가장 높아 의료 상담 권장', 'var(--danger)'],
+                ].map(([b, w, d, c], i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{b}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{w}</td>
+                    <td style={{ padding: '10px 12px', color: c }}>{d}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
         </section>
 
         {/* ── 6. 목표 BMI 설정 가이드 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             목표 BMI 설정 가이드
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             모든 사람에게 동일한 BMI 목표가 최적이지는 않습니다. 상황별로 다음을 권장합니다 —
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '8px' }}>
             {[
-              { icon: '👤', name: '일반 성인',          range: 'BMI 21~22 (한국 권장)',          desc: '건강 위험 최저 구간' },
-              { icon: '💪', name: '운동·근육 관리',     range: 'BMI 22~24',                       desc: '근육량 포함 시 안전 범위' },
-              { icon: '🥗', name: '다이어트 중',        range: 'BMI 18.5~22',                     desc: '정상 하한~상한, 무리하지 않게' },
+              { icon: '👤', name: '일반 성인',          range: 'BMI 21~22',                       desc: '국내 표준체중 산정에 흔히 쓰는 값(남 22·여 21 등)' },
+              { icon: '💪', name: '운동·근육 관리',     range: 'BMI 22~24',                       desc: '근육량이 많으면 23대도 체지방률은 정상일 수 있음 — 체지방률로 판단' },
+              { icon: '🥗', name: '다이어트 중',        range: 'BMI 18.5~22.9',                   desc: '한국 정상 범위 안에서, 무리하지 않게' },
               { icon: '🧓', name: '노인 (65세+)',       range: 'BMI 22~27',                       desc: '근감소증·낙상 위험 고려, 적정 가능' },
-              { icon: '🏃', name: '마라톤·지구력',     range: 'BMI 18~21 (체중↓ 유리)',          desc: '단, 근육·골밀도 유지가 우선' },
+              { icon: '🏃', name: '마라톤·지구력',     range: 'BMI 18.5~21',                     desc: '저체중(18.5 미만)으로 내려가지 않게 — 근육·골밀도 유지가 우선' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 10, padding: '11px 14px', display: 'grid', gridTemplateColumns: '32px 1fr auto', gap: 10, alignItems: 'center' }}>
                 <span style={{ fontSize: 22 }}>{g.icon}</span>
@@ -275,31 +315,31 @@ export default function BmiPage() {
                   <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 2 }}>{g.name}</p>
                   <p style={{ fontSize: 12, color: 'var(--muted)' }}>{g.desc}</p>
                 </div>
-                <span style={{ fontSize: 13, color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{g.range}</span>
+                <span style={{ fontSize: 13, color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{g.range}</span>
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            ⓘ 단순히 BMI를 낮추는 것보다 <strong style={{ color: 'var(--text)' }}>체지방률·근육량을 함께 고려</strong>하는 것이 중요합니다. 무리한 감량은 요요·근손실을 유발합니다.
-          </p>
+          <Callout tone="note">
+            단순히 BMI를 낮추는 것보다 <strong>체지방률·근육량을 함께 고려</strong>하는 것이 중요합니다. 무리한 감량은 요요·근손실을 유발합니다. 위 범위는 일반적인 참고값이며, 만성질환이 있으면 목표 체중은 주치의와 정하세요.
+          </Callout>
         </section>
 
         {/* ── 7. 러너 전용 팁 (기존 유지) ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
-            🏃 러닝 효율을 높이는 체중 관리
+          <h2 className="g-h2">
+            러닝 효율을 높이는 체중 관리
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             마라톤과 같은 지구력 운동에서는 체중과 기록이 밀접하게 연결됩니다.
             단순히 체중을 줄이는 것이 아니라 <strong style={{ color: 'var(--text)' }}>근육량을 유지하면서 체지방률을 조절</strong>하는 것이 기록 향상의 핵심입니다.
           </p>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px', marginBottom: '16px' }}>
             {[
-              { icon: '⚡', color: '#0EA5E9', title: '체중과 러닝 기록의 관계',   content: '스포츠 과학 연구에 따르면 체중 1kg 감량 시 10km 레이스에서 약 2~3분, 마라톤에서 약 8~12분 기록이 향상될 수 있습니다. 단, 이는 근육량을 유지한 상태의 체지방 감량일 때 해당합니다.' },
-              { icon: '⚠️', color: '#EA580C', title: '무리한 감량의 위험',         content: '마라톤과 같은 지구력 운동에서 낮은 BMI가 유리할 수 있지만, 무리한 체중 감량은 피로 골절, 근육 손실, 면역력 저하 등 부상 위험을 크게 높입니다. 특히 여성 러너의 경우 지나친 저체중은 골밀도 감소와 호르몬 이상을 유발할 수 있습니다.' },
-              { icon: '🎯', color: '#0891B2', title: '러너에게 권장하는 BMI 범위', content: '엘리트 마라토너의 평균 BMI는 남성 약 18~20, 여성 약 17~19 수준이지만, 일반 러너는 정상 범위(18.5~22.9)를 목표로 하는 것이 건강하고 지속 가능합니다.' },
+              { icon: '⚡', color: 'var(--accent-ink)', title: '체중과 러닝 기록의 관계',   content: '체중이 1% 줄면 기록도 대략 1% 단축된다는 경험칙이 있습니다. 예를 들어 70kg 러너가 1kg을 빼면 10km에서 약 30~40초, 풀코스에서 약 2~3분 정도입니다. 근육량을 유지한 채 체지방을 줄였을 때의 이야기이며 개인차가 큽니다.' },
+              { icon: '⚠️', color: 'var(--orange-600)', title: '무리한 감량의 위험',         content: '마라톤과 같은 지구력 운동에서 낮은 BMI가 유리할 수 있지만, 무리한 체중 감량은 피로 골절, 근육 손실, 면역력 저하 등 부상 위험을 크게 높입니다. 특히 여성 러너의 경우 지나친 저체중은 골밀도 감소와 호르몬 이상을 유발할 수 있습니다.' },
+              { icon: '🎯', color: 'var(--cyan-600)', title: '러너에게 권장하는 BMI 범위', content: '엘리트 마라토너의 평균 BMI는 남성 약 18~20, 여성 약 17~19 수준이지만, 일반 러너는 정상 범위(18.5~22.9)를 목표로 하는 것이 건강하고 지속 가능합니다.' },
             ].map((tip, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${tip.color}30`, borderRadius: '12px', padding: '16px 20px', display: 'flex', gap: '14px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid color-mix(in srgb, ${tip.color} 19%, transparent)`, borderRadius: 'var(--radius-m)', padding: '16px 20px', display: 'flex', gap: '14px' }}>
                 <span style={{ fontSize: '22px', flexShrink: 0, marginTop: '2px' }}>{tip.icon}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 600, color: tip.color, marginBottom: '6px' }}>{tip.title}</p>
@@ -308,8 +348,8 @@ export default function BmiPage() {
               </div>
             ))}
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.15)', borderRadius: '12px', padding: '16px 20px' }}>
-            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '10px' }}>✅ 러너를 위한 체중 관리 핵심 요약</p>
+          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }}>
+            <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent-ink)', marginBottom: '10px' }}>러너를 위한 체중 관리 핵심 요약</p>
             <ul style={{ paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
               {[
                 '급격한 체중 감량보다 주당 0.3~0.5kg 이내의 점진적 감량 권장',
@@ -325,19 +365,19 @@ export default function BmiPage() {
 
         {/* ── 8. 체지방률 추정 정확도 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             체지방률 추정 정확도
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             본 도구의 체지방률 추정은 <strong style={{ color: 'var(--text)' }}>미 해군 군 측정법(Navy formula)</strong> 기반입니다 —
             성별·키·허리·목(여성은 엉덩이 추가)만으로 추정 가능하지만, 정확도는 <strong style={{ color: 'var(--text)' }}>±3~5%</strong>로 빠른 참고용입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>측정법</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>정확도</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>대략적 오차</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left',   color: 'var(--muted)', fontWeight: 500 }}>특징</th>
                 </tr>
               </thead>
@@ -351,16 +391,19 @@ export default function BmiPage() {
                 ].map(([m, a, d], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{m}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{a}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{a}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{d}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ⓘ 본 도구의 체지방률은 빠른 추정용이며, 정확한 측정은 <strong style={{ color: 'var(--text)' }}>InBody 검사</strong>를 권장합니다. 다이어트 진척 추적은 측정법을 일관되게 유지하는 것이 더 중요합니다.
+          <p className="g-note">
+            오차는 기준 측정법(주로 DEXA·수중 체중법)과 비교한 대략적 범위로, 연구·기기·측정 조건에 따라 달라집니다. 생체전기저항(InBody 등)은 몸속 수분 상태에 민감해 식사·운동·음주 직후에는 값이 흔들립니다.
           </p>
+          <Callout tone="note">
+            본 도구의 체지방률은 빠른 추정용이며, 정확한 측정은 <strong>InBody·DEXA 같은 체성분 검사</strong>를 권장합니다. 다이어트 진척 추적은 같은 방법·같은 시간대로 꾸준히 재는 것이 절대값보다 더 중요합니다.
+          </Callout>
         </section>
 
         {/* ── 9. FAQ (accordion 방식) ── */}
@@ -382,7 +425,7 @@ export default function BmiPage() {
 
         {/* ── 함께 쓰면 좋은 도구 ── */}
         <section>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/health/bmr',         icon: '🔥', name: '기초대사량(BMR) 계산기',     desc: '하루 기본 소비 칼로리 계산' },
@@ -395,7 +438,7 @@ export default function BmiPage() {
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>
@@ -408,6 +451,6 @@ export default function BmiPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

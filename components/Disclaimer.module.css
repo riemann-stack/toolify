@@ -1,142 +1,21 @@
-/* @hover-wrapped */
-/* ──────────────────────────────────────────────────────
-   Disclaimer.module.css — <details> 기반 토글 면책 고지
-   닫힌 상태: 한 줄 제목 + "자세히" / 열린 상태: 전체 내용
-   ────────────────────────────────────────────────────── */
-.disclaimer {
-  margin-top: 28px;
-  background: var(--bg2);
-  border: 1px solid var(--border);
-  border-left-width: 3px;
-  border-radius: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
-  overflow: hidden;
-}
-
-/* variant별 액센트 컬러 (left border) */
-.disclaimer[data-variant="default"] { border-left-color: rgba(14, 165, 233, 0.6); }
-.disclaimer[data-variant="medical"] { border-left-color: rgba(8, 145, 178, 0.7); }
-.disclaimer[data-variant="finance"] { border-left-color: rgba(16, 185, 129, 0.7); }
-.disclaimer[data-variant="legal"]   { border-left-color: rgba(147, 51, 234, 0.7); }
-.disclaimer[data-variant="safety"]  { border-left-color: rgba(217, 119, 6, 0.7); }
-
-/* 닫힌 상태 — 한 줄 헤더 */
-.head {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 10px 14px;
-  cursor: pointer;
-  list-style: none;
-  user-select: none;
-}
-.head::-webkit-details-marker { display: none; }
-.emoji {
-  display: inline-flex;
-  align-items: center;
-  line-height: 1;
-  flex-shrink: 0;
-}
-.title {
-  font-size: 13px;
-  font-weight: 700;
-  color: var(--text);
-  letter-spacing: -0.01em;
-  flex: 1;
-  min-width: 0;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
-}
-.toggle {
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--muted);
-  letter-spacing: 0.02em;
-  flex-shrink: 0;
-}
-.chevron {
-  color: var(--muted);
-  flex-shrink: 0;
-  transition: transform 0.15s ease;
-}
-.disclaimer[open] .chevron { transform: rotate(180deg); }
-@media (hover: hover) {
-  .head:hover .toggle,
-  .head:hover .chevron { color: var(--text); }
-}
-
-/* ⚠️ 제목은 13px·700이라 대형 텍스트 예외(18.66px+)에 해당하지 않는다. 그런데 600레벨 색을
-      쓰고 있어 흰 카드(--bg2) 위에서 AA(4.5:1)를 넘지 못했다 — 실측:
-        default(--accent #0284C7) 4.10 · medical #0891B2 3.68 · finance #059669 3.77 ·
-        safety #D97706 3.19 (legal #9333EA 5.38만 통과).
-      199개 도구 페이지 중 198개에 걸리던 문제라, 프로젝트의 기존 ink 패턴
-      (--accent-ink · --coral-ink)과 같이 700레벨로 내린다. 왼쪽 테두리(비텍스트)는 600레벨 유지.
-      아래 값은 --bg2(#fff)·--bg3(#f8fafc)·--bg(#f0f7ff) 세 배경 모두에서 4.5:1을 넘는다. */
-.disclaimer[data-variant="default"] .title { color: var(--accent-ink); }              /* sky-700   5.93:1 */
-.disclaimer[data-variant="medical"] .title { color: #0E7490; }                        /* cyan-700  5.36:1 */
-.disclaimer[data-variant="finance"] .title { color: #047857; }                        /* emerald-700 5.48:1 */
-.disclaimer[data-variant="legal"]   .title { color: #9333EA; }                        /* purple-600 5.38:1 — 이미 통과 */
-.disclaimer[data-variant="safety"]  .title { color: var(--warning); }                 /* amber-700 5.02:1 */
-
-/* 열린 상태 — 본문 */
-.body {
-  padding: 4px 18px 14px;
-  border-top: 1px dashed var(--border);
-  margin-top: 2px;
-  font-size: 13px;
-  color: var(--text);
-  line-height: 1.75;
-}
-.list {
-  margin: 10px 0 0;
-  padding-left: 20px;
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.8;
-}
-.list li { margin-bottom: 2px; }
-.list li:last-child { margin-bottom: 0; }
-.custom { color: var(--text); margin-top: 4px !important; }
-.custom strong { color: var(--text); }
-
-.related {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px dashed var(--border);
-  font-size: 12px;
-  color: var(--muted);
-}
-.relatedLink {
-  color: var(--accent-ink); /* accent(4.10:1)는 소형 텍스트 AA 미달 — .title과 같은 처방 */
-  text-decoration: none;
-  font-weight: 600;
-}
-@media (hover: hover) {
-  .relatedLink:hover { text-decoration: underline; }
-}
-.dot { color: var(--muted); opacity: 0.5; }
-
-/* 근거 자료 (공식 출처 링크) */
-.sources {
-  margin-top: 12px;
-  padding-top: 10px;
-  border-top: 1px dashed var(--border);
-  font-size: 12px;
-  color: var(--muted);
-  line-height: 1.9;
-}
-.sourcesLabel {
-  display: inline-block;
-  font-weight: 700;
-  color: var(--text);
-  margin-right: 8px;
-}
-.sourceLink {
-  color: var(--accent-ink);
-  text-decoration: none;
-  font-weight: 600;
-}
-@media (hover: hover) {
-  .sourceLink:hover { text-decoration: underline; }
-}
+/* components/Disclaimer.module.css — 전 variant 같은 중립 박스(색 테마 폐지), 문구만 variant별. 페이지 마지막 (스펙 §10.11)
+   텍스트는 전부 --text / --muted-strong / --accent-ink — bg3 위 AA(7.77 · 6.13 이상) */
+.dc { margin-top: 32px; border-radius: var(--radius-m); background: var(--bg3); font-variant-numeric: normal; }
+.dc summary { list-style: none; display: flex; align-items: center; gap: 8px; min-height: 52px; padding: 14px 18px; cursor: pointer; font-size: 14px; font-weight: 600; line-height: 1.5; color: var(--text); word-break: keep-all; }
+.dc summary::-webkit-details-marker { display: none; }
+.dc summary > svg:first-child { flex-shrink: 0; color: var(--muted-strong); }
+.dcTitle { flex: 1; min-width: 0; }
+.dcMore { margin-left: auto; flex-shrink: 0; display: inline-flex; align-items: center; gap: 2px; font-size: 13px; font-weight: 500; color: var(--muted-strong); }
+.dcMore svg { transition: transform .15s; }
+.dc[open] .dcMore svg { transform: rotate(180deg); }
+@media (hover: hover) { .dc summary:hover .dcTitle { text-decoration: underline; text-decoration-color: var(--border-hover); text-underline-offset: 3px; } }
+.dcBody { padding: 0 18px 18px 44px; font-size: 13px; line-height: 1.75; color: var(--muted-strong); word-break: keep-all; overflow-wrap: break-word; }
+.dcBody ul { margin: 0; padding-left: 16px; }
+.dcBody li + li { margin-top: 2px; }
+.dcCustom { color: var(--text-body); }
+.dcCustom strong { color: var(--text); font-weight: 600; }
+.dcRow { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 12px; margin-top: 10px; padding-top: 10px; border-top: 1px solid var(--border); }
+.dcRowLabel { font-weight: 700; color: var(--text); }
+.dcRow a { display: inline-flex; align-items: center; gap: 2px; min-height: 24px; color: var(--accent-ink); font-weight: 500; text-decoration: underline; text-underline-offset: 3px; }
+@media (pointer: coarse) { .dcRow a { min-height: 44px; } }
+@media (max-width: 640px) { .dcBody { padding: 0 16px 16px 16px; } .dc summary { padding: 14px 16px; } }

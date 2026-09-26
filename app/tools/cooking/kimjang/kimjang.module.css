@@ -6,7 +6,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .cardLabel {
@@ -23,14 +23,14 @@
   color: var(--muted);
   font-weight: 600;
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 메인 히어로 ── */
 .heroCard {
   background: linear-gradient(140deg, rgba(220,38,38,0.14), rgba(217,119,6,0.14));
   border: 1px solid rgba(220,38,38,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   text-align: center;
 }
@@ -60,10 +60,10 @@
 }
 .heroBigItem { text-align: center; }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(48px, 12vw, 80px);
   font-weight: 800;
-  color: #DC2626;
+  color: var(--red-600);
   letter-spacing: -2px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
@@ -92,17 +92,17 @@
 .priceSource {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .refreshBtn {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 12px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }
 .refreshBtn:disabled { opacity: 0.5; cursor: wait; }
@@ -142,12 +142,12 @@
   font-weight: 800;
 }
 @media (hover: hover) {
-  .numCtrl button:hover { background: rgba(14,165,233,0.14); }
+  .numCtrl button:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
 }
 .numCtrl span {
   flex: 1;
   text-align: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--text);
@@ -168,14 +168,14 @@
   text-align: left;
   cursor: pointer;
   transition: all 0.15s;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-width: 0;
 }
 @media (hover: hover) {
   .profileBtn:hover { border-color: var(--accent); }
 }
 .profileActive {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: var(--accent);
 }
 .profileTitle {
@@ -193,7 +193,7 @@
   font-size: 11px;
   color: var(--muted);
   margin-top: 4px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 기간 ── */
@@ -208,12 +208,12 @@
 .monthBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 4px;
   font-size: 12px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (hover: hover) {
   .monthBtn:hover { border-color: var(--accent); }
@@ -241,7 +241,7 @@
   .variantBtn:hover { border-color: var(--accent); }
 }
 .variantActive {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: var(--accent);
 }
 .variantCheck {
@@ -267,7 +267,7 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .variantDesc {
   font-size: 12px;
@@ -282,7 +282,7 @@
   font-size: 13px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .toggleReduce input { accent-color: var(--accent); }
 
@@ -301,13 +301,13 @@
   font-weight: 700;
   color: var(--text);
   letter-spacing: 0.02em;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .catTotal {
   font-size: 13px;
   font-weight: 700;
   color: var(--accent);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-variant-numeric: tabular-nums;
 }
 .ingList { list-style: none; padding: 0; margin: 0; display: flex; flex-direction: column; gap: 4px; }
@@ -317,7 +317,7 @@
   gap: 10px;
   align-items: center;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 12px;
 }
 @media (max-width: 540px) {
@@ -334,13 +334,13 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
 .ingAmt {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   color: var(--accent);
@@ -360,7 +360,7 @@
   padding: 4px 8px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   text-align: right;
   font-variant-numeric: tabular-nums;
   outline: none;
@@ -372,8 +372,8 @@
   white-space: nowrap;
 }
 .ingLive {
-  font-size: 10px;
-  color: #059669;
+  font-size: 11px;
+  color: var(--emerald-600);
   background: rgba(16,185,129,0.18);
   padding: 2px 6px;
   border-radius: 4px;
@@ -381,7 +381,7 @@
   letter-spacing: 0.04em;
 }
 .ingTotal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 800;
   color: var(--text);
@@ -402,13 +402,13 @@
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .totalNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 22px;
   font-weight: 800;
-  color: #DC2626;
+  color: var(--red-600);
   font-variant-numeric: tabular-nums;
   letter-spacing: -0.5px;
 }
@@ -422,7 +422,7 @@
   font-size: 13px;
   font-weight: 800;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 10px;
   transition: opacity 0.15s;
 }
@@ -442,13 +442,13 @@
   gap: 12px;
   align-items: start;
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 12px;
 }
-.timelinePre { border-left: 3px solid #0891B2; }
+.timelinePre { border-left: 3px solid var(--cyan-600); }
 .timelinePost { border-left: 3px solid var(--accent); }
 .timelineDay {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
   color: var(--text);
@@ -458,14 +458,14 @@
   padding: 6px 4px;
   letter-spacing: -0.5px;
 }
-.timelinePre .timelineDay { color: #0891B2; }
+.timelinePre .timelineDay { color: var(--cyan-600); }
 .timelinePost .timelineDay { color: var(--accent); }
 .timelineBody { font-size: 13px; line-height: 1.6; }
 .timelineLabel {
   font-weight: 700;
   color: var(--text);
   font-size: 13px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 2px;
 }
 .timelineDesc {
@@ -476,7 +476,7 @@
 .tipCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .tipList {
@@ -502,3 +502,6 @@
   font-weight: 800;
 }
 .tipList li strong { color: var(--text); }
+
+/* overflow:hidden 컨테이너 안 버튼 — 전역 포커스 링(바깥 2px)이 잘리지 않게 안쪽으로 */
+.numCtrl :focus-visible { outline-offset: -3px; }

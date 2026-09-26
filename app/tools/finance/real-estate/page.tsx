@@ -7,6 +7,29 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { calcHouseAcquisitionTax, calcNonHouseAcquisitionTax } from '@/lib/krAcquisitionTax'
+import { CURRENT_HOUSE_FEE_SCHEDULE, OFFICETEL_FEE, OTHER_PROPERTY_FEE, bracketLabel, ppmToPct } from '@/lib/krBrokerageFee'
+import ToolPage from '@/components/ToolPage'
+
+/* 취득세 예시표 — lib/krAcquisitionTax 단일 소스로 빌드 시 생성 (취득세+지방교육세+농특세 합계) */
+const ACQ_PRICES = [500_000_000, 750_000_000, 1_200_000_000]
+const ACQ_CASES: { label: string; homeCount: number; adjusted: boolean }[] = [
+  { label: '1주택 (비조정 2주택·일시적 2주택 포함)', homeCount: 1, adjusted: false },
+  { label: '조정 2주택 · 비조정 3주택 (8%)',       homeCount: 2, adjusted: true },
+  { label: '조정 3주택+ · 비조정 4주택+ · 법인 (12%)', homeCount: 3, adjusted: true },
+]
+const eokLabel = (won: number) => `${(won / 100_000_000).toLocaleString('ko-KR')}억`
+const manLabel = (won: number) => `${Math.round(won / 10_000).toLocaleString('ko-KR')}만원`
+const pctLabel = (v: number) => `${v.toLocaleString('ko-KR', { maximumFractionDigits: 3 })}%`
+const ACQ_ROWS = ACQ_CASES.map(c => ({
+  label: c.label,
+  cells: ACQ_PRICES.map(price => ({
+    le85: calcHouseAcquisitionTax({ price, homeCount: c.homeCount, adjusted: c.adjusted, over85: false }),
+    gt85: calcHouseAcquisitionTax({ price, homeCount: c.homeCount, adjusted: c.adjusted, over85: true }),
+  })),
+}))
+const NON_HOUSE = calcNonHouseAcquisitionTax(ACQ_PRICES[0])
+const SEVEN_EOK = calcHouseAcquisitionTax({ price: 700_000_000, homeCount: 1, adjusted: false, over85: false })
 
 export const metadata = buildMetadata({
   path: '/tools/finance/real-estate',
@@ -55,24 +78,21 @@ const FAQ_LD = [
               },
               {
                 q: '상가(비주거)와 주택의 수익률 계산은 무엇이 다른가요?',
-                a: '본 계산기에서 주택 종류를 <strong>‘비주거’</strong>로 선택하면 취득세가 4%(농어촌특별세·지방교육세 별도)로 적용되어 주택(1주택 1~3%, 다주택 8~12%)과 초기 비용부터 달라집니다. 또한 1세대 1주택 비과세(양도가액 12억원 이하) 같은 주택 전용 혜택은 상가에 적용되지 않아 매도 차익에 대한 세금 부담 구조가 다릅니다. 상가는 월세 수익 비중이 큰 대신 공실·상권 변화가 수익률을 좌우하므로, 공실 기간을 보수적으로 입력해 시나리오를 비교해 보세요.',
+                a: '본 계산기에서 취득 대상을 <strong>‘비주거’</strong>로 선택하면 취득세 4%에 지방교육세 0.4%·농어촌특별세 0.2%를 더한 <strong>4.6%</strong>가 적용되어, 주택(1주택 1~3%, 다주택 중과 8~12% + 부가세목)과 초기 비용부터 달라집니다. 또한 1세대 1주택 비과세(양도가액 12억원 이하) 같은 주택 전용 혜택은 상가에 적용되지 않아 매도 차익에 대한 세금 부담 구조가 다릅니다. 상가는 월세 수익 비중이 큰 대신 공실·상권 변화가 수익률을 좌우하므로, 공실 기간을 보수적으로 입력해 시나리오를 비교해 보세요.',
               },
             ]
 
 export default function RealEstatePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        금융·재테크
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/finance/real-estate">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="finance" />부동산 수익률 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         매매가·임대·대출 레버리지를 반영한 <strong style={{ color: 'var(--text)' }}>자기자본 수익률</strong>. 진짜 남는 돈을 확인.
       </p>
 
-      <UpdatedMeta date="2026년 6월" basis="부동산 정책·시세 참고" sources={[{"label":"국토교통부","href":"https://www.molit.go.kr"},{"label":"한국부동산원","href":"https://www.reb.or.kr"},{"label":"국세청","href":"https://www.nts.go.kr"}]} />
+      <UpdatedMeta date="2026년 9월" basis="취득세: 지방세법 §11·§13의2·§151·농어촌특별세법(2026년 시행) · 양도세·중개보수: 2026년 6월 기준 참고" sources={[{"label":"위택스(취득세)","href":"https://www.wetax.go.kr"},{"label":"국가법령정보센터 지방세법","href":"https://www.law.go.kr/법령/지방세법"},{"label":"국토교통부","href":"https://www.molit.go.kr"},{"label":"국세청","href":"https://www.nts.go.kr"}]} />
 
       <RealEstateClient />
 
@@ -92,15 +112,15 @@ export default function RealEstatePage() {
 
         {/* ── 2. 핵심 공식 박스 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             핵심 계산 공식
           </h2>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -117,43 +137,77 @@ export default function RealEstatePage() {
 
         {/* ── 3. 한국 취득세 자동 계산 기준 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 취득세 자동 계산 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
-            본 계산기는 아래 기준으로 자동 산정합니다. 농어촌특별세(0.2%)·지방교육세(0.4%)는 별도이며 실제 신고 세액과 차이가 있을 수 있습니다.
+            본 계산기는 지방세법 §11(표준세율)·§13의2(다주택·법인 중과) 기준으로 <strong style={{ color: 'var(--text)' }}>취득세·지방교육세·농어촌특별세(전용 85㎡ 초과)</strong>를 합산합니다.
+            중과 여부는 <strong style={{ color: 'var(--text)' }}>취득 주택의 조정대상지역 여부</strong>와 <strong style={{ color: 'var(--text)' }}>이번 취득 후 세대 주택 수</strong>로 정해집니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>1주택자</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '14px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--success)', fontWeight: 700, marginBottom: '8px' }}>표준세율 (1주택 등)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                6억 이하 → <strong style={{ color: 'var(--accent)' }}>1.0%</strong><br/>
-                6~9억 → <strong style={{ color: 'var(--accent)' }}>1~3% 누진</strong><br/>
-                9억 초과 → <strong style={{ color: 'var(--accent)' }}>3.0%</strong>
+                6억 이하 → <strong style={{ color: 'var(--accent-ink)' }}>1%</strong><br/>
+                6~9억 → <strong style={{ color: 'var(--accent-ink)' }}>(가액×2/3억−3)%</strong>, 0.01%p 단위 반올림 (7억 → {pctLabel(SEVEN_EOK.acquisitionRate)})<br/>
+                9억 초과 → <strong style={{ color: 'var(--accent-ink)' }}>3%</strong><br/>
+                지방교육세 = 취득세율의 10% (0.1~0.3%)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>다주택자 (조정대상지역)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--warning)', fontWeight: 700, marginBottom: '8px' }}>중과세율</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                2주택 → <strong style={{ color: '#EA580C' }}>8.0%</strong><br/>
-                3주택 이상 → <strong style={{ color: '#DC2626' }}>12.0%</strong>
+                조정 2주택 · 비조정 3주택 → <strong style={{ color: 'var(--warning)' }}>8%</strong><br/>
+                조정 3주택+ · 비조정 4주택+ · 법인 → <strong style={{ color: 'var(--danger)' }}>12%</strong><br/>
+                비조정 2주택·일시적 2주택·시가표준액 1억(비수도권 2억, 2025.1.2 이후 취득) 이하 → 표준세율<br/>
+                지방교육세 0.4% (중과 공통)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#0891B2', fontWeight: 700, marginBottom: '8px' }}>비주거 부동산</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--cat-finance-ink)', fontWeight: 700, marginBottom: '8px' }}>농어촌특별세 · 비주거</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                토지·상가·오피스 → <strong style={{ color: '#0891B2' }}>4.0%</strong>
+                전용 85㎡ 이하 주택 → 비과세<br/>
+                85㎡ 초과: 표준 0.2% · 8% 중과 0.6% · 12% 중과 1.0%<br/>
+                토지·상가·오피스텔 → 4% + 0.4% + 0.2% = <strong>{pctLabel(NON_HOUSE.totalRate)}</strong>
               </p>
             </div>
           </div>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>세금 합계 (85㎡ 이하 / 초과)</th>
+                  {ACQ_PRICES.map(p => (
+                    <th scope="col" key={p} style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap' }}>{eokLabel(p)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {ACQ_ROWS.map((row, i) => (
+                  <tr key={row.label} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 600 }}>{row.label}</th>
+                    {row.cells.map((c, j) => (
+                      <td key={j} style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', whiteSpace: 'nowrap' }}>
+                        {manLabel(c.le85.total)} <span style={{ color: 'var(--muted)', fontSize: '12px' }}>({pctLabel(c.le85.totalRate)})</span><br/>
+                        {manLabel(c.gt85.total)} <span style={{ color: 'var(--muted)', fontSize: '12px' }}>({pctLabel(c.gt85.totalRate)})</span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.7 }}>
+            ※ 생애최초·신혼부부 등 감면, 분양권·입주권·주거용 오피스텔의 주택 수 산입, 일시적 2주택 사후 추징, 수도권 외 읍·면(100㎡ 기준)은 반영하지 않습니다. 실제 신고 세액은 위택스·관할 지자체에서 확인하세요.
+          </p>
         </div>
 
         {/* ── 4. 한국 중개수수료 법정 요율표 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             한국 중개수수료 법정 요율 (매매 기준)
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -163,37 +217,37 @@ export default function RealEstatePage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { range: '5천만 미만',     rate: '0.6%', cap: '25만원' },
-                  { range: '5천만 ~ 2억',    rate: '0.5%', cap: '80만원' },
-                  { range: '2억 ~ 9억',      rate: '0.4%', cap: '없음' },
-                  { range: '9억 ~ 12억',     rate: '0.5%', cap: '없음' },
-                  { range: '12억 ~ 15억',    rate: '0.6%', cap: '없음' },
-                  { range: '15억 이상',      rate: '0.7%', cap: '없음' },
-                ].map((r, i) => (
+                {/* lib/krBrokerageFee 단일 소스 (공인중개사법 시행규칙 별표 1) */}
+                {CURRENT_HOUSE_FEE_SCHEDULE.sale.map(b => ({
+                  range: bracketLabel(b),
+                  rate: `${ppmToPct(b.ratePpm)}%`,
+                  cap: b.cap === null ? '없음' : manLabel(b.cap),
+                })).map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.range}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.rate}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.cap}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.rate}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r.cap}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
-            ※ 2021.10 개정 상한요율(이 이내에서 협의 가능)이며, 매수·매도 양쪽 모두 별도로 부담합니다. 임대차(전·월세)는 별도 요율표가 적용되며 본 계산기는 매매 기준 상한으로 자동 산정합니다.
+            ※ 2021.10 개정 상한요율(이 이내에서 협의 가능, 부가세 별도)이며, 매수·매도 양쪽 모두 별도로 부담합니다. 계산기의 &lsquo;중개 대상&rsquo;에서 주거용 오피스텔(전용 {OFFICETEL_FEE.maxAreaM2}㎡ 이하·전용 부엌·화장실·목욕시설)을 고르면 매매 {ppmToPct(OFFICETEL_FEE.saleRatePpm)}%,
+            상가·토지와 주거용 요건을 못 갖춘 오피스텔을 고르면 {ppmToPct(OTHER_PROPERTY_FEE.ratePpm)}% 이내 협의의 상한으로 자동 산정합니다. 오피스텔은 취득세로는 모두 비주거지만 중개보수는 주거용 요건에 따라 갈립니다.
+            전·월세 요율과 부가세 포함액은 <Link href="/tools/finance/brokerage-fee" style={{ color: 'var(--accent-ink)' }}>중개보수 계산기</Link>에서 확인하세요.
           </p>
         </div>
 
         {/* ── 5. 대출 레버리지 효과 가이드 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             🔑 대출 레버리지 효과 완전 가이드
           </h2>
           <div style={{
-            background: 'rgba(14,165,233,0.05)',
-            border: '1px solid rgba(14,165,233,0.25)',
-            borderRadius: '12px',
+            background: 'color-mix(in srgb, var(--accent) 5%, transparent)',
+            border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)',
+            borderRadius: 'var(--radius-m)',
             padding: '16px 18px',
             marginBottom: '14px',
           }}>
@@ -207,18 +261,18 @@ export default function RealEstatePage() {
             예시 — 매입가 5억, 1년 후 7억 매도, 대출 금리 4.5%
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px', marginBottom: '14px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>현금 100% (자기자본 5억 760)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--emerald-600)', fontWeight: 700, marginBottom: '8px' }}>현금 100% (자기자본 5억 760)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 수익 2억 − 비용 약 1,040만원 = <strong>1억 8,960만원</strong><br/>
-                <span style={{ color: 'var(--muted)' }}>ROE = 1억 8,960 ÷ 5억 760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>37.4%</strong>
+                <span style={{ color: 'var(--muted)' }}>ROE = 1억 8,960 ÷ 5억 760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>37.4%</strong>
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.3)', borderRadius: '12px', padding: '14px 16px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
               <p style={{ fontSize: '12px', color: 'var(--accent)', fontWeight: 700, marginBottom: '8px' }}>대출 70% (자기자본 1억 5,760)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85 }}>
                 수익 2억 − 비용·이자 약 2,615만원 = <strong>1억 7,385만원</strong><br/>
-                <span style={{ color: 'var(--muted)' }}>ROE = 1억 7,385 ÷ 1억 5,760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>110.3%</strong>
+                <span style={{ color: 'var(--muted)' }}>ROE = 1억 7,385 ÷ 1억 5,760 = </span><strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>110.3%</strong>
               </p>
             </div>
           </div>
@@ -226,10 +280,10 @@ export default function RealEstatePage() {
           <div style={{
             background: 'rgba(220,38,38,0.06)',
             border: '1px solid rgba(220,38,38,0.25)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '14px 18px',
           }}>
-            <p style={{ fontSize: '13px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>⚠️ 위험 측면</p>
+            <p style={{ fontSize: '13px', color: 'var(--red-600)', fontWeight: 700, marginBottom: '8px' }}>⚠️ 위험 측면</p>
             <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, paddingLeft: '20px', margin: 0 }}>
               <li>가격 하락 시 손실도 동일한 비율로 확대됩니다.</li>
               <li>매입가 10% 하락 시 자기자본 50% 손실이 가능합니다 (LTV 80% 기준).</li>
@@ -244,12 +298,12 @@ export default function RealEstatePage() {
 
         {/* ── 6. 갭투자 vs 일반 매수 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             갭투자 vs 일반 매수 + 임대 비교
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', color: '#0891B2', fontWeight: 700, marginBottom: '10px' }}>갭투자 (전세 끼고 매수)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--cyan-600)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', color: 'var(--cyan-600)', fontWeight: 700, marginBottom: '10px' }}>갭투자 (전세 끼고 매수)</p>
               <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, paddingLeft: '18px', margin: 0 }}>
                 <li>자기자본 = <strong>매입가 − 전세보증금</strong></li>
                 <li>보유 기간 동안 임대수익 0</li>
@@ -258,8 +312,8 @@ export default function RealEstatePage() {
                 <li>전세가 하락 시 역전세 위험</li>
               </ul>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: '12px', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', color: '#EA580C', fontWeight: 700, marginBottom: '10px' }}>일반 매수 + 임대</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--orange-600)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+              <p style={{ fontSize: '13px', color: 'var(--orange-600)', fontWeight: 700, marginBottom: '10px' }}>일반 매수 + 임대</p>
               <ul style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.85, paddingLeft: '18px', margin: 0 }}>
                 <li>자기자본 = <strong>매입가 − 대출</strong> (또는 전액 현금)</li>
                 <li>월세 수익 발생</li>
@@ -273,7 +327,7 @@ export default function RealEstatePage() {
 
         {/* ── 6-1. 양도소득세 참고 가이드 (2026.6 추가) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             양도소득세 참고 가이드 (2026년 6월 기준)
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
@@ -281,7 +335,7 @@ export default function RealEstatePage() {
             매도 시점에 아래 양도소득세가 별도로 발생하므로, 계산된 세전 수익에서 양도세를 차감해야 실제 손에 쥐는 금액이 됩니다.
             아래는 국세청이 안내하는 현행 보유기간별 세율 골격입니다(주택·조합원입주권 기준).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -298,7 +352,7 @@ export default function RealEstatePage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.range}</td>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.rate}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.rate}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.note}</td>
                   </tr>
                 ))}
@@ -306,19 +360,19 @@ export default function RealEstatePage() {
             </table>
           </div>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '10px', marginTop: '14px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#DC2626', fontWeight: 700, marginBottom: '8px' }}>다주택 중과 (조정대상지역)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--red-600)', fontWeight: 700, marginBottom: '8px' }}>다주택 중과 (조정대상지역)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                2주택 → <strong style={{ color: '#EA580C' }}>기본세율 +20%p</strong><br/>
-                3주택 이상 → <strong style={{ color: '#DC2626' }}>기본세율 +30%p</strong><br/>
+                2주택 → <strong style={{ color: 'var(--orange-600)' }}>기본세율 +20%p</strong><br/>
+                3주택 이상 → <strong style={{ color: 'var(--red-600)' }}>기본세율 +30%p</strong><br/>
                 <span style={{ color: 'var(--muted)', fontSize: '12px' }}>
                   2022.5.10~2026.5.9 한시 중과 배제(유예) 후 연장 없이 종료되어 2026.5.10부터 다시 적용됩니다.
                   2026.5.9까지 체결한 매매계약분은 계약일부터 일정 기간(4~6개월) 내 양도 시 중과가 배제되는 경과조치가 있습니다.
                 </span>
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>1세대 1주택 비과세</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--emerald-600)', fontWeight: 700, marginBottom: '8px' }}>1세대 1주택 비과세</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
                 2년 이상 보유 시 양도가액 <strong style={{ color: 'var(--accent)' }}>12억원 이하 비과세</strong><br/>
                 <span style={{ color: 'var(--muted)', fontSize: '12px' }}>
@@ -337,13 +391,13 @@ export default function RealEstatePage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             자주 묻는 질문 (FAQ)
           </h2>
           <FaqJsonLd items={FAQ_LD} />
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
+              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                 <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
                   Q{i + 1}. {f.q}
                 </summary>
@@ -358,7 +412,7 @@ export default function RealEstatePage() {
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -377,7 +431,7 @@ export default function RealEstatePage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -391,6 +445,6 @@ export default function RealEstatePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

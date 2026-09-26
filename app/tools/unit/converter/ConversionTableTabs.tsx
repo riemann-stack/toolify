@@ -42,7 +42,8 @@ const GROUPS: Group[] = [
       ['1 파운드', '453.59 g'],
       ['1 돈 (錢)', '3.75 g'],
       ['1 냥 (兩)', '37.5 g'],
-      ['1 근 (斤, 한국)', '600 g'],
+      ['1 근 (고기)', '600 g'],
+      ['1 근 (채소·과일)', '375 g (시장 어림 400 g)'],
       ['1 관 (貫)', '3.75 kg'],
     ],
   },
@@ -92,6 +93,7 @@ export default function ConversionTableTabs() {
             key={g.id}
             type="button"
             className={`${s.tab} ${active === g.id ? s.tabActive : ''}`}
+            aria-pressed={active === g.id}
             onClick={() => setActive(g.id)}
           >
             <span aria-hidden style={{ marginRight: 4 }}>{g.icon}</span>{g.name}

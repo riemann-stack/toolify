@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -31,11 +31,11 @@
   background: transparent;
   border: none;
   padding: 10px 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   color: var(--muted);
   cursor: pointer;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   transition: all 0.15s;
   font-weight: 500;
 }@media (hover: hover) {
@@ -64,7 +64,7 @@
   border-radius: 10px;
   padding: 12px 36px 12px 14px;
   font-size: 16px;       /* iOS Safari 자동 확대 방지 (<16px 시 줌) */
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   cursor: pointer;
@@ -73,7 +73,7 @@
   box-sizing: border-box;
   min-height: 44px;  /* 터치 타깃 권장 크기 */
 }
-.select:focus { border-color: rgba(14,165,233,0.5); }
+.select:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .select:focus-visible { outline: 2px solid var(--accent-strong); outline-offset: 1px; }
 .select:disabled { opacity: 0.4; cursor: not-allowed; }
 .select option { background: var(--bg2); color: var(--text); }
@@ -94,8 +94,8 @@
   align-items: center;
   gap: 8px;
   padding: 10px 14px;
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.2);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 20%, transparent);
   border-radius: 10px;
 }
 .leapCheck {
@@ -115,8 +115,8 @@
 /* ── 결과 카드 ── */
 .resultCard {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.25);
-  border-radius: 14px;
+  border: 1px solid color-mix(in srgb, var(--accent) 25%, transparent);
+  border-radius: var(--radius-card);
   padding: 24px 26px;
   animation: fadeUp 0.3s ease;
 }
@@ -128,7 +128,7 @@
   margin-bottom: 10px;
 }
 .resultDate {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 32px;
   font-weight: 800;
   color: var(--accent);
@@ -169,7 +169,7 @@
 .errorBox {
   background: rgba(220,38,38,0.08);
   border: 1px solid rgba(220,38,38,0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--danger);

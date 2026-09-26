@@ -1,7 +1,8 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useEffect, useMemo, useRef, useState } from 'react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { todayStr } from '@/lib/date'
 import s from './sleep-debt.module.css'
 
 /* ─── 타입 ─── */
@@ -20,16 +21,10 @@ type Period = 7 | 14 | 30
 /* ─── 상수 ─── */
 const STORAGE_KEY = 'youtil_sleep_debt_v1'
 const SETTINGS_KEY = 'youtil_sleep_debt_settings_v1'
-const KST_OFFSET_MS = 9 * 3600 * 1000
 const RECOVERY_EFFICIENCY = 0.5  // 초과 수면 1h → 부채 0.5h 상쇄
 
 /* ─── 유틸 ─── */
 function pad2(n: number) { return n < 10 ? `0${n}` : `${n}` }
-
-function todayKstStr(): string {
-  const d = new Date(Date.now() + KST_OFFSET_MS)
-  return `${d.getUTCFullYear()}-${pad2(d.getUTCMonth() + 1)}-${pad2(d.getUTCDate())}`
-}
 
 function dateOffset(dateStr: string, offsetDays: number): string {
   const [y, m, d] = dateStr.split('-').map(Number)
@@ -57,13 +52,23 @@ function computeHours(bedtime: string, wakeTime: string): number | null {
 }
 
 /* ─── localStorage ─── */
+function isSleepEntry(v: unknown): v is SleepEntry {
+  if (!v || typeof v !== 'object') return false
+  const e = v as Record<string, unknown>
+  return typeof e.id === 'string'
+    && typeof e.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(e.date)
+    && typeof e.bedtime === 'string' && typeof e.wakeTime === 'string'
+    && typeof e.hours === 'number' && Number.isFinite(e.hours) && e.hours > 0 && e.hours <= 16
+    && (e.quality === undefined || (typeof e.quality === 'number' && [1, 2, 3, 4, 5].includes(e.quality)))
+}
+
 function loadEntries(): SleepEntry[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw) as SleepEntry[]
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isSleepEntry) : []
   } catch { return [] }
 }
 function saveEntries(arr: SleepEntry[]) {
@@ -82,7 +87,10 @@ function loadSettings(): Partial<SleepSettings> | null {
   if (typeof window === 'undefined') return null
   try {
     const raw = localStorage.getItem(SETTINGS_KEY)
-    return raw ? (JSON.parse(raw) as Partial<SleepSettings>) : null
+    if (!raw) return null
+    const o: unknown = JSON.parse(raw)
+    // 필드별 범위 검증은 호출부에서 — 여기선 객체 여부만
+    return o && typeof o === 'object' && !Array.isArray(o) ? (o as Partial<SleepSettings>) : null
   } catch { return null }
 }
 function saveSettings(set: SleepSettings) {
@@ -212,10 +220,10 @@ export default function SleepDebtClient() {
   const [entries, setEntries] = useState<SleepEntry[]>([])
   const [targetHours, setTargetHours] = useState(8)
   const [period, setPeriod] = useState<Period>(7)
-  const [todayDate, setTodayDate] = useState(() => todayKstStr())
+  const [todayDate, setTodayDate] = useState(() => todayStr())
 
   // 입력 폼
-  const [inputDate, setInputDate] = useState(() => todayKstStr())
+  const [inputDate, setInputDate] = useState(() => todayStr())
   const [bedtime, setBedtime] = useState('23:30')
   const [wakeTime, setWakeTime] = useState('07:00')
   const [directMode, setDirectMode] = useState(false)
@@ -231,12 +239,27 @@ export default function SleepDebtClient() {
 
   const settingsLoadedRef = useRef(false)
 
+  // 차트 폭 = 실제 렌더 폭(px) → viewBox 1단위 = 1px라 모바일에서도 축 글자가 11px로 유지됨
+  const [chartW, setChartW] = useState(600)
+  const chartRoRef = useRef<ResizeObserver | null>(null)
+  const chartRef = useCallback((el: SVGSVGElement | null) => {
+    chartRoRef.current?.disconnect()
+    chartRoRef.current = null
+    if (!el || typeof ResizeObserver === 'undefined') return
+    const ro = new ResizeObserver(([entry]) => {
+      const w = Math.round(entry.contentRect.width)
+      if (w > 0) setChartW(Math.min(900, Math.max(260, w)))
+    })
+    ro.observe(el)
+    chartRoRef.current = ro
+  }, [])
+
   // 초기 로드 — 기록 + 개인 설정 + 날짜 동기화
   useEffect(() => {
     /* eslint-disable react-hooks/set-state-in-effect */
     setEntries(loadEntries())
-    // 빌드시점(SSG) 날짜와 실제 클라이언트 KST 날짜가 다를 수 있어 마운트 시 동기화 (max/기본값 어긋남 방지)
-    const t = todayKstStr()
+    // 빌드시점(SSG) 날짜와 실제 클라이언트(기기 로컬) 날짜가 다를 수 있어 마운트 시 동기화 (max/기본값 어긋남 방지)
+    const t = todayStr()
     setTodayDate(t)
     setInputDate(t)
     const st = loadSettings()
@@ -260,7 +283,7 @@ export default function SleepDebtClient() {
   }, [targetHours, period, recoveryDailyHours, tomorrowWakeTime])
   // 오늘 날짜 매분 갱신 (자정 넘어가면 자동 반영)
   useEffect(() => {
-    const id = setInterval(() => setTodayDate(todayKstStr()), 60_000)
+    const id = setInterval(() => setTodayDate(todayStr()), 60_000)
     return () => clearInterval(id)
   }, [])
 
@@ -277,7 +300,7 @@ export default function SleepDebtClient() {
   /* ─── 부채 등급 ─── */
   const debtStatus = (() => {
     const d = analysis.totalDebt
-    if (analysis.daysWithData === 0) return { label: '기록 없음', color: '#888', desc: '아래에서 수면 기록을 추가하세요' }
+    if (analysis.daysWithData === 0) return { label: '기록 없음', color: 'var(--muted)', desc: '아래에서 수면 기록을 추가하세요' }
     if (d < 1) return { label: '✅ 정상', color: '#059669', desc: '현재 부채 거의 없음 — 잘 유지 중' }
     if (d < 5) return { label: '🟢 양호', color: '#0891B2', desc: '경미한 부채 — 아래 회복 계획대로면 곧 0으로' }
     if (d < 10) return { label: '🟡 경미한 부채', color: '#D97706', desc: '집중력·기분 영향 시작 — 회복 권장' }
@@ -286,9 +309,12 @@ export default function SleepDebtClient() {
   })()
 
   /* ─── 회복 계획 ─── */
+  // 회복 수면은 항상 목표보다 0.5h 이상 — 목표를 올리면 슬라이더 최소값과 표시·계산이 함께 따라감
+  const recoveryMin = Math.min(11, targetHours + 0.5)
+  const recoveryHours = Math.min(11, Math.max(recoveryDailyHours, recoveryMin))
   const recoveryPlan = (() => {
     if (analysis.totalDebt < 0.5) return null
-    const surplusPerDay = (recoveryDailyHours - targetHours) * RECOVERY_EFFICIENCY
+    const surplusPerDay = (recoveryHours - targetHours) * RECOVERY_EFFICIENCY
     if (surplusPerDay <= 0) {
       return {
         days: null,
@@ -305,10 +331,10 @@ export default function SleepDebtClient() {
     if (!m) return null
     const wakeMin = parseInt(m[1], 10) * 60 + parseInt(m[2], 10)
     // 잠드는데 평균 15분 걸린다고 가정 → 회복 목표 + 15분 전에 잠자리
-    const bedTotalMin = wakeMin - recoveryDailyHours * 60 - 15
+    const bedTotalMin = wakeMin - recoveryHours * 60 - 15
     const norm = ((bedTotalMin % (24 * 60)) + 24 * 60) % (24 * 60)
     return `${pad2(Math.floor(norm / 60))}:${pad2(norm % 60)}`
-  }, [tomorrowWakeTime, recoveryDailyHours])
+  }, [tomorrowWakeTime, recoveryHours])
 
   /* ─── 막대 차트 데이터 ─── */
   const chartData = useMemo(() => {
@@ -364,10 +390,12 @@ export default function SleepDebtClient() {
   )
 
   /* ─── 차트 SVG ─── */
-  const W = 600, H = 200, PL = 36, PR = 12, PT = 16, PB = 36
+  const W = chartW, H = 200, PL = 36, PR = 12, PT = 18, PB = 36
   const plotW = W - PL - PR, plotH = H - PT - PB
   const maxY = Math.max(10, targetHours + 2, ...chartData.map(d => d.hours ?? 0))
   const barW = plotW / chartData.length
+  const showBarValues = barW >= 26            // 막대 위 수치(11px)는 폭이 충분할 때만
+  const xLabelEvery = Math.max(1, Math.ceil(34 / barW))  // 날짜 라벨(MM-DD, 11px ≈ 31px) 겹침 방지
   const yFromH = (h: number) => PT + (1 - h / maxY) * plotH
   const targetY = yFromH(targetHours)
 
@@ -389,7 +417,7 @@ export default function SleepDebtClient() {
       </Disclaimer>
 
       {/* ─── 메인 히어로 ─── */}
-      <div className={s.heroCard}>
+      <div className={s.heroCard} role="status">
         <div className={s.heroLabel}>누적 수면 부채 (지난 {period}일)</div>
         <div className={s.heroNumRow}>
           <span className={s.heroNum} style={{ color: debtStatus.color }}>
@@ -499,13 +527,13 @@ export default function SleepDebtClient() {
         {!directMode ? (
           <div className={s.timePairRow}>
             <div className={s.timeField}>
-              <label>잠든 시각</label>
-              <input type="time" className={s.timeInput} aria-label="잠든 시각" value={bedtime}
+              <label htmlFor="sd-bedtime">잠든 시각</label>
+              <input id="sd-bedtime" type="time" className={s.timeInput} aria-label="잠든 시각" value={bedtime}
                 onChange={e => setBedtime(e.target.value)} />
             </div>
             <div className={s.timeField}>
-              <label>일어난 시각</label>
-              <input type="time" className={s.timeInput} aria-label="일어난 시각" value={wakeTime}
+              <label htmlFor="sd-waketime">일어난 시각</label>
+              <input id="sd-waketime" type="time" className={s.timeInput} aria-label="일어난 시각" value={wakeTime}
                 onChange={e => setWakeTime(e.target.value)} />
             </div>
             <div className={s.timeField}>
@@ -575,15 +603,15 @@ export default function SleepDebtClient() {
       {chartData.some(d => d.hours !== null) && (
         <div className={s.chartCard}>
           <div className={s.cardLabel}>지난 {period}일 수면 패턴</div>
-          <svg viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
+          <svg ref={chartRef} viewBox={`0 0 ${W} ${H}`} className={s.chartSvg} preserveAspectRatio="xMidYMid meet">
             {/* Y축 그리드 */}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
               <line key={t} x1={PL} x2={W - PR} y1={PT + t * plotH} y2={PT + t * plotH}
-                stroke="rgba(255,255,255,0.05)" strokeWidth="1" />
+                stroke="var(--border)" strokeWidth="1" />
             ))}
             {[0, 0.25, 0.5, 0.75, 1].map(t => (
               <text key={t} x={PL - 6} y={PT + (1 - t) * plotH + 3}
-                fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                fill="var(--muted)" fontSize="11" textAnchor="end">
                 {(t * maxY).toFixed(0)}h
               </text>
             ))}
@@ -591,7 +619,7 @@ export default function SleepDebtClient() {
             <line x1={PL} x2={W - PR} y1={targetY} y2={targetY}
               stroke="var(--accent)" strokeWidth="1.5" strokeDasharray="4 4" opacity="0.7" />
             <text x={W - PR - 4} y={targetY - 4}
-              fill="var(--accent)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+              fill="var(--accent-ink)" fontSize="11" textAnchor="end">
               목표 {targetHours}h
             </text>
             {/* 막대 */}
@@ -603,7 +631,7 @@ export default function SleepDebtClient() {
                 return (
                   <g key={i}>
                     <rect x={cx - bw / 2} y={PT + plotH - 4} width={bw} height={4}
-                      fill="rgba(255,255,255,0.1)" rx="2" />
+                      fill="var(--border-hover)" rx="2" />
                   </g>
                 )
               }
@@ -614,21 +642,24 @@ export default function SleepDebtClient() {
                 <g key={i}>
                   <rect x={cx - bw / 2} y={y} width={bw} height={PT + plotH - y}
                     fill={color} opacity="0.85" rx="2" />
-                  <text x={cx} y={y - 4} fill={color} fontSize="9"
-                    textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
-                    {d.hours.toFixed(1)}
-                  </text>
+                  {showBarValues && (
+                    <text x={cx} y={y - 4} fill={color} fontSize="11"
+                      textAnchor="middle">
+                      {d.hours.toFixed(1)}
+                    </text>
+                  )}
                 </g>
               )
             })}
             {/* X축 레이블 — 적정 개수만 */}
             {chartData.map((d, i) => {
-              const showEvery = period === 7 ? 1 : period === 14 ? 2 : 5
-              if (i % showEvery !== 0 && i !== chartData.length - 1) return null
+              // 마지막(오늘) 라벨은 항상 표시 — 바로 앞 라벨과 겹치면 그 라벨을 생략
+              const isLast = i === chartData.length - 1
+              if (!isLast && (i % xLabelEvery !== 0 || chartData.length - 1 - i < xLabelEvery)) return null
               const cx = PL + (i + 0.5) * barW
               return (
-                <text key={i} x={cx} y={H - PB + 14}
-                  fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+                <text key={i} x={cx} y={H - PB + 16}
+                  fill="var(--muted)" fontSize="11" textAnchor="middle">
                   {d.date.slice(5)}
                 </text>
               )
@@ -638,7 +669,7 @@ export default function SleepDebtClient() {
             <span><span className={s.dot} style={{ background: '#059669' }} />목표 이상</span>
             <span><span className={s.dot} style={{ background: '#D97706' }} />약간 부족</span>
             <span><span className={s.dot} style={{ background: '#DC2626' }} />심각 부족</span>
-            <span><span className={s.dot} style={{ background: 'rgba(255,255,255,0.15)' }} />기록 없음</span>
+            <span><span className={s.dot} style={{ background: 'var(--border-hover)' }} />기록 없음</span>
           </div>
         </div>
       )}
@@ -674,17 +705,18 @@ export default function SleepDebtClient() {
 
           <div className={s.recoveryRow}>
             <div className={s.recoveryField}>
-              <label>매일 잘 시간</label>
+              <label htmlFor="sd-recovery">매일 잘 시간</label>
               <div className={s.recoverySliderRow}>
                 <input
-                  type="range" min={targetHours} max={11} step={0.5}
-                  value={recoveryDailyHours}
+                  id="sd-recovery"
+                  type="range" min={recoveryMin} max={11} step={0.5}
+                  value={recoveryHours}
                   onChange={e => setRecoveryDailyHours(parseFloat(e.target.value))}
                   className={s.slider}
                   aria-label="회복 기간 동안 매일 잘 시간 (시간)"
-                  aria-valuetext={`${recoveryDailyHours}시간`}
+                  aria-valuetext={`${recoveryHours}시간`}
                 />
-                <span className={s.sliderVal}>{recoveryDailyHours}h</span>
+                <span className={s.sliderVal}>{recoveryHours}h</span>
               </div>
             </div>
           </div>
@@ -694,7 +726,7 @@ export default function SleepDebtClient() {
               <div className={s.recoveryResult}>
                 <strong>{recoveryPlan.days}일</strong> 후 부채 0 도달 예상
                 <span className={s.recoverySub}>
-                  (매일 {recoveryDailyHours}h × 잉여 {(recoveryPlan.surplusPerDay ?? 0).toFixed(2)}h/일 효과 적용)
+                  (매일 {recoveryHours}h × 잉여 {(recoveryPlan.surplusPerDay ?? 0).toFixed(2)}h/일 효과 적용)
                 </span>
               </div>
             ) : (
@@ -712,14 +744,14 @@ export default function SleepDebtClient() {
                 onChange={e => setTomorrowWakeTime(e.target.value)}
               /> 기상 시 →
               <strong style={{ color: 'var(--accent)' }}> {recommendedBedtime ?? '—'}</strong>까지 잠자리
-              <span className={s.bedtimeNote}>(회복 목표 {recoveryDailyHours}h + 잠들기 15분 여유)</span>
+              <span className={s.bedtimeNote}>(회복 목표 {recoveryHours}h + 잠들기 15분 여유)</span>
             </div>
           </div>
 
           <div className={s.recoveryWarnBox}>
             ⚠️ <strong>주말 몰아 자기 (Sleep Bingeing)는 효과 제한적</strong>입니다.
             연구상 누적 부채의 30~50%만 회복되고, 일주일의 생체리듬을 더 망가뜨립니다.
-            <strong>매일 +1~1.5시간씩 7일</strong>이 가장 효과적인 회복.
+            <strong>매일 조금씩 더 자는 편</strong>이 낫습니다 — 이 도구 모델(효율 0.5)로는 목표보다 1시간씩 더 자면 부채가 하루 약 0.5시간 줄어, 7시간 부채에 약 2주가 걸립니다.
           </div>
         </div>
       )}
@@ -769,7 +801,7 @@ export default function SleepDebtClient() {
         <div className={s.cardLabel}>수면 부채 회복 가이드</div>
         <ul className={s.tipList}>
           <li><strong>1~2주 누적 부채는 회복 가능</strong> — 그 이상 만성화되면 회복이 더디고 장기 건강 위험 ↑ (만성화 전 회복 권장)</li>
-          <li><strong>매일 +1시간씩 7~10일</strong>이 가장 효과적 — 주말 몰아 자기보다 우월</li>
+          <li><strong>매일 +1시간씩 꾸준히</strong> — 주말 몰아 자기보다 생체리듬에 유리 (이 도구 모델로 부채 7시간이면 약 2주)</li>
           <li><strong>같은 시각 기상</strong> 유지 (주말 ±30분 이내) — 생체리듬 보호</li>
           <li><strong>20~30분 낮잠</strong> — 부채 일부 상쇄, 다만 오후 3시 이전</li>
           <li><strong>취침 1~2시간 전 카페인·알코올·과식 X</strong> — 깊은 수면 차단</li>

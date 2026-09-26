@@ -1,34 +1,27 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import Disclaimer from '@/components/Disclaimer'
+import { useInitialTab } from '@/components/useInitialTab'
 import { todayStr } from '@/lib/date'
+import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
 import s from './interval-training.module.css'
+import {
+  type Intensity, type SchedRaceType, INTENSITY_PCT, E_FAST_PCT, VDOT_MIN, VDOT_MAX, isVdotInRange,
+  calcVDOT, getPace, KOREA_RACES, raceTiming, SCHED_DIST_M, SCHED_DEFAULT_RECORD, convertRecord, recoveryRule,
+} from './intervalUtils'
+import { paceFromVdot } from '@/lib/running'
 
-// localStorage 키 (VDOT 자동 저장)
+// localStorage 키 (VDOT 자동 저장) — 기존 키 유지(개명 시 데이터 유실)
 const STORAGE_KEY = 'youtil-interval-record-v1'
 
-// 한국 인기 마라톤·러닝 대회
-const KOREA_RACES: { name: string; month: number; distances: string }[] = [
-  { name: '서울국제마라톤',  month: 3,  distances: '풀·하프·10km' },
-  { name: '동아일보마라톤',  month: 3,  distances: '풀·하프' },
-  { name: '대구국제마라톤',  month: 4,  distances: '풀·하프' },
-  { name: '서울하프마라톤',  month: 5,  distances: '하프·10km' },
-  { name: '춘천마라톤',      month: 10, distances: '풀·하프' },
-  { name: 'JTBC서울마라톤',  month: 11, distances: '풀·하프·10km' },
-]
+// [이지·LSD] 탭 (구 /tools/sports/lsd) — 탭을 열 때만 불러와 기본 탭 번들을 키우지 않는다
+const EasyTab = dynamic(() => import('./EasyTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
-// 실제 D-day(days)와 스케줄 생성용 클램프 주수(weeks 4~16)를 분리 반환
-// — 둘을 합치면 16주 밖 대회가 전부 D-112로 보이는 버그 발생
-function raceTiming(targetMonth: number): { days: number; weeks: number } {
-  const now = new Date()
-  const year = now.getMonth() + 1 < targetMonth ? now.getFullYear() : now.getFullYear() + 1
-  const target = new Date(year, targetMonth - 1, 15)  // 대회 평균 중순
-  const days = Math.max(0, Math.round((target.getTime() - now.getTime()) / 86400000))
-  const weeks = Math.max(4, Math.min(16, Math.round(days / 7)))
-  return { days, weeks }
-}
+type TabId = 'pace' | 'yasso' | 'schedule' | 'easy'
+const TAB_IDS: readonly TabId[] = ['easy', 'pace', 'yasso', 'schedule']
 
 // ─────────────────────────────────────────────
 // 유틸
@@ -54,49 +47,20 @@ const fmtHMS = (totalSec: number): string => {
   if (m === 60) { m = 0; h += 1 }
   return `${h}:${pad(m)}:${pad(sec)}`
 }
+
+// 회복 조깅 표시 — 규칙은 intervalUtils.recoveryRule(아래 '회복 시간·거리 가이드' 표와 같은 Daniels 기준)
+function recoveryPlan(intensity: Intensity, distM: number, lapSec: number): { what: string; time: string; sec: number } | null {
+  const r = recoveryRule(intensity, distM, lapSec)
+  if (!r) return null
+  const what = r.jogM === null ? '짧은 조깅·휴식' : `${r.jogM}m 조깅`
+  const time = intensity === 'R' ? `${fmtMS(r.loSec)}~${fmtMS(r.hiSec)}` : intensity === 'I' ? `${fmtMS(r.hiSec)} 이내` : `약 ${fmtMS(r.hiSec)}`
+  return { what, time, sec: r.sec }
+}
+const recoveryText = (m: { intensity: Intensity; dist: number; recovery: string }, lapSec: number): string => {
+  const r = recoveryPlan(m.intensity, m.dist, lapSec)
+  return r ? `${r.what} (${r.time})` : m.recovery
+}
 const toSec = (m: number, sec: number, h = 0) => h * 3600 + m * 60 + sec
-
-// ─────────────────────────────────────────────
-// VDOT 계산 (Daniels formula)
-// ─────────────────────────────────────────────
-function calcVDOT(timeSec: number, distanceM: number): number {
-  if (timeSec <= 0 || distanceM <= 0) return 0
-  const t = timeSec / 60
-  const v = distanceM / t
-  const pct = 0.8 + 0.1894393 * Math.exp(-0.012778 * t) + 0.2989558 * Math.exp(-0.1932605 * t)
-  const VO2 = -4.60 + 0.182258 * v + 0.000104 * v * v
-  return VO2 / pct
-}
-
-// VDOT별 강도 페이스 (sec/km) — Jack Daniels Running Formula
-const VDOT_PACES: Record<number, { E: number; M: number; T: number; I: number; R: number }> = {
-  35: { E: 430, M: 367, T: 350, I: 310, R: 290 },
-  40: { E: 390, M: 330, T: 307, I: 279, R: 245 },
-  45: { E: 355, M: 300, T: 280, I: 253, R: 225 },
-  50: { E: 325, M: 279, T: 260, I: 235, R: 210 },
-  55: { E: 300, M: 260, T: 244, I: 220, R: 195 },
-  60: { E: 279, M: 244, T: 229, I: 207, R: 184 },
-  65: { E: 260, M: 230, T: 216, I: 195, R: 175 },
-  70: { E: 244, M: 220, T: 205, I: 185, R: 166 },
-}
-
-type Intensity = 'E' | 'M' | 'T' | 'I' | 'R'
-
-function getPace(vdot: number, intensity: Intensity): number {
-  const keys = Object.keys(VDOT_PACES).map(Number).sort((a, b) => a - b)
-  if (vdot <= keys[0]) return VDOT_PACES[keys[0]][intensity]
-  if (vdot >= keys[keys.length - 1]) return VDOT_PACES[keys[keys.length - 1]][intensity]
-  for (let i = 0; i < keys.length - 1; i++) {
-    const lo = keys[i], hi = keys[i + 1]
-    if (vdot >= lo && vdot <= hi) {
-      const t = (vdot - lo) / (hi - lo)
-      const a = VDOT_PACES[lo][intensity]
-      const b = VDOT_PACES[hi][intensity]
-      return a + (b - a) * t
-    }
-  }
-  return VDOT_PACES[keys[keys.length - 1]][intensity]
-}
 
 // 훈련 목적 → VDOT 강도 매핑
 const GOAL_INTENSITY: Record<'speed' | '5k' | '10k' | 'half' | 'marathon', Intensity> = {
@@ -122,7 +86,13 @@ const STANDARD_DISTANCES = new Set([400, 800, 1000])
 // 컴포넌트
 // ─────────────────────────────────────────────
 export default function IntervalTrainingClient() {
-  const [tab, setTab] = useState<'pace' | 'yasso' | 'schedule'>('pace')
+  const [tab, setTab] = useState<TabId>('pace')
+  // ?tab=easy 등 딥링크(구 /tools/sports/lsd 301 목적지) — 마운트 1회만 읽는다
+  useInitialTab(TAB_IDS, setTab)
+  // [이지·LSD] 탭은 처음 열 때 불러온 뒤 계속 마운트해 둔다 — 다른 탭을 다녀와도 입력값 유지
+  // (다른 탭 상태가 이 컴포넌트에 있어 전환 후에도 남는 것과 동작을 맞춤)
+  const [easyVisited, setEasyVisited] = useState(false)
+  if (tab === 'easy' && !easyVisited) setEasyVisited(true)
 
   // ── TAB 1 STATE ─────────────────────────────
   const [inputMode, setInputMode] = useState<'record' | 'target'>('record')
@@ -160,7 +130,7 @@ export default function IntervalTrainingClient() {
 
   // ── TAB 3 STATE ─────────────────────────────
   const [weeklyKm, setWeeklyKm] = useState<number>(40)
-  const [schedRaceType, setSchedRaceType] = useState<'5k' | '10k' | 'half' | 'marathon'>('10k')
+  const [schedRaceType, setSchedRaceType] = useState<SchedRaceType>('10k')
   const [schedRecord, setSchedRecord] = useState<{ min: string; sec: string }>({ min: '48', sec: '00' })
   const [weeksLeft, setWeeksLeft] = useState<number>(8)
   const [experience, setExperience] = useState<'none' | 'some' | 'regular'>('some')
@@ -183,17 +153,25 @@ export default function IntervalTrainingClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const data = JSON.parse(raw)
-        if (data.r5min) setR5min(data.r5min)
-        if (data.r5sec) setR5sec(data.r5sec)
-        if (data.r10min) setR10min(data.r10min)
-        if (data.r10sec) setR10sec(data.r10sec)
-        if (data.rHh)   setRHh(data.rHh)
-        if (data.rHmin) setRHmin(data.rHmin)
-        if (data.rHsec) setRHsec(data.rHsec)
-        if (data.recordType) setRecordType(data.recordType)
-        if (data.weeklyKm) setWeeklyKm(data.weeklyKm)
-        if (data.lastSavedAt) setLastSavedAt(data.lastSavedAt)
+        const data: unknown = JSON.parse(raw)
+        if (data && typeof data === 'object' && !Array.isArray(data)) {
+          const d = data as Record<string, unknown>
+          // 숫자 문자열(0~999)만 복원 — 손상된 값은 기본값 유지
+          const str = (v: unknown): string | null =>
+            typeof v === 'string' && /^\d{1,3}(\.\d{1,2})?$/.test(v) ? v : null
+          const r5m = str(d.r5min);   if (r5m) setR5min(r5m)
+          const r5s = str(d.r5sec);   if (r5s) setR5sec(r5s)
+          const r10m = str(d.r10min); if (r10m) setR10min(r10m)
+          const r10s = str(d.r10sec); if (r10s) setR10sec(r10s)
+          const hh = str(d.rHh);      if (hh) setRHh(hh)
+          const hm = str(d.rHmin);    if (hm) setRHmin(hm)
+          const hs = str(d.rHsec);    if (hs) setRHsec(hs)
+          if (d.recordType === '5k' || d.recordType === '10k' || d.recordType === 'half') setRecordType(d.recordType)
+          if (typeof d.weeklyKm === 'number' && Number.isFinite(d.weeklyKm) && d.weeklyKm >= 0 && d.weeklyKm <= 150) {
+            setWeeklyKm(Math.round(d.weeklyKm / 5) * 5)
+          }
+          if (typeof d.lastSavedAt === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(d.lastSavedAt)) setLastSavedAt(d.lastSavedAt)
+        }
       }
     } catch {}
     setHydrated(true)
@@ -239,9 +217,12 @@ export default function IntervalTrainingClient() {
   // ─────────────────────────────────────────────
   // 인터벌 페이스 계산 (목적별 강도 적용)
   // ─────────────────────────────────────────────
+  // 기록 모드에서 VDOT가 공식 적용 범위(20~85)를 벗어나면 페이스 대신 경고를 보여 준다
+  const vdotOutOfRange = inputMode === 'record' && vdotInfo.vdot > 0 && !isVdotInRange(vdotInfo.vdot)
   const intervalPaceSec = useMemo(() => {
     if (vdotInfo.vdot <= 0) return 0
     if (inputMode === 'target') return vdotInfo.paceFromInput
+    if (!isVdotInRange(vdotInfo.vdot)) return 0
     const intensity: Intensity = GOAL_INTENSITY[goal]
     let pace = getPace(vdotInfo.vdot, intensity)
     // 10km 기록 향상: I 페이스보다 약간 느림 (+5초)
@@ -302,8 +283,10 @@ export default function IntervalTrainingClient() {
         }
       }
       let reliability: 'low' | 'mid' | 'high' = 'low'
-      if (yReps >= 10 && variation < 5) reliability = 'high'
-      else if (yReps >= 6 && (variation < 10 || !showSplits)) reliability = 'mid'
+      const hasSplits = showSplits && validSplits.length === yReps && firstHalfAvg > 0
+      // '높은 신뢰도'는 회별 기록으로 편차를 확인했을 때만 부여
+      if (hasSplits && yReps >= 10 && variation < 5) reliability = 'high'
+      else if (yReps >= 6 && (!hasSplits || variation < 10)) reliability = 'mid'
       return {
         mode: 'A',
         predictSec,
@@ -313,7 +296,7 @@ export default function IntervalTrainingClient() {
         firstHalfAvg,
         secondHalfAvg,
         decline: secondHalfAvg - firstHalfAvg,
-        hasSplits: showSplits && validSplits.length === yReps,
+        hasSplits,
       }
     }
     // 모드 B: 목표 풀코스 → 야소 800 페이스
@@ -329,44 +312,42 @@ export default function IntervalTrainingClient() {
   const schedule = useMemo(() => {
     const recordSec = toSec(n(schedRecord.min, 0), n(schedRecord.sec, 0))
     // 입력 기록의 거리는 종목과 일치해야 VDOT가 정확 (하프/풀을 10km로 잡으면 VDOT 폭락)
-    const dist = schedRaceType === '5k' ? 5000
-      : schedRaceType === '10k' ? 10000
-      : schedRaceType === 'half' ? 21097.5
-      : 42195
+    const dist = SCHED_DIST_M[schedRaceType]
     const vdot = calcVDOT(recordSec, dist)
     // 메뉴마다 목적 강도(R/I/T/M)가 다르므로 페이스를 개별 산출 (부상 이력 시 +10%)
     const injuryMult = injuryHistory ? 1.1 : 1
     const paceOf = (it: Intensity) => (vdot > 0 ? getPace(vdot, it) * injuryMult : 0)
 
+    // recovery: 화면은 recoveryText()가 강도·랩타임으로 다시 계산한다(R·I·T). 여기 문구는 M 메뉴와 페이스가 없을 때의 대체값
     type Menu = { name: string; goal: string; intensity: Intensity; recovery: string; dist: number; reps: number }
     const menuPool: Record<typeof schedRaceType, Menu[]> = {
       '5k': [
-        { name: '400m × 6회',  goal: '스피드',     intensity: 'R', recovery: '200m 조깅', dist: 400, reps: 6 },
+        { name: '400m × 6회',  goal: '스피드',     intensity: 'R', recovery: '400m 조깅', dist: 400, reps: 6 },
         { name: '600m × 5회',  goal: '5km 페이스', intensity: 'I', recovery: '300m 조깅', dist: 600, reps: 5 },
         { name: '800m × 5회',  goal: '5km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 5 },
-        { name: '1km × 4회',   goal: 'V̇O2',       intensity: 'I', recovery: '400m 조깅', dist: 1000, reps: 4 },
-        { name: '400m × 8회',  goal: '스피드',     intensity: 'R', recovery: '200m 조깅', dist: 400, reps: 8 },
+        { name: '1km × 4회',   goal: 'V̇O2',       intensity: 'I', recovery: '500m 조깅', dist: 1000, reps: 4 },
+        { name: '400m × 8회',  goal: '스피드',     intensity: 'R', recovery: '400m 조깅', dist: 400, reps: 8 },
       ],
       '10k': [
         { name: '800m × 5회',  goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 5 },
         { name: '800m × 6회',  goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 6 },
-        { name: '1km × 5회',   goal: '10km 페이스', intensity: 'I', recovery: '400m 조깅', dist: 1000, reps: 5 },
-        { name: '1.6km × 3회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 3 },
-        { name: '1.2km × 4회', goal: 'V̇O2',        intensity: 'I', recovery: '400m 조깅', dist: 1200, reps: 4 },
-        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 4 },
+        { name: '1km × 5회',   goal: '10km 페이스', intensity: 'I', recovery: '500m 조깅', dist: 1000, reps: 5 },
+        { name: '1.6km × 3회', goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 3 },
+        { name: '1.2km × 4회', goal: 'V̇O2',        intensity: 'I', recovery: '600m 조깅', dist: 1200, reps: 4 },
+        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 4 },
       ],
       half: [
-        { name: '1km × 6회',   goal: '역치',        intensity: 'T', recovery: '400m 조깅', dist: 1000, reps: 6 },
-        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 4 },
-        { name: '2km × 3회',   goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 2000, reps: 3 },
-        { name: '3km × 2회',   goal: '하프 페이스', intensity: 'T', recovery: '800m 조깅', dist: 3000, reps: 2 },
-        { name: '1.6km × 5회', goal: '역치',        intensity: 'T', recovery: '600m 조깅', dist: 1600, reps: 5 },
+        { name: '1km × 6회',   goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1000, reps: 6 },
+        { name: '1.6km × 4회', goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 4 },
+        { name: '2km × 3회',   goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 2000, reps: 3 },
+        { name: '3km × 2회',   goal: '하프 페이스', intensity: 'T', recovery: '짧은 조깅·휴식', dist: 3000, reps: 2 },
+        { name: '1.6km × 5회', goal: '역치',        intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 5 },
       ],
       marathon: [
         { name: '800m × 6회 (야소)',   goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 6 },
         { name: '800m × 8회 (야소)',   goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 8 },
         { name: '800m × 10회 (야소)',  goal: '야소 800', intensity: 'I', recovery: '400m 조깅', dist: 800, reps: 10 },
-        { name: '1.6km × 4회',         goal: '역치',     intensity: 'T', recovery: '800m 조깅', dist: 1600, reps: 4 },
+        { name: '1.6km × 4회',         goal: '역치',     intensity: 'T', recovery: '짧은 조깅·휴식', dist: 1600, reps: 4 },
         { name: '2km × 3회 (M 페이스)', goal: 'M 페이스', intensity: 'M', recovery: '600m 조깅', dist: 2000, reps: 3 },
       ],
     }
@@ -460,7 +441,7 @@ export default function IntervalTrainingClient() {
     try {
       await navigator.clipboard.writeText(value)
       setCopiedKey(label)
-      setTimeout(() => setCopiedKey(''), 1200)
+      setTimeout(() => setCopiedKey(''), 1500)
     } catch {}
   }
 
@@ -473,7 +454,7 @@ export default function IntervalTrainingClient() {
       text = [
         `[인터벌 페이스]`,
         headline,
-        `1km 인터벌 페이스: ${fmtMS(intervalPaceSec)}/km`,
+        `1km ${inputMode === 'record' ? '인터벌' : '목표'} 페이스: ${fmtMS(intervalPaceSec)}/km`,
         ``,
         ...lapRows.map(r => `· ${r.distance}m: ${fmtMS(r.lapSec)} (${r.laps}바퀴)`),
         ``,
@@ -511,7 +492,7 @@ export default function IntervalTrainingClient() {
     try {
       await navigator.clipboard.writeText(text)
       setResultCopied(true)
-      setTimeout(() => setResultCopied(false), 1200)
+      setTimeout(() => setResultCopied(false), 1500)
     } catch {}
   }
 
@@ -520,28 +501,21 @@ export default function IntervalTrainingClient() {
   // ─────────────────────────────────────────────
   return (
     <div className={s.wrap}>
-      {/* 면책 */}
-      <Disclaimer
-        variant="safety"
-        related={[
-          { href: '/tools/sports/race-predictor', label: '마라톤 예측' },
-          { href: '/tools/sports/pace', label: '러닝 페이스' },
-          { href: '/tools/sports/one-rm', label: '1RM 계산기' }
-        ]}
-      >
-        참고용 훈련 가이드입니다.
-      </Disclaimer>
+      {/* 면책은 page.tsx 끝의 <Disclaimer variant="safety">(ToolPage가 페이지 맨 끝으로 옮김) — 계산기 위에 두면 모바일 첫 화면 입력칸이 밀린다 */}
 
       {/* 탭 */}
-      <div className={s.tabs}>
-        <button className={`${s.tabBtn} ${tab === 'pace' ? s.tabActive : ''}`} onClick={() => setTab('pace')}>
+      <div className={s.tabs} role="tablist" aria-label="인터벌 계산 기능">
+        <button type="button" role="tab" aria-selected={tab === 'pace'} className={`${s.tabBtn} ${tab === 'pace' ? s.tabActive : ''}`} onClick={() => setTab('pace')}>
           인터벌 페이스
         </button>
-        <button className={`${s.tabBtn} ${tab === 'yasso' ? s.tabActive : ''}`} onClick={() => setTab('yasso')}>
+        <button type="button" role="tab" aria-selected={tab === 'yasso'} className={`${s.tabBtn} ${tab === 'yasso' ? s.tabActive : ''}`} onClick={() => setTab('yasso')}>
           야소 800
         </button>
-        <button className={`${s.tabBtn} ${tab === 'schedule' ? s.tabActive : ''}`} onClick={() => setTab('schedule')}>
+        <button type="button" role="tab" aria-selected={tab === 'schedule'} className={`${s.tabBtn} ${tab === 'schedule' ? s.tabActive : ''}`} onClick={() => setTab('schedule')}>
           훈련 스케줄
+        </button>
+        <button type="button" role="tab" aria-selected={tab === 'easy'} className={`${s.tabBtn} ${tab === 'easy' ? s.tabActive : ''}`} onClick={() => setTab('easy')}>
+          이지·LSD
         </button>
       </div>
 
@@ -555,17 +529,17 @@ export default function IntervalTrainingClient() {
               <span className={s.cardLabelHint}>VDOT 자동 계산</span>
             </div>
             <div className={s.modeToggle}>
-              <button className={`${s.modeBtn} ${s.modeRecord} ${inputMode === 'record' ? s.modeActive : ''}`} onClick={() => setInputMode('record')}>최근 기록</button>
-              <button className={`${s.modeBtn} ${s.modeTarget} ${inputMode === 'target' ? s.modeActive : ''}`} onClick={() => setInputMode('target')}>목표 기록</button>
+              <button type="button" aria-pressed={inputMode === 'record'} className={`${s.modeBtn} ${s.modeRecord} ${inputMode === 'record' ? s.modeActive : ''}`} onClick={() => setInputMode('record')}>최근 기록</button>
+              <button type="button" aria-pressed={inputMode === 'target'} className={`${s.modeBtn} ${s.modeTarget} ${inputMode === 'target' ? s.modeActive : ''}`} onClick={() => setInputMode('target')}>목표 기록</button>
             </div>
 
             {inputMode === 'record' && (
               <>
                 <p className={s.modeSubLabel}>현재 본인의 5km·10km·하프 기록을 입력하세요</p>
                 <div className={s.recordTabs}>
-                  <button className={`${s.recordTabBtn} ${recordType === '5k'   ? s.recordTabActive : ''}`} onClick={() => setRecordType('5k')}>5km</button>
-                  <button className={`${s.recordTabBtn} ${recordType === '10k'  ? s.recordTabActive : ''}`} onClick={() => setRecordType('10k')}>10km</button>
-                  <button className={`${s.recordTabBtn} ${recordType === 'half' ? s.recordTabActive : ''}`} onClick={() => setRecordType('half')}>하프</button>
+                  <button type="button" aria-pressed={recordType === '5k'} className={`${s.recordTabBtn} ${recordType === '5k'   ? s.recordTabActive : ''}`} onClick={() => setRecordType('5k')}>5km</button>
+                  <button type="button" aria-pressed={recordType === '10k'} className={`${s.recordTabBtn} ${recordType === '10k'  ? s.recordTabActive : ''}`} onClick={() => setRecordType('10k')}>10km</button>
+                  <button type="button" aria-pressed={recordType === 'half'} className={`${s.recordTabBtn} ${recordType === 'half' ? s.recordTabActive : ''}`} onClick={() => setRecordType('half')}>하프</button>
                 </div>
                 {recordType === '5k' && (
                   <div className={s.timeInputRow}>
@@ -630,6 +604,7 @@ export default function IntervalTrainingClient() {
                     className={`${s.goalBtn} ${g.cls} ${goal === g.key ? s.goalActive : ''}`}
                     onClick={() => setGoal(g.key)}
                     type="button"
+                    aria-pressed={goal === g.key}
                   >
                     {goal === g.key && <span className={s.goalCheck}>✓</span>}
                     <span className={s.goalIcon}>{g.icon}</span>
@@ -640,7 +615,7 @@ export default function IntervalTrainingClient() {
               </div>
               {(goal === 'marathon' || goal === 'half') && (
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                  💡 {goal === 'marathon' ? '풀코스' : '하프'} 목적의 인터벌 페이스는 <strong style={{ color: 'var(--text)' }}>V̇O₂max·역치를 자극하는 보조 훈련</strong> 기준입니다. 실제 대회에서 유지할 목표 페이스(M)는 이보다 느립니다 — 아래 [E·M·T·I·R] 표를 참고하세요.
+                  💡 {goal === 'marathon' ? '풀코스' : '하프'} 목적의 인터벌 페이스는 <strong style={{ color: 'var(--text)' }}>V̇O₂max·역치를 자극하는 보조 훈련</strong> 기준입니다. 실제 대회에서 유지할 목표 페이스(M)는 이보다 느립니다. 아래 결과의 강도별 페이스 표에서 M 페이스를 확인하세요.
                 </p>
               )}
             </div>
@@ -669,9 +644,20 @@ export default function IntervalTrainingClient() {
 
           {/* HERO */}
           <div role="status">
+            {vdotOutOfRange && (
+              <div className={s.warnCard}>
+                <p className={s.warnTitle}>⚠️ 기록을 확인해 주세요</p>
+                <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
+                  입력한 기록의 VDOT는 {vdotInfo.vdot.toFixed(1)}로, 페이스를 계산하는 범위(VDOT {VDOT_MIN}~{VDOT_MAX})를 벗어납니다.
+                  {vdotInfo.vdot < VDOT_MIN
+                    ? ' 5km를 43분보다 느리게 달리는 단계라면 인터벌보다 편한 달리기로 기초를 먼저 다지는 편이 안전합니다.'
+                    : ' 분·초 입력이나 기록 거리(5km·10km·하프)가 맞는지 확인하세요.'}
+                </p>
+              </div>
+            )}
             {intervalPaceSec > 0 && (
               <div className={s.hero}>
-                <p className={s.heroLead}>인터벌 페이스</p>
+                <p className={s.heroLead}>{inputMode === 'record' ? '인터벌 페이스' : '목표 페이스'}</p>
                 <div>
                   <span className={s.heroNum}>{fmtMS(intervalPaceSec)}</span>
                   <span className={s.heroUnit}>/km</span>
@@ -692,6 +678,42 @@ export default function IntervalTrainingClient() {
               </div>
             )}
           </div>
+
+          {/* 강도별 페이스 (E·M·T·I·R) */}
+          {inputMode === 'record' && intervalPaceSec > 0 && (
+            <div className={s.card}>
+              <div className={s.cardLabel}>
+                <span>강도별 페이스</span>
+                <span className={s.cardLabelHint}>VDOT {vdotInfo.vdot.toFixed(1)} 기준</span>
+              </div>
+              <table className={s.recoveryTable}>
+                <thead>
+                  <tr>
+                    <th scope="col">강도</th>
+                    <th scope="col">1km 페이스</th>
+                    <th scope="col">400m</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>E 이지</td>
+                    <td>{fmtMS(paceFromVdot(vdotInfo.vdot, E_FAST_PCT))}~{fmtMS(getPace(vdotInfo.vdot, 'E'))}</td>
+                    <td>—</td>
+                  </tr>
+                  {(['M', 'T', 'I', 'R'] as const).map(k => (
+                    <tr key={k}>
+                      <td>{k} {k === 'M' ? '마라톤' : k === 'T' ? '역치' : k === 'I' ? '인터벌' : '반복주'}</td>
+                      <td>{fmtMS(getPace(vdotInfo.vdot, k))}</td>
+                      <td>{fmtMS(getPace(vdotInfo.vdot, k) * 0.4)}</td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+                ※ Daniels 공식의 %VO₂max 강도(E {Math.round(INTENSITY_PCT.E * 100)}~{Math.round(E_FAST_PCT * 100)}%, M {Math.round(INTENSITY_PCT.M * 100)}%, T {Math.round(INTENSITY_PCT.T * 100)}%, I {Math.round(INTENSITY_PCT.I * 100)}%, R {Math.round(INTENSITY_PCT.R * 100)}%)로 계산했습니다.
+              </p>
+            </div>
+          )}
 
           {/* 거리별 랩타임 */}
           {lapRows.length > 0 && intervalPaceSec > 0 && (
@@ -724,7 +746,7 @@ export default function IntervalTrainingClient() {
                       <tr key={r.distance} className={STANDARD_DISTANCES.has(r.distance) ? s.standardRow : ''}>
                         <td>{r.distance >= 1000 ? `${r.distance / 1000}km` : `${r.distance}m`}</td>
                         <td>{time}</td>
-                        <td style={{ color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{lap400Str}</td>
+                        <td style={{ color: '#0891B2', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{lap400Str}</td>
                         <td>{r.laps}바퀴</td>
                         <td>
                           <button
@@ -779,17 +801,25 @@ export default function IntervalTrainingClient() {
                 const lapSec = (intervalPaceSec * customDist) / 1000
                 const distLabel = customDist >= 1000 ? `${customDist / 1000}km` : `${customDist}m`
                 const paceKm = fmtMS(intervalPaceSec)
-                const recoveryDist = customDist <= 400 ? 200 : customDist <= 1200 ? 400 : 600
-                const recoverySec = customDist <= 400 ? 75 : customDist <= 1200 ? 150 : 200
                 const recoveryReps = Math.max(0, customReps - 1)
-                const intensityLabel = customDist <= 400 ? '🔴 R · 스피드 (반복주)'
-                  : customDist <= 1200 ? '🟡 I · V̇O₂max (인터벌)'
+                // 강도 표시는 실제로 쓰는 페이스를 따른다 — 기록 모드는 훈련 목적의 강도(R·I·T),
+                // 목표 페이스 모드는 강도를 알 수 없어 거리로 어림한다(예전엔 항상 거리로 정해 5km 목적 400m가 I 페이스인데 'R'로 표시됨)
+                const sessionIntensity: Intensity = inputMode === 'record'
+                  ? GOAL_INTENSITY[goal]
+                  : customDist <= 400 ? 'R' : customDist <= 1200 ? 'I' : 'T'
+                const intensityLabel = sessionIntensity === 'R' ? '🔴 R · 스피드 (반복주)'
+                  : sessionIntensity === 'I' ? '🟡 I · V̇O₂max (인터벌)'
                   : '🔵 T · 역치 (템포)'
+                // 회복은 강도 규칙을 따른다(예전엔 거리만 보고 200/400/600m로 잡아 R·T 회복이 아래 표와 어긋남)
+                const rec = recoveryPlan(sessionIntensity, customDist, lapSec) ?? { what: '가벼운 조깅', time: '', sec: 0 }
+                // Daniels: R은 한 번 2분 이내, I는 3~5분 반복이 기준 — 넘으면 거리를 줄이라는 안내
+                const tooLong = sessionIntensity === 'R' ? lapSec > 120 : sessionIntensity === 'I' ? lapSec > 300 : false
                 const warmupSec = 9 * 60   // 1.5km 가벼운 조깅
                 const cooldownSec = 9 * 60
-                const totalSec = lapSec * customReps + recoverySec * recoveryReps + warmupSec + cooldownSec
+                const totalSec = lapSec * customReps + rec.sec * recoveryReps + warmupSec + cooldownSec
                 const fastKm = (customDist * customReps) / 1000
                 return (
+                  <>
                   <div className={s.sessionPlan}>
                     <div className={s.sessionRow}>
                       <span className={s.sessionStage}>워밍업</span>
@@ -808,10 +838,10 @@ export default function IntervalTrainingClient() {
                       <div className={s.sessionRow}>
                         <span className={s.sessionStage}>회복 (조깅)</span>
                         <span className={s.sessionDetail}>
-                          <strong>{recoveryDist}m</strong>
+                          <strong>{rec.what}</strong>
                           <span className={s.sessionSep}>×</span>
                           <strong>{recoveryReps}회</strong>
-                          <span className={s.sessionPaceMuted}>천천히 ({fmtMS(recoverySec)})</span>
+                          {rec.time && <span className={s.sessionPaceMuted}>({rec.time})</span>}
                         </span>
                       </div>
                     )}
@@ -833,6 +863,14 @@ export default function IntervalTrainingClient() {
                       <span className={s.sessionDetail}>{intensityLabel}</span>
                     </div>
                   </div>
+                  {tooLong && (
+                    <p className={s.recoHint}>
+                      ※ {sessionIntensity === 'R'
+                        ? `R 강도는 한 번에 2분 이내(보통 200~400m) 반복이 기준입니다. ${distLabel} 1회가 ${fmtMS(lapSec)}라 R로 뛰기엔 길어요 — 거리를 줄이세요.`
+                        : `I 강도는 한 번에 3~5분 반복이 기준입니다. ${distLabel} 1회가 ${fmtMS(lapSec)}로 5분을 넘으니 거리를 줄이세요.`}
+                    </p>
+                  )}
+                  </>
                 )
               })()}
               <p className={s.recoHint}>
@@ -857,9 +895,10 @@ export default function IntervalTrainingClient() {
                   </tr>
                 </thead>
                 <tbody>
-                  <tr><td>R 페이스</td><td>운동 시간의 1.5~2배</td><td>운동 거리의 1배</td></tr>
-                  <tr><td>I 페이스</td><td>운동 시간과 동일</td><td>운동 거리의 50%</td></tr>
-                  <tr><td>T 페이스</td><td>운동 시간의 25~50%</td><td>운동 거리의 25%</td></tr>
+                  {/* Daniels' Running Formula 기준 — R 2~3배(또는 같은 거리 조깅) · I 같거나 짧게 · T 크루즈 인터벌 5분당 1분 */}
+                  <tr><td>R 페이스</td><td>운동 시간의 2~3배</td><td>운동 거리와 같게</td></tr>
+                  <tr><td>I 페이스</td><td>운동 시간과 같거나 짧게</td><td>운동 거리의 50% 안팎</td></tr>
+                  <tr><td>T 페이스</td><td>5분 달리기당 약 1분</td><td>짧은 조깅·제자리 휴식</td></tr>
                 </tbody>
               </table>
             </div>
@@ -869,7 +908,7 @@ export default function IntervalTrainingClient() {
           <div className={s.warnCard}>
             <p className={s.warnTitle}>⚠️ 안전한 인터벌 훈련을 위해</p>
             <ul className={s.warnList}>
-              <li>주간 거리의 10~15% 이상을 고강도로 X</li>
+              <li>1회 세션의 빠른 구간은 주간 거리의 T 10%·I 8%·R 5% 이내</li>
               <li>인터벌은 보통 주 1~2회까지 (초보 주 1회)</li>
               <li>전날 장거리주·고강도 후에는 피하기</li>
               <li>통증·이상 증상 시 즉시 중단</li>
@@ -894,8 +933,8 @@ export default function IntervalTrainingClient() {
               <span className={s.cardLabelHint}>기록 → 예측 / 목표 → 페이스 역산</span>
             </div>
             <div className={s.modeToggle}>
-              <button className={`${s.modeBtn} ${s.modeRecord} ${yassoMode === 'A' ? s.modeActive : ''}`} onClick={() => setYassoMode('A')}>A. 800m 기록 → 풀코스 예측</button>
-              <button className={`${s.modeBtn} ${s.modeTarget} ${yassoMode === 'B' ? s.modeActive : ''}`} onClick={() => setYassoMode('B')}>B. 목표 풀코스 → 야소 페이스</button>
+              <button type="button" aria-pressed={yassoMode === 'A'} className={`${s.modeBtn} ${s.modeRecord} ${yassoMode === 'A' ? s.modeActive : ''}`} onClick={() => setYassoMode('A')}>A. 800m 기록 → 풀코스 예측</button>
+              <button type="button" aria-pressed={yassoMode === 'B'} className={`${s.modeBtn} ${s.modeTarget} ${yassoMode === 'B' ? s.modeActive : ''}`} onClick={() => setYassoMode('B')}>B. 목표 풀코스 → 야소 페이스</button>
             </div>
 
             {yassoMode === 'A' && (
@@ -966,6 +1005,7 @@ export default function IntervalTrainingClient() {
           </div>
 
           {/* HERO */}
+          <div role="status">
           {yassoCalc.mode === 'A' && yassoCalc.avg800 > 0 && (
             <div className={s.hero}>
               <p className={s.heroLead}>야소 800 풀코스 예측</p>
@@ -978,6 +1018,9 @@ export default function IntervalTrainingClient() {
               <span className={`${s.relBadge} ${yassoCalc.reliability === 'high' ? s.relHigh : yassoCalc.reliability === 'mid' ? s.relMid : s.relLow}`}>
                 {yassoCalc.reliability === 'high' ? '🌟 높은 신뢰도' : yassoCalc.reliability === 'mid' ? '✅ 일반적 신뢰도' : '🔶 참고 수준 (안정성 부족)'}
               </span>
+              {!yassoCalc.hasSplits && yReps >= 10 && (
+                <p className={s.heroSub} style={{ marginTop: 8 }}>회별 기록을 입력하면 편차를 확인해 신뢰도를 더 정확히 판정합니다.</p>
+              )}
             </div>
           )}
 
@@ -993,6 +1036,7 @@ export default function IntervalTrainingClient() {
               </p>
             </div>
           )}
+          </div>
 
           {/* 후반 저하 분석 */}
           {yassoCalc.mode === 'A' && yassoCalc.hasSplits && yassoCalc.firstHalfAvg > 0 && (
@@ -1078,7 +1122,7 @@ export default function IntervalTrainingClient() {
                 </tbody>
               </table>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                목표 페이스: <strong style={{ color: '#A16207', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복 400m 조깅 (2:30 이내)
+                목표 페이스: <strong style={{ color: '#A16207', fontFamily: 'var(--font-sans)' }}>{fmtMS(yassoCalc.yassoSec)}/800m</strong>, 회복: 같은 시간({fmtMS(yassoCalc.yassoSec)}) 조깅
               </p>
             </div>
           )}
@@ -1100,24 +1144,32 @@ export default function IntervalTrainingClient() {
             </div>
             <div className={s.raceGrid}>
               {KOREA_RACES.map(race => {
-                const { days, weeks } = raceTiming(race.month)
+                const { date, days, weeks } = raceTiming(race.rule)
                 return (
                   <button key={race.name} type="button"
                     className={s.raceBtn}
                     onClick={() => {
                       setWeeksLeft(weeks)  // 스케줄은 4~16주 클램프, 표시는 실제 D-day
                       // 자동으로 풀 또는 하프 선택
-                      if (race.distances.includes('풀')) setSchedRaceType('marathon')
-                      else if (race.distances.includes('하프')) setSchedRaceType('half')
-                      else setSchedRaceType('10k')
+                      const nextType: SchedRaceType = race.distances.includes('풀') ? 'marathon'
+                        : race.distances.includes('하프') ? 'half' : '10k'
+                      if (nextType !== schedRaceType) {
+                        // 종목만 바꾸면 기존 기록(예: 10km 48:00)을 풀 기록으로 읽어 VDOT가 폭증하므로
+                        // 같은 VDOT의 새 종목 환산 기록으로 함께 바꾼다
+                        setSchedRecord(convertRecord(schedule.vdot, nextType))
+                        setSchedRaceType(nextType)
+                      }
                     }}>
-                    <span className={s.raceMonth}>{race.month}월</span>
+                    <span className={s.raceMonth}>{date.getMonth() + 1}월 {date.getDate()}일경</span>
                     <span className={s.raceName}>{race.name}</span>
-                    <span className={s.raceMeta}>{race.distances} · D-{days}</span>
+                    <span className={s.raceMeta}>{race.distances} · {days === 0 ? 'D-day' : `D-${days}`}</span>
                   </button>
                 )
               })}
             </div>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+              ※ 개최일은 최근 개최 요일을 기준으로 추정한 날짜라 실제와 다를 수 있으니 공식 공지를 확인하세요. 대회를 고르면 입력해 둔 기록이 같은 실력(VDOT)의 해당 종목 환산 기록으로 바뀝니다.
+            </p>
           </div>
 
           <div className={s.card}>
@@ -1133,10 +1185,10 @@ export default function IntervalTrainingClient() {
             <div style={{ marginTop: 14 }}>
               <span className={s.subLabel}>최근 기록</span>
               <div className={s.recordTabs}>
-                <button className={`${s.recordTabBtn} ${schedRaceType === '5k'   ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('5k'); setSchedRecord({ min: '22', sec: '30' }) }}>5km</button>
-                <button className={`${s.recordTabBtn} ${schedRaceType === '10k'  ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('10k'); setSchedRecord({ min: '48', sec: '00' }) }}>10km</button>
-                <button className={`${s.recordTabBtn} ${schedRaceType === 'half' ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('half'); setSchedRecord({ min: '105', sec: '00' }) }}>하프</button>
-                <button className={`${s.recordTabBtn} ${schedRaceType === 'marathon' ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('marathon'); setSchedRecord({ min: '210', sec: '00' }) }}>풀</button>
+                <button type="button" aria-pressed={schedRaceType === '5k'} className={`${s.recordTabBtn} ${schedRaceType === '5k'   ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('5k'); setSchedRecord(SCHED_DEFAULT_RECORD['5k']) }}>5km</button>
+                <button type="button" aria-pressed={schedRaceType === '10k'} className={`${s.recordTabBtn} ${schedRaceType === '10k'  ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('10k'); setSchedRecord(SCHED_DEFAULT_RECORD['10k']) }}>10km</button>
+                <button type="button" aria-pressed={schedRaceType === 'half'} className={`${s.recordTabBtn} ${schedRaceType === 'half' ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('half'); setSchedRecord(SCHED_DEFAULT_RECORD.half) }}>하프</button>
+                <button type="button" aria-pressed={schedRaceType === 'marathon'} className={`${s.recordTabBtn} ${schedRaceType === 'marathon' ? s.recordTabActive : ''}`} onClick={() => { setSchedRaceType('marathon'); setSchedRecord(SCHED_DEFAULT_RECORD.marathon) }}>풀</button>
               </div>
               <div className={s.timeInputRow}>
                 <input className={s.timeInput} aria-label="최근 기록 분" type="number" inputMode="numeric" min="0" value={schedRecord.min} onChange={e => setSchedRecord(r => ({ ...r, min: e.target.value }))} />
@@ -1156,9 +1208,9 @@ export default function IntervalTrainingClient() {
             <div style={{ marginTop: 14 }}>
               <span className={s.subLabel}>인터벌 경험</span>
               <div className={s.recordTabs}>
-                <button className={`${s.recordTabBtn} ${experience === 'none'    ? s.recordTabActive : ''}`} onClick={() => setExperience('none')}>없음</button>
-                <button className={`${s.recordTabBtn} ${experience === 'some'    ? s.recordTabActive : ''}`} onClick={() => setExperience('some')}>조금</button>
-                <button className={`${s.recordTabBtn} ${experience === 'regular' ? s.recordTabActive : ''}`} onClick={() => setExperience('regular')}>꾸준히</button>
+                <button type="button" aria-pressed={experience === 'none'} className={`${s.recordTabBtn} ${experience === 'none'    ? s.recordTabActive : ''}`} onClick={() => setExperience('none')}>없음</button>
+                <button type="button" aria-pressed={experience === 'some'} className={`${s.recordTabBtn} ${experience === 'some'    ? s.recordTabActive : ''}`} onClick={() => setExperience('some')}>조금</button>
+                <button type="button" aria-pressed={experience === 'regular'} className={`${s.recordTabBtn} ${experience === 'regular' ? s.recordTabActive : ''}`} onClick={() => setExperience('regular')}>꾸준히</button>
               </div>
             </div>
 
@@ -1176,14 +1228,23 @@ export default function IntervalTrainingClient() {
             <div style={{ marginTop: 14 }}>
               <span className={s.subLabel}>주당 인터벌 횟수</span>
               <div className={s.modeToggle}>
-                <button className={`${s.modeBtn} ${s.modeRecord} ${intervalsPerWeek === 1 ? s.modeActive : ''}`} onClick={() => setIntervalsPerWeek(1)}>주 1회 (안전)</button>
-                <button className={`${s.modeBtn} ${s.modeTarget} ${intervalsPerWeek === 2 ? s.modeActive : ''}`} onClick={() => setIntervalsPerWeek(2)}>주 2회 (도전)</button>
+                <button type="button" aria-pressed={intervalsPerWeek === 1} className={`${s.modeBtn} ${s.modeRecord} ${intervalsPerWeek === 1 ? s.modeActive : ''}`} onClick={() => setIntervalsPerWeek(1)}>주 1회 (안전)</button>
+                <button type="button" aria-pressed={intervalsPerWeek === 2} className={`${s.modeBtn} ${s.modeTarget} ${intervalsPerWeek === 2 ? s.modeActive : ''}`} onClick={() => setIntervalsPerWeek(2)}>주 2회 (도전)</button>
               </div>
             </div>
           </div>
 
+          {schedule.vdot > 0 && !isVdotInRange(schedule.vdot) && (
+            <div className={s.warnCard} role="status">
+              <p className={s.warnTitle}>⚠️ 기록을 확인해 주세요</p>
+              <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
+                입력한 기록의 VDOT는 {schedule.vdot.toFixed(1)}로, 스케줄을 만드는 범위(VDOT {VDOT_MIN}~{VDOT_MAX})를 벗어납니다. 기록이 선택한 종목(5km·10km·하프·풀)의 기록인지, 분·초가 맞는지 확인하세요.
+              </p>
+            </div>
+          )}
+
           {/* 스케줄 표 (확장: 6컬럼) */}
-          {schedule.weeks.length > 0 && schedule.vdot > 0 && (
+          {schedule.weeks.length > 0 && isVdotInRange(schedule.vdot) && (
             <div className={s.card}>
               <div className={s.cardLabel}>
                 <span>{weeksLeft}주 인터벌 스케줄</span>
@@ -1222,16 +1283,16 @@ export default function IntervalTrainingClient() {
                         '🟠'
                       return (
                         <tr key={w.week}>
-                          <td style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)' }}>{w.week}주차</td>
+                          <td style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)' }}>{w.week}주차</td>
                           <td style={{ color: 'var(--text)', fontSize: 13, fontWeight: 500 }}>
                             {w.menu1.name}
                             {w.menu2 && <><br /><span style={{ fontSize: 11, color: 'var(--muted)' }}>+ {w.menu2.name}</span></>}
                           </td>
-                          <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
-                            {fmtMS(lapSec)}<span style={{ fontSize: 10, color: 'var(--muted)', marginLeft: 2 }}>/{distLabel}</span>
+                          <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--accent)', fontSize: 13 }}>
+                            {fmtMS(lapSec)}<span style={{ fontSize: 11, color: 'var(--muted)', marginLeft: 2 }}>/{distLabel}</span>
                           </td>
-                          <td style={{ color: 'var(--muted)', fontSize: 12 }}>{w.menu1.recovery}</td>
-                          <td style={{ textAlign: 'right', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>
+                          <td style={{ color: 'var(--muted)', fontSize: 12 }}>{recoveryText(w.menu1, lapSec)}</td>
+                          <td style={{ textAlign: 'right', fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)', fontSize: 13 }}>
                             {totalKm.toFixed(1)}km
                           </td>
                           <td style={{ textAlign: 'center' }}>
@@ -1249,7 +1310,7 @@ export default function IntervalTrainingClient() {
           )}
 
           {/* 모바일 카드 뷰 (xs 화면 전용) */}
-          {schedule.weeks.length > 0 && schedule.vdot > 0 && (
+          {schedule.weeks.length > 0 && isVdotInRange(schedule.vdot) && (
             <div className={s.scheduleCardsMobile}>
               {schedule.weeks.map(w => {
                 const lapSec = (w.pace1 * w.menu1.dist) / 1000
@@ -1281,7 +1342,7 @@ export default function IntervalTrainingClient() {
                       <div><strong>{w.menu1.name}</strong>{w.menu2 && <span style={{ color: 'var(--muted)', fontSize: 11 }}> · + {w.menu2.name}</span>}</div>
                       <div className={s.weekCardMeta}>
                         <span>페이스: <strong style={{ color: 'var(--accent)' }}>{fmtMS(lapSec)}/{distLabel}</strong></span>
-                        <span>회복: {w.menu1.recovery}</span>
+                        <span>회복: {recoveryText(w.menu1, lapSec)}</span>
                         <span>총: <strong>{totalKm.toFixed(1)}km</strong></span>
                       </div>
                     </div>
@@ -1324,6 +1385,14 @@ export default function IntervalTrainingClient() {
             {resultCopied ? '✓ 복사됨' : '결과 복사하기'}
           </button>
         </>
+      )}
+
+      {/* ──────────── TAB 4: 이지·LSD (구 /tools/sports/lsd) ──────────── */}
+      {/* 비활성 시 hidden(display:none) → 접근성 트리에서도 빠져 role="status"는 활성 탭 1개만 노출 */}
+      {easyVisited && (
+        <div hidden={tab !== 'easy'}>
+          <EasyTab />
+        </div>
       )}
     </div>
   )

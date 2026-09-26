@@ -28,8 +28,8 @@ const UNIT_OPTIONS: UnitKey[] = ['g', 'kg', 'ml', 'l', 'tsp', 'tbsp', 'cup', 'cu
 
 // 양념 강도 — 인분 늘릴 때 양념 비율 (낮을수록 짠맛 덜함)
 const SEASONING_LEVELS: { id: 'mild' | 'standard' | 'strong'; label: string; ratio: number; hint: string }[] = [
-  { id: 'mild',     label: '간 약하게', ratio: 75,  hint: '양념 25% 줄임' },
-  { id: 'standard', label: '표준',      ratio: 85,  hint: '양념 15% 줄임 · 권장' },
+  { id: 'mild',     label: '간 약하게', ratio: 75,  hint: '늘어나는 양념 25% 줄임' },
+  { id: 'standard', label: '표준',      ratio: 85,  hint: '늘어나는 양념 15% 줄임 · 권장' },
   { id: 'strong',   label: '간 진하게', ratio: 100, hint: '그대로 배율 적용' },
 ]
 
@@ -177,9 +177,9 @@ function ScaleTab() {
       <div className={s.card}>
         <div className={s.servingsGrid}>
           <div>
-            <span className={s.subLabel}>레시피 기준</span>
+            <label className={s.subLabel} htmlFor="recipe-base-people">레시피 기준</label>
             <div className={s.inputRow}>
-              <input className={s.servingInput} type="number" inputMode="numeric" min={0.5} max={50}
+              <input id="recipe-base-people" className={s.servingInput} type="number" inputMode="decimal" min={0.5} max={50}
                 value={basePeople} onChange={e => setBasePeople(e.target.value)} />
               <span className={s.unitSuffix}>인분</span>
             </div>
@@ -193,9 +193,9 @@ function ScaleTab() {
           </div>
           <div className={s.arrow}>→</div>
           <div>
-            <span className={s.subLabel}>목표 인분</span>
+            <label className={s.subLabel} htmlFor="recipe-target-people">목표 인분</label>
             <div className={s.inputRow}>
-              <input className={s.servingInput} type="number" inputMode="numeric" min={0.5} max={50}
+              <input id="recipe-target-people" className={s.servingInput} type="number" inputMode="decimal" min={0.5} max={50}
                 value={targetPeople} onChange={e => setTargetPeople(e.target.value)} />
               <span className={s.unitSuffix}>인분</span>
             </div>
@@ -267,11 +267,13 @@ function ScaleTab() {
             return (
               <div key={ing.id} className={`${s.ingredientRow} ${seasoning ? s.ingSeasoning : ''}`}>
                 <input className={s.nameInput} type="text" placeholder={`재료 ${idx + 1}`}
+                  aria-label={`재료 ${idx + 1} 이름`}
                   value={ing.name} onChange={e => updateIng(ing.id, { name: e.target.value })}
                   list="recipe-ingredient-suggestions" />
                 <input className={s.amountInput} type="number" inputMode="decimal" placeholder="100" step={0.1}
+                  aria-label={`재료 ${idx + 1} 양`}
                   value={ing.amount || ''} onChange={e => updateIng(ing.id, { amount: parseFloat(e.target.value) || 0 })} />
-                <select className={s.unitSelect} value={ing.unit}
+                <select className={s.unitSelect} value={ing.unit} aria-label={`재료 ${idx + 1} 단위`}
                   onChange={e => updateIng(ing.id, { unit: e.target.value as UnitKey })}>
                   {UNIT_OPTIONS.map(u => {
                     const ud = UNITS.find(x => x.key === u)
@@ -279,7 +281,7 @@ function ScaleTab() {
                   })}
                 </select>
                 <button className={s.removeBtn} onClick={() => removeIng(ing.id)}
-                  disabled={ingredients.length <= 1} aria-label="삭제">×</button>
+                  disabled={ingredients.length <= 1} aria-label={`재료 ${idx + 1} 삭제`}>×</button>
               </div>
             )
           })}
@@ -290,7 +292,7 @@ function ScaleTab() {
 
         {/* 양념 자동 인식 안내 */}
         {ingredients.some(i => isSeasoning(i.name)) && (
-          <p style={{ fontSize: 12, color: '#EA580C', marginTop: 8, lineHeight: 1.6, fontFamily: 'Noto Sans KR, sans-serif' }}>
+          <p style={{ fontSize: 12, color: 'var(--orange-600)', marginTop: 8, lineHeight: 1.6, fontFamily: 'var(--font-sans)' }}>
             🌶️ 양념·향신료가 자동 감지되었습니다. &quot;양념 자동 보정&quot;이 활성화된 경우 인분 늘릴 때 보정값이 적용됩니다.
           </p>
         )}
@@ -335,7 +337,7 @@ function ScaleTab() {
         <>
           <div className={s.resultCard}>
             <div className={s.resultHeader}>
-              <div>
+              <div role="status">
                 <div className={s.resultTitle}>
                   {baseN}인분 → <span className={s.resultAccent}>{targetN}인분</span>
                 </div>
@@ -485,7 +487,7 @@ function ConvertTab() {
               })}
             </div>
           ) : (
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, fontFamily: 'Noto Sans KR, sans-serif', margin: 0 }}>
+            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75, fontFamily: 'var(--font-sans)', margin: 0 }}>
               {isCountUnit
                 ? <>⚠️ <strong style={{ color: 'var(--text)' }}>개·반 개·쪽·단</strong> 같은 개수 단위는 무게·부피로 변환할 수 없습니다. <strong style={{ color: 'var(--text)' }}>g·ml·컵·큰술</strong> 등으로 입력해 주세요.</>
                 : <>변환할 수 있는 결과가 없습니다. 재료명·양·단위를 확인해 주세요.</>}
@@ -519,7 +521,7 @@ function ConvertTab() {
       {/* 단위 정보 */}
       <div className={s.card}>
         <label className={s.cardLabel}>단위 정보</label>
-        <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0, fontFamily: 'Noto Sans KR, sans-serif' }}>
+        <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0, fontFamily: 'var(--font-sans)' }}>
           <li>· <strong style={{ color: 'var(--text)' }}>한국 1컵</strong> = 200ml (계량컵 표준)</li>
           <li>· <strong style={{ color: 'var(--text)' }}>미국 1컵</strong> = 240ml</li>
           <li>· <strong style={{ color: 'var(--text)' }}>1큰술 (Tbsp)</strong> = 15ml</li>
@@ -638,10 +640,15 @@ function SavedTab({ active }: { active: boolean }) {
       const text = e.target?.result as string
       const parsed = importRecipes(text)
       if (!parsed) { alert('잘못된 백업 파일입니다'); return }
-      const merge = confirm(`${parsed.length}개의 레시피를 가져옵니다. 기존 데이터에 추가할까요? (취소 시 교체)`)
-      if (!merge) {
-        setRecipes(parsed)
-        return
+      if (parsed.length === 0) { alert('가져올 수 있는 레시피가 없습니다'); return }
+      // 기존 레시피가 있으면 추가/교체를 2단계로 확인 — '취소'가 곧바로 전체 교체가 되던 문제 수정
+      if (recipes.length > 0) {
+        const merge = confirm(`${parsed.length}개의 레시피를 가져옵니다.\n\n[확인] 기존 레시피에 추가\n[취소] 전체 교체 여부를 다시 묻기`)
+        if (!merge) {
+          const replace = confirm(`기존 레시피 ${recipes.length}개를 모두 지우고 가져온 ${parsed.length}개로 바꿀까요?\n되돌릴 수 없습니다. 중단하려면 [취소]를 누르세요.`)
+          if (replace) setRecipes(parsed)
+          return
+        }
       }
       setRecipes(prev => {
         const existingIds = new Set(prev.map(p => p.id))
@@ -682,27 +689,27 @@ function SavedTab({ active }: { active: boolean }) {
 
           <div className={s.fieldRow}>
             <div>
-              <span className={s.subLabel}>제목 *</span>
-              <input className={s.textInput} type="text" placeholder="예: 엄마 김치찌개"
+              <label className={s.subLabel} htmlFor="recipe-form-title">제목 *</label>
+              <input id="recipe-form-title" className={s.textInput} type="text" placeholder="예: 엄마 김치찌개"
                 value={title} onChange={e => setTitle(e.target.value)} maxLength={40} />
             </div>
             <div>
-              <span className={s.subLabel}>카테고리</span>
-              <select className={s.selectInput} value={category} onChange={e => setCategory(e.target.value)}>
+              <label className={s.subLabel} htmlFor="recipe-form-category">카테고리</label>
+              <select id="recipe-form-category" className={s.selectInput} value={category} onChange={e => setCategory(e.target.value)}>
                 {RECIPE_CATEGORIES.map(c => <option key={c.id} value={c.id}>{c.emoji} {c.name}</option>)}
                 <option value="custom">📌 기타</option>
               </select>
             </div>
             <div>
-              <span className={s.subLabel}>이모지</span>
-              <input className={s.textInput} type="text" placeholder="🥘" maxLength={2}
+              <label className={s.subLabel} htmlFor="recipe-form-emoji">이모지</label>
+              <input id="recipe-form-emoji" className={s.textInput} type="text" placeholder="🥘" maxLength={2}
                 value={emoji} onChange={e => setEmoji(e.target.value)} />
             </div>
           </div>
 
           <div>
-            <span className={s.subLabel}>기준 인분</span>
-            <input className={s.textInput} type="number" inputMode="decimal" min={0.5} max={50} step={0.5}
+            <label className={s.subLabel} htmlFor="recipe-form-base">기준 인분</label>
+            <input id="recipe-form-base" className={s.textInput} type="number" inputMode="decimal" min={0.5} max={50} step={0.5}
               value={basePeople} onChange={e => setBasePeople(e.target.value)} />
           </div>
 
@@ -717,11 +724,13 @@ function SavedTab({ active }: { active: boolean }) {
                 return (
                   <div key={ing.id} className={`${s.ingredientRow} ${seasoning ? s.ingSeasoning : ''}`}>
                     <input className={s.nameInput} type="text" placeholder={`재료 ${idx + 1}`}
+                      aria-label={`재료 ${idx + 1} 이름`}
                       value={ing.name} onChange={e => updateIng(ing.id, { name: e.target.value })}
                       list="recipe-ingredient-suggestions" />
                     <input className={s.amountInput} type="number" inputMode="decimal" step={0.1} min={0}
+                      aria-label={`재료 ${idx + 1} 양`}
                       value={ing.amount || ''} onChange={e => updateIng(ing.id, { amount: parseFloat(e.target.value) || 0 })} />
-                    <select className={s.unitSelect} value={ing.unit}
+                    <select className={s.unitSelect} value={ing.unit} aria-label={`재료 ${idx + 1} 단위`}
                       onChange={e => updateIng(ing.id, { unit: e.target.value as UnitKey })}>
                       {UNIT_OPTIONS.map(u => {
                         const ud = UNITS.find(x => x.key === u)
@@ -738,8 +747,8 @@ function SavedTab({ active }: { active: boolean }) {
           </div>
 
           <div>
-            <span className={s.subLabel}>메모 (선택)</span>
-            <textarea className={s.textarea} rows={2} maxLength={300}
+            <label className={s.subLabel} htmlFor="recipe-form-notes">메모 (선택)</label>
+            <textarea id="recipe-form-notes" className={s.textarea} rows={2} maxLength={300}
               placeholder="예: 신김치 1년 묵은 게 가장 맛있음"
               value={notes} onChange={e => setNotes(e.target.value)} />
           </div>
@@ -755,7 +764,7 @@ function SavedTab({ active }: { active: boolean }) {
 
       {recipes.length > 0 && (
         <div className={s.card}>
-          <input className={s.searchInput} type="text" placeholder="🔍 레시피 검색"
+          <input className={s.searchInput} type="text" placeholder="🔍 레시피 검색" aria-label="레시피 검색"
             value={searchQ} onChange={e => setSearchQ(e.target.value)} />
         </div>
       )}

@@ -1,7 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState, useEffect } from 'react'
+import { useMemo, useState, useEffect, useRef } from 'react'
 import styles from './weightloss.module.css'
 import {
   Gender, Severity, PlateauMode,
@@ -43,7 +43,7 @@ const SEVERITY_BORDER: Record<Severity, string> = {
   safe:    'rgba(16,185,129,0.40)',
   caution: 'rgba(161,98,7,0.40)',
   warning: 'rgba(234,88,12,0.40)',
-  danger:  '#DC2626',
+  danger:  'var(--red-600)',
 }
 const SEVERITY_BG: Record<Severity, string> = {
   safe:    'rgba(16,185,129,0.06)',
@@ -67,9 +67,11 @@ export default function WeightLossClient() {
   const [tdee, setTdee]                   = useState('2200')
   // SSR/Client 일치를 위해 빈 문자열로 초기화 → useEffect에서 클라이언트 시각으로 설정 (hydration 안전)
   const [startDate, setStartDate]         = useState('')
+  const [dateReady, setDateReady]         = useState(false)
   useEffect(() => {
     // eslint-disable-next-line react-hooks/set-state-in-effect
     setStartDate(todayISO())
+    setDateReady(true)
   }, [])
 
   const cw = parseFloat(currentWeight) || 0
@@ -137,11 +139,14 @@ export default function WeightLossClient() {
 
   /* 복사 */
   const [copied, setCopied] = useState(false)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (copyTimer.current) clearTimeout(copyTimer.current) }, [])
   const copy = async (text: string) => {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1600)
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+      copyTimer.current = setTimeout(() => setCopied(false), 1500)
     } catch { /* */ }
   }
 
@@ -298,6 +303,13 @@ export default function WeightLossClient() {
         </div>
       )}
 
+      {inputValid && dateReady && !startDate && (
+        <div className={styles.empty}>
+          <div className={styles.emptyTitle}>시작일을 입력하세요</div>
+          시작일을 기준으로 종료일과 목표일까지의 기간을 계산합니다.
+        </div>
+      )}
+
       {/* 계산 불가 안내 (목표 섭취 ≤ 0) — plan·split 탭 공통 */}
       {plan && !teenWarn && impossible && tab !== 'date' && (
         <div className={styles.criticalBox}>
@@ -333,7 +345,7 @@ export default function WeightLossClient() {
           </div>
 
           {/* 히어로 */}
-          <div className={styles.hero}
+          <div className={styles.hero} role="status"
             style={{ borderColor: SEVERITY_BORDER[plan.safety.severity], background: SEVERITY_BG[plan.safety.severity] }}>
             <div className={styles.heroLabel}>감량 계획</div>
             <div className={styles.heroNum} style={{ color: 'var(--accent)' }}>
@@ -383,7 +395,7 @@ export default function WeightLossClient() {
                 {plan.safety.warnings.map((w, i) => <li key={i} style={{ marginBottom: 4 }}>{w}</li>)}
               </ul>
               <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>109</strong> (24시간)
+                💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: 'var(--red-600)' }}>1577-0199</strong> · 자살예방 <strong style={{ color: 'var(--red-600)' }}>109</strong> (24시간)
               </p>
               {(plan.safety.severity === 'danger' || plan.safety.severity === 'warning') && (
                 <button type="button" className={styles.copyBtn} style={{ marginTop: 8 }}
@@ -444,7 +456,7 @@ export default function WeightLossClient() {
                           x2={chartData.W - chartData.pad.r} y2={chartData.yScale(y)}
                           stroke="var(--border)" strokeWidth="1" strokeDasharray="2 4" opacity={0.5} />
                         <text x={chartData.pad.l - 6} y={chartData.yScale(y) + 4}
-                          fontSize="11" fill="var(--muted)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end" fontWeight="600">
+                          fontSize="11" fill="var(--muted)" textAnchor="end" fontWeight="600">
                           {y.toFixed(0)}kg
                         </text>
                       </g>
@@ -457,7 +469,7 @@ export default function WeightLossClient() {
                           x2={chartData.xScale(x)} y2={chartData.H - chartData.pad.b}
                           stroke="var(--border)" strokeWidth="1" strokeDasharray="2 4" opacity={0.4} />
                         <text x={chartData.xScale(x)} y={chartData.H - chartData.pad.b + 16}
-                          fontSize="11" fill="var(--muted)" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="middle" fontWeight="600">
+                          fontSize="11" fill="var(--muted)" textAnchor="middle" fontWeight="600">
                           {x}주
                         </text>
                       </g>
@@ -466,13 +478,13 @@ export default function WeightLossClient() {
                     {/* 정상 BMI 경계 라벨 */}
                     {normalMaxKg < chartData.maxY && normalMaxKg > chartData.minY && (
                       <text x={chartData.W - chartData.pad.r - 4} y={chartData.yScale(normalMaxKg) - 4}
-                        fontSize="10" fill="#059669" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end" fontWeight="700">
-                        BMI 23 ({normalMaxKg.toFixed(0)}kg)
+                        fontSize="10" fill="var(--emerald-600)" textAnchor="end" fontWeight="700">
+                        BMI 22.9 ({normalMaxKg.toFixed(0)}kg)
                       </text>
                     )}
                     {normalMinKg < chartData.maxY && normalMinKg > chartData.minY && (
                       <text x={chartData.W - chartData.pad.r - 4} y={chartData.yScale(normalMinKg) - 4}
-                        fontSize="10" fill="#DC2626" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="end" fontWeight="700">
+                        fontSize="10" fill="var(--red-600)" textAnchor="end" fontWeight="700">
                         BMI 18.5 ({normalMinKg.toFixed(0)}kg)
                       </text>
                     )}
@@ -527,7 +539,7 @@ export default function WeightLossClient() {
                     onClick={() => setProteinId(p.id)} title={p.desc}>
                     {p.name}
                     <br />
-                    <small style={{ fontSize: 10, opacity: 0.7 }}>{p.gPerKg}g/kg{p.recommended ? ' ★' : ''}</small>
+                    <small style={{ fontSize: 11, opacity: 0.7 }}>{p.gPerKg}g/kg{p.recommended ? ' ★' : ''}</small>
                   </button>
                 ))}
               </div>
@@ -544,10 +556,10 @@ export default function WeightLossClient() {
                 <div className={styles.macroSeg} style={{ width: `${macros.protein.percent}%`, background: 'var(--accent)' }}>
                   단 {macros.protein.percent}%
                 </div>
-                <div className={styles.macroSeg} style={{ width: `${macros.fat.percent}%`, background: '#A16207' }}>
+                <div className={styles.macroSeg} style={{ width: `${macros.fat.percent}%`, background: 'var(--yellow-700)' }}>
                   지 {macros.fat.percent}%
                 </div>
-                <div className={styles.macroSeg} style={{ width: `${macros.carb.percent}%`, background: '#EA580C' }}>
+                <div className={styles.macroSeg} style={{ width: `${macros.carb.percent}%`, background: 'var(--orange-600)' }}>
                   탄 {macros.carb.percent}%
                 </div>
               </div>
@@ -561,19 +573,24 @@ export default function WeightLossClient() {
                   <span>{fmt(macros.protein.kcal)}</span>
                   <span>{macros.protein.percent}%</span>
                 </div>
-                <div className={styles.macroRow} style={{ borderLeftColor: '#A16207' }}>
-                  <span>🥑 지방 ({fatRatio}%)</span>
+                <div className={styles.macroRow} style={{ borderLeftColor: 'var(--yellow-700)' }}>
+                  <span>🥑 지방 ({macros.adjusted ? Math.min(fatRatio, 20) : fatRatio}%)</span>
                   <span>{macros.fat.g}g</span>
                   <span>{fmt(macros.fat.kcal)}</span>
                   <span>{macros.fat.percent}%</span>
                 </div>
-                <div className={styles.macroRow} style={{ borderLeftColor: '#EA580C' }}>
+                <div className={styles.macroRow} style={{ borderLeftColor: 'var(--orange-600)' }}>
                   <span>🍚 탄수화물</span>
                   <span>{macros.carb.g}g</span>
                   <span>{fmt(macros.carb.kcal)}</span>
                   <span>{macros.carb.percent}%</span>
                 </div>
               </div>
+              {macros.adjusted && (
+                <div className={styles.warnBox} style={{ marginTop: 8 }}>
+                  ⚠️ 목표 섭취량이 너무 낮아 선택한 단백질·지방 목표를 모두 채울 수 없습니다. 합계가 {fmt(plan.targetDailyCalories)}kcal를 넘지 않도록 지방을 20% 이하로{macros.protein.g < Math.round(cw * proteinTarget.gPerKg) ? ', 단백질을 섭취량의 40%로' : ''} 조정했습니다. 감량 속도를 낮추는 것을 권장합니다.
+                </div>
+              )}
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
                 💡 단백질 {macros.protein.g}g ≈ 닭가슴살 {Math.round(macros.protein.g / 23)}× 100g · 계란 {Math.round(macros.protein.g / 6)}개 / 탄수 {macros.carb.g}g ≈ 밥 {(macros.carb.g / 75).toFixed(1)}공기. 감량 시 단백질 1.6g/kg 권장 (근손실 방지·포만감).
               </p>
@@ -616,15 +633,15 @@ export default function WeightLossClient() {
             <>
               <div className={styles.hero}
                 style={{
-                  borderColor: targetDateResult.feasibility === 'safe' ? '#059669' :
-                               targetDateResult.feasibility === 'caution' ? '#A16207' :
-                               targetDateResult.feasibility === 'aggressive' ? '#EA580C' : '#DC2626',
+                  borderColor: targetDateResult.feasibility === 'safe' ? 'var(--emerald-600)' :
+                               targetDateResult.feasibility === 'caution' ? 'var(--yellow-700)' :
+                               targetDateResult.feasibility === 'aggressive' ? 'var(--orange-600)' : 'var(--red-600)',
                   background: targetDateResult.feasibility === 'safe' ? 'rgba(16,185,129,0.06)' :
                               targetDateResult.feasibility === 'caution' ? 'rgba(161,98,7,0.06)' :
                               targetDateResult.feasibility === 'aggressive' ? 'rgba(234,88,12,0.06)' : 'rgba(220,38,38,0.10)',
                 }}>
                 <div className={styles.heroLabel}>{targetDateResult.totalWeeks.toFixed(1)}주 안에 {fmt1(cw - tw)}kg 감량</div>
-                <div className={styles.heroNum} style={{ color: '#A16207' }}>
+                <div className={styles.heroNum} style={{ color: 'var(--yellow-700)' }}>
                   {fmt(targetDateResult.dailyDeficit)}<span className={styles.heroNumUnit}>kcal/일</span>
                 </div>
                 <div className={styles.heroSub}>
@@ -652,7 +669,7 @@ export default function WeightLossClient() {
                     {targetDateResult.warnings.map((w, i) => <li key={i} style={{ marginBottom: 4 }}>{w}</li>)}
                   </ul>
                   <p style={{ marginTop: 8, fontSize: 12, color: 'var(--muted)' }}>
-                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: '#DC2626' }}>1577-0199</strong> · 자살예방 <strong style={{ color: '#DC2626' }}>109</strong> (24시간) · 아래 안전 대안을 권장합니다.
+                    💛 체중 강박·식이 장애 우려 시 — 정신건강 위기상담 <strong style={{ color: 'var(--red-600)' }}>1577-0199</strong> · 자살예방 <strong style={{ color: 'var(--red-600)' }}>109</strong> (24시간) · 아래 안전 대안을 권장합니다.
                   </p>
                 </div>
               )}
@@ -662,9 +679,9 @@ export default function WeightLossClient() {
                 <label className={styles.cardLabel}>대안 기간 비교 (안전 대안 자동 추천)</label>
                 <div className={styles.altTable}>
                   {alternatives.map((alt, i) => {
-                    const color = alt.feasibility === 'safe' ? '#059669' :
-                                  alt.feasibility === 'caution' ? '#A16207' :
-                                  alt.feasibility === 'aggressive' ? '#EA580C' : '#DC2626'
+                    const color = alt.feasibility === 'safe' ? 'var(--emerald-600)' :
+                                  alt.feasibility === 'caution' ? 'var(--yellow-700)' :
+                                  alt.feasibility === 'aggressive' ? 'var(--orange-600)' : 'var(--red-600)'
                     return (
                       <div key={i}
                         role="button" tabIndex={0}
@@ -745,12 +762,12 @@ export default function WeightLossClient() {
           <div className={styles.hero}
             style={{ borderColor: 'rgba(234,88,12,0.30)', background: 'rgba(234,88,12,0.06)' }}>
             <div className={styles.heroLabel}>분배 결과</div>
-            <div className={styles.heroNum} style={{ color: '#EA580C' }}>
+            <div className={styles.heroNum} style={{ color: 'var(--orange-600)' }}>
               {fmt(split.dietDailyDeficit)}<span style={{ fontSize: '0.4em', color: 'var(--muted)' }}>+</span>{fmt(split.exerciseDailyDeficit)}
               <span className={styles.heroNumUnit}>kcal/일</span>
             </div>
             <div className={styles.heroSub}>
-              하루 식단 적자 <strong style={{ color: '#EA580C' }}>{fmt(split.dietDailyDeficit)}kcal</strong> + 운동 소모 <strong style={{ color: '#EA580C' }}>{fmt(split.exerciseDailyDeficit)}kcal</strong>
+              하루 식단 적자 <strong style={{ color: 'var(--orange-600)' }}>{fmt(split.dietDailyDeficit)}kcal</strong> + 운동 소모 <strong style={{ color: 'var(--orange-600)' }}>{fmt(split.exerciseDailyDeficit)}kcal</strong>
               {exerciseFreq > 0 && <><br />주 {exerciseFreq}회 · 1회당 {fmt(split.perSessionKcal)}kcal 소모</>}
             </div>
           </div>

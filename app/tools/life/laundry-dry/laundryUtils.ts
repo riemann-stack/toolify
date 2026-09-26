@@ -2,6 +2,12 @@
 // 빨래 건조 시간 계산기 — 한국 가정 장비 데이터 + 조합 추천
 // ─────────────────────────────────────────────────────────────
 
+import {
+  ELEC_HOUSEHOLD_AVG_KRW_PER_KWH as KRW_PER_KWH,
+  KEPCO_RATES_ASOF,
+  KEPCO_RESIDENTIAL_LOW_TIERS,
+} from '@/lib/krElectricityRates'
+
 export type Equipment = {
   id: string
   name: string
@@ -38,8 +44,9 @@ export const LAUNDRY_EQUIPMENT: Equipment[] = [
   { id: 'extra-spin',   name: '추가 탈수 1회',   icon: '🌪️', desc: '15~20% 단축, 짧게 사용', timeReduction: 0.18, powerW: 100, runtimeMin: 10, category: 'spin' },
 ]
 
-// 한국 평균 전기료 (2026 기준, 2단계 가정)
-export const KRW_PER_KWH = 200
+// 전기료 계산 단가·한전 누진 단계표 — lib/krElectricityRates.ts 단일 소스
+// KRW_PER_KWH: 기본요금·기후환경요금·연료비조정요금·부가세·전력기반기금까지 합친 가구 평균 kWh당 어림값(누진 단계별 전력량요금과 다름)
+export { KRW_PER_KWH, KEPCO_RATES_ASOF, KEPCO_RESIDENTIAL_LOW_TIERS }
 
 export type ComboResult = {
   combo: string[]

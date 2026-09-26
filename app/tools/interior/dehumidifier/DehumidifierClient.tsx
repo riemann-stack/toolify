@@ -3,8 +3,8 @@
 import { useState, useMemo } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import {
-  HOME_TYPES, ENV_FACTORS, PRODUCT_TIERS,
-  calcDehumidifier, pyeongToSqm,
+  HOME_TYPES, ENV_FACTORS, PRODUCT_TIERS, KEPCO_RESIDENTIAL_TIER_KRW, MAX_HOURS_PER_DAY, DEFAULT_WON_PER_KWH,
+  calcDehumidifier, pyeongToSqm, sqmToPyeong,
 } from './dehumidifierData'
 import s from './dehumidifier.module.css'
 
@@ -16,7 +16,7 @@ export default function DehumidifierClient() {
   const [home, setHome] = useState('apt')
   const [env, setEnv] = useState('normal')
   const [hours, setHours] = useState('6')
-  const [won, setWon] = useState('160')
+  const [won, setWon] = useState(String(DEFAULT_WON_PER_KWH))
 
   const areaNum = parseFloat(area) || 0
   const areaSqm = unit === 'pyeong' ? pyeongToSqm(areaNum) : areaNum
@@ -38,6 +38,17 @@ export default function DehumidifierClient() {
 
   const fmt = (n: number, d = 1) => n.toLocaleString('ko-KR', { maximumFractionDigits: d })
 
+  /* 단위 전환 시 입력값도 환산 — 20평을 ㎡로 바꾸면 '20'이 20㎡(약 6평)로 조용히 바뀌던 문제 방지 */
+  const switchUnit = (u: AreaUnit) => {
+    if (u === unit) return
+    const v = parseFloat(area)
+    if (Number.isFinite(v) && v > 0) {
+      const converted = u === 'sqm' ? pyeongToSqm(v) : sqmToPyeong(v)
+      setArea(String(Math.round(converted * 10) / 10))
+    }
+    setUnit(u)
+  }
+
   return (
     <div className={s.wrap}>
       {/* 면적 입력 */}
@@ -49,7 +60,7 @@ export default function DehumidifierClient() {
               <button key={u} type="button"
                 aria-pressed={unit === u}
                 className={`${s.unitBtn} ${unit === u ? s.unitBtnActive : ''}`}
-                onClick={() => setUnit(u)}>
+                onClick={() => switchUnit(u)}>
                 {u === 'pyeong' ? '평' : '㎡'}
               </button>
             ))}
@@ -122,18 +133,24 @@ export default function DehumidifierClient() {
           <div className={s.tierBox}>
             <div className={s.tierMain}>
               <span className={s.tierLabel}>권장 제품 용량</span>
-              <strong className={s.tierValue}>{result.tier.label}</strong>
-              <span className={s.tierSpace}>{result.tier.space}</span>
+              <strong className={s.tierValue}>{result.exceedsMax ? `${result.tier.label} × ${result.units}대` : result.tier.label}</strong>
+              <span className={s.tierSpace}>{result.exceedsMax ? '가정용 최대 등급을 넘는 필요량' : result.tier.space}</span>
             </div>
-            <p className={s.tierNote}>
-              제품 정격({result.tier.ratedL}L/일)은 30℃·80%RH 고온다습 조건 시험값이라 실사용 제거량보다 큽니다 — 여유분 포함이 정상입니다.
-            </p>
+            {result.exceedsMax ? (
+              <p className={s.tierNote}>
+                하루 필요량({fmt(result.dailyLiters)}L)이 가정용 최대 등급 정격({result.tier.ratedL}L/일)을 넘습니다. 공간을 나눠 {result.tier.label} {result.units}대를 함께 돌리거나 업소용 대용량 제품을 검토하세요. 아래 전기요금은 {result.units}대 기준입니다.
+              </p>
+            ) : (
+              <p className={s.tierNote}>
+                제품 정격({result.tier.ratedL}L/일)은 국내 KS C 9317 기준 27℃·60%RH에서 24시간 연속 운전한 시험값입니다. 실제 제거량은 방 온습도·습도 설정에 따라 달라지니 계산값과 같거나 조금 큰 등급을 고르세요.
+              </p>
+            )}
           </div>
 
           <div className={s.powerBox}>
             <div className={s.powerRow}>
               <span className={s.powerKey}>정격 소비전력</span>
-              <span className={s.powerVal}>{result.tier.watt} W</span>
+              <span className={s.powerVal}>{result.tier.watt} W{result.units > 1 ? ` × ${result.units}대` : ''}</span>
             </div>
             <div className={s.powerRow}>
               <span className={s.powerKey}>월 소비전력량</span>
@@ -150,9 +167,12 @@ export default function DehumidifierClient() {
             <div className={s.assumeField}>
               <label className={s.assumeLabel} htmlFor="dehum-hours">하루 가동</label>
               <div className={s.assumeInputWrap}>
-                <input id="dehum-hours" type="number" inputMode="decimal" min={0} max={24}
+                <input id="dehum-hours" type="number" inputMode="decimal" min={0} max={MAX_HOURS_PER_DAY}
                   className={s.assumeInput} value={hours}
-                  onChange={(e) => setHours(e.target.value)} aria-label="하루 가동시간(시간)" />
+                  onChange={(e) => {
+                    const v = parseFloat(e.target.value)
+                    setHours(Number.isFinite(v) && v > MAX_HOURS_PER_DAY ? String(MAX_HOURS_PER_DAY) : e.target.value)
+                  }} aria-label="하루 가동시간(시간)" />
                 <span className={s.assumeUnit}>시간</span>
               </div>
             </div>
@@ -167,7 +187,7 @@ export default function DehumidifierClient() {
             </div>
           </div>
           <p className={s.assumeNote}>
-            단가는 주택용 누진 구간에 따라 100~280원/kWh로 달라집니다. 여름 3단계(450kWh 초과)는 kWh당 약 280원. 정확한 요금은 <a href="https://cyber.kepco.co.kr" target="_blank" rel="noopener noreferrer">한전 사이버지점</a>에서 확인하세요.
+            주택용 전력량요금은 누진 구간에 따라 {KEPCO_RESIDENTIAL_TIER_KRW.tier1}원·{KEPCO_RESIDENTIAL_TIER_KRW.tier2}원·{KEPCO_RESIDENTIAL_TIER_KRW.tier3}원/kWh로 오릅니다. 여름(7~8월) 3단계(450kWh 초과)는 kWh당 {KEPCO_RESIDENTIAL_TIER_KRW.tier3}원이며 기후환경·연료비조정요금과 부가세는 별도입니다. 정확한 요금은 <a href="https://cyber.kepco.co.kr" target="_blank" rel="noopener noreferrer">한전 사이버지점</a>에서 확인하세요.
           </p>
         </div>
       ) : (
@@ -205,7 +225,7 @@ export default function DehumidifierClient() {
           { label: '한국환경산업기술원 실내공기질', href: 'https://www.keiti.re.kr' },
         ]}
       >
-        제습량은 업계 통용 가이드(아파트 평당 약 0.76L·주택 1.02L)에 습도 환경 보정을 곱한 추정치입니다. 실제 필요량은 외기 습도·환기·침수 이력에 따라 달라지며, 제품 정격은 제조사 스펙(30℃·80%RH)을 확인하세요.
+        제습량은 업계 통용 가이드(아파트 평당 약 0.76L·주택 1.02L)에 습도 환경 보정을 곱한 추정치입니다. 실제 필요량은 외기 습도·환기·침수 이력에 따라 달라지며, 제품 정격은 제조사 스펙(시험 조건 — KS C 9317은 27℃·60%RH, 해외 제품은 30℃·80% 등 다를 수 있음)을 확인하세요.
       </Disclaimer>
     </div>
   )

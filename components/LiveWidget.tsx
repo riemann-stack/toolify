@@ -1,63 +1,51 @@
 'use client'
-
+/* components/LiveWidget.tsx — 홈 '오늘' 한 줄: 오늘 날짜 · 다음 공휴일 D-n (UX-10: 1초 시계 → 실용 정보)
+   · 서버(ISR)가 KST 기준으로 계산한 값을 initial로 받아 SSR에 바로 그린다 → 빈 자리 없음
+   · 마운트 후 기기 날짜로 한 번 다시 계산 — ISR 캐시가 하루 넘게 묵었을 때만 글자가 바뀐다(한 줄 고정 높이 → CLS 0)
+   · 공휴일 데이터는 lib/krHolidays 단일 소스(대체공휴일 포함). 데이터 범위 밖이면 공휴일 부분을 생략 */
 import Link from 'next/link'
 import { useEffect, useState } from 'react'
+import { todayStr } from '@/lib/date'
+import { todayInfo, type TodayInfo } from '@/lib/todayInfo'
+import styles from '@/app/page.module.css'
 
-const WEEKDAYS = ['일', '월', '화', '수', '목', '금', '토']
-const pad = (n: number) => n.toString().padStart(2, '0')
+const WEEK = ['일', '월', '화', '수', '목', '금', '토']
 
-export default function LiveWidget() {
-  // 클라이언트 마운트 후에만 시각 표시 (SSR 하이드레이션 불일치 방지)
-  const [now, setNow] = useState<Date | null>(null)
+function ymd(s: string): [number, number, number] {
+  const [y, m, d] = s.split('-').map(Number)
+  return [y, m, d]
+}
+/** 'YYYY-MM-DD' → '9월 26일 (토)' — Date 문자열 파싱 없이(UTC 해석 버그 회피) */
+function label(s: string): string {
+  const [y, m, d] = ymd(s)
+  return `${m}월 ${d}일 (${WEEK[new Date(Date.UTC(y, m - 1, d)).getUTCDay()]})`
+}
+function dayDiff(a: string, b: string): number {
+  const [ay, am, ad] = ymd(a)
+  const [by, bm, bd] = ymd(b)
+  return Math.round((Date.UTC(by, bm - 1, bd) - Date.UTC(ay, am - 1, ad)) / 86_400_000)
+}
+
+export default function LiveWidget({ initial }: { initial: TodayInfo }) {
+  const [info, setInfo] = useState(initial)
   useEffect(() => {
-    // 시계 — 마운트 후 시각 표시 + 1초 주기 갱신 (하이드레이션 안전 패턴, 의도됨)
+    const t = todayStr()
+    // 기기 날짜가 서버 렌더 날짜와 다를 때만 갱신(의도된 마운트 후 1회 동기화)
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setNow(new Date())
-    const id = setInterval(() => setNow(new Date()), 1000)
-    return () => clearInterval(id)
-  }, [])
+    if (t !== initial.today) setInfo(todayInfo(t))
+  }, [initial.today])
 
-  let text = ' '
-  if (now) {
-    const dateStr = `${now.getFullYear()}년 ${now.getMonth() + 1}월 ${now.getDate()}일 ${WEEKDAYS[now.getDay()]}요일`
-    const h = now.getHours()
-    const ampm = h < 12 ? '오전' : '오후'
-    const h12 = h % 12 || 12
-    const timeStr = `${ampm} ${h12}시 ${pad(now.getMinutes())}분 ${pad(now.getSeconds())}초`
-    text = `${dateStr} · ${timeStr}`
-  }
-
+  const n = info.next
+  const d = n ? dayDiff(info.today, n.date) : 0
   return (
-    <div
-      style={{
-        textAlign: 'center',
-        padding: '8px 0 2px',
-        // 홈 페이퍼 캔버스 정합 — 쿨 슬레이트(--muted) 대신 웜 잉크
-        color: 'var(--paper-ink-soft)',
-        fontVariantNumeric: 'tabular-nums',
-      }}
-    >
-      <div
-        style={{
-          fontSize: 13,
-          fontWeight: 500,
-          letterSpacing: '-0.01em',
-          lineHeight: 1.6,
-        }}
-        aria-live="off"
-      >
-        {text}
-      </div>
-      {/* opacity 감산은 AA 미달(~2.7:1)이었음 — faint 토큰 직접 지정 */}
-      <div style={{ fontSize: 11, color: 'var(--paper-ink-faint)', marginTop: 2 }}>
-        내 기기 시계 기준 ·{' '}
-        <Link
-          href="/tools/date/server-time"
-          style={{ color: 'inherit', textDecoration: 'underline' }}
-        >
-          정확한 서버 시간 확인
-        </Link>
-      </div>
-    </div>
+    <p className={styles.hmToday}>
+      <span>오늘 <b>{label(info.today)}</b></span>
+      {n && (
+        <span>
+          {d === 0 ? <>오늘은 <b>{n.name}</b></> : <>다음 공휴일 <b>{n.name}</b> {label(n.date)} · <b className="num">D-{d}</b></>}
+        </span>
+      )}
+      <Link href="/tools/date/holiday-bridge">연차 붙여 쉬는 날 계산</Link>
+    </p>
   )
 }

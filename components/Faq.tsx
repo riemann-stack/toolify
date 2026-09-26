@@ -1,26 +1,29 @@
-/* FAQ 아코디언 공통 컴포넌트 — 표준 FAQ 블록(h2 + FAQPage JSON-LD + <details> 목록).
-   마크업·인라인 스타일은 기존 페이지 표준 블록과 동일 (렌더 결과 불변이 전제).
-   사용: 페이지의 <section>/<div> 래퍼 안에서 <Faq items={FAQ_LD} /> */
-
+/* components/Faq.tsx — FAQ 괘선 목록형 아코디언 (스펙 §10.9) · FAQPage JSON-LD 동시 렌더 유지
+   ─ 호환: <Faq items={FAQ_LD} /> (68곳) 그대로. title·id는 선택.
+   ─ 1.5px 잉크 괘선 목록 · 'Q' 표시는 accent-ink · 답변 16/1.8 · 첫 항목만 열림 · 제목에서 '(FAQ)' 괄호 제거 · id="faq"(레일 목차 앵커)
+   ─ 본문 시트(.prose) 안에서는 h2가 자동 번호(01…)를 받는다. 시트 밖(과도기)에서도 .fqH가 크기를 잡는다.
+   ─ 답변은 페이지 상수 FAQ 배열(신뢰된 정적 HTML 조각)만 받는다 — 사용자 입력을 넣지 말 것. */
 import FaqJsonLd from './FaqJsonLd'
+import styles from './Faq.module.css'
+import UiIcon from './UiIcon'
 
 interface FaqItem { q: string; a: string }
 
-export default function Faq({ items }: { items: FaqItem[] }) {
+export default function Faq({ items, title = '자주 묻는 질문', id = 'faq' }: { items: FaqItem[]; title?: string; id?: string }) {
+  if (!items || items.length === 0) return null
   return (
     <>
-      <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>자주 묻는 질문 (FAQ)</h2>
+      <h2 id={id} className={styles.fqH}>{title}</h2>
       <FaqJsonLd items={items} />
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-        {items.map((faq, i) => (
-          <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-            <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-              Q{i + 1}. {faq.q}
+      <div className={styles.fq}>
+        {items.map((f, i) => (
+          <details key={i} open={i === 0}>
+            <summary>
+              <span className={styles.fqQ} aria-hidden="true">Q</span>
+              <span className={styles.fqText}>{f.q}</span>
+              <UiIcon name="chev-d" size={18} />
             </summary>
-            <p
-              style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginTop: '10px' }}
-              dangerouslySetInnerHTML={{ __html: faq.a }}
-            />
+            <div className={styles.fqA} dangerouslySetInnerHTML={{ __html: f.a }} />
           </details>
         ))}
       </div>

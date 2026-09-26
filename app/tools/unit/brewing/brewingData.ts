@@ -19,7 +19,7 @@ export interface ScaleInfo {
 }
 
 export const SCALES: ScaleInfo[] = [
-  { id: 'brix',    name: 'Brix',    fullName: '브릭스 (당도)',         unit: '°Bx',  range: [0, 40],    desc: '식품·과실·음료 표준. 정제당 % (중량 기준) — 와인 머스트·잼·시럽' },
+  { id: 'brix',    name: 'Brix',    fullName: '브릭스 (당도)',         unit: '°Bx',  range: [0, 75],    desc: '식품·과실·음료 표준. 정제당 % (중량 기준) — 와인 머스트·잼·시럽' },
   { id: 'plato',   name: 'Plato',   fullName: '플라토 (맥주 당도)',     unit: '°P',   range: [0, 30],    desc: '맥주 워트(wort) 표준. Brix와 거의 동일하지만 양조 업계 관습' },
   { id: 'sg',      name: 'SG',      fullName: 'Specific Gravity (비중)', unit: '',    range: [0.980, 1.150], desc: '비중 (물=1.000). 가장 정확한 발효 추적 — 발효 전/후 모두 사용' },
   { id: 'baume',   name: 'Baumé',   fullName: '보메 (와인 전통)',       unit: '°Bé',  range: [0, 25],    desc: '프랑스 와인 전통 단위. 1°Bé ≈ 1.8°Bx — 와인 머스트 등급' },
@@ -47,7 +47,8 @@ export const platoToBrix = (p: number) => p
 
 /** SG ↔ Baumé — `Bé = 145 × (1 − 1/SG)` (heavier than water) */
 export function sgToBaume(sg: number): number {
-  if (sg <= 1) return 0
+  // SG<1(발효 후·알코올)은 heavier-than-water Baumé 정의 밖 → NaN (화면에서 '—'로 표시, Brix·Plato와 동일 취급)
+  if (sg < 1) return NaN
   return 145 * (1 - 1 / sg)
 }
 export function baumeToSg(be: number): number {
@@ -84,10 +85,14 @@ export function convertAll(scale: Scale, value: number): Converted {
     case 'baume':   sg = baumeToSg(value); break
     case 'oechsle': sg = oechsleToSg(value); break
   }
+  // Plato ≡ Brix(brixToPlato 항등)이므로 Brix·Plato 입력은 SG 왕복(다항식 역산 오차) 없이 입력값을 그대로 사용
+  const rawBrix = scale === 'brix' || scale === 'plato' ? value : sgToBrix(sg)
+  // 다항식 오프셋으로 SG 1.000(물)에서 sgToBrix가 -0.005가 되므로, SG ≥ 1이면 음수를 0으로 고정 (SG<1만 '—' 대상)
+  const brix = sg >= 1 && rawBrix < 0 ? 0 : rawBrix
   return {
     sg,
-    brix:    sgToBrix(sg),
-    plato:   sgToPlato(sg),
+    brix,
+    plato:   brixToPlato(brix),
     baume:   sgToBaume(sg),
     oechsle: sgToOechsle(sg),
   }
@@ -95,15 +100,15 @@ export function convertAll(scale: Scale, value: number): Converted {
 
 // ─── ABV 계산 ─────────────────────────────────────────────
 /** 표준 공식 — `ABV% = (OG − FG) × 131.25`
- *  단순하지만 OG ≤ 1.090 / 결과 ≤ 12% 범위에서 적정.
- *  와인·하이 알코올용은 보정식 필요.
+ *  저비중 맥주·사이다용 경험식 — OG가 높을수록 보정식보다 낮게 나옴
+ *  (OG 1.090/FG 1.000에서 약 0.8%p).
  */
 export function abvSimple(og: number, fg: number): number {
   if (og <= fg) return 0
   return (og - fg) * 131.25
 }
 
-/** 보정 공식 — 고알코올 와인 (Cutaia et al. 2009)
+/** 보정(대체) 공식 — 홈브루 계산기 통용 경험식(출처 불명확, 0.794 = 에탄올 비중)
  *  ABV% = (76.08 × (OG−FG) / (1.775−OG)) × (FG / 0.794) */
 export function abvCorrected(og: number, fg: number): number {
   if (og <= fg || og >= 1.7) return 0
@@ -154,7 +159,8 @@ export const CATEGORY_GUIDES: CategoryGuide[] = [
   },
   {
     emoji: '🍯', name: '잼·시럽',
-    ogRangeSG: [1.319, 1.363], brix: [65, 72],
+    // SG 하한은 이 도구의 Brix→SG 다항식 값(65°Bx → 1.3183)에 맞춤 — 1.319면 '잼 65 Brix' 프리셋이 현재 범위로 안 잡힘
+    ogRangeSG: [1.318, 1.363], brix: [65, 72],
     note: '잼은 65°Bx↑이 보존성 기준점. 70°Bx↑은 결정화 위험. 굴절계 측정 필수(Brix↔SG 다항식 검증범위 밖이라 SG는 참고값)',
   },
   {
@@ -172,8 +178,8 @@ export const CATEGORY_GUIDES: CategoryGuide[] = [
 // ─── pH·TA 측정 참고 ──────────────────────────────────────
 export const PH_GUIDE = [
   { range: '< 3.0', label: '매우 산성', note: '와인·시트러스 즙·식초류 영역. 보존성 ↑' },
-  { range: '3.0~4.0', label: '산성',   note: '와인·요거트·김치 발효 적정' },
-  { range: '4.0~4.6', label: '약산성',  note: '비어·사이다 발효 후 / 보툴리누스 차단선(4.6)' },
+  { range: '3.0~4.0', label: '산성',   note: '와인·요거트 발효 영역 (김치는 4.0 미만이면 과발효)' },
+  { range: '4.0~4.6', label: '약산성',  note: '비어·사이다 발효 후 · 김치 적숙(약 4.2) / 보툴리누스 차단선(4.6)' },
   { range: '4.6~6.0', label: '약산',    note: '치즈·우유 발효 / 미생물 활동 활발' },
   { range: '6.0~7.0', label: '중성',    note: '생수·우유 원유 / 발효 시작 전' },
   { range: '> 7.0', label: '염기성',   note: '베이킹소다·암모니아 / 식품 보존 X' },

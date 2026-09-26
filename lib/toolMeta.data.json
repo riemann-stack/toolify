@@ -1,0 +1,5957 @@
+{
+ "/tools/art/capo": {
+  "slug": "/tools/art/capo",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "카포 1프렛 = 반음 1개(12평균율 프렛) · 추천 = 장조 다이아토닉 3화음(M-m-m-M-M-m-°) 중 오픈 코드 수 → 바레 수 → 낮은 프렛 순(0~5프렛) · 단조 곡은 같은 조표의 나란한 장조로 계산 · 애창곡 원키·통용 카포 = 악보바다·ezcho·Ultimate Guitar(2026-07 확인)",
+  "sources": [
+   {
+    "label": "Merriam-Webster — capotasto(카포) 정의",
+    "org": "",
+    "href": "https://www.merriam-webster.com/dictionary/capotasto"
+   },
+   {
+    "label": "Music Theory for the 21st-Century Classroom — 장조의 다이아토닉 화음",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/DiatonicChordsInMajor.html"
+   },
+   {
+    "label": "Music Theory for the 21st-Century Classroom — 단조 조표와 나란한조",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/MinorKeySignatures.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/charcount": {
+  "slug": "/tools/art/charcount",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "총 글자수 = UTF-16 코드 유닛(String.length) 기준 · X 가중치 = 공식 twitter-text config v3(4구간·기본 가중치 2·URL 23자 고정·NFC 정규화·이모지 엔티티 1개당 2자) · 플랫폼 한도는 항목별로 공식 문서 확인값/공식 미문서화 통용값/편의 프리셋을 구분해 표시 · SMS 90바이트는 EUC-KR 기준",
+  "sources": [
+   {
+    "label": "유튜브 고객센터",
+    "org": "",
+    "href": "https://support.google.com/youtube/answer/57404?hl=ko"
+   },
+   {
+    "label": "twitter-text 공식 설정 (config/v3.json)",
+    "org": "",
+    "href": "https://github.com/twitter/twitter-text/blob/master/config/v3.json"
+   },
+   {
+    "label": "X — 글자수 세는 법",
+    "org": "",
+    "href": "https://docs.x.com/fundamentals/counting-characters"
+   },
+   {
+    "label": "Google — 제목 링크 가이드",
+    "org": "",
+    "href": "https://developers.google.com/search/docs/appearance/title-link?hl=ko"
+   },
+   {
+    "label": "Google — 스니펫 가이드",
+    "org": "",
+    "href": "https://developers.google.com/search/docs/appearance/snippet?hl=ko"
+   },
+   {
+    "label": "WHATWG HTML — maxlength(코드 유닛 길이)",
+    "org": "",
+    "href": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-maxlength"
+   },
+   {
+    "label": "Unicode UAX #29 — 그래핌 경계",
+    "org": "",
+    "href": "https://www.unicode.org/reports/tr29/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/chord": {
+  "slug": "/tools/art/chord",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "구성음 = 근음 + 코드 종류별 반음 간격(12평균율, 31종) · 도수에 맞춘 이론 철자 · 로마숫자와 단조 Ⅴ7 표기는 Open Music Theory 기준",
+  "sources": [
+   {
+    "label": "Open Music Theory — Roman Numerals",
+    "org": "",
+    "href": "https://viva.pressbooks.pub/openmusictheory/chapter/roman-numerals/"
+   },
+   {
+    "label": "Open Music Theory — ii–V–I",
+    "org": "",
+    "href": "https://viva.pressbooks.pub/openmusictheory/chapter/ii-v-i/"
+   },
+   {
+    "label": "Music Theory Online 23.3 — Richards, Axis Progressions",
+    "org": "",
+    "href": "https://mtosmt.org/issues/mto.17.23.3/mto.17.23.3.richards.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/color": {
+  "slug": "/tools/art/color",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "W3C WCAG 2.2 명도 대비 기준 · CSS Color 4(lab()·oklch()) · 질병관리청 색각이상 유병률",
+  "sources": [
+   {
+    "label": "W3C WCAG 2.2",
+    "org": "",
+    "href": "https://www.w3.org/TR/WCAG22/"
+   },
+   {
+    "label": "W3C CSS Color Module Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-color-4/"
+   },
+   {
+    "label": "질병관리청 국가건강정보포털 — 색각이상",
+    "org": "",
+    "href": "https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=1469"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/exposure": {
+  "slug": "/tools/art/exposure",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "조리개 1/3 stop 계열 = ISO 517(표준 f수 계열, 공비 2^(1/6)) · EV↔조명 대응 = ANSI PH2.7-1973/1986 계열 노출 가이드(직사광 행은 일출 2시간 후~일몰 2시간 전·정면광 기준) · ND 배율↔stop = 제조사 공식 표기 · IBIS stop = CIPA 규격 기준 제조사 발표값",
+  "sources": [
+   {
+    "label": "ISO 517 (f수 표준 계열)",
+    "org": "",
+    "href": "https://www.iso.org/standard/50089.html"
+   },
+   {
+    "label": "PhotoPills — 별 사진 셔터 룰(500·NPF)",
+    "org": "",
+    "href": "https://www.photopills.com/articles/how-photograph-milky-way"
+   },
+   {
+    "label": "EV↔조명 대응표 (ANSI PH2.7 인용)",
+    "org": "",
+    "href": "https://en.wikipedia.org/wiki/Exposure_value"
+   },
+   {
+    "label": "Sunny 16 룰",
+    "org": "",
+    "href": "https://en.wikipedia.org/wiki/Sunny_16_rule"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/fov": {
+  "slug": "/tools/art/fov",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "센서 치수 = 제조사 공식 사양(소니 a6700 23.3×15.5 · 니콘 Z fc·후지 X-T5 23.5×15.7 · 캐논 R10 22.3×14.9 · OM SYSTEM 17.3×13.0 · 1형 13.2×8.8) · 크롭 팩터는 제조사 표기 관행값(소니·니콘 ×1.5, 후지 ×1.52, 캐논 ×1.6)이라 대각선 계산값과 최대 2% 차이 · 렌즈 분류 경계는 표준 규정이 아니라 제조사(캐논·리코펜탁스) 관행",
+  "sources": [
+   {
+    "label": "소니 a6700 사양 (센서 치수)",
+    "org": "",
+    "href": "https://helpguide.sony.net/ilc/2320/v1/en/contents/221h_specifications_ilc2320.html"
+   },
+   {
+    "label": "후지필름 X-T5 사양",
+    "org": "",
+    "href": "http://www.fujifilm-x.com/en-us/products/cameras/x-t5/specifications/"
+   },
+   {
+    "label": "OM SYSTEM OM-1 Mark II 사양",
+    "org": "",
+    "href": "https://my.omsystem.com/consumer/product_specs/SPECIFICATIONS_om-1-mark-ii_EN.pdf"
+   },
+   {
+    "label": "삼성 ISOCELL HP2 (1/1.3형)",
+    "org": "",
+    "href": "https://news.samsungsemiconductor.com/global/introducing-isocell-hp2-experience-more-pictures-and-epic-details-on-the-galaxy-s23-ultra/"
+   },
+   {
+    "label": "CIPA DC-008 Exif 2.3 — 35mm 환산 초점거리 태그",
+    "org": "",
+    "href": "https://www.cipa.jp/std/documents/e/DC-008-2012_E.pdf"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/frequency": {
+  "slug": "/tools/art/frequency",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "ISO 16:1975(2022년 재확인) 기준 조율 주파수 · ISO 226:2023 등청감곡선 · 12음 평균율 산출식",
+  "sources": [
+   {
+    "label": "ISO 16:1975",
+    "org": "",
+    "href": "https://www.iso.org/standard/3601.html"
+   },
+   {
+    "label": "ISO 226:2023",
+    "org": "",
+    "href": "https://www.iso.org/standard/83117.html"
+   },
+   {
+    "label": "UNSW Music Acoustics — 음이름·주파수",
+    "org": "",
+    "href": "https://newt.phys.unsw.edu.au/jw/notes.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/golden-ratio": {
+  "slug": "/tools/art/golden-ratio",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "φ = (1+√5)/2 — 유클리드 『원론』 6권 정의 3(외중비) · 자연·예술 사례 검증 = Markowsky(1992)·Falbo(2005)·Swinton & Ochu(2016) · 종이 비율 = ISO 216 · 썸네일 규격 = YouTube 고객센터",
+  "sources": [
+   {
+    "label": "유클리드 『원론』 6권 정의 3 — 외중비 (D. Joyce 편, Clark Univ.)",
+    "org": "",
+    "href": "https://mathcs.clarku.edu/~djoyce/elements/bookVI/defVI3.html"
+   },
+   {
+    "label": "OEIS A001622 — φ의 소수 전개",
+    "org": "",
+    "href": "https://oeis.org/A001622"
+   },
+   {
+    "label": "Markowsky, Misconceptions about the Golden Ratio (1992)",
+    "org": "",
+    "href": "https://doi.org/10.1080/07468342.1992.11973428"
+   },
+   {
+    "label": "Swinton & Ochu, 해바라기 나선 시민과학 실측 (2016)",
+    "org": "",
+    "href": "https://royalsocietypublishing.org/doi/10.1098/rsos.160091"
+   },
+   {
+    "label": "ISO 216 (A·B 시리즈 용지 규격)",
+    "org": "",
+    "href": "https://www.iso.org/standard/36631.html"
+   },
+   {
+    "label": "YouTube 고객센터 — 맞춤 미리보기 이미지",
+    "org": "",
+    "href": "https://support.google.com/youtube/answer/72431"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/gradient-generator": {
+  "slug": "/tools/art/gradient-generator",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "W3C CSS Images 4(그라디언트 문법)·CSS Color 4(oklch·lab 보간) · WCAG 2.2 대비 기준",
+  "sources": [
+   {
+    "label": "W3C CSS Images Module Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-images-4/"
+   },
+   {
+    "label": "W3C CSS Color Module Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-color-4/"
+   },
+   {
+    "label": "W3C WCAG 2.2",
+    "org": "",
+    "href": "https://www.w3.org/TR/WCAG22/"
+   },
+   {
+    "label": "MDN <color-interpolation-method>",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/CSS/color-interpolation-method"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/knit-gauge": {
+  "slug": "/tools/art/knit-gauge",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "CYC 표준 실 굵기 시스템(0~7, 4 inches / 10 cm, GUIDELINES ONLY) · CYC 「Bust/Chest Fit and Ease Chart」(2018-11-06판) · KS 의류 치수 표준의 호칭 체계(2025-09-17 개정판) 참고 — 표의 수치는 KS 호칭표가 아닌 뜨개 패턴용 참고 치수",
+  "sources": [
+   {
+    "label": "CYC 실 굵기 표준",
+    "org": "",
+    "href": "https://www.craftyarncouncil.com/standards/yarn-weight-system"
+   },
+   {
+    "label": "CYC 바늘·코바늘 규격",
+    "org": "",
+    "href": "https://www.craftyarncouncil.com/standards/hooks-and-needles"
+   },
+   {
+    "label": "CYC 신체 치수·여유분",
+    "org": "",
+    "href": "https://www.craftyarncouncil.com/standards/body-sizing"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/lorem": {
+  "slug": "/tools/art/lorem",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "더미 값 대역: RFC 2606 예약 도메인 · 전기통신번호관리세칙 미부여 대역 기준",
+  "sources": [
+   {
+    "label": "RFC 2606 (예약 최상위 도메인)",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc2606"
+   },
+   {
+    "label": "전기통신번호관리세칙 (국가법령정보센터)",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/전기통신번호관리세칙"
+   },
+   {
+    "label": "우편번호 안내 (우정사업본부)",
+    "org": "",
+    "href": "https://www.koreapost.go.kr/kpost/subIndex/208.do?pSiteIdx=125"
+   },
+   {
+    "label": "2025 저작권 상담 사례집 (한국저작권위원회)",
+    "org": "",
+    "href": "https://www.copyright.or.kr/information-materials/publication/research-report/view.do?brdctsno=55038"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/morse-code": {
+  "slug": "/tools/art/morse-code",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "ITU-R M.1677-1(모스 부호)·M.1172(약어)·ICAO Annex 10 Vol II(음성 문자) 기준",
+  "sources": [
+   {
+    "label": "ITU-R M.1677-1 국제 모스 부호",
+    "org": "",
+    "href": "https://www.itu.int/rec/R-REC-M.1677/en"
+   },
+   {
+    "label": "ITU-R M.1172 약어·신호",
+    "org": "",
+    "href": "https://www.itu.int/rec/R-REC-M.1172/en"
+   },
+   {
+    "label": "국가등록문화재 「전보장정」 해설",
+    "org": "",
+    "href": "https://www.heritage.go.kr/heri/cul/culSelectDetail.do?ccbaKdcd=79&ccbaAsno=05290000&ccbaCtcd=11"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/paint-mix": {
+  "slug": "/tools/art/paint-mix",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "색 계산 = sRGB(IEC 61966-2-1) · CIELAB(D65)·ΔE*ab(CIE76, CIE 015) · RYB = Gossett & Chen(2004) 색 큐브(단순화) · 식용 색소 = 식약처 「식품첨가물의 기준 및 규격」 품목별 사용기준",
+  "sources": [
+   {
+    "label": "CIE 015:2018 Colorimetry (CIELAB·색차)",
+    "org": "",
+    "href": "https://cie.co.at/publications/colorimetry-4th-edition"
+   },
+   {
+    "label": "IEC 61966-2-1 (sRGB 색공간)",
+    "org": "",
+    "href": "https://webstore.iec.ch/en/publication/6169"
+   },
+   {
+    "label": "식품안전나라 — 식용색소적색제102호 사용기준 (식약처)",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/foodcode/04_03.jsp?idx=8200241"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/print-resolution": {
+  "slug": "/tools/art/print-resolution",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "사진 인화 규격 = 후지필름 공식 스토어 표기(L 89×127 · KG 102×152 · 2L 127×178 · 六切 203×254) · A규격 = ISO 216 · 명함 90×50(한국 관행) · 증명사진 35×45(외교부 여권 규격) · 300 PPI 기준 = 하프톤 150 lpi × 품질계수 2 · 250 PPI = 일반 상업 인쇄 실무 권장값 · 관람 거리 한계 = 시력 1.0(1분각, ISO 8596) 기준 계산",
+  "sources": [
+   {
+    "label": "후지필름 프린트 사이즈 (L·KG·2L)",
+    "org": "",
+    "href": "https://pg-ja.fujifilm.com/10001.html"
+   },
+   {
+    "label": "외교부 여권 사진 규격",
+    "org": "",
+    "href": "https://www.passport.go.kr/home/kor/contents.do?menuPos=32"
+   },
+   {
+    "label": "Adobe — 프린터 해상도와 이미지 해상도",
+    "org": "",
+    "href": "https://helpx.adobe.com/photoshop/desktop/crop-resize-transform/resize-adjust-resolution/printer-resolution.html"
+   },
+   {
+    "label": "ISO 216 — A·B 시리즈 용지 규격",
+    "org": "",
+    "href": "https://www.iso.org/standard/36631.html"
+   },
+   {
+    "label": "ISO 8596 — 시력 검사 표준 시표(1.0 = 1분각)",
+    "org": "",
+    "href": "https://www.iso.org/standard/69042.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/scale": {
+  "slug": "/tools/art/scale",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "장음계 간격 W-W-H-W-W-W-H · 음이름은 도수마다 A~G 글자를 한 번씩(레터워크) · 교회 모드 = 장음계의 회전 · 블루스 = 마이너 펜타토닉 + ♭5 경과음 · 다이어토닉 7화음 로마숫자 표기(대문자 장·소문자 단·ø 반감7) · 재생음 A4 = 440Hz 12평균율",
+  "sources": [
+   {
+    "label": "Music Theory for the 21st-Century Classroom — 장음계 (Univ. of Puget Sound)",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/TheMajorScale.html"
+   },
+   {
+    "label": "같은 교재 — 단음계 3종",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/MinorScales.html"
+   },
+   {
+    "label": "같은 교재 — 다이어토닉 7화음 로마숫자",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/RomanNumeralsOfDiatonicSeventhChords.html"
+   },
+   {
+    "label": "Open Music Theory — Diatonic Modes",
+    "org": "",
+    "href": "https://viva.pressbooks.pub/openmusictheory/chapter/diatonic-modes/"
+   },
+   {
+    "label": "Open Music Theory — Blues Melodies and the Blues Scale",
+    "org": "",
+    "href": "https://viva.pressbooks.pub/openmusictheory/chapter/blues-melodies-and-the-blues-scale/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/tap-tempo": {
+  "slug": "/tools/art/tap-tempo",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "리버브 프리딜레이 통용 범위 — 해외 오디오 엔지니어링 가이드(iZotope·Loopmasters·eMastered) 교차 확인",
+  "sources": [
+   {
+    "label": "iZotope — Reverb pre-delay 가이드",
+    "org": "",
+    "href": "https://www.izotope.com/en/learn/reverb-pre-delay"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/art/vocal-range": {
+  "slug": "/tools/art/vocal-range",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "음이름↔주파수 = 12평균율·A4 440Hz(ISO 16) · MIDI = 69 + 12·log₂(f/440) · 옥타브는 국제 표기(C4 = 가운데 도)와 한국 대중음악 관행(국제 옥타브 − 2)을 병기 · 성부 음역은 교재 관행값이라 자료마다 1~2음 차이",
+  "sources": [
+   {
+    "label": "ISO 16:1975 표준 음높이(A = 440Hz)",
+    "org": "",
+    "href": "https://www.iso.org/standard/3601.html"
+   },
+   {
+    "label": "MDN — getUserMedia(보안 컨텍스트 필요)",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia"
+   },
+   {
+    "label": "NIDCD — Taking Care of Your Voice",
+    "org": "",
+    "href": "https://www.nidcd.nih.gov/health/taking-care-your-voice"
+   },
+   {
+    "label": "pitchy — McLeod Pitch Method 구현 (피치 감지 라이브러리)",
+    "org": "",
+    "href": "https://github.com/ianprime0509/pitchy"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/baby-porridge": {
+  "slug": "/tools/cooking/baby-porridge",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "배죽 물양은 육아 서적·레시피 플랫폼 통용 관행 종합(공식 규격이 아닌 관행 수치) · 이유식 시작 시기·안전 수칙은 질병관리청(모유 6개월 이후·분유 4~6개월)·WHO 2023 보완식 지침(생후 6개월) 기준",
+  "sources": [
+   {
+    "label": "질병관리청 국가건강정보포털",
+    "org": "",
+    "href": "https://health.kdca.go.kr"
+   },
+   {
+    "label": "질병관리청 — 이유기보충식(이유식)",
+    "org": "",
+    "href": "https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5470"
+   },
+   {
+    "label": "WHO — 6~23개월 보완식 지침(2023)",
+    "org": "",
+    "href": "https://www.who.int/publications/i/item/9789240081864"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/baker-percent": {
+  "slug": "/tools/cooking/baker-percent",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "베이커 퍼센트 정의(밀가루 = 100%)·소금 1.8~2.2%·이스트 환산(생 3 : 액티브 1.2~1.25 : 인스턴트 1)·프리퍼먼트 수분율은 King Arthur Baking 전문가 레퍼런스 기준, 계란 75%·우유 90% 수분 환산은 본 도구 기준값",
+  "sources": [
+   {
+    "label": "King Arthur Baking — Baker's Percentage",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/pro/reference/bakers-percentage"
+   },
+   {
+    "label": "King Arthur Baking — Yeast",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/pro/reference/yeast"
+   },
+   {
+    "label": "King Arthur Baking — Preferment",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/pro/reference/preferment"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/baking-recipe": {
+  "slug": "/tools/cooking/baking-recipe",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "품목별 기본 비율은 통용 동량 배합(마들렌·파운드 1:1:1:1)과 제과기능사 실기 공개문제 대조 · 케이크 팬은 부피비 환산(원형 1호 15cm·호당 +3cm·높은팬 7cm, 판매 규격 교차 확인) · 계란 무게는 축산법 시행규칙 중량규격",
+  "sources": [
+   {
+    "label": "Q-Net — 제과기능사 실기 공개문제(2026)",
+    "org": "",
+    "href": "https://www.q-net.or.kr/cst006.do?id=cst00602&gSite=Q&gId=&artlSeq=5250954&brdId=Q006&code=1204"
+   },
+   {
+    "label": "King Arthur Baking — 팬 크기와 부피",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/blog/2025/08/18/baking-pan-size"
+   },
+   {
+    "label": "King Arthur Baking — 6인치 팬으로 나눠 굽기",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/blog/2022/09/28/how-to-turn-any-cake-recipe-into-6-inch-mini-cakes"
+   },
+   {
+    "label": "국가법령정보센터 — 축산법 시행규칙(계란 중량규격)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/축산법시행규칙"
+   },
+   {
+    "label": "Illinois Extension — 계란 구조·구성비",
+    "org": "",
+    "href": "https://extension.illinois.edu/eggs-structure"
+   },
+   {
+    "label": "국가법령정보센터 — 식품표시광고법 시행규칙(알레르기 표시)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/식품등의표시ㆍ광고에관한법률시행규칙"
+   },
+   {
+    "label": "식품의약품안전처 — 식품표시광고법 시행규칙 개정안 입법예고(알레르기 표시 대상 확대)",
+    "org": "",
+    "href": "https://www.mfds.go.kr/brd/m_209/view.do?seq=44285"
+   },
+   {
+    "label": "카우2004 — 케이크 팬 판매 규격",
+    "org": "",
+    "href": "https://www.cow2004.com"
+   },
+   {
+    "label": "웰베이킹 — 케이크 팬 판매 규격",
+    "org": "",
+    "href": "https://wellbaking.co.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/baking-schedule": {
+  "slug": "/tools/cooking/baking-schedule",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "22℃ 표준 일정 × 실내 온도 배율(발효 단계만) · 물 온도는 DDT 공식(목표 반죽 온도×3 또는 ×4 − 실내·밀가루·발효종 온도 − 마찰열)",
+  "sources": [
+   {
+    "label": "King Arthur Baking — Dough Temperature",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/pro/reference/dough-temperature"
+   },
+   {
+    "label": "King Arthur Baking — Friction factor",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/blog/2018/08/27/determining-the-friction-factor-in-baking"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/brew": {
+  "slug": "/tools/cooking/brew",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "SCA 골든컵(물 1L당 원두 55g ±10% · TDS 1.15~1.35% · 추출 수율 18~22%)과 추출법별 통용 레시피 · 카페인 1일 최대 섭취 권고량은 식약처 기준",
+  "sources": [
+   {
+    "label": "SCA — Protocols & Best Practices (골든컵·추출 기준)",
+    "org": "",
+    "href": "https://sca.coffee/research/protocols-best-practices"
+   },
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "FDA — How Much Caffeine is Too Much?",
+    "org": "",
+    "href": "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/egg-timer": {
+  "slug": "/tools/cooking/egg-timer",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "계란 크기는 축산법 시행규칙 중량규격(2XL~S, 2026.5.21 명칭 개편) · 가열 기준은 식약처 살모넬라 예방 수칙(중심온도 75℃ 1분 이상)",
+  "sources": [
+   {
+    "label": "농림축산식품부 계란 중량규격 명칭 개편(2026.5.21)",
+    "org": "",
+    "href": "https://www.mafra.go.kr/home/5109/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaG9tZSUyRjc5MiUyRjU3Nzk4MiUyRmFydGNsVmlldy5kbyUzRg%3D%3D"
+   },
+   {
+    "label": "식약처 살모넬라 식중독 예방",
+    "org": "",
+    "href": "https://www.mfds.go.kr/brd/m_99/view.do?seq=43647"
+   },
+   {
+    "label": "USDA FSIS Shell Eggs from Farm to Table",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/eggs/shell-eggs-farm-table"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/food-storage": {
+  "slug": "/tools/cooking/food-storage",
+  "updated": "2026-09-26",
+  "basis": "",
+  "sources": [
+   {
+    "label": "식약처 「식품유형별 소비기한 설정 보고서」 — 식품안전나라 소비기한 자료실",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/portal/board/board.do?menu_grp=MENU_NEW01&menu_no=4612"
+   },
+   {
+    "label": "소비기한 표시제 Q&A — 대한민국 정책브리핑",
+    "org": "",
+    "href": "https://www.korea.kr/news/healthView.do?newsId=148911057"
+   },
+   {
+    "label": "USDA FSIS — Freezing and Food Safety",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/freezing-and-food-safety"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/fruit-syrup": {
+  "slug": "/tools/cooking/fruit-syrup",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "식약처 「안전한 매실청 담그는 방법」(2026.5.27) 안내 반영",
+  "sources": [
+   {
+    "label": "식약처 보도자료(2026.5.27)",
+    "org": "",
+    "href": "https://www.mfds.go.kr/brd/m_99/view.do?seq=50018"
+   },
+   {
+    "label": "식약처 카드뉴스",
+    "org": "",
+    "href": "https://mfds.go.kr/brd/m_580/view.do?seq=166"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/frying": {
+  "slug": "/tools/cooking/frying",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "안전 중심온도는 식약처 식중독 예방 수칙(육류 75℃·어패류 85℃, 1분 이상)과 USDA FSIS 안전 최저 내부온도표 · 재료별 온도·시간은 가정 조리 참고값",
+  "sources": [
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "USDA FSIS Safe Minimum Internal Temperature Chart",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart"
+   },
+   {
+    "label": "소방청",
+    "org": "",
+    "href": "https://www.nfa.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/holiday-table": {
+  "slug": "/tools/cooking/holiday-table",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "aT 차례상 비용 조사(2026년 설 2.6·추석 9.18)·KAMIS 일별 시세 기준 · 성균관 의례정립위원회 차례상 표준안(2022.9)·제례 현대화 권고안(2023.11)",
+  "sources": [
+   {
+    "label": "aT 한국농수산식품유통공사",
+    "org": "",
+    "href": "https://www.at.or.kr"
+   },
+   {
+    "label": "KAMIS 농산물유통정보",
+    "org": "",
+    "href": "https://www.kamis.or.kr"
+   },
+   {
+    "label": "성균관 — 차례상 표준안·제례 권고안 발표 기관",
+    "org": "",
+    "href": "https://www.skkok.com"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/kimjang": {
+  "slug": "/tools/cooking/kimjang",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "배추 1포기(절임 전 약 3kg·절임 후 약 2.5kg) 기준 가정 비율 · 가격은 KAMIS 서울 소매가(조회 실패·미연동 품목은 2025년 11월 평균가)",
+  "sources": [
+   {
+    "label": "KAMIS 농산물유통정보",
+    "org": "",
+    "href": "https://www.kamis.or.kr"
+   },
+   {
+    "label": "aT 한국농수산식품유통공사",
+    "org": "",
+    "href": "https://www.at.or.kr"
+   },
+   {
+    "label": "기상청 날씨누리",
+    "org": "",
+    "href": "https://www.weather.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/microwave": {
+  "slug": "/tools/cooking/microwave",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "출력 환산은 시간 × (기준 W ÷ 새 W) 반비례에 본 도구의 경험적 보정(600W 이하 +7%·1000W 이상 −5%)을 곱한 값 · 용기·안전 안내는 식약처·미국 FDA·USDA FSIS 기준",
+  "sources": [
+   {
+    "label": "식품안전나라 — 전자레인지 전용 식품용기, 바로 알고 사용해요",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/portal/board/boardDetail.do?menu_no=2694&menu_grp=MENU_NEW01&bbs_no=bbs231&ntctxt_no=1082132"
+   },
+   {
+    "label": "U.S. FDA — Microwave Ovens",
+    "org": "",
+    "href": "https://www.fda.gov/radiation-emitting-products/resources-you-radiation-emitting-products/microwave-ovens"
+   },
+   {
+    "label": "USDA FSIS — Cooking with Microwave Ovens",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/cooking-microwave-ovens"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/nuts": {
+  "slug": "/tools/cooking/nuts",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "셀레늄 권장 60μg·상한 400μg(2020 한국인 영양소 섭취기준) · 영양 성분은 USDA FoodData Central 평균값",
+  "sources": [
+   {
+    "label": "보건복지부 2020 한국인 영양소 섭취기준",
+    "org": "",
+    "href": "https://www.mohw.go.kr/board.es?mid=a10411010100&bid=0019&act=view&list_no=362385"
+   },
+   {
+    "label": "USDA FoodData Central",
+    "org": "",
+    "href": "https://fdc.nal.usda.gov/"
+   },
+   {
+    "label": "NIH ODS 셀레늄 팩트시트",
+    "org": "",
+    "href": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+   },
+   {
+    "label": "NIAID 땅콩 알레르기 예방 지침(2017)",
+    "org": "",
+    "href": "https://www.niaid.nih.gov/sites/default/files/addendum-peanut-allergy-prevention-guidelines.pdf"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/ramen": {
+  "slug": "/tools/cooking/ramen",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "물양·시간·영양은 제조사 봉지/용기 표기(1개) 기준, 개수·농도·토핑 보정은 도구 자체 경험값 · 나트륨 비교는 WHO 성인 권고(하루 2,000mg 미만)",
+  "sources": [
+   {
+    "label": "WHO Sodium reduction 팩트시트",
+    "org": "",
+    "href": "https://www.who.int/news-room/fact-sheets/detail/sodium-reduction"
+   },
+   {
+    "label": "식약처 식품영양성분 데이터베이스",
+    "org": "",
+    "href": "https://various.foodsafetykorea.go.kr/nutrient/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/recipe": {
+  "slug": "/tools/cooking/recipe",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "한국 계량 1컵 200ml·1큰술 15ml·1작은술 5ml, 미국 컵 240ml · 부피↔무게는 계산기 내장 재료 밀도(g/ml, 가정용 근사값)로 환산",
+  "sources": [
+   {
+    "label": "USDA FoodData Central (재료별 계량 단위 무게)",
+    "org": "",
+    "href": "https://fdc.nal.usda.gov/"
+   },
+   {
+    "label": "King Arthur Baking — Ingredient Weight Chart",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/learn/ingredient-weight-chart"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/serving": {
+  "slug": "/tools/cooking/serving",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "1인분 기준값은 이 계산기의 재료 데이터(가정 식사량 통용값 — 공식 기준 아님) · 비교용 1회 분량은 2020 한국인 영양소 섭취기준 활용자료(보건복지부·한국영양학회, 2022) — 2025년 개정판 식사구성안 반영 전",
+  "sources": [
+   {
+    "label": "보건복지부 — 2020 한국인 영양소 섭취기준 활용자료",
+    "org": "",
+    "href": "https://www.mohw.go.kr/board.es?mid=a10411010100&bid=0019&act=view&list_no=370012"
+   },
+   {
+    "label": "한국영양학회 — 한국인 영양소 섭취기준 자료실",
+    "org": "",
+    "href": "https://www.kns.or.kr/FileRoom/FileRoom.asp?BoardID=Kdr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/cooking/sourdough": {
+  "slug": "/tools/cooking/sourdough",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "냉장 관리·부활 절차·후치와 폐기 신호는 King Arthur Baking 공식 가이드와 콜로라도·사우스다코타 주립대 익스텐션 자료 · 피크 시간은 도구의 경험식(24°C 기준, 10°C 낮아질 때마다 약 2배 느림)",
+  "sources": [
+   {
+    "label": "King Arthur Baking — Sourdough Starter",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/recipes/sourdough-starter-recipe"
+   },
+   {
+    "label": "Colorado State University Extension",
+    "org": "",
+    "href": "https://extension.colostate.edu"
+   },
+   {
+    "label": "South Dakota State University Extension",
+    "org": "",
+    "href": "https://extension.sdstate.edu"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/substitute": {
+  "slug": "/tools/cooking/substitute",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "대체 비율은 제과·요리 통용 환산 종합(꿀 대체·계량 무게는 King Arthur Baking 등 제과 레퍼런스 참고) · 알레르기 표시 대상은 「식품등의 표시기준」 기준",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 식품등의 표시기준",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/식품등의표시기준"
+   },
+   {
+    "label": "식품안전나라 — 알레르기 유발 식품 표시",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/portal/board/boardDetail.do?menu_no=3120&menu_grp=MENU_NEW01&bbs_no=bbs001&ntctxt_no=1091412"
+   },
+   {
+    "label": "King Arthur Baking — Ingredient Weight Chart",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/learn/ingredient-weight-chart"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/cooking/tea": {
+  "slug": "/tools/cooking/tea",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "카페인 1일 권고량은 식약처(성인 400mg·임산부 300mg·어린이·청소년 체중 1kg당 2.5mg) · 말차·침출액 카페인은 일본식품표준성분표(8정) · 온도·시간·비율은 일반 우림 관행",
+  "sources": [
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "일본 문부과학성 식품성분 데이터베이스",
+    "org": "",
+    "href": "https://fooddb.mext.go.jp/"
+   },
+   {
+    "label": "FDA — How Much Caffeine is Too Much?",
+    "org": "",
+    "href": "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/cooking/thawing": {
+  "slug": "/tools/cooking/thawing",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "안전 해동법(냉장·흐르는 찬물·전자레인지)·위험 온도대 2시간 규칙은 식약처·USDA FSIS 안내, 냉장 해동 시간은 USDA '5파운드당 24시간'(≈1kg당 10.6시간)에 맞춘 도구 모델",
+  "sources": [
+   {
+    "label": "식약처 식품안전나라",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/"
+   },
+   {
+    "label": "USDA FSIS The Big Thaw",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/big-thaw-safe-defrosting-methods"
+   },
+   {
+    "label": "USDA FSIS Freezing and Food Safety",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/freezing-and-food-safety"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/age": {
+  "slug": "/tools/date/age",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "국가데이터처(구 통계청) 2024년 생명표 (2025년 12월 발표)",
+  "sources": [
+   {
+    "label": "국가데이터처 2024년 생명표 보도자료",
+    "org": "",
+    "href": "https://mods.go.kr/board.es?mid=a10301010000&bid=208&act=view&list_no=439533"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/dday": {
+  "slug": "/tools/date/dday",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "시험 일정은 시행기관 공고 기준 · 공휴일 2026~2030년 반영",
+  "sources": [
+   {
+    "label": "국가법령정보센터(관공서의 공휴일에 관한 규정)",
+    "org": "",
+    "href": "https://www.law.go.kr"
+   },
+   {
+    "label": "공휴일에 관한 법률 — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/공휴일에관한법률"
+   },
+   {
+    "label": "한국산업인력공단 Q-Net",
+    "org": "",
+    "href": "https://www.q-net.or.kr"
+   },
+   {
+    "label": "한국교육과정평가원 수능",
+    "org": "",
+    "href": "https://www.suneung.re.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/history-era": {
+  "slug": "/tools/date/history-era",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "조선왕조실록 기년(유년칭원법) 기준",
+  "sources": [
+   {
+    "label": "조선왕조실록",
+    "org": "",
+    "href": "https://sillok.history.go.kr"
+   },
+   {
+    "label": "한국사데이터베이스",
+    "org": "",
+    "href": "https://db.history.go.kr"
+   },
+   {
+    "label": "우리역사넷",
+    "org": "",
+    "href": "http://contents.history.go.kr"
+   },
+   {
+    "label": "연호에 관한 법률",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/연호에관한법률"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/holiday-bridge": {
+  "slug": "/tools/date/holiday-bridge",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "2026~2030년 법정공휴일·대체공휴일 (제헌절·노동절 공휴일 편입 반영 — 대통령령 제36290호)",
+  "sources": [
+   {
+    "label": "관공서의 공휴일에 관한 규정 — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/관공서의공휴일에관한규정"
+   },
+   {
+    "label": "대통령령 제36290호 개정 이유 — 정부입법현황",
+    "org": "",
+    "href": "https://opinion.lawmaking.go.kr/lmSts/govLm/2000000326376/detailRP"
+   },
+   {
+    "label": "인사혁신처",
+    "org": "",
+    "href": "https://www.mpm.go.kr/"
+   },
+   {
+    "label": "한국천문연구원 음력",
+    "org": "",
+    "href": "https://astro.kasi.re.kr/"
+   },
+   {
+    "label": "관공서의 공휴일에 관한 규정 — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/jet-lag": {
+  "slug": "/tools/date/jet-lag",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "시차·서머타임 = IANA 시간대 데이터(출발일 기준) · 적응 속도 = 동쪽 1시간/일·서쪽 1.5시간/일 (CDC Yellow Book)",
+  "sources": [
+   {
+    "label": "CDC Yellow Book — Jet Lag Disorder",
+    "org": "",
+    "href": "https://www.cdc.gov/yellow-book/hcp/travel-air-sea/jet-lag-disorder.html"
+   },
+   {
+    "label": "AASM 임상 진료지침 (SLEEP 2007)",
+    "org": "",
+    "href": "https://aasm.org/wp-content/uploads/2017/07/PP_CircadianRhythm.pdf"
+   },
+   {
+    "label": "NHS — Jet lag",
+    "org": "",
+    "href": "https://www.nhs.uk/conditions/jet-lag/"
+   },
+   {
+    "label": "IANA Time Zone Database",
+    "org": "",
+    "href": "https://www.iana.org/time-zones"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/lunar": {
+  "slug": "/tools/date/lunar",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "한국천문연구원(KASI) 음력 데이터 1900~2049 전수 일치 · 2025~2030 공휴일 발표 교차 확인",
+  "sources": [
+   {
+    "label": "한국천문연구원 음양력변환",
+    "org": "",
+    "href": "https://astro.kasi.re.kr"
+   },
+   {
+    "label": "한국민속대백과사전",
+    "org": "",
+    "href": "https://folkency.nfm.go.kr"
+   },
+   {
+    "label": "2027년 월력요항 (우주항공청)",
+    "org": "",
+    "href": "https://www.kasa.go.kr/prog/plcyBrf/brief/kor/sub01_01_04/view.do?plcyBrfNo=431"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/military": {
+  "slug": "/tools/date/military",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "복무기간 = 병무청 병역이행안내 / 전역일 산정 = 「병역법」 제18조·시행령 제27조 + 「민법」 제160조 / 진급 = 「군인사법 시행규칙」 제32조 (국방부령 제1207호, 시행 2026-03-01)",
+  "sources": [
+   {
+    "label": "병역법 제18조(현역의 복무) — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/병역법/제18조"
+   },
+   {
+    "label": "군인사법 시행규칙 제32조(병의 진급 등) — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/군인사법시행규칙/제32조"
+   },
+   {
+    "label": "민법 제160조(역에 의한 계산) — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/민법/제160조"
+   },
+   {
+    "label": "병무청 병역이행안내",
+    "org": "",
+    "href": "https://www.mma.go.kr/contents.do?mc=usr0000041"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/schengen": {
+  "slug": "/tools/date/schengen",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "쉥겐 29개 회원국 · EES 전면 시행(2026-04-10) 반영",
+  "sources": [
+   {
+    "label": "EU 공식 쉥겐 계산기",
+    "org": "",
+    "href": "https://ec.europa.eu/assets/home/visa-calculator/calculator.htm"
+   },
+   {
+    "label": "EU EES·ETIAS 안내",
+    "org": "",
+    "href": "https://travel-europe.europa.eu/ees_en"
+   },
+   {
+    "label": "외교부 해외안전여행",
+    "org": "",
+    "href": "https://0404.go.kr/bbs/contsPst/MST0000000000117/17/detail"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/date/server-time": {
+  "slug": "/tools/date/server-time",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "NTP(RFC 5905) 방식 왕복 지연 보정 · 외부 사이트는 HTTP Date 헤더(RFC 9110, 초 단위) 기준",
+  "sources": [
+   {
+    "label": "RFC 5905 (NTPv4)",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc5905"
+   },
+   {
+    "label": "RFC 9110 (HTTP Date 헤더)",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc9110"
+   },
+   {
+    "label": "한국표준과학연구원(KRISS)",
+    "org": "",
+    "href": "https://www.kriss.re.kr"
+   },
+   {
+    "label": "공연법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/공연법"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/date/timezone": {
+  "slug": "/tools/date/timezone",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "IANA 시간대 데이터베이스(브라우저 내장 tzdata) · 한국 표준시 UTC+9(표준시에 관한 법률)",
+  "sources": [
+   {
+    "label": "IANA Time Zone Database",
+    "org": "",
+    "href": "https://www.iana.org/time-zones"
+   },
+   {
+    "label": "표준시에 관한 법률",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/표준시에관한법률"
+   },
+   {
+    "label": "BIPM 제27차 CGPM 결의 4 (UTC·윤초)",
+    "org": "",
+    "href": "https://www.bipm.org/en/cgpm-2022/resolution-4"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/base64": {
+  "slug": "/tools/dev/base64",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "RFC 4648(Base64·Base64URL) · RFC 2397(data URL) · 브라우저 btoa()/atob() 정의",
+  "sources": [
+   {
+    "label": "RFC 4648 Base16·32·64 인코딩",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc4648"
+   },
+   {
+    "label": "RFC 2397 data URL",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc2397"
+   },
+   {
+    "label": "MDN btoa()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/cron": {
+  "slug": "/tools/dev/cron",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "표준 cron 5필드(Vixie·cronie crontab(5)) · Kubernetes CronJob·AWS EventBridge 공식 문서의 필드·요일 규칙",
+  "sources": [
+   {
+    "label": "crontab(5) 매뉴얼",
+    "org": "",
+    "href": "https://man7.org/linux/man-pages/man5/crontab.5.html"
+   },
+   {
+    "label": "POSIX crontab",
+    "org": "",
+    "href": "https://pubs.opengroup.org/onlinepubs/9799919799/utilities/crontab.html"
+   },
+   {
+    "label": "Kubernetes CronJob",
+    "org": "",
+    "href": "https://kubernetes.io/docs/concepts/workloads/controllers/cron-jobs/"
+   },
+   {
+    "label": "AWS EventBridge 일정 표현식",
+    "org": "",
+    "href": "https://docs.aws.amazon.com/eventbridge/latest/userguide/eb-scheduled-rule-pattern.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/css-converter": {
+  "slug": "/tools/dev/css-converter",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "W3C CSS Values and Units 4(rem·vw·dvh·clamp)·CSS Text 4(letter-spacing)·CSS Box Sizing 4(aspect-ratio)·CSS 2.1(line-height) 정의 기준",
+  "sources": [
+   {
+    "label": "W3C CSS Values and Units Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-values-4/"
+   },
+   {
+    "label": "W3C CSS Text Module Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-text-4/"
+   },
+   {
+    "label": "W3C CSS Box Sizing Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-sizing-4/"
+   },
+   {
+    "label": "W3C CSS 2.1 line-height",
+    "org": "",
+    "href": "https://www.w3.org/TR/CSS21/visudet.html#propdef-line-height"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/curl": {
+  "slug": "/tools/dev/curl",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "curl 공식 매뉴얼 옵션 정의 · WHATWG Fetch 금지 헤더 · 각 언어 표준 HTTP 클라이언트 문서",
+  "sources": [
+   {
+    "label": "curl 매뉴얼",
+    "org": "",
+    "href": "https://curl.se/docs/manpage.html"
+   },
+   {
+    "label": "Everything curl",
+    "org": "",
+    "href": "https://everything.curl.dev/"
+   },
+   {
+    "label": "MDN 금지 요청 헤더",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Glossary/Forbidden_request_header"
+   },
+   {
+    "label": "Go net/http",
+    "org": "",
+    "href": "https://pkg.go.dev/net/http"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/dev/hash": {
+  "slug": "/tools/dev/hash",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "MD5 RFC 1321 · SHA-1/SHA-2 NIST FIPS 180-4 · HMAC RFC 2104 · SRI W3C 권고 · NIST SHA-1 퇴역 발표(2022.12)",
+  "sources": [
+   {
+    "label": "NIST FIPS 180-4 (SHS)",
+    "org": "",
+    "href": "https://nvlpubs.nist.gov/nistpubs/fips/nist.fips.180-4.pdf"
+   },
+   {
+    "label": "NIST SHA-1 퇴역 발표",
+    "org": "",
+    "href": "https://www.nist.gov/news-events/news/2022/12/nist-retires-sha-1-cryptographic-algorithm"
+   },
+   {
+    "label": "RFC 2104 (HMAC)",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc2104"
+   },
+   {
+    "label": "W3C Subresource Integrity",
+    "org": "",
+    "href": "https://www.w3.org/TR/SRI/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/http-status": {
+  "slug": "/tools/dev/http-status",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "RFC 9110(HTTP Semantics)·RFC 9111(캐시)·RFC 6585 등 IETF 표준과 IANA 상태 코드 레지스트리 · 비표준 코드는 Cloudflare·nginx 공식 문서",
+  "sources": [
+   {
+    "label": "RFC 9110 HTTP Semantics",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc9110"
+   },
+   {
+    "label": "IANA HTTP 상태 코드 레지스트리",
+    "org": "",
+    "href": "https://www.iana.org/assignments/http-status-codes/"
+   },
+   {
+    "label": "RFC 9111 HTTP Caching",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc9111"
+   },
+   {
+    "label": "RFC 6585 추가 상태 코드",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc6585"
+   },
+   {
+    "label": "Cloudflare HTTP 상태 코드 문서",
+    "org": "",
+    "href": "https://developers.cloudflare.com/support/troubleshooting/http-status-codes/"
+   },
+   {
+    "label": "Google 검색 센터 — 리다이렉트",
+    "org": "",
+    "href": "https://developers.google.com/search/docs/crawling-indexing/301-redirects"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/dev/json": {
+  "slug": "/tools/dev/json",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "JSON 문법 RFC 8259·ECMA-404 · YAML 1.2.2(코어 스키마) · 브라우저 JSON.parse/stringify · YAML 처리 js-yaml 4 · CSV 따옴표 규칙 RFC 4180",
+  "sources": [
+   {
+    "label": "RFC 8259 JSON 데이터 교환 형식",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc8259"
+   },
+   {
+    "label": "ECMA-404 JSON 문법",
+    "org": "",
+    "href": "https://ecma-international.org/publications-and-standards/standards/ecma-404/"
+   },
+   {
+    "label": "YAML 1.2.2 명세",
+    "org": "",
+    "href": "https://yaml.org/spec/1.2.2/"
+   },
+   {
+    "label": "MDN JSON.stringify()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/JSON/stringify"
+   },
+   {
+    "label": "RFC 4180 CSV 형식",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc4180"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/jwt": {
+  "slug": "/tools/dev/jwt",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "RFC 7519(JWT) 등록 클레임 · RFC 8725(JWT 보안 권고) · RFC 9700(OAuth 2.0 보안 권고)",
+  "sources": [
+   {
+    "label": "RFC 7519 JSON Web Token",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc7519"
+   },
+   {
+    "label": "RFC 8725 JWT Best Current Practices",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc8725"
+   },
+   {
+    "label": "RFC 9700 OAuth 2.0 Security BCP",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc9700"
+   },
+   {
+    "label": "NVD CVE-2015-9235",
+    "org": "",
+    "href": "https://nvd.nist.gov/vuln/detail/CVE-2015-9235"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/keyboard-layout": {
+  "slug": "/tools/dev/keyboard-layout",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "KS X 5002(정보 처리용 건반 배열) 두벌식 · 유니코드 한글 음절 조합 규칙(3.12절)",
+  "sources": [
+   {
+    "label": "KS X 5002 정보 처리용 건반 배열 (e나라표준인증)",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&topMenuId=502&ksNo=KSX5002&tmprKsNo=KSX5002&reformNo=00"
+   },
+   {
+    "label": "유니코드 표준 3장 (3.12 Conjoining Jamo Behavior)",
+    "org": "",
+    "href": "https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-3/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/llm-vram": {
+  "slug": "/tools/dev/llm-vram",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "llama.cpp quantize README 실측 bpw · HuggingFace 공식 config.json (Llama·Qwen·Gemma·EXAONE 등 13종)",
+  "sources": [
+   {
+    "label": "llama.cpp",
+    "org": "",
+    "href": "https://github.com/ggml-org/llama.cpp"
+   },
+   {
+    "label": "HuggingFace",
+    "org": "",
+    "href": "https://huggingface.co"
+   },
+   {
+    "label": "Gemma 3 기술 보고서",
+    "org": "",
+    "href": "https://arxiv.org/abs/2503.19786"
+   },
+   {
+    "label": "Apple Metal recommendedMaxWorkingSetSize",
+    "org": "",
+    "href": "https://developer.apple.com/documentation/metal/mtldevice/recommendedmaxworkingsetsize"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/network-test": {
+  "slug": "/tools/dev/network-test",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "LTE·5G 평균: 과기정통부·NIA 2025 통신서비스 품질평가 (2025.12.30 발표)",
+  "sources": [
+   {
+    "label": "과기정통부 보도자료(정책브리핑)",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156737428"
+   },
+   {
+    "label": "KDI 경제정보센터 게시본",
+    "org": "",
+    "href": "https://eiec.kdi.re.kr/policy/materialView.do?num=275568"
+   },
+   {
+    "label": "RFC 3550 (지터 정의)",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc3550"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/number-base": {
+  "slug": "/tools/dev/number-base",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "정수는 임의 정밀도(BigInt)로 계산 · 부동소수점은 IEEE 754-2019, 문자 코드는 ASCII(RFC 20)·Unicode 17.0, 서브넷은 CIDR(RFC 4632) 기준",
+  "sources": [
+   {
+    "label": "IEEE 754-2019 부동소수점 표준",
+    "org": "",
+    "href": "https://standards.ieee.org/standard/754-2019.html"
+   },
+   {
+    "label": "Unicode 17.0",
+    "org": "",
+    "href": "https://www.unicode.org/versions/Unicode17.0.0/"
+   },
+   {
+    "label": "RFC 20 ASCII",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc20"
+   },
+   {
+    "label": "RFC 4632 CIDR",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc4632"
+   },
+   {
+    "label": "W3C PNG 명세(파일 시그니처)",
+    "org": "",
+    "href": "https://www.w3.org/TR/png/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/og-preview": {
+  "slug": "/tools/dev/og-preview",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "태그 해석·검증 규칙 = Open Graph 프로토콜 + 플랫폼 공식 개발자 문서 기준",
+  "sources": [
+   {
+    "label": "Open Graph 프로토콜",
+    "org": "",
+    "href": "https://ogp.me/"
+   },
+   {
+    "label": "Meta 공유 이미지 가이드",
+    "org": "",
+    "href": "https://developers.facebook.com/docs/sharing/webmasters/images/"
+   },
+   {
+    "label": "카카오 공유 디버거",
+    "org": "",
+    "href": "https://developers.kakao.com/tool/clear/og"
+   },
+   {
+    "label": "X Cards 문서",
+    "org": "",
+    "href": "https://developer.x.com/en/docs/x-for-websites/cards/guides/getting-started"
+   },
+   {
+    "label": "LinkedIn 공유 도움말",
+    "org": "",
+    "href": "https://www.linkedin.com/help/linkedin/answer/a521928"
+   },
+   {
+    "label": "Slack 링크 미리보기 봇",
+    "org": "",
+    "href": "https://api.slack.com/robots"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/regex": {
+  "slug": "/tools/dev/regex",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "ECMAScript 정규식(브라우저 내장 엔진) 문법 기준 · 주민등록번호 부여체계 개편(2020.10) · 개인정보 보호법 시행령 제19조",
+  "sources": [
+   {
+    "label": "MDN 정규 표현식 안내서",
+    "org": "",
+    "href": "https://developer.mozilla.org/ko/docs/Web/JavaScript/Guide/Regular_expressions"
+   },
+   {
+    "label": "ECMA-262 (ECMAScript 명세)",
+    "org": "",
+    "href": "https://tc39.es/ecma262/"
+   },
+   {
+    "label": "OWASP ReDoS",
+    "org": "",
+    "href": "https://owasp.org/www-community/attacks/Regular_expression_Denial_of_Service_-_ReDoS"
+   },
+   {
+    "label": "개인정보 보호법 시행령 제19조",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/개인정보보호법시행령/제19조"
+   },
+   {
+    "label": "행정안전부 주민번호 부여체계 개편",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/policyBriefingView.do?newsId=148872723"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/token-counter": {
+  "slug": "/tools/dev/token-counter",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "각 사 공개 API 표준 단가(대표 모델, 배치·캐시 할인 제외)",
+  "sources": [
+   {
+    "label": "Anthropic 가격",
+    "org": "",
+    "href": "https://platform.claude.com/docs/en/about-claude/pricing"
+   },
+   {
+    "label": "OpenAI 가격",
+    "org": "",
+    "href": "https://openai.com/api/pricing/"
+   },
+   {
+    "label": "Gemini API 가격",
+    "org": "",
+    "href": "https://ai.google.dev/gemini-api/docs/pricing"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/dev/url-encode": {
+  "slug": "/tools/dev/url-encode",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "RFC 3986(URI 문법)·WHATWG URL 표준(폼 인코딩)·ECMAScript encodeURIComponent 정의 · URL 길이는 RFC 9110 권고와 서버 기본 설정",
+  "sources": [
+   {
+    "label": "RFC 3986 URI Generic Syntax",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc3986"
+   },
+   {
+    "label": "WHATWG URL Standard",
+    "org": "",
+    "href": "https://url.spec.whatwg.org/"
+   },
+   {
+    "label": "ECMAScript encodeURIComponent",
+    "org": "",
+    "href": "https://tc39.es/ecma262/#sec-encodeuricomponent-uricomponent"
+   },
+   {
+    "label": "RFC 9110 §4.1 URI 길이",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc9110#section-4.1"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/circuit-simulator": {
+  "slug": "/tools/edu/circuit-simulator",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "옴의 법칙 V = IR · 키르히호프 법칙(직류 선형 저항 회로) · 전력 P = VI = I²R = V²/R · LED 저항 R = (Vs − Vf) ÷ I를 계산값 이상의 E12 표준값으로 올림 · 소비 전력이 정격의 절반을 넘으면 주의(2배 마진)",
+  "sources": [
+   {
+    "label": "NIST — SI 단위(볼트·암페어·옴·와트)",
+    "org": "",
+    "href": "https://physics.nist.gov/cuu/Units/units.html"
+   },
+   {
+    "label": "BIPM — 국제단위계(SI) 브로슈어",
+    "org": "",
+    "href": "https://www.bipm.org/en/publications/si-brochure"
+   },
+   {
+    "label": "NCIC 국가교육과정정보센터 — 과학과 교육과정",
+    "org": "",
+    "href": "https://ncic.re.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/cognitive-test": {
+  "slug": "/tools/edu/cognitive-test",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "인지심리학 표준 과제(단순 반응시간 · Stroop 1935 · 이중 과제 간섭)를 게임화한 참고 지표 — 임상 검사 아님",
+  "sources": [
+   {
+    "label": "Stroop (1935) 원 논문",
+    "org": "",
+    "href": "https://doi.org/10.1037/h0054651"
+   },
+   {
+    "label": "Pashler (1994) 이중 과제 간섭 리뷰",
+    "org": "",
+    "href": "https://doi.org/10.1037/0033-2909.116.2.220"
+   },
+   {
+    "label": "Woods 외(2015) 단순 반응시간 요인",
+    "org": "",
+    "href": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC4374455/"
+   },
+   {
+    "label": "Simons 외(2016) 두뇌 훈련 효과 리뷰",
+    "org": "",
+    "href": "https://doi.org/10.1177/1529100616661983"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/cosmic-calendar": {
+  "slug": "/tools/edu/cosmic-calendar",
+  "reviewed": "2026-08",
+  "updated": "2026-09-26",
+  "basis": "우주 나이 Planck 2018(13.787 Gyr) · 사건 연대는 추정 범위이며 환산값입니다",
+  "sources": [
+   {
+    "label": "우주 나이 — NASA Universe",
+    "org": "",
+    "href": "https://science.nasa.gov/universe/overview/"
+   },
+   {
+    "label": "최초의 별·은하 시기 — NASA (JWST)",
+    "org": "",
+    "href": "https://science.nasa.gov/asset/webb/first-stars-timeline-of-the-universe/"
+   },
+   {
+    "label": "Planck 2018 results VI. Cosmological parameters (A&A 641, A6)",
+    "org": "",
+    "href": "https://doi.org/10.1051/0004-6361/201833910"
+   },
+   {
+    "label": "칼 세이건 코스믹 캘린더 (개념)",
+    "org": "",
+    "href": "https://en.wikipedia.org/wiki/Cosmic_Calendar"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/fermi-estimate": {
+  "slug": "/tools/edu/fermi-estimate",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "페르미 추정용 한국 통계 어림값",
+  "sources": [
+   {
+    "label": "KOSIS 국가통계포털",
+    "org": "",
+    "href": "https://kosis.kr"
+   },
+   {
+    "label": "한국은행 ECOS",
+    "org": "",
+    "href": "https://ecos.bok.or.kr"
+   },
+   {
+    "label": "국토교통 통계누리",
+    "org": "",
+    "href": "https://stat.molit.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/gpa-converter": {
+  "slug": "/tools/edu/gpa-converter",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "비례 = 평점 ÷ 만점 × 4.0 · WES·평어 = 한국 평어(A+·A0 → 4.0, B+ → 3.3 …)를 미국 4.0 평어로 옮겨 인접 평어 사이를 선형 보간 · 영국 등급은 4.5 만점 First≈3.5·2:1≈3.0 / 4.3 만점 First≈3.3·2:1≈2.8의 대략값(학교별 동등표가 우선)",
+  "sources": [
+   {
+    "label": "WES (World Education Services) — 외국 학력·성적 평가",
+    "org": "",
+    "href": "https://www.wes.org/"
+   },
+   {
+    "label": "대학알리미 — 대학별 성적 평가 결과 공시",
+    "org": "",
+    "href": "https://www.academyinfo.go.kr/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/nesin-5grade": {
+  "slug": "/tools/edu/nesin-5grade",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "교육부훈령 제555호(시행 2026-03-01) [별표 9] 석차등급·성취도 기준 / 2028 대입제도 개편",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 학교생활기록 작성 및 관리지침(훈령 제555호)",
+    "org": "",
+    "href": "https://www.law.go.kr/LSW/admRulInfoP.do?admRulSeq=2100000274694"
+   },
+   {
+    "label": "교육부",
+    "org": "",
+    "href": "https://www.moe.go.kr"
+   },
+   {
+    "label": "한국대학교육협의회 — 대학입학전형기본사항",
+    "org": "",
+    "href": "https://www.kcue.or.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/planet-comparison": {
+  "slug": "/tools/edu/planet-comparison",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "행성 물리량 = NASA Planetary Fact Sheet(표면 중력·공전주기·항성일·태양일·1bar 기준 온도) · 체중계 눈금 = 체중 × 표면중력비 · 행성 나이 = 나이 × 365.25 ÷ 공전일수 · 지구–행성 거리는 원궤도·동일 평면 근사 · 탐사 현황은 각 기관 발표 기준",
+  "sources": [
+   {
+    "label": "NASA Planetary Fact Sheet (NSSDCA)",
+    "org": "",
+    "href": "https://nssdc.gsfc.nasa.gov/planetary/factsheet/"
+   },
+   {
+    "label": "NASA Science — Planets",
+    "org": "",
+    "href": "https://science.nasa.gov/solar-system/planets/"
+   },
+   {
+    "label": "ESA — BepiColombo",
+    "org": "",
+    "href": "https://www.esa.int/Science_Exploration/Space_Science/BepiColombo"
+   },
+   {
+    "label": "NASA — Europa Clipper",
+    "org": "",
+    "href": "https://science.nasa.gov/mission/europa-clipper/"
+   },
+   {
+    "label": "NASA — Juno",
+    "org": "",
+    "href": "https://science.nasa.gov/mission/juno/"
+   },
+   {
+    "label": "ESA — Juice",
+    "org": "",
+    "href": "https://www.esa.int/Science_Exploration/Space_Science/Juice"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/review-interval": {
+  "slug": "/tools/edu/review-interval",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "에빙하우스(1885) 절약률 원자료 · SM-2 원 알고리즘(Wozniak) · 학습 기법 효과 리뷰(Dunlosky 외 2013)",
+  "sources": [
+   {
+    "label": "Ebbinghaus, Memory 7장 (York Univ. Classics)",
+    "org": "",
+    "href": "https://psychclassics.yorku.ca/Ebbinghaus/memory7.htm"
+   },
+   {
+    "label": "SuperMemo — SM-2 알고리즘 원문",
+    "org": "",
+    "href": "https://www.supermemo.com/en/blog/application-of-a-computer-to-improve-the-results-obtained-in-working-with-the-supermemo-method"
+   },
+   {
+    "label": "Dunlosky 외(2013) 학습 기법 리뷰",
+    "org": "",
+    "href": "https://doi.org/10.1177/1529100612453266"
+   },
+   {
+    "label": "Cepeda 외(2008) 간격 효과 연구",
+    "org": "",
+    "href": "https://doi.org/10.1111/j.1467-9280.2008.02209.x"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/room-mode": {
+  "slug": "/tools/edu/room-mode",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "Rayleigh 직사각형 방 모드 공식 · Schroeder 주파수 · 청취실 비율 조건(EBU Tech 3276 · ITU-R BS.1116-3)",
+  "sources": [
+   {
+    "label": "ITU-R BS.1116-3 (청취실 조건)",
+    "org": "",
+    "href": "https://www.itu.int/rec/R-REC-BS.1116-3-201502-I/en"
+   },
+   {
+    "label": "EBU Tech 3276 (청취 조건)",
+    "org": "",
+    "href": "https://tech.ebu.ch/publications/tech3276"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/sig-figs": {
+  "slug": "/tools/edu/sig-figs",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "과학적 표기 탭 — 물리 상수 CODATA 2022 권장값 · AU·파섹은 IAU 정의 기준",
+  "sources": [
+   {
+    "label": "NIST CODATA",
+    "org": "",
+    "href": "https://physics.nist.gov/cuu/Constants/"
+   },
+   {
+    "label": "IAU Measuring the Universe",
+    "org": "",
+    "href": "https://iauarchive.eso.org/public/themes/measuring/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/edu/sound-speed": {
+  "slug": "/tools/edu/sound-speed",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "건조 공기 1기압 음속 근사식(331.3 + 0.606 × 기온) · 빛의 속도 정의값 · 낙뢰 행동요령(기상청·NWS) · Sabine 잔향식",
+  "sources": [
+   {
+    "label": "기상청 날씨누리 — 낙뢰 국민행동요령",
+    "org": "",
+    "href": "https://www.weather.go.kr/w/hazard/safety-guide/lightning.do"
+   },
+   {
+    "label": "NWS Lightning Safety",
+    "org": "",
+    "href": "https://www.weather.gov/safety/lightning-safety"
+   },
+   {
+    "label": "NASA Glenn — Speed of Sound",
+    "org": "",
+    "href": "https://www.grc.nasa.gov/www/k-12/airplane/sound.html"
+   },
+   {
+    "label": "NIST CODATA — 진공 중 빛의 속도",
+    "org": "",
+    "href": "https://physics.nist.gov/cgi-bin/cuu/Value?c"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/finance/4-insurance": {
+  "slug": "/tools/finance/4-insurance",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 4대보험 요율·국민연금 기준소득월액 상·하한 기준",
+  "sources": [
+   {
+    "label": "4대 사회보험 정보연계센터",
+    "org": "",
+    "href": "https://www.4insure.or.kr"
+   },
+   {
+    "label": "국민연금공단",
+    "org": "",
+    "href": "https://www.nps.or.kr"
+   },
+   {
+    "label": "국민건강보험공단",
+    "org": "",
+    "href": "https://www.nhis.or.kr"
+   },
+   {
+    "label": "고용노동부(산재보험료율 고시)",
+    "org": "",
+    "href": "https://www.moel.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 — 고용보험법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/고용보험법"
+   },
+   {
+    "label": "두루누리 사회보험료 지원",
+    "org": "",
+    "href": "https://insurancesupport.or.kr"
+   }
+  ],
+  "verified": {
+   "cases": 32,
+   "scope": "근로자·사업주 4대보험료",
+   "full": true,
+   "tests": [
+    "tests/golden/salaryInsurance.test.mts",
+    "tests/golden/pensionBase.test.mts",
+    "tests/golden/workersComp.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/acquisition-tax": {
+  "slug": "/tools/finance/acquisition-tax",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "지방세법 §11·§13의2·§15·§151, 지방세특례제한법 §36의3(2026.1.1 시행), 농어촌특별세법 §5 기준 — 2026.8.26 발표 지방세제 개편안은 시행 전이라 미반영(일시적 2주택 처분기한 단축 예정은 본문 안내)",
+  "sources": [
+   {
+    "label": "지방세법 제11조(부동산 취득의 세율)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법/제11조"
+   },
+   {
+    "label": "지방세특례제한법 제36조의3(생애최초 주택 취득세 감면)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세특례제한법/제36조의3"
+   },
+   {
+    "label": "위택스 취득세 신고·모의계산",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 지방세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법"
+   },
+   {
+    "label": "지방세법 제13조의2(법인의 주택 취득 등 중과)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법/제13조의2"
+   },
+   {
+    "label": "지방세법 제151조(지방교육세 과세표준과 세율)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법/제151조"
+   },
+   {
+    "label": "농어촌특별세법 제5조(과세표준과 세율)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/농어촌특별세법/제5조"
+   },
+   {
+    "label": "행정안전부 보도자료 — 지방 저가주택 취득세 중과 기준 완화",
+    "org": "",
+    "href": "https://www.mois.go.kr/frt/bbs/type010/commonSelectBoardArticle.do?bbsId=BBSMSTR_000000000008&nttId=117228"
+   },
+   {
+    "label": "국토교통부 조정대상지역 지정 현황",
+    "org": "",
+    "href": "https://www.molit.go.kr/policy/stable/sta_b_03.jsp"
+   }
+  ],
+  "verified": {
+   "cases": 68,
+   "scope": "취득 원인별 취득세·지방교육세·농특세",
+   "full": true,
+   "tests": [
+    "tests/golden/acquisitionTaxCauses.test.mts",
+    "tests/golden/acquisitionTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/annual-leave": {
+  "slug": "/tools/finance/annual-leave",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "근로기준법 §60①②④⑦·§61·§11(상시 명 이상) · (1년 계약직 최대 일)·고용노동부 행정해석(1년·1개월을 마친 다음 날 발생) · 회계연도 퇴직 정산 · 연차수당 기본값 년 최저시급 원 × 시간",
+  "sources": [
+   {
+    "label": "근로기준법 §60",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로기준법/제60조"
+   },
+   {
+    "label": "대법원",
+    "org": "",
+    "href": "https://www.law.go.kr/판례/(${SC.caseNo})"
+   },
+   {
+    "label": "고용노동부 행정해석 변경",
+    "org": "",
+    "href": "https://www.moel.go.kr/news/enews/report/enewsView.do?news_seq=13052"
+   },
+   {
+    "label": "근로기준법 §61 (사용 촉진)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로기준법/제61조"
+   },
+   {
+    "label": "근로기준법 §11 (적용 범위)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로기준법/제11조"
+   },
+   {
+    "label": "근로기준법 시행령 §7 [별표 1]",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로기준법시행령/제7조"
+   },
+   {
+    "label": "대법원 (통상임금)",
+    "org": "",
+    "href": "https://www.law.go.kr/판례/(${OW.caseNo})"
+   }
+  ],
+  "verified": {
+   "cases": 37,
+   "scope": "연차 발생·잔여·연차수당",
+   "full": true,
+   "tests": [
+    "tests/golden/annualLeave.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/auction": {
+  "slug": "/tools/finance/auction",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 지방세법 기준 (취득세율 제11조·중과 제13조의2) · 대출 규제는 2025.10.16 시행 10·15 대책 기준 · 경매 절차는 민사집행법·민사집행규칙 기준",
+  "sources": [
+   {
+    "label": "위택스",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "행정안전부",
+    "org": "",
+    "href": "https://www.mois.go.kr"
+   },
+   {
+    "label": "금융위원회 (대출 규제)",
+    "org": "",
+    "href": "https://www.fsc.go.kr"
+   },
+   {
+    "label": "대법원 법원경매정보",
+    "org": "",
+    "href": "https://www.courtauction.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 민사집행법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/민사집행법"
+   },
+   {
+    "label": "국가법령정보센터 주택임대차보호법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택임대차보호법"
+   },
+   {
+    "label": "위택스 취득세 안내",
+    "org": "",
+    "href": "https://www.wetax.go.kr/"
+   },
+   {
+    "label": "행정안전부 지방세",
+    "org": "",
+    "href": "https://www.mois.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 16,
+   "scope": "취득세·지방교육세·농특세 · 경락대출 LTV·DSR 한도",
+   "full": false,
+   "tests": [
+    "tests/golden/acquisitionTax.test.mts",
+    "tests/golden/loanRules.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/brokerage-fee": {
+  "slug": "/tools/finance/brokerage-fee",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "공인중개사법 §32, 시행규칙 §20·별표 1(주택, 시행)·§20④1호·별표 2(주거용 오피스텔, 요율 시행·협의 문구 시행), 서울특별시 주택 중개보수 등에 관한 조례 기준",
+  "sources": [
+   {
+    "label": "서울특별시 부동산 중개보수 안내",
+    "org": "",
+    "href": "https://land.seoul.go.kr/land/broker/brokerageCommission.do"
+   },
+   {
+    "label": "국토교통부 부동산거래 전자계약시스템 중개보수 요율표",
+    "org": "",
+    "href": "https://irts.molit.go.kr/com/cmn/popup/fee/rtecsFeeRtoPopup.do"
+   },
+   {
+    "label": "공인중개사법 시행규칙 [별표 1] 주택 중개보수 상한요율",
+    "org": "",
+    "href": "https://www.law.go.kr/lsBylInfoPLinkR.do?bylCls=BE&lsNm=%EA%B3%B5%EC%9D%B8%EC%A4%91%EA%B0%9C%EC%82%AC%EB%B2%95+%EC%8B%9C%ED%96%89%EA%B7%9C%EC%B9%99&bylNo=0001&bylBrNo=00"
+   },
+   {
+    "label": "서울특별시 주택 중개보수 등에 관한 조례",
+    "org": "",
+    "href": "https://www.law.go.kr/자치법규/서울특별시주택중개보수등에관한조례"
+   },
+   {
+    "label": "법제처 법령해석 — 간이과세자 공인중개사의 부가가치세 수령",
+    "org": "",
+    "href": "https://www.moleg.go.kr/lawinfo/nwLwAnInfo.mo?mid=a10106020000&cs_seq=356669"
+   },
+   {
+    "label": "헌법재판소 2025. 4. 10. 2023헌마995 결정(간이과세자 중개보수 부가세)",
+    "org": "",
+    "href": "https://www.law.go.kr/헌재결정례/(2023헌마995)"
+   },
+   {
+    "label": "국세청 부가가치세 세율(간이과세자 업종별 부가가치율)",
+    "org": "",
+    "href": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=2275&cntntsId=7696"
+   },
+   {
+    "label": "대법원 2005다32159 전원합의체 판결",
+    "org": "",
+    "href": "https://www.law.go.kr/판례/(2005다32159)"
+   }
+  ],
+  "verified": {
+   "cases": 82,
+   "scope": "중개보수 상한요율·한도액",
+   "full": true,
+   "tests": [
+    "tests/golden/brokerageFee.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/capital-gains-tax": {
+  "slug": "/tools/finance/capital-gains-tax",
+  "reviewed": "2026",
+  "updated": "2026-09-26",
+  "basis": "2026년 국세청 양도소득세 기준 · 12억 비과세·장기보유특별공제·단기 중과세율 반영",
+  "sources": [
+   {
+    "label": "국세청 양도소득세(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   },
+   {
+    "label": "소득세법 §89·§95·§104 (국가법령정보센터)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법"
+   },
+   {
+    "label": "소득세법 시행령 §154·§162",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법시행령"
+   },
+   {
+    "label": "국세청 홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr/"
+   },
+   {
+    "label": "법제처 소득세법",
+    "org": "",
+    "href": "https://www.law.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 14,
+   "scope": "소득세 기본세율 구간",
+   "full": false,
+   "tests": [
+    "tests/golden/incomeTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/car-cost": {
+  "slug": "/tools/finance/car-cost",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 자동차세(배기량별 cc당 80/140/200원 + 지방교육세 30%, 전기차 13만원 정액)·유류세 반영 연료비 시세 기준",
+  "sources": [
+   {
+    "label": "위택스(자동차세)",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "오피넷 유가정보(한국석유공사)",
+    "org": "",
+    "href": "https://www.opinet.co.kr"
+   },
+   {
+    "label": "국가법령정보센터 지방세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법"
+   },
+   {
+    "label": "보험다모아(자동차보험 비교)",
+    "org": "",
+    "href": "https://www.e-insmarket.or.kr"
+   },
+   {
+    "label": "여신금융협회 공시",
+    "org": "",
+    "href": "https://www.crefia.or.kr"
+   }
+  ],
+  "verified": {
+   "cases": 3,
+   "scope": "자동차세",
+   "full": false,
+   "tests": [
+    "tests/golden/vehicleTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/car-tax": {
+  "slug": "/tools/finance/car-tax",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 자동차세·취득세 감면 기준",
+  "sources": [
+   {
+    "label": "위택스",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "행정안전부",
+    "org": "",
+    "href": "https://www.mois.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 지방세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법"
+   },
+   {
+    "label": "국가법령정보센터 지방세특례제한법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세특례제한법"
+   },
+   {
+    "label": "오피넷(한국석유공사)",
+    "org": "",
+    "href": "https://www.opinet.co.kr"
+   },
+   {
+    "label": "위택스 자동차세 안내",
+    "org": "",
+    "href": "https://www.wetax.go.kr/"
+   },
+   {
+    "label": "행정안전부 지방세",
+    "org": "",
+    "href": "https://www.mois.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 20,
+   "scope": "자동차 취득세·자동차세",
+   "full": false,
+   "tests": [
+    "tests/golden/vehicleTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/compound": {
+  "slug": "/tools/finance/compound",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "이자·배당소득세 15.4%(소득세 14% + 지방소득세 1.4%) 반영 · 소득세법 제129조 기준",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 소득세법 제129조(원천징수세율)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법/제129조"
+   },
+   {
+    "label": "국가법령정보센터 소득세법 제59조의3(연금계좌세액공제)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법/제59조의3"
+   },
+   {
+    "label": "국가법령정보센터 조세특례제한법 제91조의18(ISA)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/조세특례제한법/제91조의18"
+   },
+   {
+    "label": "한국은행 물가안정목표",
+    "org": "",
+    "href": "https://www.bok.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/cost-rate": {
+  "slug": "/tools/finance/cost-rate",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "2025년 시행 배달앱 차등수수료(상생요금제 2.0~7.8%, 3년 한시) 기준",
+  "sources": [
+   {
+    "label": "대한민국 정책브리핑(상생협의체)",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156660502"
+   },
+   {
+    "label": "요기요 사장님포털",
+    "org": "",
+    "href": "https://ceo.yogiyo.co.kr"
+   },
+   {
+    "label": "국세청(부가가치세)",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "여신금융협회(가맹점수수료율)",
+    "org": "",
+    "href": "https://www.crefia.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/deposit-interest": {
+  "slug": "/tools/finance/deposit-interest",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "이자소득 원천징수 % + 지방소득세 %(합계 %, 각 원 미만 절사) · 비과세종합저축·상호금융 예탁금은 2025년 12월 23일 개정 조세특례제한법 §88의2·§89의3(가입일 기준) 조문 대조 · 이자는 월 단위(개월/12) 공식",
+  "sources": [
+   {
+    "label": "소득세법 §129",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법/제129조"
+   },
+   {
+    "label": "조세특례제한법 §89의3",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/조세특례제한법/제89조의3"
+   },
+   {
+    "label": "국세청 비과세 금융소득",
+    "org": "",
+    "href": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=6474&cntntsId=7910"
+   },
+   {
+    "label": "지방세법 §103의13 (특별징수)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법/제103조의13"
+   },
+   {
+    "label": "조세특례제한법 §88의2 (비과세종합저축)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/조세특례제한법/제88조의2"
+   },
+   {
+    "label": "조세특례제한법 §88의5 (소득 기준)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/조세특례제한법/제88조의5"
+   },
+   {
+    "label": "농어촌특별세법 §5 (감면세액의 10%)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/농어촌특별세법/제5조"
+   },
+   {
+    "label": "국고금 관리법 §47 (끝수 계산)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/국고금관리법/제47조"
+   },
+   {
+    "label": "국세청 — 금융소득의 수입시기",
+    "org": "",
+    "href": "https://www.nts.go.kr/nts/cm/cntnts/cntntsView.do?mi=6476&cntntsId=7912"
+   }
+  ],
+  "verified": {
+   "cases": 56,
+   "scope": "예·적금 세후 이자·만기 수령액",
+   "full": true,
+   "tests": [
+    "tests/golden/depositInterest.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/dividend": {
+  "slug": "/tools/finance/dividend",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "배당소득세 %(소득세 %+지방세 %)·금융소득 종합과세 원 기준·ISA 9.9%·연금저축/IRP 5.5% 분리과세 및 16.5% 세액공제·고배당기업 배당소득 분리과세(2026~2028년 지급분) 반영 (2026년)",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "기획재정부 (2025년 세법개정)",
+    "org": "",
+    "href": "https://www.moef.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 26,
+   "scope": "배당소득세 15.4%·종합과세 기준 · 소득세 기본세율 구간",
+   "full": false,
+   "tests": [
+    "tests/golden/dividendTax.test.mts",
+    "tests/golden/incomeTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/dsr": {
+  "slug": "/tools/finance/dsr",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "스트레스 DSR 3단계(2025-07-01 시행)·금융위 6.27 및 10.15 대책 반영 · 대출 종류별 부채산정방식은 은행업감독업무시행세칙 [별표18] 「표 3」(개정 2024.3.7, 현행 세칙 시행 2026.6.30)",
+  "sources": [
+   {
+    "label": "금융위원회 — 3단계 스트레스 DSR 시행방안(2025.5)",
+    "org": "",
+    "href": "https://www.fsc.go.kr/no010101/84617"
+   },
+   {
+    "label": "금융위원회 — 가계부채 관리 강화 방안(2025.6.27)",
+    "org": "",
+    "href": "https://www.fsc.go.kr/no010101/84824"
+   },
+   {
+    "label": "금융위원회 — 대출수요 관리 방안(2025.10.15)",
+    "org": "",
+    "href": "https://www.fsc.go.kr/po010101/85432"
+   },
+   {
+    "label": "국가법령정보센터 — 은행업감독업무시행세칙 [별표18] 「표 3」(현행)",
+    "org": "",
+    "href": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulSeq=2200000108789"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/freelance-tax": {
+  "slug": "/tools/finance/freelance-tax",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 종합소득세율 · 국세청 2024년 귀속 경비율 고시 기준",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "홈택스 기준(단순)경비율 조회",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 소득세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법"
+   },
+   {
+    "label": "국가법령정보센터 조세특례제한법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/조세특례제한법"
+   },
+   {
+    "label": "국세청 종합소득세 안내(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   },
+   {
+    "label": "국세청 홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 26,
+   "scope": "경비율·단순경비율 적용 한도 · 소득세 기본세율 구간",
+   "full": false,
+   "tests": [
+    "tests/golden/expenseRates.test.mts",
+    "tests/golden/incomeTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/gold-converter": {
+  "slug": "/tools/finance/gold-converter",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "무게 9단위·순도(14/18/24K) 고정 환산 + 사용자가 입력한 24K 1g 시세(KRX 금시장 기준) 기반 매수·매도가 계산. 골드바 부가세 10%·KRX 금현물 비과세·금통장 배당소득세 15.4% 등 국내 세제·거래비용(스프레드·수수료·세공비) 가정 반영. 시세는 실시간 자동 연동이 아니며 직접 입력값입니다.",
+  "sources": [
+   {
+    "label": "한국거래소(KRX 금시장)",
+    "org": "",
+    "href": "https://www.krx.co.kr"
+   },
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "NIST SP 811 (단위 환산 계수)",
+    "org": "",
+    "href": "https://www.nist.gov/pml/special-publication-811"
+   },
+   {
+    "label": "국가법령정보센터 — 조세특례제한법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/조세특례제한법"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/historical-money": {
+  "slug": "/tools/finance/historical-money",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "통계청 소비자물가지수(CPI, 2020=100) 기반 · 1965~2025년 연도별 공식 통계, 이전은 추정치 · 2026년 물가 추정(전년 대비 +2%)",
+  "sources": [
+   {
+    "label": "통계청 KOSIS",
+    "org": "",
+    "href": "https://kosis.kr"
+   },
+   {
+    "label": "한국은행 경제통계시스템",
+    "org": "",
+    "href": "https://ecos.bok.or.kr"
+   },
+   {
+    "label": "KOSIS 소비자물가지수(2020=100)",
+    "org": "",
+    "href": "https://kosis.kr/statHtml/statHtml.do?orgId=101&tblId=DT_1J22003"
+   },
+   {
+    "label": "한국은행(화폐 발행)",
+    "org": "",
+    "href": "https://www.bok.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/hourly-pay": {
+  "slug": "/tools/finance/hourly-pay",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "년 최저시급 원·년 원(2026년 8월 고시) · 근로기준법 §18③·§54·§55·§56, 시행령 §30①·[별표 2] · 4대보험 년 근로자 요율(국민연금은 연도별 법정 요율) · 월 환산 = 주급 × 365 ÷ 7 ÷ 12",
+  "sources": [
+   {
+    "label": "근로기준법 §55",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로기준법/제55조"
+   },
+   {
+    "label": "근로기준법 §56",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로기준법/제56조"
+   },
+   {
+    "label": "최저임금위원회",
+    "org": "",
+    "href": "https://www.minimumwage.go.kr"
+   },
+   {
+    "label": "근로기준법 시행령 §30 (주휴일)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로기준법시행령/제30조"
+   },
+   {
+    "label": "기간제법 §6 (단시간근로자 초과근로)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/기간제및단시간근로자보호등에관한법률/제6조"
+   },
+   {
+    "label": "최저임금법 §10 (최저임금 고시)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/최저임금법/제10조"
+   },
+   {
+    "label": "고용보험법 §10 (적용 제외 · 2027 소득기준)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/고용보험법/제10조"
+   },
+   {
+    "label": "고용보험법 시행령 §3 (적용 제외)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/고용보험법시행령/제3조"
+   },
+   {
+    "label": "국민연금법 시행령 §2 (근로자 제외)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/국민연금법시행령/제2조"
+   },
+   {
+    "label": "국민연금법 (부칙 §4 연도별 요율)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/국민연금법"
+   },
+   {
+    "label": "최저임금법 §5 (수습 감액)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/최저임금법/제5조"
+   },
+   {
+    "label": "고용노동부 — 주휴수당 행정해석 변경(2021)",
+    "org": "",
+    "href": "https://www.moel.go.kr/policy/policydata/view.do?bbs_seq=20210802167"
+   }
+  ],
+  "verified": {
+   "cases": 42,
+   "scope": "주휴수당·가산수당·월 환산",
+   "full": true,
+   "tests": [
+    "tests/golden/hourlyPay.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/housing-score": {
+  "slug": "/tools/finance/housing-score",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "주택공급에 관한 규칙 별표1(가점)·별표2(예치금), 2026.6.15 개정(민영 신생아 특별공급) 반영",
+  "sources": [
+   {
+    "label": "청약홈",
+    "org": "",
+    "href": "https://www.applyhome.co.kr"
+   },
+   {
+    "label": "국토교통부",
+    "org": "",
+    "href": "https://www.molit.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 주택공급에 관한 규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택공급에관한규칙"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/inheritance": {
+  "slug": "/tools/finance/inheritance",
+  "reviewed": "2026-05",
+  "updated": "2026-09-26",
+  "basis": "2026년 상속·증여세법 기준",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "상속세 및 증여세법 (국가법령정보센터)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/상속세및증여세법"
+   },
+   {
+    "label": "민법 (법정상속분·유류분)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/민법"
+   },
+   {
+    "label": "국세청 상속·증여세 안내(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   },
+   {
+    "label": "국세청 홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 17,
+   "scope": "상속세·증여세 세율·공제",
+   "full": false,
+   "tests": [
+    "tests/golden/inheritanceTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/installment": {
+  "slug": "/tools/finance/installment",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "원금균등 분할 + 할부 잔액 기준 수수료 산식 · 법정 최고금리 연 20% · 할부거래법(청약철회·항변권)",
+  "sources": [
+   {
+    "label": "금융감독원",
+    "org": "",
+    "href": "https://www.fss.or.kr"
+   },
+   {
+    "label": "여신금융협회",
+    "org": "",
+    "href": "https://www.crefia.or.kr"
+   },
+   {
+    "label": "국가법령정보센터 할부거래에 관한 법률",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/할부거래에관한법률"
+   },
+   {
+    "label": "국가법령정보센터 대부업법(여신금융기관 이자율 제한)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/대부업등의등록및금융이용자보호에관한법률"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/ipo-deposit": {
+  "slug": "/tools/finance/ipo-deposit",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "공모주 청약 제도(균등배정 50% 이상·중복청약 금지·5사6입) 기준",
+  "sources": [
+   {
+    "label": "DART 전자공시시스템",
+    "org": "",
+    "href": "https://dart.fss.or.kr"
+   },
+   {
+    "label": "KIND 한국거래소",
+    "org": "",
+    "href": "https://kind.krx.co.kr"
+   },
+   {
+    "label": "금융위원회 (공모주 청약제도)",
+    "org": "",
+    "href": "https://www.fsc.go.kr"
+   },
+   {
+    "label": "금융투자협회",
+    "org": "",
+    "href": "https://www.kofia.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/loan": {
+  "slug": "/tools/finance/loan",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2025.10.15 대출 규제(LTV·주담대 한도)·2025.1.13 중도상환수수료 개편 반영, 금리 프리셋은 참고값",
+  "sources": [
+   {
+    "label": "은행연합회 공시",
+    "org": "",
+    "href": "https://portal.kfb.or.kr"
+   },
+   {
+    "label": "금융위원회 (중도상환수수료 개편)",
+    "org": "",
+    "href": "https://www.fsc.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 금융소비자보호법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/금융소비자보호에관한법률"
+   },
+   {
+    "label": "한국은행 경제통계시스템(ECOS)",
+    "org": "",
+    "href": "https://ecos.bok.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/national-pension": {
+  "slug": "/tools/finance/national-pension",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "A값 적용기간 2025.12~2026.11 · 기준소득월액 상·하한 2026년 7월~2027년 6월 적용분 기준",
+  "sources": [
+   {
+    "label": "국민연금공단(nps.or.kr)",
+    "org": "",
+    "href": "https://www.nps.or.kr/"
+   },
+   {
+    "label": "국가법령정보센터 국민연금법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/국민연금법"
+   }
+  ],
+  "verified": {
+   "cases": 4,
+   "scope": "기준소득월액 상·하한",
+   "full": false,
+   "tests": [
+    "tests/golden/salaryInsurance.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/property-holding-tax": {
+  "slug": "/tools/finance/property-holding-tax",
+  "reviewed": "2026",
+  "updated": "2026-09-26",
+  "basis": "2026년 재산세·종합부동산세 기준 · 개편 진행 시 변동 가능",
+  "sources": [
+   {
+    "label": "위택스(wetax.go.kr)",
+    "org": "",
+    "href": "https://www.wetax.go.kr/"
+   },
+   {
+    "label": "국세청(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   },
+   {
+    "label": "국가법령정보센터 지방세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법"
+   },
+   {
+    "label": "국가법령정보센터 종합부동산세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/종합부동산세법"
+   }
+  ],
+  "verified": {
+   "cases": 13,
+   "scope": "재산세·종합부동산세",
+   "full": false,
+   "tests": [
+    "tests/golden/propertyTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/real-estate": {
+  "slug": "/tools/finance/real-estate",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "취득세: 지방세법 §11·§13의2·§151·농어촌특별세법(2026년 시행) · 양도세·중개보수: 2026년 6월 기준 참고",
+  "sources": [
+   {
+    "label": "위택스(취득세)",
+    "org": "",
+    "href": "https://www.wetax.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 지방세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/지방세법"
+   },
+   {
+    "label": "국토교통부",
+    "org": "",
+    "href": "https://www.molit.go.kr"
+   },
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 108,
+   "scope": "매매 중개보수 · 취득세·지방교육세·농특세",
+   "full": false,
+   "tests": [
+    "tests/golden/brokerageFee.test.mts",
+    "tests/golden/acquisitionTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/rent-jeonse": {
+  "slug": "/tools/finance/rent-jeonse",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 전월세·금리 참고 · 버팀목 대출은 주택도시기금 기준",
+  "sources": [
+   {
+    "label": "국토부 실거래가",
+    "org": "",
+    "href": "https://rt.molit.go.kr"
+   },
+   {
+    "label": "한국부동산원",
+    "org": "",
+    "href": "https://www.reb.or.kr"
+   },
+   {
+    "label": "주택도시기금",
+    "org": "",
+    "href": "https://nhuf.molit.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 주택임대차보호법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택임대차보호법"
+   },
+   {
+    "label": "HUG 주택도시보증공사",
+    "org": "",
+    "href": "https://www.khug.or.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/salary": {
+  "slug": "/tools/finance/salary",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 4대보험 요율·국민연금 기준소득월액 상·하한·소득세는 간이세액표 근사(연 결정세액÷12), 연봉 분포는 국세청 2024년 귀속 연말정산 국세통계(2025-12 공표) 기준",
+  "sources": [
+   {
+    "label": "홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "4대 사회보험 정보연계센터",
+    "org": "",
+    "href": "https://www.4insure.or.kr"
+   },
+   {
+    "label": "근로소득 백분위 자료(공공데이터포털)",
+    "org": "",
+    "href": "https://www.data.go.kr/data/15082063/fileData.do"
+   },
+   {
+    "label": "국가법령정보센터 — 소득세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법"
+   },
+   {
+    "label": "국세청 국세통계포털",
+    "org": "",
+    "href": "https://tasis.nts.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 9,
+   "scope": "4대보험·근로소득세 공제 후 실수령액",
+   "full": true,
+   "tests": [
+    "tests/golden/salaryInsurance.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/savings": {
+  "slug": "/tools/finance/savings",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 절세 상품 기준 · 1인 가구 소비지출은 2024년 가계동향조사(168.9만원)",
+  "sources": [
+   {
+    "label": "국가데이터처 KOSIS",
+    "org": "",
+    "href": "https://kosis.kr"
+   },
+   {
+    "label": "금융위원회 (청년미래적금)",
+    "org": "",
+    "href": "https://www.fsc.go.kr"
+   },
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "금융감독원 금융상품한눈에",
+    "org": "",
+    "href": "https://finlife.fss.or.kr"
+   },
+   {
+    "label": "소득세법 (연금계좌 세액공제 §59의3)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/severance": {
+  "slug": "/tools/finance/severance",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "근로기준법·근로자퇴직급여 보장법·소득세법(2023.1.1 이후 퇴직분 근속연수공제) · 통상임금은 대법원 2024.12.19. 2020다247190 전원합의체 판결 기준",
+  "sources": [
+   {
+    "label": "고용노동부",
+    "org": "",
+    "href": "https://www.moel.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 근로자퇴직급여 보장법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로자퇴직급여보장법"
+   },
+   {
+    "label": "국가법령정보센터 소득세법 제48조(퇴직소득공제)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법/제48조"
+   },
+   {
+    "label": "국가법령정보센터 근로기준법 제2조",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/근로기준법/제2조"
+   },
+   {
+    "label": "국가법령정보센터 대법원 2020다247190 전원합의체 판결(통상임금)",
+    "org": "",
+    "href": "https://www.law.go.kr/판례/(2020다247190)"
+   },
+   {
+    "label": "국세청 퇴직소득세 안내",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 24,
+   "scope": "소득세 기본세율 구간 · 평균임금 산정기간(3개월) 경계",
+   "full": false,
+   "tests": [
+    "tests/golden/incomeTax.test.mts",
+    "tests/golden/severancePeriod.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/stock": {
+  "slug": "/tools/finance/stock",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "증권거래세율 0.20%(코스피·코스닥, 2026년 금투세 폐지로 환원) · 해외주식 양도소득세 22%(연 250만원 공제) · 증권사 표준 온라인 수수료 반영",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/LSW/main.html"
+   },
+   {
+    "label": "DART 전자공시",
+    "org": "",
+    "href": "https://dart.fss.or.kr"
+   },
+   {
+    "label": "KIND 공시",
+    "org": "",
+    "href": "https://kind.krx.co.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/unemployment-benefit": {
+  "slug": "/tools/finance/unemployment-benefit",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 구직급여 상한 원·하한 원, 년 이직자 하한 원 기준",
+  "sources": [
+   {
+    "label": "고용노동부(moel.go.kr)",
+    "org": "",
+    "href": "https://www.moel.go.kr/"
+   },
+   {
+    "label": "고용보험(ei.go.kr)",
+    "org": "",
+    "href": "https://www.ei.go.kr/"
+   },
+   {
+    "label": "국가법령정보센터 고용보험법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/고용보험법"
+   },
+   {
+    "label": "고용24(work24.go.kr)",
+    "org": "",
+    "href": "https://www.work24.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 33,
+   "scope": "구직급여 1일액 상·하한",
+   "full": false,
+   "tests": [
+    "tests/golden/unemployment.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/vat": {
+  "slug": "/tools/finance/vat",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "2026년 부가가치세법 기준 (간이과세 기준 1억 400만 원, 2024.7.1 시행)",
+  "sources": [
+   {
+    "label": "국세청",
+    "org": "",
+    "href": "https://www.nts.go.kr"
+   },
+   {
+    "label": "홈택스",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 부가가치세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/부가가치세법"
+   },
+   {
+    "label": "국가법령정보센터 부가가치세법 시행령",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/부가가치세법시행령"
+   }
+  ],
+  "verified": {
+   "cases": 7,
+   "scope": "부가세 역산·가산 반올림",
+   "full": false,
+   "tests": [
+    "tests/golden/vatReverse.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/wealth-rank": {
+  "slug": "/tools/finance/wealth-rank",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "2025 가계금융복지조사 분포·상위 구간 보도치 + UBS GWR 2025",
+  "sources": [
+   {
+    "label": "국가데이터처 가계금융복지조사",
+    "org": "",
+    "href": "https://kostat.go.kr"
+   },
+   {
+    "label": "한국은행 보도자료",
+    "org": "",
+    "href": "https://www.bok.or.kr"
+   },
+   {
+    "label": "UBS Global Wealth Report",
+    "org": "",
+    "href": "https://www.ubs.com"
+   },
+   {
+    "label": "국가통계포털 KOSIS(가계금융복지조사 통계표)",
+    "org": "",
+    "href": "https://kosis.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/finance/year-end-tax": {
+  "slug": "/tools/finance/year-end-tax",
+  "reviewed": "2026",
+  "updated": "2026-09-26",
+  "basis": "2026년 귀속(2027년 1~2월 정산) 종합소득세율·근로소득공제·공제 한도 기준, 신용카드 자녀 한도 가산(2026년 사용분부터) 반영",
+  "sources": [
+   {
+    "label": "국세청 홈택스(hometax.go.kr)",
+    "org": "",
+    "href": "https://hometax.go.kr"
+   },
+   {
+    "label": "국가법령정보센터 소득세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법"
+   },
+   {
+    "label": "국가법령정보센터 조세특례제한법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/조세특례제한법"
+   },
+   {
+    "label": "국세청 홈택스(nts.go.kr)",
+    "org": "",
+    "href": "https://www.nts.go.kr/"
+   }
+  ],
+  "verified": {
+   "cases": 17,
+   "scope": "세액공제·소득공제 구성요소",
+   "full": false,
+   "tests": [
+    "tests/golden/yearEndTax.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/blood-alcohol": {
+  "slug": "/tools/health/blood-alcohol",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "위드마크(Widmark) 공식 — 체내분포계수 남 0.68·여 0.55, 시간당 분해율 0.010~0.020g/dL(기본 0.015) · 처벌 기준 도로교통법 제44조·제93조(0.03% 면허정지·0.08% 면허취소)·제148조의2(형사처벌)·제82조(결격기간)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 도로교통법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/도로교통법"
+   },
+   {
+    "label": "도로교통공단 — 음주운전 처벌 기준",
+    "org": "",
+    "href": "https://www.koroad.or.kr/kp_web/drunkDriveInfo4.do"
+   },
+   {
+    "label": "NIAAA — 알코올·약물 상호작용",
+    "org": "",
+    "href": "https://www.niaaa.nih.gov/publications/brochures-and-fact-sheets/harmful-interactions-mixing-alcohol-with-medicines"
+   },
+   {
+    "label": "Brooks 외 2009 — ALDH2 결손과 식도암 (PLOS Medicine)",
+    "org": "",
+    "href": "https://journals.plos.org/plosmedicine/article?id=10.1371/journal.pmed.1000050"
+   }
+  ],
+  "verified": {
+   "cases": 11,
+   "scope": "음주운전 처벌 기준",
+   "full": false,
+   "tests": [
+    "tests/golden/drunkDriving.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/bmi": {
+  "slug": "/tools/health/bmi",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "BMI = 체중(kg) ÷ 키(m)² · 비만 기준 한국(대한비만학회) BMI 25·복부비만 허리둘레 남 90/여 85cm(갈비뼈 아래~장골능 중간 측정), WHO BMI 30 · 체지방률은 미 해군(U.S. Navy) 추정식 · 임신 중 체중 증가는 미국 IOM 2009",
+  "sources": [
+   {
+    "label": "대한비만학회 비만 진료지침(2022)",
+    "org": "",
+    "href": "https://general.kosso.or.kr/html/user/core/view/reaction/main/kosso/inc/data/guideline2022_vol8.pdf"
+   },
+   {
+    "label": "대한비만학회 — 비만 진단(허리둘레 측정법)",
+    "org": "",
+    "href": "https://general.kosso.or.kr/html/?pmode=obesityDiagnosis"
+   },
+   {
+    "label": "WHO — Obesity and overweight",
+    "org": "",
+    "href": "https://www.who.int/news-room/fact-sheets/detail/obesity-and-overweight"
+   },
+   {
+    "label": "IOM(2009) 임신 중 체중 증가 지침",
+    "org": "",
+    "href": "https://www.nationalacademies.org/read/12584/chapter/2"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/bmr": {
+  "slug": "/tools/health/bmr",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "BMR 공식 4종 — Mifflin-St Jeor(1990)·Harris-Benedict(Roza-Shizgal 1984 개정)·Katch-McArdle·Cunningham · 활동계수 1.2~1.9",
+  "sources": [
+   {
+    "label": "Mifflin 외(1990) — Am J Clin Nutr",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/2305711/"
+   },
+   {
+    "label": "Roza·Shizgal(1984) — Am J Clin Nutr",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/6741850/"
+   },
+   {
+    "label": "Frankenfield 외(2005) — 예측식 체계적 문헌고찰",
+    "org": "",
+    "href": "https://www.jandonline.org/article/S0002-8223(05)00149-5/abstract"
+   },
+   {
+    "label": "보건복지부 — 2025 한국인 영양소 섭취기준 개정",
+    "org": "",
+    "href": "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1488441"
+   },
+   {
+    "label": "Shcherbina 외(2017) — 손목형 기기 에너지 소비 정확도",
+    "org": "",
+    "href": "https://www.mdpi.com/2075-4426/7/2/3"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/caffeine": {
+  "slug": "/tools/health/caffeine",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "반감기 지수감쇠 모델(기본 5시간, 3~12시간 선택) · 1일 한도 성인 400mg(FDA·식약처)·임산부 200mg(ACOG)·어린이·청소년 체중 1kg당 2.5mg(식약처)",
+  "sources": [
+   {
+    "label": "FDA — 카페인 섭취 안내",
+    "org": "",
+    "href": "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much"
+   },
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "ACOG — 임신 중 카페인",
+    "org": "",
+    "href": "https://www.acog.org/womens-health/experts-and-stories/ask-acog/how-much-coffee-can-i-drink-while-pregnant"
+   },
+   {
+    "label": "EFSA — 카페인 안전성",
+    "org": "",
+    "href": "https://www.efsa.europa.eu/en/topics/topic/caffeine"
+   },
+   {
+    "label": "Drake 외 2013 (J Clin Sleep Med)",
+    "org": "",
+    "href": "https://jcsm.aasm.org/doi/10.5664/jcsm.3170"
+   },
+   {
+    "label": "한국소비자원",
+    "org": "",
+    "href": "https://www.kca.go.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/child-height": {
+  "slug": "/tools/health/child-height",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "Tanner 중간부모키(MPH) 공식 · 한국 평균 비교는 8차 사이즈코리아 20~24세 평균(남 175.0·여 161.8cm)",
+  "sources": [
+   {
+    "label": "Tanner MPH (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/5491878/"
+   },
+   {
+    "label": "사이즈코리아 인체치수조사",
+    "org": "",
+    "href": "https://sizekorea.kr"
+   },
+   {
+    "label": "질병관리청 소아청소년 성장도표",
+    "org": "",
+    "href": "https://knhanes.kdca.go.kr/"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/cycle": {
+  "slug": "/tools/health/cycle",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "황체기 14일 고정 모델 — 배란일 = 다음 생리 −14일, 가임기 = 배란 −5일~+1일(정자 생존 최대 5일·난자 약 24시간), 정상 주기 성인 21~35일(NICHD)·청소년 최대 45일, 무월경 = 임신 아닌데 3개월 이상 생리 없음",
+  "sources": [
+   {
+    "label": "NICHD — Menstruation",
+    "org": "",
+    "href": "https://www.nichd.nih.gov/health/topics/menstruation/conditioninfo"
+   },
+   {
+    "label": "NICHD — 월경 불순(Menstrual irregularities)",
+    "org": "",
+    "href": "https://www.nichd.nih.gov/health/topics/menstruation/conditioninfo/irregularities"
+   },
+   {
+    "label": "ACOG — 가임인지법(FABM)",
+    "org": "",
+    "href": "https://www.acog.org/womens-health/faqs/fertility-awareness-based-methods-of-family-planning"
+   },
+   {
+    "label": "Wilcox 외, BMJ 2000 — 가임창 시기 전향 연구",
+    "org": "",
+    "href": "https://pmc.ncbi.nlm.nih.gov/articles/PMC27529/"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/glycemic-load": {
+  "slug": "/tools/health/glycemic-load",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "GL = 탄수화물(g)×GI÷100 · 판정 저 ≤10 / 중 11~19 / 고 ≥20 (1회 기준) · GI 조회표는 국제표 2008·2021판 + 한국 인체시험(2015) 원문 값 · 기능성 쌀 품종 표는 인체시험 GI가 아니라 Front Plant Sci 2025;16:1724565의 시험관 예측값(ISO 26642:2010·Atkinson 2021 기준 GI로 부를 수 없음) + 농촌진흥청 보도자료(2014·2021·2026)",
+  "sources": [
+   {
+    "label": "국제 GI 표 2008 (Atkinson, Diabetes Care)",
+    "org": "",
+    "href": "https://pmc.ncbi.nlm.nih.gov/articles/PMC2584181/"
+   },
+   {
+    "label": "국제 GI 표 2021 (Atkinson, Am J Clin Nutr)",
+    "org": "",
+    "href": "https://nutrition.org/ajcn-publishes-international-tables-of-glycemic-index-and-glycemic-load-values-2021-a-systematic-review/"
+   },
+   {
+    "label": "한국식품영양과학회지 44(1) 인체시험 (2015)",
+    "org": "",
+    "href": "https://koreascience.kr/article/JAKO201506565684482.pdf"
+   },
+   {
+    "label": "기능성 쌀 품종 예측 GI — Front Plant Sci 2025;16:1724565",
+    "org": "",
+    "href": "https://pmc.ncbi.nlm.nih.gov/articles/PMC12738849/"
+   },
+   {
+    "label": "ISO 26642:2010 (GI 측정 표준)",
+    "org": "",
+    "href": "https://www.iso.org/standard/43633.html"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/hba1c": {
+  "slug": "/tools/health/hba1c",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "대한당뇨병학회 2025 당뇨병 진료지침 제9판(진단기준·표 4-1.1)·ADAG 회귀식(Nathan 2008)·NGSP 기준",
+  "sources": [
+   {
+    "label": "대한당뇨병학회",
+    "org": "",
+    "href": "https://www.diabetes.or.kr"
+   },
+   {
+    "label": "질병관리청 국가건강정보포털 — 당뇨병",
+    "org": "",
+    "href": "https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5305"
+   },
+   {
+    "label": "NGSP — HbA1c and eAG",
+    "org": "",
+    "href": "https://ngsp.org/A1ceAG.asp"
+   },
+   {
+    "label": "Nathan 외(2008) ADAG — Diabetes Care",
+    "org": "",
+    "href": "https://diabetesjournals.org/care/article/31/8/1473/28589/Translating-the-A1C-Assay-Into-Estimated-Average"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/heat-hydration": {
+  "slug": "/tools/health/heat-hydration",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "기상청 폭염특보 3단계(2026 개편)·산업안전보건규칙 폭염 조항(2025-07-17 시행)·ACSM/NATA 수분 보충 지침·미 육군 TB MED 507(하루 음용 상한) 기준",
+  "sources": [
+   {
+    "label": "질병관리청",
+    "org": "",
+    "href": "https://www.kdca.go.kr"
+   },
+   {
+    "label": "기상청 날씨누리",
+    "org": "",
+    "href": "https://www.weather.go.kr"
+   },
+   {
+    "label": "국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr"
+   },
+   {
+    "label": "ACSM 수분 보충 입장문 (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/17277604/"
+   },
+   {
+    "label": "NATA 수분 보충 입장문 (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/28985128/"
+   },
+   {
+    "label": "고용노동부",
+    "org": "",
+    "href": "https://www.moel.go.kr"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/pet": {
+  "slug": "/tools/health/pet",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "RER = 70 × 체중(kg)^0.75(Merck), DER = RER × 생활계수(도구 단순화: 중성화×활동 6조합 1.2~1.8·퍼피/키튼 2.0~3.0·노령 = 성견 계수 × 0.85 — 문헌 대표 계수는 본문 표) · 사람 나이 = AVMA 규칙(1세 15·2세 24) 기반, 이후 크기별 연 4~6세 도구 단순화 · 고양이 생애 단계 AAHA/AAFP 2021",
+  "sources": [
+   {
+    "label": "Merck Veterinary Manual — 소동물 영양요구량",
+    "org": "",
+    "href": "https://www.merckvetmanual.com/management-and-nutrition/nutrition-small-animals/nutritional-requirements-of-small-animals"
+   },
+   {
+    "label": "WSAVA — Global Nutrition Guidelines",
+    "org": "",
+    "href": "https://wsava.org/global-guidelines/global-nutrition-guidelines/"
+   },
+   {
+    "label": "Pet Nutrition Alliance — RER·MER 계수표",
+    "org": "",
+    "href": "https://petnutritionalliance.org/wp-content/uploads/2023/03/MER.RER_.PNA_.pdf"
+   },
+   {
+    "label": "AKC — 개 나이를 사람 나이로 환산하기",
+    "org": "",
+    "href": "https://www.akc.org/expert-advice/health/how-to-calculate-dog-years-to-human-years/"
+   },
+   {
+    "label": "AAHA/AAFP — 고양이 생애 단계(2021)",
+    "org": "",
+    "href": "https://www.aaha.org/resources/2021-aaha-aafp-feline-life-stage-guidelines/feline-life-stage-definitions/"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/pregnancy": {
+  "slug": "/tools/health/pregnancy",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "네겔레 공식 — 마지막 생리일(LMP) + 280일(40주) = 출산 예정일, 배란 LMP+14일·주기 28일 외 ±보정, GBS 검사 36~37주 일정",
+  "sources": [
+   {
+    "label": "NCBI Bookshelf — Estimated Date of Delivery",
+    "org": "",
+    "href": "https://www.ncbi.nlm.nih.gov/books/NBK536986/"
+   },
+   {
+    "label": "ACOG — GBS 조기 감염 예방 지침",
+    "org": "",
+    "href": "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2020/02/prevention-of-group-b-streptococcal-early-onset-disease-in-newborns"
+   },
+   {
+    "label": "ACOG 위원회 의견 700 — 출산 예정일 산정법",
+    "org": "",
+    "href": "https://www.acog.org/clinical/clinical-guidance/committee-opinion/articles/2017/05/methods-for-estimating-the-due-date"
+   },
+   {
+    "label": "WHO(2016) — 산전 진료 권고",
+    "org": "",
+    "href": "https://www.ncbi.nlm.nih.gov/books/NBK409108/"
+   },
+   {
+    "label": "보건복지부 — 임신·출산 진료비 지원",
+    "org": "",
+    "href": "https://www.mohw.go.kr/menu.es?mid=a10705020100"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/sleep-debt": {
+  "slug": "/tools/health/sleep-debt",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "연령별 권장 수면 범위(NSF 2015, 성인 7~9시간) 기준 · 일별 부채 = 목표 − 실제 수면, 초과 수면은 회복효율 0.5 적용(단순화 가정)",
+  "sources": [
+   {
+    "label": "NSF 2015 — 권장 수면 시간(최종 보고)",
+    "org": "",
+    "href": "https://www.sleephealthjournal.org/article/S2352-7218(15)00160-6/abstract"
+   },
+   {
+    "label": "CDC — About Sleep (성인 7시간+)",
+    "org": "",
+    "href": "https://www.cdc.gov/sleep/about/index.html"
+   },
+   {
+    "label": "Van Dongen 외 2003 — 만성 수면 제한의 누적 비용(SLEEP)",
+    "org": "",
+    "href": "https://academic.oup.com/sleep/article-abstract/26/2/117/2709164"
+   },
+   {
+    "label": "질병관리청 — 청소년건강행태조사",
+    "org": "",
+    "href": "https://www.kdca.go.kr/yhs/"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/supplement": {
+  "slug": "/tools/health/supplement",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "영양소 권장량·상한량(미국 NIH 영양소 섭취기준 중심의 성인 대표값 — 비타민C·B6·칼슘 등 일부 권장량은 한국인 영양소 섭취기준 값) · 오메가3 EPA+DHA 합산 250~500mg 목표·보충제 2,000mg(식품 포함 총 3,000mg) 한도(미국 FDA 권고)",
+  "sources": [
+   {
+    "label": "NIH ODS 영양소 섭취기준(DRI)",
+    "org": "",
+    "href": "https://ods.od.nih.gov/HealthInformation/nutrientrecommendations.aspx"
+   },
+   {
+    "label": "보건복지부·한국영양학회 (KDRIs)",
+    "org": "",
+    "href": "https://www.kns.or.kr"
+   },
+   {
+    "label": "NIH ODS 오메가3",
+    "org": "",
+    "href": "https://ods.od.nih.gov/factsheets/Omega3FattyAcids-HealthProfessional/"
+   },
+   {
+    "label": "NIH ODS 셀레늄 (브라질너트 함량)",
+    "org": "",
+    "href": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+   },
+   {
+    "label": "NCCIH — 성요한초 상호작용",
+    "org": "",
+    "href": "https://www.nccih.nih.gov/health/st-johns-wort"
+   },
+   {
+    "label": "NIH Office of Dietary Supplements",
+    "org": "",
+    "href": "https://ods.od.nih.gov"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": false
+ },
+ "/tools/health/uv-protection": {
+  "slug": "/tools/health/uv-protection",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "WHO 자외선지수 정의(1 UVI = 홍반가중 자외선 0.025W/㎡) · Fitzpatrick 피부 타입별 MED 기반 추정 · 반사·고도 보정 근거 WHO(눈 최대 80%·물거품 25%·모래 15%·고도 1,000m당 약 10%) · 차단제 외출 15분 전·2시간 재도포(식약처·미국 FDA) · UV 단계 기상청 5단계",
+  "sources": [
+   {
+    "label": "WHO 자외선지수 실용 가이드",
+    "org": "",
+    "href": "https://www.who.int/publications/i/item/9241590076"
+   },
+   {
+    "label": "WHO — 자외선 Q&A",
+    "org": "",
+    "href": "https://www.who.int/news-room/questions-and-answers/item/radiation-ultraviolet-(uv)"
+   },
+   {
+    "label": "기상청 생활기상지수(자외선지수)",
+    "org": "",
+    "href": "https://www.weather.go.kr/w/forecast/life/life-weather-index.do"
+   },
+   {
+    "label": "정책브리핑(식약처) — 자외선차단제 올바른 사용법",
+    "org": "",
+    "href": "https://www.korea.kr/news/policyNewsView.do?newsId=148965990"
+   },
+   {
+    "label": "FDA 자외선 차단제 안내",
+    "org": "",
+    "href": "https://www.fda.gov/drugs/understanding-over-counter-medicines/sunscreen-how-help-protect-your-skin-sun"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/health/weightloss": {
+  "slug": "/tools/health/weightloss",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "지방 1kg ≈ 7,700kcal(Wishnofsky, 1958) · 주당 체중 0.3~1.5% 감량 속도 옵션 · 운동 칼로리 METs 기준(신체활동 컴펜디엄)",
+  "sources": [
+   {
+    "label": "Wishnofsky(1958) 원 논문 (DOI)",
+    "org": "",
+    "href": "https://doi.org/10.1093/ajcn/6.5.542"
+   },
+   {
+    "label": "Compendium of Physical Activities",
+    "org": "",
+    "href": "https://pacompendium.com/"
+   },
+   {
+    "label": "CDC — Steps for Losing Weight",
+    "org": "",
+    "href": "https://www.cdc.gov/healthy-weight-growth/losing-weight/index.html"
+   },
+   {
+    "label": "대한비만학회 — 식사요법",
+    "org": "",
+    "href": "https://general.kosso.or.kr/html/?pmode=nutritionDiet"
+   },
+   {
+    "label": "NIDDK — Body Weight Planner(동적 모델)",
+    "org": "",
+    "href": "https://www.niddk.nih.gov/health-information/professionals/diabetes-discoveries-practice/nih-body-weight-planner"
+   },
+   {
+    "label": "Garthe 외(2011) — 감량 속도와 체성분",
+    "org": "",
+    "href": "https://journals.humankinetics.com/view/journals/ijsnem/21/2/article-p97.xml"
+   },
+   {
+    "label": "보건복지부 — 2025 한국인 영양소 섭취기준 개정",
+    "org": "",
+    "href": "https://www.mohw.go.kr/board.es?mid=a10503010100&bid=0027&act=view&list_no=1488441"
+   }
+  ],
+  "ymyl": true,
+  "hasResult": true
+ },
+ "/tools/interior/ac-capacity": {
+  "slug": "/tools/interior/ac-capacity",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "냉방부하 약 123 W/㎡·1평형 ≈ 407W(KS C 9306 부속서 D) 기준 — 향·층·단열·인원 보정은 관행 가정값",
+  "sources": [
+   {
+    "label": "KS C 9306 에어컨디셔너 (e-나라 표준인증)",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSC9306"
+   },
+   {
+    "label": "한국에너지공단 (에너지소비효율등급)",
+    "org": "",
+    "href": "https://www.energy.or.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/curtain-blind": {
+  "slug": "/tools/interior/curtain-blind",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "사이즈 공식은 업계 통용 관행(커튼봉 = 창 폭 + 30cm · 커튼 폭 = 봉 길이 × 주름 배수 · 블라인드 인사이드 폭 −1cm·높이 −0.5cm, 아웃사이드 +10cm) · 차광 1~3급 구간은 일본 인테리어패브릭협회(NIF, JIS L 1055 A법) 기준 · 한국은 KS K 0819 차광성 시험방법",
+  "sources": [
+   {
+    "label": "산겟츠 — 커튼 기능 가이드(NIF 차광 등급)",
+    "org": "",
+    "href": "https://www.sangetsu.co.jp/style/curtain_choose04.html"
+   },
+   {
+    "label": "e나라표준인증 — KS K 0819 커튼의 차광성 시험방법",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSK0819&tmprKsNo=KSK0819"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/dehumidifier": {
+  "slug": "/tools/interior/dehumidifier",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "한전 주택용(저압) 누진제 요금표 기준 — 소비전력은 국내 유통 제품 통상 범위",
+  "sources": [
+   {
+    "label": "한국전력 — 전기요금표(주택용)",
+    "org": "",
+    "href": "https://cyber.kepco.co.kr/ckepco/front/jsp/CY/E/E/CYEEHP00101.jsp"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/flooring": {
+  "slug": "/tools/interior/flooring",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "박스 면적은 국내 시판 대표값(강화 2.4㎡·강마루 2.6㎡·원목 2.0㎡·데코타일 3.3㎡ — 구매 전 박스 표기 확인) · 장판은 폭 1.8m 롤을 폭(줄) 단위로 배치 · 단가·시공비는 흔히 안내되는 대략적 범위(견적 시 재확인)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 실내공기질 관리법 시행규칙(바닥재·접착제 방출 기준)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/실내공기질관리법시행규칙"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/lighting": {
+  "slug": "/tools/interior/lighting",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "KS A 3011 조도 기준 참고 · LED 평균 효율 100lm/W · 형광등 평균 65lm/W 기준(FPL 램프 광속은 제조사 데이터시트 주백색 840 값)",
+  "sources": [
+   {
+    "label": "e나라표준인증 — KS A 3011 조도기준",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=919&topMenuId=502&upperMenuId=503&ksNo=KSA3011&tmprKsNo=KSA3011&reformNo=09"
+   },
+   {
+    "label": "미국 에너지부 — 루멘과 밝기 표시(백열 W 환산)",
+    "org": "",
+    "href": "https://www.energy.gov/energysaver/lumens-and-lighting-facts-label"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/molding": {
+  "slug": "/tools/interior/molding",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "필요 길이 = 둘레 × (1 + 로스율) + 모서리 4곳 × 5cm, 종류별로 1본(2.4·3.0·3.6m) 단위 올림 · 평수 입력은 정사각형 둘레(√면적 × 4) 가정 · 재질 단가는 흔히 안내되는 대략적 범위(구매 시 재확인)",
+  "sources": [
+   {
+    "label": "e나라표준인증 — KS F 3200 섬유판(MDF)",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSF3200"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/paint": {
+  "slug": "/tools/interior/paint",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "수성 1L당 약 10㎡(1회 도장) 기준 — 페인트·시공 단가는 시장 통용 범위, 폐페인트 처리비는 유역환경청·지자체 안내 기준",
+  "sources": [
+   {
+    "label": "서울 중구청 소량 지정폐기물 처리 서비스",
+    "org": "",
+    "href": "https://www.junggu.seoul.kr/content.do?cmsid=15486"
+   },
+   {
+    "label": "인천시 소량 유해폐기물 처리 서비스 안내",
+    "org": "",
+    "href": "https://incheon.go.kr/IC010101/view?curPage=&nttNo=2042396&srchKey=&srchSiteRealmCode=&srchWord="
+   },
+   {
+    "label": "서울시 재활용 비해당품목 배출기준",
+    "org": "",
+    "href": "https://news.seoul.go.kr/env/archives/563504"
+   },
+   {
+    "label": "기후에너지환경부 — 생활계 유해폐기물 관리지침(2023.12 개정)",
+    "org": "",
+    "href": "https://www.mcee.go.kr/m/mob/policy_data/read.do?menuId=34&condition.code=A6&seq=8220"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/pipe": {
+  "slug": "/tools/interior/pipe",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "호칭 KS(A)·ASME B36.10(인치)·ISO 6708(DN) · 강관 KS D 3507(SPP, JIS G 3452 SGP와 같은 치수)·KS D 3562(SPPS, JIS G 3454 STPG와 같은 치수) Sch 40·80 · 동관 KS D 5301(ASTM B88 K·L·M 두께) · PVC·PB·XL·STS는 표준 일반치 · 유량 Q = π/4 × 내경² × 유속",
+  "sources": [
+   {
+    "label": "e나라표준인증 — KS D 3507 배관용 탄소 강관",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSD3507&tmprKsNo=KSD3507"
+   },
+   {
+    "label": "e나라표준인증 — KS D 5301 이음매 없는 구리 및 구리합금 관",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSD5301&tmprKsNo=KSD5301"
+   },
+   {
+    "label": "국가법령정보센터 — 수도법(수도용 자재 위생안전기준)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/수도법"
+   },
+   {
+    "label": "국가법령정보센터 — 도시가스사업법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/도시가스사업법"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/rebar": {
+  "slug": "/tools/interior/rebar",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "단위중량 KS D 3504 · 결속선 건설공사 표준품셈 기준 — 가격·고철 시세는 변동치(발주 시 재확인)",
+  "sources": [
+   {
+    "label": "한국철강협회",
+    "org": "",
+    "href": "https://www.kosa.or.kr"
+   },
+   {
+    "label": "KS D 3504 철근 콘크리트용 봉강 (e-나라 표준인증)",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSD3504"
+   },
+   {
+    "label": "도로교통법 시행령 (적재 길이)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/도로교통법시행령"
+   },
+   {
+    "label": "건축법 시행령 (공작물 축조신고)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축법시행령"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/roof": {
+  "slug": "/tools/interior/roof",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "물매 = 수평 10 대비 수직 높이(tanθ × 10) · 표면적 = 처마 포함 평면 × 1/cosθ(모든 면이 같은 경사일 때) · 처마 건축면적 산입은 건축법 시행령 제119조 · 자재 단가는 흔히 안내되는 대략적 범위(견적 시 재확인)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 건축법 시행령(면적 등의 산정방법)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축법시행령"
+   },
+   {
+    "label": "국가법령정보센터 — 산업안전보건기준에 관한 규칙(지붕 위 위험 방지)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/산업안전보건기준에관한규칙"
+   },
+   {
+    "label": "국가법령정보센터 — 산업안전보건법(석면해체·제거업)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/산업안전보건법"
+   },
+   {
+    "label": "한국산업안전보건공단(KOSHA)",
+    "org": "",
+    "href": "https://www.kosha.or.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/room-area": {
+  "slug": "/tools/interior/room-area",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "1평 = 400/121㎡ ≈ 3.3058㎡(계산기 적용값) · 벽 면적 = 둘레 × 천장 높이 − 창·문 · 바닥면적·반자높이 산정은 건축법 시행령 제119조 · 공동주택 주거전용면적은 주택법 시행규칙 제2조(외벽 내부선 기준) · 국민주택규모 전용 85㎡(주택법) · 냉방 부하 약 123W/㎡(KS C 9306)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 건축법 시행령(면적 등의 산정방법)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축법시행령"
+   },
+   {
+    "label": "국가법령정보센터 — 주택법(국민주택규모)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택법"
+   },
+   {
+    "label": "국가법령정보센터 — 주택법 시행규칙(주거전용면적 산정)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택법시행규칙"
+   },
+   {
+    "label": "e나라표준인증 — KS C 9306 에어컨디셔너",
+    "org": "",
+    "href": "https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?ksNo=KSC9306"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/screw": {
+  "slug": "/tools/interior/screw",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "미터 나사 KS B 0201·0204(ISO 261) · 탭드릴 외경 − 피치(ISO 2306 계열) · 관통홀 ISO 273(KS B ISO 273) 정밀·중간·거친 · 관용 테이퍼 나사 KS B 0222(ISO 7-1)·NPT ASME B1.20.1 · 볼트 머리 ISO 4017·구 DIN 933·JIS 소형 · 알렌 ISO 4762 · 강도등급 ISO 898-1 · 토크는 마찰계수 0.14 가정 일반 참고치",
+  "sources": [
+   {
+    "label": "e나라표준인증 — KS B 0201 미터 보통 나사",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSB0201&tmprKsNo=KSB0201"
+   },
+   {
+    "label": "e나라표준인증 — KS B 0222 관용 테이퍼 나사",
+    "org": "",
+    "href": "https://www.standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&ksNo=KSB0222&tmprKsNo=KSB0222"
+   },
+   {
+    "label": "ISO 273 — Clearance holes for bolts and screws",
+    "org": "",
+    "href": "https://www.iso.org/standard/4183.html"
+   },
+   {
+    "label": "ISO 2306 — Drills for use prior to tapping screw threads",
+    "org": "",
+    "href": "https://www.iso.org/standard/7135.html"
+   },
+   {
+    "label": "ISO 898-1 — 탄소강·합금강 볼트의 기계적 성질(강도등급)",
+    "org": "",
+    "href": "https://www.iso.org/standard/60610.html"
+   },
+   {
+    "label": "국가법령정보센터 — 산업안전보건기준에 관한 규칙(제95조 장갑의 사용 금지)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/산업안전보건기준에관한규칙"
+   },
+   {
+    "label": "ISO 16047 — Fasteners: Torque/clamp force testing",
+    "org": "",
+    "href": "https://www.iso.org/standard/27788.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/ventilation": {
+  "slug": "/tools/interior/ventilation",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "신축 30세대 이상 공동주택 시간당 0.5회 환기(건축물의 설비기준 등에 관한 규칙)·학교 1인당 21.6㎥/h(학교보건법 시행규칙)·CO₂ 1,000ppm(실내공기질 관리법 시행규칙) — 그 외 용도별 ACH는 권장 범위",
+  "sources": [
+   {
+    "label": "건축물의 설비기준 등에 관한 규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축물의설비기준등에관한규칙"
+   },
+   {
+    "label": "학교보건법 시행규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/학교보건법시행규칙"
+   },
+   {
+    "label": "실내공기질 관리법 시행규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/실내공기질관리법시행규칙"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/wallpaper": {
+  "slug": "/tools/interior/wallpaper",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "국내 유통 표준 규격(실크 폭 106cm×15.6m · 광폭 합지 93cm×17.75m) 기준 — 벽지·시공 단가는 흔히 안내되는 대략적 범위(견적 시 재확인)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 실내공기질 관리법 시행규칙(벽지 등 건축자재 방출 기준)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/실내공기질관리법시행규칙"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/interior/wire": {
+  "slug": "/tools/interior/wire",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "한국전기설비규정(KEC) 과전류 보호 IB ≤ In ≤ Iz · 허용전류 IEC 60364-5-52 참조 부설방법 C(PVC 절연·동선·30°C) · 전압강하 KEC 수용가 설비 한도(조명 3%·기타 5%)와 계산기 설계 목표 2% · 차단기 국내 표준 정격 · 연속부하 125% 여유",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 한국전기설비규정(KEC)",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/한국전기설비규정"
+   },
+   {
+    "label": "국가법령정보센터 — 전기설비기술기준",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/전기설비기술기준"
+   },
+   {
+    "label": "국가법령정보센터 — 전기공사업법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/전기공사업법"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/alcohol": {
+  "slug": "/tools/life/alcohol",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "순수 알코올(g) = 용량(ml) × 도수(%) ÷ 100 × 0.7893(에탄올 밀도) · 1잔 표시 8g(표준잔 정의는 기관별 7~14g) · 소주 도수는 2026년 7월 제조사 표기",
+  "sources": [
+   {
+    "label": "WHO 유럽사무소 — 안전한 음주량은 없다(2023)",
+    "org": "",
+    "href": "https://www.who.int/europe/news/item/04-01-2023-no-level-of-alcohol-consumption-is-safe-for-our-health"
+   },
+   {
+    "label": "NIAAA — What Is a Standard Drink?",
+    "org": "",
+    "href": "https://www.niaaa.nih.gov/alcohols-effects-health/what-standard-drink"
+   },
+   {
+    "label": "질병관리청 국민건강영양조사 (고위험음주 지표)",
+    "org": "",
+    "href": "https://knhanes.kdca.go.kr/"
+   },
+   {
+    "label": "국가법령정보센터 — 청소년보호법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/청소년보호법"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/cleaning": {
+  "slug": "/tools/life/cleaning",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "락스 희석은 질병관리청 소독 안내의 표면 소독 농도(차아염소산나트륨 약 1,000ppm), 세탁조 통세척은 LG전자·삼성전자서비스 공식 안내 기준 — 구연산·과탄산·베이킹소다 농도는 공식 기준이 없어 통용 관행값",
+  "sources": [
+   {
+    "label": "질병관리청 — 집단시설·다중이용시설 소독 안내",
+    "org": "",
+    "href": "https://www.kdca.go.kr"
+   },
+   {
+    "label": "LG전자 통돌이 통세척",
+    "org": "",
+    "href": "https://www.lge.co.kr/support/solutions-1430889036106"
+   },
+   {
+    "label": "LG전자 워시타워 통살균",
+    "org": "",
+    "href": "https://www.lge.co.kr/support/solutions-20153936989467"
+   },
+   {
+    "label": "삼성전자서비스 무세제통세척",
+    "org": "",
+    "href": "https://www.samsungsvc.co.kr/solution/40255"
+   },
+   {
+    "label": "삼성전자서비스 통세척",
+    "org": "",
+    "href": "https://www.samsungsvc.co.kr/solution/41708"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/customs": {
+  "slug": "/tools/life/customs",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "관세법 시행규칙 제45조 소액면세 한도($150)·특송물품 수입통관 사무처리에 관한 고시(미국발 목록통관 $200)·관세율표 기본세율·개별소비세법·주세법·부가가치세법 기준 간이 예상세액",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 관세법 시행규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/관세법시행규칙"
+   },
+   {
+    "label": "국가법령정보센터 — 수입통관 사무처리에 관한 고시",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/수입통관사무처리에관한고시"
+   },
+   {
+    "label": "국가법령정보센터 — 특송물품 수입통관 사무처리에 관한 고시",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/특송물품수입통관사무처리에관한고시"
+   },
+   {
+    "label": "국가법령정보센터 — 개별소비세법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/개별소비세법"
+   },
+   {
+    "label": "관세청 — 해외직구 안내",
+    "org": "",
+    "href": "https://www.customs.go.kr"
+   },
+   {
+    "label": "관세청 UNI-PASS — 세율·주간환율 조회",
+    "org": "",
+    "href": "https://unipass.customs.go.kr"
+   }
+  ],
+  "verified": {
+   "cases": 21,
+   "scope": "관부가세 면세 한도·세액 적층",
+   "full": false,
+   "tests": [
+    "tests/golden/customs.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/drake": {
+  "slug": "/tools/life/drake",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "드레이크 방정식(1961) 원형 · 탐사 현황은 NASA·Breakthrough Initiatives 발표 기준 · 거리는 은하 원반 균등 분포를 가정한 단순 모델",
+  "sources": [
+   {
+    "label": "SETI Institute — Drake Equation",
+    "org": "",
+    "href": "https://www.seti.org/research/seti-101/drake-equation/"
+   },
+   {
+    "label": "NASA Exoplanet Archive",
+    "org": "",
+    "href": "https://exoplanetarchive.ipac.caltech.edu/"
+   },
+   {
+    "label": "NASA Science — Europa Clipper",
+    "org": "",
+    "href": "https://science.nasa.gov/mission/europa-clipper/"
+   },
+   {
+    "label": "Breakthrough Listen",
+    "org": "",
+    "href": "https://breakthroughinitiatives.org/initiative/1"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/dutch": {
+  "slug": "/tools/life/dutch",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "단위 처리·잔여 처리·술값 분리는 도구 계산식 그대로 · 최소 송금 = 잔액이 있는 인원 − 합이 0인 그룹 수 (Verhoeff 2004)",
+  "sources": [
+   {
+    "label": "Verhoeff (2004) Settling Multiple Debts Efficiently — Informatics in Education",
+    "org": "",
+    "href": "https://infedu.vu.lt/journal/INFEDU/article/612/info"
+   },
+   {
+    "label": "The debts’ clearing problem: a new approach (arXiv:1111.3663)",
+    "org": "",
+    "href": "https://arxiv.org/abs/1111.3663"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/gift-money": {
+  "slug": "/tools/life/gift-money",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "관계별 금액은 법정 기준이 아닌 사회 통념 참고치 · 결혼식 동반 1인당 식대 5만원 가산(기준액 30만원 이하일 때) · 4·9로 시작하는 합계는 다음 관례 금액으로 올림 · 식대 시세 = 한국소비자원 참가격 결혼서비스 조사(1인 식대 전국 중간값 5만원대 후반) · 공직자 등 경조사비 상한 = 청탁금지법 시행령 별표1(축의금·조의금 5만원, 화환·조화 10만원)",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 청탁금지법 시행령(별표1 경조사비 가액 범위)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/부정청탁및금품등수수의금지에관한법률시행령"
+   },
+   {
+    "label": "한국소비자원 참가격 — 결혼서비스 가격 정보",
+    "org": "",
+    "href": "https://www.price.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/height-rank": {
+  "slug": "/tools/life/height-rank",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "사이즈코리아 8차 한국인 인체치수조사 (직접측정 2020~2021, 20~69세 6,839명) 성별·연령대별 실측 통계",
+  "sources": [
+   {
+    "label": "사이즈코리아",
+    "org": "",
+    "href": "https://sizekorea.kr"
+   },
+   {
+    "label": "국가기술표준원",
+    "org": "",
+    "href": "https://www.kats.go.kr"
+   },
+   {
+    "label": "NCD-RisC — 국가별 키 원자료",
+    "org": "",
+    "href": "https://www.ncdrisc.org"
+   },
+   {
+    "label": "NCD-RisC (eLife 2016) — 100년간 성인 키 추세",
+    "org": "",
+    "href": "https://doi.org/10.7554/eLife.13410"
+   },
+   {
+    "label": "병무청",
+    "org": "",
+    "href": "https://www.mma.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/kinship": {
+  "slug": "/tools/life/kinship",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "국립국어원 『표준 언어 예절』(2011) 가정에서의 호칭·지칭 + 『우리, 뭐라고 부를까요?』(2020) 안내 · 촌수·친족 범위는 민법 제767~777조(현행)",
+  "sources": [
+   {
+    "label": "국립국어원 표준 언어 예절(2011) — 가정에서의 호칭, 지칭",
+    "org": "",
+    "href": "https://www.korean.go.kr/front/reportData/reportDataView.do?mn_id=207&report_seq=772"
+   },
+   {
+    "label": "국립국어원 우리, 뭐라고 부를까요?(2020)",
+    "org": "",
+    "href": "https://www.korean.go.kr/front/etcData/etcDataView.do?mn_id=208&etc_seq=648"
+   },
+   {
+    "label": "민법 제777조(친족의 범위)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/민법/제777조"
+   },
+   {
+    "label": "민법 제1000조(상속의 순위)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/민법/제1000조"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/ladder": {
+  "slug": "/tools/life/ladder",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "도구 알고리즘(균등 순열 선추첨 + 홀짝 교환 정렬 배치) · 위치 편향·완전순열 표는 빌드 시 도구와 같은 규칙으로 계산",
+  "sources": [
+   {
+    "label": "MDN — Math.random()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random"
+   },
+   {
+    "label": "OEIS A000166 — 완전순열 수",
+    "org": "",
+    "href": "https://oeis.org/A000166"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/laundry-dry": {
+  "slug": "/tools/life/laundry-dry",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "건조 시간 = 의류 기본 시간 × 소재·두께·탈수·간격 × 기온·습도(구간 보간)·바람·햇빛·장소 계수 — 생활 경험 기반 추정 모델(실측 아님) · 전기료 = 소비전력 × 사용 시간 × 가구 평균 원/kWh(기본요금·부가세 등 포함 어림값) · 누진 단계 = 한전 주택용(저압) 전력량요금( 시행분)",
+  "sources": [
+   {
+    "label": "한국전력 — 주택용 전기요금표",
+    "org": "",
+    "href": "https://home.kepco.co.kr/kepco/front/html/CY/E/E/CYEEHP00101.html"
+   },
+   {
+    "label": "Kubota et al. (2012) — 빨래 냄새의 주원인 모락셀라균, Applied and Environmental Microbiology",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/22367080/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/lotto": {
+  "slug": "/tools/life/lotto",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "등수별 확률·패턴 비율은 조합론으로 빌드 시 계산 · 당첨금 배분은 동행복권 로또6/45 규정 · 세금은 소득세법 제84조(과세최저한 200만원)·제129조(3억 초과분 30%) + 지방소득세",
+  "sources": [
+   {
+    "label": "동행복권 — 로또6/45 소개",
+    "org": "",
+    "href": "https://www.dhlottery.co.kr/lt645/intro"
+   },
+   {
+    "label": "소득세법 제84조(기타소득의 과세최저한)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법/제84조"
+   },
+   {
+    "label": "소득세법 제129조(원천징수세율)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소득세법/제129조"
+   },
+   {
+    "label": "한국도박문제예방치유원",
+    "org": "",
+    "href": "https://www.kcgp.or.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/monty-hall": {
+  "slug": "/tools/life/monty-hall",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "표준 규칙(진행자가 자동차 위치를 알고 항상 고르지 않은 염소 문을 엶) 아래 조건부확률 · 변형 규칙 3종 · 시뮬레이션 표본오차 표는 빌드 시 계산",
+  "sources": [
+   {
+    "label": "Selvin (1975) — The American Statistician",
+    "org": "",
+    "href": "https://doi.org/10.1080/00031305.1975.10479121"
+   },
+   {
+    "label": "New York Times (1991) — 몬티홀 논쟁 보도",
+    "org": "",
+    "href": "https://www.nytimes.com/1991/07/21/us/behind-monty-hall-s-doors-puzzle-debate-and-answer.html"
+   },
+   {
+    "label": "Rosenthal — Monty Hall, Monty Fall, Monty Crawl",
+    "org": "",
+    "href": "https://probability.ca/jeff/writing/montyfall.pdf"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/packing": {
+  "slug": "/tools/life/packing",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "옷 개수·무게는 계산기 계산식(본문 표는 빌드 시 같은 식으로 계산) · 보조배터리 기내 규정은 ICAO·국토교통부 기준(2026-04-20 시행)",
+  "sources": [
+   {
+    "label": "국토교통부 — 보조배터리 기내 반입 기준",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374"
+   },
+   {
+    "label": "IATA — 승객 배터리 안내",
+    "org": "",
+    "href": "https://www.iata.org/en/youandiata/travelers/batteries/"
+   },
+   {
+    "label": "FAA PackSafe — 배터리",
+    "org": "",
+    "href": "https://www.faa.gov/hazmat/packsafe/airline-passengers-and-batteries"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/pomodoro": {
+  "slug": "/tools/life/pomodoro",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "도구 동작(타임스탬프 기준 타이머·프리셋 7종·단계 전환 규칙) 코드 기준 점검 · 표의 사이클 시간은 빌드 시 프리셋 값으로 계산",
+  "sources": [
+   {
+    "label": "MDN — setTimeout(비활성 탭 타이머 지연)",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/Window/setTimeout"
+   },
+   {
+    "label": "MDN — Notifications API",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/Notifications_API"
+   },
+   {
+    "label": "Lally 외(2010) 습관 형성 연구",
+    "org": "",
+    "href": "https://doi.org/10.1002/ejsp.674"
+   },
+   {
+    "label": "Mehta 외(2012) 주변 소음과 창의성",
+    "org": "",
+    "href": "https://doi.org/10.1086/665048"
+   },
+   {
+    "label": "Ericsson 외(1993) 의도적 연습",
+    "org": "",
+    "href": "https://doi.org/10.1037/0033-295X.100.3.363"
+   },
+   {
+    "label": "Francesco Cirillo — Pomodoro Technique 공식",
+    "org": "",
+    "href": "https://www.pomodorotechnique.com/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/life/random": {
+  "slug": "/tools/life/random",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "도구 알고리즘(Fisher-Yates 셔플·누적 가중치 추첨) 코드 기준 점검 · 편차·사다리 확률표는 빌드 시 계산",
+  "sources": [
+   {
+    "label": "MDN — Math.random()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Math/random"
+   },
+   {
+    "label": "MDN — Crypto.getRandomValues()",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/Crypto/getRandomValues"
+   },
+   {
+    "label": "ECMAScript 명세 — Math.random",
+    "org": "",
+    "href": "https://tc39.es/ecma262/#sec-math.random"
+   },
+   {
+    "label": "Durstenfeld(1964) CACM Algorithm 235",
+    "org": "",
+    "href": "https://doi.org/10.1145/364520.364540"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/residual-value": {
+  "slug": "/tools/life/residual-value",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "소비자분쟁해결기준 — 공정거래위원회고시 제2025-14호 (2025.12.18. 시행) 별표Ⅱ·Ⅲ·Ⅳ 원문",
+  "sources": [
+   {
+    "label": "국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/소비자분쟁해결기준"
+   },
+   {
+    "label": "한국소비자원",
+    "org": "",
+    "href": "https://www.kca.go.kr"
+   },
+   {
+    "label": "소비자기본법 (제16조·제58조·제67조)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/소비자기본법"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/travel-budget": {
+  "slug": "/tools/life/travel-budget",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "도시별 1박 평균·항공권은 주요 OTA·항공 메타서치 관찰 평균 (대표 도시 재점검) — 시기·환율 따라 ±30% 이상 변동하는 참고치 · 아래 출처는 환율 확인·환전 수수료·여행자보험·입국 요건 근거이며, 가격과 기본 환율은 참고치",
+  "sources": [
+   {
+    "label": "한국은행 경제통계시스템(ECOS) — 환율 확인용",
+    "org": "",
+    "href": "https://ecos.bok.or.kr/"
+   },
+   {
+    "label": "은행연합회 소비자포털 — 환전 수수료 비교",
+    "org": "",
+    "href": "https://portal.kfb.or.kr/compare/commission_spread.php"
+   },
+   {
+    "label": "보험다모아 — 여행자보험 비교(손해·생명보험협회)",
+    "org": "",
+    "href": "https://e-insmarket.or.kr/"
+   },
+   {
+    "label": "외교부 해외안전여행",
+    "org": "",
+    "href": "https://www.0404.go.kr/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/travel-tip": {
+  "slug": "/tools/life/travel-tip",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "국가·서비스별 팁 비율·정액은 현지 관례를 모은 참고치(법정 기준 아님) · 비율 팁 = 금액 × 만족도별 비율(보통·좋음·매우 좋음) · 정액 팁은 ‘/인’ 단위만 인원수 곱 · 원화 환산 환율은 입력값(실시간 아님) · 미국 팁 크레딧 = FLSA §3(m) · 프랑스 ‘service compris’ = 1987년 3월 27일 가격 표시 부령 · 영국 팁 배분 = Employment (Allocation of Tips) Act 2023",
+  "sources": [
+   {
+    "label": "U.S. Department of Labor — Fact Sheet #15: Tipped Employees Under the FLSA",
+    "org": "",
+    "href": "https://www.dol.gov/agencies/whd/fact-sheets/15-tipped-employees-flsa"
+   },
+   {
+    "label": "JNTO(일본정부관광국) 공식 여행 안내 — 일본 팁·봉사료 관행",
+    "org": "",
+    "href": "https://www.japan.travel/en/"
+   },
+   {
+    "label": "Légifrance — Arrêté du 27 mars 1987 relatif à l’affichage des prix dans les établissements servant des repas (service compris)",
+    "org": "",
+    "href": "https://www.legifrance.gouv.fr"
+   },
+   {
+    "label": "legislation.gov.uk — Employment (Allocation of Tips) Act 2023",
+    "org": "",
+    "href": "https://www.legislation.gov.uk/ukpga/2023/13"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/unit-price": {
+  "slug": "/tools/life/unit-price",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "계산식·자동 추천 기준은 도구 코드 기준(가이드 예시는 같은 식으로 빌드 시 계산) · 단위가격 표시단위는 「가격표시제 실시요령」(2025.4.7 개정, 온라인몰 2026.4 시행) 기준",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 가격표시제 실시요령(고시)",
+    "org": "",
+    "href": "https://www.law.go.kr/LSW/admRulLsInfoP.do?admRulId=33397&efYd=0"
+   },
+   {
+    "label": "물가안정에 관한 법률 제3조(가격 표시)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/물가안정에관한법률/제3조"
+   },
+   {
+    "label": "한국소비자원 참가격",
+    "org": "",
+    "href": "https://www.price.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/life/vin-decoder": {
+  "slug": "/tools/life/vin-decoder",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "자리 구조 = ISO 3779 · 제조사 식별(WMI) = ISO 3780 · 체크 디지트 = 49 CFR 565.15(문자 변환값 × 자리 가중치 합 ÷ 11의 나머지, 10이면 X — 북미·중국 의무) · 연식 코드 = 30년 주기(A=1980/2010 … 9=2009/2039) · 제조사 코드 = 공개 WMI 목록 교차 확인 참고 데이터",
+  "sources": [
+   {
+    "label": "ISO 3779:2009 — Vehicle identification number (VIN) 내용과 구조",
+    "org": "",
+    "href": "https://www.iso.org/standard/52200.html"
+   },
+   {
+    "label": "eCFR — 49 CFR Part 565 VIN Requirements(NHTSA)",
+    "org": "",
+    "href": "https://www.ecfr.gov/current/title-49/subtitle-B/chapter-V/part-565"
+   },
+   {
+    "label": "국가법령정보센터 — 자동차관리법(차대번호 표기·훼손 금지)",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/자동차관리법"
+   },
+   {
+    "label": "카히스토리(보험개발원) — 차량 이력",
+    "org": "",
+    "href": "https://www.carhistory.or.kr"
+   },
+   {
+    "label": "자동차365(국토교통부) — 등록·제원",
+    "org": "",
+    "href": "https://www.car365.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/life/zodiac": {
+  "slug": "/tools/life/zodiac",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "띠·60갑자는 양력 연도 기준 계산(음력 설날 기준표는 한국천문연구원 음양력 데이터) · 별자리는 서양 점성술 12궁 대표 날짜 · 탄생석은 현대 목록(GIA 안내)",
+  "sources": [
+   {
+    "label": "한국천문연구원 — 음양력 변환계산",
+    "org": "",
+    "href": "https://astro.kasi.re.kr/life/pageView/8"
+   },
+   {
+    "label": "IAU — The Constellations",
+    "org": "",
+    "href": "https://www.iau.org/IAU/IAU/Astronomy-FAQs/Constellations.aspx"
+   },
+   {
+    "label": "GIA — Birthstones",
+    "org": "",
+    "href": "https://www.gia.edu/birthstones"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/baseball-stats": {
+  "slug": "/tools/sports/baseball-stats",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "타율·출루율·OPS·ERA·WHIP 표준 공식 · 규정타석(경기수×3.1)·규정이닝(경기수×1.0) = 공식야구규칙 9.22 기준",
+  "sources": [
+   {
+    "label": "KBO 공식 기록실",
+    "org": "",
+    "href": "https://www.koreabaseball.com/Record/Player/HitterBasic/Basic1.aspx"
+   },
+   {
+    "label": "MLB 공식 용어집(Rate Stats Qualifiers)",
+    "org": "",
+    "href": "https://www.mlb.com/glossary/standard-stats/rate-stats-qualifiers"
+   },
+   {
+    "label": "FanGraphs Sabermetrics Library — FIP",
+    "org": "",
+    "href": "https://library.fangraphs.com/pitching/fip/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/buildup": {
+  "slug": "/tools/sports/buildup",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "Daniels 훈련 페이스표를 재현하도록 잡은 도구 계수(VDOT 대비 E 59~74% · M 82% · T 88% · I 97% · R 106%)와 Daniels·Gilbert VDOT 식 — 마라톤 기록 계산기와 같은 계수",
+  "sources": [
+   {
+    "label": "Daniels' Running Formula — Human Kinetics (도구 계수는 3판·2014 페이스표 기준, 링크는 현행 4판)",
+    "org": "",
+    "href": "https://us.humankinetics.com/products/daniels-running-formula-4th-edition"
+   },
+   {
+    "label": "VDOT O2 러닝 계산기 (Jack Daniels 공식)",
+    "org": "",
+    "href": "https://vdoto2.com/calculator/"
+   },
+   {
+    "label": "Seiler (2010) 지구성 훈련 강도 분포 — IJSPP",
+    "org": "",
+    "href": "https://journals.humankinetics.com/view/journals/ijspp/5/3/article-p276.xml"
+   },
+   {
+    "label": "Jones & Doust (1996) 트레드밀 1% 경사 — J Sports Sci",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/8887211/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/carb-loading": {
+  "slug": "/tools/sports/carb-loading",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "ACSM/AND/DC 2016 공동 성명 Table 2 (g/kg) + 국가표준식품성분 DB 10.4(2026)",
+  "sources": [
+   {
+    "label": "ACSM/AND/DC 공동 성명 — Nutrition and Athletic Performance (2016)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/26891166/"
+   },
+   {
+    "label": "농촌진흥청 농식품올바로 — 국가표준식품성분표",
+    "org": "",
+    "href": "https://koreanfood.rda.go.kr/kfi/fct/fctFoodSrch/list"
+   },
+   {
+    "label": "IOC 스포츠영양 합의 — Burke 외 (2011) Carbohydrates for training and competition",
+    "org": "",
+    "href": "https://doi.org/10.1080/02640414.2011.585473"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/climbing-grade": {
+  "slug": "/tools/sports/climbing-grade",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "통용 등급 환산표 기준 (근사 변환 · 공인 단일 표준 없음)",
+  "sources": [
+   {
+    "label": "Wikipedia — Grade (climbing)",
+    "org": "",
+    "href": "https://en.wikipedia.org/wiki/Grade_(climbing)"
+   },
+   {
+    "label": "99Boulders",
+    "org": "",
+    "href": "https://www.99boulders.com/bouldering-grades"
+   },
+   {
+    "label": "Guide Dolomiti — Rock climbing grades",
+    "org": "",
+    "href": "https://www.guidedolomiti.com/en/rock-climbing-grades/"
+   },
+   {
+    "label": "UKClimbing — 이성수 Burden of Dreams(9A) 완등",
+    "org": "",
+    "href": "https://www.ukclimbing.com/news/2025/05/lee_sungsu_climbs_burden_of_dreams_9a_twice-73979"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/fight-weight": {
+  "slug": "/tools/sports/fight-weight",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "체급 한도는 각 단체 규정(UFC·프로 복싱·ONE·K-1·IJF·UWW·WT) · 계체 시각·재수화 절차는 대표적인 운영 방식이라 출전 전 단체 최신 규정 확인 필요 · 위험도는 주당 감량 ÷ 체중(1%·1.5%·2% 구간) · 탈수 기준은 ACSM 수분 보충 입장문(체중 2% 초과 수분 손실 시 수행 능력 저하) · 정맥 수액은 WADA 금지목록 M2.2",
+  "sources": [
+   {
+    "label": "ACSM 입장문 — Exercise and Fluid Replacement (2007, PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/17277604/"
+   },
+   {
+    "label": "WADA 금지목록 (M2.2 정맥 주입)",
+    "org": "",
+    "href": "https://www.wada-ama.org/en/prohibited-list"
+   },
+   {
+    "label": "국제유도연맹(IJF)",
+    "org": "",
+    "href": "https://www.ijf.org"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/formation": {
+  "slug": "/tools/sports/formation",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "대회 결과·전술 트렌드는 2026 FIFA 북중미 월드컵 종료(2026-07-19) 기준, 대표팀 감독 체제는 2026-07-30 기준",
+  "sources": [
+   {
+    "label": "FIFA 공식 경기 리포트",
+    "org": "",
+    "href": "https://www.fifa.com/en/tournaments/mens/worldcup/canadamexicousa2026"
+   },
+   {
+    "label": "FIFA Training Centre (기술연구그룹 분석)",
+    "org": "",
+    "href": "https://www.fifatrainingcentre.com/"
+   },
+   {
+    "label": "대한축구협회 8인제 경기 규칙",
+    "org": "",
+    "href": "https://www.kfa.or.kr/img_src/data_rule/kfa_regulationofthe8vs8game_202201.pdf"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": false
+ },
+ "/tools/sports/ftp-zones": {
+  "slug": "/tools/sports/ftp-zones",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "Coggan 7단계 파워존(%FTP) · FTP 추정 계수 20분 ×0.95·램프 ×0.75·8분 ×0.90 · W/kg 등급은 커뮤니티 통용 참고값",
+  "sources": [
+   {
+    "label": "TrainingPeaks — Coggan 7단계 파워존",
+    "org": "",
+    "href": "https://www.trainingpeaks.com/blog/power-training-levels/"
+   },
+   {
+    "label": "Tramontin 외, Int J Sports Med 2022 (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/34749416/"
+   },
+   {
+    "label": "Zwift — Category Enforcement 페이스 그룹",
+    "org": "",
+    "href": "https://support.zwift.com/en_us/category-enforcement-pace-groups-rkhtvQuqT"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/golf-cost": {
+  "slug": "/tools/sports/golf-cost",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "한국레저산업연구소 그린피 조사 — 대중형 2025년 5월·10월, 회원제(비회원) 2026년 5월(레저백서 2026) 평균",
+  "sources": [
+   {
+    "label": "한국레저산업연구소 — 레저백서",
+    "org": "",
+    "href": "https://www.kole.kr/book"
+   },
+   {
+    "label": "체육시설의 설치·이용에 관한 법률(골프장 회원제·비회원제 구분) — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/체육시설의설치ㆍ이용에관한법률"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/golf-distance": {
+  "slug": "/tools/sports/golf-distance",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "클럽 수 한도 — R&A·USGA 골프 규칙 4.1b(최대 14개) · 거리 단위 — 국제 야드(1yd = 0.9144m) · 평균 비거리·환경 보정 계수는 공식 통계가 아닌 경험칙 추정",
+  "sources": [
+   {
+    "label": "R&A 공식 사이트",
+    "org": "",
+    "href": "https://www.randa.org"
+   },
+   {
+    "label": "대한골프협회 — 골프 규칙",
+    "org": "",
+    "href": "https://www.kgagolf.or.kr"
+   },
+   {
+    "label": "NIST 도량형국(OWM) — 야드·미터 환산",
+    "org": "",
+    "href": "https://www.nist.gov/pml/owm"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/golf-handicap": {
+  "slug": "/tools/sports/golf-handicap",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "WHS 핸디캡 규칙(2024 개정) — 스코어 디퍼런셜 = (스코어 − CR) × 113 ÷ 슬로프, 최근 20라운드 중 최저 8개 평균·최대 54.0, 코스 핸디캡 = 지수 × 슬로프 ÷ 113 + (CR − 파), 스트로크 플레이 허용률 95% · AGS·PCC·캡 절차는 생략",
+  "sources": [
+   {
+    "label": "World Handicap System (USGA·R&A)",
+    "org": "",
+    "href": "https://www.whs.com"
+   },
+   {
+    "label": "R&A (WHS 공동 운영)",
+    "org": "",
+    "href": "https://www.randa.org"
+   },
+   {
+    "label": "대한골프협회(KGA)",
+    "org": "",
+    "href": "https://www.kgagolf.or.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/grip-size": {
+  "slug": "/tools/sports/grip-size",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "Nirschl 손 측정법 · 제조사 공칭 사이즈 표기 · R&A/USGA 장비 규칙 (종목별 추천 구간은 Youtil 추정)",
+  "sources": [
+   {
+    "label": "Hatch 외, Am J Sports Med 2006 (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/16861576/"
+   },
+   {
+    "label": "R&A Rules of Equipment Part 2",
+    "org": "",
+    "href": "https://www.randa.org/en/roe/the-rules-of-equipment/part-2-conformance-of-clubs"
+   },
+   {
+    "label": "Golf Pride 그립 사이즈 가이드",
+    "org": "",
+    "href": "https://www.golfpride.com/us/en-us/grip-academy/swing-grip-size-guide.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/hiking-time": {
+  "slug": "/tools/sports/hiking-time",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "국립공원 입산시간지정제(공원·탐방로별 상이)·자연공원법 제86조제2항 과태료 기준",
+  "sources": [
+   {
+    "label": "국립공원공단 — 입산시간지정제",
+    "org": "",
+    "href": "https://www.knps.or.kr/portal/main/contents.do?menuNo=8000198"
+   },
+   {
+    "label": "국민재난안전포털 — 산행안전사고 행동요령",
+    "org": "",
+    "href": "https://www.safekorea.go.kr/safekorea-kor/acts/nacts/action-guide.do?category=mtSafetyAccident&actsHeaderTitle=%EC%82%B0%ED%96%89%EC%95%88%EC%A0%84%EC%82%AC%EA%B3%A0&menuSn=4"
+   },
+   {
+    "label": "한국천문연구원 — 일출·일몰 시각 계산",
+    "org": "",
+    "href": "https://astro.kasi.re.kr/life/pageView/9"
+   },
+   {
+    "label": "산림청",
+    "org": "",
+    "href": "https://www.forest.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/hyrox": {
+  "slug": "/tools/sports/hyrox",
+  "reviewed": "2026-06",
+  "updated": "2026-09-26",
+  "basis": "HYROX 공식 룰북 시즌 25/26(경기 순서·부문별 중량·규격) · 월 볼 횟수는 26/27 시즌 안내 반영 · 국내 대회 현황은 2026년 6월까지의 공개 자료 기준",
+  "sources": [
+   {
+    "label": "HYROX 공식 사이트 — 룰북·대회 등록",
+    "org": "",
+    "href": "https://hyrox.com"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/interval-training": {
+  "slug": "/tools/sports/interval-training",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "페이스 — Daniels·Gilbert VDOT 공식과 Daniels 5단계 훈련 강도(%VO₂max), 이지·LSD 탭 — Riegel 거리 환산·Tanaka 최대심박·Karvonen 심박예비, 야소 800 — Bart Yasso의 경험칙",
+  "sources": [
+   {
+    "label": "VDOT O2 러닝 계산기 (Jack Daniels 공식)",
+    "org": "",
+    "href": "https://vdoto2.com/calculator/"
+   },
+   {
+    "label": "Seiler (2010) 지구력 선수의 훈련 강도 분포 — IJSPP",
+    "org": "",
+    "href": "https://doi.org/10.1123/ijspp.5.3.276"
+   },
+   {
+    "label": "Riegel (1981) Athletic Records and Human Endurance — American Scientist",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/7235349/"
+   },
+   {
+    "label": "Tanaka 외 (2001) 연령 예측 최대심박 재검토 — JACC",
+    "org": "",
+    "href": "https://doi.org/10.1016/S0735-1097(00)01054-8"
+   },
+   {
+    "label": "ACSM·AND·DC (2016) 영양과 운동 수행 공동 성명 — MSSE",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/26891166/"
+   },
+   {
+    "label": "World Athletics 경기·기술 규칙 (레인 폭·측정선, TR 14)",
+    "org": "",
+    "href": "https://worldathletics.org/about-iaaf/documents/book-of-rules"
+   },
+   {
+    "label": "World Athletics Track and Field Facilities Manual (표준 400m 트랙 규격)",
+    "org": "",
+    "href": "https://worldathletics.org/about-iaaf/documents/technical-information"
+   },
+   {
+    "label": "Jack Daniels, Daniels' Running Formula 4판 (Human Kinetics) — 강도별 회복·1회 분량 상한",
+    "org": "",
+    "href": "https://us.humankinetics.com/products/daniels-running-formula-4th-edition"
+   },
+   {
+    "label": "Bart Yasso — Yasso 800's (BartYasso.com)",
+    "org": "",
+    "href": "https://www.bartyasso.com/800s"
+   }
+  ],
+  "verified": {
+   "cases": 5,
+   "scope": "VDOT 훈련 페이스",
+   "full": false,
+   "tests": [
+    "tests/golden/running.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/league-scenarios": {
+  "slug": "/tools/sports/league-scenarios",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "EPL 2016-17~2025-26·K리그1 2016~2025 최종 순위표 실측 승점 · 대회별 타이브레이커 2026년 6월 확인 기준",
+  "sources": [
+   {
+    "label": "Premier League 공식 순위표",
+    "org": "",
+    "href": "https://www.premierleague.com/en/tables"
+   },
+   {
+    "label": "K리그 공식 기록",
+    "org": "",
+    "href": "https://www.kleague.com/record/team.do"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/one-rm": {
+  "slug": "/tools/sports/one-rm",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "1RM 추정식 4종(Epley·Brzycki·Lombardi·O'Conner) 평균 · RPE는 남은 반복(RIR)으로 환산 · 강도·반복·휴식 구간은 ACSM 저항운동 입장문(2009) 범위 참고",
+  "sources": [
+   {
+    "label": "ACSM 입장문 — Progression Models in Resistance Training for Healthy Adults (2009, PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/19204579/"
+   },
+   {
+    "label": "Brzycki (1993) Strength Testing: Predicting a One-Rep Max from Reps-to-Fatigue — JOPERD",
+    "org": "",
+    "href": "https://doi.org/10.1080/07303084.1993.10606684"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/pace": {
+  "slug": "/tools/sports/pace",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "World Athletics 기술규칙의 도로 경기 거리(마라톤 42.195km·하프 21.0975km)·코스 측정·400m 트랙 레인 규격, 국제 마일 1,609.344m — 경사 페이스 보정 계수는 도구 자체 경험칙 추정치(Minetti 2002·Strava GAP는 배경 자료)",
+  "sources": [
+   {
+    "label": "World Athletics Book of Rules — C2.1 기술규칙(도로 경기·트랙 규격)",
+    "org": "",
+    "href": "https://worldathletics.org/about-iaaf/documents/book-of-rules"
+   },
+   {
+    "label": "대한육상연맹(KAAF) 자료실 — 2024~2025 육상경기규칙",
+    "org": "",
+    "href": "https://www.kaaf.or.kr/ver3/work/dataroom_view.asp?recno=213&search=&searcnt=&page=1"
+   },
+   {
+    "label": "NIST SP 811 부록 B.8 — 단위 환산 계수(마일 = 1,609.344m)",
+    "org": "",
+    "href": "https://www.nist.gov/pml/special-publication-811/nist-guide-si-appendix-b-conversion-factors/nist-guide-si-appendix-b8"
+   },
+   {
+    "label": "Jones & Doust (1996) 트레드밀 1% 경사와 야외 달리기 에너지 비용 — J Sports Sci",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/8887211/"
+   },
+   {
+    "label": "Minetti 외 (2002) 경사별 걷기·달리기 에너지 비용 — J Appl Physiol",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/12183501/"
+   },
+   {
+    "label": "Strava 고객센터 — 경사 보정 페이스(GAP)",
+    "org": "",
+    "href": "https://support.strava.com/en-us/articles/15402117-grade-adjusted-pace-gap"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/park-golf": {
+  "slug": "/tools/sports/park-golf",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "대한파크골프협회 경기규칙 (파 구성·OB 2벌타·조 편성) + IPGA 코스 기준",
+  "sources": [
+   {
+    "label": "대한파크골프협회",
+    "org": "",
+    "href": "https://www.kpga7330.com"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/race-predictor": {
+  "slug": "/tools/sports/race-predictor",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "Riegel(1981) 지수 1.06 · Daniels·Gilbert VDOT · Cameron 식 3공식 평균 — 환경·연령 보정은 도구 자체 근사 계수, 월평균기온은 기상청 1991~2020 전국 평년값",
+  "sources": [
+   {
+    "label": "Riegel (1981) Athletic Records and Human Endurance — American Scientist",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/7235349/"
+   },
+   {
+    "label": "VDOT O2 러닝 계산기 (Jack Daniels 공식)",
+    "org": "",
+    "href": "https://vdoto2.com/calculator/"
+   },
+   {
+    "label": "Ely 외 (2007) 날씨와 마라톤 기록 — MSSE",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/17473775/"
+   },
+   {
+    "label": "Vickers & Vertosick (2016) 아마추어 러너 기록 예측 — BMC",
+    "org": "",
+    "href": "https://bmcsportsscimedrehabil.biomedcentral.com/articles/10.1186/s13102-016-0052-y"
+   },
+   {
+    "label": "기상청 기후평년값 (1991~2020)",
+    "org": "",
+    "href": "https://data.kma.go.kr/normals/index.do"
+   },
+   {
+    "label": "WMA·USATF 연령 계수표 (Age-Grade Tables)",
+    "org": "",
+    "href": "https://github.com/AlanLyttonJones/Age-Grade-Tables"
+   }
+  ],
+  "verified": {
+   "cases": 7,
+   "scope": "VDOT·Riegel 기록 예측식",
+   "full": false,
+   "tests": [
+    "tests/golden/running.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/shoe-mileage": {
+  "slug": "/tools/sports/shoe-mileage",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "제조사 공식 교체 주기 안내(나이키·브룩스·아식스) 범위 안의 소재별 기준값 · 체중·착지·로테이션 보정은 관행 배수",
+  "sources": [
+   {
+    "label": "나이키 코리아 — 러닝화 교체 주기",
+    "org": "",
+    "href": "https://www.nike.com/kr/a/how-often-to-replace-running-shoes"
+   },
+   {
+    "label": "Verdejo & Mills, J Biomech 2004 (PubMed)",
+    "org": "",
+    "href": "https://pubmed.ncbi.nlm.nih.gov/15275845/"
+   },
+   {
+    "label": "Malisoux 외, Scand J Med Sci Sports 2015",
+    "org": "",
+    "href": "https://onlinelibrary.wiley.com/doi/10.1111/sms.12154"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/strength-level": {
+  "slug": "/tools/sports/strength-level",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "IPF GL 2020 계수(클래식 풀파워) · Wilks(원판)·DOTS 공개 계수 · IPF 기술규정(원판·칼라) · 레벨 배수표는 Youtil 추정 기준",
+  "sources": [
+   {
+    "label": "IPF — IPF GL Formula",
+    "org": "",
+    "href": "https://www.powerlifting.sport/rules/codes/info/ipf-formula"
+   },
+   {
+    "label": "IPF GL Coefficients 2020 (PDF)",
+    "org": "",
+    "href": "https://www.powerlifting.sport/fileadmin/ipf/data/ipf-formula/IPF_GL_Coefficients-2020.pdf"
+   },
+   {
+    "label": "한국도핑방지위원회(KADA)",
+    "org": "",
+    "href": "https://www.kada-ad.or.kr/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/swim-pace": {
+  "slug": "/tools/sports/swim-pace",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "풀 길이 — World Aquatics 경기·시설 규정(장수 50m·단수 25m) · 페이스·바퀴 수는 단순 비례 환산, 영법 계수는 통용 추정치",
+  "sources": [
+   {
+    "label": "World Aquatics 공식 사이트",
+    "org": "",
+    "href": "https://www.worldaquatics.com"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/sports/vo2max": {
+  "slug": "/tools/sports/vo2max",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "추정식 — Cooper(1968)·George(1993)·Kline(1987)·McArdle(1972)·Nes(2011)·Uth(2004), 예상 기록 — Daniels·Gilbert VDOT",
+  "sources": [
+   {
+    "label": "Mandsager 외(2018) 심폐체력과 장기 사망률 — JAMA Network Open",
+    "org": "",
+    "href": "https://doi.org/10.1001/jamanetworkopen.2018.3605"
+   },
+   {
+    "label": "Kodama 외(2009) 심폐체력과 사망 위험 메타분석 — JAMA",
+    "org": "",
+    "href": "https://doi.org/10.1001/jama.2009.681"
+   },
+   {
+    "label": "국민체력100 — 국민체육진흥공단 체력 측정",
+    "org": "",
+    "href": "https://nfa.kspo.or.kr"
+   }
+  ],
+  "verified": {
+   "cases": 8,
+   "scope": "VDOT 훈련 페이스",
+   "full": false,
+   "tests": [
+    "tests/golden/running.test.mts"
+   ],
+   "date": "2026-09-26"
+  },
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/area": {
+  "slug": "/tools/unit/area",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "1평 = 400/121㎡(6자×6자) 환산 · 국민주택규모(전용 85㎡ 이하)는 주택법, 발코니 바닥면적 산정 제외는 건축법 시행령 제119조, 최저주거기준은 국토해양부 공고 제2011-490호(당시 주택법 근거, 현 주거기본법 제17조) 기준",
+  "sources": [
+   {
+    "label": "국가법령정보센터 주택법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주택법"
+   },
+   {
+    "label": "국가법령정보센터 건축법 시행령",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/건축법시행령"
+   },
+   {
+    "label": "국가법령정보센터 주거기본법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/주거기본법"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/battery": {
+  "slug": "/tools/unit/battery",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "ICAO·국토교통부 보조배터리 기준(2026-04-20 시행)과 미국 주요 항공사 정책(2026-05-01) 반영",
+  "sources": [
+   {
+    "label": "국토교통부",
+    "org": "",
+    "href": "https://www.korea.kr/briefing/pressReleaseView.do?newsId=156753374"
+   },
+   {
+    "label": "FAA PackSafe",
+    "org": "",
+    "href": "https://www.faa.gov/hazmat/packsafe/airline-passengers-and-batteries"
+   },
+   {
+    "label": "IATA",
+    "org": "",
+    "href": "https://www.iata.org/en/youandiata/travelers/batteries/"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/brewing": {
+  "slug": "/tools/unit/brewing",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "ASBC 당도-비중 다항식·OIV 와인 단위 정의 기반 환산 · OG/FG 비중차 ABV 식 · 알코올 도수는 15°C 부피 백분율(주세법)",
+  "sources": [
+   {
+    "label": "ASBC Methods of Analysis",
+    "org": "",
+    "href": "https://www.asbc.org/"
+   },
+   {
+    "label": "OIV(국제포도·와인기구)",
+    "org": "",
+    "href": "https://www.oiv.int/"
+   },
+   {
+    "label": "국가법령정보센터 — 주세법",
+    "org": "",
+    "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%A3%BC%EC%84%B8%EB%B2%95"
+   },
+   {
+    "label": "eCFR 27 CFR 5.65(주류 도수 표시)",
+    "org": "",
+    "href": "https://www.ecfr.gov/current/title-27/chapter-I/subchapter-A/part-5/subpart-E/section-5.65"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/converter": {
+  "slug": "/tools/unit/converter",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "단위 환산 계수는 KS·ISO·국제단위계(SI) 기준. 근무시간·경사로·소독 농도 등 법정·안전 수치는 아래 공식 출처 기준으로 정기 검토합니다.",
+  "sources": [
+   {
+    "label": "국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr"
+   },
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "질병관리청",
+    "org": "",
+    "href": "https://www.kdca.go.kr"
+   },
+   {
+    "label": "NIST SP 811 — 단위 환산 계수",
+    "org": "",
+    "href": "https://www.nist.gov/pml/special-publication-811"
+   },
+   {
+    "label": "BIPM SI 브로슈어",
+    "org": "",
+    "href": "https://www.bipm.org/en/publications/si-brochure"
+   },
+   {
+    "label": "NIST — 이진 접두어(KiB·MiB)",
+    "org": "",
+    "href": "https://physics.nist.gov/cuu/Units/binary.html"
+   },
+   {
+    "label": "계량에 관한 법률",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/계량에관한법률"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/fuel-economy": {
+  "slug": "/tools/unit/fuel-economy",
+  "updated": "2026-09-26",
+  "basis": "휘발유·경유 단가는 오피넷 전국 평균, 전기 충전요금은 공공 충전요금 5단계 개편안(2026-08-01 시행) 기준",
+  "sources": [
+   {
+    "label": "오피넷",
+    "org": "",
+    "href": "https://www.opinet.co.kr"
+   },
+   {
+    "label": "무공해차 통합누리집",
+    "org": "",
+    "href": "https://ev.or.kr"
+   },
+   {
+    "label": "한국에너지공단",
+    "org": "",
+    "href": "https://www.energy.or.kr"
+   },
+   {
+    "label": "미국 DOE·EPA fueleconomy.gov",
+    "org": "",
+    "href": "https://www.fueleconomy.gov"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/hardness": {
+  "slug": "/tools/unit/hardness",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "경도 상호 환산 = ASTM E140 Table 1(비오스테나이트계 강)·Table 2(HRB 구간) · 인장강도 추정 = ISO 18265 표 A.1(비합금·저합금강) · 압흔 깊이·최소 두께 = ISO 6508-1·6507-1·6506-1 정의식",
+  "sources": [
+   {
+    "label": "ASTM E140 — 금속 경도 환산표",
+    "org": "",
+    "href": "https://www.astm.org/e0140-12br19e01.html"
+   },
+   {
+    "label": "ISO 18265 — 경도값 환산(인장강도 포함)",
+    "org": "",
+    "href": "https://www.iso.org/standard/53810.html"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/radiation": {
+  "slug": "/tools/unit/radiation",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "단위 환산은 SI·ICRP 정의 기준. 일상 노출 비교값(CT·항공·자연 노출)과 EMF 참고치는 아래 공식 출처의 발표값을 정리한 참고용 대표치입니다.",
+  "sources": [
+   {
+    "label": "원자력안전위원회",
+    "org": "",
+    "href": "https://www.nssc.go.kr"
+   },
+   {
+    "label": "ICRP",
+    "org": "",
+    "href": "https://www.icrp.org"
+   },
+   {
+    "label": "한국천문연구원",
+    "org": "",
+    "href": "https://www.kasi.re.kr"
+   },
+   {
+    "label": "국가법령정보센터 원자력안전법 시행령",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/원자력안전법시행령"
+   },
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/size": {
+  "slug": "/tools/unit/size",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "신발은 나이키 코리아 사이즈표, 반지는 ISO 8653(안쪽 둘레)·US 호수 규칙, 직구 면세는 관세청 안내 기준",
+  "sources": [
+   {
+    "label": "나이키 코리아 남성 신발 사이즈표",
+    "org": "",
+    "href": "https://www.nike.com/kr/size-fit/mens-footwear"
+   },
+   {
+    "label": "나이키 코리아 여성 신발 사이즈표",
+    "org": "",
+    "href": "https://www.nike.com/kr/size-fit/womens-footwear"
+   },
+   {
+    "label": "사이즈코리아(국가기술표준원 인체치수조사)",
+    "org": "",
+    "href": "https://sizekorea.kr/"
+   },
+   {
+    "label": "관세청 — 자가사용물품 면세 안내",
+    "org": "",
+    "href": "https://www.customs.go.kr/call/ad/crmcc/selectFaqViewPage.do?mi=6822&cnslKnwlSrno=512"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/tire-pressure": {
+  "slug": "/tools/unit/tire-pressure",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "공기압 환산 = psi·bar·kgf/cm² 정의값(NIST SP 811) · 기온 보정 = 정적 부피 이상기체 식 · 외경 = 휠지름 + 2 × 단면폭 × 편평비 · 마모 한계 1.6mm = 국내 자동차 안전기준 · 점검 주기 = 한국교통안전공단·NHTSA 권고",
+  "sources": [
+   {
+    "label": "한국교통안전공단",
+    "org": "",
+    "href": "https://www.kotsa.or.kr"
+   },
+   {
+    "label": "NHTSA — Tires",
+    "org": "",
+    "href": "https://www.nhtsa.gov/equipment/tires"
+   },
+   {
+    "label": "자동차 및 자동차부품의 성능과 기준에 관한 규칙",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/자동차및자동차부품의성능과기준에관한규칙"
+   },
+   {
+    "label": "NIST SP 811 — 단위 환산 계수",
+    "org": "",
+    "href": "https://www.nist.gov/pml/special-publication-811"
+   },
+   {
+    "label": "미국 에너지부 — 타이어 공기압과 연비",
+    "org": "",
+    "href": "https://www.fueleconomy.gov/feg/maintain.jsp"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/viscosity": {
+  "slug": "/tools/unit/viscosity",
+  "reviewed": "2026-09",
+  "updated": "2026-09-26",
+  "basis": "cP↔cSt는 ν = μ/ρ, SUS는 ASTM D2161 계산식(100°F), 엔진오일 등급은 SAE J300, 산업 윤활유 등급은 ISO 3448(40°C 중심값 ±10%) 기준",
+  "sources": [
+   {
+    "label": "SAE J300 엔진오일 점도 분류",
+    "org": "",
+    "href": "https://www.sae.org/standards/content/j300_202405/"
+   },
+   {
+    "label": "ASTM D2161 Saybolt 점도 환산",
+    "org": "",
+    "href": "https://www.astm.org/d2161-19.html"
+   },
+   {
+    "label": "NIST SP 811 SI 단위 환산 지침",
+    "org": "",
+    "href": "https://www.nist.gov/pml/special-publication-811"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ },
+ "/tools/unit/window-tint": {
+  "slug": "/tools/unit/window-tint",
+  "reviewed": "2026-07",
+  "updated": "2026-09-26",
+  "basis": "도로교통법 시행령 제28조 기준",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 도로교통법 시행령 제28조",
+    "org": "",
+    "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EB%8F%84%EB%A1%9C%EA%B5%90%ED%86%B5%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9/%EC%A0%9C28%EC%A1%B0"
+   },
+   {
+    "label": "국가법령정보센터 — 도로교통법(제49조·제160조)",
+    "org": "",
+    "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EB%8F%84%EB%A1%9C%EA%B5%90%ED%86%B5%EB%B2%95"
+   },
+   {
+    "label": "국가법령정보센터 — 자동차규칙 제94조",
+    "org": "",
+    "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EC%9E%90%EB%8F%99%EC%B0%A8%EB%B0%8F%EC%9E%90%EB%8F%99%EC%B0%A8%EB%B6%80%ED%92%88%EC%9D%98%EC%84%B1%EB%8A%A5%EA%B3%BC%EA%B8%B0%EC%A4%80%EC%97%90%EA%B4%80%ED%95%9C%EA%B7%9C%EC%B9%99/%EC%A0%9C94%EC%A1%B0"
+   },
+   {
+    "label": "국가법령정보센터 — 도로교통법 시행령",
+    "org": "",
+    "href": "https://www.law.go.kr/%EB%B2%95%EB%A0%B9/%EB%8F%84%EB%A1%9C%EA%B5%90%ED%86%B5%EB%B2%95%EC%8B%9C%ED%96%89%EB%A0%B9"
+   }
+  ],
+  "ymyl": false,
+  "hasResult": true
+ }
+}

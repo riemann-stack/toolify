@@ -2,7 +2,7 @@
 
 import { useState, useMemo } from 'react'
 import Disclaimer from '@/components/Disclaimer'
-import { TEST_METHODS, calcFtp } from './ftpZonesData'
+import { TEST_METHODS, calcFtp, fmtWkg } from './ftpZonesData'
 import s from './ftp-zones.module.css'
 
 export default function FtpZonesClient() {
@@ -11,8 +11,9 @@ export default function FtpZonesClient() {
   const [weight, setWeight] = useState('70')
 
   const method = TEST_METHODS.find((m) => m.id === methodId) ?? TEST_METHODS[0]
-  const wattNum = parseFloat(watt) || 0
-  const weightNum = parseFloat(weight) || 0
+  // 상한 클램프 — 오타(0 하나 더)로 비현실적인 값이 들어가도 결과가 폭주하지 않게
+  const wattNum = Math.min(3000, Math.max(0, parseFloat(watt) || 0))
+  const weightNum = Math.min(300, Math.max(0, parseFloat(weight) || 0))
   const valid = wattNum > 0
 
   const result = useMemo(() => (valid ? calcFtp(wattNum, method, weightNum) : null), [valid, wattNum, method, weightNum])
@@ -66,7 +67,7 @@ export default function FtpZonesClient() {
           <p className={s.hero}>{fmt(result.ftp)}<span className={s.heroUnit}>W</span></p>
           {result.wkg !== null && (
             <p className={s.resultSub}>
-              <strong>{result.wkg.toFixed(2)} W/kg</strong> · {result.grade}
+              <strong>{fmtWkg(result.wkg)} W/kg</strong> · {result.grade}
             </p>
           )}
 
@@ -74,7 +75,7 @@ export default function FtpZonesClient() {
             <div className={s.zwiftBox} style={{ borderColor: result.zwift.color }}>
               <span className={s.zwiftLabel}>즈위프트 레이스 카테고리</span>
               <span className={s.zwiftCat} style={{ color: result.zwift.color }}>{result.zwift.cat}</span>
-              <span className={s.zwiftNote}>W/kg 기준 · 리그마다 상이</span>
+              <span className={s.zwiftNote}>W/kg·절대 와트 기준 참고값</span>
             </div>
           )}
 

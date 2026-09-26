@@ -12,6 +12,7 @@ import {
   generateForwardSchedule, generateBackwardSchedule,
   fmtTime, fmtDateTimeKo, fmtDuration, dayDiffLabel, getTempInfo,
   loadRecipes, saveRecipes, newRecipeId, parseDateTimeLocal, toDateTimeLocal,
+  supportedModesOf,
   calcWaterTemp, seasonalWaterGuide,
   type ScheduleResult, type ScheduleStep, type SavedRecipe,
 } from './bakingUtils'
@@ -90,6 +91,14 @@ export default function BakingScheduleClient() {
     const bp = BREAD_PRESETS.find(p => p.id === presetId)
     if (bp?.ddtTargetC) setTargetDoughC(bp.ddtTargetC)
   }, [presetId])
+
+  // 빵이 지원하지 않는 발효 방식이 선택돼 있으면 지원하는 첫 방식으로 되돌림 (크루아상·치아바타)
+  useEffect(() => {
+    const bp = BREAD_PRESETS.find(p => p.id === presetId)
+    if (!bp) return
+    const sup = supportedModesOf(bp)
+    if (!sup.includes(fermentationMode)) setFermentationMode(sup[0])
+  }, [presetId, fermentationMode])
 
   const ddtProps = {
     ddtEnabled, setDdtEnabled,
@@ -194,6 +203,7 @@ function CommonInputs(p: CommonInputsProps) {
   const presetObj = BREAD_PRESETS.find(b => b.id === p.presetId)
   const presetShortName = presetObj?.name.split(' ')[0] ?? ''
   const builtInCold = !!presetObj?.steps.some(st => st.observationKey === 'cold-proof')
+  const supModes = presetObj ? supportedModesOf(presetObj) : FERMENTATION_MODES.map(m => m.id)
   const tempCls =
     tempInfo.band === 'cold'   ? s.tempCold :
     tempInfo.band === 'normal' ? s.tempNormal :
@@ -223,15 +233,24 @@ function CommonInputs(p: CommonInputsProps) {
       <div className={s.card}>
         <label className={s.cardLabel}>발효 방식</label>
         <div className={s.fermRow}>
-          {FERMENTATION_MODES.map(m => (
-            <button key={m.id} className={`${s.fermBtn} ${p.fermentationMode === m.id ? s.fermActive : ''}`}
-              onClick={() => p.setFermentationMode(m.id)} aria-pressed={p.fermentationMode === m.id}>
-              <strong>{m.name}</strong>
-              <small>{m.desc}</small>
-            </button>
-          ))}
+          {FERMENTATION_MODES.map(m => {
+            const supported = supModes.includes(m.id)
+            return (
+              <button key={m.id} className={`${s.fermBtn} ${p.fermentationMode === m.id ? s.fermActive : ''}`}
+                onClick={() => p.setFermentationMode(m.id)} aria-pressed={p.fermentationMode === m.id}
+                disabled={!supported} style={supported ? undefined : { opacity: 0.45, cursor: 'not-allowed' }}>
+                <strong>{m.name}</strong>
+                <small>{m.desc}</small>
+              </button>
+            )
+          })}
         </div>
-        {builtInCold && p.fermentationMode === 'cold-final' && (
+        {presetObj?.modeNote && (
+          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
+            💡 {presetObj.modeNote}
+          </p>
+        )}
+        {builtInCold && p.fermentationMode === 'cold-final' && supModes.includes('sameday') && (
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
             💡 <strong style={{ color: 'var(--text)' }}>{presetShortName}</strong>의 표준 일정에는 이미 냉장·장시간 발효가 포함돼 있어 <strong>냉장 2차 발효</strong>를 골라도 표준 일정과 동일합니다. 실온 당일 일정은 <strong style={{ color: 'var(--text)' }}>당일 발효</strong>를 선택하세요.
           </p>
@@ -473,7 +492,7 @@ function TimelineList({ result }: { result: ScheduleResult }) {
             <span className={s.tlBody}>
               {step.name}
               {step.guide && <small>{step.guide}</small>}
-              {step.warning && <small style={{ color: '#A16207' }}>⚠️ {step.warning}</small>}
+              {step.warning && <small style={{ color: 'var(--yellow-700)' }}>⚠️ {step.warning}</small>}
             </span>
             <span className={s.tlDuration}>{fmtDuration(step.duration)}</span>
           </div>
@@ -498,14 +517,14 @@ function scheduleToText(result: ScheduleResult, mode: 'forward' | 'backward'): s
 
 /* ═════════════════════════════════════════ 탭 1 — Forward ═════════════════════════════════════════ */
 function ForwardTab(p: CommonInputsProps) {
-  // 기본값: 오늘 09:00
-  const defaultStart = useMemo(() => {
+  // 기본값: 오늘 09:00 (지났으면 내일) — 마운트 후 채움(빌드 시각이 정적 HTML에 박히지 않도록)
+  const [startStr, setStartStr] = useState('')
+  useEffect(() => {
     const d = new Date()
     d.setHours(9, 0, 0, 0)
     if (d < new Date()) d.setDate(d.getDate() + 1)
-    return toDateTimeLocal(d)
+    setStartStr(prev => prev || toDateTimeLocal(d))
   }, [])
-  const [startStr, setStartStr] = useState(defaultStart)
   const [copied, setCopied] = useState(false)
 
   const startDate = parseDateTimeLocal(startStr)
@@ -594,14 +613,14 @@ function ForwardTab(p: CommonInputsProps) {
 
 /* ═════════════════════════════════════════ 탭 2 — Backward ═════════════════════════════════════════ */
 function BackwardTab(p: CommonInputsProps) {
-  // 기본값: 내일 09:00
-  const defaultEnd = useMemo(() => {
+  // 기본값: 내일 09:00 — 마운트 후 채움(빌드 시각이 정적 HTML에 박히지 않도록)
+  const [endStr, setEndStr] = useState('')
+  useEffect(() => {
     const d = new Date()
     d.setDate(d.getDate() + 1)
     d.setHours(9, 0, 0, 0)
-    return toDateTimeLocal(d)
+    setEndStr(prev => prev || toDateTimeLocal(d))
   }, [])
-  const [endStr, setEndStr] = useState(defaultEnd)
   const [copied, setCopied] = useState(false)
 
   const endDate = parseDateTimeLocal(endStr)
@@ -634,7 +653,7 @@ function BackwardTab(p: CommonInputsProps) {
 
       {result && (
         <>
-          <div className={`${s.hero} ${s.heroBack}`}>
+          <div className={`${s.hero} ${s.heroBack}`} role="status">
             <div className={s.heroEmoji}>{result.preset.icon}</div>
             <div className={s.heroTitle}>{result.preset.name}</div>
             <div className={s.heroMeta}>
@@ -888,7 +907,7 @@ function RecipeTab({
 
           <div>
             <span className={s.inlineLabel}>현재 적용될 설정</span>
-            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 8, padding: '10px 12px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7, fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '10px 12px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7, fontFamily: 'var(--font-sans)' }}>
               {(() => {
                 const bp = BREAD_PRESETS.find(b => b.id === currentSettings.presetId)
                 const fm = FERMENTATION_MODES.find(m => m.id === currentSettings.fermentationMode)
@@ -910,7 +929,7 @@ function RecipeTab({
             <textarea className={s.textInput} rows={3} maxLength={300}
               placeholder="예: 냉장 16시간이 가장 좋음, 르방 100g 사용"
               value={notes} onChange={e => setNotes(e.target.value)}
-              style={{ fontFamily: 'Noto Sans KR, sans-serif', resize: 'vertical' }} />
+              style={{ fontFamily: 'var(--font-sans)', resize: 'vertical' }} />
           </div>
 
           <div className={s.btnRow}>
@@ -978,20 +997,20 @@ function SleepConflictBanner({ result, sleepStart, sleepEnd }: { result: Schedul
     <div style={{
       background: 'rgba(217, 119, 6, 0.08)',
       border: '1px solid rgba(217, 119, 6, 0.40)',
-      borderRadius: 12,
+      borderRadius: 'var(--radius-m)',
       padding: '14px 18px',
       marginBottom: 12,
       fontSize: 13,
       color: 'var(--text)',
       lineHeight: 1.7,
     }}>
-      <strong style={{ color: '#D97706', display: 'block', marginBottom: 6 }}>
+      <strong style={{ color: 'var(--amber-600)', display: 'block', marginBottom: 6 }}>
         수면 시간 ({sleepStart} ~ {sleepEnd}) 중 작업 {conflicts.length}건
       </strong>
       <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginBottom: 8 }}>
         {conflicts.map((c, i) => (
           <div key={i} style={{ fontSize: 12, color: 'var(--muted)' }}>
-            · <strong style={{ color: '#D97706' }}>{fmtTime(c.startTime)}</strong> {c.emoji} {c.name}
+            · <strong style={{ color: 'var(--amber-600)' }}>{fmtTime(c.startTime)}</strong> {c.emoji} {c.name}
           </div>
         ))}
       </div>

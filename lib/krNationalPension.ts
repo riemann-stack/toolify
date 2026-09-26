@@ -3,13 +3,17 @@
    실제 연금액은 가입연도별 재평가율·소득대체율 가중과 기준소득월액 이력에 따라 달라지므로 추정값임.
    출처: 국민연금공단(nps.or.kr). A값 적용기간 2025.12~2026.11. */
 
+import { PENSION_BASE_CURRENT, type PensionBasePeriod } from './krInsuranceRates'
+
 export const NP_A_VALUE_2026 = 3_193_511 // A값 (전체 가입자 3년 평균소득월액, 2026 적용)
 export const NP_PROPORTION_CONSTANT = 1.29 // 비례상수 (공단 간단계산 근사, 2026 신규수급)
 
-/** 기준소득월액 상·하한 (2026.7.~ 적용).
- *  ※ lib/krInsuranceRates.ts의 2026 pension minBase/maxBase(400,000/6,370,000)는 2026.6까지 값. */
-export const NP_INCOME_FLOOR = 410_000
-export const NP_INCOME_CAP = 6_590_000
+/** 기준소득월액 상·하한 — 단일 소스 lib/krInsuranceRates.ts PENSION_BASE_SCHEDULE에서 파생 (매년 7월 개정).
+ *  NP_INCOME_FLOOR/CAP는 '오늘'(todayStr) 기준 구간의 편의 상수. 클라이언트 SSG 렌더에서는
+ *  calcPension(input.incomeBase)로 빌드일 기준 구간을 명시해 hydration 불일치를 피한다. */
+export const NP_INCOME_BASE: PensionBasePeriod = PENSION_BASE_CURRENT
+export const NP_INCOME_FLOOR = NP_INCOME_BASE.min
+export const NP_INCOME_CAP = NP_INCOME_BASE.max
 
 export const NP_EARLY_RATE = 0.06 // 조기노령연금 감액 (연 6% = 월 0.5%)
 export const NP_DEFER_RATE = 0.072 // 연기연금 가산 (연 7.2% = 월 0.6%)
@@ -40,6 +44,8 @@ export interface PensionInput {
   adjustYears: number // 조기/연기 연수 (0~5)
   spouse: boolean
   dependents: number  // 자녀·부모 수
+  /** 기준소득월액 상·하한 구간 (생략 시 NP_INCOME_BASE = 오늘 기준 구간) */
+  incomeBase?: Pick<PensionBasePeriod, 'min' | 'max'>
 }
 
 export interface PensionResult {
@@ -60,7 +66,8 @@ export interface PensionResult {
 /** 노령연금 월 예상액 추정 */
 export function calcPension(input: PensionInput): PensionResult {
   const totalMonths = Math.max(0, Math.round(input.totalMonths))
-  const B = Math.min(NP_INCOME_CAP, Math.max(NP_INCOME_FLOOR, input.avgIncome))
+  const base = input.incomeBase ?? NP_INCOME_BASE
+  const B = Math.min(base.max, Math.max(base.min, input.avgIncome))
   const eligible = totalMonths >= NP_MIN_COVERAGE_MONTHS
 
   const n = Math.max(0, totalMonths - 240) // 20년 초과분만 증액

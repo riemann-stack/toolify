@@ -45,9 +45,18 @@ function manToWon(manStr: string) {
   return n * 10_000
 }
 
+/* 금액 입력 — 실시간 천 단위 콤마, 소수점(만원 단위 0.5 = 5천원) 보존 */
+function commaDecimal(v: string): string {
+  const cleaned = v.replace(/[^\d.]/g, '')
+  if (!cleaned) return ''
+  const [intPart, ...rest] = cleaned.split('.')
+  const intFmt = intPart ? parseInt(intPart, 10).toLocaleString('ko-KR') : '0'
+  return rest.length > 0 ? `${intFmt}.${rest.join('').slice(0, 4)}` : intFmt
+}
+
 export default function CompoundClient() {
   /* ─── 6개 입력 ─── */
-  const [principal,    setPrincipal]    = useState('1000')   // 만원
+  const [principal,    setPrincipal]    = useState('1,000')  // 만원
   const [years,        setYears]        = useState('20')     // 년
 
   // 적립액 + 주기
@@ -60,10 +69,10 @@ export default function CompoundClient() {
   const [compoundFreqId, setCompoundFreqId] = useState('monthly')
 
   // 목표 금액
-  const [goal, setGoal] = useState('10000')   // 만원
+  const [goal, setGoal] = useState('10,000')  // 만원
 
   // 물가 상승률
-  const [inflationRate, setInflationRate] = useState('2.5')  // %
+  const [inflationRate, setInflationRate] = useState('2.0')  // % — 한국은행 목표·최근 10년 소비자물가 평균 수준
 
   /* ─── 파싱 ─── */
   const principalNum    = manToWon(principal)
@@ -73,7 +82,8 @@ export default function CompoundClient() {
   const goalNum         = manToWon(goal)
   const inflationNum    = parseFloat(inflationRate) || 0
 
-  // 월 수익률 → 연 수익률 환산
+  // 월 수익률 → 실효 연 수익률 환산 (calcCompound에는 rateIsEffective로 전달 — 명목으로 다시 쪼개면 복리 이중 적용)
+  const rateIsEffective = rateType === 'monthly'
   const annualRateNum = useMemo(() => {
     const v = parseFloat(rateInput) || 0
     if (rateType === 'monthly') {
@@ -92,8 +102,9 @@ export default function CompoundClient() {
       compoundFreqId,
       annualRate: annualRateNum,
       years: yearsNum,
+      rateIsEffective,
     })
-  }, [principalNum, contributionNum, annualRateNum, yearsNum, contributionFreqId, compoundFreqId])
+  }, [principalNum, contributionNum, annualRateNum, rateIsEffective, yearsNum, contributionFreqId, compoundFreqId])
 
   /* ─── 목표 역산 ─── */
   const reverse = useMemo(() => {
@@ -105,8 +116,9 @@ export default function CompoundClient() {
       annualRate: annualRateNum,
       contributionFreqId: 'monthly', // 결과는 항상 "매월 X"로 표시 → 적립주기와 무관하게 월 기준으로 역산
       compoundFreqId,
+      rateIsEffective,
     })
-  }, [goalNum, principalNum, yearsNum, annualRateNum, compoundFreqId])
+  }, [goalNum, principalNum, yearsNum, annualRateNum, rateIsEffective, compoundFreqId])
 
   /* ─── 인플레이션 ─── */
   const realValue = useMemo(() => {
@@ -165,17 +177,17 @@ export default function CompoundClient() {
 
         {/* 1. 초기 원금 */}
         <div className={styles.card}>
-          <div className={styles.cardLabel}>초기 원금<span className={styles.cardLabelHint}>거치 시작 금액</span></div>
+          <label className={styles.cardLabel} htmlFor="compound-principal">초기 원금<span className={styles.cardLabelHint}>거치 시작 금액</span></label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
-              value={principal} onChange={e => setPrincipal(e.target.value)} />
+            <input id="compound-principal" className={styles.numInput} type="text" inputMode="decimal"
+              value={principal} onChange={e => setPrincipal(commaDecimal(e.target.value))} />
             <span className={styles.unit}>만원</span>
           </div>
           <div className={styles.chips}>
             {PRINCIPAL_PRESETS.map(p => (
-              <button key={p.value} type="button" aria-pressed={principal === String(p.value)}
-                className={`${styles.chip} ${principal === String(p.value) ? styles.chipActive : ''}`}
-                onClick={() => setPrincipal(String(p.value))}
+              <button key={p.value} type="button" aria-pressed={parseAmount(principal) === p.value}
+                className={`${styles.chip} ${parseAmount(principal) === p.value ? styles.chipActive : ''}`}
+                onClick={() => setPrincipal(commaDecimal(String(p.value)))}
               >{p.label}</button>
             ))}
           </div>
@@ -183,9 +195,9 @@ export default function CompoundClient() {
 
         {/* 2. 투자 기간 */}
         <div className={styles.card}>
-          <div className={styles.cardLabel}>투자 기간</div>
+          <label className={styles.cardLabel} htmlFor="compound-years">투자 기간</label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
+            <input id="compound-years" className={styles.numInput} type="number" inputMode="numeric"
               value={years} onChange={e => setYears(e.target.value)} />
             <span className={styles.unit}>년</span>
           </div>
@@ -201,10 +213,10 @@ export default function CompoundClient() {
 
         {/* 3. 적립액 + 주기 */}
         <div className={styles.card}>
-          <div className={styles.cardLabel}>정기 적립액<span className={styles.cardLabelHint}>주기당</span></div>
+          <label className={styles.cardLabel} htmlFor="compound-contribution">정기 적립액<span className={styles.cardLabelHint}>주기당</span></label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
-              value={contribution} onChange={e => setContribution(e.target.value)} />
+            <input id="compound-contribution" className={styles.numInput} type="text" inputMode="decimal"
+              value={contribution} onChange={e => setContribution(commaDecimal(e.target.value))} />
             <span className={styles.unit}>만원</span>
           </div>
           <div className={styles.chips}>
@@ -219,14 +231,14 @@ export default function CompoundClient() {
 
         {/* 4. 수익률 (월/년 선택) + 복리 주기 */}
         <div className={styles.card}>
-          <div className={styles.cardLabel}>
+          <label className={styles.cardLabel} htmlFor="compound-rate">
             수익률
             <span className={styles.cardLabelHint}>
-              연 환산 {annualRateNum.toFixed(2)}%
+              {rateIsEffective ? '실효 연' : '연'} {annualRateNum.toFixed(2)}%
             </span>
-          </div>
+          </label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal" step={0.1}
+            <input id="compound-rate" className={styles.numInput} type="number" inputMode="decimal" step={0.1}
               value={rateInput} onChange={e => setRateInput(e.target.value)} />
             <span className={styles.unit}>%</span>
           </div>
@@ -252,30 +264,36 @@ export default function CompoundClient() {
               ))}
             </div>
           )}
-          {/* 복리 주기 */}
-          <div className={styles.optionRow4} style={{ marginTop: 10 }} role="group" aria-label="복리 주기">
-            {COMPOUND_FREQUENCIES.map(f => (
-              <button key={f.id} type="button" aria-pressed={compoundFreqId === f.id}
-                className={`${styles.optionBtn} ${compoundFreqId === f.id ? styles.optionActive : ''}`}
-                onClick={() => setCompoundFreqId(f.id)}
-              >{f.name}</button>
-            ))}
-          </div>
+          {/* 복리 주기 — 월 수익률은 이미 실제 월간 성장률이라 복리 주기와 무관 */}
+          {rateIsEffective ? (
+            <p className={styles.cardLabelHint} style={{ marginTop: 10, display: 'block' }}>
+              월 수익률은 매달 실제로 불어나는 비율로 보고 계산하므로 복리 주기를 따로 고르지 않습니다.
+            </p>
+          ) : (
+            <div className={styles.optionRow4} style={{ marginTop: 10 }} role="group" aria-label="복리 주기">
+              {COMPOUND_FREQUENCIES.map(f => (
+                <button key={f.id} type="button" aria-pressed={compoundFreqId === f.id}
+                  className={`${styles.optionBtn} ${compoundFreqId === f.id ? styles.optionActive : ''}`}
+                  onClick={() => setCompoundFreqId(f.id)}
+                >{f.name}</button>
+              ))}
+            </div>
+          )}
         </div>
 
         {/* 5. 목표 금액 */}
         <div className={styles.card}>
-          <div className={styles.cardLabel}>목표 금액<span className={styles.cardLabelHint}>{yearsNum}년 후 달성</span></div>
+          <label className={styles.cardLabel} htmlFor="compound-goal">목표 금액<span className={styles.cardLabelHint}>{yearsNum}년 후 달성</span></label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="numeric"
-              value={goal} onChange={e => setGoal(e.target.value)} />
+            <input id="compound-goal" className={styles.numInput} type="text" inputMode="decimal"
+              value={goal} onChange={e => setGoal(commaDecimal(e.target.value))} />
             <span className={styles.unit}>만원</span>
           </div>
           <div className={styles.chips}>
             {GOAL_PRESETS.map(g => (
-              <button key={g.value} type="button" aria-pressed={goal === String(g.value)}
-                className={`${styles.chip} ${goal === String(g.value) ? styles.chipActive : ''}`}
-                onClick={() => setGoal(String(g.value))}
+              <button key={g.value} type="button" aria-pressed={parseAmount(goal) === g.value}
+                className={`${styles.chip} ${parseAmount(goal) === g.value ? styles.chipActive : ''}`}
+                onClick={() => setGoal(commaDecimal(String(g.value)))}
               >{g.label}</button>
             ))}
           </div>
@@ -283,9 +301,9 @@ export default function CompoundClient() {
 
         {/* 6. 물가 상승률 */}
         <div className={styles.card}>
-          <div className={styles.cardLabel}>물가 상승률<span className={styles.cardLabelHint}>인플레이션</span></div>
+          <label className={styles.cardLabel} htmlFor="compound-inflation">물가 상승률<span className={styles.cardLabelHint}>인플레이션</span></label>
           <div className={styles.inputRow}>
-            <input className={styles.numInput} type="number" inputMode="decimal" step={0.1}
+            <input id="compound-inflation" className={styles.numInput} type="number" inputMode="decimal" step={0.1}
               value={inflationRate} onChange={e => setInflationRate(e.target.value)} />
             <span className={styles.unit}>%/년</span>
           </div>
@@ -311,7 +329,7 @@ export default function CompoundClient() {
       ) : (
         <>
           {/* 1. 메인 결과 — 최종 자산 */}
-          <div className={`${styles.hero} ${styles.heroAccent}`}>
+          <div className={`${styles.hero} ${styles.heroAccent}`} role="status">
             <div className={styles.heroLabel}>{yearsNum}년 후 최종 금액</div>
             <div className={`${styles.heroNum} ${styles.heroNumAccent}`}>{formatEok(result.finalValue)}</div>
             <div className={styles.heroSub}>

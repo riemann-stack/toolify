@@ -1,7 +1,16 @@
 'use client'
 
 import { useState, useEffect, useRef, useCallback, useMemo } from 'react'
+import dynamic from 'next/dynamic'
+import { useInitialTab } from '@/components/useInitialTab'
 import styles from './tap-tempo.module.css'
+
+// 딜레이 계산 탭(구 /tools/art/bpm) — 지연 로드로 기본 탭 번들 유지.
+// ssr:false — ?bpm= 쿼리를 초기 렌더에서 읽으므로 서버 렌더와 어긋나지 않게 클라이언트 전용
+const DelayTab = dynamic(() => import('./DelayTab'), {
+  ssr: false,
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
 /* ──────────────────────── 공통 ──────────────────────── */
 const MAX_TAPS = 8
@@ -22,12 +31,13 @@ function getTempoInfo(bpm: number): TempoInfo {
   return             { name: 'Prestissimo', ko: '최대한 빠르게' }
 }
 
-function computeBpmFromTaps(taps: number[]): { bpm: number | null; intervals: number[] } {
-  if (taps.length < 2) return { bpm: null, intervals: [] }
+function computeBpmFromTaps(taps: number[]): { bpm: number | null; rawBpm: number | null; intervals: number[] } {
+  if (taps.length < 2) return { bpm: null, rawBpm: null, intervals: [] }
   const intervals: number[] = []
   for (let i = 1; i < taps.length; i++) intervals.push(taps[i] - taps[i - 1])
   const avg = intervals.reduce((a, b) => a + b, 0) / intervals.length
-  return { bpm: Math.round(60000 / avg), intervals }
+  // bpm은 표시용 정수, rawBpm은 오차율 계산용 원값 (반올림 값으로 오차를 구하면 60 BPM에서 0/1.7/3.3%로만 양자화)
+  return { bpm: Math.round(60000 / avg), rawBpm: 60000 / avg, intervals }
 }
 
 // 간격 변동계수(CV = 표준편차/평균) — 템포와 무관한 상대 흔들림 지표
@@ -45,7 +55,7 @@ function getAccuracy(intervals: number[]): number {
 }
 
 /* ──────────────────────── 탭 1: 탭 템포 측정기 ──────────────────────── */
-function TapTempoTab({ active }: { active: boolean }) {
+function TapTempoTab({ active, onUseBpm }: { active: boolean; onUseBpm: (bpm: number) => void }) {
   const [taps, setTaps] = useState<number[]>([])
   const [tapCount, setTapCount] = useState(0)
   const [locked, setLocked] = useState<number | null>(null)
@@ -80,6 +90,7 @@ function TapTempoTab({ active }: { active: boolean }) {
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A' || tag === 'SELECT') return
       if (e.code === 'Space' || e.code === 'Enter') {
         e.preventDefault()
+        if (e.repeat) return  // 길게 누를 때 자동 반복 입력은 탭으로 기록하지 않음
         doTap()
       }
     }
@@ -111,9 +122,9 @@ function TapTempoTab({ active }: { active: boolean }) {
           type="button"
           className={styles.tapButton}
           onPointerDown={doTap}
-          onKeyDown={e => { if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); doTap() } }}
+          onKeyDown={e => { if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); if (!e.repeat) doTap() } }}
           style={{ touchAction: 'manipulation' }}
-          aria-label="탭하여 BPM 측정"
+          aria-label={displayBpm != null ? `${displayBpm} BPM — 탭하여 측정` : '탭하여 BPM 측정'}
         >
           <span key={rippleKey} className={styles.ripple} aria-hidden />
           <div className={styles.tapBpmWrap}>
@@ -142,6 +153,11 @@ function TapTempoTab({ active }: { active: boolean }) {
 
       {/* 정확도 + 상태 */}
       <div className={styles.accCard} role="status">
+        {displayBpm != null && (
+          <span className="srOnly">
+            측정 {displayBpm} BPM{tempoInfo ? ` ${tempoInfo.name}` : ''}.
+          </span>
+        )}
         <div className={styles.accLabel}>{accuracyStatus.msg}</div>
         {accuracyStatus.level === 'ready' && (
           <div className={styles.accBar}>
@@ -184,14 +200,15 @@ function TapTempoTab({ active }: { active: boolean }) {
         >
           {locked ? `${locked} 고정됨` : 'BPM 고정'}
         </button>
-        <a
+        {/* 같은 페이지의 '딜레이 계산' 탭으로 전환하며 측정값 전달 (구: /tools/art/bpm?bpm=X 이동) */}
+        <button
+          type="button"
           className={`${styles.ctrlBtn} ${styles.ctrlBtnLink}`}
-          href={displayBpm != null ? `/tools/art/bpm?bpm=${displayBpm}` : '#'}
-          aria-disabled={displayBpm == null}
-          onClick={e => { if (displayBpm == null) e.preventDefault() }}
+          onClick={() => { if (displayBpm != null) onUseBpm(displayBpm) }}
+          disabled={displayBpm == null}
         >
           이 BPM으로 딜레이 계산 →
-        </a>
+        </button>
       </div>
     </div>
   )
@@ -221,6 +238,7 @@ function MetronomeTab({ active }: { active: boolean }) {
   const nextNoteTimeRef = useRef<number>(0)
   const currentBeatRef = useRef<number>(0)
   const schedulerIdRef = useRef<number | null>(null)
+  const beatTimersRef = useRef<Set<number>>(new Set())  // 박자 표시용 타이머 — 정지 시 일괄 취소
   const bpmRef = useRef(bpm)
   const beatsRef = useRef(TIME_SIG_BEATS[timeSig])
 
@@ -256,7 +274,11 @@ function MetronomeTab({ active }: { active: boolean }) {
       // 시각 동기화: 해당 노트 시간에 박자 표시 업데이트
       const delayMs = Math.max(0, (nextNoteTimeRef.current - ctx.currentTime) * 1000)
       const displayBeat = beat
-      setTimeout(() => setCurrentBeatDisplay(displayBeat + 1), delayMs)
+      const timerId = window.setTimeout(() => {
+        beatTimersRef.current.delete(timerId)
+        setCurrentBeatDisplay(displayBeat + 1)
+      }, delayMs)
+      beatTimersRef.current.add(timerId)
       nextNoteTimeRef.current += 60 / bpmRef.current
       currentBeatRef.current = (currentBeatRef.current + 1) % beatsRef.current
     }
@@ -282,6 +304,9 @@ function MetronomeTab({ active }: { active: boolean }) {
       clearInterval(schedulerIdRef.current)
       schedulerIdRef.current = null
     }
+    // 정지 후 남은 표시 타이머가 박자를 다시 1로 바꿔 강세 펄스가 남는 문제 방지
+    beatTimersRef.current.forEach(id => clearTimeout(id))
+    beatTimersRef.current.clear()
     setCurrentBeatDisplay(0)
   }, [])
 
@@ -292,8 +317,13 @@ function MetronomeTab({ active }: { active: boolean }) {
     return () => { clearInterval(id); schedulerIdRef.current = null }
   }, [playing, scheduler])
 
-  useEffect(() => () => {
-    if (audioCtxRef.current) audioCtxRef.current.close().catch(() => {})
+  useEffect(() => {
+    const timers = beatTimersRef.current
+    return () => {
+      timers.forEach(id => clearTimeout(id))
+      timers.clear()
+      if (audioCtxRef.current) audioCtxRef.current.close().catch(() => {})
+    }
   }, [])
 
   // 다른 탭으로 이동하면 소리 정지 (BPM 등 설정은 유지)
@@ -421,6 +451,7 @@ function RhythmTestTab({ active }: { active: boolean }) {
 
   const audioCtxRef = useRef<AudioContext | null>(null)
   const previewTimerRef = useRef<number[]>([])
+  const previewNodesRef = useRef<{ osc: OscillatorNode; gain: GainNode }[]>([])
 
   const getCtx = () => {
     if (!audioCtxRef.current) {
@@ -435,6 +466,12 @@ function RhythmTestTab({ active }: { active: boolean }) {
   const clearPreviewTimers = () => {
     previewTimerRef.current.forEach(id => clearTimeout(id))
     previewTimerRef.current = []
+    // AudioContext에 미리 예약된 비프도 취소 — 탭 이탈·다시 하기 후 소리가 계속 나는 문제 방지
+    previewNodesRef.current.forEach(({ osc, gain }) => {
+      try { osc.stop() } catch { /* 이미 정지됨 */ }
+      gain.disconnect()
+    })
+    previewNodesRef.current = []
   }
 
   // 특정 AudioContext 시각에 클릭 예약 (메인 스레드 지터와 무관한 샘플 단위 재생)
@@ -450,6 +487,7 @@ function RhythmTestTab({ active }: { active: boolean }) {
     gain.gain.exponentialRampToValueAtTime(0.0001, time + 0.05)
     osc.start(time)
     osc.stop(time + 0.06)
+    previewNodesRef.current.push({ osc, gain })
   }
 
   const startTest = () => {
@@ -507,6 +545,7 @@ function RhythmTestTab({ active }: { active: boolean }) {
       if (tag === 'INPUT' || tag === 'TEXTAREA' || tag === 'BUTTON' || tag === 'A' || tag === 'SELECT') return
       if (e.code === 'Space' || e.code === 'Enter') {
         e.preventDefault()
+        if (e.repeat) return
         handleTap()
       }
     }
@@ -518,10 +557,11 @@ function RhythmTestTab({ active }: { active: boolean }) {
 
   const result = useMemo(() => {
     if (phase !== 'result' || taps.length < 2) return null
-    const { bpm: actual, intervals } = computeBpmFromTaps(taps)
+    const { rawBpm: actual, intervals } = computeBpmFromTaps(taps)
     if (actual == null) return null
-    const errPct = Math.abs(actual - targetBpm) / targetBpm * 100
-    const cvPct = getCvPct(intervals)
+    // 화면·복사 문구에 소수 1자리로 보이는 값과 별점 판정이 어긋나지 않게 같은 값으로 판정
+    const errPct = Math.round(Math.abs(actual - targetBpm) / targetBpm * 1000) / 10
+    const cvPct = Math.round(getCvPct(intervals) * 10) / 10
     // 평균만 맞고 간격이 널뛰는 탭이 만점 받지 않도록 오차율·일관성 이중 게이트
     const errStars = errPct <= 1 ? 3 : errPct <= 3 ? 2 : errPct <= 5 ? 1 : 0
     const cvStars = cvPct <= 3 ? 3 : cvPct <= 6 ? 2 : cvPct <= 10 ? 1 : 0
@@ -539,7 +579,7 @@ function RhythmTestTab({ active }: { active: boolean }) {
 
   const handleShare = async () => {
     if (!result) return
-    const text = `나는 BPM ${targetBpm} 목표에서 ${result.actual}을 탭했습니다! (오차 ${result.errPct.toFixed(1)}% · 간격 일관성 CV ${result.cvPct.toFixed(1)}%) — youtil.kr 박자감 테스트`
+    const text = `나는 BPM ${targetBpm} 목표에서 ${result.actual.toFixed(1)}을 탭했습니다! (오차 ${result.errPct.toFixed(1)}% · 간격 일관성 CV ${result.cvPct.toFixed(1)}%) — youtil.kr 박자감 테스트`
     try {
       await navigator.clipboard.writeText(text)
       setShareCopied('ok')
@@ -634,7 +674,7 @@ function RhythmTestTab({ active }: { active: boolean }) {
             type="button"
             className={styles.testTapBtn}
             onPointerDown={handleTap}
-            onKeyDown={e => { if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); handleTap() } }}
+            onKeyDown={e => { if (e.code === 'Space' || e.code === 'Enter') { e.preventDefault(); if (!e.repeat) handleTap() } }}
             style={{ touchAction: 'manipulation' }}
           >
             TAP
@@ -671,7 +711,7 @@ function RhythmTestTab({ active }: { active: boolean }) {
             <div className={styles.resultArrow}>vs</div>
             <div className={styles.resultBlock}>
               <div className={styles.resultSub}>실제 탭</div>
-              <div className={styles.resultNum}>{result.actual}</div>
+              <div className={styles.resultNum}>{result.actual.toFixed(1)}</div>
             </div>
           </div>
           <div className={styles.resultErrRow}>
@@ -707,27 +747,57 @@ function RhythmTestTab({ active }: { active: boolean }) {
 }
 
 /* ──────────────────────── 메인 ──────────────────────── */
+type Tab = 'tap' | 'metronome' | 'test' | 'delay'
+// ?tab= 딥링크 허용 목록 — 'delay'는 구 /tools/art/bpm 301 목적지
+const TABS: readonly Tab[] = ['delay', 'tap', 'metronome', 'test']
+
 export default function TapTempoClient() {
-  const [tab, setTab] = useState<'tap' | 'metronome' | 'test'>('tap')
+  const [tab, setTab] = useState<Tab>('tap')
+  // 딜레이 탭은 처음 열 때 마운트하고, 이후 다른 탭으로 가도 숨김만 해 입력을 유지
+  const [delayMounted, setDelayMounted] = useState(false)
+  // 탭 측정값 전달 — n이 바뀌면 딜레이 탭을 새 값으로 다시 마운트(같은 BPM 재전달도 반영)
+  const [delaySeed, setDelaySeed] = useState<{ bpm: string; n: number } | null>(null)
+  const delayTabBtnRef = useRef<HTMLButtonElement>(null)
+
+  const selectTab = (t: Tab) => {
+    setTab(t)
+    if (t === 'delay') setDelayMounted(true)
+  }
+  useInitialTab(TABS, selectTab)
+
+  const openDelayWith = (bpm: number) => {
+    setDelaySeed(prev => ({ bpm: String(bpm), n: (prev?.n ?? 0) + 1 }))
+    selectTab('delay')
+    // 누른 버튼이 숨겨지므로 포커스를 '딜레이 계산' 탭 버튼으로 옮김 — 탭 바가 화면 밖이면 보이도록 스크롤도 함께
+    delayTabBtnRef.current?.focus()
+  }
 
   return (
     <div className={styles.wrap}>
       <div className={styles.tabs}>
-        <button type="button" aria-pressed={tab === 'tap'} className={`${styles.tab} ${tab === 'tap'       ? styles.tabActive : ''}`} onClick={() => setTab('tap')}>
+        <button type="button" aria-pressed={tab === 'tap'} className={`${styles.tab} ${tab === 'tap'       ? styles.tabActive : ''}`} onClick={() => selectTab('tap')}>
           탭 템포
         </button>
-        <button type="button" aria-pressed={tab === 'metronome'} className={`${styles.tab} ${tab === 'metronome' ? styles.tabActive : ''}`} onClick={() => setTab('metronome')}>
+        <button type="button" aria-pressed={tab === 'metronome'} className={`${styles.tab} ${tab === 'metronome' ? styles.tabActive : ''}`} onClick={() => selectTab('metronome')}>
           메트로놈
         </button>
-        <button type="button" aria-pressed={tab === 'test'} className={`${styles.tab} ${tab === 'test'      ? styles.tabActive : ''}`} onClick={() => setTab('test')}>
+        <button type="button" aria-pressed={tab === 'test'} className={`${styles.tab} ${tab === 'test'      ? styles.tabActive : ''}`} onClick={() => selectTab('test')}>
           박자감 테스트
+        </button>
+        <button type="button" ref={delayTabBtnRef} aria-pressed={tab === 'delay'} className={`${styles.tab} ${tab === 'delay'     ? styles.tabActive : ''}`} onClick={() => selectTab('delay')}>
+          딜레이 계산
         </button>
       </div>
 
       {/* 탭 전환 시 상태 보존 — 언마운트 대신 hidden (메트로놈·테스트 소리는 이탈 시 정지) */}
-      <div hidden={tab !== 'tap'}><TapTempoTab active={tab === 'tap'} /></div>
+      <div hidden={tab !== 'tap'}><TapTempoTab active={tab === 'tap'} onUseBpm={openDelayWith} /></div>
       <div hidden={tab !== 'metronome'}><MetronomeTab active={tab === 'metronome'} /></div>
       <div hidden={tab !== 'test'}><RhythmTestTab active={tab === 'test'} /></div>
+      {delayMounted && (
+        <div hidden={tab !== 'delay'}>
+          <DelayTab key={delaySeed?.n ?? 0} initialBpm={delaySeed?.bpm ?? null} />
+        </div>
+      )}
     </div>
   )
 }

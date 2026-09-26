@@ -18,16 +18,16 @@ export interface Agent {
 }
 
 export const AGENTS: Agent[] = [
-  { id: 'baking',   name: '베이킹소다',   sub: '탄산수소나트륨 NaHCO₃', type: '알칼리', ph: '약 8', uses: '가벼운 기름때·냄새·연마', tip: '가루로 문지르거나 물에 풀어 사용. 가장 순함', color: '#0891B2', gPerTbsp: 14 },
-  { id: 'sesqui',   name: '세스퀴소다',   sub: '세스퀴탄산소다',          type: '알칼리', ph: '약 9~10', uses: '손때·생활 기름때·물걸레 만능', tip: '베이킹·소다회 중간 세기, 물에 잘 녹음', color: '#0EA5E9', gPerTbsp: 12 },
-  { id: 'percarb',  name: '과탄산소다',   sub: '산소계 표백 (퍼카보네이트)', type: '표백·살균', ph: '약 10~11', uses: '표백·찌든때·곰팡이·삶기', tip: '40~60℃ 따뜻한 물에서 활성. 밀폐보관·락스 혼합 금지', color: '#059669', gPerTbsp: 13 },
+  { id: 'baking',   name: '베이킹소다',   sub: '탄산수소나트륨 NaHCO₃', type: '알칼리', ph: '약 8', uses: '가벼운 기름때·냄새·연마', tip: '가루로 문지르거나 물에 풀어 사용. 가장 순함', color: 'var(--cyan-600)', gPerTbsp: 14 },
+  { id: 'sesqui',   name: '세스퀴소다',   sub: '세스퀴탄산소다',          type: '알칼리', ph: '약 9~10', uses: '손때·생활 기름때·물걸레 만능', tip: '베이킹·소다회 중간 세기, 물에 잘 녹음', color: 'var(--sky-500)', gPerTbsp: 12 },
+  { id: 'percarb',  name: '과탄산소다',   sub: '산소계 표백 (퍼카보네이트)', type: '표백·살균', ph: '약 10~11', uses: '표백·찌든때·곰팡이·삶기', tip: '40~60℃ 따뜻한 물에서 활성. 밀폐보관·락스 혼합 금지', color: 'var(--emerald-600)', gPerTbsp: 13 },
   { id: 'washsoda', name: '소다회',       sub: '탄산나트륨 (워싱소다)',    type: '알칼리', ph: '약 11', uses: '강한 기름때·찌든때', tip: '세기 강함 — 장갑·환기. 알루미늄 변색 주의', color: '#16A34A', gPerTbsp: 18 },
-  { id: 'citric',   name: '구연산',       sub: '시트르산 (산성)',          type: '산성', ph: '약 3~4', uses: '물때·석회·소변석·스케일·섬유유연', tip: '대리석·철 부식 주의. 락스와 절대 혼합 금지', color: '#EA580C', gPerTbsp: 12 },
-  { id: 'vinegar',  name: '식초',         sub: '아세트산 (산성)',          type: '산성', ph: '약 2~3', uses: '물때·유리·냄새·섬유유연', tip: '구연산과 용도 유사(냄새 강함). 락스와 절대 혼합 금지', color: '#D97706' },
-  { id: 'bleach',   name: '락스',         sub: '차아염소산나트륨 4~6%',    type: '표백·살균', ph: '약 11~13', uses: '살균·표백·곰팡이 제거', tip: '☠️ 물로만 희석·단독·환기·헹굼. 산성/암모니아 혼합 시 유독가스', color: '#DC2626' },
+  { id: 'citric',   name: '구연산',       sub: '시트르산 (산성)',          type: '산성', ph: '약 3~4', uses: '물때·석회·소변석·스케일·섬유유연', tip: '대리석·철 부식 주의. 락스와 절대 혼합 금지', color: 'var(--orange-600)', gPerTbsp: 12 },
+  { id: 'vinegar',  name: '식초',         sub: '아세트산 (산성)',          type: '산성', ph: '약 2~3', uses: '물때·유리·냄새·섬유유연', tip: '구연산과 용도 유사(냄새 강함). 락스와 절대 혼합 금지', color: 'var(--amber-600)' },
+  { id: 'bleach',   name: '락스',         sub: '차아염소산나트륨 4~6%',    type: '표백·살균', ph: '약 11~13', uses: '살균·표백·곰팡이 제거', tip: '☠️ 물로만 희석·단독·환기·헹굼. 산성/암모니아 혼합 시 유독가스', color: 'var(--red-600)' },
   { id: 'peroxide', name: '과산화수소',   sub: '3% 옥시풀',               type: '표백·살균', ph: '중성~약산', uses: '표백·살균(순한 대안)', tip: '빛에 분해. 단독 사용, 락스와 혼합 금지', color: '#7C3AED' },
   { id: 'neutral',  name: '중성세제',     sub: '주방세제 등',             type: '중성', ph: '약 6~8', uses: '일반 기름때·식기', tip: '가장 안전·무난. 식품접촉면에도 사용', color: '#64748B' },
-  { id: 'alcohol',  name: '소독용 알코올', sub: '에탄올 70%',             type: '표백·살균', ph: '중성', uses: '살균·유리·전자제품', tip: '인화성(화기 주의). 일부 도장·플라스틱 손상', color: '#9333EA' },
+  { id: 'alcohol',  name: '소독용 알코올', sub: '에탄올 70%',             type: '표백·살균', ph: '중성', uses: '살균·유리·전자제품', tip: '인화성(화기 주의). 일부 도장·플라스틱 손상', color: 'var(--purple-600)' },
 ]
 
 export const AGENT_MAP: Record<string, Agent> = Object.fromEntries(AGENTS.map((a) => [a.id, a]))

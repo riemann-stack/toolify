@@ -3,15 +3,15 @@
 
 /* ── 면책 ── */
 .disclaimer {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 12px;
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #0891B2; }
+.disclaimer strong { color: var(--cyan-600); }
 
 /* ── 탭 ── */
 .tabs {
@@ -20,7 +20,7 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 @media (max-width: 720px) { .tabs { grid-template-columns: repeat(3, 1fr); } }
@@ -28,28 +28,28 @@
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 4px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
   .tabBtn:hover { color: var(--text); }
 }
-.tabActive       { background: var(--accent-dim); color: var(--accent); font-weight: 700; }
-.tabActiveQuick  { background: rgba(8,145,178,0.18);  color: #0891B2; font-weight: 700; }
-.tabActivePace   { background: rgba(161,98,7,0.18);   color: #A16207; font-weight: 700; }
-.tabActiveDiff   { background: rgba(155,89,182,0.10);  color: #9333EA; font-weight: 700; }
-.tabActiveBiz    { background: rgba(16,185,129,0.18);  color: #059669; font-weight: 700; }
+.tabActive       { background: var(--accent-dim); color: var(--accent-ink); font-weight: 700; }
+.tabActiveQuick  { background: color-mix(in srgb, var(--cyan-600) 18%, transparent);  color: var(--cyan-600); font-weight: 700; }
+.tabActivePace   { background: rgba(161,98,7,0.18);   color: var(--yellow-700); font-weight: 700; }
+.tabActiveDiff   { background: rgba(155,89,182,0.10);  color: var(--purple-600); font-weight: 700; }
+.tabActiveBiz    { background: rgba(16,185,129,0.18);  color: var(--emerald-600); font-weight: 700; }
 
 /* ── 카드 ── */
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   width: 100%;
   box-sizing: border-box;
@@ -66,7 +66,7 @@
   font-weight: 600;
 }
 .cardLabelHint { text-transform: none; letter-spacing: 0; font-size: 11px; color: var(--muted); font-weight: 400; opacity: 0.85; }
-.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: 'Noto Sans KR', sans-serif; }
+.subLabel { display: block; font-size: 11px; color: var(--muted); margin-bottom: 8px; font-family: var(--font-sans); }
 
 /* ── 입력 ── */
 .dateInput, .textInput, .numInput {
@@ -76,7 +76,7 @@
   padding: 11px 13px;
   font-size: 16px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   width: 100%;
   min-width: 0;
@@ -87,7 +87,7 @@
 }
 .dateInput::-webkit-date-and-time-value { text-align: left; }
 .dateInput:focus, .textInput:focus, .numInput:focus { border-color: var(--accent); box-shadow: 0 0 0 3px var(--accent-dim); }
-.numInput { font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace; }
+.numInput { font-family: var(--font-mono); }
 
 .fieldRow { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
 .fieldRow3 { display: grid; grid-template-columns: 2fr 1fr 1fr; gap: 8px; }
@@ -121,7 +121,7 @@
   padding: 9px 4px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   text-align: center;
@@ -129,7 +129,7 @@
   .catBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .catBtn small { display: block; font-size: 18px; margin-bottom: 2px; }
-.catActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.catActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* 반복 옵션 */
 .recurRow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 5px; }
@@ -137,16 +137,16 @@
 .recurBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .recurBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.recurActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.recurActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ── 버튼 ── */
 .actionBtn {
@@ -155,29 +155,29 @@
   border-radius: 10px;
   padding: 11px 18px;
   font-size: 13px;
-  color: var(--accent);
-  font-family: 'Noto Sans KR', sans-serif;
+  color: var(--accent-ink);
+  font-family: var(--font-sans);
   font-weight: 700;
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .actionBtn:hover { background: rgba(14,165,233,0.18); }
+  .actionBtn:hover { background: color-mix(in srgb, var(--accent) 18%, transparent); }
 }
 
 .bigCta {
   background: var(--accent);
   border: 1px solid var(--accent);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 14px;
-  color: #000;
-  font-family: 'Noto Sans KR', sans-serif;
+  color: #fff;
+  font-family: var(--font-sans);
   font-weight: 800;
   cursor: pointer;
   width: 100%;
   text-align: center;
 }@media (hover: hover) {
-  .bigCta:hover { background: #d8ff5e; }
+  .bigCta:hover { background: var(--accent-hover); }
 }
 
 .btnRow { display: flex; gap: 8px; flex-wrap: wrap; }
@@ -189,14 +189,14 @@
   padding: 5px 10px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
 }@media (hover: hover) {
   .miniBtn:hover { color: var(--accent); border-color: var(--accent); }
 }
-.miniDanger { color: #DC2626; border-color: rgba(220,38,38,0.3); }@media (hover: hover) {
-  .miniDanger:hover { background: rgba(220,38,38,0.18); border-color: #DC2626; }
+.miniDanger { color: var(--red-600); border-color: rgba(220,38,38,0.3); }@media (hover: hover) {
+  .miniDanger:hover { background: rgba(220,38,38,0.18); border-color: var(--red-600); }
 }
 
 /* ─────── 시즌 프리셋 ─────── */
@@ -210,11 +210,11 @@
   flex-shrink: 0;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 7px 12px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.12s;
   white-space: nowrap;
@@ -234,16 +234,16 @@
 .filterBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 7px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .filterBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.filterActive { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.filterActive { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }
 
 /* ─────── D-day 카드 ─────── */
 .ddayGrid {
@@ -257,7 +257,7 @@
   background: var(--bg2);
   border: 1px solid var(--border);
   border-left: 4px solid var(--accent);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
   position: relative;
   transition: all 0.15s;
@@ -265,14 +265,14 @@
   .ddayCard:hover { transform: translateY(-2px); }
 }
 .ddayPinned {
-  background: linear-gradient(140deg, rgba(14,165,233,0.14), transparent);
-  box-shadow: 0 0 0 2px rgba(14,165,233,0.25);
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 14%, transparent), transparent);
+  box-shadow: 0 0 0 2px color-mix(in srgb, var(--accent) 25%, transparent);
 }
 .ddayUrgent {
-  border-left-color: #DC2626;
+  border-left-color: var(--red-600);
   box-shadow: 0 0 0 2px rgba(220,38,38,0.20);
 }
-.ddaySoon { border-left-color: #A16207; }
+.ddaySoon { border-left-color: var(--yellow-700); }
 .ddayPast { opacity: 0.55; }
 
 .ddayHeader {
@@ -288,7 +288,7 @@
   gap: 5px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .ddayActions {
@@ -309,7 +309,7 @@
 .ddayPinned .ddayPinBtn { color: var(--accent); }
 
 .ddayTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 15px;
   font-weight: 700;
   color: var(--text);
@@ -319,7 +319,7 @@
 }
 
 .ddayHero {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 56px;
   letter-spacing: -2px;
@@ -329,8 +329,8 @@
   text-align: center;
   font-variant-numeric: tabular-nums;
 }
-.ddayHeroUrgent { color: #DC2626; animation: pulseHero 1.6s ease-in-out infinite; }
-.ddayHeroSoon { color: #A16207; }
+.ddayHeroUrgent { color: var(--red-600); animation: pulseHero 1.6s ease-in-out infinite; }
+.ddayHeroSoon { color: var(--yellow-700); }
 .ddayHeroPast { color: var(--muted); }
 
 @keyframes pulseHero {
@@ -342,23 +342,23 @@
   text-align: center;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 10px;
 }
 
 .ddayBadge {
   display: inline-block;
   padding: 3px 10px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 11px;
   font-weight: 700;
   letter-spacing: 0.04em;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 6px;
 }
-.badgeUrgent  { background: rgba(220,38,38,0.15); color: #DC2626; }
-.badgeSoon    { background: rgba(161,98,7,0.15);   color: #A16207; }
-.badgeOk      { background: rgba(16,185,129,0.15);  color: #059669; }
+.badgeUrgent  { background: rgba(220,38,38,0.15); color: var(--red-600); }
+.badgeSoon    { background: rgba(161,98,7,0.15);   color: var(--yellow-700); }
+.badgeOk      { background: rgba(16,185,129,0.15);  color: var(--emerald-600); }
 .badgePast    { background: rgba(176,176,176,0.10); color: var(--muted); }
 
 .ddayMeta {
@@ -367,7 +367,7 @@
   align-items: center;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   border-top: 1px solid var(--border);
   padding-top: 10px;
   margin-top: 6px;
@@ -376,20 +376,20 @@
 .ddayProgress {
   height: 6px;
   background: var(--bg3);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
   margin: 8px 0 6px;
 }
 .ddayProgressBar {
   height: 100%;
-  background: linear-gradient(90deg, var(--accent), #0891B2);
-  border-radius: 999px;
+  background: linear-gradient(90deg, var(--accent), var(--cyan-600));
+  border-radius: var(--radius-pill);
   transition: width 0.4s;
 }
 .ddayProgressLabel {
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
@@ -397,17 +397,17 @@
 .ddayPace {
   background: rgba(161,98,7,0.14);
   border: 1px solid rgba(161,98,7,0.25);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 10px;
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 8px;
   display: flex;
   justify-content: space-between;
   align-items: center;
 }
-.ddayPace strong { color: #A16207; font-family: 'Inter', system-ui, sans-serif; }
+.ddayPace strong { color: var(--yellow-700); font-family: var(--font-sans); }
 
 .empty {
   text-align: center;
@@ -416,8 +416,8 @@
   padding: 36px 20px;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-card);
+  font-family: var(--font-sans);
 }
 .emptyTitle {
   font-size: 16px;
@@ -439,12 +439,12 @@
   gap: 4px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 14px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   transition: all 0.15s;
 }
 @media (hover: hover) {
@@ -453,9 +453,9 @@
 
 /* ─────── 빠른 계산기 히어로 ─────── */
 .heroBig {
-  background: linear-gradient(140deg, rgba(8,145,178,0.14), rgba(155,89,182,0.05));
-  border: 1px solid rgba(8,145,178,0.30);
-  border-radius: 16px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--cyan-600) 14%, transparent), rgba(155,89,182,0.05));
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
 }
@@ -468,22 +468,22 @@
   font-weight: 600;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(64px, 14vw, 96px);
   letter-spacing: -2px;
   line-height: 1;
   color: var(--accent);
-  text-shadow: 0 0 30px rgba(14,165,233,0.25);
+  text-shadow: 0 0 30px color-mix(in srgb, var(--accent) 25%, transparent);
   font-variant-numeric: tabular-nums;
 }
-.heroNumUrgent { color: #DC2626; text-shadow: 0 0 30px rgba(220,38,38,0.30); }
-.heroNumSoon { color: #A16207; text-shadow: 0 0 30px rgba(161,98,7,0.30); }
+.heroNumUrgent { color: var(--red-600); text-shadow: 0 0 30px rgba(220,38,38,0.30); }
+.heroNumSoon { color: var(--yellow-700); text-shadow: 0 0 30px rgba(161,98,7,0.30); }
 .heroSub {
   font-size: 13px;
   color: var(--muted);
   margin-top: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 통계 그리드 */
@@ -497,12 +497,12 @@
 .statBox {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   text-align: center;
 }
 .statNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 22px;
   color: var(--accent);
@@ -513,7 +513,7 @@
 .statLabel {
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .statSub { font-size: 11px; color: var(--muted); margin-top: 2px; }
@@ -526,23 +526,23 @@
   margin-top: 12px;
 }
 .countdown4 .box {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-radius: 10px;
   padding: 10px 6px;
   text-align: center;
 }
 .countdown4 .num {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: 22px;
-  color: #0891B2;
+  color: var(--cyan-600);
   line-height: 1;
   margin-bottom: 3px;
   font-variant-numeric: tabular-nums;
 }
 .countdown4 .lbl {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
   text-transform: uppercase;
@@ -554,30 +554,30 @@
 .modeBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 6px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .modeBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.modeActive { background: rgba(16,185,129,0.18); color: #059669; border-color: #059669; font-weight: 700; }
+.modeActive { background: rgba(16,185,129,0.18); color: var(--emerald-600); border-color: var(--emerald-600); font-weight: 700; }
 
 /* ─────── 페이스 ─────── */
 .paceHero {
   background: linear-gradient(140deg, rgba(161,98,7,0.14), rgba(234,88,12,0.14));
   border: 1px solid rgba(161,98,7,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .paceHeroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(40px, 9vw, 56px);
-  color: #A16207;
+  color: var(--yellow-700);
   line-height: 1;
   margin-bottom: 6px;
   font-variant-numeric: tabular-nums;
@@ -585,7 +585,7 @@
 .paceHeroSub {
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .paceTable {
   display: flex;
@@ -598,36 +598,36 @@
   gap: 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
 }
-.paceRow span:first-child { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.paceRow span:first-child { color: var(--text); font-family: var(--font-sans); }
 .paceRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
 }
-.paceWarn { color: #DC2626 !important; }
-.paceOk   { color: #059669 !important; }
+.paceWarn { color: var(--red-600) !important; }
+.paceOk   { color: var(--emerald-600) !important; }
 
 .paceVerdict {
   background: rgba(16,185,129,0.14);
   border: 1px solid rgba(16,185,129,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.paceVerdict strong { color: #059669; }
+.paceVerdict strong { color: var(--emerald-600); }
 .paceVerdictWarn {
   background: rgba(220,38,38,0.14);
   border-color: rgba(220,38,38,0.30);
 }
-.paceVerdictWarn strong { color: #DC2626; }
+.paceVerdictWarn strong { color: var(--red-600); }
 
 .paceBars {
   display: flex;
@@ -641,20 +641,20 @@
   gap: 10px;
   align-items: center;
   font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 @media (max-width: 480px) { .paceBarRow { grid-template-columns: 80px 1fr 70px; gap: 6px; font-size: 11px; } }
 .paceBarLabel { color: var(--text); font-weight: 600; }
 .paceBarTrack {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   height: 14px;
   overflow: hidden;
 }
-.paceBarFill { height: 100%; border-radius: 999px; transition: width 0.4s; }
+.paceBarFill { height: 100%; border-radius: var(--radius-pill); transition: width 0.4s; }
 .paceBarValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   text-align: right;
   font-variant-numeric: tabular-nums;
@@ -671,32 +671,32 @@
 .paceGoalBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px 4px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   text-align: center;
 }
 .paceGoalBtn small { display: block; font-size: 16px; margin-bottom: 2px; }@media (hover: hover) {
   .paceGoalBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.paceGoalActive { background: rgba(161,98,7,0.18); color: #A16207; border-color: #A16207; font-weight: 700; }
+.paceGoalActive { background: rgba(161,98,7,0.18); color: var(--yellow-700); border-color: var(--yellow-700); font-weight: 700; }
 
 /* ─────── 두 날짜 사이 ─────── */
 .diffHero {
-  background: linear-gradient(140deg, rgba(155,89,182,0.08), rgba(8,145,178,0.14));
+  background: linear-gradient(140deg, rgba(155,89,182,0.08), color-mix(in srgb, var(--cyan-600) 14%, transparent));
   border: 1px solid rgba(155,89,182,0.30);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
   padding: 26px 22px;
   text-align: center;
 }
 .diffHeroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-size: clamp(56px, 12vw, 80px);
-  color: #9333EA;
+  color: var(--purple-600);
   line-height: 1;
   font-variant-numeric: tabular-nums;
 }
@@ -711,13 +711,13 @@
   grid-template-columns: 1fr auto;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 14px;
   font-size: 13px;
 }
-.diffRow span:first-child { color: var(--text); font-family: 'Noto Sans KR', sans-serif; }
+.diffRow span:first-child { color: var(--text); font-family: var(--font-sans); }
 .diffRow span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   color: var(--accent);
   font-variant-numeric: tabular-nums;
@@ -728,7 +728,7 @@
   color: var(--muted);
   margin-top: 6px;
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 계산 기준 안내 (차이 vs 양 끝 포함) */
@@ -740,8 +740,8 @@
   padding: 10px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
 }
 .basisNote strong { color: var(--text); font-weight: 700; }
 
@@ -754,8 +754,8 @@
   padding: 10px 12px;
   background: var(--bg3);
   border: 1px solid var(--warning);
-  border-radius: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
 }
 .coverageNote strong { font-weight: 700; }
 
@@ -766,7 +766,7 @@
   text-align: center;
   margin-top: 10px;
   line-height: 1.6;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 편집 폼 보조 라벨·힌트 */
@@ -775,14 +775,14 @@
   font-size: 11px;
   color: var(--muted);
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .formHint {
   font-size: 11px;
   color: var(--muted);
   line-height: 1.6;
   margin-top: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .formHint strong { color: var(--text); font-weight: 700; }
 
@@ -790,7 +790,7 @@
 .editForm {
   background: var(--bg2);
   border: 1px solid var(--accent);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   display: flex;
   flex-direction: column;
@@ -802,7 +802,7 @@
   color: var(--accent);
   letter-spacing: 0.04em;
   text-transform: uppercase;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .editAdvanced {
@@ -818,12 +818,12 @@
 .editAdvancedToggle {
   background: transparent;
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 8px;
   font-size: 12px;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .editAdvancedToggle:hover { color: var(--accent); border-color: var(--accent); }
 }
@@ -839,15 +839,15 @@
 .backupBtn {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }@media (hover: hover) {
   .backupBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
-.backupDanger { color: #DC2626; border-color: rgba(220,38,38,0.3); }@media (hover: hover) {
-  .backupDanger:hover { background: rgba(220,38,38,0.18); border-color: #DC2626; }
+.backupDanger { color: var(--red-600); border-color: rgba(220,38,38,0.3); }@media (hover: hover) {
+  .backupDanger:hover { background: rgba(220,38,38,0.18); border-color: var(--red-600); }
 }

@@ -16,14 +16,15 @@ const PRODUCTS = [
 ] as const
 type ProductId = typeof PRODUCTS[number]['id']
 
-/* 창문 위치 프리셋 */
+/* 창문 위치 프리셋 — fromFloor: 창문 하단~바닥(cm). 대형 거실창·베란다 창은 바닥 가까이에서 시작하므로
+   하단 높이도 함께 바꿔야 천장(기본 240cm)보다 높은 창이 만들어지지 않는다 */
 const LOCATIONS = [
-  { id: 'normal',  label: '일반 방 창',     hint: '120~180 × 120~150', w: 150, h: 130 },
-  { id: 'living',  label: '거실 창 (중)',   hint: '200~250 × 150',      w: 220, h: 150 },
-  { id: 'big',     label: '거실 창 (대형)',  hint: '300~400 × 200',      w: 350, h: 200 },
-  { id: 'veranda', label: '베란다 창',      hint: '150 × 200~230',      w: 150, h: 220 },
-  { id: 'small',   label: '욕실·작은 창',  hint: '60~90 × 60~90',      w: 80,  h: 80  },
-  { id: 'custom',  label: '직접 입력',      hint: '',                   w: 0,   h: 0   },
+  { id: 'normal',  label: '일반 방 창',     hint: '120~180 × 120~150', w: 150, h: 130, fromFloor: 90 },
+  { id: 'living',  label: '거실 창 (중)',   hint: '200~250 × 150',      w: 220, h: 150, fromFloor: 70 },
+  { id: 'big',     label: '거실 창 (대형)',  hint: '300~400 × 200',      w: 350, h: 200, fromFloor: 20 },
+  { id: 'veranda', label: '베란다 창',      hint: '150 × 200~230',      w: 150, h: 220, fromFloor: 10 },
+  { id: 'small',   label: '욕실·작은 창',  hint: '60~90 × 60~90',      w: 80,  h: 80,  fromFloor: 120 },
+  { id: 'custom',  label: '직접 입력',      hint: '',                   w: 0,   h: 0,   fromFloor: 0 },
 ]
 
 const INSTALL_TYPES = [
@@ -56,6 +57,12 @@ function n(v: string | number, min = 0): number {
   if (!Number.isFinite(x) || x < min) return min
   return x
 }
+/** 입력 문자열 → 숫자. 빈 값·비숫자는 fallback, 범위 밖은 [min, max]로 클램프 (계산 단계 전용 — onChange 클램프는 첫 타자를 치환함) */
+function parseClamp(s: string, min: number, max: number, fallback = min): number {
+  const x = parseFloat(s)
+  if (!Number.isFinite(x)) return fallback
+  return Math.min(max, Math.max(min, x))
+}
 function fmt(v: number, dec = 0): string {
   return (Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec)).toLocaleString('ko-KR')
 }
@@ -71,10 +78,14 @@ export default function CurtainBlindClient() {
 
   /* 창문 입력 */
   const [locationId, setLocationId] = useState('living')
-  const [winW, setWinW] = useState(220)
-  const [winH, setWinH] = useState(150)
+  // 가로·세로·천장 높이는 문자열로 보관하고 계산 시 클램프 — onChange 클램프(min 1·150)는 '260' 입력을 15060으로 만든다
+  const [winWStr, setWinWStr] = useState('220')
+  const [winHStr, setWinHStr] = useState('150')
   const [winFromFloor, setWinFromFloor] = useState(70)   // 창문 하단~바닥 (cm)
-  const [ceilingH, setCeilingH] = useState(240)            // cm
+  const [ceilingHStr, setCeilingHStr] = useState('240')    // cm
+  const winW = parseClamp(winWStr, 1, 2000)
+  const winH = parseClamp(winHStr, 1, 1000)
+  const ceilingH = parseClamp(ceilingHStr, 150, 500, 240)
   const [frameDepth, setFrameDepth] = useState(7)          // 창문틀 깊이 (cm) — 인사이드 마운트 가능 여부
 
   /* 설치 방식 — 커튼만 wall-mount 기본, 블라인드·롤·버티칼·로만은 inside-mount 기본 */
@@ -101,8 +112,9 @@ export default function CurtainBlindClient() {
     setLocationId(id)
     const loc = LOCATIONS.find(l => l.id === id)
     if (loc && loc.id !== 'custom') {
-      setWinW(loc.w)
-      setWinH(loc.h)
+      setWinWStr(String(loc.w))
+      setWinHStr(String(loc.h))
+      setWinFromFloor(loc.fromFloor)
     }
   }
 
@@ -134,12 +146,13 @@ export default function CurtainBlindClient() {
         else if (lengthOpt === 'window') curtainLength = ceilingH - winFromFloor  // 천장 봉 ~ 창문 하단(=창문 전체 가림)
         else curtainLength = ceilingH - 50  // knee — 천장에서 바닥 50cm(무릎) 위까지
       } else {
-        // 벽 부착 기준 (창문 위 약 10cm 위에 봉)
+        // 벽 부착 기준 (창문 위 약 10cm 위에 봉) — 봉 높이는 천장을 넘을 수 없으므로 천장 높이로 제한
         const rodAboveWindow = 10
-        if (lengthOpt === 'window') curtainLength = winH + 10
-        else if (lengthOpt === 'knee') curtainLength = winH + rodAboveWindow + winFromFloor - 50  // 무릎 50cm
-        else if (lengthOpt === 'floor') curtainLength = winH + rodAboveWindow + winFromFloor - 5
-        else curtainLength = winH + rodAboveWindow + winFromFloor + 15  // pooling
+        const rodTop = Math.min(winFromFloor + winH + rodAboveWindow, ceilingH)
+        if (lengthOpt === 'window') curtainLength = rodTop - winFromFloor
+        else if (lengthOpt === 'knee') curtainLength = rodTop - 50  // 무릎 50cm
+        else if (lengthOpt === 'floor') curtainLength = rodTop - 5
+        else curtainLength = rodTop + 15  // pooling
       }
       const finishedLength = Math.max(0, curtainLength)   // 완성(걸었을 때) 길이
       const orderLength = finishedLength + 10              // 원단 재단 주문 길이 (헴 10cm 포함)
@@ -203,7 +216,7 @@ export default function CurtainBlindClient() {
     if (doubleLayer) lines.push('이중 커튼 (시어 + 암막)')
     lines.push('youtil.kr/tools/interior/curtain-blind')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -229,14 +242,14 @@ export default function CurtainBlindClient() {
     <div className={styles.wrap}>
 
       <Disclaimer
-        variant="safety"
+        variant="default"
         related={[
           { href: '/tools/interior/wallpaper', label: '도배 소요량' },
           { href: '/tools/interior/paint', label: '페인트 계산' },
           { href: '/tools/interior/room-area', label: '방 면적 계산' }
         ]}
       >
-        본 계산기는 일반적인 한국 표준 측정법 기준 참고용
+        본 계산기는 일반적인 측정 관행 기준 참고용
       </Disclaimer>
 
       <div className={styles.tabs} role="tablist">
@@ -282,9 +295,9 @@ export default function CurtainBlindClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>창문 가로 × 세로 (cm)</span>
             <div className={styles.dimRow}>
-              <input className={styles.bigInput} aria-label="창문 가로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winW} onChange={e => { setWinW(n(e.target.value, 1)); setLocationId('custom') }} />
+              <input className={styles.bigInput} aria-label="창문 가로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winWStr} onChange={e => { setWinWStr(e.target.value); setLocationId('custom') }} />
               <span className={styles.dimSep}>×</span>
-              <input className={styles.bigInput} aria-label="창문 세로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winH} onChange={e => { setWinH(n(e.target.value, 1)); setLocationId('custom') }} />
+              <input className={styles.bigInput} aria-label="창문 세로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winHStr} onChange={e => { setWinHStr(e.target.value); setLocationId('custom') }} />
             </div>
 
             {(productId === 'curtain') && (
@@ -292,13 +305,13 @@ export default function CurtainBlindClient() {
                 <div style={{ height: 12 }} />
                 <span className={styles.subLabel}>창문 하단 ~ 바닥 (cm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} aria-label="창문 하단에서 바닥까지 (cm)" type="number" inputMode="decimal" min={0} max={300} value={winFromFloor} onChange={e => setWinFromFloor(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="창문 하단에서 바닥까지 (cm)" type="number" inputMode="decimal" min={0} max={300} value={winFromFloor} onChange={e => setWinFromFloor(Math.min(300, n(e.target.value)))} />
                   <span className={styles.unit}>cm</span>
                 </div>
                 <div style={{ height: 8 }} />
                 <span className={styles.subLabel}>천장 높이 (cm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} aria-label="천장 높이 (cm)" type="number" inputMode="decimal" min={150} max={500} value={ceilingH} onChange={e => setCeilingH(n(e.target.value, 150))} />
+                  <input className={styles.smallInput} aria-label="천장 높이 (cm)" type="number" inputMode="decimal" min={150} max={500} value={ceilingHStr} onChange={e => setCeilingHStr(e.target.value)} />
                   <span className={styles.unit}>cm</span>
                 </div>
               </>
@@ -310,11 +323,11 @@ export default function CurtainBlindClient() {
                 <div style={{ height: 12 }} />
                 <span className={styles.subLabel}>창문틀 깊이 (cm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} aria-label="창문틀 깊이 (cm)" type="number" inputMode="decimal" min={0} max={50} value={frameDepth} onChange={e => setFrameDepth(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="창문틀 깊이 (cm)" type="number" inputMode="decimal" min={0} max={50} value={frameDepth} onChange={e => setFrameDepth(Math.min(50, n(e.target.value)))} />
                   <span className={styles.unit}>cm</span>
                 </div>
                 {frameDepth > 0 && frameDepth < 6 && (
-                  <div role="alert" style={{ marginTop: 8, background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '10px 12px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6 }}>
+                  <div role="alert" style={{ marginTop: 8, background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '10px 12px', fontSize: 13, color: 'var(--text)', lineHeight: 1.6 }}>
                     ⚠️ 창문틀 깊이 {fmt(frameDepth)}cm — 인사이드 마운트는 <strong>6cm 이상</strong> 권장. 깊이가 부족하면 본체가 튀어나오니 <strong>아웃사이드(창문틀 밖)</strong>를 권장합니다.
                   </div>
                 )}
@@ -335,7 +348,7 @@ export default function CurtainBlindClient() {
                   <button key={i.id} type="button" aria-pressed={installId === i.id} className={`${styles.installBtn} ${styles[i.cls]} ${installId === i.id ? styles.installActive : ''}`} onClick={() => setInstallId(i.id)}>
                     <span style={{ fontSize: 16 }}>{i.icon}</span>
                     <span>{i.label}</span>
-                    <small style={{ fontSize: 10, color: 'var(--muted)' }}>{i.sub}</small>
+                    <small style={{ fontSize: 11, color: 'var(--muted)' }}>{i.sub}</small>
                   </button>
                 ))}
             </div>
@@ -349,7 +362,7 @@ export default function CurtainBlindClient() {
             <div className={styles.card}>
               <div className={styles.cardLabel}>
                 <span>커튼 길이 옵션</span>
-                <span className={styles.cardLabelHint}>한국 표준은 바닥형</span>
+                <span className={styles.cardLabelHint}>가장 무난한 건 바닥형</span>
               </div>
               <div className={styles.lengthGrid}>
                 {LENGTH_OPTIONS.map(opt => {
@@ -359,7 +372,7 @@ export default function CurtainBlindClient() {
                     <button key={opt.id} type="button" aria-pressed={lengthOpt === opt.id} className={`${styles.lengthBtn} ${lengthOpt === opt.id ? styles.lengthActive : ''}`} onClick={() => setLengthOpt(opt.id)}>
                       <svg className={styles.lengthSvg} width="40" height="80" viewBox="0 0 40 80" aria-hidden="true">
                         {/* 창문 */}
-                        <rect x="8" y="14" width="24" height="22" fill="rgba(8,145,178,0.15)" stroke="#0891B2" strokeWidth="1" />
+                        <rect x="8" y="14" width="24" height="22" fill="color-mix(in srgb, var(--cyan-600) 15%, transparent)" stroke="var(--cyan-600)" strokeWidth="1" />
                         {/* 커튼 */}
                         <line x1="6" y1="12" x2="6" y2={heights[opt.id]} stroke={lengthOpt === opt.id ? 'var(--accent)' : 'var(--muted)'} strokeWidth="2" />
                         <line x1="34" y1="12" x2="34" y2={heights[opt.id]} stroke={lengthOpt === opt.id ? 'var(--accent)' : 'var(--muted)'} strokeWidth="2" />
@@ -367,7 +380,7 @@ export default function CurtainBlindClient() {
                         <line x1="2" y1="74" x2="38" y2="74" stroke="var(--muted)" strokeWidth="0.8" strokeDasharray="2 2" opacity="0.5" />
                       </svg>
                       <span>{opt.label}</span>
-                      <small style={{ fontSize: 10, color: 'var(--muted)' }}>{opt.desc}</small>
+                      <small style={{ fontSize: 11, color: 'var(--muted)' }}>{opt.desc}</small>
                     </button>
                   )
                 })}
@@ -380,7 +393,7 @@ export default function CurtainBlindClient() {
             <div className={styles.card}>
               <div className={styles.cardLabel}>
                 <span>주름 배수</span>
-                <span className={styles.cardLabelHint}>한국 표준 2배</span>
+                <span className={styles.cardLabelHint}>가장 흔한 2배</span>
               </div>
               <div className={styles.pleatRow}>
                 <input className={styles.slider} aria-label="주름 배수" aria-valuetext={`${pleatRatio.toFixed(1)}배`} type="range" min={1.5} max={3.0} step={0.5} value={pleatRatio} onChange={e => setPleatRatio(Number(e.target.value))} />
@@ -397,7 +410,7 @@ export default function CurtainBlindClient() {
                 ))}
               </div>
               <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-                <strong style={{ color: 'var(--text)' }}>1.5배</strong> 가벼운 주름 · <strong style={{ color: 'var(--text)' }}>2배</strong> 한국 표준 · <strong style={{ color: 'var(--text)' }}>2.5~3배</strong> 호텔·고급
+                <strong style={{ color: 'var(--text)' }}>1.5배</strong> 가벼운 주름 · <strong style={{ color: 'var(--text)' }}>2배</strong> 가장 흔한 기준 · <strong style={{ color: 'var(--text)' }}>2.5~3배</strong> 호텔·고급
               </p>
             </div>
           )}
@@ -437,7 +450,7 @@ export default function CurtainBlindClient() {
               <div role="alert" style={{ background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '12px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
                 {isCeil
                   ? `⚠️ 천장 높이(${fmt(ceilingH)}cm)가 창문 상단(${fmt(windowTop)}cm = 하단 ${fmt(winFromFloor)} + 높이 ${fmt(winH)})보다 낮습니다. 천장 높이 또는 창문 하단~바닥 값을 확인하세요.`
-                  : `⚠️ 벽 부착 봉 위치(창문 상단 +10cm = ${fmt(wallRodTop)}cm)가 천장(${fmt(ceilingH)}cm)보다 높습니다. 창문이 천장에 닿을 듯 높아 벽면 봉 설치가 어렵습니다 — 천장 부착을 고려하거나 입력값을 확인하세요.`}
+                  : `⚠️ 벽 부착 봉 위치(창문 상단 +10cm = ${fmt(wallRodTop)}cm)가 천장(${fmt(ceilingH)}cm)보다 높습니다. 창문이 천장에 닿을 듯 높아 벽면 봉 설치가 어렵습니다 — 천장 부착을 고려하거나 입력값을 확인하세요. 아래 길이는 봉을 천장 높이에 단다고 보고 계산했습니다.`}
               </div>
             )
           })()}
@@ -484,8 +497,8 @@ export default function CurtainBlindClient() {
             )}
             {result.type === 'curtain' && (
               <p className={styles.heroSub}>
-                길이는 <strong style={{ color: 'var(--text)' }}>완성(걸었을 때)</strong> 기준 · 원단 재단 주문 시 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(result.orderLength)}cm</strong>(헴 10cm 포함)
-                <br />1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
+                길이는 <strong style={{ color: 'var(--text)' }}>완성(걸었을 때)</strong> 기준 · 원단 재단 주문 시 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{fmt(result.orderLength)}cm</strong>(헴 10cm 포함)
+                <br />1패널당 <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{fmt(result.widthPerPanel)}cm × {fmt(result.curtainLength)}cm × {result.panelCount}장</strong>
                 {doubleLayer && ' · 이중 (시어 + 암막)'}
               </p>
             )}
@@ -568,10 +581,10 @@ export default function CurtainBlindClient() {
                     <text x={VBW - 25} y={VBH - 14} textAnchor="end" fill="var(--muted)" fontSize="9" fontFamily="monospace">바닥</text>
 
                     {/* 창문 */}
-                    <rect x={winX} y={winY} width={drawWinW} height={drawWinH} fill="rgba(8,145,178,0.10)" stroke="#0891B2" strokeWidth="2" />
+                    <rect x={winX} y={winY} width={drawWinW} height={drawWinH} fill="color-mix(in srgb, var(--cyan-600) 10%, transparent)" stroke="var(--cyan-600)" strokeWidth="2" />
                     {/* 창문 격자 (4분할) */}
-                    <line x1={winX + drawWinW / 2} y1={winY} x2={winX + drawWinW / 2} y2={winY + drawWinH} stroke="#0891B2" strokeWidth="0.8" opacity="0.5" />
-                    <line x1={winX} y1={winY + drawWinH / 2} x2={winX + drawWinW} y2={winY + drawWinH / 2} stroke="#0891B2" strokeWidth="0.8" opacity="0.5" />
+                    <line x1={winX + drawWinW / 2} y1={winY} x2={winX + drawWinW / 2} y2={winY + drawWinH} stroke="var(--cyan-600)" strokeWidth="0.8" opacity="0.5" />
+                    <line x1={winX} y1={winY + drawWinH / 2} x2={winX + drawWinW} y2={winY + drawWinH / 2} stroke="var(--cyan-600)" strokeWidth="0.8" opacity="0.5" />
 
                     {/* 제품별 시각화 */}
                     {productId === 'curtain' && result.type === 'curtain' && (() => {
@@ -596,7 +609,7 @@ export default function CurtainBlindClient() {
                         }
                         panels.push(
                           <g key={i}>
-                            <rect x={px + 2} y={rodY + 2} width={pw - 4} height={drawCurtainBottom - rodY - 2} fill="rgba(14,165,233,0.12)" stroke="var(--accent)" strokeWidth="1" rx="1" />
+                            <rect x={px + 2} y={rodY + 2} width={pw - 4} height={drawCurtainBottom - rodY - 2} fill="color-mix(in srgb, var(--accent) 12%, transparent)" stroke="var(--accent)" strokeWidth="1" rx="1" />
                             {lines}
                           </g>
                         )
@@ -604,9 +617,9 @@ export default function CurtainBlindClient() {
                       return (
                         <>
                           {/* 봉 */}
-                          <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="#A16207" strokeWidth="2.5" />
-                          <circle cx={rodX1} cy={rodY} r="3" fill="#A16207" />
-                          <circle cx={rodX2} cy={rodY} r="3" fill="#A16207" />
+                          <line x1={rodX1} y1={rodY} x2={rodX2} y2={rodY} stroke="var(--yellow-700)" strokeWidth="2.5" />
+                          <circle cx={rodX1} cy={rodY} r="3" fill="var(--yellow-700)" />
+                          <circle cx={rodX2} cy={rodY} r="3" fill="var(--yellow-700)" />
                           {/* 커튼 패널 */}
                           {panels}
                         </>
@@ -622,10 +635,10 @@ export default function CurtainBlindClient() {
                       const slats = []
                       const slatCount = productId === 'blind' ? 8 : productId === 'roman' ? 4 : 0
                       for (let i = 1; i < slatCount; i++) {
-                        slats.push(<line key={i} x1={winX + offsetX} y1={winY + offsetY + (h / slatCount) * i} x2={winX + offsetX + w} y2={winY + offsetY + (h / slatCount) * i} stroke={productId === 'roman' ? '#9B59B6' : '#0891B2'} strokeWidth={productId === 'roman' ? 1 : 0.6} opacity="0.5" />)
+                        slats.push(<line key={i} x1={winX + offsetX} y1={winY + offsetY + (h / slatCount) * i} x2={winX + offsetX + w} y2={winY + offsetY + (h / slatCount) * i} stroke={productId === 'roman' ? 'var(--amethyst)' : 'var(--cyan-600)'} strokeWidth={productId === 'roman' ? 1 : 0.6} opacity="0.5" />)
                       }
-                      const fillColor = productId === 'blind' ? 'rgba(8,145,178,0.18)' : productId === 'roll' ? 'rgba(161,98,7,0.18)' : 'rgba(155,89,182,0.18)'
-                      const strokeColor = productId === 'blind' ? '#0891B2' : productId === 'roll' ? '#A16207' : '#9B59B6'
+                      const fillColor = productId === 'blind' ? 'color-mix(in srgb, var(--cyan-600) 18%, transparent)' : productId === 'roll' ? 'rgba(161,98,7,0.18)' : 'rgba(155,89,182,0.18)'
+                      const strokeColor = productId === 'blind' ? 'var(--cyan-600)' : productId === 'roll' ? 'var(--yellow-700)' : 'var(--amethyst)'
                       return (
                         <>
                           <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill={fillColor} stroke={strokeColor} strokeWidth="1.5" />
@@ -642,11 +655,11 @@ export default function CurtainBlindClient() {
                       const verts = []
                       for (let i = 0; i <= 8; i++) {
                         const x = winX + offsetX + (w / 8) * i
-                        verts.push(<line key={i} x1={x} y1={winY + offsetY} x2={x} y2={winY + offsetY + h} stroke="#DC2626" strokeWidth="1.5" opacity="0.6" />)
+                        verts.push(<line key={i} x1={x} y1={winY + offsetY} x2={x} y2={winY + offsetY + h} stroke="var(--red-600)" strokeWidth="1.5" opacity="0.6" />)
                       }
                       return (
                         <>
-                          <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill="rgba(220,38,38,0.10)" stroke="#DC2626" strokeWidth="1" />
+                          <rect x={winX + offsetX} y={winY + offsetY} width={w} height={h} fill="rgba(220,38,38,0.10)" stroke="var(--red-600)" strokeWidth="1" />
                           {verts}
                         </>
                       )
@@ -655,13 +668,13 @@ export default function CurtainBlindClient() {
                     {/* 라벨 — 항상 마지막에 그려서 패널 위에 보이도록 (z-order) */}
                     {/* 봉 라벨 — 커튼 모드일 때만 위쪽에 분리 배치 */}
                     {isCurtain && (
-                      <text x={VBW / 2} y={28} textAnchor="middle" fill="#A16207" fontSize="11" fontFamily="monospace" fontWeight="700">
+                      <text x={VBW / 2} y={28} textAnchor="middle" fill="var(--yellow-700)" fontSize="11" fontFamily="monospace" fontWeight="700">
                         봉 {fmt(result.rodLength)}cm
                       </text>
                     )}
                     {/* 창문 너비 라벨 — 커튼 모드일 땐 창문 안쪽 상단 (봉·끝마개와 안 겹침) / 그 외엔 창문 위쪽 */}
                     {isCurtain ? (
-                      <text x={winX + drawWinW / 2} y={winY + 14} textAnchor="middle" fill="#0891B2" fontSize="10" fontFamily="monospace" fontWeight="700">
+                      <text x={winX + drawWinW / 2} y={winY + 14} textAnchor="middle" fill="var(--cyan-600)" fontSize="10" fontFamily="monospace" fontWeight="700">
                         창문 {winW}cm
                       </text>
                     ) : (
@@ -671,7 +684,7 @@ export default function CurtainBlindClient() {
                     )}
                     {/* 창문 높이 라벨 — 커튼 모드일 땐 커튼 바깥 우측, 그 외엔 창문 바로 옆 */}
                     <text x={heightLabelX} y={winY + drawWinH / 2 + 3} textAnchor="start"
-                      fill={isCurtain ? '#0891B2' : 'var(--muted)'} fontSize="10" fontFamily="monospace"
+                      fill={isCurtain ? 'var(--cyan-600)' : 'var(--muted)'} fontSize="10" fontFamily="monospace"
                       fontWeight={isCurtain ? '700' : '400'}>
                       {winH}cm
                     </text>
@@ -728,16 +741,16 @@ export default function CurtainBlindClient() {
           <div className={styles.card}>
             <div className={styles.cardLabel}><span>롤스크린 vs 로만쉐이드</span></div>
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
-              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #A16207', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#A16207', fontWeight: 700, marginBottom: 6 }}>롤스크린</p>
+              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid var(--yellow-700)', borderRadius: 10, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--yellow-700)', fontWeight: 700, marginBottom: 6 }}>롤스크린</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>단순한 천 형태, 위로 말려 올라감</li>
                   <li>작은 창·욕실·주방에 인기</li>
                   <li>가격 저렴</li>
                 </ul>
               </div>
-              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid #9B59B6', borderRadius: 10, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: '#9333EA', fontWeight: 700, marginBottom: 6 }}>로만쉐이드</p>
+              <div style={{ background: 'var(--bg3)', borderLeft: '3px solid var(--amethyst)', borderRadius: 10, padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--purple-600)', fontWeight: 700, marginBottom: 6 }}>로만쉐이드</p>
                 <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.8 }}>
                   <li>가로 주름이 잡히며 올라감</li>
                   <li>커튼처럼 부드러운 느낌</li>
@@ -763,7 +776,7 @@ export default function CurtainBlindClient() {
             </div>
             <div className={styles.guideStep}>
               <span className={styles.guideStepNum}>4</span>
-              <span className={styles.guideStepBody}>주름 배수 — 일반적으로 <strong>2배</strong> (한국 표준)</span>
+              <span className={styles.guideStepBody}>주름 배수 — 일반적으로 <strong>2배</strong> (업계 관행)</span>
             </div>
           </div>
 

@@ -1,9 +1,13 @@
 import Link from 'next/link'
 import UrlEncodeClient from './UrlEncodeClient'
+import { TRACKING_GROUPS, MAX_DECODE_ITERATIONS, analyzeKorean, cleanTrackingParams, decodeUrl, detectTrackingParams } from './urlEncodeUtils'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/url-encode',
@@ -21,406 +25,279 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '22px',
-  fontWeight: 700,
-  marginBottom: '14px',
-  marginTop: '48px',
-  letterSpacing: '-0.5px',
-}
-const card: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '14px',
-  padding: '20px 22px',
-  marginBottom: '14px',
-}
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: '12px',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '15px',
-  fontWeight: 600,
-  color: 'var(--text)',
-  listStyle: 'none',
-  padding: '4px 0',
-}
-const faqAnswer: React.CSSProperties = {
-  marginTop: '10px',
-  paddingTop: '10px',
-  borderTop: '1px solid var(--border)',
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
-}
-const codeStyle: React.CSSProperties = {
-  background: 'var(--bg3)',
-  padding: '2px 6px',
-  borderRadius: '4px',
-  fontFamily: 'var(--font-mono)',
-  fontSize: '13px',
-  color: '#0EA5E9',
-}
+const tableStyle: React.CSSProperties = { width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }
+const th: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap' }
+const td: React.CSSProperties = { padding: '10px 12px', color: 'var(--text)', verticalAlign: 'top', lineHeight: 1.6 }
+const tdMono: React.CSSProperties = { ...td, fontFamily: 'var(--font-mono)', whiteSpace: 'nowrap' }
+const rowLine: React.CSSProperties = { borderBottom: '1px solid var(--border)' }
+const code: React.CSSProperties = { background: 'var(--bg3)', padding: '2px 6px', borderRadius: 'var(--radius-xs)', fontFamily: 'var(--font-mono)', overflowWrap: 'anywhere' }
+
+/* 함수별 인코딩 비교 — 손으로 적지 않고 빌드 시 JS 엔진으로 직접 인코딩한다 */
+const strict3986 = (s: string) => encodeURIComponent(s).replace(/[!'()*]/g, (ch) => '%' + ch.charCodeAt(0).toString(16).toUpperCase())
+const CHAR_ROWS = [' ', '!', '#', '%', '&', "'", '*', '+', '/', ':', '=', '?', '@', '~', 'é', '한', '😀'].map((ch) => ({
+  ch,
+  comp: encodeURIComponent(ch),
+  uri: encodeURI(ch),
+  form: new URLSearchParams({ v: ch }).toString().slice(2),
+  strict: strict3986(ch),
+  esc: escape(ch),
+}))
+
+/* UTF-8 바이트 분해 — 도구의 analyzeKorean()과 같은 함수 */
+const UTF8_ROWS = analyzeKorean('한국안녕韓é😀')
+const EX_TEXT = '서울 맛집'
+const EX_ENC = encodeURIComponent(EX_TEXT)
+
+/* 이중 인코딩 예시 — 도구의 decodeUrl()로 1회·반복 디코드 결과를 계산 */
+const DBL_SRC = 'a b&c'
+const DBL = encodeURIComponent(encodeURIComponent(DBL_SRC))
+const DBL_ONCE = decodeUrl(DBL, false).result
+const DBL_REPEAT = decodeUrl(DBL, true)
+
+/* 추적 정리 예시 — 도구의 detect/clean 함수로 계산 */
+const CLEAN_SRC = 'https://shop.example.com/item?id=42&q=a+b&utm_source=naver&utm_medium=cpc&n_media=27758&fbclid=IwAR0abc'
+const CLEAN_OUT = cleanTrackingParams(CLEAN_SRC, new Set(detectTrackingParams(CLEAN_SRC).map((m) => m.key)))
+const TRACK_TOTAL = TRACKING_GROUPS.reduce((n, g) => n + g.keys.length + (g.domainKeys?.keys.length ?? 0), 0)
 
 const FAQ_LD = [
-  { "q":"encodeURIComponent와 encodeURI 차이?","a":"encodeURIComponent는 거의 모든 특수문자를 인코드합니다 (:·/·?·#·@·&·= 포함). encodeURI는 URL 구조 문자(스킴·구분자)를 보존합니다. 실용 룰: • 쿼리 값·경로 세그먼트 → encodeURIComponent (안전) • 전체 URL 한 번에 → encodeURI 예: encodeURIComponent(\"a&b\") = a%26b (쿼리 값으로 안전), encodeURI(\"a&b\") = a&b (그대로 — 쿼리 키와 충돌 위험). 의심스러우면 항상 encodeURIComponent." },
-  { "q":"escape()는 왜 쓰면 안 되나요?","a":"1990년대 옛 함수로 deprecated 됐습니다 (ECMAScript 표준에서 Annex B로 분류 — 호환성용만). 문제점: • Unicode 부정확: BMP 외 문자(이모지) 처리 못함 • %uXXXX 형식: 표준 URL %XX 인코딩이 아닌 자바스크립트 전용 형식 → 서버에서 디코드 실패 • 한글 깨짐: ISO-8859-1 가정 → UTF-8 한글 처리 불가 반드시 encodeURIComponent 또는 encodeURI 사용. 본 도구는 escape()를 지원하지 않습니다." },
-  { "q":"한글 1글자가 왜 %XX %XX %XX (3개)인가요?","a":"UTF-8 인코딩 때문입니다. URL은 ASCII 문자만 직접 사용 가능하므로, 비-ASCII 문자는 UTF-8 바이트로 변환됩니다. • 한글 (BMP, U+AC00 ~ U+D7A3): UTF-8에서 3 bytes → URL %XX %XX %XX • 이모지 (Supplementary Plane, U+1F000+): UTF-8에서 4 bytes → URL %XX %XX %XX %XX • 한자: BMP 내 한자는 3 bytes 예: 한(U+D55C) → UTF-8 0xED 0x95 0x9C → URL %ED%95%9C. 본 도구의 한글 분석 박스에서 글자별 변환 과정을 시각화합니다." },
-  { "q":"+ 기호는 공백인가요? %20인가요?","a":"둘 다 공백이지만 사용 컨텍스트가 다릅니다. • RFC 3986 (표준 URL): 공백 = %20. +는 그냥 + 문자 • application/x-www-form-urlencoded (HTML 폼): 공백 = +. %20도 공백으로 디코드 실제 동작: • encodeURIComponent(\" \") = %20 (RFC 3986) • new URLSearchParams({a: ' '}).toString() = 'a=+' (form 변형) • 디코드 시 양쪽 모두 공백으로 인식 혼용 주의: 같은 URL에 %20과 + 섞이면 문제. 한 가지로 통일 권장. 본 도구는 %20 (encodeURIComponent) 출력." },
-  { "q":"이중 인코딩(%2520)이 발생하는 이유?","a":"이미 인코딩된 값을 또 인코딩했기 때문입니다. 1단계: 공백 → %20 (정상) 2단계: %20의 % → %25 → 결과 %2520! 발생 시나리오: • 백엔드에서 디코드된 값을 받아 다시 인코드하면서 변환 • 프론트엔드에서 이미 인코딩된 URL을 또 encodeURIComponent 호출 • OAuth redirect_uri 등에서 중첩 escape 해결: 본 도구의 탭 1 디코드 + 반복 디코드 옵션으로 한 번에 풀기 (최대 5회). 코드에서는 인코드/디코드 횟수를 명확히 추적해야 합니다." },
-  { "q":"UTM 파라미터 제거해도 되나요?","a":"네, 일반적으로 안전합니다. UTM은 Google Analytics 추적용이며 페이지 콘텐츠에 영향을 주지 않습니다. • utm_source, utm_medium, utm_campaign 등은 분석 데이터일 뿐 • 제거해도 페이지는 정상 작동 • 깔끔한 URL 공유에 유리 (블로그·SNS·문서) 예외 주의: • 일부 사이트가 UTM으로 다국어·캠페인 페이지 분기 (드물지만 가능) • 광고주 입장에서는 추적 데이터가 사라지므로 본인 광고 클릭은 유지 권장 • OAuth state·CSRF 토큰처럼 보안 토큰은 절대 제거 X (본 도구는 추적이 아닌 키는 손대지 않음)" },
-  { "q":"네이버 n_media 같은 파라미터는?","a":"네이버 검색·쇼핑·검색광고 추적 파라미터입니다. • n_media: 광고 매체 (예: cpc=검색광고) • n_query: 검색어 • n_keyword: 키워드 ID • n_rank: 검색 결과 순위 • n_ad_group·n_ad: 광고 그룹·광고 ID • n_campaign_type: 캠페인 유형 UTM과 동일하게 제거해도 페이지 작동에 영향 없음. 깔끔한 공유 URL을 만들 때 유용합니다. 본 도구의 네이버 그룹에서 일괄 제거 가능." },
-  { "q":"URL 길이 제한은 얼마인가요?","a":"공식 표준에는 길이 제한이 없지만, 실용적 제한이 존재합니다: • 브라우저: Chrome/Firefox/Safari 대부분 ~32,000자 처리, 일부 구형 IE는 2,083자 • 웹 서버: Nginx 기본 8,192자, Apache 8,190자, IIS 16,384자 • 안전권장: 2,000자 이하 (모든 환경 호환) • SEO: 짧을수록 좋음 (~75자 권장) 한글 주의: 한글 1글자가 URL에서 9자(%ED%95%9C)를 차지하므로, 짧은 한국어 텍스트도 URL에서는 빨리 길어집니다. 긴 데이터는 POST body나 JSON 토큰으로 전달 권장." },
-  { "q":"OAuth state·redirect_uri 디코드?","a":"OAuth 콜백 URL 디버깅에 본 도구가 매우 유용합니다. • state: CSRF 방지 토큰 (랜덤 문자열, 디코드해서 검증) • redirect_uri: 콜백 URL (이중 인코딩 자주 발생) • code: 인증 코드 (단발성, 1회 사용) • access_token: 액세스 토큰 (보안 민감!) ⚠️ 보안 주의: 1. access_token·refresh_token·session_id 디코드는 OK, 공유·수정은 절대 X (계정 탈취 위험) 2. state 토큰을 임의로 수정하면 CSRF 검증 실패 → 인증 오류 3. 공용 PC에서 사용 후 브라우저 캐시·localStorage 정리 (본 도구의 입력은 localStorage에 저장됨) 본 도구는 모든 처리가 클라이언트 측이라 외부 전송 없음." },
-  { "q":"본 도구는 입력 데이터를 서버에 보내나요?","a":"아니요. 모든 처리가 브라우저(클라이언트)에서 수행됩니다. • 인코드/디코드: Native Web API (encodeURIComponent·decodeURIComponent·URL·URLSearchParams) • 한글 분석: TextEncoder 브라우저 내장 • 외부 라이브러리·서버 호출 0개 • Network 탭 확인: 변환 시 어떤 fetch/XHR도 발생하지 않음 • 다운로드: Blob URL로 브라우저 내 처리 • 입력은 localStorage에 저장(편의), 외부 전송 없음 다만: 공용 PC·공유 기기에서 OAuth 토큰·세션 ID·access_token 등을 다룬 경우 사용 후 정리하세요. DevTools → Application → Local Storage에서 youtil_url_encode_v1 키 삭제 가능." }
+  {
+    q: 'encodeURIComponent와 encodeURI는 어떻게 다른가요?',
+    a: '<strong>encodeURIComponent</strong>는 <code>: / ? # @ &amp; = + $ ,</code> 같은 URL 구분 문자까지 모두 인코딩합니다. <strong>encodeURI</strong>는 주소 전체가 들어온다고 보고 이 구분 문자를 그대로 둡니다.<br />그래서 쿼리 값·경로 한 조각에는 encodeURIComponent, 이미 모양이 갖춰진 전체 URL에서 공백·한글만 바꿀 때는 encodeURI를 씁니다. 예: <code>encodeURIComponent("a&amp;b")</code> = <code>a%26b</code>(값으로 안전), <code>encodeURI("a&amp;b")</code> = <code>a&amp;b</code>(그대로 넣으면 <code>&amp;</code> 뒤가 다른 파라미터로 잘립니다). 어느 쪽인지 애매하면 값 단위로 encodeURIComponent를 쓰는 편이 안전합니다.',
+  },
+  {
+    q: 'escape()는 왜 쓰면 안 되나요?',
+    a: 'escape()는 URL 표준 인코딩이 아닙니다. ECMAScript 명세에서도 웹 호환용 부록(Annex B)으로만 남아 있습니다. 동작이 표준과 두 군데서 어긋납니다.<br />• 0~255 범위 문자는 UTF-8이 아니라 Latin-1 한 바이트로 바꿉니다 — <code>é</code> → <code>%E9</code>(표준은 <code>%C3%A9</code>)<br />• 그보다 큰 문자는 <code>%uXXXX</code>라는 비표준 형식이 됩니다 — <code>한</code> → <code>%uD55C</code>, 이모지는 서로게이트 두 개(<code>%uD83D%uDE00</code>)<br />서버의 URL 디코더는 <code>%u</code> 형식을 모르므로 값이 깨지거나 오류가 납니다. 이 도구는 escape()를 제공하지 않고, 위 비교표에 결과만 참고로 실었습니다.',
+  },
+  {
+    q: '한글 한 글자가 왜 %XX가 세 개인가요?',
+    a: 'URL에는 ASCII 문자만 그대로 쓸 수 있어서, 그 밖의 문자는 먼저 <strong>UTF-8 바이트</strong>로 바꾼 뒤 바이트마다 <code>%XX</code>를 붙입니다. UTF-8은 코드포인트 U+0080~U+07FF를 2바이트, U+0800~U+FFFF를 3바이트, U+10000 이상을 4바이트로 표현합니다. 한글 음절(U+AC00~U+D7A3)과 대부분의 한자는 3바이트 구간이라 <code>%XX</code> 세 개(9자), 이모지는 4바이트라 네 개(12자)가 됩니다. 예: 한(U+D55C) → 바이트 ED 95 9C → <code>%ED%95%9C</code>.',
+  },
+  {
+    q: '공백은 +인가요, %20인가요?',
+    a: '쓰이는 규칙이 다릅니다. RFC 3986의 URL 문법에서 공백은 <code>%20</code>이고 <code>+</code>는 그냥 더하기 기호입니다. 반면 HTML 폼 전송 형식(<code>application/x-www-form-urlencoded</code>, WHATWG URL 표준)은 공백을 <code>+</code>로 씁니다 — <code>new URLSearchParams({a: " "}).toString()</code>의 결과가 <code>a=+</code>인 이유입니다.<br />문제는 디코딩입니다. <code>decodeURIComponent</code>는 <code>+</code>를 공백으로 바꾸지 않으므로, 검색 URL(<code>q=a+b</code>)을 그대로 디코드하면 <code>a+b</code>가 남습니다. 이 도구는 디코드 옵션의 "+를 공백으로"를 켜면 폼 규칙으로 해석하고, 실제 + 기호는 <code>%2B</code>로 들어와 있으므로 디코드 후에도 +로 남습니다. 인코딩 결과는 항상 <code>%20</code>입니다.',
+  },
+  {
+    q: '%2520처럼 이중 인코딩이 생기는 이유는?',
+    a: '이미 인코딩된 값을 한 번 더 인코딩했기 때문입니다. 공백 → <code>%20</code>, 그 <code>%</code>가 다시 <code>%25</code>가 되어 <code>%2520</code>이 됩니다. 프런트엔드가 인코딩한 값을 HTTP 클라이언트 라이브러리가 또 인코딩하거나, OAuth <code>redirect_uri</code>처럼 URL 안에 URL을 넣는 과정에서 흔히 생깁니다. 이 도구의 디코드 탭에서 "반복 디코드"를 켜면 값이 더 바뀌지 않을 때까지 최대 5회 풀어 원문을 확인할 수 있습니다. 근본 해결은 코드에서 인코딩을 <strong>값을 URL에 넣는 마지막 한 곳</strong>에서만 하도록 정리하는 것입니다.',
+  },
+  {
+    q: 'UTM 같은 추적 파라미터를 지워도 페이지가 정상 동작하나요?',
+    a: '대부분은 그렇습니다. <code>utm_*</code>는 Google Analytics 등이 유입 경로를 기록하는 값이고, <code>fbclid</code>·<code>gclid</code>는 광고 클릭 식별자라 페이지 내용과 무관합니다. 다만 일부 사이트는 캠페인 파라미터로 다른 랜딩 화면을 보여 주기도 하므로 정리한 URL을 한 번 열어 보고 공유하세요. 이 도구는 미리 등록한 추적 키만 제거 후보로 고르고, <code>src</code>·<code>pid</code>처럼 다른 사이트에서는 상품 ID 같은 기능용으로 쓰이는 키는 해당 플랫폼 주소(쿠팡·카카오)일 때만 추적으로 분류합니다.',
+  },
+  {
+    q: '네이버 n_media·n_query 같은 파라미터는 무엇인가요?',
+    a: '네이버 검색광고가 광고 클릭 시 랜딩 URL에 자동으로 붙이는 추적 파라미터입니다. <code>n_media</code>는 광고가 노출된 매체 ID, <code>n_query</code>는 사용자가 입력한 검색어, <code>n_keyword</code>·<code>n_keyword_id</code>는 광고주가 등록한 키워드와 그 ID, <code>n_rank</code>는 광고 노출 순위, <code>n_ad_group</code>·<code>n_ad</code>는 광고그룹·소재 ID, <code>n_campaign_type</code>은 캠페인 유형입니다. 광고 성과 분석용이라 지워도 페이지 동작에는 영향이 없고, n_query에 검색어가 그대로 들어 있으므로 공유 전에 지우는 편이 좋습니다.',
+  },
+  {
+    q: 'URL은 최대 몇 자까지 쓸 수 있나요?',
+    a: '표준 상한은 없고 RFC 9110은 <strong>최소 8,000옥텟</strong> 지원을 권고합니다. 서버·브라우저별 기본 한도는 위 ‘URL 길이 한도’ 표를 참고하고, 긴 텍스트나 JSON은 URL이 아니라 POST 본문으로 보내세요.',
+  },
+  {
+    q: 'OAuth 콜백 URL을 디코드할 때 주의할 점은?',
+    a: '콜백 URL에는 <code>code</code>(1회용 인가 코드), <code>state</code>(CSRF 방지용 임의 값), 때로는 <code>access_token</code>이 들어 있습니다. 디코드해서 확인하는 것은 문제없지만 <strong>값을 수정하거나 남에게 공유하면 안 됩니다</strong> — state를 바꾸면 검증이 실패하고, 토큰이 노출되면 계정이 탈취될 수 있습니다. 이 도구의 처리는 모두 브라우저 안에서 이뤄지지만 입력값은 편의를 위해 이 브라우저의 localStorage(<code>youtil_url_encode_v1</code>)에 저장되므로, 공용 PC에서 토큰이 든 URL을 다뤘다면 입력을 지우거나 DevTools → Application → Local Storage에서 해당 키를 삭제하세요.',
+  },
 ]
 
 export default function UrlEncodePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        개발자
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={880} slug="/tools/dev/url-encode">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="dev" />URL 인코더/디코더
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
+      <p className="tp-lead">
         URL 인코드/디코드 + URL 분해와 쿼리 파라미터 표 편집. <strong style={{ color: 'var(--text)' }}>UTM·추적 파라미터 일괄 정리</strong>.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="RFC 3986(URI 문법)·WHATWG URL 표준(폼 인코딩)·ECMAScript encodeURIComponent 정의 · URL 길이는 RFC 9110 권고와 서버 기본 설정"
+        sources={[
+          { label: 'RFC 3986 URI Generic Syntax', href: 'https://www.rfc-editor.org/rfc/rfc3986' },
+          { label: 'WHATWG URL Standard', href: 'https://url.spec.whatwg.org/' },
+          { label: 'ECMAScript encodeURIComponent', href: 'https://tc39.es/ecma262/#sec-encodeuricomponent-uricomponent' },
+          { label: 'RFC 9110 §4.1 URI 길이', href: 'https://www.rfc-editor.org/rfc/rfc9110#section-4.1' },
+        ]}
+      />
 
-      {/* 면책 박스 */}
-      <div style={{
-        background: 'rgba(255, 138, 62, 0.06)',
-        border: '1px solid rgba(255, 138, 62, 0.40)',
-        borderRadius: '12px',
-        padding: '12px 16px',
-        marginBottom: '32px',
-      }}>
-        <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
-          ⚠️ 본 도구의 인코드·디코드·파싱은 모두 <strong>브라우저에서 실행</strong>되며 입력 URL·데이터는 외부로 전송되지 않습니다.
-          추적 파라미터 정리 결과는 일반적인 광고 추적 제거이며, <strong>일부 합법적 기능</strong>(다국어 분기·캠페인 식별)도 함께 제거될 수 있으니 검토 후 사용하세요.
-          OAuth state·CSRF 토큰 등 <strong>보안 관련 파라미터를 무단 수정·공유하지 마세요</strong>. 입력 100KB 제한.
-          분야별 안전 안내는 <Link href="/disclaimer#dev" style={{ color: 'var(--accent)' }}>면책조항</Link> 참고.
-        </p>
-      </div>
+      <Callout tone="warn" title="입력과 정리 결과">
+        인코드·디코드·파싱은 모두 <strong>브라우저에서 실행</strong>되며 입력 URL은 외부로 전송되지 않습니다(입력 최대 100KB).
+        추적 파라미터 정리는 일반적인 광고 추적 키를 지우는 것이라 <strong>일부 사이트의 캠페인 분기 같은 기능</strong>도 함께 사라질 수 있으니 결과를 확인한 뒤 쓰세요.
+        OAuth state·CSRF 토큰 같은 보안 값은 수정하거나 공유하지 마세요. 분야별 안전 안내는 <Link href="/disclaimer#dev" style={{ color: 'var(--accent-ink)' }}>면책조항</Link> 참고.
+      </Callout>
 
       <UrlEncodeClient />
 
       <GuideDivider />
 
-      {/* 1. 사용법 */}
-      <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
-      <div style={card}>
-        <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
-          <li><strong>탭 1 인코드/디코드</strong> — 자동 감지(%XX 있으면 디코드) + encodeURIComponent/encodeURI 선택 + 반복 디코드 + 한글 UTF-8 bytes 분해 표</li>
-          <li><strong>탭 2 URL 분해·편집</strong> — URL 자동 분해 (scheme/host/path/query/fragment 7개) + 쿼리 파라미터 표 편집기 + URL 즉시 재구성</li>
-          <li><strong>탭 3 추적 정리</strong> — 7 그룹 50+ 파라미터 자동 감지 (UTM·fbclid·네이버·카카오·쿠팡·Bing·기타) + 그룹별 또는 개별 체크박스 제거</li>
-          <li><strong>탭 4 가이드</strong> — encodeURIComponent vs encodeURI 비교 + RFC 3986 + UTF-8 인코딩 + 흔한 실수 + 추적 사전</li>
-        </ol>
-        <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 입력·옵션은 모두 자동 저장됩니다. 200ms 디바운스로 입력 변화 시 즉시 재계산.
-        </p>
-      </div>
+      <h2 className="g-h2">어떻게 사용하나요?</h2>
+      <ol className="g-list">
+        <li><strong>인코드/디코드</strong> — 입력에 <code style={code}>%XX</code> 형태가 하나라도 있으면 디코드, 없으면 인코드로 자동 판단합니다(수동 전환 가능). 인코드는 encodeURIComponent·encodeURI 중 고르고, 디코드는 &ldquo;반복 디코드(최대 {MAX_DECODE_ITERATIONS}회)&rdquo;와 &ldquo;+를 공백으로&rdquo; 옵션이 있습니다. 한글·이모지 같은 비ASCII 문자는 글자별 UTF-8 바이트 표로 풀어 보여 줍니다.</li>
+        <li><strong>URL 분해·편집</strong> — scheme·host·port·path·query·fragment(사용자 정보가 있으면 user·password)로 나누고, 쿼리 파라미터를 표에서 추가·수정·삭제하면 URL이 즉시 다시 조립됩니다. 조립할 때 키와 값은 각각 encodeURIComponent로 인코딩됩니다.</li>
+        <li><strong>추적 정리</strong> — 7개 그룹 {TRACK_TOTAL}개 추적 키 중 URL에 들어 있는 것을 찾아 그룹별·개별로 골라 지웁니다.</li>
+        <li><strong>가이드</strong> — 함수 비교, RFC 3986 문자 분류, 흔한 실수, 추적 키 사전을 도구 안에서 바로 볼 수 있습니다.</li>
+      </ol>
+      <p className="g-p">
+        입력과 옵션은 이 브라우저에 자동 저장되어 새로고침해도 유지됩니다. 퍼센트 인코딩 자체는 RFC 3986이 정한 규칙이고, 브라우저의 encodeURIComponent는 이 규칙을 ECMAScript 명세대로 구현한 함수입니다.
+      </p>
 
-      {/* 2. encodeURIComponent vs encodeURI 비교 */}
-      <h2 style={sectionTitle}>🔧 encodeURIComponent vs encodeURI 비교</h2>
-      <div style={card}>
-        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          가장 흔한 혼동입니다. <strong>쿼리 값엔 encodeURIComponent, 전체 URL엔 encodeURI</strong>가 원칙입니다.
-        </p>
-        <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12, overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>함수</th>
-                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>인코드 안 하는 문자</th>
-                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>사용처</th>
+      <h2 className="g-h2">함수별 인코딩 결과 비교</h2>
+      <p className="g-p">
+        RFC 3986은 URL에 그대로 써도 되는 <strong>비예약 문자(unreserved)</strong>를 영문자·숫자와 <code style={code}>- . _ ~</code> 네 기호로 정하고, <code style={code}>: / ? # [ ] @</code>(구분자)와 <code style={code}>! $ &amp; &apos; ( ) * + , ; =</code>(하위 구분자)를 예약 문자로 둡니다.
+        그런데 자바스크립트의 인코딩 함수들은 이 경계를 조금씩 다르게 그어서 같은 문자도 결과가 달라집니다. 아래 표는 각 함수를 실제로 실행한 결과입니다.
+      </p>
+      <div className="tableScroll">
+        <table style={tableStyle}>
+          <thead>
+            <tr style={rowLine}>
+              {['문자', 'encodeURIComponent', 'encodeURI', 'URLSearchParams(폼)', 'RFC 3986 엄격', 'escape() — 사용 금지'].map((h) => <th scope="col" key={h} style={th}>{h}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {CHAR_ROWS.map((r) => (
+              <tr key={r.ch} style={rowLine}>
+                <td style={{ ...tdMono, fontWeight: 700 }}>{r.ch === ' ' ? '(공백)' : r.ch}</td>
+                <td style={{ ...tdMono, color: 'var(--accent-ink)' }}>{r.comp}</td>
+                <td style={tdMono}>{r.uri}</td>
+                <td style={tdMono}>{r.form}</td>
+                <td style={tdMono}>{r.strict}</td>
+                <td style={{ ...tdMono, color: 'var(--muted)' }}>{r.esc}</td>
               </tr>
-            </thead>
-            <tbody>
-              <tr>
-                <td style={{ padding: '8px 10px' }}><code style={codeStyle}>encodeURIComponent</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>A-Z a-z 0-9 - _ . ! ~ * &apos; ( )</td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)' }}>쿼리 값·경로 세그먼트 (권장)</td>
-              </tr>
-              <tr>
-                <td style={{ padding: '8px 10px' }}><code style={codeStyle}>encodeURI</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>+ : / ? # [ ] @ ! $ &amp; &apos; ( ) * + , ; =</td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)' }}>전체 URL 인코딩</td>
-              </tr>
-              <tr>
-                <td style={{ padding: '8px 10px' }}><code style={codeStyle}>escape</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>영숫자 + @*+-./_</td>
-                <td style={{ padding: '8px 10px', color: '#DB2777', fontWeight: 600 }}>❌ 사용 금지 (Unicode 부정확, deprecated)</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-        <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 <strong>쉽게 기억하는 법</strong>: 의심스러우면 <code style={codeStyle}>encodeURIComponent</code>. 더 안전한 쪽을 선택.
-        </p>
+            ))}
+          </tbody>
+        </table>
       </div>
+      <p className="g-p">
+        읽는 법: encodeURIComponent는 비예약 문자 외에 <code style={code}>! &apos; ( ) *</code>도 그대로 둡니다. 브라우저 주소로는 문제없지만, <strong>서명 계산</strong>처럼 비예약 문자만 남기도록 요구하는 규격에서는 이 다섯 글자가 서명 불일치를 일으킵니다
+        — OAuth 1.0(RFC 5849)과 AWS 서명 버전 4가 대표적이며, 이때는 &lsquo;RFC 3986 엄격&rsquo; 열처럼 다섯 글자를 추가로 치환해야 합니다.
+        URLSearchParams는 폼 규칙이라 공백을 <code style={code}>+</code>로, <code style={code}>~</code>를 <code style={code}>%7E</code>로 바꾸고, escape()는 é·한글·이모지에서 표준과 전혀 다른 값을 만듭니다.
+      </p>
 
-      {/* 3. 한글·이모지 UTF-8 인코딩 */}
-      <h2 style={sectionTitle}>🇰🇷 한글·이모지 UTF-8 인코딩 원리</h2>
-      <div style={card}>
-        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          ASCII 외 문자는 <strong>UTF-8 멀티바이트</strong>로 변환된 후 각 바이트가 <code style={codeStyle}>%XX</code>로 인코딩됩니다.
-        </p>
-        <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '14px 16px', marginTop: 12, overflowX: 'auto' }}>
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
-            <thead>
-              <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>글자</th>
-                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>코드포인트</th>
-                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>UTF-8 bytes</th>
-                <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>URL 인코딩</th>
+      <h2 className="g-h2">한글·이모지가 길어지는 이유 — UTF-8 바이트</h2>
+      <p className="g-p">
+        ASCII 밖의 문자는 먼저 UTF-8 바이트열로 바뀌고, 각 바이트가 <code style={code}>%</code>와 16진수 두 자리로 적힙니다. 그래서 URL 길이는 글자 수가 아니라 <strong>바이트 수 × 3</strong>으로 늘어납니다.
+      </p>
+      <div className="tableScroll">
+        <table style={tableStyle}>
+          <thead>
+            <tr style={rowLine}>
+              {['글자', '코드포인트', 'UTF-8 바이트', 'URL 인코딩', '인코딩 후 길이'].map((h) => <th scope="col" key={h} style={th}>{h}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {UTF8_ROWS.map((r) => (
+              <tr key={r.char} style={rowLine}>
+                <td style={{ ...td, fontSize: '18px', fontWeight: 700 }}>{r.char}</td>
+                <td style={tdMono}>{r.codepoint}</td>
+                <td style={tdMono}>{r.bytes.length} ({r.bytes.map((b) => b.toString(16).toUpperCase().padStart(2, '0')).join(' ')})</td>
+                <td style={{ ...tdMono, color: 'var(--accent-ink)', fontWeight: 700 }}>{r.hexEncoded}</td>
+                <td style={td}>{r.hexEncoded.length}자</td>
               </tr>
-            </thead>
-            <tbody>
-              {[
-                ['한', 'U+D55C', '3 (ED 95 9C)', '%ED%95%9C'],
-                ['국', 'U+AD6D', '3 (EA B5 AD)', '%EA%B5%AD'],
-                ['안', 'U+C548', '3 (EC 95 88)', '%EC%95%88'],
-                ['녕', 'U+B155', '3 (EB 85 95)', '%EB%85%95'],
-                ['😀', 'U+1F600', '4 (F0 9F 98 80)', '%F0%9F%98%80'],
-                ['韓', 'U+97D3', '3 (E9 9F 93)', '%E9%9F%93'],
-              ].map((row, i) => (
-                <tr key={i}>
-                  <td style={{ padding: '8px 10px', fontSize: 22, fontWeight: 700 }}>{row[0]}</td>
-                  <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--text)' }}>{row[1]}</td>
-                  <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: 'var(--muted)', fontSize: 12 }}>{row[2]}</td>
-                  <td style={{ padding: '8px 10px', fontFamily: 'var(--font-mono)', color: '#0EA5E9', fontWeight: 700 }}>{row[3]}</td>
-                </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-        <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 한국어 1글자 = 보통 3 bytes (BMP), 이모지 1글자 = 보통 4 bytes (Supplementary Plane). 따라서 <strong>&quot;한국&quot; 2글자도 URL에서는 12자(%XX 6번) 차지</strong>합니다.
-          이는 URL 길이 안전 권장선(약 2,000자 — 모든 환경 호환)에서 한글이 빨리 차오르는 이유.
-        </p>
+            ))}
+          </tbody>
+        </table>
       </div>
+      <p className="g-p">
+        계산 예: &ldquo;{EX_TEXT}&rdquo;는 한글 4글자와 공백 1개, 5글자지만 encodeURIComponent 결과는 <code style={code}>{EX_ENC}</code>로 <strong>{EX_ENC.length}자</strong>가 됩니다(한글 4 × 9자 + 공백 3자).
+        검색어·상품명이 들어가는 URL이 금세 수백 자가 되는 이유이고, 로그나 문서에 붙여 넣을 때는 디코드한 형태가 훨씬 읽기 쉽습니다.
+      </p>
 
-      {/* 4. 흔한 실수 5가지 */}
-      <h2 style={sectionTitle}>🚨 흔한 실수 5가지</h2>
-      <div style={{
-        background: 'rgba(255, 138, 62, 0.06)',
-        border: '2px solid rgba(255, 138, 62, 0.50)',
-        borderRadius: '14px',
-        padding: '18px 22px',
-        marginBottom: '14px',
-      }}>
-        <ol style={{ margin: 0, paddingLeft: 22, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
-          <li><strong>이중 인코딩</strong> — 이미 인코딩된 값을 또 인코딩 → <code style={codeStyle}>%2520</code>(원래 공백 = <code style={codeStyle}>%20</code>). 본 도구의 <strong>반복 디코드</strong> 옵션으로 풀기 가능</li>
-          <li><strong>encodeURIComponent vs encodeURI 잘못 사용</strong> — 쿼리 값에 encodeURI 쓰면 <code style={codeStyle}>=</code>·<code style={codeStyle}>&amp;</code>가 그대로 남아 파싱 깨짐</li>
-          <li><strong>옛날 escape() 사용</strong> — Unicode 부정확, deprecated. 절대 쓰지 마세요</li>
-          <li><strong>% 단독 입력</strong> — <code style={codeStyle}>%</code> 다음에 16진수 2자리 필수 (<code style={codeStyle}>%XX</code>). 단독 % → 디코드 오류</li>
-          <li><strong>+ 기호 혼동</strong> — application/x-www-form-urlencoded 폼 인코딩에서만 <code style={codeStyle}>+</code>가 공백, RFC 3986 표준은 <code style={codeStyle}>%20</code>. 혼합 사용 시 디코드 결과 다름</li>
-        </ol>
+      <h2 className="g-h2">URL 길이 한도 — 어디서 잘리나</h2>
+      <p className="g-p">
+        HTTP 표준은 URL 길이 상한을 정하지 않는 대신, 모든 송수신 측이 최소 8,000옥텟은 처리하도록 권고합니다. 실제로는 요청이 거치는 경로 중 <strong>가장 짧은 한도</strong>에서 잘리고, 서버마다 돌려주는 코드도 다릅니다.
+      </p>
+      <div className="tableScroll">
+        <table style={tableStyle}>
+          <thead>
+            <tr style={rowLine}>
+              {['구간', '기본 한도', '넘으면'].map((h) => <th scope="col" key={h} style={th}>{h}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {[
+              ['RFC 9110 권고', '최소 8,000옥텟은 지원', '—'],
+              ['nginx (large_client_header_buffers 4 8k)', '요청 줄이 버퍼 하나(8KB)를 넘으면 거부', '414 URI Too Long'],
+              ['Apache (LimitRequestLine)', '8,190바이트', '414 URI Too Long'],
+              ['IIS 요청 필터링', 'URL 경로 4,096바이트 · 쿼리 문자열 2,048바이트', '404.14 · 404.15'],
+              ['Chrome', '2MB', '탐색하지 않음'],
+              ['Internet Explorer(지원 종료)', '2,083자', '— 흔히 말하는 2,000자 안전선의 출처'],
+            ].map((r) => (
+              <tr key={r[0]} style={rowLine}>
+                <td style={{ ...td, fontWeight: 600 }}>{r[0]}</td>
+                <td style={td}>{r[1]}</td>
+                <td style={{ ...td, color: 'var(--muted)' }}>{r[2]}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      <p className="g-p">
+        CDN·로드밸런서·WAF가 앞에 있으면 그 계층의 한도가 먼저 적용되므로, 긴 URL이 필요한 기능이라면 실제 운영 경로로 한 번 요청해 보고 결정하세요. 필터 조건이 수십 개인 검색처럼 데이터가 큰 요청은 POST 본문으로 옮기는 편이 안전합니다.
+      </p>
 
-      {/* 5. 추적 파라미터 — 어디서 왔고 왜 정리해야 하나 */}
-      <h2 style={sectionTitle}>📊 추적 파라미터 — 어디서 왔고 왜 정리해야 하나</h2>
-      <div style={card}>
-        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          광고 클릭·검색 결과·SNS 공유 시 URL에 자동으로 붙는 파라미터들입니다. <strong>실제 콘텐츠와 무관</strong>하며, 광고 플랫폼이 클릭 출처·전환을 추적하는 용도예요.
-        </p>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10, marginTop: 14 }}>
-          {[
-            { emoji: '🌐', name: 'Google (UTM)', desc: 'utm_source/medium/campaign — Google Analytics 캠페인 추적' },
-            { emoji: '🌐', name: 'Google Ads', desc: 'gclid·gbraid·wbraid — 광고 클릭 ID' },
-            { emoji: '📘', name: 'Facebook·Meta', desc: 'fbclid·_fbp·_fbc — 페북 광고·픽셀 추적' },
-            { emoji: '🇰🇷', name: '네이버', desc: 'n_media·n_query·n_keyword — 네이버 검색·검색광고' },
-            { emoji: '💬', name: '카카오', desc: 'kakao_share_id·kakao_chat_id — 카톡 공유 추적' },
-            { emoji: '🛍️', name: '쿠팡', desc: '_xts_·src·addtag — 쿠팡 파트너스·검색 광고' },
-            { emoji: '🟦', name: 'Microsoft Bing', desc: 'msclkid·mc_eid — Bing 광고·MailChimp' },
-            { emoji: '📊', name: '기타', desc: 'twclid·li_fat_id·yclid·igshid — Twitter·LinkedIn·Yandex·Instagram' },
-          ].map((s, i) => (
-            <div key={i} style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 14px', borderLeft: '3px solid #FFA63E' }}>
-              <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' }}>{s.emoji} {s.name}</p>
-              <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{s.desc}</p>
-            </div>
-          ))}
-        </div>
-        <p style={{ marginTop: 14, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-          <strong>왜 정리해야 하나?</strong> ① 깔끔한 URL 공유 (블로그·메모) ② 개인 추적 거부 ③ 캐시 효율 ↑ ④ 분석 도구가 같은 페이지를 다른 페이지로 인식하는 문제 방지<br />
-          <strong>주의</strong>: 일부 사이트는 추적 파라미터로 다국어·캠페인 분기를 수행하므로, 제거 후 동작 검토 필요.
-        </p>
+      <h2 className="g-h2">흔한 실수와 확인 방법</h2>
+      <ol className="g-list">
+        <li>
+          <strong>이중 인코딩</strong> — &ldquo;{DBL_SRC}&rdquo;를 두 번 인코딩하면 <code style={code}>{DBL}</code>가 됩니다. 한 번 디코드하면 <code style={code}>{DBL_ONCE}</code>로 여전히 인코딩이 남고,
+          반복 디코드를 켜면 {DBL_REPEAT.iterations}회 만에 원문 &ldquo;{DBL_REPEAT.result}&rdquo;로 돌아옵니다. 서버 로그에 <code style={code}>%25</code>가 보이면 이중 인코딩을 의심하세요.
+        </li>
+        <li><strong>쿼리 값에 encodeURI 사용</strong> — 값 속의 <code style={code}>&amp;</code>·<code style={code}>=</code>·<code style={code}>#</code>가 그대로 남아 파라미터가 잘리거나 뒷부분이 fragment로 사라집니다. 값에는 encodeURIComponent를 쓰세요.</li>
+        <li><strong>+와 공백 혼동</strong> — 폼 형식으로 만든 URL을 decodeURIComponent로 풀면 +가 남고, 반대로 +가 들어간 값(전화번호 +82, 수식 1+1)을 인코딩 없이 붙이면 서버가 공백으로 읽습니다.</li>
+        <li><strong>짝이 맞지 않는 %</strong> — <code style={code}>%</code> 뒤에는 16진수 두 자리가 와야 합니다. &ldquo;50% 할인&rdquo; 같은 원문을 디코드하면 URIError가 나므로, 이런 값은 먼저 인코딩해야 합니다.</li>
+        <li><strong>escape()/unescape() 사용</strong> — 오래된 코드에 남아 있는 경우가 많습니다. 위 비교표처럼 결과가 표준과 달라 서버에서 한글이 깨집니다.</li>
+      </ol>
+
+      <h2 className="g-h2">추적 파라미터 — 이 도구가 지우는 키</h2>
+      <p className="g-p">
+        광고 클릭·검색 결과·SNS 공유를 거치면 URL 뒤에 유입 경로를 기록하는 파라미터가 붙습니다. 페이지 내용과는 무관하지만 URL을 길게 만들고, 검색어(<code style={code}>n_query</code>)나 캠페인 이름이 그대로 드러나며,
+        같은 페이지가 분석 도구에서 서로 다른 주소로 집계되는 원인이 됩니다. 아래 표는 이 도구의 추적 키 사전 그대로이며, <code style={code}>utm_*</code>처럼 별표가 붙은 항목은 그 접두어로 시작하는 모든 키를 뜻합니다.
+      </p>
+      <div className="tableScroll">
+        <table style={tableStyle}>
+          <thead>
+            <tr style={rowLine}>
+              {['그룹', '어디서든 추적으로 보는 키', '해당 플랫폼 주소에서만'].map((h) => <th scope="col" key={h} style={th}>{h}</th>)}
+            </tr>
+          </thead>
+          <tbody>
+            {TRACKING_GROUPS.map((g) => (
+              <tr key={g.id} style={rowLine}>
+                <td style={{ ...td, fontWeight: 600, whiteSpace: 'nowrap' }}>{g.label}</td>
+                <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: '12px' }}>{g.keys.join(' · ')}</td>
+                <td style={{ ...td, fontFamily: 'var(--font-mono)', fontSize: '12px', color: 'var(--muted)' }}>
+                  {g.domainKeys ? `${g.domainKeys.keys.join(' · ')} (${g.domainKeys.domains.join(', ')})` : '—'}
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
       </div>
+      <p className="g-p">
+        정리 예: <code style={code}>{CLEAN_SRC}</code>에서 추적 키 {CLEAN_OUT.removedCount}개를 지우면 <code style={code}>{CLEAN_OUT.cleanUrl}</code>가 됩니다.
+        남은 파라미터는 다시 조립되면서 encodeURIComponent 규칙으로 인코딩되므로, 폼 형식의 <code style={code}>q=a+b</code>는 같은 뜻의 <code style={code}>q=a%20b</code>로 바뀝니다. 값의 의미는 같지만 원문과 글자가 달라지니 비교할 때 참고하세요.
+      </p>
 
-      {/* FAQ */}
-      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-      <FaqJsonLd items={FAQ_LD} />
+      <Faq items={FAQ_LD} />
 
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q1. encodeURIComponent와 encodeURI 차이?</summary>
-        <p style={faqAnswer}>
-          <strong>encodeURIComponent</strong>는 거의 모든 특수문자를 인코드합니다 (<code style={codeStyle}>:</code>·<code style={codeStyle}>/</code>·<code style={codeStyle}>?</code>·<code style={codeStyle}>#</code>·<code style={codeStyle}>@</code>·<code style={codeStyle}>&amp;</code>·<code style={codeStyle}>=</code> 포함).<br />
-          <strong>encodeURI</strong>는 URL 구조 문자(스킴·구분자)를 보존합니다.<br />
-          <strong>실용 룰</strong>:<br />
-          • <strong>쿼리 값·경로 세그먼트</strong> → <code style={codeStyle}>encodeURIComponent</code> (안전)<br />
-          • <strong>전체 URL 한 번에</strong> → <code style={codeStyle}>encodeURI</code><br />
-          예: <code style={codeStyle}>encodeURIComponent(&quot;a&amp;b&quot;)</code> = <code style={codeStyle}>a%26b</code> (쿼리 값으로 안전), <code style={codeStyle}>encodeURI(&quot;a&amp;b&quot;)</code> = <code style={codeStyle}>a&amp;b</code> (그대로 — 쿼리 키와 충돌 위험).
-          의심스러우면 항상 encodeURIComponent.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q2. escape()는 왜 쓰면 안 되나요?</summary>
-        <p style={faqAnswer}>
-          <strong>1990년대 옛 함수</strong>로 deprecated 됐습니다 (ECMAScript 표준에서 Annex B로 분류 — 호환성용만).<br />
-          문제점:<br />
-          • <strong>Unicode 부정확</strong>: BMP 외 문자(이모지) 처리 못함<br />
-          • <strong>%uXXXX 형식</strong>: 표준 URL %XX 인코딩이 아닌 자바스크립트 전용 형식 → 서버에서 디코드 실패<br />
-          • <strong>한글 깨짐</strong>: ISO-8859-1 가정 → UTF-8 한글 처리 불가<br />
-          반드시 <code style={codeStyle}>encodeURIComponent</code> 또는 <code style={codeStyle}>encodeURI</code> 사용. 본 도구는 escape()를 지원하지 않습니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q3. 한글 1글자가 왜 %XX %XX %XX (3개)인가요?</summary>
-        <p style={faqAnswer}>
-          <strong>UTF-8 인코딩</strong> 때문입니다. URL은 ASCII 문자만 직접 사용 가능하므로, 비-ASCII 문자는 UTF-8 바이트로 변환됩니다.<br />
-          • <strong>한글</strong> (BMP, U+AC00 ~ U+D7A3): UTF-8에서 <strong>3 bytes</strong> → URL %XX %XX %XX<br />
-          • <strong>이모지</strong> (Supplementary Plane, U+1F000+): UTF-8에서 <strong>4 bytes</strong> → URL %XX %XX %XX %XX<br />
-          • <strong>한자</strong>: BMP 내 한자는 3 bytes<br />
-          예: <code style={codeStyle}>한</code>(U+D55C) → UTF-8 <code style={codeStyle}>0xED 0x95 0x9C</code> → URL <code style={codeStyle}>%ED%95%9C</code>.
-          본 도구의 한글 분석 박스에서 글자별 변환 과정을 시각화합니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q4. + 기호는 공백인가요? %20인가요?</summary>
-        <p style={faqAnswer}>
-          <strong>둘 다 공백이지만 사용 컨텍스트가 다릅니다</strong>.<br />
-          • <strong>RFC 3986 (표준 URL)</strong>: 공백 = <code style={codeStyle}>%20</code>. <code style={codeStyle}>+</code>는 그냥 + 문자<br />
-          • <strong>application/x-www-form-urlencoded (HTML 폼)</strong>: 공백 = <code style={codeStyle}>+</code>. <code style={codeStyle}>%20</code>도 공백으로 디코드<br />
-          <strong>실제 동작</strong>:<br />
-          • <code style={codeStyle}>encodeURIComponent(&quot; &quot;)</code> = <code style={codeStyle}>%20</code> (RFC 3986)<br />
-          • <code style={codeStyle}>new URLSearchParams({`{a: ' '}`}).toString()</code> = <code style={codeStyle}>a=+</code> (form 변형)<br />
-          • 디코드 시 양쪽 모두 공백으로 인식<br />
-          <strong>혼용 주의</strong>: 같은 URL에 <code style={codeStyle}>%20</code>과 <code style={codeStyle}>+</code> 섞이면 문제. 한 가지로 통일 권장. 본 도구는 <code style={codeStyle}>%20</code> (encodeURIComponent) 출력.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q5. 이중 인코딩(%2520)이 발생하는 이유?</summary>
-        <p style={faqAnswer}>
-          <strong>이미 인코딩된 값을 또 인코딩했기 때문</strong>입니다.<br />
-          1단계: 공백 → <code style={codeStyle}>%20</code> (정상)<br />
-          2단계: <code style={codeStyle}>%20</code>의 <code style={codeStyle}>%</code> → <code style={codeStyle}>%25</code> → 결과 <code style={codeStyle}>%2520</code>!<br />
-          <strong>발생 시나리오</strong>:<br />
-          • 백엔드에서 디코드된 값을 받아 다시 인코드하면서 변환<br />
-          • 프론트엔드에서 이미 인코딩된 URL을 또 encodeURIComponent 호출<br />
-          • OAuth redirect_uri 등에서 중첩 escape<br />
-          <strong>해결</strong>: 본 도구의 <strong>탭 1 디코드 + 반복 디코드 옵션</strong>으로 한 번에 풀기 (최대 5회). 코드에서는 인코드/디코드 횟수를 명확히 추적해야 합니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q6. UTM 파라미터 제거해도 되나요?</summary>
-        <p style={faqAnswer}>
-          <strong>네, 일반적으로 안전합니다</strong>. UTM은 <strong>Google Analytics 추적용</strong>이며 페이지 콘텐츠에 영향을 주지 않습니다.<br />
-          • <code style={codeStyle}>utm_source</code>, <code style={codeStyle}>utm_medium</code>, <code style={codeStyle}>utm_campaign</code> 등은 분석 데이터일 뿐<br />
-          • 제거해도 페이지는 정상 작동<br />
-          • 깔끔한 URL 공유에 유리 (블로그·SNS·문서)<br />
-          <strong>예외 주의</strong>:<br />
-          • 일부 사이트가 UTM으로 다국어·캠페인 페이지 분기 (드물지만 가능)<br />
-          • 광고주 입장에서는 추적 데이터가 사라지므로 본인 광고 클릭은 유지 권장<br />
-          • OAuth state·CSRF 토큰처럼 보안 토큰은 절대 제거 X (본 도구는 추적이 아닌 키는 손대지 않음)
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q7. 네이버 n_media 같은 파라미터는?</summary>
-        <p style={faqAnswer}>
-          <strong>네이버 검색·쇼핑·검색광고 추적</strong> 파라미터입니다.<br />
-          • <code style={codeStyle}>n_media</code>: 광고 매체 (예: cpc=검색광고)<br />
-          • <code style={codeStyle}>n_query</code>: 검색어<br />
-          • <code style={codeStyle}>n_keyword</code>: 키워드 ID<br />
-          • <code style={codeStyle}>n_rank</code>: 검색 결과 순위<br />
-          • <code style={codeStyle}>n_ad_group</code>·<code style={codeStyle}>n_ad</code>: 광고 그룹·광고 ID<br />
-          • <code style={codeStyle}>n_campaign_type</code>: 캠페인 유형<br />
-          UTM과 동일하게 <strong>제거해도 페이지 작동에 영향 없음</strong>. 깔끔한 공유 URL을 만들 때 유용합니다.
-          본 도구의 <strong>네이버 그룹</strong>에서 일괄 제거 가능.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q8. URL 길이 제한은 얼마인가요?</summary>
-        <p style={faqAnswer}>
-          공식 표준에는 길이 제한이 없지만, <strong>실용적 제한</strong>이 존재합니다:<br />
-          • <strong>브라우저</strong>: Chrome/Firefox/Safari 대부분 ~32,000자 처리, 일부 구형 IE는 2,083자<br />
-          • <strong>웹 서버</strong>: Nginx 기본 8,192자, Apache 8,190자, IIS 16,384자<br />
-          • <strong>안전권장</strong>: <strong>2,000자 이하</strong> (모든 환경 호환)<br />
-          • <strong>SEO</strong>: 짧을수록 좋음 (~75자 권장)<br />
-          <strong>한글 주의</strong>: 한글 1글자가 URL에서 9자(%ED%95%9C)를 차지하므로, 짧은 한국어 텍스트도 URL에서는 빨리 길어집니다. 긴 데이터는 POST body나 JSON 토큰으로 전달 권장.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q9. OAuth state·redirect_uri 디코드?</summary>
-        <p style={faqAnswer}>
-          <strong>OAuth 콜백 URL 디버깅</strong>에 본 도구가 매우 유용합니다.<br />
-          • <code style={codeStyle}>state</code>: CSRF 방지 토큰 (랜덤 문자열, 디코드해서 검증)<br />
-          • <code style={codeStyle}>redirect_uri</code>: 콜백 URL (이중 인코딩 자주 발생)<br />
-          • <code style={codeStyle}>code</code>: 인증 코드 (단발성, 1회 사용)<br />
-          • <code style={codeStyle}>access_token</code>: 액세스 토큰 (보안 민감!)<br />
-          <strong>⚠️ 보안 주의</strong>:<br />
-          1. <strong>access_token·refresh_token·session_id 디코드는 OK, 공유·수정은 절대 X</strong> (계정 탈취 위험)<br />
-          2. <strong>state 토큰을 임의로 수정하면 CSRF 검증 실패</strong> → 인증 오류<br />
-          3. <strong>공용 PC에서 사용 후 브라우저 캐시·localStorage 정리</strong> (본 도구의 입력은 localStorage에 저장됨)<br />
-          본 도구는 모든 처리가 클라이언트 측이라 외부 전송 없음.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q10. 본 도구는 입력 데이터를 서버에 보내나요?</summary>
-        <p style={faqAnswer}>
-          <strong>아니요. 모든 처리가 브라우저(클라이언트)에서 수행됩니다.</strong><br />
-          • 인코드/디코드: <strong>Native Web API</strong> (encodeURIComponent·decodeURIComponent·URL·URLSearchParams)<br />
-          • 한글 분석: <code style={codeStyle}>TextEncoder</code> 브라우저 내장<br />
-          • 외부 라이브러리·서버 호출 <strong>0개</strong><br />
-          • Network 탭 확인: 변환 시 어떤 fetch/XHR도 발생하지 않음<br />
-          • 다운로드: <code style={codeStyle}>Blob</code> URL로 브라우저 내 처리<br />
-          • 입력은 <strong>localStorage에 저장</strong>(편의), 외부 전송 없음<br />
-          <strong>다만</strong>: 공용 PC·공유 기기에서 OAuth 토큰·세션 ID·access_token 등을 다룬 경우 사용 후 정리하세요.
-          DevTools → Application → Local Storage에서 <code style={codeStyle}>youtil_url_encode_v1</code> 키 삭제 가능.
-        </p>
-      </details>
-
-      {/* 크로스링크 */}
-      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+      <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>📋</p>
+        <Link href="/tools/dev/json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>JSON 포맷터</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             JSON 정렬·압축·유효성
           </p>
         </Link>
-        <Link href="/tools/dev/regex" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>🔍</p>
+        <Link href="/tools/dev/regex" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
           <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>정규식 테스트기</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
             매칭·캡처·치환·치트시트
           </p>
         </Link>
-        <Link href="/tools/dev/yaml-json" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>📄</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>YAML ↔ JSON 변환기</p>
+        <Link href="/tools/dev/base64" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>Base64 인코더/디코더</p>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            K8s·Spring·OpenAPI 예시
+            텍스트 ↔ Base64·URL-safe
           </p>
         </Link>
       </div>
-    </div>
+    </ToolPage>
   )
 }

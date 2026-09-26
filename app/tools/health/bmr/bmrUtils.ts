@@ -29,13 +29,13 @@ export interface BmrFormulaInfo {
 
 export const FORMULAS: BmrFormulaInfo[] = [
   { id: 'mifflin',         name: 'Mifflin-St Jeor', desc: '1990년 건강한 성인 데이터 기반, 현재 널리 권장 (일반인에 비교적 정확)',
-    needs: ['키', '체중', '나이', '성별'], accuracy: '±5~10%' },
+    needs: ['키', '체중', '나이', '성별'], accuracy: '대다수 ±10% 이내(Frankenfield 2005)' },
   { id: 'harris-benedict', name: 'Harris-Benedict', desc: '1919년 원전·1984년 개정판(Roza-Shizgal). 임상에서 널리 사용',
-    needs: ['키', '체중', '나이', '성별'], accuracy: '±10%' },
+    needs: ['키', '체중', '나이', '성별'], accuracy: '±14%(정상 영양 상태, Roza·Shizgal 1984)' },
   { id: 'katch-mcardle',   name: 'Katch-McArdle',   desc: '체지방률 입력 시 정확. 운동선수에게 권장',
-    needs: ['체중', '체지방률'], accuracy: '±3~5% (체지방률 정확 시)' },
+    needs: ['체중', '체지방률'], accuracy: '체지방률 측정 정확도에 좌우' },
   { id: 'cunningham',      name: 'Cunningham',      desc: '제지방량(LBM) 입력 시. 근육량 많은 사람에게 권장',
-    needs: ['제지방량(LBM)'], accuracy: '±3~5% (LBM 정확 시)' },
+    needs: ['제지방량(LBM)'], accuracy: '제지방량 측정 정확도에 좌우' },
 ]
 
 export function calcMifflin(input: BmrFormulaInput): number {
@@ -83,6 +83,8 @@ export function calcAllFormulas(input: BmrFormulaInput): FormulaResult[] {
   return FORMULAS.map(f => {
     if (f.id === 'katch-mcardle' && (!input.bodyFat || input.bodyFat <= 0))
       return { id: f.id, name: f.name, bmr: null, available: false, reason: '체지방률 입력 필요' }
+    if (f.id === 'katch-mcardle' && input.bodyFat !== undefined && input.bodyFat >= 60)
+      return { id: f.id, name: f.name, bmr: null, available: false, reason: '체지방률 1~59%만 지원' }
     if (f.id === 'cunningham' && (!input.leanMass || input.leanMass <= 0))
       return { id: f.id, name: f.name, bmr: null, available: false, reason: '제지방량(LBM) 입력 필요' }
     const v = calcBMR(input, f.id)
@@ -123,7 +125,8 @@ export const JOB_ACTIVITY_LEVELS: JobActivityLevel[] = [
 
 /* ─── 운동 강도 (MET 계수) ─── */
 // 1 MET ≈ 1 kcal/kg/시간 → 운동 칼로리는 체중에 비례한다(50kg과 100kg이 달라야 함).
-// kcalPerHour = met × 체중(kg). 아래 MET는 약 70kg 기준 250~800kcal/h와 일치.
+// kcalPerHour = met × 체중(kg). 아래 MET는 약 70kg 기준 250~800kcal/h와 일치(총 소비, 안정 대사 포함).
+// TDEE에 더할 때는 BMR에 이미 들어 있는 안정 대사(1 MET)를 빼고 (MET−1)만 더한다.
 export interface ExerciseIntensity {
   id: string
   name: string
@@ -173,8 +176,8 @@ export function calcDetailedTDEE(bmr: number, activity: ActivityInput): Detailed
   const stepsBonus = activity.dailySteps && activity.dailySteps > 5000
     ? ((activity.dailySteps - 5000) / 1000) * 50
     : 0
-  // 운동 칼로리 = MET × 체중(kg) × 시간 → 체중에 비례(50kg과 100kg이 다름)
-  const exercisePerSession = (activity.exerciseDuration / 60) * exerciseKcalPerHour(intensity.met, activity.weight)
+  // 운동 추가 칼로리 = (MET − 1) × 체중(kg) × 시간 — 운동 중 안정 대사(1 MET)는 BMR에 이미 포함되어 제외
+  const exercisePerSession = (activity.exerciseDuration / 60) * exerciseKcalPerHour(intensity.met - 1, activity.weight)
   const weeklyExerciseKcal = exercisePerSession * activity.weeklyExercises
   const dailyExerciseAvg = weeklyExerciseKcal / 7
 
@@ -322,13 +325,27 @@ export interface BmrRecord {
 
 const STORAGE_KEY = 'youtil_bmr_history_v1'
 
+const FORMULA_IDS: FormulaId[] = ['mifflin', 'harris-benedict', 'katch-mcardle', 'cunningham']
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
+
+function isBmrRecord(v: unknown): v is BmrRecord {
+  if (!v || typeof v !== 'object') return false
+  const r = v as Record<string, unknown>
+  return typeof r.id === 'string'
+    && typeof r.date === 'string' && !Number.isNaN(new Date(r.date).getTime())
+    && isFiniteNum(r.height) && isFiniteNum(r.weight) && isFiniteNum(r.age)
+    && isFiniteNum(r.bmr) && isFiniteNum(r.tdee)
+    && typeof r.formula === 'string' && (FORMULA_IDS as string[]).includes(r.formula)
+    && (r.bodyFat === undefined || isFiniteNum(r.bodyFat))
+}
+
 export function loadBmrHistory(): BmrRecord[] {
   if (typeof window === 'undefined') return []
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return []
-    const arr = JSON.parse(raw)
-    return Array.isArray(arr) ? arr : []
+    const arr: unknown = JSON.parse(raw)
+    return Array.isArray(arr) ? arr.filter(isBmrRecord) : []
   } catch { return [] }
 }
 

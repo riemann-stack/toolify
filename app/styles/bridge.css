@@ -1,0 +1,36 @@
+/* ═══ app/styles/bridge.css — Trust Ledger 과도기 브리지 (도입 2026-09-26 · 스펙 §10.6) ═══
+   components/ToolPage.tsx가 import한다(ToolPage를 쓰는 페이지에만 의미가 있는 규칙).
+   ─ 범위: [data-article='v1'] = ToolPage가 감싼 '코드모드 G(가이드 조판) 전' 레거시 가이드 본문 시트.
+           코드모드 G를 마친 파일은 <ToolPage article="v2"> → 자동 제외. 전량 v2가 되면(rg -c 'article="v1"' = 0) 이 파일째 삭제.
+   ─ 선택자: React SSR은 style을 'font-size:14px;color:var(--muted)'(공백 없음)로, 클라이언트 내비게이션으로 만든 DOM은
+             'font-size: 14px; color: var(--muted)'(공백 있음)로 직렬화한다 → 두 형태를 모두 적는다.
+   ─ !important는 인라인 style을 이기기 위한 것 — 이 파일 밖에서 쓰지 말 것. */
+
+/* 1) 레거시 가이드 문단(14px · muted · 행간 1.8~1.9, 약 350곳) → 본문 조판 16/1.8 · --text-body · 가독 폭 680 */
+[data-article='v1'] p:is([style*='font-size:14px'], [style*='font-size: 14px']):is([style*='color:var(--muted)'], [style*='color: var(--muted)']):is([style*='line-height:1.8'], [style*='line-height: 1.8'], [style*='line-height:1.9'], [style*='line-height: 1.9']) {
+  font-size: 16px !important;
+  line-height: 1.8 !important;
+  color: var(--text-body) !important;
+  max-width: var(--w-read);
+}
+
+/* 2) 레거시 가이드 h2(20px, 약 810곳) → 22px · 제목 자간. 앞 번호(01…)는 :where(.prose) h2::before가 붙인다 */
+[data-article='v1'] h2:is([style*='font-size:20px'], [style*='font-size: 20px']) {
+  font-size: 22px !important;
+  line-height: 1.4;
+  letter-spacing: -0.03em !important;
+  scroll-margin-top: calc(var(--header-h) + 16px);
+}
+@media (max-width: 640px) {
+  [data-article='v1'] h2:is([style*='font-size:20px'], [style*='font-size: 20px']) { font-size: 20px !important; }
+}
+
+/* 3) 섹션 간격은 레거시 flex 래퍼(gap 48)가 맡는다 → 섹션 첫 h2(예: <Faq>의 h2)에 :where(.prose) h2의 48px가 겹치지 않게 */
+[data-article='v1'] :is(section, div) > h2:first-child { margin-top: 0; }
+
+/* 4) 레거시 표 래퍼(overflow-x:auto) 위 간격만 */
+[data-article='v1'] div:is([style*='overflow-x:auto'], [style*='overflow-x: auto']) { margin-top: 16px; }
+
+/* 5) 브레드크럼 중복 방지 — ToolPage가 본문 열 안에 브레드크럼을 그리므로, app/tools/layout.tsx가 아직
+      <main> 바로 아래에 그리는 과도기 브레드크럼은 숨긴다(layout에서 제거되면 이 규칙은 아무 일도 하지 않는다) */
+main:has(> [data-tool-page]) > nav[aria-label='현재 위치'] { display: none; }

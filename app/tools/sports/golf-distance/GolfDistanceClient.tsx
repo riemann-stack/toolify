@@ -3,11 +3,12 @@
 
 import { useEffect, useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
+import { todayStr } from '@/lib/date'
 import s from './golf-distance.module.css'
 import {
   GENDER_AGE_LABEL, SENIOR_FACTOR, LIE_LABEL,
   calcEnvCorrected, convertDistance,
-  loadRecords, saveRecords, newId, todayStr, analyzeRecords,
+  loadRecords, saveRecords, newId, analyzeRecords, dateToTs,
   LOCATION_LABEL,
   type GenderAge, type DistanceUnit, type WindDirection, type LieType,
   type DistanceRecord, type RecordLocation,
@@ -42,13 +43,14 @@ const CLUB_NAME_KR: Record<Club, string> = {
 }
 
 // 7번 아이언 기준 추정 계수 (= 아래 AVG_DISTANCE.male 비거리 / 7I 비거리, 우드·드라이버 포함 일관)
+// 하이브리드는 같은 번호 아이언보다 조금 길게(4U ≥ 4I, 5U ≥ 5I), 4I는 5W보다 짧게 — 순서가 뒤집히지 않도록
 const RATIO_FROM_7I: Record<Club, number> = {
   DR:  1.50,
   '3W': 1.32,
   '5W': 1.21,
-  '4U': 1.18,
-  '5U': 1.11,
-  '4I': 1.21,
+  '4U': 1.20,
+  '5U': 1.16,
+  '4I': 1.18,
   '5I': 1.14,
   '6I': 1.07,
   '7I': 1.00,
@@ -63,16 +65,21 @@ const RATIO_FROM_7I: Record<Club, number> = {
 // 아마추어 평균
 const AVG_DISTANCE: Record<'male' | 'female', Record<Club, number>> = {
   male: {
-    DR: 210, '3W': 185, '5W': 170, '4U': 165, '5U': 155,
-    '4I': 170, '5I': 160, '6I': 150, '7I': 140, '8I': 130,
+    DR: 210, '3W': 185, '5W': 170, '4U': 168, '5U': 162,
+    '4I': 165, '5I': 160, '6I': 150, '7I': 140, '8I': 130,
     '9I': 120, PW: 110, AW: 100, SW: 85, LW: 70,
   },
   female: {
-    DR: 160, '3W': 140, '5W': 130, '4U': 125, '5U': 118,
-    '4I': 130, '5I': 120, '6I': 112, '7I': 105, '8I': 96,
+    DR: 160, '3W': 140, '5W': 130, '4U': 128, '5U': 122,
+    '4I': 126, '5I': 120, '6I': 112, '7I': 105, '8I': 96,
     '9I': 88, PW: 80, AW: 73, SW: 62, LW: 52,
   },
 }
+
+// 간격 분석에 필요한 최소 직접 입력 클럽 수
+const MIN_ACTUAL_FOR_GAP = 3
+// 간단 입력 모드에 보이는 기본 칸 — 이 셋만 채웠다면 사이 클럽을 입력하지 않은 것이라 간격을 판정하지 않는다
+const SIMPLE_CLUBS: Club[] = ['DR', '7I', 'PW']
 
 // 권장 간격 범위
 const GAP_RULES: Record<string, { min: number; max: number }> = {
@@ -190,9 +197,14 @@ export default function GolfDistanceClient() {
     return Math.max(myMax, avgMax) * 1.05
   }, [results, gender])
 
-  /* ── Gap 분석 ── */
+  /* ── Gap 분석 ── 직접 입력한 클럽만 (추정값끼리의 간격은 내부 비율표에서 나온 값이라 판정 대상이 아님) */
+  const actualResults = useMemo(() => results.filter(r => r.isActual), [results])
+  // 기본 칸(DR·7I·PW) 외의 클럽을 하나라도 직접 입력했을 때만 — 기본 세 칸만으로는 백 구성을 알 수 없다
+  const gapReady = actualResults.length >= MIN_ACTUAL_FOR_GAP
+    && actualResults.some(r => !SIMPLE_CLUBS.includes(r.club))
   const gapList = useMemo(() => {
-    const sorted = [...results].sort((a, b) => b.distance - a.distance)
+    if (!gapReady) return []
+    const sorted = [...actualResults].sort((a, b) => b.distance - a.distance)
     const gaps: {
       from: Club
       to: Club
@@ -223,12 +235,12 @@ export default function GolfDistanceClient() {
       gaps.push({ from: from.club, to: to.club, gap, level, suggestion })
     }
     return gaps
-  }, [results, unit])
+  }, [actualResults, gapReady, unit])
 
   /* ── 추천 카드 ── */
   const recommendations = useMemo(() => {
     const recs: { title: string; text: string }[] = []
-    const sorted = [...results].sort((a, b) => b.distance - a.distance)
+    const sorted = [...actualResults].sort((a, b) => b.distance - a.distance)
 
     // 가장 큰 wide gap 1개 우선 추천
     const widest = gapList
@@ -259,7 +271,7 @@ export default function GolfDistanceClient() {
     }
 
     return recs
-  }, [gapList, results, unit])
+  }, [gapList, actualResults, unit])
 
   /* ── 7번 아이언 등급 ── */
   const sevenIronGrade = useMemo(() => {
@@ -284,7 +296,7 @@ export default function GolfDistanceClient() {
   /* ── 표시 클럽 (입력 모드) ── */
   const visibleClubs: Club[] = expandAll
     ? [...CLUB_LIST]
-    : (['DR', '7I', 'PW'] as Club[])
+    : SIMPLE_CLUBS
 
   return (
     <div className={s.wrap}>
@@ -432,6 +444,8 @@ export default function GolfDistanceClient() {
       ) : (
         <AnalysisView
           results={results}
+          actualCount={actualResults.length}
+          gapReady={gapReady}
           gapList={gapList}
           recommendations={recommendations}
           unit={unit}
@@ -565,9 +579,11 @@ function showDist(mValue: number, targetUnit: DistanceUnit): number {
  * 클럽 분석 뷰
  * ──────────────────────────────────────────────── */
 function AnalysisView({
-  results, gapList, recommendations, unit,
+  results, actualCount, gapReady, gapList, recommendations, unit,
 }: {
   results: { club: Club; distance: number; isActual: boolean }[]
+  actualCount: number
+  gapReady: boolean
   gapList: { from: Club; to: Club; gap: number; level: 'ok' | 'tight' | 'wide'; suggestion?: string }[]
   recommendations: { title: string; text: string }[]
   unit: DistanceUnit
@@ -585,8 +601,8 @@ function AnalysisView({
         <span className={s.cardLabel}>클럽 구성 총평</span>
         <div className={s.summaryGrid}>
           <div className={s.summaryCell}>
-            <div className={s.summaryLabel}>추정 클럽 종류</div>
-            <div className={s.summaryValue}>{results.length}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>종</span></div>
+            <div className={s.summaryLabel}>직접 입력한 클럽</div>
+            <div className={s.summaryValue}>{actualCount}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>개</span></div>
           </div>
           <div className={s.summaryCell}>
             <div className={s.summaryLabel}>비거리 범위</div>
@@ -599,15 +615,26 @@ function AnalysisView({
               <div className={s.summarySub}>{widestGap.from} → {widestGap.to}</div>
             </div>
           )}
-          <div className={s.summaryCell}>
-            <div className={s.summaryLabel}>보완 추천</div>
-            <div className={s.summaryValue}>{wideCount}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>구간</span></div>
-            <div className={s.summarySub}>{wideCount === 0 ? '간격 분포가 양호합니다' : '간격이 넓은 구간 있음'}</div>
-          </div>
+          {gapReady && (
+            <div className={s.summaryCell}>
+              <div className={s.summaryLabel}>보완 추천</div>
+              <div className={s.summaryValue}>{wideCount}<span style={{ fontSize: '0.5em', color: 'var(--muted)', marginLeft: 4 }}>구간</span></div>
+              <div className={s.summarySub}>{wideCount === 0 ? '간격 분포가 양호합니다' : '간격이 넓은 구간 있음'}</div>
+            </div>
+          )}
         </div>
       </div>
 
+      {!gapReady && (
+        <div className={s.infoBox}>
+          클럽 간격 분석은 <strong>[전체 클럽 직접 입력하기]에서 백에 든 클럽을 {MIN_ACTUAL_FOR_GAP}개 이상</strong> 넣으면 보여 드려요. 기본 세 칸(드라이버, 7번 아이언, 피칭 웨지)만 채우면 그 사이에 어떤 클럽이 있는지 알 수 없고, 추정값끼리의 간격은 계산 비율에서 나온 값이라 판정하지 않습니다.
+        </div>
+      )}
+
       {/* Gap 분석 표 */}
+      {gapList.length > 0 && (
+        <p className={s.envHint} style={{ margin: 0 }}>직접 입력한 클럽끼리만 비교합니다. 입력한 클럽이 실제 백 구성과 같을 때 가장 정확해요.</p>
+      )}
       {gapList.length > 0 && (
         <div className={s.card}>
           <span className={s.cardLabel}>거리 간격(Gap) 분석</span>
@@ -676,6 +703,11 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
   const initialBase = baseI7 > 0 ? baseI7 : (baseDR > 0 ? baseDR : 145)
   const [baseDistance, setBaseDistance] = useState(initialBase)
   const [baseClub, setBaseClub] = useState<'7I' | 'DR'>(baseI7 > 0 ? '7I' : 'DR')
+  // 상단 입력 카드(모든 탭 공통)에서 7I·DR을 고치면 보정 기준도 따라가게
+  useEffect(() => {
+    if (baseClub === '7I' && baseI7 > 0) setBaseDistance(baseI7)
+    else if (baseClub === 'DR' && baseDR > 0) setBaseDistance(baseDR)
+  }, [baseI7, baseDR, baseClub])
   const [temperature, setTemperature] = useState(20)
   const [elevation, setElevation] = useState(0)
   const [windDir, setWindDir] = useState<WindDirection>('none')
@@ -727,7 +759,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
             <input type="range" min={-10} max={40} step={1} aria-label="기온"
               value={temperature} onChange={e => setTemperature(parseInt(e.target.value))}
               className={s.envSlider} />
-            <span className={s.envSliderValue} style={{ color: temperature < 10 ? '#0891B2' : temperature > 28 ? '#EA580C' : 'var(--accent)' }}>
+            <span className={s.envSliderValue} style={{ color: temperature < 10 ? 'var(--cat-health-ink)' : temperature > 28 ? 'var(--warning)' : 'var(--accent-ink)' }}>
               {temperature}°C
             </span>
           </div>
@@ -777,9 +809,9 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
 
         {/* 경사 */}
         <div className={s.envFactorRow}>
-          <span className={s.envFactorLabel}>경사 (양수=오르막)</span>
+          <span className={s.envFactorLabel}>타깃 고저차 경사 (양수=오르막)</span>
           <div className={s.envSliderRow}>
-            <input type="range" min={-10} max={10} step={1} aria-label="경사 (양수=오르막)"
+            <input type="range" min={-10} max={10} step={1} aria-label="공에서 타깃까지 경사 (양수=오르막)"
               value={slopeAngle} onChange={e => setSlopeAngle(parseInt(e.target.value))}
               className={s.envSlider} />
             <span className={s.envSliderValue}>{slopeAngle > 0 ? '+' : ''}{slopeAngle}°</span>
@@ -807,8 +839,8 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
         <div className={s.envResultHead}>
           <span className={s.cardLabel}>환경 보정 비거리</span>
           <span className={s.envResultBadge} style={{
-            color: result.changePercent >= 0 ? '#059669' : '#DC2626',
-            borderColor: (result.changePercent >= 0 ? '#059669' : '#DC2626') + '55',
+            color: result.changePercent >= 0 ? 'var(--success)' : 'var(--danger)',
+            borderColor: `color-mix(in srgb, ${result.changePercent >= 0 ? 'var(--success)' : 'var(--danger)'} 33%, transparent)`,
           }}>
             {result.changePercent >= 0 ? '+' : ''}{result.changePercent}%
           </span>
@@ -821,7 +853,7 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
           <span className={s.envResultArrow}>→</span>
           <div className={s.envResultBlock}>
             <div className={s.envResultLabel}>보정 후</div>
-            <div className={s.envResultValue} style={{ color: 'var(--accent)' }}>{showDist(result.correctedDistance, unit)}{unit}</div>
+            <div className={s.envResultValue} style={{ color: 'var(--accent-ink)' }}>{showDist(result.correctedDistance, unit)}{unit}</div>
           </div>
         </div>
 
@@ -842,8 +874,8 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
                     <td style={{ color: 'var(--muted)', fontSize: 12 }}>{c.desc}</td>
                     <td style={{
                       textAlign: 'right',
-                      color: c.tone === 'pos' ? '#059669' : c.tone === 'neg' ? '#DC2626' : 'var(--muted)',
-                      fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700,
+                      color: c.tone === 'pos' ? 'var(--success)' : c.tone === 'neg' ? 'var(--danger)' : 'var(--muted)',
+                      fontFamily: 'var(--font-sans)', fontWeight: 700,
                     }}>
                       {c.impact > 0 ? '+' : ''}{showDist(c.impact, unit)}{unit}
                     </td>
@@ -853,8 +885,8 @@ function EnvTab({ baseI7, baseDR, unit }: { baseI7: number; baseDR: number; unit
                   <td colSpan={2} style={{ fontWeight: 700, color: 'var(--text)' }}>합계</td>
                   <td style={{
                     textAlign: 'right',
-                    color: result.totalImpact >= 0 ? '#059669' : '#DC2626',
-                    fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 14,
+                    color: result.totalImpact >= 0 ? 'var(--success)' : 'var(--danger)',
+                    fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 14,
                   }}>
                     {result.totalImpact >= 0 ? '+' : ''}{showDist(result.totalImpact, unit)}{unit}
                   </td>
@@ -896,20 +928,23 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
   const handleSave = () => {
     const dr = parseFloat(drInput); const i7 = parseFloat(i7Input)
     if ((!dr || dr <= 0) && (!i7 || i7 <= 0)) return
+    // 날짜 칸을 비우면 ts가 NaN → JSON null이 되어 새로고침 때 기록이 사라지므로 오늘로 대체
+    const recDate = Number.isFinite(dateToTs(date)) ? date : todayStr()
+    const temp = parseFloat(tempInput); const wind = parseFloat(windInput)
     const rec: DistanceRecord = {
       id: newId(),
-      date,
-      ts: new Date(date + 'T12:00:00').getTime(),
+      date: recDate,
+      ts: dateToTs(recDate),
       location,
       driver: dr > 0 ? Math.round(convertDistance(dr, unit, 'm')) : undefined,
       iron7:  i7 > 0 ? Math.round(convertDistance(i7, unit, 'm')) : undefined,
-      temperature: tempInput ? parseFloat(tempInput) : undefined,
-      windSpeed:   windInput ? parseFloat(windInput) : undefined,
+      temperature: Number.isFinite(temp) ? temp : undefined,
+      windSpeed:   Number.isFinite(wind) ? wind : undefined,
       notes: notes.trim() || undefined,
     }
     const updated = [rec, ...records]
     setRecords(updated); saveRecords(updated)
-    setDrInput(''); setI7Input(''); setTempInput(''); setWindInput(''); setNotes('')
+    setDrInput(''); setI7Input(''); setTempInput(''); setWindInput(''); setNotes(''); setDate(recDate)
   }
 
   const handleDelete = (id: string) => {
@@ -944,9 +979,9 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
           </div>
           {(stats.driverChange !== null || stats.iron7Change !== null) && (
             <p className={s.envHint} style={{ marginTop: 10 }}>
-              📈 최근 30일 변화 — DR <strong style={{ color: (stats.driverChange ?? 0) >= 0 ? '#059669' : '#DC2626' }}>
+              📈 최근 30일 변화 — DR <strong style={{ color: (stats.driverChange ?? 0) >= 0 ? 'var(--success)' : 'var(--danger)' }}>
                 {stats.driverChange !== null ? `${stats.driverChange >= 0 ? '+' : ''}${showDist(stats.driverChange, unit)}${unit}` : '—'}
-              </strong>, 7I <strong style={{ color: (stats.iron7Change ?? 0) >= 0 ? '#059669' : '#DC2626' }}>
+              </strong>, 7I <strong style={{ color: (stats.iron7Change ?? 0) >= 0 ? 'var(--success)' : 'var(--danger)' }}>
                 {stats.iron7Change !== null ? `${stats.iron7Change >= 0 ? '+' : ''}${showDist(stats.iron7Change, unit)}${unit}` : '—'}
               </strong>
             </p>
@@ -1018,7 +1053,7 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
           <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 10 }}>
             <span className={s.cardLabel} style={{ marginBottom: 0 }}>최근 기록 (최대 1년 보관)</span>
             <button type="button" onClick={handleClearAll}
-              style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 8, padding: '4px 10px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
+              style={{ background: 'transparent', border: '1px solid var(--border)', borderRadius: 'var(--radius-s)', padding: '4px 10px', fontSize: 11, color: 'var(--muted)', cursor: 'pointer' }}>
               전체 삭제
             </button>
           </div>
@@ -1036,12 +1071,12 @@ function RecordsTab({ unit, currentDR, currentI7 }: { unit: DistanceUnit; curren
               <tbody>
                 {records.slice(0, 30).map(r => (
                   <tr key={r.id}>
-                    <td className={s.tdMuted} style={{ fontSize: 12, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.date}</td>
+                    <td className={s.tdMuted} style={{ fontSize: 12, fontFamily: 'var(--font-sans)' }}>{r.date}</td>
                     <td style={{ fontSize: 12, color: 'var(--muted)' }}>{LOCATION_LABEL[r.location]}</td>
                     <td className={s.tdNum}>{r.driver ? `${showDist(r.driver, unit)}${unit}` : '—'}</td>
                     <td className={s.tdNum}>{r.iron7 ? `${showDist(r.iron7, unit)}${unit}` : '—'}</td>
                     <td>
-                      <button type="button" onClick={() => handleDelete(r.id)}
+                      <button type="button" onClick={() => handleDelete(r.id)} aria-label={`${r.date} 기록 삭제`}
                         style={{ background: 'transparent', border: 'none', color: 'var(--muted)', cursor: 'pointer', fontSize: 14 }}>×</button>
                     </td>
                   </tr>

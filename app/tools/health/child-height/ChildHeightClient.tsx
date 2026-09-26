@@ -5,8 +5,8 @@ import styles from './childHeight.module.css'
 import {
   Sex,
   predictHeight, heightBand, midParent, diffFromKrAverage,
-  parseHeight, round1,
-  KR_ADULT_AVG, BAND, MALE_ADJ,
+  parseHeight, heightError, round1,
+  KR_ADULT_AVG, KR_AVG_LABEL, BAND, MALE_ADJ,
 } from './childHeightUtils'
 
 const STORAGE_KEY = 'youtil:child-height:last-v1'
@@ -54,6 +54,8 @@ export default function ChildHeightClient() {
   const [motherHeight, setMotherHeight] = useState('')
   const [compare, setCompare] = useState(false)
   const [copied, setCopied] = useState(false)
+  /* 입력 중('1'→'17'→'178') 오류가 깜빡이지 않도록 blur 이후에만 오류 안내 */
+  const [touched, setTouched] = useState({ f: false, m: false })
 
   /* 마지막 입력 복원 */
   useEffect(() => {
@@ -63,6 +65,7 @@ export default function ChildHeightClient() {
       setFatherHeight(s.fatherHeight)
       setMotherHeight(s.motherHeight)
       setCompare(s.compare)
+      setTouched({ f: s.fatherHeight.trim() !== '', m: s.motherHeight.trim() !== '' })
     }
   }, [])
 
@@ -71,9 +74,11 @@ export default function ChildHeightClient() {
     saveLast({ sex, fatherHeight, motherHeight, compare })
   }, [sex, fatherHeight, motherHeight, compare])
 
-  /* 정규화된 키(cm) — 클램프 포함 */
+  /* 정규화된 키(cm) — 범위 밖이면 null(결과 숨김) + 인라인 안내 */
   const fH = useMemo(() => parseHeight(fatherHeight), [fatherHeight])
   const mH = useMemo(() => parseHeight(motherHeight), [motherHeight])
+  const fErr = touched.f ? heightError(fatherHeight) : null
+  const mErr = touched.m ? heightError(motherHeight) : null
 
   /* 결과 (양쪽 키가 모두 유효할 때만) */
   const result = useMemo(() => {
@@ -152,9 +157,13 @@ export default function ChildHeightClient() {
               placeholder="예: 175"
               value={fatherHeight}
               onChange={(e) => setFatherHeight(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, f: true }))}
+              aria-invalid={fErr ? true : undefined}
+              aria-describedby={fErr ? 'ch-father-err' : undefined}
             />
             <span className={styles.unit}>cm</span>
           </div>
+          {fErr && <p id="ch-father-err" className={styles.inputError}>{fErr}</p>}
         </div>
         <div className={styles.card}>
           <label className={styles.cardLabel} htmlFor="ch-mother">
@@ -169,9 +178,13 @@ export default function ChildHeightClient() {
               placeholder="예: 162"
               value={motherHeight}
               onChange={(e) => setMotherHeight(e.target.value)}
+              onBlur={() => setTouched((t) => ({ ...t, m: true }))}
+              aria-invalid={mErr ? true : undefined}
+              aria-describedby={mErr ? 'ch-mother-err' : undefined}
             />
             <span className={styles.unit}>cm</span>
           </div>
+          {mErr && <p id="ch-mother-err" className={styles.inputError}>{mErr}</p>}
         </div>
       </div>
 
@@ -239,7 +252,7 @@ export default function ChildHeightClient() {
                 {result.diff >= 0 ? '+' : '−'}
                 {Math.abs(result.diff).toFixed(1)}
               </div>
-              <p>cm · 평균 {krAvg}cm 참고치</p>
+              <p>cm · {KR_AVG_LABEL} {krAvg}cm</p>
             </div>
           </div>
 
@@ -250,7 +263,7 @@ export default function ChildHeightClient() {
           </div>
 
           <p className={styles.refNote}>
-            ⓘ 한국 성인 {sex === 'male' ? '남성' : '여성'} 평균 약 <strong>{krAvg}cm</strong>(참고치)
+            ⓘ 한국 {sex === 'male' ? '남성' : '여성'} {KR_AVG_LABEL} 약 <strong>{krAvg}cm</strong>
             대비 {result.diff >= 0 ? '+' : '−'}{Math.abs(result.diff).toFixed(1)}cm입니다. 단순 차이일 뿐 백분위·우열을 뜻하지 않습니다.
           </p>
 

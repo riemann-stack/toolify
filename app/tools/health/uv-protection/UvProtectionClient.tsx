@@ -1,8 +1,9 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useRef, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './uv-protection.module.css'
+import { SKIN_TYPES, baseBurnMinutes, effectiveSpf, fmtMinutes, type SkinTypeId } from './uvProtectionUtils'
 
 // ─────────────────────────────────────────────
 // 유틸
@@ -16,25 +17,6 @@ const round = (v: number, dp = 1) => Math.round(v * Math.pow(10, dp)) / Math.pow
 // ─────────────────────────────────────────────
 // 데이터
 // ─────────────────────────────────────────────
-type SkinTypeId = 'I' | 'II' | 'III' | 'IV' | 'V' | 'VI'
-const SKIN_TYPES: {
-  id: SkinTypeId
-  name: string
-  desc: string
-  swatch: string
-  medJm2: number
-  multiplier: number
-  koreanRatio: string
-  isKoreanCommon: boolean
-}[] = [
-  { id: 'I',   name: '타입 I',   desc: '매우 흰 피부, 항상 화상',          swatch: '#FFE4D6', medJm2: 200,  multiplier: 2.5, koreanRatio: '1% 미만',        isKoreanCommon: false },
-  { id: 'II',  name: '타입 II',  desc: '흰 피부, 보통 화상',                 swatch: '#FFD4BB', medJm2: 250,  multiplier: 3,   koreanRatio: '1~5%',          isKoreanCommon: false },
-  { id: 'III', name: '타입 III', desc: '한국인 평균, 가끔 화상',              swatch: '#E8B894', medJm2: 300,  multiplier: 4,   koreanRatio: '40~50%',         isKoreanCommon: true },
-  { id: 'IV',  name: '타입 IV',  desc: '약간 어두움, 드물게 화상',            swatch: '#C8956D', medJm2: 450,  multiplier: 5,   koreanRatio: '40~50%',         isKoreanCommon: true },
-  { id: 'V',   name: '타입 V',   desc: '어두운 피부, 매우 드물게 화상',       swatch: '#8D5524', medJm2: 600,  multiplier: 8,   koreanRatio: '5% 미만',        isKoreanCommon: false },
-  { id: 'VI',  name: '타입 VI',  desc: '매우 어두움, 거의 화상 X',           swatch: '#553A29', medJm2: 1000, multiplier: 12,  koreanRatio: '1% 미만',        isKoreanCommon: false },
-]
-
 type SpfId = 'none' | 'spf15' | 'spf30' | 'spf50' | 'spf70'
 const SPF_OPTIONS: { id: SpfId; spf: number; blocks: number; name: string; cls: string }[] = [
   { id: 'none',  spf: 1,  blocks: 0,    name: '없음',     cls: s.spfNone },
@@ -48,10 +30,10 @@ type EnvId = 'daily' | 'running' | 'beach' | 'hiking' | 'snow' | 'water' | 'driv
 const ENVIRONMENTS: { id: EnvId; name: string; mult: number; icon: string; cls: string; note: string }[] = [
   { id: 'daily',   name: '일상 외출',  mult: 1.0, icon: '🚶', cls: '',          note: '' },
   { id: 'running', name: '러닝·운동',  mult: 1.0, icon: '🏃', cls: '',          note: '땀으로 SPF 효과 단축' },
-  { id: 'beach',   name: '해변·수영장',mult: 1.5, icon: '🏖️', cls: s.envBeach,  note: '모래·물 반사로 자외선 약 50% 증가' },
-  { id: 'hiking',  name: '등산·고지대',mult: 1.2, icon: '⛰️', cls: s.envHiking, note: '고도 1km당 자외선 약 12% 증가' },
+  { id: 'beach',   name: '해변·수영장',mult: 1.5, icon: '🏖️', cls: s.envBeach,  note: '모래·물거품 반사와 긴 노출을 보수적으로 반영해 자외선 1.5배로 계산' },
+  { id: 'hiking',  name: '등산·고지대',mult: 1.2, icon: '⛰️', cls: s.envHiking, note: '고도 1km당 자외선 약 12% 증가 — 고도 미입력·1,700m 미만이면 +20%로 보수적 가정' },
   { id: 'snow',    name: '눈·스키',    mult: 1.8, icon: '⛷️', cls: s.envSnow,   note: '눈 반사로 자외선 약 80% 증가' },
-  { id: 'water',   name: '수상 스포츠',mult: 1.5, icon: '🚤', cls: s.envWater,  note: '물 반사로 자외선 약 50% 증가' },
+  { id: 'water',   name: '수상 스포츠',mult: 1.5, icon: '🚤', cls: s.envWater,  note: '물 반사와 그늘 없는 긴 노출을 보수적으로 반영해 자외선 1.5배로 계산' },
   { id: 'driving', name: '운전·실내',  mult: 0.5, icon: '🚗', cls: s.envDriving,note: '유리창 UVB 차단, UVA 일부 통과' },
 ]
 
@@ -87,18 +69,18 @@ function calcBurnTime(input: {
   const env = ENVIRONMENTS.find(x => x.id === input.envId)!
 
   const altitudeMult = 1 + Math.max(0, input.altitude / 1000) * 0.12
+  // '등산·고지대'의 1.2배 자체가 고도 보정(약 1,700m 가정)이므로 고도 슬라이더와 곱하지 않고
+  // 둘 중 큰 값만 적용 (이중 보정 방지, 1,700m 미만 입력 시에도 보수적으로 1.2배 유지)
+  const envAltMult = env.id === 'hiking' ? Math.max(env.mult, altitudeMult) : env.mult * altitudeMult
+  // 구름 보정은 보수적으로 최대 30%만 감쇠 (실제 두꺼운 먹구름은 더 많이 줄일 수 있음)
   const cloudMult = 1 - (Math.min(100, Math.max(0, input.cloudCover)) / 100) * 0.3
-  const adjustedUvi = Math.max(0.1, input.uvIndex * env.mult * altitudeMult * cloudMult)
+  const adjustedUvi = Math.max(0.1, input.uvIndex * envAltMult * cloudMult)
 
-  // 단순 공식
-  const t1 = (200 * skin.multiplier) / (3 * adjustedUvi)
-  // MED 기반
-  const irradiance = adjustedUvi * 0.025
-  const t2 = skin.medJm2 / (irradiance * 60)
-  const baseMin = Math.min(t1, t2)
+  // 단순식·MED 기반 식 중 짧은 쪽 (uvProtectionUtils — 본문 표와 같은 식)
+  const baseMin = baseBurnMinutes(adjustedUvi, skin)
 
   // SPF 적용 (도포량 50% 보수적)
-  const realSpf = 1 + 0.5 * (spf.spf - 1)
+  const realSpf = effectiveSpf(spf.spf)
   let withSpf = baseMin * realSpf
   if (input.isWaterContact && spf.spf > 1) withSpf *= 0.5
 
@@ -125,19 +107,11 @@ function calcBurnTime(input: {
   }
 }
 
-function fmtMinutes(min: number): string {
-  if (!Number.isFinite(min)) return '-'
-  if (min < 1) return '< 1분'
-  if (min < 60) return `${Math.round(min)}분`
-  const h = Math.floor(min / 60)
-  const m = Math.round(min - h * 60)
-  if (m === 0) return `${h}시간`
-  return `${h}시간 ${m}분`
-}
 function fmtRange(minVal: number, maxVal: number): string {
   if (!Number.isFinite(minVal) || !Number.isFinite(maxVal)) return '-'
-  if (maxVal < 60) return `약 ${Math.round(minVal)}~${Math.round(maxVal)}분`
-  if (minVal < 60 && maxVal >= 60) return `약 ${Math.round(minVal)}분 ~ ${fmtMinutes(maxVal)}`
+  const lo = Math.round(minVal), hi = Math.round(maxVal)
+  if (hi < 60) return `약 ${lo}~${hi}분`
+  if (lo < 60) return `약 ${lo}분 ~ ${fmtMinutes(maxVal)}`
   return `약 ${fmtMinutes(minVal)} ~ ${fmtMinutes(maxVal)}`
 }
 
@@ -158,18 +132,28 @@ export default function UvProtectionClient() {
   // 재도포 카운트다운
   const [reapplyStartedAt, setReapplyStartedAt] = useState<number | null>(null)
   const [now, setNow] = useState<number>(() => Date.now())
-  useEffect(() => {
-    if (reapplyStartedAt === null) return
-    const tid = setInterval(() => setNow(Date.now()), 1000)
-    return () => clearInterval(tid)
-  }, [reapplyStartedAt])
 
   // 복사
   const [copied, setCopied] = useState<boolean>(false)
+  const copyTimer = useRef<ReturnType<typeof setTimeout> | null>(null)
+  useEffect(() => () => { if (copyTimer.current) clearTimeout(copyTimer.current) }, [])
 
   const result = useMemo(() => calcBurnTime({
     uvIndex, skinTypeId, spfId, envId, altitude, cloudCover, isWaterContact,
   }), [uvIndex, skinTypeId, spfId, envId, altitude, cloudCover, isWaterContact])
+
+  // 1초 갱신 — 재도포 시점이 지나면 인터벌 정지('재도포 필요!' 상태에서 불필요한 리렌더 방지)
+  const reapplyMs = result.reapplyMinutes * 60 * 1000
+  useEffect(() => {
+    if (reapplyStartedAt === null) return
+    const dueAt = reapplyStartedAt + reapplyMs
+    const tid = setInterval(() => {
+      const t = Date.now()
+      setNow(t)
+      if (t >= dueAt) clearInterval(tid)
+    }, 1000)
+    return () => clearInterval(tid)
+  }, [reapplyStartedAt, reapplyMs])
 
   const env = ENVIRONMENTS.find(e => e.id === envId)!
 
@@ -205,7 +189,7 @@ export default function UvProtectionClient() {
       notes.push('자외선이 매우 강함 — 차단복·그늘·SPF 50 + 방수 권장')
     }
     if (envId === 'hiking' && altitude >= 1000) {
-      notes.push(`해발 ${altitude}m — 평지보다 자외선 ${round((altitude / 1000) * 12, 0)}% 증가`)
+      notes.push(`해발 ${altitude}m — 평지보다 자외선 ${round((altitude / 1000) * 12, 0)}% 증가 (고도 입력값으로 보정)`)
     }
     if (envId === 'driving') {
       notes.push('UVA는 유리창 통과 — 장시간 운전 시 SPF 30+ 사용 권장 (특히 왼팔·얼굴)')
@@ -239,7 +223,8 @@ export default function UvProtectionClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      if (copyTimer.current) clearTimeout(copyTimer.current)
+      copyTimer.current = setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -329,7 +314,7 @@ export default function UvProtectionClient() {
                   <div className={s.skinSwatch} style={{ background: t.swatch }} />
                   <p className={s.skinName}>{t.name}</p>
                   <p className={s.skinDesc}>{t.desc}</p>
-                  <span className={s.skinKoreanRatio}>한국인 {t.koreanRatio}</span>
+                  {t.isKoreanCommon && <span className={s.skinKoreanRatio}>한국인에 흔함</span>}
                 </button>
               ))}
             </div>
@@ -339,7 +324,7 @@ export default function UvProtectionClient() {
           <div className={s.card}>
             <div className={s.cardLabel}>
               <span>자외선 차단제 (SPF)</span>
-              <span className={s.cardLabelHint}>SPF 50이 한국 표준</span>
+              <span className={s.cardLabelHint}>국내 표시 상한 SPF50+</span>
             </div>
             <div className={s.spfGrid} role="group" aria-label="자외선 차단제 SPF 선택">
               {SPF_OPTIONS.map(o => (
@@ -407,7 +392,7 @@ export default function UvProtectionClient() {
           </details>
 
           {/* HERO */}
-          <div className={`${s.hero} ${result.uvLevel.heroCls}`}>
+          <div className={`${s.hero} ${result.uvLevel.heroCls}`} role="status">
             <p className={s.heroLead}>{result.spfApplied ? '재도포 전 보호 가능 시간' : '화상 위험 추정 시간'}</p>
             <p className={s.heroLevelLabel}>{result.uvLevel.icon} {result.uvLevel.level} (UV 지수 {round(result.adjustedUvi, 1)})</p>
             <div>
@@ -502,7 +487,7 @@ export default function UvProtectionClient() {
               ) : reapplyCountdown.isDue ? (
                 <>
                   <p className={s.reapplyValue} style={{ color: '#EA580C' }}>재도포 필요!<small>지금</small></p>
-                  <button className={s.reapplyBtn} onClick={() => setReapplyStartedAt(Date.now())} type="button">
+                  <button className={s.reapplyBtn} onClick={() => { setReapplyStartedAt(Date.now()); setNow(Date.now()) }} type="button">
                     다시 도포
                   </button>
                 </>
@@ -547,7 +532,7 @@ export default function UvProtectionClient() {
             },
             {
               cls: s.actBorderBeach, emoji: '🏖️', name: '해변·수영장',
-              uvGuide: ['🚨 가장 위험한 환경', '모래 반사 15% + 물 반사 25% = 자외선 약 50% 증가'],
+              uvGuide: ['🚨 가장 위험한 환경', '모래(최대 약 15%)·물거품(약 25%) 반사가 직사광에 더해짐 — 본 도구는 1.5배로 보수적 보정'],
               gear: ['SPF 50 이상 + 방수(Water Resistant 80분)', '래시가드·수영복 활용', '챙 넓은 모자·UV 차단 비치 우산'],
               caution: ['1시간마다 재도포 (수영 후 즉시)', '12~14시 직사광 피하기', '얕은 물에서도 자외선 통과'],
             },
@@ -615,7 +600,7 @@ export default function UvProtectionClient() {
                   <tr><td>차단제 없음</td><td>0%</td><td>100%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>—</td></tr>
                   <tr><td>SPF 15</td><td>93.3%</td><td>6.7%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>일상 산책</td></tr>
                   <tr><td>SPF 30</td><td>96.7%</td><td>3.3%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>일반 외출</td></tr>
-                  <tr className={s.highlightRow}><td>SPF 50</td><td>98.0%</td><td>2.0%</td><td style={{ color: '#059669', fontWeight: 700 }}>한국 표준</td></tr>
+                  <tr className={s.highlightRow}><td>SPF 50</td><td>98.0%</td><td>2.0%</td><td style={{ color: 'var(--success)', fontWeight: 700 }}>국내 표시 상한(SPF50+)</td></tr>
                   <tr><td>SPF 70+</td><td>98.6%</td><td>1.4%</td><td style={{ color: 'var(--muted)', fontWeight: 500 }}>야외 장시간</td></tr>
                 </tbody>
               </table>
@@ -649,7 +634,7 @@ export default function UvProtectionClient() {
                         <span className={s.uvLevelDot} style={{ background: lv.color }} />
                         <span style={{ color: lv.color, fontWeight: 700 }}>{lv.icon} {lv.level}</span>
                       </td>
-                      <td style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: '"Noto Sans KR", sans-serif' }}>{lv.advice}</td>
+                      <td style={{ color: 'var(--muted)', fontWeight: 500, fontFamily: 'var(--font-sans)' }}>{lv.advice}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -668,9 +653,9 @@ export default function UvProtectionClient() {
                 <thead>
                   <tr>
                     <th scope="col">피부 타입</th>
-                    <th scope="col">한국인 비율</th>
+                    <th scope="col">MED (J/㎡)</th>
                     <th scope="col">무보호 시간</th>
-                    <th scope="col">SPF 30 적용</th>
+                    <th scope="col">SPF 30 적용 (재도포 전)</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -680,9 +665,9 @@ export default function UvProtectionClient() {
                     return (
                       <tr key={t.id} className={t.isKoreanCommon ? s.highlightRow : ''}>
                         <td>{t.name}</td>
-                        <td>{t.koreanRatio}</td>
+                        <td>{t.medJm2}</td>
                         <td>{fmtMinutes(r1.base)}</td>
-                        <td>{fmtMinutes(r2.withSpf)}</td>
+                        <td>{r2.fullyCapped ? `약 ${fmtMinutes(r2.reapplyMinutes)} (재도포 주기)` : fmtRange(r2.displayMin, r2.displayMax)}</td>
                       </tr>
                     )
                   })}
@@ -723,9 +708,9 @@ export default function UvProtectionClient() {
                 { s: '가을 (9~11월)',r: '4~7',  level: '보통~높음',   c: '#A16207' },
                 { s: '겨울 (12~2월)',r: '1~4',  level: '낮음~보통',   c: '#059669' },
               ].map((r, i) => (
-                <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
+                <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${r.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
                   <p style={{ fontSize: 13, color: 'var(--muted)', marginBottom: 4, fontWeight: 600 }}>{r.s}</p>
-                  <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 18, color: r.c }}>{r.r}</p>
+                  <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 18, color: r.c }}>{r.r}</p>
                   <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 2 }}>{r.level}</p>
                 </div>
               ))}
@@ -735,8 +720,8 @@ export default function UvProtectionClient() {
       )}
 
       {/* 공식 자료 출처 (모든 탭 공통 푸터) */}
-      <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 12, padding: '12px 16px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
-        <p style={{ fontWeight: 700, color: '#0891B2', marginBottom: 6, fontFamily: '"Noto Sans KR", sans-serif' }}>공식 자료 출처</p>
+      <div style={{ background: 'rgba(8,145,178,0.05)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 12, color: 'var(--muted)', lineHeight: 1.85 }}>
+        <p style={{ fontWeight: 700, color: '#0891B2', marginBottom: 6, fontFamily: 'var(--font-sans)' }}>공식 자료 출처</p>
         <a href="https://www.weather.go.kr/w/forecast/life/life-weather-index.do" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>기상청 자외선지수</a>
         {' · '}<a href="https://www.epa.gov/sunsafety/uv-index-scale-0" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>EPA UV Index</a>
         {' · '}<a href="https://www.who.int/health-topics/ultraviolet-radiation" target="_blank" rel="noopener noreferrer" style={{ color: '#0891B2', textDecoration: 'underline' }}>WHO UV</a>

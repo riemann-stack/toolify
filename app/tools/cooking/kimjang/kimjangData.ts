@@ -73,24 +73,35 @@ export interface KimchiVariant {
   reduceRatio: number
   /** 이 김치 1kg당 추가 재료 (배추김치 양념과 별도) — 없으면 빈 객체 */
   extraIngredients: Record<string, number>   // ingredient id → amount
+  /** 양념·젓갈 사용량 — 같은 무게의 배추김치 대비 비율 (추정치).
+   *  깍두기·총각은 무가 수분이 많아 양념이 적게 들고, 파·갓김치는 배추김치와 비슷하게 듦 */
+  seasoningRatio: number
+  /** 이 김치에는 넣지 않는 양념 (동치미: 고춧가루·젓갈·찹쌀풀 없음) */
+  skipSeasoning?: string[]
   desc: string
 }
 
 export const KIMCHI_VARIANTS: KimchiVariant[] = [
   { id: 'kkakdugi', name: '깍두기',     cabbageEquiv: 1.0, reduceRatio: 0.15,
     extraIngredients: { mu: 1.5 },  // 무 1.5개 추가 per kg
+    seasoningRatio: 0.6,
     desc: '무 베이스 — 김치찌개·곰탕에 잘 어울림' },
   { id: 'chonggak', name: '총각김치',   cabbageEquiv: 1.0, reduceRatio: 0.10,
     extraIngredients: { mu: 1.2 },
+    seasoningRatio: 0.6,
     desc: '알타리무 사용. 식감 살림' },
   { id: 'dongchimi', name: '동치미',    cabbageEquiv: 1.0, reduceRatio: 0.10,
     extraIngredients: { mu: 1.0 },
+    seasoningRatio: 0.3,
+    skipSeasoning: ['gochugaru', 'myeoljeot', 'saeu', 'kkanari', 'chapssal'],
     desc: '시원한 국물김치. 냉면·만두에 곁들임' },
   { id: 'pakimchi', name: '파김치',     cabbageEquiv: 1.0, reduceRatio: 0.05,
     extraIngredients: { jjokpa: 1.5 },
+    seasoningRatio: 1.0,
     desc: '쪽파 베이스. 매콤·짭짤' },
   { id: 'gatkimchi', name: '갓김치',    cabbageEquiv: 1.0, reduceRatio: 0.05,
     extraIngredients: { gat: 1.5 },
+    seasoningRatio: 1.0,
     desc: '여수 돌산 갓이 유명. 톡 쏘는 맛' },
 ]
 
@@ -132,11 +143,17 @@ export function calcIngredients(
     for (const vid of variants) {
       const v = KIMCHI_VARIANTS.find(x => x.id === vid)
       if (!v) continue
+      // 부가 김치 양 ≈ reduceRatio * (감산 전)포기 * 2.5kg
+      const variantKg = v.reduceRatio * vBase * 2.5
       const extra = v.extraIngredients[ing.id]
       if (extra) {
-        // extra는 부가 김치 1kg당 — 부가 김치 양 ≈ reduceRatio * (감산 전)포기 * 2.5kg
-        const variantKg = v.reduceRatio * vBase * 2.5
+        // extra는 부가 김치 1kg당 주재료
         amount += extra * variantKg
+      }
+      // 양념·젓갈도 부가 김치 양만큼 추가 — 배추김치 1포기(≈2.5kg) 양념 × (부가 김치 kg ÷ 2.5) × 김치별 비율
+      // (자동 감산으로 배추를 줄여도 부가 김치 양념이 빠지지 않게)
+      if ((ing.cat === '양념' || ing.cat === '젓갈·액젓') && !v.skipSeasoning?.includes(ing.id)) {
+        amount += ing.perCabbageAmt * (variantKg / 2.5) * v.seasoningRatio
       }
     }
     return { ing, amount }

@@ -1,9 +1,18 @@
 export interface Tool {
   href:  string
+  /** 이모지 — OG·레거시 호환용으로만 남김(스펙 §12). 화면 크롬엔 UiIcon/CatIcon */
   icon:  string
   name:  string
   desc:  string
+  /** @deprecated 수기 라벨(NEW 105/200 인플레). 화면 표시는 lib/toolSignals.ts `toolBadge()`가 결정한다:
+   *  HOT = app/popular-tools.json(GA4 최근 28일 상위), NEW = 공개일(addedAt) 기준 NEW_BADGE_DAYS 이내.
+   *  새 코드는 이 필드를 읽지 말 것 — 통폐합 단계에서 일괄 제거 예정 */
   badge?: 'hot' | 'new'
+  /** 공개일 'YYYY-MM-DD' — 생략하면 lib/siteDates.json(git 첫 커밋, scripts/gen-site-dates.mjs 생성)을 쓴다.
+   *  아직 커밋 전인 새 도구에만 적는다(지어낸 날짜 금지) */
+  addedAt?: string
+  /** 허브 하위 분류 이름 — 생략하면 lib/categoryGuides.ts의 그룹 정의(hrefs)를 따른다. 어느 쪽에도 없으면 '그 밖의 도구' */
+  group?: string
 }
 
 export interface Category {
@@ -27,7 +36,8 @@ export const categories: Category[] = [
       { href: '/tools/finance/loan',     icon: '💳', name: '대출이자 계산기',      desc: '원리금균등·원금균등부터 갈아타기·중도상환·금리 변동까지. 매달 얼마 나갈지 정확하게.' },
       { href: '/tools/finance/dsr',      icon: '🏦', name: 'DSR·LTV·스트레스DSR 계산기', desc: '연소득·집값·금리 한 번 입력으로 DSR·LTV·스트레스DSR 동시 계산. 변동/혼합/고정 금리별 최대 대출 한도까지.', badge: 'new' },
       { href: '/tools/finance/compound', icon: '📈', name: '복리 계산기',          desc: '거치·적립·증액·인플레이션 반영. 시간이 만드는 자산을 시나리오별로 비교.' },
-      { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 시 평단가가 어디까지 내려갈지 + 회복까지 필요한 상승률을 즉시.' },
+      { href: '/tools/finance/deposit-interest', icon: '🏦', name: '예·적금 이자 계산기', desc: '정기예금·적금 세후 이자와 만기 수령액. 단리·월복리, 적금↔예금 금리 환산, 비과세까지.' },
+      { href: '/tools/finance/stock',    icon: '📉', name: '주식 물타기 계산기',   desc: '추가 매수 시 평단가·회복 상승률을 즉시 계산 + 매매 전 투자 심리 7대 편향 가이드.' },
       { href: '/tools/finance/vat',      icon: '🧾', name: '부가세 계산기',        desc: '공급가·세액·합계 자유 역산. 견적서·세금계산서 그대로 쓰는 사업자·프리랜서 도구.' },
       { href: '/tools/finance/dividend', icon: '💰', name: '월배당 목표 자산 계산기', desc: '매달 받고 싶은 배당액에서 거꾸로 — 필요한 원금과 월 적립액, ISA·연금 절세까지.', badge: 'hot' },
       { href: '/tools/finance/inheritance', icon: '🏛️', name: '상속·증여세 계산기', desc: '관계별 공제·10년 합산·배우자 공제 반영 정확한 세액 + 분산 증여 시뮬레이션.' },
@@ -35,14 +45,17 @@ export const categories: Category[] = [
       { href: '/tools/finance/car-tax',  icon: '🧾', name: '자동차 세금 종합 계산기', desc: '취득세·자동차세·유류세·공채·환경부담금까지 — 자동차 관련 모든 세금 한 화면에. 친환경차·다자녀·장애인 감면 + 5/10년 누적 시뮬.', badge: 'new' },
       { href: '/tools/finance/historical-money', icon: '💰', name: '한국 화폐가치 환산기', desc: '1960년 50환, 1980년 1만원의 현재 가치는? 圓·환·원 화폐사 + 1945~2026 구매력 환산. 짜장면·집값·월급 시대별 비교.', badge: 'new' },
       { href: '/tools/finance/real-estate', icon: '🏘️', name: '부동산 수익률 계산기', desc: '매매가·임대·대출 레버리지 반영한 자기자본 수익률. 진짜 남는 돈을 확인.' },
+      { href: '/tools/finance/acquisition-tax', icon: '🏠', name: '부동산 취득세 계산기', desc: '매매·증여·상속·신축 취득세·교육세·농특세. 다주택 중과·생애최초 감면까지 반영.' },
+      { href: '/tools/finance/brokerage-fee', icon: '🤝', name: '중개보수(복비) 계산기', desc: '매매·전세·월세 법정 상한 복비. 월세 환산·한도액·부가세·오피스텔까지.' },
       { href: '/tools/finance/capital-gains-tax', icon: '🏠', name: '1주택 양도소득세 계산기', desc: '1세대 1주택 양도세를 12억 비과세·고가주택 안분·장기보유특별공제(최대 80%)·단기 중과세율까지 단계별로. 2026 국세청 기준.', badge: 'new' },
       { href: '/tools/finance/property-holding-tax', icon: '🏡', name: '주택 보유세 계산기', desc: '공시가격으로 재산세·종합부동산세·도시지역분·농특세까지. 1세대 1주택 특례와 고령·장기보유 세액공제 반영한 2026 보유세 추정.', badge: 'new' },
       { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기', desc: '84점 만점(무주택 32 + 부양가족 35 + 통장 17) 자동 + 최근 평균 당첨 가점 비교 + 가점 향상 시뮬 + 5가지 특공 자가진단 (2025 기준).', badge: 'new' },
       { href: '/tools/finance/cost-rate', icon: '🍽️', name: '음식점 원가율 계산기', desc: '재료비·배달 수수료·포장재 반영한 실질 원가율과 마진. 메뉴 가격 결정에 바로.' },
       { href: '/tools/finance/installment', icon: '💳', name: '카드 할부 계산기', desc: '할부 개월수별 진짜 이자와 일시불·무이자 비교. 카드 선택의 기준을 숫자로.' },
       { href: '/tools/finance/4-insurance', icon: '🏥', name: '4대보험 계산기', desc: '국민연금·건강·고용·산재 — 근로자/사업주 부담 정확히. 알바·프리랜서 비교까지.' },
+      { href: '/tools/finance/hourly-pay', icon: '⏰', name: '알바 급여·주휴수당 계산기', desc: '시급·근무시간으로 주휴수당·월급 환산, 야간·휴일 가산과 3.3%·4대보험 실수령.' },
+      { href: '/tools/finance/annual-leave', icon: '🏖️', name: '연차 계산기', desc: '입사일로 발생·잔여 연차와 연차수당, 회계연도 비례·퇴사 정산까지.' },
       { href: '/tools/finance/ipo-deposit', icon: '💰', name: '공모주 증거금 계산기', desc: '증거금 ↔ 예상 주수 양방향 + 5사6입·청약 한도 자동. 청약일 D-day 메모.', badge: 'new' },
-      { href: '/tools/finance/stock-decision', icon: '🧠', name: '주식 매도·매수 심리 진단', desc: '팔까 살까 망설일 때, 행동경제학 7대 편향 자가진단으로 내 결정에 끼어든 감정을 점검. 투자 권유·종목 추천 X.', badge: 'new' },
       { href: '/tools/finance/savings', icon: '💰', name: '저축액 계산기', desc: '수입·지출 → 저축률과 한국 평균 비교 + 6 항아리 분배. 청년도약·ISA 절세 시뮬.', badge: 'new' },
       { href: '/tools/finance/wealth-rank', icon: '🏆', name: '자산 순위 계산기', desc: '내 순자산이 상위 몇 %? 전국·시도·연령대·세계 기준 + 상위 10%·1% 진입선. 2025 가계금융복지조사·UBS 기반.', badge: 'new' },
       { href: '/tools/finance/auction', icon: '🏛️', name: '경매 비용 계산기', desc: '낙찰가 + 취득세·명도·체납·수리·대출까지 진짜 들어가는 비용을 시나리오별로.', badge: 'new' },
@@ -91,13 +104,12 @@ export const categories: Category[] = [
       { href: '/tools/cooking/ramen', icon: '🍜', name: '라면 물양 계산기', desc: '라면 개수·국물 농도·토핑별 권장 물양과 시간. 신라면·짜파게티·불닭·비빔면 전부.', badge: 'new' },
       { href: '/tools/cooking/brew', icon: '☕', name: '커피 브루잉 계산기', desc: '핸드드립·콜드브루·에어로프레스 6가지 추출법 + 비율·온도·시간·분쇄도 매트릭스.', badge: 'new' },
       { href: '/tools/cooking/tea', icon: '🍵', name: '차 우리기 계산기', desc: '녹차·말차·우롱·홍차·보이·허브 9종 + 온도/시간/비율 + 냉침 모드와 떫음 게이지.', badge: 'new' },
-      { href: '/tools/cooking/baking-recipe', icon: '🧁', name: '제과 레시피 계산기', desc: '마들렌·파운드·쿠키·머핀·마카롱 등 10종 비율 자동 + 식감 보정·틀 용량 환산.', badge: 'new' },
+      { href: '/tools/cooking/baking-recipe', icon: '🧁', name: '제과 레시피 계산기', desc: '마들렌·파운드 등 제과 10종 비율 + 식감 보정·틀 용량·케이크 팬 호수 배율.', badge: 'new' },
       { href: '/tools/cooking/egg-timer', icon: '🥚', name: '계란 삶는 시간 계산기', desc: '반숙·완숙·잼노른자 8단계 익힘 + 계란 크기·시작 온도 자동 보정 + 실시간 타이머.', badge: 'new' },
       { href: '/tools/cooking/kimjang', icon: '🥬', name: '김장 양 계산기', desc: '가족 수·소비·기간만 알려주면 배추 포기·양념·비용 자동. KAMIS 실시간 시세 연동.', badge: 'new' },
       { href: '/tools/cooking/holiday-table', icon: '🍱', name: '명절 상차림 계산기', desc: '설날·추석·제사 × 차례상·간소·식사 + 인원 입력 → 50종 품목 수량·비용 자동. KAMIS 실시간 시세 + 5열 차례상 배치.', badge: 'new' },
       { href: '/tools/cooking/fruit-syrup', icon: '🍯', name: '과일청 담그기 계산기', desc: '매실청·레몬청·유자청 설탕 비율(1:1) + 필요 유리병 크기·숙성 D-day 일정. 제철 과일 캘린더와 보관 궁합까지.', badge: 'new' },
       { href: '/tools/cooking/baby-porridge', icon: '🍚', name: '이유식 배죽 물양 계산기', desc: '10배죽~진밥 물양 자동 — 불린쌀·생쌀·쌀가루·밥 기준 환산 + 월령별 한 끼 양·큐브 소분 역산.', badge: 'new' },
-      { href: '/tools/cooking/cake-pan', icon: '🎂', name: '케이크 팬 호수 변환', desc: '1호→3호 레시피 배율을 팬 부피 기준 정확 계산 — 원형·사각·무스링 + 호수↔인치·인원·굽기 보정.', badge: 'new' },
     ],
   },
   {
@@ -119,7 +131,6 @@ export const categories: Category[] = [
       { href: '/tools/life/laundry-dry',   icon: '🧺', name: '빨래 건조 시간 계산기', desc: '온도·습도·소재별 가장 빠른 건조 조합 + 전기료 비교까지.' },
       { href: '/tools/life/cleaning',      icon: '🧽', name: '상황별 청소 세제 계산기', desc: '화장실·주방·기름때 상황별 추천 세제·희석량 + 락스+산성=염소가스 등 혼합 금지 안전 가이드.', badge: 'new' },
       { href: '/tools/life/monty-hall',    icon: '🚪', name: '몬티홀 시뮬레이터', desc: '바꿔야 유리한 진짜 이유. 3·10·100·1000문 시뮬과 베이즈 추론으로 직관을 깨다.' },
-      { href: '/tools/life/fart-risk',     icon: '💨', name: '방귀 위험도 계산기', desc: '가스량·냄새·복부팽만 3축 점수로 원인 진단 + 저FODMAP 대체와 증상별 대처.' },
       { href: '/tools/life/unit-price',    icon: '🏷️', name: '단가 비교 계산기',        desc: '마트·편의점·코스트코 가격을 1ml·1g·1개당 실질 단가로 즉시. 1+1·2+1도 정확히.' },
       { href: '/tools/life/gift-money',    icon: '🧧', name: '축의금·부의금 계산기', desc: '관계·참석 여부로 결혼식 축의금·장례식 부의금 적정액 추천 + 홀수 관례·봉투 문구·신권 매너까지.', badge: 'new' },
       { href: '/tools/life/vin-decoder',   icon: '🚗', name: '차대번호(VIN) 해석기', desc: '17자리 차대번호 자리별 분해 — 제조국·제조사·연식·공장 해석 + 체크 디지트 검증, 연식 코드 변환, 제조사 코드 사전. (이력 조회 아님)', badge: 'new' },
@@ -132,20 +143,17 @@ export const categories: Category[] = [
     tools: [
       { href: '/tools/sports/fight-weight',    icon: '🥊', name: '격투기 체급 계산기',     desc: '복싱·UFC·MMA 체급별 감량 계획과 D-day 일정 + 위험도 자동 경고.' },
       { href: '/tools/sports/baseball-stats',  icon: '⚾', name: '야구 타율 계산기',   desc: '타율·출루율·장타율·OPS·ERA·WHIP 즉시 계산 + KBO 평균 비교.' },
-      { href: '/tools/sports/football-points', icon: '⚽', name: '축구 승점 계산기',  desc: '남은 경기 시나리오로 목표 승점 달성 가능성 + 라이벌 추격 자동 계산.' },
-      { href: '/tools/sports/league-scenarios', icon: '⚽', name: '축구 순위 경우의 수 계산기', desc: '조별리그·잔여 경기 순위 경우의 수 — 자력/타력 진출 조건과 대회별 타이브레이커(월드컵·K리그·챔스 골득실·승자승).', badge: 'new' },
+      { href: '/tools/sports/league-scenarios', icon: '⚽', name: '축구 순위·승점 경우의 수 계산기', desc: '월드컵·K리그·챔스 경우의 수·자력/타력 진출 조건·타이브레이커 + 시즌 승점 예측·라이벌 추격.', badge: 'new' },
       { href: '/tools/sports/formation',       icon: '⚽', name: '축구 포메이션 생성기', desc: '5·7·9·11인제 22+ 포메이션 + 명단 칩 입력으로 그라운드 위에 시각화. PNG 다운로드.', badge: 'new' },
-      { href: '/tools/sports/pace',            icon: '🏃', name: '러닝 페이스 계산기',     desc: '페이스 ↔ 완주 시간 1줄 입력 + 트레드밀 시속과 5km·10km·하프·풀 스플릿.' },
+      { href: '/tools/sports/pace',            icon: '🏃', name: '러닝 페이스 계산기',     desc: '페이스 ↔ 완주 시간·트레드밀 시속·스플릿 + 레이스 플랜(구간 전략·코스 고도·통과 시각).' },
       { href: '/tools/sports/race-predictor',  icon: '🏅', name: '마라톤 기록 계산기', desc: '5km·10km·하프 기록으로 풀코스 예상 시간 + 기온·고도·연령 자동 보정.', badge: 'hot' },
-      { href: '/tools/sports/race-plan',       icon: '🏁', name: '레이스 페이스 플래너', desc: '구간별 페이스 + 코스 고도(언덕) 반영 완주 시간·통과 예상 시각. 균등·네거티브 스플릿 자동 분배.', badge: 'new' },
       { href: '/tools/sports/hyrox',           icon: '🏋️', name: '하이록스(HYROX) 계산기', desc: '8km 런 + 8개 스테이션 + 록스존으로 완주 시간 예측 + 목표 페이스 역산 + Open/Pro 부문별 중량표.', badge: 'new' },
       { href: '/tools/sports/hiking-time',     icon: '🥾', name: '등산 시간 계산기',   desc: '한국 100대 명산 35+ 프리셋 + 체력·날씨 보정. 일몰 전 하산 자동 진단.', badge: 'new' },
       { href: '/tools/sports/one-rm',          icon: '🏋️', name: '1RM 계산기',             desc: '5RM·8RM 기록으로 진짜 최대 무게 추정 + RPE 보정과 워밍업 5세트 자동.' },
       { href: '/tools/sports/strength-level',  icon: '🏋️', name: '파워리프팅 계산기', desc: '3대 합·Wilks·DOTS·IPF GL 점수 + 체급 레벨, 대회 1·2·3차 시도 전략, 원판(IPF 색상) 세팅, 합계·점수 추이 기록.', badge: 'new' },
       { href: '/tools/sports/climbing-grade',  icon: '🧗', name: '클라이밍 등급 변환기', desc: '볼더링 V↔Font, 루트 YDS↔French↔UIAA 난이도 환산 + 입문~엘리트 밴드·변환표.', badge: 'new' },
-      { href: '/tools/sports/interval-training',icon: '🏃‍♂️', name: '인터벌 훈련 계산기',   desc: 'VDOT 기반 정확한 인터벌 페이스 + 4~16주 풀 트레이닝 스케줄.' },
+      { href: '/tools/sports/interval-training',icon: '🏃‍♂️', name: '인터벌 훈련 계산기',   desc: 'VDOT 인터벌 페이스·야소 800·4~16주 스케줄 + 이지·LSD 페이스·존2 심박.' },
       { href: '/tools/sports/buildup',         icon: '📈', name: '러닝 빌드업 계산기', desc: '거리·페이스·구간·프로파일 → 구간별 페이스표와 워치 포맷 자동 + 안전성 체크.', badge: 'new' },
-      { href: '/tools/sports/lsd',             icon: '🏃', name: 'LSD·이지런 페이스 계산기', desc: '최근 기록으로 이지 페이스 범위·존2 심박 + 회색지대(정크 마일) 경고 + 롱런 보급 플래너.', badge: 'new' },
       { href: '/tools/sports/vo2max',          icon: '🫁', name: 'VO₂ Max 계산기', desc: '쿠퍼·1.5마일·락포트·노르웨이 등 6가지 방법으로 심폐 체력 추정 + 동년배 5단계 등급 + 마라톤 예상 시간 + 강도별 트레이닝 페이스.', badge: 'new' },
       { href: '/tools/sports/carb-loading',    icon: '🍚', name: '카보로딩 계산기', desc: '체중·대회 유형으로 대회 전 하루 탄수화물 목표량(g)과 날짜별 플랜 + 밥·바나나·젤 음식 환산. IOC·ACSM 기준.', badge: 'new' },
       { href: '/tools/sports/ftp-zones',       icon: '🚴', name: 'FTP·파워존 계산기', desc: '20분·램프·8분 테스트로 FTP 추정 + Coggan 7단계 파워존(W)·W/kg 등급·즈위프트 카테고리. 실내 사이클·즈위프트용.', badge: 'new' },
@@ -172,8 +180,7 @@ export const categories: Category[] = [
       { href: '/tools/interior/flooring',      icon: '🪵', name: '바닥재 계산기',       desc: '장판·강화마루·강마루·원목·데코타일 박스 수와 비용 견적.' },
       { href: '/tools/interior/molding',       icon: '📏', name: '몰딩 계산기',           desc: '천장 몰딩·걸레받이·띠몰딩의 길이·개수·비용.' },
       { href: '/tools/interior/roof',          icon: '🏠', name: '지붕 면적 계산기',           desc: '박공·모임·외쪽·평지붕·맞배 5가지 + 물매·처마·로스율 → 자재 면적과 단가.', badge: 'new' },
-      { href: '/tools/interior/screw',         icon: '🔩', name: '나사 규격 계산기',     desc: 'M·UNC·UNF·PT·목재·석고 7종 + 탭드릴·관통홀·렌치 사이즈.', badge: 'new' },
-      { href: '/tools/interior/bolt-wrench',   icon: '🔧', name: '볼트 스패너 계산기', desc: 'M3~M24 + ISO/DIN/KS vs 옛 JIS 비교 + 알렌렌치·와셔·너트·토크 등급.', badge: 'new' },
+      { href: '/tools/interior/screw',         icon: '🔩', name: '나사 규격 계산기',     desc: 'M·UNC·UNF·PT·목재·석고 7종 탭드릴·관통홀 + 볼트 스패너·알렌·와셔·토크.', badge: 'new' },
       { href: '/tools/interior/pipe',          icon: '🔧', name: '배관 규격 변환기',             desc: 'A호칭·인치·DN 통합 + 강관·PVC·PB·XL·동관·STS 6재질 실제 OD/ID와 유량.', badge: 'new' },
       { href: '/tools/interior/wire',          icon: '⚡', name: '전선 굵기 계산기',     desc: '사용 가전 W에 맞는 전선 굵기와 차단기 + 전압강하 자동. KEC 2021 기준.', badge: 'new' },
       { href: '/tools/interior/rebar',         icon: '🏗️', name: '철근 중량 계산기',             desc: 'KS D 3504 12규격 + 길이별 본수·중량·톤·단가 + 트럭 적재 매칭.', badge: 'new' },
@@ -199,7 +206,7 @@ export const categories: Category[] = [
     id: 'date', icon: '📅', name: '날짜·시간', color: 'var(--cat-date)', ink: 'var(--cat-date-ink)', tagline: '만 나이 · D-Day · 전역일',
     tools: [
       { href: '/tools/date/server-time', icon: '⏱️', name: '실시간 서버 시간', desc: '수강신청·티켓팅을 위한 NTP 동기화 KST를 밀리초로. 카운트다운·알림음 포함.', badge: 'new' },
-      { href: '/tools/date/age',         icon: '🎂', name: '나이 계산기', desc: '만 나이·D-day·1만일 기념·생일 카운트다운 + 인생 시간 통계까지 한 화면에.' },
+      { href: '/tools/date/age',         icon: '🎂', name: '나이 계산기', desc: '만 나이·D-day·1만일 기념·인생 통계·기대수명 기준 남은 시간까지 한 화면에.' },
       { href: '/tools/date/dday',        icon: '📅', name: 'D-Day 계산기', desc: '여러 D-day 저장 + 진행률·평일·영업일 페이스 + 반복 D-day.' },
       { href: '/tools/date/holiday-bridge', icon: '🌉', name: '징검다리 연휴 플래너', desc: '보유 연차로 2026~2030 공휴일·대체공휴일에 맞춰 가장 길게 쉬는 연차 배치 추천 + 효율배수·공짜 연휴·미니 캘린더.', badge: 'new' },
       { href: '/tools/date/military',    icon: '🎖️', name: '군대 전역일 계산기', desc: '입대일 기준 전역일과 복무율을 시각화.' },
@@ -208,7 +215,6 @@ export const categories: Category[] = [
       { href: '/tools/date/jet-lag',     icon: '✈️', name: '시차 적응 계산기',          desc: '여행 전·중·후 시차 적응 일정과 수면 타이밍 자동 가이드.' },
       { href: '/tools/date/timezone',    icon: '🌐', name: '시간대(타임존) 변환기',     desc: 'UTC·KST·EST·PST·BST·시드니·인도(+5:30)·이란·네팔(+5:45) 동시 변환. DST 자동, 회의 슬롯 추천.', badge: 'new' },
       { href: '/tools/date/schengen',    icon: '🇪🇺', name: '쉥겐 체류일 계산기',         desc: '유럽 무비자 90/180일 규칙 — 출입국 기록으로 남은 체류일·연속 체류·다음 입국 가능일 자동 계산.', badge: 'new' },
-      { href: '/tools/date/life-time',   icon: '⏳', name: '생애 시간 계산기',         desc: '기대수명 기준 살아온 시간·앞으로의 시간을 행동 가치로 환산해 보여줍니다.', badge: 'hot' },
     ],
   },
   {
@@ -216,10 +222,9 @@ export const categories: Category[] = [
     tools: [
       /* 🎵 음악 */
       { href: '/tools/art/vocal-range', icon: '🎤', name: '음역대 측정기', desc: '마이크로 실시간 음정 감지로 내 최저·최고음 측정 + 한국 노래 30+곡 키 매칭.', badge: 'new' },
-      { href: '/tools/art/bpm',       icon: '🎛️', name: 'BPM 딜레이 계산기', desc: 'BPM만 입력하면 음표별 딜레이 타임(ms) 자동 계산. 프리딜레이 참고값까지.' },
       { href: '/tools/art/frequency', icon: '🎵', name: '주파수↔음정 변환기',    desc: 'Hz ↔ 음정 변환 + MIDI 번호와 파장 계산. 튜닝과 사운드 디자인용.' },
       { href: '/tools/art/capo',      icon: '🎸', name: '기타 카포 계산기', desc: '원곡 키와 카포 위치로 변환된 코드 + 쉬운 코드 추천.' },
-      { href: '/tools/art/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '박자에 맞춰 탭하면 BPM 자동 측정 + 메트로놈.', badge: 'hot' },
+      { href: '/tools/art/tap-tempo', icon: '👆', name: '탭 템포 계산기',         desc: '박자에 맞춰 탭하면 BPM 자동 측정 + 메트로놈·음표별 딜레이 ms 계산.', badge: 'hot' },
       { href: '/tools/art/chord',     icon: '🎹', name: '코드 구성음 계산기',     desc: 'Cmaj7·Dm7 등 코드의 구성음과 역방향 검색 + 다이아토닉 코드표.' },
       { href: '/tools/art/scale',     icon: '🎼', name: '스케일 음계 계산기',     desc: '12키 × 12스케일 + 피아노·기타 지판 시각화 + 7 모드 비교와 소리 재생.', badge: 'new' },
       /* 🎨 디자인·미술 */
@@ -249,8 +254,7 @@ export const categories: Category[] = [
       { href: '/tools/edu/cognitive-test',     icon: '🧠', name: '인지 능력 테스트',     desc: '반응속도·스트룹·이중 과제로 집중력과 인지 처리 속도를 게임처럼 측정.' },
       { href: '/tools/edu/fermi-estimate',     icon: '🧮', name: '페르미 추정 계산기',   desc: '막막한 문제를 변수로 쪼개고 시나리오로 비교해 대략 답을 추정하는 사고력 훈련.' },
       { href: '/tools/edu/gpa-converter',       icon: '🎓', name: '학점(GPA) 환산기',     desc: '한국 4.5·4.3 ↔ 미국 4.0 ↔ 영국 학위 등급. WES·비례·평어 3방식 동시 비교 + 한국 대학별 만점 가이드.', badge: 'new' },
-      { href: '/tools/edu/sci-units',           icon: '🔬', name: '과학 단위 변환기',     desc: 'SI 접두어·과학적/공학적 표기 상호 변환 + 옹스트롬·광년·eV 등 과학 스케일 단위 환산 + 주요 물리 상수표.', badge: 'new' },
-      { href: '/tools/edu/sig-figs',            icon: '📏', name: '유효숫자·오차 계산기', desc: '측정값 유효숫자 자동 판별·반올림 + 절대·상대·백분율오차 + 두 측정값의 오차 전파(±·×·÷·거듭제곱). 실험 보고서용.', badge: 'new' },
+      { href: '/tools/edu/sig-figs',            icon: '📏', name: '유효숫자·과학적 표기 계산기', desc: '유효숫자 판별·반올림·오차 전파 + 과학적 표기·SI 접두어·과학 단위 환산·물리 상수표.', badge: 'new' },
       { href: '/tools/edu/nesin-5grade',        icon: '📊', name: '내신 5등급제 계산기', desc: '2025 고1부터 적용 내신 5등급 이수단위 가중 평균 + 구 9등급 환산 병기 + 성취도 A~E. 석차·재적수·단위만 입력.', badge: 'new' },
     ],
   },
@@ -258,13 +262,11 @@ export const categories: Category[] = [
     id: 'dev', icon: '🖥️', name: '개발자', color: 'var(--cat-dev)', ink: 'var(--cat-dev-ink)', tagline: 'JSON · 정규식 · Base64',
     tools: [
       { href: '/tools/dev/base64',    icon: '🔐', name: 'Base64 인코더/디코더', desc: '텍스트 ↔ Base64 즉시 변환 + URL 안전 모드.' },
-      { href: '/tools/dev/tech-stack', icon: '🛠️', name: '기술 스택 추천기', desc: '프로젝트 시나리오로 Frontend·Backend·DB·Auth·Hosting·Payment 풀스택 자동 추천.', badge: 'new' },
-      { href: '/tools/dev/json',      icon: '📋', name: 'JSON 포맷터',          desc: 'JSON 정렬·압축·검증·트리 뷰 + TypeScript 인터페이스 자동 + YAML/CSV 변환.' },
+      { href: '/tools/dev/json',      icon: '📋', name: 'JSON 포맷터',          desc: 'JSON 정렬·압축·검증·트리 뷰·TS 인터페이스·CSV + YAML↔JSON 양방향 변환.' },
       { href: '/tools/dev/css-converter', icon: '🎨', name: 'CSS 단위 변환기',    desc: 'px·rem·em 변환 + clamp()·aspect-ratio 자동 생성.' },
       { href: '/tools/dev/number-base',   icon: '🔢', name: '진법 변환기',       desc: '2·8·10·16진 변환 + 비트 시각화 + 2의 보수·ASCII·비트 연산.' },
       { href: '/tools/dev/hash', icon: '🔒', name: '해시 생성기', desc: 'MD5·SHA-1·SHA-256·SHA-512 동시 + HMAC 서명·파일 무결성·SRI 해시. 전부 브라우저 처리.', badge: 'new' },
       { href: '/tools/dev/regex', icon: '🔍', name: '정규식 테스트기', desc: 'JavaScript 정규식 실시간 매칭·하이라이트 + 캡처·치환·분할 + 한국 데이터 패턴 30+.', badge: 'new' },
-      { href: '/tools/dev/yaml-json', icon: '📄', name: 'YAML ↔ JSON 변환기', desc: '양방향 변환·유효성 + Kubernetes·Docker Compose·GitHub Actions 12개 예시.', badge: 'new' },
       { href: '/tools/dev/url-encode', icon: '🔗', name: 'URL 인코더/디코더', desc: 'URL 인코드/디코드 + URL 분해와 쿼리 파라미터 표 편집. UTM·추적 파라미터 일괄 정리.', badge: 'new' },
       { href: '/tools/dev/curl', icon: '🌀', name: 'cURL 변환기', desc: 'cURL 명령어를 fetch·axios·Python·Node·Go 5 언어로 즉시 변환. 한국 API 12개 예시.', badge: 'new' },
       { href: '/tools/dev/http-status', icon: '🌐', name: 'HTTP 상태 코드 검색기', desc: 'HTTP 65+ 상태 코드 한국어 설명·발생 시기·해결 힌트. CORS·JWT·Lambda 시나리오.', badge: 'new' },

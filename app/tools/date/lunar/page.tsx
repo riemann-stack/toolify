@@ -6,6 +6,7 @@ import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/date/lunar',
@@ -21,7 +22,7 @@ const FAQ_LD = [
               },
               {
                 q: '음력 생일은 매년 양력으로 바뀌나요?',
-                a: '네. 음력 생일은 매년 양력 날짜가 달라집니다. 예를 들어 <strong>음력 1월 1일(설날)은 2026년 2월 17일, 2027년 2월 7일</strong>입니다.<br/><br/>편차는 보통 ±11일 이내지만, 윤달이 끼면 그해는 같은 음력 날짜라도 양력 30일 이상 뒤로 밀릴 수 있습니다. 매년 본 계산기로 그해 양력 날짜를 확인해 미리 일정에 표시하는 것을 권장합니다.',
+                a: '네. 음력 생일은 매년 양력 날짜가 달라집니다. 예를 들어 <strong>음력 1월 1일(설날)은 2026년 2월 17일, 2027년 2월 7일, 2028년 1월 27일, 2029년 2월 13일</strong>입니다.<br/><br/>음력 1년(354~355일)이 양력보다 짧아 같은 음력 날짜는 해마다 대개 <strong>10~12일 앞당겨지고</strong>, 그 사이에 윤달이 한 번 끼면 반대로 <strong>17~20일 늦춰집니다</strong>(위 예의 2028→2029년은 2028년 윤5월 때문에 17일 늦춰짐). 그래서 양력 날짜는 약 한 달 폭 안에서 오르내립니다. 매년 본 계산기로 그해 양력 날짜를 확인해 미리 일정에 표시하는 것을 권장합니다.',
               },
               {
                 q: '60갑자는 어떻게 계산되나요?',
@@ -33,11 +34,11 @@ const FAQ_LD = [
               },
               {
                 q: '설날·추석 양력 날짜는 매년 어떻게 정해지나요?',
-                a: '설날 = 음력 1월 1일, 추석 = 음력 8월 15일로 음력 자체는 고정입니다. 양력 날짜는 그 해의 음력↔양력 매핑에 따라 결정되며, 한국천문연구원이 산출하고 정부가 매년 「월력요항」으로 발표합니다.<br/><br/>1900~2049년 실측 기준 —<br/>· 설날 양력 범위 — <strong>1월 22일 ~ 2월 20일</strong><br/>· 추석 양력 범위 — <strong>9월 8일 ~ 10월 8일</strong>',
+                a: '설날 = 음력 1월 1일, 추석 = 음력 8월 15일로 음력 자체는 고정입니다. 양력 날짜는 그 해의 음력↔양력 매핑에 따라 결정되며, 한국천문연구원이 산출하고 정부(현재 우주항공청)가 매년 이듬해 달력의 기준인 「월력요항」으로 발표합니다.<br/><br/>1900~2049년 실측 기준 —<br/>· 설날 양력 범위 — <strong>1월 22일 ~ 2월 20일</strong><br/>· 추석 양력 범위 — <strong>9월 8일 ~ 10월 8일</strong>',
               },
               {
-                q: '이 계산기는 얼마나 정확한가요?',
-                a: '한국천문연구원(KASI) 음력 데이터와 전 구간(1900~2049년) 일치를 검증했고, 2025~2030년 국가 공휴일 발표(설날·추석·부처님오신날)와도 교차 확인했습니다. 상한이 2049년인 이유는 KASI가 확정 계산해 배포한 음양력 자료가 2050년까지이기 때문입니다.<br/><br/>주의: 흔히 쓰이는 중국력 기반 변환기와는 <strong>다른 날이 있습니다</strong>. 한국 음력은 KST(UTC+9) 합삭 기준이라 예컨대 한국 설날 2027년은 2월 7일, 중국 춘절은 2월 6일로 하루 다릅니다.',
+                q: '이 계산기의 기준은 무엇이고, 왜 2049년까지만 되나요?',
+                a: '한국천문연구원(KASI) 음력 데이터와 전 구간(1900~2049년) 일치를 검증했고, 2025~2030년 국가 공휴일 발표(설날·추석·부처님오신날)와도 교차 확인했습니다. 상한이 2049년인 이유는 KASI가 확정 계산해 배포한 음양력 자료가 2050년까지이기 때문입니다.',
               },
               {
                 q: '한국·중국·일본 음력이 모두 같은가요?',
@@ -51,12 +52,11 @@ const FAQ_LD = [
 
 export default function LunarPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/date/lunar">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="date" />양력 음력 변환기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         양력 ↔ 음력 자유 변환 + <strong style={{ color: 'var(--text)' }}>60갑자 간지·띠</strong> 자동.
       </p>
 
@@ -76,30 +76,30 @@ export default function LunarPage() {
 
         {/* 1. 양력 vs 음력 차이 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>양력과 음력, 무엇이 다를까?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
-            <strong style={{ color: 'var(--text)' }}>양력(태양력)</strong>은 지구가 태양을 한 바퀴 도는 365.25일을 기준으로 하며 현재 세계 표준 달력입니다.
-            <strong style={{ color: 'var(--text)' }}> 음력(태음력)</strong>은 달이 차고 기우는 주기 약 29.5일을 한 달로 삼아 1년이 약 354일로 양력보다 11일가량 짧습니다.
+          <h2 className="g-h2">양력과 음력, 무엇이 다를까?</h2>
+          <p className="g-p">
+            <strong style={{ color: 'var(--text)' }}>양력(태양력)</strong>은 계절이 한 바퀴 도는 태양년(약 365.2422일)에 맞춘 달력으로, 오늘날 쓰는 그레고리력은 평년 365일에 윤년을 끼워 평균 365.2425일이 되게 합니다.
+            <strong style={{ color: 'var(--text)' }}> 음력</strong>은 달이 차고 기우는 주기(삭망월, 약 29.53일)를 한 달로 삼아 1년이 354~355일로 양력보다 11일가량 짧습니다. 한국 음력은 윤달로 계절을 맞추므로 정확히는 <strong style={{ color: 'var(--text)' }}>태음태양력</strong>입니다.
             이 차이를 보정하기 위해 중기(中氣)가 들지 않는 달을 윤달로 삼는 <strong style={{ color: 'var(--accent)' }}>무중치윤법</strong>으로 윤달을 끼워 넣으며, 결과적으로 약 19년에 7번꼴(메톤 주기 근사)이 됩니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             한국의 공식 달력은 을미개혁 때 음력 1895년 11월 17일을 <strong style={{ color: 'var(--text)' }}>양력 1896년 1월 1일(건양 원년)</strong>로 삼은 이후 양력이지만, <strong style={{ color: 'var(--text)' }}>설날·추석·부처님오신날·단오·제사·음력 생일</strong> 등 전통 절기는 여전히 음력 기준으로 챙깁니다. 일부 가정은 음력 생일·양력 생일을 모두 챙기기도 합니다.
           </p>
-          <div style={{ overflowX: 'auto', marginTop: 14 }}>
+          <div className="tableScroll" style={{ marginTop: 14 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--accent)', fontWeight: 700 }}>양력 (태양력)</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--cat-health)', fontWeight: 700 }}>음력 (태음력)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--cat-health)', fontWeight: 700 }}>음력 (태음태양력)</th>
                 </tr>
               </thead>
               <tbody>
                 {[
                   ['기준', '지구의 태양 공전', '달의 차오름·이지러짐'],
-                  ['1년 길이', '365일 (윤년 366일)', '약 354일 (윤달 든 해 383~385일)'],
-                  ['1개월 길이', '28~31일 고정', '29일 또는 30일'],
-                  ['윤 보정', '4년마다 윤일(2/29) 추가', '무중치윤법 (약 19년에 7번꼴)'],
+                  ['1년 길이', '365일 (윤년 366일)', '354~355일 (윤달 든 해 383~385일)'],
+                  ['1개월 길이', '28~31일 고정', '29일(작은달) 또는 30일(큰달) — 해마다 배치가 다름'],
+                  ['윤 보정', '4년마다 윤일(2/29) — 단 100의 배수 해는 빼고 400의 배수 해는 넣음', '무중치윤법 (약 19년에 7번꼴)'],
                   ['시작', '1896년 채택 (을미개혁·건양)', '신라·고려·조선~현재'],
                   ['주 용도', '일상·법정·국제', '설·추석·제사·음력 생일'],
                 ].map((r, i) => (
@@ -116,11 +116,11 @@ export default function LunarPage() {
 
         {/* 2. 한국 명절 음력 → 양력 (2026~2028) */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>한국 명절 음력 → 양력 (2026~2028)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">한국 명절 음력 → 양력 (2026~2028)</h2>
+          <p className="g-p">
             매년 양력 날짜가 바뀝니다. 설·추석은 한국에서 가장 큰 명절(3일 연휴).
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -141,49 +141,105 @@ export default function LunarPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500, whiteSpace: 'nowrap' }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r[3]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+          <p className="g-note">
             ※ 한국천문연구원 데이터·국가 공휴일 발표 기준. 2027년 설날(2/7)·2028년 설날(1/27)은 중국 춘절(각 2/6·1/26)과 하루 다른 해입니다 —
             한국 음력은 KST 합삭 기준이라 중국력 기반 달력·앱과 차이가 날 수 있습니다.
           </p>
         </div>
 
+        {/* 2-1. 윤달 — 값은 LunarClient의 LUNAR_INFO(KASI 기준)로 lunarToSolar를 돌려 확인한 결과 */}
+        <div>
+          <h2 className="g-h2">윤달 — 언제 오고, 어떻게 입력하나</h2>
+          <p className="g-p">
+            윤달은 바로 앞 달의 이름을 한 번 더 쓰는 달이라, 윤달이 든 해에는 같은 음력 날짜가 두 번 있습니다.
+            2028년에는 윤5월이 들어 <strong>음력 5월 10일은 양력 6월 2일, 윤5월 10일은 양력 7월 2일</strong>로 한 달이 떨어집니다.
+            이 계산기의 「음력 → 양력」에서는 그해에 그 달의 윤달이 있을 때만 「윤O월로 계산」 체크박스가 나타납니다.
+            윤달에 있었던 날짜(윤달생 생일·윤달 기일 등)를 옮길 때만 체크하고, 평달 날짜라면 체크하지 않은 채로 두세요.
+          </p>
+          <p className="g-p">
+            같은 달의 윤달이 다시 오는 일은 드뭅니다. 예컨대 2020년 윤4월 15일(양력 6월 6일)에 태어났다면, 이 계산기가 다루는 2049년까지 윤4월은 다시 오지 않습니다.
+            그래서 윤달생 생일이나 윤달 기일은 흔히 평달의 같은 날짜(이 예에서는 음력 4월 15일 — 2026년 양력 5월 31일)로 챙기는데, 집안 관례에 따라 다를 수 있습니다.
+          </p>
+          <p className="g-p">
+            1900~2049년 150년 동안 윤달은 55번 들었고, 그중 <strong>윤5월이 13번</strong>으로 가장 많았습니다. 반면 윤9·10·11월은 각 1번뿐이고 윤12월·윤1월은 한 번도 없습니다.
+            지구가 태양에 가장 가까운 1월 초 무렵에는 공전이 빨라 중기(中氣) 사이 간격이 한 달보다 짧아지므로, 겨울 달에는 중기가 빠지는 일(= 윤달 조건)이 거의 생기지 않기 때문입니다.
+            이장·수의 준비처럼 윤달에 맞춰 일정을 잡으려면 아래 기간을 참고하세요.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+              <caption className="srOnly">2025~2047년 윤달과 양력 기간 (한국천문연구원 음력 기준)</caption>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>음력 연도</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>윤달</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>양력 기간 (윤달 1일 ~ 말일)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>일수</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['2025', '윤6월', '2025. 7. 25.(금) ~ 8. 22.(금)', '29일'],
+                  ['2028', '윤5월', '2028. 6. 23.(금) ~ 7. 21.(금)', '29일'],
+                  ['2031', '윤3월', '2031. 4. 22.(화) ~ 5. 20.(화)', '29일'],
+                  ['2033', '윤11월', '2033. 12. 22.(목) ~ 2034. 1. 19.(목)', '29일'],
+                  ['2036', '윤6월', '2036. 7. 23.(수) ~ 8. 21.(목)', '30일'],
+                  ['2039', '윤5월', '2039. 6. 22.(수) ~ 7. 20.(수)', '29일'],
+                  ['2042', '윤2월', '2042. 3. 22.(토) ~ 4. 19.(토)', '29일'],
+                  ['2044', '윤7월', '2044. 8. 23.(화) ~ 9. 20.(화)', '29일'],
+                  ['2047', '윤5월', '2047. 6. 23.(일) ~ 7. 22.(월)', '30일'],
+                ].map((r, i) => (
+                  <tr key={r[0]} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontVariantNumeric: 'tabular-nums' }}>{r[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            ※ 2025년 윤6월은 지난 윤달로, 그해 윤달생의 생일 확인용으로 함께 적었습니다. 2033년 윤11월은 옛 계산 방식을 따른 일부 달력·프로그램이 윤7월로 적어 온 드문 사례(이른바 「2033년 문제」)이니, 그 무렵 일정은 해당 연도 월력요항으로 다시 확인하세요.
+          </p>
+        </div>
+
         {/* 3. 60갑자 — 천간 · 지지 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>60갑자 — 천간(10) × 지지(12)</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '12px' }}>
+          <h2 className="g-h2">60갑자 — 천간(10) × 지지(12)</h2>
+          <p className="g-p">
             동아시아 전통 연도 표기. 천간 10개와 지지 12개를 순차로 조합해 60년마다 한 번 순환합니다 — 그래서 만 60세 환갑(還甲)은 「자기 출생 간지로 돌아오는」 의미.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             주기가 60년인 이유는 <strong style={{ color: 'var(--text)' }}>10과 12의 최소공배수가 60</strong>이기 때문입니다.
             또한 천간이 양(갑·병·무·경·임)이면 지지도 양(자·인·진·오·신·술)끼리만 짝지어지므로 120개가 아닌 <strong style={{ color: 'var(--text)' }}>60개 조합</strong>만 존재합니다 — 갑축(甲丑)·을자(乙子) 같은 간지는 없습니다.
             천간의 오행·색과 지지의 동물이 결합해 「청룡(갑진)」 「붉은 말(병오)」 같은 별칭이 만들어집니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.25)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--accent) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>천간 (10)</p>
-              <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
+              <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'var(--font-sans)' }}>
                 甲(갑) · 乙(을) · 丙(병) · 丁(정) · 戊(무)<br/>
                 己(기) · 庚(경) · 辛(신) · 壬(임) · 癸(계)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid rgba(8,145,178,0.25)', borderRadius: 12, padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-health) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 8 }}>지지 (12) · 띠</p>
-              <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'Noto Sans KR, sans-serif' }}>
+              <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'var(--font-sans)' }}>
                 子(자·쥐) · 丑(축·소) · 寅(인·범) · 卯(묘·토끼)<br/>
                 辰(진·용) · 巳(사·뱀) · 午(오·말) · 未(미·양)<br/>
                 申(신·원숭이) · 酉(유·닭) · 戌(술·개) · 亥(해·돼지)
               </p>
             </div>
           </div>
-          <div style={{ overflowX: 'auto', marginTop: 14 }}>
+          <div className="tableScroll" style={{ marginTop: 14 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -201,7 +257,7 @@ export default function LunarPage() {
                   ['2028', '戊申 (무신)', '🐒 누런 원숭이띠'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[0]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
@@ -213,7 +269,7 @@ export default function LunarPage() {
 
         {/* 4. 사용 방법 (기존 유지) */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>사용 방법</h2>
+          <h2 className="g-h2">사용 방법</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { step: '1', title: '변환 방향 선택', content: '상단 토글에서 "양력 → 음력" 또는 "음력 → 양력" 을 고릅니다.' },
@@ -221,8 +277,8 @@ export default function LunarPage() {
               { step: '3', title: '윤달 체크 (필요 시)', content: '음력 → 양력 변환 시 해당 월이 윤달이 있는 달이라면 "윤O월로 계산" 체크박스가 나타납니다.' },
               { step: '4', title: '결과 확인', content: '변환된 날짜와 해당 연도의 60갑자, 띠를 함께 확인할 수 있습니다.' },
             ].map((item) => (
-              <div key={item.step} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 18px', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
-                <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', minWidth: '24px' }}>{item.step}</span>
+              <div key={item.step} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', display: 'flex', gap: '14px', alignItems: 'flex-start' }}>
+                <span style={{ fontFamily: 'var(--font-sans)', fontSize: '18px', fontWeight: 800, color: 'var(--accent)', minWidth: '24px' }}>{item.step}</span>
                 <div>
                   <p style={{ fontSize: '14px', fontWeight: 500, color: 'var(--text)', marginBottom: '4px' }}>{item.title}</p>
                   <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>{item.content}</p>
@@ -253,7 +309,7 @@ export default function LunarPage() {
 
         {/* 6. 관련 도구 — 2열 카드 그리드 */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/zodiac',     icon: '🐲', name: '띠·별자리 계산기',   desc: '60갑자·궁합·삼합' },
@@ -261,12 +317,12 @@ export default function LunarPage() {
               { href: '/tools/date/dday',       icon: '📅', name: 'D-Day 계산기',        desc: '두 날짜 사이·페이스' },
               { href: '/tools/date/military',   icon: '🎖️', name: '군대 전역일 계산기',  desc: '전역일·복무율' },
               { href: '/tools/date/history-era', icon: '📜', name: '연호·연대 변환기',   desc: '단기·조선왕·간지·한·중·일' },
-              { href: '/tools/date/life-time',  icon: '⏳', name: '생애 시간 계산기',    desc: '살아온 시간·앞으로의 시간' },
+              { href: '/tools/date/holiday-bridge', icon: '🌉', name: '징검다리 연휴 플래너', desc: '설·추석 연휴에 연차 붙이기' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>
@@ -279,6 +335,6 @@ export default function LunarPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

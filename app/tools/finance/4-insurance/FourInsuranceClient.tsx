@@ -2,8 +2,13 @@
 
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
-import { INSURANCE_RATES, MIN_HOURLY_WAGE } from '@/lib/krInsuranceRates'
-import { useMemo, useState } from 'react'
+import {
+  MIN_HOURLY_WAGE, previousPensionBase, pensionBasePeriodLabel,
+  WORKERS_COMP_INDUSTRIES, WORKERS_COMP_COMMUTE_PERMILLE, WAGE_CLAIM_LEVY_PERMILLE,
+} from '@/lib/krInsuranceRates'
+import { todayStr } from '@/lib/date'
+import { useMemo, useState, useSyncExternalStore } from 'react'
+import { calc4Insurance, pensionBaseForYear, yearViewLabel } from './fourInsuranceUtils'
 import s from './four-insurance.module.css'
 
 // ─────────────────────────────────────────────
@@ -22,79 +27,48 @@ const fmtComma = (v: string): string => {
   return parseInt(num, 10).toLocaleString('ko-KR')
 }
 
-// ─────────────────────────────────────────────
-// 4대보험 요율 (2025 / 2026) — 단일 소스 lib/krInsuranceRates.ts
-// ─────────────────────────────────────────────
-const RATES = INSURANCE_RATES
+const man = (v: number): string => `${(v / 10_000).toLocaleString('ko-KR')}만`
 
-// 산재보험 업종 예시 (% 단위)
-const WORKERS_COMP_INDUSTRIES = [
-  { key: 'office',        name: '사무직·금융업', rate: 0.07 },
-  { key: 'retail',        name: '도소매·서비스', rate: 0.09 },
-  { key: 'restaurant',    name: '음식점',         rate: 0.10 },
-  { key: 'manufacturing', name: '제조업 평균',    rate: 0.15 },
-  { key: 'transport',     name: '운수·창고업',    rate: 0.18 },
-  { key: 'construction',  name: '건설업',         rate: 0.36 },
-  { key: 'custom',        name: '직접 입력',      rate: 0.10 },
+// ─────────────────────────────────────────────
+// 기준일 — 국민연금 기준소득월액 상·하한(매년 7월 개정) 구간 선택용
+// SSG(빌드)와 hydration 첫 렌더는 page.tsx가 빌드 때 넘긴 날짜(buildDate)를 같이 쓰고(불일치 없음),
+// hydration 직후 기기 날짜(todayStr)로 다시 렌더한다 → 7월 1일 전 빌드·후 방문이어도 값이 맞다.
+// ─────────────────────────────────────────────
+const noopSubscribe = () => () => {}
+function useAsOfDate(buildDate: string): string {
+  return useSyncExternalStore(noopSubscribe, todayStr, () => buildDate)
+}
+
+// 산재보험 업종 — 요율 단일 소스 lib/krInsuranceRates (고시 천분율 ‰ → 화면 % = ÷10)
+type IndustryOption = { key: string; name: string; rate: number } // rate: %
+const industryOptions = (year: 2025 | 2026): IndustryOption[] => [
+  ...WORKERS_COMP_INDUSTRIES[year].map(i => ({ key: i.key, name: i.name, rate: i.permille / 10 })),
+  { key: 'custom', name: '직접 입력', rate: 0.5 },
 ]
+// 전 업종 공통 가산: 출퇴근재해 0.06% + 임금채권부담금 0.06%
+const WORKERS_EXTRA_RATE = (WORKERS_COMP_COMMUTE_PERMILLE + WAGE_CLAIM_LEVY_PERMILLE) / 10
 
 // 2026년 최저시급 (참고) — lib/krInsuranceRates 단일 소스 (고용노동부 고시 10,320원)
 const MIN_WAGE_2026 = MIN_HOURLY_WAGE[2026]
 
-// ─────────────────────────────────────────────
-// 핵심 계산
-// ─────────────────────────────────────────────
-type CalcInput = {
-  monthlySalary: number
-  taxFreeAmount: number
-  workersCompRate: number
-  companySize: 'under150' | 'under1000' | 'over1000'
-  year: 2025 | 2026
-}
-
-function calc4Insurance(input: CalcInput) {
-  const r = RATES[input.year]
-  const taxableSalary = Math.max(0, input.monthlySalary - input.taxFreeAmount)
-  const pensionBase = Math.min(Math.max(taxableSalary, r.pension.minBase), r.pension.maxBase)
-
-  const pensionEmp  = pensionBase * (r.pension.employee / 100)
-  const pensionEmpr = pensionBase * (r.pension.employer / 100)
-  const healthEmp   = taxableSalary * (r.health.employee / 100)
-  const healthEmpr  = taxableSalary * (r.health.employer / 100)
-  const ltcEmp      = taxableSalary * (r.ltc.employee / 100)
-  const ltcEmpr     = taxableSalary * (r.ltc.employer / 100)
-  const unempEmp    = taxableSalary * (r.unemp.employee / 100)
-  const unempEmpr   = taxableSalary * (r.unemp.employer / 100)
-  const unempExtra  = taxableSalary * (r.unemp.extra[input.companySize] / 100)
-  const workersEmpr = taxableSalary * (input.workersCompRate / 100)
-
-  const employeeTotal = pensionEmp + healthEmp + ltcEmp + unempEmp
-  const employerTotal = pensionEmpr + healthEmpr + ltcEmpr + unempEmpr + unempExtra + workersEmpr
-
-  return {
-    pensionEmp, pensionEmpr,
-    healthEmp,  healthEmpr,
-    ltcEmp,     ltcEmpr,
-    unempEmp,   unempEmpr: unempEmpr + unempExtra,
-    workersEmp: 0, workersEmpr,
-    employeeTotal,
-    employerTotal,
-    grandTotal: employeeTotal + employerTotal,
-    netSalary: input.monthlySalary - employeeTotal,
-    companyTotalCost: input.monthlySalary + employerTotal,
-    pensionBase,
-    isPensionMinApplied: taxableSalary < r.pension.minBase,
-    isPensionMaxApplied: taxableSalary > r.pension.maxBase,
-    rates: r,
-  }
-}
+// 핵심 계산: ./fourInsuranceUtils.ts (calc4Insurance — 골든 테스트 대상)
 
 // ─────────────────────────────────────────────
 // 컴포넌트
 // ─────────────────────────────────────────────
-export default function FourInsuranceClient() {
+export default function FourInsuranceClient({ buildDate }: { buildDate?: string }) {
   const [tab, setTab] = useState<'employee' | 'employer' | 'partTime' | 'freelance'>('employee')
   const [year, setYear] = useState<2025 | 2026>(2026)
+  const asOf = useAsOfDate(buildDate ?? todayStr())
+  const { pensionPeriod, pensionPrev, pensionLabel, viewLabel } = useMemo(() => {
+    const p = pensionBaseForYear(year, asOf)
+    return {
+      pensionPeriod: p,
+      pensionPrev: previousPensionBase(p),
+      pensionLabel: pensionBasePeriodLabel(p),   // 상·하한 고시 적용기간 (7월~익년 6월)
+      viewLabel: yearViewLabel(year, p),         // 선택 연도 요율과 함께 쓰이는 기간 (예: 2025년 7~12월)
+    }
+  }, [year, asOf])
 
   // ── TAB 1 ─
   const [salary, setSalary] = useState<string>('3,000,000')
@@ -105,8 +79,8 @@ export default function FourInsuranceClient() {
   const [empTaxFree, setEmpTaxFree] = useState<string>('200,000')
   const [headCount, setHeadCount] = useState<string>('1')
   const [companySize, setCompanySize] = useState<'under150' | 'under1000' | 'over1000'>('under150')
-  const [industry, setIndustry] = useState<string>('office')
-  const [customWorkersRate, setCustomWorkersRate] = useState<string>('0.10')
+  const [industry, setIndustry] = useState<string>('finance')
+  const [customWorkersRate, setCustomWorkersRate] = useState<string>('0.5')
   const [bonus, setBonus] = useState<string>('0')
 
   // ── TAB 3 ─
@@ -129,17 +103,19 @@ export default function FourInsuranceClient() {
     workersCompRate: 0,
     companySize: 'under150',
     year,
-  }), [salary, taxFree, year])
+    pensionPeriod,
+  }), [salary, taxFree, year, pensionPeriod])
 
   // ─────────────────────────────────────────────
   // TAB 2 계산
   // ─────────────────────────────────────────────
-  const selectedIndustry = WORKERS_COMP_INDUSTRIES.find(i => i.key === industry) ?? WORKERS_COMP_INDUSTRIES[0]
+  const industries = industryOptions(year)
+  const selectedIndustry = industries.find(i => i.key === industry) ?? industries[0]
   const effectiveWorkersRate = industry === 'custom'
-    ? parseFloat(customWorkersRate) || 0
+    ? Math.min(50, Math.max(0, parseFloat(customWorkersRate) || 0))
     : selectedIndustry.rate
   // 추가 부담금: 출퇴근재해 0.06% + 임금채권부담금 0.06%
-  const totalWorkersRate = effectiveWorkersRate + 0.06 + 0.06
+  const totalWorkersRate = effectiveWorkersRate + WORKERS_EXTRA_RATE
 
   const employerCalc = useMemo(() => calc4Insurance({
     monthlySalary: parseComma(empSalary),
@@ -147,7 +123,8 @@ export default function FourInsuranceClient() {
     workersCompRate: totalWorkersRate,
     companySize,
     year,
-  }), [empSalary, empTaxFree, totalWorkersRate, companySize, year])
+    pensionPeriod,
+  }), [empSalary, empTaxFree, totalWorkersRate, companySize, year, pensionPeriod])
 
   const headN = Math.max(1, parseInt(headCount, 10) || 1)
   const annualPerEmployee = employerCalc.companyTotalCost * 12 + parseComma(bonus)
@@ -180,6 +157,7 @@ export default function FourInsuranceClient() {
       workersCompRate: 0,
       companySize: 'under150',
       year,
+      pensionPeriod,
     })
     // 월 60시간 미만이면 국민·건강·고용 가입 의무가 없어 근로자 공제 0 (산재는 사업주 부담)
     const employeeDeduction = isOver60h ? calc.employeeTotal : 0
@@ -198,7 +176,7 @@ export default function FourInsuranceClient() {
         net: monthlySalary,
       },
     }
-  }, [hourlyWage, weekHours, year])
+  }, [hourlyWage, weekHours, year, pensionPeriod])
 
   // ─────────────────────────────────────────────
   // TAB 4 계산
@@ -215,6 +193,7 @@ export default function FourInsuranceClient() {
       workersCompRate: 0,
       companySize: 'under150',
       year,
+      pensionPeriod,
     })
     const empNet = empResult.netSalary
 
@@ -227,7 +206,7 @@ export default function FourInsuranceClient() {
       diffNet: flNet - empNet,
       diffCompanyCost: empResult.companyTotalCost - amt,
     }
-  }, [flAmount, flTaxFree, year])
+  }, [flAmount, flTaxFree, year, pensionPeriod])
 
   // ─────────────────────────────────────────────
   // 복사
@@ -287,7 +266,7 @@ export default function FourInsuranceClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -331,16 +310,16 @@ export default function FourInsuranceClient() {
             </div>
             <div className={s.gridTwo}>
               <div>
-                <span className={s.subLabel}>월 보수액 (원)</span>
+                <label htmlFor="fi-salary" className={s.subLabel}>월 보수액 (원)</label>
                 <div className={s.inputRow}>
-                  <input className={s.bigInput} type="text" inputMode="numeric" value={salary} onChange={e => setSalary(fmtComma(e.target.value))} />
+                  <input id="fi-salary" className={s.bigInput} type="text" inputMode="numeric" value={salary} onChange={e => setSalary(fmtComma(e.target.value))} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>비과세 (식대 등)</span>
+                <label htmlFor="fi-taxfree" className={s.subLabel}>비과세 (식대 등)</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="text" inputMode="numeric" value={taxFree} onChange={e => setTaxFree(fmtComma(e.target.value))} />
+                  <input id="fi-taxfree" className={s.smallInput} type="text" inputMode="numeric" value={taxFree} onChange={e => setTaxFree(fmtComma(e.target.value))} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
@@ -353,7 +332,7 @@ export default function FourInsuranceClient() {
 
           {/* HERO */}
           {parseComma(salary) > 0 && (
-            <div className={`${s.hero} ${s.heroEmployee}`}>
+            <div role="status" className={`${s.hero} ${s.heroEmployee}`}>
               <p className={s.heroLead}>월급에서 빠지는 4대보험</p>
               <div>
                 <span className={s.heroNum}>{fmt(Math.round(empCalc.employeeTotal))}</span>
@@ -361,7 +340,7 @@ export default function FourInsuranceClient() {
               </div>
               <p className={s.heroSub}>
                 요율 합계 <span className={s.heroSubAccent}>{(empCalc.rates.pension.employee + empCalc.rates.health.employee + empCalc.rates.ltc.employee + empCalc.rates.unemp.employee).toFixed(3)}%</span>
-                {' · '}<span className={s.heroSubAccent}>{year}년 기준</span>
+                {' · '}<span className={s.heroSubAccent}>{viewLabel} 기준</span>
               </p>
               <div className={s.heroSecondary}>
                 실수령 (4대보험만 차감): <strong>{fmtKRW(empCalc.netSalary)}</strong>
@@ -399,8 +378,9 @@ export default function FourInsuranceClient() {
                 <div className={s.pensionCapNote}>
                   📌 국민연금 기준소득월액 <strong>{empCalc.isPensionMinApplied ? '하한' : '상한'}</strong> 적용 — 실제 보수
                   {empCalc.isPensionMinApplied
-                    ? ` ${fmtKRW(parseComma(salary) - parseComma(taxFree))} → 하한 ${fmtKRW(empCalc.rates.pension.minBase)} 기준 부과`
-                    : ` ${fmtKRW(parseComma(salary) - parseComma(taxFree))} → 상한 ${fmtKRW(empCalc.rates.pension.maxBase)} 기준 부과`}
+                    ? ` ${fmtKRW(parseComma(salary) - parseComma(taxFree))} → 하한 ${fmtKRW(empCalc.pensionPeriod.min)} 기준 부과`
+                    : ` ${fmtKRW(parseComma(salary) - parseComma(taxFree))} → 상한 ${fmtKRW(empCalc.pensionPeriod.max)} 기준 부과`}
+                  {` (${viewLabel} 기준)`}
                 </div>
               )}
             </div>
@@ -415,8 +395,8 @@ export default function FourInsuranceClient() {
                 <li>국민연금 <strong>9% → 9.5%</strong> (0.5%p ↑, 1998년 이후 28년 만의 인상)</li>
                 <li>건강보험 <strong>7.09% → 7.19%</strong> (0.1%p ↑)</li>
                 <li>장기요양 <strong>0.9182% → 0.9448%</strong> (2.9% ↑)</li>
-                <li>국민연금 기준소득월액 상한 <strong>617만 → 637만원</strong></li>
-                <li>국민연금 기준소득월액 하한 <strong>39만 → 40만원</strong></li>
+                <li>국민연금 기준소득월액 상한 <strong>{pensionPrev ? `${man(pensionPrev.max)} → ` : ''}{man(pensionPeriod.max)}원</strong> ({pensionLabel} · 매년 7월 조정)</li>
+                <li>국민연금 기준소득월액 하한 <strong>{pensionPrev ? `${man(pensionPrev.min)} → ` : ''}{man(pensionPeriod.min)}원</strong></li>
               </ul>
             </div>
           )}
@@ -445,30 +425,30 @@ export default function FourInsuranceClient() {
             </div>
             <div className={s.gridTwo}>
               <div>
-                <span className={s.subLabel}>직원 월 보수액 (원)</span>
+                <label htmlFor="fi-emp-salary" className={s.subLabel}>직원 월 보수액 (원)</label>
                 <div className={s.inputRow}>
-                  <input className={s.bigInput} type="text" inputMode="numeric" value={empSalary} onChange={e => setEmpSalary(fmtComma(e.target.value))} />
+                  <input id="fi-emp-salary" className={s.bigInput} type="text" inputMode="numeric" value={empSalary} onChange={e => setEmpSalary(fmtComma(e.target.value))} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>비과세</span>
+                <label htmlFor="fi-emp-taxfree" className={s.subLabel}>비과세</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="text" inputMode="numeric" value={empTaxFree} onChange={e => setEmpTaxFree(fmtComma(e.target.value))} />
+                  <input id="fi-emp-taxfree" className={s.smallInput} type="text" inputMode="numeric" value={empTaxFree} onChange={e => setEmpTaxFree(fmtComma(e.target.value))} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>직원 수</span>
+                <label htmlFor="fi-headcount" className={s.subLabel}>직원 수</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="number" inputMode="numeric" min="1" max="1000" step="1" value={headCount} onChange={e => setHeadCount(e.target.value)} />
+                  <input id="fi-headcount" className={s.smallInput} type="number" inputMode="numeric" min="1" max="1000" step="1" value={headCount} onChange={e => setHeadCount(e.target.value)} />
                   <span className={s.unit}>명</span>
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>연 상여 (선택)</span>
+                <label htmlFor="fi-bonus" className={s.subLabel}>연 상여 (선택)</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="text" inputMode="numeric" value={bonus} onChange={e => setBonus(fmtComma(e.target.value))} />
+                  <input id="fi-bonus" className={s.smallInput} type="text" inputMode="numeric" value={bonus} onChange={e => setBonus(fmtComma(e.target.value))} />
                   <span className={s.unit}>원/연</span>
                 </div>
               </div>
@@ -477,25 +457,28 @@ export default function FourInsuranceClient() {
             <div style={{ marginTop: 12 }}>
               <span className={s.subLabel}>사업장 규모 (고용보험 사업주 추가 부담률)</span>
               <div className={s.choiceRow} role="group" aria-label="사업장 규모">
-                <button type="button" aria-pressed={companySize === 'under150'} className={`${s.choiceBtn} ${companySize === 'under150'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('under150')}>150인 미만<br /><small style={{ fontSize: 10 }}>+0.25%</small></button>
-                <button type="button" aria-pressed={companySize === 'under1000'} className={`${s.choiceBtn} ${companySize === 'under1000' ? s.choiceActive : ''}`} onClick={() => setCompanySize('under1000')}>150~999인<br /><small style={{ fontSize: 10 }}>+0.65%</small></button>
-                <button type="button" aria-pressed={companySize === 'over1000'} className={`${s.choiceBtn} ${companySize === 'over1000'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('over1000')}>1,000인+<br /><small style={{ fontSize: 10 }}>+0.85%</small></button>
+                <button type="button" aria-pressed={companySize === 'under150'} className={`${s.choiceBtn} ${companySize === 'under150'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('under150')}>150인 미만<br /><small style={{ fontSize: 11 }}>+0.25%</small></button>
+                <button type="button" aria-pressed={companySize === 'under1000'} className={`${s.choiceBtn} ${companySize === 'under1000' ? s.choiceActive : ''}`} onClick={() => setCompanySize('under1000')}>150~999인<br /><small style={{ fontSize: 11 }}>+0.65%</small></button>
+                <button type="button" aria-pressed={companySize === 'over1000'} className={`${s.choiceBtn} ${companySize === 'over1000'  ? s.choiceActive : ''}`} onClick={() => setCompanySize('over1000')}>1,000인+<br /><small style={{ fontSize: 11 }}>+0.85%</small></button>
               </div>
             </div>
 
             <div style={{ marginTop: 12 }}>
-              <span className={s.subLabel}>산재보험 업종 ({selectedIndustry.name} {industry === 'custom' ? customWorkersRate : selectedIndustry.rate}% + 0.12% 추가부담)</span>
-              <select className={s.selectInput} value={industry} onChange={e => setIndustry(e.target.value)}>
-                {WORKERS_COMP_INDUSTRIES.map(i => (
+              <label htmlFor="fi-industry" className={s.subLabel}>산재보험 업종 ({selectedIndustry.name} {effectiveWorkersRate}% + 출퇴근재해·임금채권 {WORKERS_EXTRA_RATE.toFixed(2)}%)</label>
+              <select id="fi-industry" className={s.selectInput} value={industry} onChange={e => setIndustry(e.target.value)}>
+                {industries.map(i => (
                   <option key={i.key} value={i.key}>{i.name} {i.key !== 'custom' ? `(${i.rate}%)` : ''}</option>
                 ))}
               </select>
               {industry === 'custom' && (
                 <div className={s.inputRow} style={{ marginTop: 8 }}>
-                  <input className={s.smallInput} type="number" inputMode="decimal" min="0" max="50" step="0.01" value={customWorkersRate} onChange={e => setCustomWorkersRate(e.target.value)} />
+                  <input className={s.smallInput} type="number" inputMode="decimal" min="0" max="50" step="0.01" value={customWorkersRate} onChange={e => setCustomWorkersRate(e.target.value)} aria-label="산재보험 업종 요율 직접 입력 (%)" />
                   <span className={s.unit}>%</span>
                 </div>
               )}
+              <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 6, lineHeight: 1.6 }}>
+                산재 요율은 직무가 아니라 사업장의 사업종류로 정해집니다. 정확한 요율은 근로복지공단 고지서에서 확인하세요.
+              </p>
             </div>
 
             <div className={s.yearToggle} role="group" aria-label="적용 연도">
@@ -506,7 +489,7 @@ export default function FourInsuranceClient() {
 
           {/* HERO */}
           {parseComma(empSalary) > 0 && (
-            <div className={`${s.hero} ${s.heroEmployer}`}>
+            <div role="status" className={`${s.hero} ${s.heroEmployer}`}>
               <p className={s.heroLead}>직원 1명당 월 총 인건비</p>
               <div>
                 <span className={s.heroNum}>{fmt(Math.round(employerCalc.companyTotalCost))}</span>
@@ -638,9 +621,9 @@ export default function FourInsuranceClient() {
             </div>
             <div className={s.gridTwo}>
               <div>
-                <span className={s.subLabel}>시급 (원)</span>
+                <label htmlFor="fi-hourly" className={s.subLabel}>시급 (원)</label>
                 <div className={s.inputRow}>
-                  <input className={s.bigInput} type="text" inputMode="numeric" value={hourlyWage} onChange={e => setHourlyWage(fmtComma(e.target.value))} />
+                  <input id="fi-hourly" className={s.bigInput} type="text" inputMode="numeric" value={hourlyWage} onChange={e => setHourlyWage(fmtComma(e.target.value))} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
@@ -686,7 +669,7 @@ export default function FourInsuranceClient() {
 
           {/* HERO */}
           {parseComma(hourlyWage) > 0 && (
-            <div className={`${s.hero} ${s.heroPartTime}`}>
+            <div role="status" className={`${s.hero} ${s.heroPartTime}`}>
               <p className={s.heroLead}>월 예상 임금</p>
               <div>
                 <span className={s.heroNum}>{fmt(Math.round(partTimeCalc.monthlySalary))}</span>
@@ -771,16 +754,16 @@ export default function FourInsuranceClient() {
             </div>
             <div className={s.gridTwo}>
               <div>
-                <span className={s.subLabel}>월 지급액 (원)</span>
+                <label htmlFor="fi-fl-amount" className={s.subLabel}>월 지급액 (원)</label>
                 <div className={s.inputRow}>
-                  <input className={s.bigInput} type="text" inputMode="numeric" value={flAmount} onChange={e => setFlAmount(fmtComma(e.target.value))} />
+                  <input id="fi-fl-amount" className={s.bigInput} type="text" inputMode="numeric" value={flAmount} onChange={e => setFlAmount(fmtComma(e.target.value))} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
               <div>
-                <span className={s.subLabel}>비과세 (4대보험 시만)</span>
+                <label htmlFor="fi-fl-taxfree" className={s.subLabel}>비과세 (4대보험 시만)</label>
                 <div className={s.inputRow}>
-                  <input className={s.smallInput} type="text" inputMode="numeric" value={flTaxFree} onChange={e => setFlTaxFree(fmtComma(e.target.value))} />
+                  <input id="fi-fl-taxfree" className={s.smallInput} type="text" inputMode="numeric" value={flTaxFree} onChange={e => setFlTaxFree(fmtComma(e.target.value))} />
                   <span className={s.unit}>원</span>
                 </div>
               </div>
@@ -793,7 +776,7 @@ export default function FourInsuranceClient() {
 
           {/* HERO */}
           {parseComma(flAmount) > 0 && (
-            <div className={`${s.hero} ${s.heroFreelance}`}>
+            <div role="status" className={`${s.hero} ${s.heroFreelance}`}>
               <p className={s.heroLead}>공제 후 차이 <small style={{ fontWeight: 400, opacity: 0.85 }}>(근로자 소득세 차감 전)</small></p>
               <div>
                 <span className={s.heroNum}>+{fmt(Math.round(Math.abs(freelanceCalc.diffNet)))}</span>

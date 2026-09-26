@@ -44,11 +44,11 @@ const catMeta = (k: Category) => CATEGORIES.find(c => c.key === k) ?? CATEGORIES
 
 // 카테고리별 SVG 색상 (CSS dot 색상과 일치)
 const CATEGORY_COLORS: Record<Category, string> = {
-  flour:  '#0EA5E9',
-  liquid: '#0891B2',
-  salt:   '#D97706',
-  yeast:  '#9B59B6',
-  sugar:  '#EA580C',
+  flour:  'var(--sky-500)',
+  liquid: 'var(--cyan-600)',
+  salt:   'var(--amber-600)',
+  yeast:  'var(--amethyst)',
+  sugar:  'var(--orange-600)',
   fat:    '#E8B947',
   other:  '#94A3B8',
 }
@@ -156,14 +156,15 @@ function textureDesc(a: AnalysisLike): { headline: string; detail: string; tags:
     `${sg >= 5 ? `당분 ${round1(sg)}% 로 발효와 갈변이 활발하며, ` : ''}` +
     `소금 ${round1(sa)}% 가 글루텐을 강화하고 발효 속도를 조절합니다.`
 
-  // 빵 종류 추정 태그
+  // 빵 종류 추정 태그 — 지방 15% 이상(브리오슈·크루아상)을 먼저 판정해야 단과자빵 분기에 가려지지 않음.
+  // 린 반죽은 수분 58~75%(바게트 70% 포함), 사워도우 75~80%, 치아바타·포카치아 80~90%
   const tags: string[] = []
-  if (h < 58 && f < 5)                        tags.push('베이글·비스킷 류')
-  else if (h < 68 && f < 5 && sg < 3)         tags.push('린 식빵·바게트')
+  if (h < 75 && f >= 15)                      tags.push('브리오슈·크루아상')
+  else if (h < 58 && f < 5)                   tags.push('베이글·비스킷 류')
   else if (h < 70 && f >= 4 && sg >= 4)       tags.push('단과자빵·식빵')
-  else if (h < 75 && f >= 15)                 tags.push('브리오슈·크루아상')
-  else if (h >= 75 && h < 82 && f < 5)        tags.push('사워도우·캄파뉴')
-  else if (h >= 80 && f < 8)                  tags.push('치아바타·포카치아')
+  else if (h < 75 && f < 5 && sg < 3)         tags.push('린 식빵·바게트')
+  else if (h >= 75 && h < 80 && f < 5)        tags.push('사워도우·캄파뉴')
+  else if (h >= 80 && h < 90 && f < 8)        tags.push('치아바타·포카치아')
   else if (h >= 90)                            tags.push('극고수분 — 다루기 어려움')
 
   if (sa >= 1.8 && sa <= 2.2) tags.push('소금 표준')
@@ -379,6 +380,26 @@ type Favorite = {
 
 const FAV_KEY = 'youtil-baker-percent-favs-v1'
 
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
+function isIngredient(v: unknown): v is Ingredient {
+  if (!v || typeof v !== 'object') return false
+  const x = v as Record<string, unknown>
+  return typeof x.id === 'string'
+    && typeof x.name === 'string'
+    && isFiniteNum(x.weight) && isFiniteNum(x.percent)
+    && typeof x.category === 'string' && CATEGORIES.some(c => c.key === x.category)
+    && (x.liquidRatio === undefined || isFiniteNum(x.liquidRatio))
+}
+/** 즐겨찾기 요소 검증 — 배열이 아니거나 필드가 깨진 값이면 favorites.slice·map에서 크래시 */
+function isFavorite(v: unknown): v is Favorite {
+  if (!v || typeof v !== 'object') return false
+  const x = v as Record<string, unknown>
+  return typeof x.id === 'string'
+    && typeof x.name === 'string'
+    && isFiniteNum(x.baseFlour) && isFiniteNum(x.hydration) && isFiniteNum(x.totalWeight) && isFiniteNum(x.savedAt)
+    && Array.isArray(x.ingredients) && x.ingredients.every(isIngredient)
+}
+
 /* ─────────────────────────────────────────────
    재료 행 (모듈 레벨 — 매 렌더마다 재정의되지 않도록)
    레이아웃: × / 카테고리 / dot / 이름 / 입력 / 결과
@@ -400,13 +421,13 @@ function IngredientRowEditable({ items, mode, onUpdateWeight, onUpdatePct, onUpd
         return (
           <div key={i.id} className={`${s.ingredientRow} ${meta.cls}`}>
             {/* 1) 삭제 */}
-            <button className={s.removeBtn} onClick={() => onRemove(i.id)} type="button" aria-label="삭제">×</button>
+            <button className={s.removeBtn} onClick={() => onRemove(i.id)} type="button" aria-label={`${i.name || '재료'} 삭제`}>×</button>
             {/* 2) 카테고리 선택 */}
             <select
               className={s.catSelect}
               value={i.category}
               onChange={e => onUpdateField(i.id, { category: e.target.value as Category })}
-              aria-label="카테고리"
+              aria-label={`${i.name || '재료'} 카테고리`}
               title={meta.label}
             >
               {CATEGORIES.map(c => (
@@ -421,6 +442,7 @@ function IngredientRowEditable({ items, mode, onUpdateWeight, onUpdatePct, onUpd
                 type="text"
                 value={i.name}
                 placeholder="재료명"
+                aria-label="재료명"
                 onChange={e => onUpdateField(i.id, { name: e.target.value })}
               />
             </div>
@@ -434,6 +456,7 @@ function IngredientRowEditable({ items, mode, onUpdateWeight, onUpdatePct, onUpd
                   step="0.1"
                   value={i.weight === 0 ? '' : i.weight}
                   onChange={e => onUpdateWeight?.(i.id, n(e.target.value, 0))}
+                  aria-label={`${i.name || '재료'} 무게 (g)`}
                   placeholder="g"
                 />
                 <span className={s.unit}>g</span>
@@ -447,6 +470,7 @@ function IngredientRowEditable({ items, mode, onUpdateWeight, onUpdatePct, onUpd
                   step="0.1"
                   value={round1(i.percent) === 0 ? '' : round1(i.percent)}
                   onChange={e => onUpdatePct?.(i.id, n(e.target.value, 0))}
+                  aria-label={`${i.name || '재료'} 베이커스 퍼센트 (%)`}
                   placeholder="%"
                 />
                 <span className={s.unit}>%</span>
@@ -492,6 +516,7 @@ export default function BakerPercentClient() {
 
   // ─ 즐겨찾기 ─
   const [favorites, setFavorites] = useState<Favorite[]>([])
+  const [favLoaded, setFavLoaded] = useState(false)
   const [favName, setFavName] = useState<string>('')
 
   // ─ 복사 ─
@@ -501,13 +526,18 @@ export default function BakerPercentClient() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(FAV_KEY)
-      if (raw) setFavorites(JSON.parse(raw))
+      if (raw) {
+        const parsed: unknown = JSON.parse(raw)
+        if (Array.isArray(parsed)) setFavorites(parsed.filter(isFavorite).slice(0, 20))
+      }
     } catch {}
+    setFavLoaded(true)
   }, [])
   useEffect(() => {
-    if (typeof window === 'undefined') return
+    // 로드 전에 빈 배열로 덮어쓰지 않도록 로드 완료 후에만 저장
+    if (typeof window === 'undefined' || !favLoaded) return
     try { localStorage.setItem(FAV_KEY, JSON.stringify(favorites.slice(0, 20))) } catch {}
-  }, [favorites])
+  }, [favorites, favLoaded])
 
   // 프리셋 변경 시 반영 (tab 2)
   useEffect(() => {
@@ -741,7 +771,7 @@ export default function BakerPercentClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -901,10 +931,10 @@ export default function BakerPercentClient() {
                 <div className={s.gaugeWrap}>
                   <div className={s.gaugeBar} style={{ position: 'relative' }}>
                     {/* 구간 라벨 — 게이지 안에 배치 */}
-                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
-                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
-                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
-                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 10, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'Noto Sans KR, sans-serif', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
+                    <span style={{ position: 'absolute', left: '17.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>저수분</span>
+                    <span style={{ position: 'absolute', left: '50%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>표준</span>
+                    <span style={{ position: 'absolute', left: '75%',   top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>고수분</span>
+                    <span style={{ position: 'absolute', left: '92.5%', top: '50%', transform: 'translate(-50%, -50%)', fontSize: 11, fontWeight: 700, color: 'rgba(0,0,0,0.55)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap', pointerEvents: 'none' }}>극고</span>
                     <div className={s.gaugeMarker} style={{ left: `${gaugePct(analysis1.hydration)}%` }} />
                   </div>
                   {/* 구간 경계 숫자 — 정확한 위치에 표시 */}
@@ -917,7 +947,7 @@ export default function BakerPercentClient() {
                   </div>
                 </div>
                 <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 16, lineHeight: 1.7 }}>
-                  현재 <strong style={{ color: '#0891B2', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
+                  현재 <strong style={{ color: 'var(--cyan-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{round1(analysis1.hydration)}%</strong> — {hydroDesc(analysis1.hydration)}
                 </p>
               </div>
 
@@ -1000,8 +1030,8 @@ export default function BakerPercentClient() {
                 onChange={e => setFlourAndRecalc(Math.max(0, Number(e.target.value) || 0))}
                 style={{
                   width: 80, padding: '6px 10px', background: 'var(--bg3)',
-                  border: '1px solid var(--border)', borderRadius: 8,
-                  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14,
+                  border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
+                  fontFamily: 'var(--font-sans)', fontSize: 14,
                   fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
                 }}
               />
@@ -1042,7 +1072,7 @@ export default function BakerPercentClient() {
 
           {/* HERO */}
           {analysis2.flourTotal > 0 && (
-            <div className={s.hero}>
+            <div className={s.hero} role="status">
               <p className={s.heroLead}>총 반죽량</p>
               <div>
                 <span className={s.heroNum}>{fmt(analysis2.totalWeight)}</span>
@@ -1198,8 +1228,8 @@ export default function BakerPercentClient() {
                 onChange={e => setTargetTotal(Math.max(0, Number(e.target.value) || 0))}
                 style={{
                   width: 80, padding: '6px 10px', background: 'var(--bg3)',
-                  border: '1px solid var(--border)', borderRadius: 8,
-                  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 14,
+                  border: '1px solid var(--border)', borderRadius: 'var(--radius-s)',
+                  fontFamily: 'var(--font-sans)', fontSize: 14,
                   fontWeight: 700, color: 'var(--text)', textAlign: 'right', outline: 'none',
                 }}
               />
@@ -1238,7 +1268,7 @@ export default function BakerPercentClient() {
 
           {/* HERO */}
           {tab3Calc.totalPct > 0 && (
-            <div className={s.hero}>
+            <div className={s.hero} role="status">
               <p className={s.heroLead}>총 반죽량 {fmt(targetTotal)}g 기준</p>
               <div>
                 <span className={s.heroNum}>{fmt(tab3Calc.flour)}</span>
@@ -1375,7 +1405,7 @@ export default function BakerPercentClient() {
 
           {/* HERO */}
           {tab4Calc.totalFlour > 0 && (
-            <div className={s.hero}>
+            <div className={s.hero} role="status">
               <p className={s.heroLead}>전체 수분율</p>
               <div>
                 <span className={s.heroNum}>{round1(tab4Calc.totalHydration)}</span>

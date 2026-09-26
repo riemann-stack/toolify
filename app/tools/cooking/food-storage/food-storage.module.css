@@ -5,19 +5,19 @@
 .tabs {
   display: grid; grid-template-columns: 1fr 1fr; gap: 6px;
   background: var(--bg2); border: 1px solid var(--border);
-  border-radius: 14px; padding: 6px;
+  border-radius: var(--radius-card); padding: 6px;
 }
 .tab {
   padding: 12px 6px; border-radius: 10px; border: none;
-  font-size: 13px; font-family: 'Noto Sans KR', sans-serif; font-weight: 500;
+  font-size: 13px; font-family: var(--font-sans); font-weight: 500;
   color: var(--muted); background: transparent; cursor: pointer; transition: all 0.18s;
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
-.tabActive { background: var(--accent) !important; color: #000 !important; font-weight: 700 !important; }
+.tabActive { background: var(--accent) !important; color: #fff !important; font-weight: 700 !important; }
 
 /* ── 카드 공통 ── */
-.card { background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px; }
+.card { background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px 20px; }
 .cardLabel { display: block; font-size: 11px; color: var(--muted); letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 12px; }
 .cardLabelRow { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 6px; margin-bottom: 12px; }
 .cardLabelRow .cardLabel { margin-bottom: 0; }
@@ -27,10 +27,10 @@
 .disclaimer {
   background: rgba(234,88,12,0.14);
   border: 1px solid rgba(234,88,12,0.25);
-  border-radius: 12px; padding: 12px 16px;
+  border-radius: var(--radius-m); padding: 12px 16px;
   font-size: 12px; color: var(--muted); line-height: 1.7;
 }
-.disclaimer strong { color: #EA580C; }
+.disclaimer strong { color: var(--orange-600); }
 
 /* ── 요약 카드 ── */
 .summaryGrid {
@@ -40,13 +40,13 @@
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 10px; text-align: center;
 }
-.summaryLabel { font-size: 10px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; }
+.summaryLabel { font-size: 11px; color: var(--muted); margin-bottom: 4px; letter-spacing: 0.04em; }
 .summaryValue {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 22px; font-weight: 800; line-height: 1;
+  font-family: var(--font-sans); font-size: 22px; font-weight: 800; line-height: 1;
 }
-.summaryValueSafe    { color: #059669; }
-.summaryValueWarning { color: #EA580C; }
-.summaryValueUrgent  { color: #DC2626; }
+.summaryValueSafe    { color: var(--emerald-600); }
+.summaryValueWarning { color: var(--orange-600); }
+.summaryValueUrgent  { color: var(--red-600); }
 .summaryValueExpired { color: #FF4646; }
 .summaryValueDefault { color: var(--accent); }
 
@@ -54,11 +54,11 @@
 .urgentCard {
   background: rgba(220,38,38,0.14);
   border: 2px solid rgba(220,38,38,0.3);
-  border-radius: 14px; padding: 16px 18px;
+  border-radius: var(--radius-card); padding: 16px 18px;
   animation: foodFadeUp 0.25s ease;
 }
 .urgentLabel {
-  font-size: 13px; color: #DC2626; font-weight: 700;
+  font-size: 13px; color: var(--red-600); font-weight: 700;
   margin-bottom: 12px; display: flex; align-items: center; gap: 6px;
 }
 .urgentList { display: flex; flex-direction: column; gap: 6px; }
@@ -69,7 +69,7 @@
 }
 .urgentItemName { color: var(--text); display: flex; align-items: center; gap: 6px; }
 .urgentItemDday {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 800; font-size: 14px;
+  font-family: var(--font-sans); font-weight: 800; font-size: 14px;
 }
 
 /* ── 식재료 추가 폼 ── */
@@ -83,10 +83,10 @@
   width: 100%; appearance: none; -webkit-appearance: none;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 11px 32px 11px 14px; font-size: 14px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; cursor: pointer; outline: none;
+  font-family: var(--font-sans); cursor: pointer; outline: none;
   transition: border-color 0.15s;
 }
-.select:focus { border-color: rgba(14,165,233,0.4); }
+.select:focus { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 .select option { background: var(--bg2); color: var(--text); }
 .selectArrow {
   position: absolute; right: 12px; top: 50%; transform: translateY(-50%);
@@ -98,11 +98,11 @@
 .textInput {
   width: 100%; background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 11px 14px; font-size: 14px; color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif; outline: none;
+  font-family: var(--font-sans); outline: none;
   transition: border-color 0.15s;
 }
 .textInput::placeholder { color: var(--muted); opacity: 0.7; }
-.textInput:focus { border-color: rgba(14,165,233,0.4); }
+.textInput:focus { border-color: color-mix(in srgb, var(--accent) 40%, transparent); }
 
 /* 라디오 버튼 그룹 */
 .radioRow { display: flex; gap: 6px; flex-wrap: wrap; }
@@ -110,14 +110,14 @@
   flex: 1; min-width: 80px;
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 6px; font-size: 12px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.15s;
   text-align: center;
 }@media (hover: hover) {
   .radioBtn:hover { color: var(--text); border-color: var(--border-hover); }
 }
 .radioBtnActive {
-  background: rgba(14,165,233,0.15) !important;
-  border-color: rgba(14,165,233,0.4) !important;
+  background: color-mix(in srgb, var(--accent) 15%, transparent) !important;
+  border-color: color-mix(in srgb, var(--accent) 40%, transparent) !important;
   color: var(--accent) !important;
 }
 
@@ -126,21 +126,21 @@
 .storageBtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 4px; font-size: 12px; color: var(--muted);
-  cursor: pointer; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  cursor: pointer; font-family: var(--font-sans); transition: all 0.15s;
   text-align: center;
 }@media (hover: hover) {
   .storageBtn:hover { color: var(--text); }
 }
-.storageBtnRoom.storageBtnActive    { background: rgba(161,98,7,0.15);  border-color: rgba(161,98,7,0.4);  color: #A16207; }
-.storageBtnFridge.storageBtnActive  { background: rgba(8,145,178,0.15); border-color: rgba(8,145,178,0.4); color: #0891B2; }
+.storageBtnRoom.storageBtnActive    { background: rgba(161,98,7,0.15);  border-color: rgba(161,98,7,0.4);  color: var(--yellow-700); }
+.storageBtnFridge.storageBtnActive  { background: color-mix(in srgb, var(--cyan-600) 15%, transparent); border-color: color-mix(in srgb, var(--cyan-600) 40%, transparent); color: var(--cyan-600); }
 .storageBtnFreezer.storageBtnActive { background: rgba(155,89,182,0.15); border-color: rgba(155,89,182,0.4); color: #BB7FE0; }
-.storageBtnKimchi.storageBtnActive  { background: rgba(14,165,233,0.15); border-color: rgba(14,165,233,0.4); color: var(--accent); }
+.storageBtnKimchi.storageBtnActive  { background: color-mix(in srgb, var(--accent) 15%, transparent); border-color: color-mix(in srgb, var(--accent) 40%, transparent); color: var(--accent); }
 
 /* 추가 버튼 */
 .addBtn {
-  background: var(--bg3); border: 1px dashed var(--border); border-radius: 12px;
+  background: var(--bg3); border: 1px dashed var(--border); border-radius: var(--radius-m);
   padding: 14px; cursor: pointer; color: var(--muted); width: 100%;
-  font-size: 14px; font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s;
+  font-size: 14px; font-family: var(--font-sans); transition: all 0.15s;
 }@media (hover: hover) {
   .addBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
@@ -150,7 +150,7 @@
 .submitBtn {
   flex: 1; background: var(--accent-strong); border: none; border-radius: 10px;
   padding: 12px; cursor: pointer; color: #ffffff;
-  font-size: 14px; font-family: 'Noto Sans KR', sans-serif; font-weight: 700;
+  font-size: 14px; font-family: var(--font-sans); font-weight: 700;
   transition: opacity 0.15s;
 }@media (hover: hover) {
   .submitBtn:hover { opacity: 0.85; }
@@ -158,7 +158,7 @@
 .cancelBtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 12px 18px; cursor: pointer; color: var(--muted);
-  font-size: 14px; font-family: 'Noto Sans KR', sans-serif;
+  font-size: 14px; font-family: var(--font-sans);
   transition: all 0.15s;
 }@media (hover: hover) {
   .cancelBtn:hover { color: var(--text); }
@@ -168,7 +168,7 @@
 .foodList { display: flex; flex-direction: column; gap: 8px; }
 
 .foodItem {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 12px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-m);
   padding: 14px 16px; transition: background 0.18s, border-color 0.18s;
   animation: foodFadeUp 0.25s ease;
 }
@@ -191,21 +191,21 @@
 .foodBadgeRow { display: flex; gap: 6px; flex-wrap: wrap; align-items: center; }
 
 .storageBadge {
-  display: inline-block; padding: 3px 9px; border-radius: 12px;
-  font-size: 11px; font-weight: 600; font-family: 'Noto Sans KR', sans-serif;
+  display: inline-block; padding: 3px 9px; border-radius: var(--radius-m);
+  font-size: 11px; font-weight: 600; font-family: var(--font-sans);
 }
-.storageBadgeRoom    { background: rgba(161,98,7,0.15);  color: #A16207; border: 1px solid rgba(161,98,7,0.4); }
-.storageBadgeFridge  { background: rgba(8,145,178,0.15); color: #0891B2; border: 1px solid rgba(8,145,178,0.4); }
+.storageBadgeRoom    { background: rgba(161,98,7,0.15);  color: var(--yellow-700); border: 1px solid rgba(161,98,7,0.4); }
+.storageBadgeFridge  { background: color-mix(in srgb, var(--cyan-600) 15%, transparent); color: var(--cyan-600); border: 1px solid color-mix(in srgb, var(--cyan-600) 40%, transparent); }
 .storageBadgeFreezer { background: rgba(155,89,182,0.15); color: #BB7FE0; border: 1px solid rgba(155,89,182,0.4); }
-.storageBadgeKimchi  { background: rgba(14,165,233,0.15); color: var(--accent); border: 1px solid rgba(14,165,233,0.4); }
+.storageBadgeKimchi  { background: color-mix(in srgb, var(--accent) 15%, transparent); color: var(--accent); border: 1px solid color-mix(in srgb, var(--accent) 40%, transparent); }
 
 .statusBadge {
-  display: inline-block; padding: 3px 10px; border-radius: 12px;
-  font-size: 11px; font-weight: 700; font-family: 'Noto Sans KR', sans-serif;
+  display: inline-block; padding: 3px 10px; border-radius: var(--radius-m);
+  font-size: 11px; font-weight: 700; font-family: var(--font-sans);
 }
-.statusSafe    { background: rgba(16,185,129,0.15); color: #059669; border: 1px solid rgba(16,185,129,0.4); }
-.statusWarning { background: rgba(234,88,12,0.15); color: #EA580C; border: 1px solid rgba(234,88,12,0.4); }
-.statusUrgent  { background: rgba(220,38,38,0.15); color: #DC2626; border: 1px solid rgba(220,38,38,0.4); }
+.statusSafe    { background: rgba(16,185,129,0.15); color: var(--emerald-600); border: 1px solid rgba(16,185,129,0.4); }
+.statusWarning { background: rgba(234,88,12,0.15); color: var(--orange-600); border: 1px solid rgba(234,88,12,0.4); }
+.statusUrgent  { background: rgba(220,38,38,0.15); color: var(--red-600); border: 1px solid rgba(220,38,38,0.4); }
 .statusExpired { background: rgba(255,70,70,0.2);   color: #FF4646; border: 1px solid rgba(255,70,70,0.5); }
 
 .deleteBtn {
@@ -213,31 +213,31 @@
   font-size: 18px; line-height: 1; padding: 4px 8px; border-radius: 6px;
   transition: all 0.15s;
 }@media (hover: hover) {
-  .deleteBtn:hover { color: #DC2626; background: rgba(220,38,38,0.1); }
+  .deleteBtn:hover { color: var(--red-600); background: rgba(220,38,38,0.1); }
 }
 
 /* 진행 바 */
 .progressRow { display: flex; align-items: center; gap: 10px; }
 .progressTrack {
-  flex: 1; height: 8px; background: var(--bg3); border-radius: 999px; overflow: hidden;
+  flex: 1; height: 8px; background: var(--bg3); border-radius: var(--radius-pill); overflow: hidden;
 }
 .progressFill {
-  height: 100%; border-radius: 999px;
-  background: linear-gradient(90deg, #059669, var(--accent));
+  height: 100%; border-radius: var(--radius-pill);
+  background: linear-gradient(90deg, var(--emerald-600), var(--accent));
   transition: width 0.4s ease;
 }
-.progressFillWarning { background: linear-gradient(90deg, var(--accent), #EA580C); }
-.progressFillUrgent  { background: linear-gradient(90deg, #EA580C, #DC2626); }
+.progressFillWarning { background: linear-gradient(90deg, var(--accent), var(--orange-600)); }
+.progressFillUrgent  { background: linear-gradient(90deg, var(--orange-600), var(--red-600)); }
 .progressFillExpired { background: #FF4646; }
 
 .progressMeta {
-  font-family: 'Inter', system-ui, sans-serif; font-size: 12px; font-weight: 700;
+  font-family: var(--font-sans); font-size: 12px; font-weight: 700;
   color: var(--text); white-space: nowrap;
 }
-.progressMeta .small { color: var(--muted); font-weight: 500; font-size: 10px; margin-left: 4px; }
+.progressMeta .small { color: var(--muted); font-weight: 500; font-size: 11px; margin-left: 4px; }
 
 .foodWarning {
-  font-size: 11px; color: #EA580C; line-height: 1.6;
+  font-size: 11px; color: var(--orange-600); line-height: 1.6;
   margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border);
   display: flex; align-items: flex-start; gap: 6px;
 }
@@ -254,9 +254,9 @@
 .freezeText { font-size: 12px; color: var(--text); line-height: 1.6; flex: 1; min-width: 200px; }
 .freezeText strong { color: #BB7FE0; }
 .freezeBtn {
-  background: var(--accent-strong); color: #ffffff; border: none; border-radius: 8px;
+  background: var(--accent-strong); color: #ffffff; border: none; border-radius: var(--radius-s);
   padding: 7px 14px; font-size: 12px; font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif; cursor: pointer;
+  font-family: var(--font-sans); cursor: pointer;
   transition: opacity 0.15s; white-space: nowrap;
 }@media (hover: hover) {
   .freezeBtn:hover { opacity: 0.85; }
@@ -264,7 +264,7 @@
 
 /* 빈 상태 */
 .emptyState {
-  background: var(--bg2); border: 1px dashed var(--border); border-radius: 14px;
+  background: var(--bg2); border: 1px dashed var(--border); border-radius: var(--radius-card);
   padding: 40px 22px; text-align: center;
   color: var(--muted); font-size: 13px; line-height: 1.7;
 }
@@ -274,14 +274,14 @@
 .resetBtn {
   background: var(--bg3); border: 1px solid var(--border); border-radius: 10px;
   padding: 10px 14px; font-size: 12px; color: var(--muted); cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif; transition: all 0.15s; align-self: flex-start;
+  font-family: var(--font-sans); transition: all 0.15s; align-self: flex-start;
 }@media (hover: hover) {
-  .resetBtn:hover { color: #DC2626; border-color: rgba(220,38,38,0.4); }
+  .resetBtn:hover { color: var(--red-600); border-color: rgba(220,38,38,0.4); }
 }
 
 /* ── 보관 가이드 표 ── */
 .guideSection {
-  background: var(--bg2); border: 1px solid var(--border); border-radius: 14px; padding: 18px 20px;
+  background: var(--bg2); border: 1px solid var(--border); border-radius: var(--radius-card); padding: 18px 20px;
 }
 .guideHead {
   display: flex; align-items: center; gap: 10px; margin-bottom: 12px;
@@ -301,17 +301,17 @@
 }
 .guideName { font-weight: 600; color: var(--text); }
 .guideDays {
-  font-family: 'Inter', system-ui, sans-serif; font-weight: 700; color: var(--text);
+  font-family: var(--font-sans); font-weight: 700; color: var(--text);
   text-align: center;
 }
 .guideDaysNone { color: var(--muted); font-weight: 400; }
 .guideWarning { color: var(--muted); font-size: 11px; line-height: 1.5; }
-.guideRowDanger { border-left: 3px solid #EA580C; }
+.guideRowDanger { border-left: 3px solid var(--orange-600); }
 
 /* 안내 박스 */
 .tipCard {
-  background: rgba(14,165,233,0.14); border: 1px solid rgba(14,165,233,0.2);
-  border-radius: 12px; padding: 14px 18px;
+  background: color-mix(in srgb, var(--accent) 14%, transparent); border: 1px solid color-mix(in srgb, var(--accent) 20%, transparent);
+  border-radius: var(--radius-m); padding: 14px 18px;
 }
 .tipLabel { font-size: 12px; color: var(--accent); font-weight: 700; margin-bottom: 8px; }
 .tipList { font-size: 12px; color: var(--muted); line-height: 1.9; padding-left: 0; list-style: none; }

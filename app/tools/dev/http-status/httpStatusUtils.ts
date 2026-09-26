@@ -9,11 +9,11 @@ export type DebugCategory = 'all' | 'auth' | 'cors' | 'timeout' | 'rate' | 'serv
    ───────────────────────────────────────────── */
 export const CATEGORY_META: Record<CategoryKey, { color: string; label: string; range: string; desc: string; emoji: string }> = {
   '1xx':           { color: '#888888', label: 'Informational', range: '100–199', desc: '정보성 응답 (드물게 사용)', emoji: 'ℹ️' },
-  '2xx':           { color: '#0D9488', label: 'Success',       range: '200–299', desc: '요청 성공',                emoji: '✅' },
-  '3xx':           { color: '#0891B2', label: 'Redirect',      range: '300–399', desc: '리다이렉트',              emoji: '↪️' },
-  '4xx':           { color: '#D97706', label: 'Client Error',  range: '400–499', desc: '클라이언트 오류',          emoji: '⚠️' },
-  '5xx':           { color: '#DB2777', label: 'Server Error',  range: '500–599', desc: '서버 오류',               emoji: '🚨' },
-  nonstandard:     { color: '#9B59B6', label: 'Non-standard',  range: '벤더',     desc: 'Cloudflare·nginx 비표준',  emoji: '🔌' },
+  '2xx':           { color: 'var(--teal-600)', label: 'Success',       range: '200–299', desc: '요청 성공',                emoji: '✅' },
+  '3xx':           { color: 'var(--cyan-600)', label: 'Redirect',      range: '300–399', desc: '리다이렉트',              emoji: '↪️' },
+  '4xx':           { color: 'var(--amber-600)', label: 'Client Error',  range: '400–499', desc: '클라이언트 오류',          emoji: '⚠️' },
+  '5xx':           { color: 'var(--pink-600)', label: 'Server Error',  range: '500–599', desc: '서버 오류',               emoji: '🚨' },
+  nonstandard:     { color: 'var(--amethyst)', label: 'Non-standard',  range: '벤더',     desc: 'Cloudflare·nginx 비표준',  emoji: '🔌' },
 }
 
 export const CATEGORIES: { id: CategoryFilter; label: string; emoji: string }[] = [
@@ -62,7 +62,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'Expect: 100-continue 헤더로 큰 본문 전송 전에 서버 OK 확인. 거의 사용 안됨.',
     whenItHappens: ['POST/PUT 큰 본문 전송 전 서버 사전 확인', 'curl --expect100-timeout 사용 시'],
     howToFix: ['정상 동작 — 추가 작업 불필요'],
-    isStandard: true, rfc: 'RFC 7231 §6.2.1',
+    isStandard: true, rfc: 'RFC 9110 §15.2.1',
   },
   {
     code: 101, category: '1xx', name: 'Switching Protocols', nameKr: '프로토콜 전환',
@@ -72,7 +72,7 @@ export const ALL_CODES: StatusCode[] = [
     whenItHappens: ['WebSocket 연결 수립', 'HTTP/1.1 → HTTP/2 업그레이드'],
     howToFix: ['정상 — Upgrade 응답 헤더 확인'],
     koreanCase: '카카오톡 채팅·네이버 라이브 스트리밍 WebSocket 핸드셰이크',
-    isStandard: true, rfc: 'RFC 7231 §6.2.2',
+    isStandard: true, rfc: 'RFC 9110 §15.2.2',
   },
   {
     code: 103, category: '1xx', name: 'Early Hints', nameKr: '조기 힌트',
@@ -94,7 +94,7 @@ export const ALL_CODES: StatusCode[] = [
     howToFix: ['정상 응답 — 추가 작업 불필요'],
     koreanCase: '네이버 검색 API 정상 응답, 카카오 OAuth 토큰 발급 성공',
     example: { lang: 'json', body: '{ "status": "success", "data": { "id": 1, "name": "user" } }' },
-    isStandard: true, rfc: 'RFC 7231 §6.3.1',
+    isStandard: true, rfc: 'RFC 9110 §15.3.1',
   },
   {
     code: 201, category: '2xx', name: 'Created', nameKr: '생성됨',
@@ -105,7 +105,7 @@ export const ALL_CODES: StatusCode[] = [
     howToFix: ['정상 — Location 헤더로 새 리소스 위치 확인'],
     koreanCase: '토스페이먼츠 결제 생성 응답 (paymentKey 반환)',
     example: { lang: 'json', body: '{ "id": 42, "createdAt": "2026-05-05T12:00:00Z" }' },
-    isStandard: true, rfc: 'RFC 7231 §6.3.2',
+    isStandard: true, rfc: 'RFC 9110 §15.3.2',
   },
   {
     code: 202, category: '2xx', name: 'Accepted', nameKr: '수락됨',
@@ -115,7 +115,7 @@ export const ALL_CODES: StatusCode[] = [
     whenItHappens: ['배치 작업 큐에 추가', '대용량 파일 처리·이메일 발송 비동기', 'AWS SQS·SNS·Lambda 비동기 호출'],
     howToFix: ['Location 헤더 또는 응답 본문의 task_id로 상태 polling'],
     koreanCase: '대량 메시지 발송 API (수락 후 백그라운드 처리)',
-    isStandard: true, rfc: 'RFC 7231 §6.3.3',
+    isStandard: true, rfc: 'RFC 9110 §15.3.3',
   },
   {
     code: 204, category: '2xx', name: 'No Content', nameKr: '본문 없음',
@@ -125,7 +125,7 @@ export const ALL_CODES: StatusCode[] = [
     whenItHappens: ['DELETE /users/123 정상 삭제', 'PUT 후 변경 결과 반환 불필요', 'CORS preflight OPTIONS 성공 응답'],
     howToFix: ['정상 — 응답 본문 파싱 X (.json() 호출 X)'],
     example: { lang: 'json', body: '(빈 본문)' },
-    isStandard: true, rfc: 'RFC 7231 §6.3.5',
+    isStandard: true, rfc: 'RFC 9110 §15.3.5',
   },
   {
     code: 206, category: '2xx', name: 'Partial Content', nameKr: '부분 콘텐츠',
@@ -134,7 +134,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'Range 헤더로 파일 일부만 받을 때 응답. 동영상 스트리밍·이어받기.',
     whenItHappens: ['동영상 streaming (YouTube·Netflix)', '파일 이어받기 (resume download)', 'Content-Range 응답'],
     howToFix: ['Content-Range 응답 헤더로 받은 범위 확인'],
-    isStandard: true, rfc: 'RFC 7233 §4.1',
+    isStandard: true, rfc: 'RFC 9110 §15.3.7',
   },
   {
     code: 207, category: '2xx', name: 'Multi-Status', nameKr: '다중 상태',
@@ -163,7 +163,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '거의 사용 안됨. 자원에 여러 표현(언어·형식)이 있을 때.',
     whenItHappens: ['콘텐츠 협상 (드묾)'],
     howToFix: ['Location 또는 본문에서 옵션 선택'],
-    isStandard: true, rfc: 'RFC 7231 §6.4.1',
+    isStandard: true, rfc: 'RFC 9110 §15.4.1',
   },
   {
     code: 301, category: '3xx', name: 'Moved Permanently', nameKr: '영구 이동',
@@ -173,7 +173,7 @@ export const ALL_CODES: StatusCode[] = [
     whenItHappens: ['도메인 변경 (daum.net → kakao.com 일부 페이지)', 'http → https 마이그레이션', 'URL 구조 개편 (영구)'],
     howToFix: ['Location 헤더의 새 URL로 자동 follow', '북마크·링크 업데이트 권장', 'SEO에는 301 사용 (302 X)'],
     koreanCase: '다음 → 카카오 URL 변경, 네이버 블로그 → 새 도메인',
-    isStandard: true, rfc: 'RFC 7231 §6.4.2',
+    isStandard: true, rfc: 'RFC 9110 §15.4.2',
   },
   {
     code: 302, category: '3xx', name: 'Found', nameKr: '임시 이동',
@@ -182,7 +182,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '임시 리다이렉트. 검색엔진은 원본 URL 유지. 다음 요청 시 다시 원본으로.',
     whenItHappens: ['로그인 후 리다이렉트', 'A/B 테스트로 임시 분기', '점검 페이지로 임시 이동'],
     howToFix: ['Location 헤더로 follow', 'SEO 영구 이동이면 301 사용 권장', 'POST → GET 변환 주의 (303 또는 307이 명확)'],
-    isStandard: true, rfc: 'RFC 7231 §6.4.3',
+    isStandard: true, rfc: 'RFC 9110 §15.4.3',
   },
   {
     code: 303, category: '3xx', name: 'See Other', nameKr: '다른 위치 참조',
@@ -191,7 +191,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'Post-Redirect-Get 패턴. POST 처리 후 결과 페이지로 GET 이동 명시.',
     whenItHappens: ['주문 완료 후 주문 상세 페이지로', 'Form POST 후 새로고침 시 재제출 방지'],
     howToFix: ['Location 헤더로 GET 요청'],
-    isStandard: true, rfc: 'RFC 7231 §6.4.4',
+    isStandard: true, rfc: 'RFC 9110 §15.4.4',
   },
   {
     code: 304, category: '3xx', name: 'Not Modified', nameKr: '수정되지 않음',
@@ -200,7 +200,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'If-Modified-Since·If-None-Match 조건부 요청에서 변경 없음. 브라우저 캐시 효율.',
     whenItHappens: ['이미지·CSS·JS 캐시 적중', 'ETag 일치', 'Last-Modified 변경 없음'],
     howToFix: ['정상 — 브라우저 캐시 활용', 'Cache-Control·ETag 헤더 정상 설정 확인'],
-    isStandard: true, rfc: 'RFC 7232 §4.1',
+    isStandard: true, rfc: 'RFC 9110 §15.4.5',
   },
   {
     code: 307, category: '3xx', name: 'Temporary Redirect', nameKr: '임시 리다이렉트',
@@ -209,7 +209,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '302와 달리 POST → POST, PUT → PUT으로 메서드 보존. 본문도 그대로.',
     whenItHappens: ['POST 요청을 다른 서버로 임시 분기', '메서드 보존 필요한 임시 이동'],
     howToFix: ['Location으로 동일 메서드로 재요청'],
-    isStandard: true, rfc: 'RFC 7231 §6.4.7',
+    isStandard: true, rfc: 'RFC 9110 §15.4.8',
   },
   {
     code: 308, category: '3xx', name: 'Permanent Redirect', nameKr: '영구 리다이렉트',
@@ -218,10 +218,10 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '301의 현대적 대체. POST → POST 보존. 캐시 가능.',
     whenItHappens: ['REST API URL 영구 변경 (메서드 보존)', 'http → https 영구 이동 (POST 포함)'],
     howToFix: ['Location으로 동일 메서드로 재요청'],
-    isStandard: true, rfc: 'RFC 7538',
+    isStandard: true, rfc: 'RFC 9110 §15.4.9',
   },
 
-  /* ═══ 4xx Client Error (26) ═══ */
+  /* ═══ 4xx Client Error (27) ═══ */
   {
     code: 400, category: '4xx', name: 'Bad Request', nameKr: '잘못된 요청',
     emoji: '❌',
@@ -231,7 +231,7 @@ export const ALL_CODES: StatusCode[] = [
     howToFix: ['요청 본문 JSON 검증 (jsonlint)', '필수 필드 확인', '응답 본문의 errors 필드 참조', 'curl -v로 실제 전송 데이터 확인'],
     koreanCase: '카카오 API에 잘못된 template_object 전송 시 400',
     example: { lang: 'json', body: '{ "code": 400, "msg": "Invalid JSON: unexpected token at line 3" }' },
-    isStandard: true, rfc: 'RFC 7231 §6.5.1',
+    isStandard: true, rfc: 'RFC 9110 §15.5.1',
   },
   {
     code: 401, category: '4xx', name: 'Unauthorized', nameKr: '인증 필요',
@@ -254,7 +254,7 @@ export const ALL_CODES: StatusCode[] = [
     ],
     koreanCase: '카카오 OAuth access_token 만료 (6시간) → kapi.kakao.com 401 응답',
     example: { lang: 'json', body: '{ "code": 401, "msg": "Invalid access token", "error": "unauthorized" }' },
-    isStandard: true, rfc: 'RFC 7235 §3.1',
+    isStandard: true, rfc: 'RFC 9110 §15.5.2',
   },
   {
     code: 402, category: '4xx', name: 'Payment Required', nameKr: '결제 필요',
@@ -263,7 +263,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '원래 디지털 결제용으로 예약됐지만 표준화 안됨. Stripe·일부 SaaS API에서 사용.',
     whenItHappens: ['Stripe·SaaS API에서 결제 실패·구독 만료', 'Cloudflare에서 일부 사용'],
     howToFix: ['결제 정보 갱신·구독 활성화', 'Stripe Dashboard 확인'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.2',
+    isStandard: true, rfc: 'RFC 9110 §15.5.3',
   },
   {
     code: 403, category: '4xx', name: 'Forbidden', nameKr: '금지됨',
@@ -286,7 +286,7 @@ export const ALL_CODES: StatusCode[] = [
     ],
     koreanCase: '토스페이먼츠 잘못된 시크릿 키 사용 시 403, 쿠팡 이미지 다른 사이트에서 hotlink 시도 시 403',
     example: { lang: 'json', body: '{ "code": 403, "msg": "Permission denied", "required_scope": "write:users" }' },
-    isStandard: true, rfc: 'RFC 7231 §6.5.3',
+    isStandard: true, rfc: 'RFC 9110 §15.5.4',
   },
   {
     code: 404, category: '4xx', name: 'Not Found', nameKr: '찾을 수 없음',
@@ -297,7 +297,7 @@ export const ALL_CODES: StatusCode[] = [
     howToFix: ['URL 철자 확인', 'API 문서에서 정확한 경로 확인', '리소스가 실제 존재하는지 (DB·관리자 페이지)', '권한 문제일 가능성도 검토 (실제로는 403일 수 있음)'],
     koreanCase: '쿠팡 상품 페이지 사라짐, 네이버 카페 글 삭제 후 404',
     example: { lang: 'json', body: '{ "code": 404, "msg": "Resource not found" }' },
-    isStandard: true, rfc: 'RFC 7231 §6.5.4',
+    isStandard: true, rfc: 'RFC 9110 §15.5.5',
   },
   {
     code: 405, category: '4xx', name: 'Method Not Allowed', nameKr: '허용되지 않은 메서드',
@@ -306,7 +306,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'Allow 응답 헤더에 허용된 메서드 목록. CORS preflight OPTIONS 누락 시 자주 발생.',
     whenItHappens: ['GET 전용 라우트에 POST 호출', 'CORS preflight OPTIONS 미처리', 'REST API에 허용되지 않은 메서드'],
     howToFix: ['Allow 응답 헤더로 허용 메서드 확인', '서버 라우팅 설정 검토 (Express·Spring·FastAPI)', 'CORS 미들웨어로 OPTIONS 자동 응답'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.5',
+    isStandard: true, rfc: 'RFC 9110 §15.5.6',
   },
   {
     code: 406, category: '4xx', name: 'Not Acceptable', nameKr: '허용 불가',
@@ -315,7 +315,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '클라이언트의 Accept 헤더(예: application/xml)와 서버 가능 형식(JSON만)이 불일치.',
     whenItHappens: ['Accept: application/xml 요청에 JSON만 가능한 서버', '언어·인코딩 협상 실패'],
     howToFix: ['Accept 헤더 변경 (application/json)', 'Accept: */* 사용으로 모든 형식 허용'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.6',
+    isStandard: true, rfc: 'RFC 9110 §15.5.7',
   },
   {
     code: 407, category: '4xx', name: 'Proxy Authentication Required', nameKr: '프록시 인증 필요',
@@ -324,7 +324,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '401과 비슷하지만 프록시 서버용. Proxy-Authenticate 헤더로 인증 방식 안내.',
     whenItHappens: ['회사 사내망 프록시 사용 시', '인증 프록시 통과 필요'],
     howToFix: ['Proxy-Authorization 헤더 추가', 'curl --proxy-user user:pass'],
-    isStandard: true, rfc: 'RFC 7235 §3.2',
+    isStandard: true, rfc: 'RFC 9110 §15.5.8',
   },
   {
     code: 408, category: '4xx', name: 'Request Timeout', nameKr: '요청 시간 초과',
@@ -333,7 +333,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '클라이언트가 요청을 보내는 데 너무 오래 걸림. 504와 다름 (504는 서버가 늦음).',
     whenItHappens: ['클라이언트 인터넷 느림', '큰 본문 업로드 도중 끊김', 'Keep-Alive 연결 idle 시간 초과'],
     howToFix: ['요청 재시도', '청크 업로드 사용', '네트워크 상태 확인'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.7',
+    isStandard: true, rfc: 'RFC 9110 §15.5.9',
   },
   {
     code: 409, category: '4xx', name: 'Conflict', nameKr: '충돌',
@@ -343,7 +343,7 @@ export const ALL_CODES: StatusCode[] = [
     whenItHappens: ['이미 존재하는 이메일·아이디로 가입 시도', 'Git push 충돌', '낙관적 락 (ETag·version) 위반', '동시 수정'],
     howToFix: ['중복 검사 후 재시도', '서버 상태 다시 fetch 후 재요청', 'If-Match 헤더로 ETag 확인'],
     koreanCase: '회원가입 시 이미 존재하는 이메일',
-    isStandard: true, rfc: 'RFC 7231 §6.5.8',
+    isStandard: true, rfc: 'RFC 9110 §15.5.10',
   },
   {
     code: 410, category: '4xx', name: 'Gone', nameKr: '영구 삭제됨',
@@ -352,7 +352,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '404는 "찾을 수 없음", 410은 "영구 삭제됨"으로 의도 명확. 검색엔진이 인덱스 제거.',
     whenItHappens: ['단종된 API 엔드포인트', '의도적으로 삭제된 콘텐츠', '서비스 종료'],
     howToFix: ['새 API 사용', '검색 인덱스 재구축 (sitemap에서 제거)'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.9',
+    isStandard: true, rfc: 'RFC 9110 §15.5.11',
   },
   {
     code: 411, category: '4xx', name: 'Length Required', nameKr: 'Content-Length 필요',
@@ -361,7 +361,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '서버가 본문 크기를 미리 알아야 처리 가능한 경우.',
     whenItHappens: ['POST/PUT 시 Content-Length 누락', '청크 인코딩 미지원 서버'],
     howToFix: ['Content-Length 헤더 자동 설정 (대부분 라이브러리는 자동)'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.10',
+    isStandard: true, rfc: 'RFC 9110 §15.5.12',
   },
   {
     code: 412, category: '4xx', name: 'Precondition Failed', nameKr: '사전 조건 실패',
@@ -370,17 +370,17 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'ETag·Last-Modified 기반 조건부 요청에서 조건 불충족.',
     whenItHappens: ['If-Match ETag 불일치 (낙관적 락 위반)', '리소스가 이미 변경됨'],
     howToFix: ['최신 ETag 다시 가져와 재요청', '낙관적 락 패턴 검토'],
-    isStandard: true, rfc: 'RFC 7232 §4.2',
+    isStandard: true, rfc: 'RFC 9110 §15.5.13',
   },
   {
-    code: 413, category: '4xx', name: 'Payload Too Large', nameKr: '본문 너무 큼',
+    code: 413, category: '4xx', name: 'Content Too Large', nameKr: '본문 너무 큼',
     emoji: '📦',
-    shortDesc: '요청 본문이 서버 허용 한도를 초과했습니다',
+    shortDesc: '요청 본문이 서버 허용 한도를 초과했습니다 (옛 명칭 Payload Too Large)',
     longDesc: '파일 업로드 크기 제한 초과. nginx client_max_body_size·Express limit 설정.',
     whenItHappens: ['이미지·동영상 업로드 시 nginx 1MB 기본 제한', 'Express bodyParser limit 초과', 'AWS API Gateway 6MB·Lambda 6MB 제한'],
     howToFix: ['nginx: client_max_body_size 100M;', 'Express: bodyParser.json({ limit: "10mb" })', '청크 업로드·multipart 사용', 'Pre-signed URL로 S3 직접 업로드'],
     koreanCase: 'nginx 기본 1MB 초과 이미지 업로드 시 413',
-    isStandard: true, rfc: 'RFC 7231 §6.5.11',
+    isStandard: true, rfc: 'RFC 9110 §15.5.14',
   },
   {
     code: 414, category: '4xx', name: 'URI Too Long', nameKr: 'URL 너무 김',
@@ -389,7 +389,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '쿼리 스트링이 너무 길거나 base64 데이터를 URL에 넣은 경우.',
     whenItHappens: ['GET 요청에 거대한 쿼리 스트링', 'JWT를 URL 파라미터로 (POST body로 옮기기 권장)'],
     howToFix: ['POST body로 데이터 이동', '쿼리 스트링 최소화', 'nginx large_client_header_buffers 늘리기'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.12',
+    isStandard: true, rfc: 'RFC 9110 §15.5.15',
   },
   {
     code: 415, category: '4xx', name: 'Unsupported Media Type', nameKr: '지원 안 되는 형식',
@@ -398,7 +398,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'Content-Type이 잘못됐거나 누락. 서버는 application/json을 기대하지만 text/plain 전송 등.',
     whenItHappens: ['Content-Type 헤더 누락', 'JSON 보내면서 application/x-www-form-urlencoded 명시', 'multipart 부적절 사용'],
     howToFix: ['Content-Type: application/json 명시', '서버가 받는 형식 확인 (Spring @RequestMapping consumes)', 'Postman·curl에서 Content-Type 확인'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.13',
+    isStandard: true, rfc: 'RFC 9110 §15.5.16',
   },
   {
     code: 416, category: '4xx', name: 'Range Not Satisfiable', nameKr: '범위 충족 불가',
@@ -407,7 +407,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '동영상 streaming·이어받기에서 범위 잘못 요청.',
     whenItHappens: ['Range: bytes=1000- 인데 파일이 500 bytes', '잘못된 범위 형식'],
     howToFix: ['HEAD 요청으로 Content-Length 먼저 확인', '범위 재계산'],
-    isStandard: true, rfc: 'RFC 7233 §4.4',
+    isStandard: true, rfc: 'RFC 9110 §15.5.17',
   },
   {
     code: 417, category: '4xx', name: 'Expectation Failed', nameKr: '기대 실패',
@@ -416,7 +416,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'Expect: 100-continue 등 기대 충족 실패.',
     whenItHappens: ['Expect 헤더 사용 시 (드묾)'],
     howToFix: ['Expect 헤더 제거 또는 변경'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.14',
+    isStandard: true, rfc: 'RFC 9110 §15.5.18',
   },
   {
     code: 418, category: '4xx', name: "I'm a teapot", nameKr: '나는 찻주전자',
@@ -428,15 +428,24 @@ export const ALL_CODES: StatusCode[] = [
     isStandard: true, rfc: 'RFC 2324',
   },
   {
-    code: 422, category: '4xx', name: 'Unprocessable Entity', nameKr: '처리 불가능한 엔티티',
+    code: 421, category: '4xx', name: 'Misdirected Request', nameKr: '잘못 전달된 요청',
+    emoji: '🎯',
+    shortDesc: '이 서버가 응답할 수 없는 호스트의 요청이 들어옴',
+    longDesc: 'HTTP/2·HTTP/3에서 한 연결을 여러 도메인이 함께 쓰다가(connection coalescing) 이 서버가 처리하지 않는 호스트의 요청을 받았을 때 반환. 클라이언트는 새 연결로 다시 요청할 수 있음.',
+    whenItHappens: ['멀티도메인·와일드카드 인증서로 맺은 HTTP/2 연결이 다른 도메인 요청에 재사용됨', '리버스 프록시·CDN에서 TLS SNI와 Host 헤더가 서로 다름', '같은 IP를 쓰는 가상 호스트의 TLS 설정이 어긋남'],
+    howToFix: ['도메인별 TLS 인증서·SNI 설정 점검', 'SNI 호스트와 Host(:authority) 헤더가 일치하는지 확인', '클라이언트는 새 연결로 재시도 (브라우저는 자동 재시도)'],
+    isStandard: true, rfc: 'RFC 9110 §15.5.20',
+  },
+  {
+    code: 422, category: '4xx', name: 'Unprocessable Content', nameKr: '처리할 수 없는 콘텐츠',
     emoji: '📋',
-    shortDesc: '요청 형식은 맞지만 의미적 오류 (Validation 실패)',
+    shortDesc: '요청 형식은 맞지만 의미적 오류 (Validation 실패, 옛 명칭 Unprocessable Entity)',
     longDesc: '400과 달리 JSON 파싱은 됐지만 비즈니스 검증(Validation) 실패. Spring·FastAPI·Django REST가 자주 사용.',
     whenItHappens: ['이메일 형식 잘못 (@ 없음)', '비밀번호 길이 부족', '필수 필드 빈 값', 'Spring @Valid·FastAPI Pydantic·Joi 검증 실패', 'NaN·음수 등 비즈니스 규칙 위반'],
     howToFix: ['응답 본문의 errors 배열 확인 (필드별 오류)', 'Validation 규칙 클라이언트에도 동기화', '입력 검증 라이브러리 사용 (Yup·Zod·Joi)'],
     koreanCase: 'FastAPI Pydantic 모델 검증 실패 시 자동 422 응답',
     example: { lang: 'json', body: '{ "detail": [{ "loc": ["body", "email"], "msg": "value is not a valid email address", "type": "value_error.email" }] }' },
-    isStandard: true, rfc: 'RFC 4918 §11.2',
+    isStandard: true, rfc: 'RFC 9110 §15.5.21',
   },
   {
     code: 425, category: '4xx', name: 'Too Early', nameKr: '너무 이름',
@@ -454,7 +463,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '서버가 더 안전한 프로토콜 요구. Upgrade 응답 헤더로 안내.',
     whenItHappens: ['HTTPS 강제 사이트가 HTTP 요청에 응답', 'WebSocket 필수 엔드포인트에 일반 HTTP'],
     howToFix: ['Upgrade 헤더 따라 프로토콜 전환', 'HTTPS로 재요청'],
-    isStandard: true, rfc: 'RFC 7231 §6.5.15',
+    isStandard: true, rfc: 'RFC 9110 §15.5.22',
   },
   {
     code: 428, category: '4xx', name: 'Precondition Required', nameKr: '사전 조건 필요',
@@ -529,7 +538,7 @@ export const ALL_CODES: StatusCode[] = [
     ],
     koreanCase: 'Spring Boot @ExceptionHandler 미처리 시 500, AWS Lambda runtime 오류',
     example: { lang: 'json', body: '{ "code": 500, "msg": "Internal Server Error" }' },
-    isStandard: true, rfc: 'RFC 7231 §6.6.1',
+    isStandard: true, rfc: 'RFC 9110 §15.6.1',
   },
   {
     code: 501, category: '5xx', name: 'Not Implemented', nameKr: '구현되지 않음',
@@ -538,7 +547,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '405와 다름. 서버 자체가 메서드 미구현 (예: PATCH·CONNECT 미지원).',
     whenItHappens: ['이전 HTTP 서버가 PATCH 미지원', 'CONNECT·TRACE 미구현'],
     howToFix: ['지원 메서드 사용 (GET/POST/PUT/DELETE)', '서버 업그레이드'],
-    isStandard: true, rfc: 'RFC 7231 §6.6.2',
+    isStandard: true, rfc: 'RFC 9110 §15.6.2',
   },
   {
     code: 502, category: '5xx', name: 'Bad Gateway', nameKr: '게이트웨이 오류',
@@ -548,7 +557,7 @@ export const ALL_CODES: StatusCode[] = [
     whenItHappens: ['백엔드 서버 다운 (Spring·Express·Lambda)', 'nginx upstream 헬스체크 실패', 'CloudFront → S3 origin 응답 깨짐', 'AWS ALB → EC2 connection refused'],
     howToFix: ['백엔드 서비스 재시작·로그 확인', 'nginx upstream 설정 검토', 'AWS Target Group 헬스체크 확인', 'CDN 캐시 purge'],
     koreanCase: '쿠팡 CDN 장애·AWS ELB → EC2 다운 시 502',
-    isStandard: true, rfc: 'RFC 7231 §6.6.3',
+    isStandard: true, rfc: 'RFC 9110 §15.6.3',
   },
   {
     code: 503, category: '5xx', name: 'Service Unavailable', nameKr: '서비스 이용 불가',
@@ -558,7 +567,7 @@ export const ALL_CODES: StatusCode[] = [
     whenItHappens: ['서버 점검 중', '트래픽 폭증으로 과부하', 'AutoScaling 적응 중', 'Maintenance 페이지'],
     howToFix: ['Retry-After 헤더 확인 후 재시도', 'AutoScaling 설정 검토', 'Status 페이지에 점검 공지', '대기열 큐로 부하 분산'],
     koreanCase: '카카오톡 장애·네이버 점검 시 503',
-    isStandard: true, rfc: 'RFC 7231 §6.6.4',
+    isStandard: true, rfc: 'RFC 9110 §15.6.4',
   },
   {
     code: 504, category: '5xx', name: 'Gateway Timeout', nameKr: '게이트웨이 시간 초과',
@@ -566,19 +575,19 @@ export const ALL_CODES: StatusCode[] = [
     shortDesc: '게이트웨이가 백엔드 응답을 기다리다 시간 초과',
     longDesc: '502와 비슷하지만 백엔드가 다운된 게 아니라 응답이 너무 느림.',
     whenItHappens: [
-      'AWS Lambda 30초 (API Gateway 29초) 타임아웃',
+      'API Gateway 통합 타임아웃 초과 (REST API 기본 29초 — Lambda 자체 한도 15분과 별개)',
       'DB 슬로우 쿼리',
       '외부 API 호출 무응답',
       'nginx proxy_read_timeout 초과 (기본 60초)',
     ],
     howToFix: [
       '백엔드 처리 시간 단축 (DB 인덱스·캐시)',
-      'Lambda timeout 증가 (최대 15분)',
+      'API Gateway 뒤의 Lambda는 29초 안에 끝내거나 비동기로 분리 (Lambda timeout만 늘려도 504는 그대로)',
       'nginx proxy_read_timeout 600s 등 증가',
       '비동기 처리로 전환 (202 Accepted + polling)',
     ],
-    koreanCase: 'AWS Lambda 30초 타임아웃·Spring 백엔드 무한루프 시 504',
-    isStandard: true, rfc: 'RFC 7231 §6.6.5',
+    koreanCase: 'API Gateway 29초 한도를 넘긴 Lambda·Spring 백엔드 무한루프 시 504',
+    isStandard: true, rfc: 'RFC 9110 §15.6.5',
   },
   {
     code: 505, category: '5xx', name: 'HTTP Version Not Supported', nameKr: 'HTTP 버전 미지원',
@@ -587,7 +596,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: 'HTTP/1.0 클라이언트가 HTTP/2-only 서버 접근 등.',
     whenItHappens: ['HTTP/1.0만 지원하는 클라이언트', 'HTTP/2 강제 서버'],
     howToFix: ['클라이언트 HTTP 버전 업그레이드'],
-    isStandard: true, rfc: 'RFC 7231 §6.6.6',
+    isStandard: true, rfc: 'RFC 9110 §15.6.6',
   },
   {
     code: 506, category: '5xx', name: 'Variant Also Negotiates', nameKr: '협상 변형 오류',
@@ -678,8 +687,8 @@ export const ALL_CODES: StatusCode[] = [
     emoji: '☁️',
     shortDesc: 'Cloudflare — Origin이 100초 내 응답 못함 (504와 비슷)',
     longDesc: 'TCP 연결은 됐지만 HTTP 응답이 100초 내에 안 옴. Cloudflare 기본 타임아웃.',
-    whenItHappens: ['Origin 처리 시간 100초 초과', 'DB 슬로우 쿼리·외부 API 무응답', 'WebSocket 장기 연결 시 (별도 처리 필요)'],
-    howToFix: ['처리 시간 단축', '비동기 처리 (202 Accepted + polling)', 'Cloudflare Enterprise 플랜에서 타임아웃 늘리기 (최대 6000초)', 'WebSocket·SSE 사용 시 별도 처리'],
+    whenItHappens: ['Origin 처리 시간 100초 초과', 'DB 슬로우 쿼리·외부 API 무응답', 'SSE·롱폴링처럼 첫 응답을 100초 넘게 미루는 요청'],
+    howToFix: ['처리 시간 단축', '비동기 처리 (202 Accepted + polling)', 'Cloudflare Enterprise 플랜에서 타임아웃 늘리기 (최대 6000초)', 'WebSocket·SSE는 100초 안에 ping·heartbeat를 보내 유휴 끊김 방지 (WebSocket은 전 플랜 지원)'],
     koreanCase: '쿠팡 검색 API·대형 쇼핑몰 트래픽 폭주 시 524',
     isStandard: false, source: 'Cloudflare',
   },
@@ -702,12 +711,12 @@ export const ALL_CODES: StatusCode[] = [
     isStandard: false, source: 'Cloudflare',
   },
   {
-    code: 530, category: 'nonstandard', name: 'Frozen', nameKr: '계정 동결',
-    emoji: '🧊',
-    shortDesc: 'Cloudflare — 계정 동결·1xxx 오류 (서비스 약관 위반)',
-    longDesc: '결제 실패·약관 위반·DMCA 등으로 Cloudflare 계정 동결.',
-    whenItHappens: ['결제 실패로 계정 정지', 'Cloudflare 약관 위반'],
-    howToFix: ['Cloudflare Dashboard에서 계정 상태 확인', 'Support 문의'],
+    code: 530, category: 'nonstandard', name: 'Origin DNS Error (1xxx 동반)', nameKr: '원본 DNS·터널 오류',
+    emoji: '☁️',
+    shortDesc: 'Cloudflare — 원본 호스트를 찾거나 연결하지 못함 (본문에 1xxx 오류 번호 동반)',
+    longDesc: 'Cloudflare가 530과 함께 1xxx 오류 페이지를 돌려줌. 대표적으로 1016(Origin DNS 오류)·1033(Cloudflare Tunnel 오류). 오류 페이지의 1xxx 번호로 원인을 찾습니다. (Pantheon 등 다른 플랫폼은 530을 "Site Frozen" 뜻으로 따로 쓰기도 함)',
+    whenItHappens: ['원본을 가리키는 DNS A·CNAME 레코드가 없거나 해석되지 않음 (1016)', 'cloudflared 터널이 꺼져 있거나 연결 끊김 (1033)', '원본 호스트명 오타·만료된 외부 도메인'],
+    howToFix: ['오류 페이지의 1xxx 번호 확인', 'Cloudflare DNS 레코드와 원본 호스트명 점검', 'Tunnel 사용 시 `cloudflared tunnel info`로 상태 확인 후 재시작', 'Cloudflare 1016·1033 오류 문서 참고'],
     isStandard: false, source: 'Cloudflare',
   },
 
@@ -725,7 +734,7 @@ export const ALL_CODES: StatusCode[] = [
     code: 494, category: 'nonstandard', name: 'Request Header Too Large', nameKr: '요청 헤더 너무 큼',
     emoji: '📋',
     shortDesc: 'nginx — 헤더 크기 초과 (431과 유사)',
-    longDesc: 'nginx 자체 코드. 표준은 431.',
+    longDesc: 'nginx 내부 코드. 클라이언트 응답과 access.log에는 400으로 기록되며, error_page 494로만 따로 처리할 수 있음. 표준에서 같은 뜻은 431.',
     whenItHappens: ['거대한 쿠키·헤더', 'nginx large_client_header_buffers 초과'],
     howToFix: ['nginx large_client_header_buffers 4 32k;', '쿠키 정리'],
     isStandard: false, source: 'nginx',
@@ -737,7 +746,7 @@ export const ALL_CODES: StatusCode[] = [
     longDesc: '서버 처리 중에 클라이언트가 취소·새로고침. 모바일 브라우저에서 자주 발생.',
     whenItHappens: ['모바일 사용자가 페이지 떠남 (back·새로고침)', '클라이언트 timeout', 'AJAX 취소'],
     howToFix: ['일반적으로 클라이언트 측 문제 — 서버 정상', '클라이언트 timeout 늘리기', '백엔드 응답 시간 개선 (사용자가 안 떠나게)'],
-    koreanCase: '모바일 한국 사이트에서 가장 자주 보이는 5xx (서버 정상이지만 사용자가 빨리 떠남)',
+    koreanCase: '느린 페이지를 모바일 사용자가 먼저 떠날 때 nginx 로그에 흔히 남음 (4xx 대역의 비표준 코드 — 서버 오류 아님)',
     isStandard: false, source: 'nginx',
   },
 ]
@@ -854,7 +863,7 @@ export const DEBUG_SCENARIOS: DebugScenario[] = [
     id: 'lambda-504', emoji: '⏱️', category: 'timeout',
     title: 'AWS Lambda·Spring 504 Gateway Timeout',
     causes: [
-      'Lambda 30초 제한 (API Gateway 29초)',
+      'API Gateway 통합 타임아웃 (REST API 기본 29초) 초과',
       'DB 슬로우 쿼리',
       '외부 API 호출 무응답',
       'nginx proxy_read_timeout 초과',
@@ -862,7 +871,7 @@ export const DEBUG_SCENARIOS: DebugScenario[] = [
     ],
     steps: [
       'CloudWatch Logs에서 Lambda 실행 시간 확인',
-      'Lambda timeout 늘리기 (최대 15분, API Gateway는 별도)',
+      'Lambda timeout 확인 (최대 15분) — API Gateway 뒤라면 29초 한도가 먼저 걸리므로 긴 작업은 비동기로',
       'DB 인덱스·쿼리 최적화 (EXPLAIN)',
       '외부 API 호출에 timeout 설정 (axios timeout: 5000)',
       'nginx: proxy_read_timeout 600s; (긴 처리)',
@@ -904,7 +913,7 @@ export const DEBUG_SCENARIOS: DebugScenario[] = [
       'Cloudflare IP 화이트리스트: AWS Security Group·iptables 추가',
       'Cloudflare 공식 IP 범위 확인 (cloudflare.com/ips)',
       'Origin 처리 시간 단축 (524 대비)',
-      'WebSocket·SSE는 Cloudflare Enterprise 필요 (장기 연결)',
+      'WebSocket은 모든 플랜 지원 — 100초간 데이터가 없으면 끊기므로 ping·keepalive(예: 30초) 전송, SSE도 주기적 heartbeat, 100초 넘는 단일 요청은 비동기(202+polling)로',
       'Cloudflare Always Online 활성화 (캐시 폴백)',
     ],
     relatedCodes: [521, 522, 524, 502, 504],
@@ -931,7 +940,7 @@ export const DEBUG_SCENARIOS: DebugScenario[] = [
   },
   {
     id: 'validation-422', emoji: '📋', category: 'validation',
-    title: '422 Unprocessable Entity (Validation 실패)',
+    title: '422 Unprocessable Content (Validation 실패)',
     causes: [
       'Spring @Valid 검증 실패',
       'FastAPI Pydantic 모델 위반',
@@ -992,8 +1001,8 @@ export const DEBUG_SCENARIOS: DebugScenario[] = [
    ───────────────────────────────────────────── */
 export const CONFUSION_PAIRS: { a: number; b: number; aDesc: string; bDesc: string; usage: string }[] = [
   { a: 401, b: 403, aDesc: '인증 정보 없음·만료', bDesc: '인증은 됐지만 권한 없음', usage: '401: 토큰 누락/만료, 403: 토큰 있지만 스코프 부족·IP 차단' },
-  { a: 301, b: 302, aDesc: '영구 이동 (캐시·SEO)', bDesc: '임시 이동 (SEO 영향 X)', usage: 'SEO 영구 이동은 301, 일시적 분기·테스트는 302' },
-  { a: 502, b: 504, aDesc: '백엔드 다운·잘못된 응답', bDesc: '백엔드 응답 너무 느림 (timeout)', usage: '502: nginx upstream 다운, 504: Lambda 30초 초과' },
+  { a: 301, b: 302, aDesc: '영구 이동 (캐시·새 URL 색인)', bDesc: '임시 이동 (원래 URL 색인 유지 경향)', usage: 'SEO 영구 이동은 301, 일시적 분기·테스트는 302' },
+  { a: 502, b: 504, aDesc: '백엔드 다운·잘못된 응답', bDesc: '백엔드 응답 너무 느림 (timeout)', usage: '502: nginx upstream 다운, 504: API Gateway 29초 한도 초과·DB 슬로우 쿼리' },
   { a: 200, b: 204, aDesc: '성공 + 응답 본문 있음', bDesc: '성공 + 본문 없음 (DELETE 후)', usage: '데이터 반환=200, DELETE/PUT 후 헤더만=204' },
   { a: 200, b: 201, aDesc: '단순 성공 (조회·수정)', bDesc: '성공 + 새 리소스 생성 (POST)', usage: 'GET/PUT 결과=200, POST로 생성=201 (Location 헤더)' },
 ]

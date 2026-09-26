@@ -4,7 +4,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   box-sizing: border-box;
 }
@@ -23,7 +23,7 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 6px;
 }
 .tabs4 { grid-template-columns: repeat(4, 1fr); }
@@ -33,13 +33,13 @@
   -webkit-appearance: none;
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 6px;
   font-size: 13px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   min-height: 44px;
 }@media (hover: hover) {
   .tab:hover { background: var(--bg3); color: var(--text); }
@@ -56,11 +56,11 @@
   width: 100%;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 14px;
   font-size: 15px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
 }
 .input:focus { border-color: var(--accent); }
@@ -68,7 +68,7 @@
 .input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 
 select.input {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
 }
 
@@ -82,13 +82,13 @@ select.input {
   -webkit-appearance: none;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 8px 14px;
   font-size: 12px;
   font-weight: 600;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   min-height: 36px;
 }@media (hover: hover) {
   .pill:hover { border-color: var(--accent); color: var(--text); }
@@ -113,7 +113,7 @@ select.input {
   border-radius: 10px;
   padding: 12px 14px;
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   text-align: left;
 }@media (hover: hover) {
   .systemBtn:hover { border-color: var(--accent); }
@@ -129,15 +129,15 @@ select.input {
 
 /* 히어로 */
 .hero {
-  background: linear-gradient(135deg, rgba(232, 151, 87, 0.1) 0%, rgba(8, 145, 178, 0.05) 100%);
+  background: linear-gradient(135deg, rgba(232, 151, 87, 0.1) 0%, color-mix(in srgb, var(--cyan-600) 5%, transparent) 100%);
   border: 1px solid rgba(232, 151, 87, 0.3);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 24px 22px;
   text-align: center;
 }
 .heroLabel { font-size: 13px; color: var(--muted); margin: 0 0 8px; }
 .heroValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
@@ -163,14 +163,14 @@ select.input {
 }
 .aliasChip span {
   display: block;
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   letter-spacing: 0.04em;
   text-transform: uppercase;
   margin-bottom: 2px;
 }
 .aliasChip strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   color: var(--accent);
   font-weight: 800;
@@ -195,12 +195,12 @@ select.input {
 }
 .detailTable td:nth-child(n+2) {
   text-align: right;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
 .detailTable tr:last-child td { border-bottom: none; }
 .cellAccent { color: var(--accent); }
-.cellMono { font-family: 'Inter', system-ui, sans-serif; }
+.cellMono { font-family: var(--font-sans); }
 .cellSubtitle {
   background: var(--bg3);
   font-size: 11px;
@@ -209,7 +209,7 @@ select.input {
   letter-spacing: 0.04em;
   text-transform: uppercase;
 }
-.cellSubtitle td { text-align: left !important; font-family: 'Noto Sans KR', sans-serif !important; }
+.cellSubtitle td { text-align: left !important; font-family: var(--font-sans); }
 
 .tableScroll {
   overflow-x: auto;
@@ -256,7 +256,7 @@ select.input {
   font-size: 12px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .barTrack {
   height: 28px;
@@ -277,7 +277,7 @@ select.input {
   transition: width 0.3s ease;
 }
 .barValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 12px;
   font-weight: 800;
   color: #ffffff;
@@ -311,7 +311,7 @@ select.input {
   font-size: 11px;
   color: var(--accent);
   letter-spacing: 1px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .fitDesc {
   margin: 0;
@@ -323,10 +323,10 @@ select.input {
   margin: 4px 0 0;
   padding: 6px 8px;
   background: rgba(217, 119, 6, 0.08);
-  border-left: 2px solid #D97706;
+  border-left: 2px solid var(--amber-600);
   border-radius: 4px;
   font-size: 11px;
-  color: #D97706;
+  color: var(--amber-600);
   line-height: 1.6;
 }
 
@@ -357,7 +357,7 @@ select.input {
   display: block;
   background: var(--bg2);
   border: 1px dashed var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   text-align: center;
   font-size: 13px;
@@ -375,18 +375,18 @@ select.input {
 .warnCard {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 12px;
 }
-.warnCard strong { display: block; color: #D97706; margin-bottom: 6px; font-family: 'Noto Sans KR', sans-serif; }
+.warnCard strong { display: block; color: var(--amber-600); margin-bottom: 6px; font-family: var(--font-sans); }
 .warnCard p { margin: 0; color: var(--muted); line-height: 1.7; }
 
 /* 면책 */
 .disclaimer {
   background: rgba(217, 119, 6, 0.06);
   border: 1px solid rgba(217, 119, 6, 0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -394,9 +394,9 @@ select.input {
 }
 .disclaimer strong {
   display: block;
-  color: #D97706;
+  color: var(--amber-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

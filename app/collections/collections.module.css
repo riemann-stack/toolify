@@ -1,0 +1,86 @@
+/* app/collections/collections.module.css — 상황별 가이드 목록·상세 (Trust Ledger)
+   흰 히어로 → 카드/단계 목록. 칩 색은 컬렉션 raw hex 대신 대표 분야 data-cat 토큰(--c/--c-soft, AA 보장). 새 hex 없음 */
+.cl { padding-bottom: 64px; }
+.clWrap { max-width: var(--w-shell); margin: 0 auto; padding: 0 24px; }
+.clNarrow { max-width: calc(var(--w-content) + 48px); }
+.clBand { background: var(--bg2); border-bottom: 1px solid var(--border); }
+.clCrumb { display: flex; flex-wrap: wrap; align-items: center; gap: 4px; padding-top: 20px; font-size: 13px; color: var(--muted); }
+.clCrumb a { position: relative; display: inline-flex; align-items: center; min-height: 24px; color: var(--muted); }
+.clCrumb a::after { content: ''; position: absolute; inset: -10px 0; } /* 히트 영역 44 */
+.clCrumb a:hover { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+.clCrumb svg { color: var(--gray-400); }
+.clCrumb [aria-current='page'] { font-weight: 600; color: var(--text); }
+.clHero { max-width: 760px; padding: 16px 0 32px; }
+.clId { display: flex; align-items: center; gap: 12px; }
+.clEyebrow { font-size: 14px; font-weight: 700; color: var(--c-ink, var(--accent-ink)); }
+.clH1 { margin-top: 12px; font-size: clamp(28px, 6vw, 40px); font-weight: 800; line-height: 1.25; letter-spacing: -0.04em; color: var(--text); }
+.clLead { margin-top: 10px; font-size: 17px; line-height: 1.7; color: var(--muted-strong); font-variant-numeric: normal; }
+.clStats { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 18px; }
+.clStat { display: inline-flex; align-items: center; gap: 6px; height: 32px; padding: 0 12px; border-radius: var(--radius-pill); background: var(--bg3); font-size: 13px; font-weight: 600; color: var(--muted-strong); font-variant-numeric: tabular-nums; }
+
+/* 목록 카드 */
+.clList { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 12px; padding-top: 40px; }
+.clCard { display: flex; gap: 16px; height: 100%; padding: 20px 22px; border-radius: var(--radius-card); background: var(--bg2); border: 1px solid var(--border); transition: border-color .15s, box-shadow .15s; }
+.clCard:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); }
+.clCard:hover h2 { color: var(--accent-ink); }
+.clCardBody { flex: 1; min-width: 0; }
+.clCard h2 { font-size: 17px; font-weight: 700; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); }
+.clCard p { margin-top: 4px; font-size: 14px; line-height: 1.6; color: var(--muted-strong); }
+.clMeta { display: flex; flex-wrap: wrap; gap: 4px 10px; margin-top: 10px; font-size: 12px; font-weight: 600; color: var(--muted); font-variant-numeric: tabular-nums; }
+.clSeason { color: var(--c-ink, var(--accent-ink)); }
+
+/* 상세 — 엮은이 노트 */
+.clNote { margin-top: 40px; padding: 28px 32px; border-radius: var(--radius-lg); background: var(--bg2); border: 1px solid var(--border); }
+.clNoteK { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 700; color: var(--accent-ink); }
+.clNote p { margin-top: 10px; max-width: var(--w-read); font-size: 16px; line-height: 1.8; color: var(--text-body); font-variant-numeric: normal; }
+.clBy { display: flex; align-items: center; gap: 10px; margin-top: 16px; font-size: 13px; line-height: 1.5; color: var(--muted); }
+.clBy b { color: var(--text); font-weight: 600; }
+.clBy a { color: var(--accent-ink); font-weight: 600; text-decoration: underline; text-underline-offset: 3px; text-decoration-color: var(--accent-line); }
+.clAvatar { width: 32px; height: 32px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: var(--text); color: #FFFFFF; font-size: 13px; font-weight: 700; }
+
+/* 상세 — 단계 */
+.clSteps { list-style: none; counter-reset: step; }
+.clStep { padding-top: 44px; }
+.clStepH { display: flex; align-items: center; gap: 12px; padding-top: 14px; border-top: 1.5px solid var(--rule); }
+.clStepN { width: 28px; height: 28px; flex-shrink: 0; border-radius: 50%; display: grid; place-items: center; background: var(--text); color: #FFFFFF; font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.clStepH h2 { font-size: 20px; font-weight: 700; line-height: 1.4; letter-spacing: -0.03em; color: var(--text); }
+.clStepNote { margin: 8px 0 0 40px; max-width: var(--w-read); font-size: 15px; line-height: 1.75; color: var(--text-body); font-variant-numeric: normal; }
+.clTools { list-style: none; display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; margin-top: 16px; }
+.clTool { display: flex; align-items: center; gap: 12px; min-height: 64px; padding: 12px 14px; border-radius: var(--radius-m); background: var(--bg2); border: 1px solid var(--border); transition: border-color .15s, box-shadow .15s; }
+.clTool:hover { border-color: var(--border-hover); box-shadow: var(--shadow-lift); }
+.clTool:hover b { color: var(--accent-ink); }
+.clTool > span:nth-child(2) { flex: 1; min-width: 0; }
+.clTool b { display: block; font-size: 15px; font-weight: 700; line-height: 1.45; letter-spacing: -0.02em; color: var(--text); }
+.clTool small { margin-top: 2px; font-size: 13px; line-height: 1.5; color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.clTool > svg { flex-shrink: 0; color: var(--gray-400); }
+
+.clCta { margin-top: 48px; padding: 18px 20px; border-radius: var(--radius-m); background: var(--bg3); font-size: 14px; line-height: 1.7; color: var(--muted-strong); }
+.clCta a { font-weight: 600; color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+
+.clOthers { padding-top: 56px; }
+.clSecH { padding-top: 14px; margin-bottom: 16px; border-top: 1.5px solid var(--rule); font-size: 20px; font-weight: 700; line-height: 1.4; letter-spacing: -0.03em; color: var(--text); }
+.clOtherGrid { list-style: none; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.clOther { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 12px 14px; border-radius: var(--radius-m); background: var(--bg2); border: 1px solid var(--border); transition: border-color .15s; }
+.clOther:hover { border-color: var(--border-hover); }
+.clOther > span:last-child { min-width: 0; }
+.clOther b { display: block; font-size: 14px; font-weight: 700; color: var(--text); }
+.clOther small { display: block; margin-top: 2px; font-size: 12px; color: var(--muted); font-variant-numeric: tabular-nums; }
+
+@media (max-width: 900px) {
+  .clList, .clTools { grid-template-columns: minmax(0, 1fr); }
+  .clOtherGrid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}
+@media (max-width: 640px) {
+  .cl { padding-bottom: 48px; }
+  .clWrap { padding: 0 16px; }
+  .clCrumb { padding-top: 16px; }
+  .clHero { padding: 12px 0 24px; }
+  .clLead { font-size: 16px; }
+  .clList { padding-top: 32px; }
+  .clCard { padding: 16px; gap: 12px; }
+  .clNote { margin: 32px -16px 0; padding: 24px 20px; border-radius: 0; border-left: 0; border-right: 0; }
+  .clStep { padding-top: 36px; }
+  .clStepH h2 { font-size: 18px; }
+  .clStepNote { margin-left: 0; }
+  .clOtherGrid { grid-template-columns: minmax(0, 1fr); }
+}

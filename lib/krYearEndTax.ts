@@ -2,8 +2,8 @@
    재사용: lib/krIncomeTax(progressiveTax·earnedIncomeDeduction·earnedTaxCredit), lib/krInsuranceRates(추정용).
    ※ 핵심 공제만 반영한 추정 — 난임 의료비·중기감면·주택자금·부녀자/한부모 등 미반영(면책). 단위: 원. */
 
-import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit } from './krIncomeTax'
-import { INSURANCE_RATES } from './krInsuranceRates'
+import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit, LOCAL_INCOME_TAX_RATIO } from './krIncomeTax'
+import { INSURANCE_RATES, clampPensionBase, pensionBaseAt } from './krInsuranceRates'
 
 export const PERSONAL_DEDUCTION = 1_500_000 // 기본공제 1인당 150만
 export const ELDERLY_ADD = 1_000_000 // 경로우대(70세↑) 1인 100만
@@ -14,6 +14,11 @@ export const CARD_RATE_CHECK = 0.3 // 체크·현금영수증
 export const CARD_RATE_MARKET = 0.4 // 전통시장·대중교통
 export const CARD_LIMIT_LOW = 3_000_000 // 총급여 7천만↓ 기본한도
 export const CARD_LIMIT_HIGH = 2_500_000 // 총급여 7천만↑ 기본한도
+/* 자녀 수별 기본한도 가산 — 조특법 §126의2 (2025.12 개정, 2026.1.1 이후 사용분부터 2028년까지).
+   기본공제대상 자녀 1인당 50만원(총급여 7천만 초과 25만원), 최대 2명분 → 7천만 이하 350만/400만, 초과 275만/300만 */
+export const CARD_CHILD_ADD_LOW = 500_000
+export const CARD_CHILD_ADD_HIGH = 250_000
+export const CARD_CHILD_ADD_MAX_KIDS = 2
 export const CARD_MARKET_EXTRA = 1_000_000 // 전통시장·대중교통 추가한도(간이 합산 100만)
 export const PENSION_SAVINGS_LIMIT = 6_000_000 // 연금저축 한도
 export const PENSION_TOTAL_LIMIT = 9_000_000 // 연금저축+IRP 합산 한도
@@ -33,7 +38,7 @@ export const RENT_GROSS_CAP = 80_000_000 // 월세 세액공제 총급여 상한
 export const PENSION_CREDIT_GROSS_CUT = 55_000_000 // 연금/월세 고율 적용 총급여 경계
 export const PENSION_CREDIT_RATE_HIGH = 0.15 // 총급여 5,500만↓ 연금계좌 세액공제율
 export const PENSION_CREDIT_RATE_LOW = 0.12 // 총급여 5,500만↑
-export const LOCAL_TAX_RATE = 0.1 // 지방소득세 10%
+export const LOCAL_TAX_RATE = LOCAL_INCOME_TAX_RATIO // 지방소득세 10% — lib/krIncomeTax 단일 소스(지방세법 §103의13)
 
 /** 자녀세액공제(8~20세): 1명 25만·2명 55만·3명↑ 55만+40만/추가 */
 export function childTaxCredit(children: number): number {
@@ -43,11 +48,17 @@ export function childTaxCredit(children: number): number {
   return 550_000 + (children - 2) * 400_000
 }
 
-/** 국민연금 본인부담 연액 추정 (입력 없을 때) */
+/** 국민연금 본인부담 연액 추정 (입력 없을 때) — 2026 귀속.
+ *  기준소득월액 상·하한은 7월에 바뀌므로 월별로 적용: 1~6월 2025.7 고시(40만~637만), 7~12월 2026.7 고시(41만~659만).
+ *  (단일 소스 lib/krInsuranceRates PENSION_BASE_SCHEDULE — 날짜 무관·결정적) */
 export function estimateNationalPension(gross: number): number {
-  const r = INSURANCE_RATES[2026].pension
-  const monthlyBase = Math.min(r.maxBase, Math.max(0, gross / 12))
-  return Math.round(monthlyBase * (r.employee / 100) * 12)
+  const rate = INSURANCE_RATES[2026].pension.employee / 100
+  const monthly = gross / 12
+  let sum = 0
+  for (let month = 1; month <= 12; month++) {
+    sum += clampPensionBase(monthly, pensionBaseAt({ year: 2026, month })) * rate
+  }
+  return Math.round(sum)
 }
 
 /** 건강·장기요양·고용보험 본인부담 연액 추정 (입력 없을 때). 각 요율은 보수(총급여) 대비 % */
@@ -61,8 +72,9 @@ export function estimateOtherInsurance(gross: number): number {
 
 export interface YearEndInput {
   gross: number              // 총급여(연, 비과세 제외)
-  dependents: number         // 부양가족 수(본인 외)
-  children: number           // 8~20세 자녀 수
+  dependents: number         // 부양가족 수(본인 외, 자녀 포함) — 자녀 수보다 작으면 자녀 수로 간주
+  children: number           // 8~20세 자녀 수 (자녀세액공제)
+  youngChildren?: number     // 8세 미만 자녀 수 (카드 한도 가산·기본공제용, 생략 시 0)
   elderly: number            // 경로우대(70세↑) 수
   disabled: number           // 장애인 수
   creditCard: number         // 신용카드 사용액
@@ -86,7 +98,8 @@ export interface YearEndResult {
   earnedIncome: number       // 근로소득금액
   personalDeduction: number  // 인적공제
   pensionDeduction: number   // 연금보험료공제
-  insuranceDeduction: number // 보험료 특별소득공제
+  insuranceDeduction: number // 보험료 특별소득공제 (실제 적용액 — 표준세액공제 선택 시 0)
+  insurancePaid: number      // 건보·장기요양·고용 본인부담 연액 (입력 또는 추정)
   cardDeduction: number      // 신용카드 등 소득공제
   taxBase: number            // 과세표준
   computedTax: number        // 산출세액
@@ -95,8 +108,8 @@ export interface YearEndResult {
   pensionAccountCredit: number // 연금계좌 세액공제
   specialCredit: number      // 특별세액공제(보험·의료·교육·기부)
   rentCredit: number         // 월세 세액공제
-  appliedSpecialBlock: number // max(특별+월세, 표준 13만)
-  usedStandard: boolean      // 표준세액공제 적용 여부
+  appliedSpecialBlock: number // 적용된 특별+월세 세액공제, 또는 표준 13만
+  usedStandard: boolean      // 표준세액공제 적용 여부 (보험료 특별소득공제·특별·월세 세액공제 미적용 경로가 유리할 때)
   decidedIncomeTax: number   // 결정세액(소득세)
   localTax: number           // 지방소득세
   decidedTotal: number       // 결정세액(총)
@@ -119,8 +132,39 @@ export function cardDeduction(input: YearEndInput): number {
   const marketEff = Math.max(0, market - rem)
   const general = creditEff * CARD_RATE_CREDIT + checkEff * CARD_RATE_CHECK
   const marketCredit = marketEff * CARD_RATE_MARKET
-  const baseLimit = input.gross <= 70_000_000 ? CARD_LIMIT_LOW : CARD_LIMIT_HIGH
+  const low = input.gross <= 70_000_000
+  const kids = Math.min(CARD_CHILD_ADD_MAX_KIDS, Math.max(0, input.children) + Math.max(0, input.youngChildren ?? 0))
+  const baseLimit = (low ? CARD_LIMIT_LOW : CARD_LIMIT_HIGH) + kids * (low ? CARD_CHILD_ADD_LOW : CARD_CHILD_ADD_HIGH)
   return Math.round(Math.min(general, baseLimit) + Math.min(marketCredit, CARD_MARKET_EXTRA))
+}
+
+/** 인적공제 대상 부양가족 수(본인 외). 자녀세액공제·카드 한도 대상 자녀는 기본공제대상자여야 하므로
+ *  입력한 부양가족 수가 자녀 수보다 작으면 자녀 수로 올려 잡는다. */
+export function effectiveDependents(input: Pick<YearEndInput, 'dependents' | 'children' | 'youngChildren'>): number {
+  const kids = Math.max(0, input.children) + Math.max(0, input.youngChildren ?? 0)
+  return Math.max(Math.max(0, input.dependents), kids)
+}
+
+/** 표준세액공제 택일 (소득세법 §59의4⑨): 특별소득공제(건강·고용보험료 등)·특별세액공제·월세세액공제를
+ *  하나도 신청하지 않은 근로자에게만 13만원. 두 경로의 결정세액(소득세)을 모두 구해 작은 쪽을 고른다.
+ *  A = 보험료 특별소득공제 + 특별·월세 세액공제(itemized) / B = 둘 다 없이 표준 13만 */
+function decideWithStandardChoice(p: {
+  gross: number
+  incomeAfterMandatory: number  // 근로소득금액 − 인적공제 − 연금보험료공제 − 신용카드 등 공제
+  insurance: number             // 보험료 특별소득공제 대상액
+  itemized: number              // 특별세액공제 + 월세 세액공제
+  otherCredits: number          // 자녀·연금계좌 세액공제 (두 경로 공통)
+}) {
+  const path = (taxBase: number, block: number) => {
+    const computedTax = Math.round(progressiveTax(taxBase))
+    const earnedCredit = Math.round(earnedTaxCredit(computedTax, p.gross))
+    const decided = Math.max(0, computedTax - earnedCredit - p.otherCredits - block)
+    return { taxBase, computedTax, earnedCredit, decided }
+  }
+  const a = path(Math.max(0, p.incomeAfterMandatory - p.insurance), p.itemized)
+  const b = path(Math.max(0, p.incomeAfterMandatory), STANDARD_TAX_CREDIT)
+  const usedStandard = b.decided < a.decided
+  return { ...(usedStandard ? b : a), usedStandard }
 }
 
 export function calcYearEnd(input: YearEndInput): YearEndResult {
@@ -131,19 +175,14 @@ export function calcYearEnd(input: YearEndInput): YearEndResult {
 
   // STEP 2. 종합소득공제
   const personalDeduction =
-    PERSONAL_DEDUCTION * (1 + Math.max(0, input.dependents)) +
+    PERSONAL_DEDUCTION * (1 + effectiveDependents(input)) +
     Math.max(0, input.elderly) * ELDERLY_ADD +
     Math.max(0, input.disabled) * DISABLED_ADD
   const pensionDeduction = input.nationalPension != null ? Math.max(0, input.nationalPension) : estimateNationalPension(gross)
-  const insuranceDeduction = input.otherInsurance != null ? Math.max(0, input.otherInsurance) : estimateOtherInsurance(gross)
+  const insurancePaid = input.otherInsurance != null ? Math.max(0, input.otherInsurance) : estimateOtherInsurance(gross)
   const cardDed = cardDeduction(input)
-  const taxBase = Math.max(0, earnedIncome - personalDeduction - pensionDeduction - insuranceDeduction - cardDed)
 
-  // STEP 3. 산출세액
-  const computedTax = Math.round(progressiveTax(taxBase))
-
-  // STEP 4. 세액공제
-  const earnedCredit = Math.round(earnedTaxCredit(computedTax, gross))
+  // STEP 3·4. 산출세액·세액공제 — 보험료 특별소득공제 적용 여부가 표준세액공제 택일에 달려 있어 아래에서 함께 계산
   const childCredit = childTaxCredit(Math.max(0, input.children))
 
   // 연금계좌
@@ -169,15 +208,20 @@ export function calcYearEnd(input: YearEndInput): YearEndResult {
     rentCredit = Math.round(Math.min(Math.max(0, input.monthlyRent), RENT_LIMIT) * rentRate)
   }
 
-  // 특별세액공제+월세 vs 표준 13만 (간이 비교)
+  // 항목별(보험료 특별소득공제 + 특별·월세 세액공제) vs 표준 13만 — 결정세액이 작은 쪽
   const itemized = specialCredit + rentCredit
-  const usedStandard = itemized < STANDARD_TAX_CREDIT
-  const appliedSpecialBlock = Math.max(itemized, STANDARD_TAX_CREDIT)
+  const chosen = decideWithStandardChoice({
+    gross,
+    incomeAfterMandatory: earnedIncome - personalDeduction - pensionDeduction - cardDed,
+    insurance: insurancePaid,
+    itemized,
+    otherCredits: childCredit + pensionAccountCredit,
+  })
+  const { taxBase, computedTax, earnedCredit, usedStandard } = chosen
+  const insuranceDeduction = usedStandard ? 0 : insurancePaid
+  const appliedSpecialBlock = usedStandard ? STANDARD_TAX_CREDIT : itemized
 
-  const decidedIncomeTax = Math.max(
-    0,
-    computedTax - earnedCredit - childCredit - pensionAccountCredit - appliedSpecialBlock,
-  )
+  const decidedIncomeTax = chosen.decided
   const localTax = Math.round(decidedIncomeTax * LOCAL_TAX_RATE)
   const decidedTotal = decidedIncomeTax + localTax
 
@@ -198,7 +242,7 @@ export function calcYearEnd(input: YearEndInput): YearEndResult {
   const marginalRatePct = Math.round((taxBase > 0 ? progressiveTax(taxBase + 1) - progressiveTax(taxBase) : 0.06) * 100)
 
   return {
-    earnedIncome, personalDeduction, pensionDeduction, insuranceDeduction, cardDeduction: cardDed,
+    earnedIncome, personalDeduction, pensionDeduction, insuranceDeduction, insurancePaid, cardDeduction: cardDed,
     taxBase, computedTax, earnedCredit, childCredit, pensionAccountCredit, specialCredit, rentCredit,
     appliedSpecialBlock, usedStandard, decidedIncomeTax, localTax, decidedTotal,
     prepaidTotal, prepaidEstimated, settlement, marginalRatePct,
@@ -206,18 +250,21 @@ export function calcYearEnd(input: YearEndInput): YearEndResult {
 }
 
 /** 기납부세액 추정: 선택공제(신용카드·연금계좌·특별·월세) 제외, 의무공제만 반영한 결정세액(총).
-    간이세액표 원천징수 근사. */
+    실제 원천징수는 간이세액표(소득세법 시행령 별표2 — 특별공제 등을 총급여 구간별 공식으로 일괄 반영)를
+    따르므로 이 값은 근사다. 표준세액공제 택일은 calcYearEnd와 같은 규칙(보험료 소득공제 경로와 비교)을 써서,
+    선택공제를 하나도 입력하지 않으면 정산액이 0 근처가 되도록 맞춘다. */
 export function estimatePrepaidWithholding(input: YearEndInput): number {
   const gross = Math.max(0, input.gross)
   const earnedIncome = Math.max(0, gross - earnedIncomeDeduction(gross))
-  const personalDeduction = PERSONAL_DEDUCTION * (1 + Math.max(0, input.dependents))
+  const personalDeduction = PERSONAL_DEDUCTION * (1 + effectiveDependents(input))
   const pension = input.nationalPension != null ? Math.max(0, input.nationalPension) : estimateNationalPension(gross)
   const other = input.otherInsurance != null ? Math.max(0, input.otherInsurance) : estimateOtherInsurance(gross)
-  const taxBase = Math.max(0, earnedIncome - personalDeduction - pension - other)
-  const computedTax = Math.round(progressiveTax(taxBase))
-  const earnedCredit = Math.round(earnedTaxCredit(computedTax, gross))
-  const childCredit = childTaxCredit(Math.max(0, input.children))
-  // 간이세액표 원천징수는 표준세액공제 수준을 반영한다고 보고 13만 포함
-  const income = Math.max(0, computedTax - earnedCredit - childCredit - STANDARD_TAX_CREDIT)
-  return Math.round(income * (1 + LOCAL_TAX_RATE))
+  const { decided } = decideWithStandardChoice({
+    gross,
+    incomeAfterMandatory: earnedIncome - personalDeduction - pension,
+    insurance: other,
+    itemized: 0,
+    otherCredits: childTaxCredit(Math.max(0, input.children)),
+  })
+  return Math.round(decided * (1 + LOCAL_TAX_RATE))
 }

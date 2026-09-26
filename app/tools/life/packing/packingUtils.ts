@@ -26,30 +26,30 @@ export const CLIMATES: ClimateMeta[] = [
   { id: 'frigid', emoji: '❄️', label: '혹한', range: '-10°C 이하',
     tops: '두꺼운 니트·기모 티·플리스', outers: '롱패딩·다운·롱코트', outerCount: 3,
     accessories: '내복·핫팩·털모자·장갑·머플러', tip: '레이어드 필수 (이너+미들+아우터)',
-    color: '#0891B2' },
+    color: 'var(--cyan-600)' },
   { id: 'winter', emoji: '🥶', label: '겨울·초봄', range: '0~10°C',
     tops: '니트·후리스·긴팔', outers: '패딩·트렌치·코트', outerCount: 2,
     accessories: '머플러·장갑·비니', tip: '낮·밤 온도 차 큼 → 가벼운 이너 추가',
-    color: '#9B59B6' },
+    color: 'var(--amethyst)' },
   { id: 'spring', emoji: '🍂', label: '봄·가을', range: '10~20°C',
     tops: '긴팔·맨투맨·셔츠', outers: '자켓·가디건·바람막이', outerCount: 2,
     accessories: '얇은 머플러·우산', tip: '환절기 → 일교차 큼, 얇은 옷 여러 겹',
-    color: '#D97706' },
+    color: 'var(--amber-600)' },
   { id: 'mild', emoji: '🌤️', label: '초여름', range: '20~25°C',
     tops: '반팔·긴팔 혼용', outers: '얇은 가디건·셔츠', outerCount: 1,
     accessories: '우산·선글라스', tip: '실내 냉방 대비 가벼운 가디건 1벌',
-    color: '#0D9488' },
+    color: 'var(--teal-600)' },
   { id: 'summer', emoji: '☀️', label: '여름', range: '25~30°C',
     tops: '반팔·민소매·린넨', outers: '얇은 셔츠 (실내 냉방)', outerCount: 1,
     accessories: '모자·선글라스·선크림·우산', tip: '땀 많이 → 옷 +30%, 통풍 소재',
-    color: '#EA580C' },
+    color: 'var(--orange-600)' },
   { id: 'hot', emoji: '🔥', label: '한여름·열대', range: '30°C 이상',
     tops: '통풍 셔츠·드라이핏·민소매', outers: '얇은 자켓 (UV·실내 냉방)', outerCount: 1,
     accessories: '모자·선글라스·선크림·수영복·휴대용 선풍기', tip: '땀 많이 + 빈번한 갈아입음 → 옷 +50%',
-    color: '#DB2777' },
+    color: 'var(--pink-600)' },
 ]
 
-export const getClimate = (id: Climate) => CLIMATES.find((c) => c.id === id)!
+export const getClimate = (id: Climate) => CLIMATES.find((c) => c.id === id) ?? CLIMATES[0]
 
 /* ─────────────────────────────────────────────
    세탁
@@ -70,7 +70,7 @@ export const LAUNDRIES: LaundryMeta[] = [
   { id: 'daily',  emoji: '🧺', label: '숙소 매일 세탁',    cycle: 2,  multiplier: 0.35, desc: '매일·격일 — 옷 1/3 가능 (장기 여행 추천)' },
 ]
 
-export const getLaundry = (id: Laundry) => LAUNDRIES.find((l) => l.id === id)!
+export const getLaundry = (id: Laundry) => LAUNDRIES.find((l) => l.id === id) ?? LAUNDRIES[0]
 
 /* ─────────────────────────────────────────────
    활동량
@@ -91,7 +91,7 @@ export const ACTIVITIES: ActivityMeta[] = [
   { id: 'beach',  emoji: '🏖️', label: '비치·해양 스포츠', multiplier: 1.3, desc: '서핑·스노쿨링 (바닷물·모래)' },
 ]
 
-export const getActivity = (id: Activity) => ACTIVITIES.find((a) => a.id === id)!
+export const getActivity = (id: Activity) => ACTIVITIES.find((a) => a.id === id) ?? ACTIVITIES[0]
 
 /* ─────────────────────────────────────────────
    사진 중요도
@@ -110,7 +110,7 @@ export const PHOTOS: PhotoMeta[] = [
   { id: 'very',      emoji: '🎥', label: '매우 중요 (인스타·기념일)', bonus: 2 },
 ]
 
-export const getPhoto = (id: PhotoLevel) => PHOTOS.find((p) => p.id === id)!
+export const getPhoto = (id: PhotoLevel) => PHOTOS.find((p) => p.id === id) ?? PHOTOS[0]
 
 /* ─────────────────────────────────────────────
    계산
@@ -138,7 +138,8 @@ export interface PackingItem {
 
 export interface PackingResult {
   items: PackingItem[]
-  clothingWeight: number   // 1인 의류 kg
+  clothingWeight: number   // 1인 의류 kg — 캐리어에 넣는 분량 (착용분 제외)
+  wornWeight: number       // 탑승 시 입고·신는 아우터 1벌 + 신발 1켤레 kg (무게에서 제외)
   extrasWeight: number     // 1인 비의류(세면·전자·약 등) 추정 kg
   carrierWeight: number    // 캐리어 자체 kg
   totalWeight: number      // 1인 총(의류+비의류+캐리어) kg — 위탁 실측 기준
@@ -148,10 +149,49 @@ export interface PackingResult {
   airline: string
 }
 
-const ITEM_WEIGHTS: Record<string, number> = {
+/* ── 계산 상수 — calcPacking과 가이드 본문(page.tsx)이 함께 참조 (본문 수치가 계산식과 어긋나지 않도록 단일 소스) ── */
+
+/** 품목 1개 평균 무게 (g) */
+export const ITEM_WEIGHTS = {
   top: 200, bottom: 400, underwear: 50, sock: 30,
   outer: 800, shoe: 700, sports: 250, formal: 600, swim: 150,
+} as const
+
+/** 더위 보정 — 여름·열대는 땀으로 자주 갈아입어 상의·속옷 +30~50% */
+export const HEAT_MULT: Record<Climate, number> = {
+  frigid: 1.0, winter: 1.0, spring: 1.0, mild: 1.0, summer: 1.3, hot: 1.5,
 }
+
+/** 여유분 — 상의·하의는 넉넉 버전에만, 속옷·양말은 두 버전 모두 */
+export const MARGIN = {
+  tops: { min: 0, comfort: 1 },
+  bottoms: { min: 0, comfort: 1 },
+  underwear: { min: 1, comfort: 2 },
+} as const
+
+/** 품목별 하한 */
+export const MIN_COUNT = { tops: 2, bottoms: 1, underwear: 3 } as const
+
+/** 액티비티(골프·등산) + 운동복 옵션일 때 운동복 상한 (그 외 활동은 최소 1·넉넉 2세트) */
+export const SPORTS_ACTIVE_CAP = { min: 4, comfort: 5 } as const
+
+/** 1인 비의류(세면·화장품·전자·약·잡화) 추정 무게 (kg) */
+export const EXTRAS_KG = 2.5
+
+/** 캐리어 자체 무게 — 내용물 무게 구간별 (kg), 오름차순 */
+export const CARRIER_KG_STEPS: { maxContentsKg: number; kg: number }[] = [
+  { maxContentsKg: 7, kg: 2.5 },
+  { maxContentsKg: 14, kg: 3.5 },
+  { maxContentsKg: Infinity, kg: 4.5 },
+]
+
+/** 캐리어 추천 구간 — 1인 총 무게(의류+비의류+캐리어) 기준, 오름차순 */
+export const CARRIER_SIZES: { id: string; label: string; capacity: string; maxTotalKg: number }[] = [
+  { id: 'cabin', label: '기내용 (20인치)',    capacity: '~ 10kg', maxTotalKg: 10 },
+  { id: '24',    label: '24인치 (중형)',      capacity: '~ 15kg', maxTotalKg: 15 },
+  { id: '28',    label: '28인치 (대형)',      capacity: '~ 23kg', maxTotalKg: 23 },
+  { id: 'large', label: '28인치+ 또는 분할', capacity: '23kg+',  maxTotalKg: Infinity },
+]
 
 export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfort'): PackingResult {
   const days = Math.max(1, inp.days)
@@ -162,20 +202,21 @@ export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfo
   const ph = getPhoto(inp.photo)
 
   /* 여름·열대는 땀으로 자주 갈아입어 옷 +30~50% (가이드 콘텐츠 기준 반영) */
-  const heat = inp.climate === 'hot' ? 1.5 : inp.climate === 'summer' ? 1.3 : 1.0
+  const heat = HEAT_MULT[cli.id]
 
   /* 상의 = ceil(일수 × 활동량 × 세탁 보정 × 더위 보정) + 1 + 사진 보너스 */
   const topsBase = Math.ceil(days * act.multiplier * lau.multiplier * heat)
-  const topsCount = Math.max(2, topsBase + (mode === 'comfort' ? 1 : 0) + ph.bonus)
+  const topsCount = Math.max(MIN_COUNT.tops, topsBase + MARGIN.tops[mode] + ph.bonus)
 
-  /* 하의 = ceil(일수 / 3 × 세탁 보정) + 1 */
-  const bottomsBase = Math.ceil((days / 3) * (lau.cycle === 99 ? 1 : lau.cycle / 4))
-  const bottomsCount = Math.max(1, bottomsBase + (mode === 'comfort' ? 1 : 0))
+  /* 하의 = ceil(일수 / 3 × 세탁 보정) + 1 — 세탁 보정은 상의와 같은 multiplier
+     (이전 cycle/4 식은 코인·호텔 세탁(주기 4일)에서 보정이 1이 돼 '세탁 불가'와 같은 수가 나왔음) */
+  const bottomsBase = Math.ceil((days / 3) * lau.multiplier)
+  const bottomsCount = Math.max(MIN_COUNT.bottoms, bottomsBase + MARGIN.bottoms[mode])
 
   /* 속옷·양말 = 일수 보정 (세탁·더위 반영) */
   const underwearCount = lau.id === 'none'
-    ? Math.max(3, Math.ceil(days * heat) + (mode === 'comfort' ? 2 : 1))
-    : Math.max(3, Math.ceil(days * lau.multiplier * heat) + (mode === 'comfort' ? 2 : 1))
+    ? Math.max(MIN_COUNT.underwear, Math.ceil(days * heat) + MARGIN.underwear[mode])
+    : Math.max(MIN_COUNT.underwear, Math.ceil(days * lau.multiplier * heat) + MARGIN.underwear[mode])
   const sockCount = underwearCount
 
   /* 아우터 = 기온대별 (min은 -1) */
@@ -191,7 +232,7 @@ export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfo
   /* 운동복 — 액티비티(골프·등산)는 일수만큼(라운드·산행별), 그 외는 1~2세트 */
   const sportsCount = inp.needSports
     ? (inp.activity === 'active'
-        ? Math.min(days, mode === 'comfort' ? 5 : 4)
+        ? Math.min(days, SPORTS_ACTIVE_CAP[mode])
         : (mode === 'comfort' ? 2 : 1))
     : 0
 
@@ -214,23 +255,25 @@ export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfo
   if (formalCount > 0) items.push({ id: 'formal', emoji: '👔', label: '격식 옷',       count: formalCount, weight: ITEM_WEIGHTS.formal, totalWeight: formalCount * ITEM_WEIGHTS.formal })
   if (swimCount > 0) items.push({ id: 'swim',     emoji: '🩱', label: '수영복',         count: swimCount,   weight: ITEM_WEIGHTS.swim,   totalWeight: swimCount * ITEM_WEIGHTS.swim })
 
-  const clothingKg = items.reduce((s, it) => s + it.totalWeight, 0) / 1000   // 1인 의류
+  const allClothingKg = items.reduce((s, it) => s + it.totalWeight, 0) / 1000   // 1인 의류 전체
+  // 아우터 1벌·신발 1켤레는 입고 탑승하므로 캐리어 무게에서 뺀다 (아우터·신발은 항상 1개 이상)
+  const wornKg = (ITEM_WEIGHTS.outer + ITEM_WEIGHTS.shoe) / 1000
+  const clothingKg = Math.max(0, allClothingKg - wornKg)
   // 비의류(세면·화장품·전자·약·잡화) 1인 추정 + 캐리어 자체 — 위탁 시 함께 측정되므로 한도 판정에 포함
-  const extrasKg = 2.5
+  const extrasKg = EXTRAS_KG
   const contentsKg = clothingKg + extrasKg
-  const carrierKg = contentsKg <= 7 ? 2.5 : contentsKg <= 14 ? 3.5 : 4.5
+  const carrierKg = (CARRIER_KG_STEPS.find((st) => contentsKg <= st.maxContentsKg) ?? CARRIER_KG_STEPS[CARRIER_KG_STEPS.length - 1]).kg
   const totalKg = contentsKg + carrierKg     // 1인 1캐리어 총 무게
   const groupTotal = totalKg * people
 
-  /* 캐리어 추천 (1인 기준) */
-  let carrier = { id: 'cabin', label: '기내용 (20인치)', capacity: '~ 7kg' }
-  if (totalKg > 7 && totalKg <= 15) carrier = { id: '24', label: '24인치 (중형)', capacity: '~ 15kg' }
-  else if (totalKg > 15 && totalKg <= 23) carrier = { id: '28', label: '28인치 (대형)', capacity: '~ 23kg' }
-  else if (totalKg > 23) carrier = { id: 'large', label: '28인치+ 또는 분할', capacity: '23kg+' }
+  /* 캐리어 추천 (1인 기준) — 기내 한도는 국적 항공사·국내 LCC 기준 10kg 안팎, 해외 LCC는 7kg인 곳이 많음 */
+  const size = CARRIER_SIZES.find((c) => totalKg <= c.maxTotalKg) ?? CARRIER_SIZES[0]
+  const carrier = { id: size.id, label: size.label, capacity: size.capacity }
 
-  /* 항공사 한도 안내 (1인 위탁 기준) */
+  /* 항공사 한도 안내 (1인 기준) */
   let airline = ''
-  if (totalKg <= 7) airline = '✅ 기내 휴대 가능 (대부분 LCC 7~10kg, 풀서비스 7~12kg)'
+  if (totalKg <= 7) airline = '✅ 기내 휴대 가능 (기내 한도 7kg인 항공사도 대부분 통과)'
+  else if (totalKg <= 10) airline = '✅ 기내 휴대 가능 — 국적 항공사·국내 LCC는 대체로 10kg 안팎이지만, 7kg 한도인 해외 LCC는 넘을 수 있어 예약한 항공사 규정을 확인하세요'
   else if (totalKg <= 15) airline = '⚠️ 위탁 수하물 (대부분 LCC 15~20kg, 풀서비스 23kg)'
   else if (totalKg <= 23) airline = '⚠️ 위탁 수하물 (풀서비스 표준 23kg, LCC 추가 요금 가능)'
   else airline = '🚨 23kg 초과 — 추가 요금 또는 짐 분할 필요 (대부분 항공사 30kg 한도)'
@@ -238,6 +281,7 @@ export function calcPacking(inp: PackingInputs, mode: 'min' | 'comfort' = 'comfo
   return {
     items,
     clothingWeight: clothingKg,
+    wornWeight: wornKg,
     extrasWeight: extrasKg,
     carrierWeight: carrierKg,
     totalWeight: totalKg,

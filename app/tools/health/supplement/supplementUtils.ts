@@ -3,7 +3,7 @@
    영양제 — 약물 상호작용 / 특수 상황 / 오메가3 합산 / 한국 인기 프리셋
    ※ 본 도구는 일반 정보 제공이며 의학적 진단·처방·복용 권유 도구가 아닙니다.
    처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사 상담.
-   한국 식약처 식품안전정보: 1577-1255 / 의약품안전사용서비스: 1577-2334
+   식품의약품안전처 종합상담센터: 1577-1255
    ────────────────────────────────────────────────────── */
 
 /* ─── 오메가3 EPA+DHA 합산 가이드 ─── */
@@ -12,7 +12,8 @@ export const OMEGA3_GUIDELINES = {
   idealMin: 250,
   idealMax: 500,
   cardiacMin: 1000, // 심혈관 치료 (의사 처방)
-  upperLimit: 3000, // FDA 상한
+  supplementMax: 2000, // FDA 권고: 보충제로는 2,000mg/일 이하 (식품 포함 총 3,000mg)
+  upperLimit: 3000, // FDA 권고 총량 한도 (식품 포함)
 }
 
 export interface Omega3Analysis {
@@ -36,22 +37,28 @@ export function analyzeOmega3(epa: number, dha: number): Omega3Analysis | null {
   if (total < OMEGA3_GUIDELINES.minDaily) {
     status = 'under'
     statusLabel = '🟡 목표 미달'
-    statusColor = '#A16207'
+    statusColor = 'var(--yellow-700)'
     interpretation = `${total}mg은 일반적 섭취 목표(250~500mg)에 못 미칩니다. EPA·DHA는 공식 권장량(RDA)이 없으며, 식사(등푸른 생선) 보충이나 용량 증가를 고려할 수 있습니다.`
   } else if (total <= OMEGA3_GUIDELINES.idealMax) {
     status = 'meet'
     statusLabel = '🟢 목표 범위'
-    statusColor = '#059669'
+    statusColor = 'var(--emerald-600)'
     interpretation = `${total}mg은 일반적 섭취 목표 범위(250~500mg) 안입니다.`
-  } else if (total <= OMEGA3_GUIDELINES.upperLimit) {
+  } else if (total <= OMEGA3_GUIDELINES.supplementMax) {
     status = 'over'
     statusLabel = '🟡 목표보다 높음 (한도 이내)'
-    statusColor = '#EA580C'
-    interpretation = `${total}mg은 일반 목표보다 높지만 FDA 권고 한도(보충제 2,000mg·총 3,000mg) 안입니다. 심혈관 목적의 고용량은 의사와 상담하세요.`
+    statusColor = 'var(--orange-600)'
+    interpretation = `${total}mg은 일반 목표보다 높지만 FDA의 보충제 권고 한도(2,000mg) 안입니다. 심혈관 목적의 고용량은 의사와 상담하세요.`
+  } else if (total <= OMEGA3_GUIDELINES.upperLimit) {
+    // 본 도구의 합계는 영양제(보충제)에서 온 양이므로 보충제 기준 2,000mg 초과부터 경고
+    status = 'exceed'
+    statusLabel = '🟠 보충제 권고 한도(2,000mg) 초과'
+    statusColor = 'var(--orange-600)'
+    interpretation = `${total}mg은 FDA가 권고하는 보충제 한도(2,000mg/일, 식품 포함 총 3,000mg)를 넘습니다. 식약처 건강기능식품 기준도 EPA+DHA 하루 0.5~2g입니다. 출혈 위험이 커질 수 있어 용량 조정이나 의사 상담을 권합니다.`
   } else {
     status = 'exceed'
     statusLabel = '🔴 권고 한도 초과'
-    statusColor = '#DC2626'
+    statusColor = 'var(--red-600)'
     interpretation = `${total}mg은 FDA 권고 한도(총 3,000mg)를 초과합니다 — 출혈 위험 ↑. 용량 조정·의사 상담을 권합니다.`
   }
 
@@ -162,7 +169,7 @@ export const DRUG_INTERACTIONS: DrugCategory[] = [
     name: '콜레스테롤약 (스타틴)',
     desc: '콜레스테롤 저하 약물 — CoQ10 ↓ + 나이아신 주의',
     risky: [
-      { ingredientName: '코엔자임Q10',      risk: 'low',    desc: '스타틴 → CoQ10 ↓. 보충 권장 (해롭지 않음)' },
+      { ingredientName: '코엔자임Q10',      risk: 'low',    desc: '스타틴 → CoQ10 ↓. 보충은 대체로 안전하나 근육통 개선 근거는 엇갈림' },
       { ingredientName: '비타민B3(나이아신)', risk: 'medium', desc: '고용량 (500mg+) + 스타틴 → 근육통 위험', minCanon: 500 },
     ],
   },
@@ -199,18 +206,21 @@ export interface SpecialAlert {
   ingredientName: string
   type: 'recommend' | 'caution' | 'avoid'
   desc: string
+  /** 권장 범위 — min은 목표(권장량)로 사용, max는 참고 표시용(상한 아님) */
   recommendedAmount?: { min?: number; max?: number; unit: string }
+  /** 이 상황에서 적용할 상한(UL·주의 기준) — recommendedAmount.unit 단위. 없으면 성인 일반 상한 유지 */
+  ul?: number
 }
 
 export const SPECIAL_MODE_ALERTS: Record<LifeStage, SpecialAlert[]> = {
   general: [],
   pregnant: [
-    { ingredientName: '비타민B9(엽산)',       type: 'recommend', desc: '600~800μg/일 권장 (신경관 결손 예방). 임신 전 3개월부터 시작 이상적.', recommendedAmount: { min: 600, max: 1000, unit: 'μg' } },
+    { ingredientName: '비타민B9(엽산)',       type: 'recommend', desc: '600~800μg/일 권장 (신경관 결손 예방). 임신 전 3개월부터 시작 이상적.', recommendedAmount: { min: 600, max: 800, unit: 'μg' }, ul: 1000 },
     { ingredientName: '철분',                 type: 'recommend', desc: '27mg/일 권장 (임산부 빈혈 예방). 의사 처방 권장.', recommendedAmount: { min: 27, unit: 'mg' } },
-    { ingredientName: '요오드',               type: 'recommend', desc: '150μg/일 정확 (과다·부족 모두 위험).', recommendedAmount: { min: 150, max: 220, unit: 'μg' } },
+    { ingredientName: '요오드',               type: 'recommend', desc: '임신 중에는 권장량이 늘어납니다(미국 기준 220μg/일). 과다·부족 모두 갑상선에 영향을 줄 수 있습니다.', recommendedAmount: { min: 220, unit: 'μg' } },
     { ingredientName: '오메가3(DHA)',         type: 'recommend', desc: '200mg+ 권장 (태아 뇌·시각 발달).', recommendedAmount: { min: 200, unit: 'mg' } },
-    { ingredientName: '비타민A(레티놀)',      type: 'caution',   desc: '레티놀 형태 고용량 (3,000μg+) → 1삼분기 기형아 위험. 베타카로틴 형태로 변경 권장.', recommendedAmount: { max: 3000, unit: 'μg' } },
-    { ingredientName: '비타민D',              type: 'caution',   desc: '4,000IU 초과 → 태아 위험. 권장 600~2,000IU.', recommendedAmount: { max: 4000, unit: 'IU' } },
+    { ingredientName: '비타민A(레티놀)',      type: 'caution',   desc: '레티놀 형태 고용량 (3,000μg+) → 1삼분기 기형아 위험. 베타카로틴 형태로 변경 권장.', recommendedAmount: { unit: 'μg' }, ul: 3000 },
+    { ingredientName: '비타민D',              type: 'caution',   desc: '4,000IU 초과 → 태아 위험. 권장 600~2,000IU.', recommendedAmount: { min: 600, max: 2000, unit: 'IU' }, ul: 4000 },
   ],
   lactating: [
     { ingredientName: '오메가3(DHA)',     type: 'recommend', desc: '300mg+ 권장 (모유 통해 영아에게 전달).', recommendedAmount: { min: 300, unit: 'mg' } },
@@ -220,15 +230,16 @@ export const SPECIAL_MODE_ALERTS: Record<LifeStage, SpecialAlert[]> = {
   teen: [
     { ingredientName: '칼슘',         type: 'recommend', desc: '1,300mg/일 (성장기 골밀도)', recommendedAmount: { min: 1300, unit: 'mg' } },
     { ingredientName: '비타민D',      type: 'recommend', desc: '600IU/일 (성장기)', recommendedAmount: { min: 600, unit: 'IU' } },
-    { ingredientName: '비타민A(레티놀)', type: 'caution',   desc: '청소년 상한 (남 2,800μg / 여 2,400μg) — 성인보다 낮음', recommendedAmount: { max: 2800, unit: 'μg' } },
+    { ingredientName: '비타민A(레티놀)', type: 'caution',   desc: '청소년 상한 (남 2,800μg / 여 2,400μg) — 성인보다 낮음', recommendedAmount: { unit: 'μg' }, ul: 2800 },
   ],
   elderly: [
     { ingredientName: '비타민D',              type: 'recommend', desc: '800~1,000IU/일 (낙상·골절 예방)', recommendedAmount: { min: 800, max: 2000, unit: 'IU' } },
     { ingredientName: '칼슘',                 type: 'recommend', desc: '1,200mg/일 (남 1,000, 여 1,200)', recommendedAmount: { min: 1200, unit: 'mg' } },
     { ingredientName: '비타민B12(코발라민)',  type: 'recommend', desc: '2.4μg+ (위산 ↓로 흡수 ↓)', recommendedAmount: { min: 2.4, unit: 'μg' } },
     { ingredientName: '마그네슘',             type: 'recommend', desc: '부족 흔함 (수면·근육)' },
-    { ingredientName: '비타민E',              type: 'caution',   desc: '400IU 초과 → 출혈 위험 ↑', recommendedAmount: { max: 400, unit: 'mg' } },
-    { ingredientName: '철분',                 type: 'caution',   desc: '결핍 진단 없으면 X. 노년 산화 스트레스 ↑' },
+    // 천연형 400IU = 400/1.49 ≈ 268.46mg → 올림 269로 둬야 400IU 자체는 '초과'가 아니고 401IU부터 초과
+    { ingredientName: '비타민E',              type: 'caution',   desc: '약 269mg(천연형 400IU) 초과 → 출혈 위험 ↑ (고령자 주의 기준)', recommendedAmount: { unit: 'mg' }, ul: Math.ceil(400 / 1.49) },
+    { ingredientName: '철분',                 type: 'caution',   desc: '결핍 진단 없으면 철분 함유 제품은 피하기 (철 과잉 위험)' },
   ],
   chronic: [
     { ingredientName: '비타민A(레티놀)', type: 'caution', desc: '간 손상 위험 — 베타카로틴 형태 권장' },
@@ -239,25 +250,39 @@ export const SPECIAL_MODE_ALERTS: Record<LifeStage, SpecialAlert[]> = {
 }
 
 /* ─── 시너지 조합 (확장) ─── */
+/**
+ * evidence — 화면 분류 기준.
+ *  - 'established': 작용 원리가 분명 → 시너지 카드(초록)로 표시·건수 집계
+ *  - 'limited'    : 소규모·엇갈린 연구뿐 → 중립 「근거 제한」 카드, 시너지 건수 제외
+ *  - 'null'       : 대규모 시험에서 기대 효과 확인 안 됨 → 중립 카드, 시너지 건수 제외
+ * page.tsx 「근거는 얼마나 있나」 표와 등급을 맞출 것.
+ */
+export type SynergyEvidence = 'established' | 'limited' | 'null'
+
 export interface SynergyCombo {
   ingredientNames: [string, string]
   title: string
   desc: string
+  evidence: SynergyEvidence
 }
 
 export const EXTRA_SYNERGY: SynergyCombo[] = [
   { ingredientNames: ['마그네슘', '비타민B6(피리독신)'],
     title: '마그네슘 + 비타민B6',
-    desc: 'B6가 마그네슘의 세포 흡수와 활용을 도와줍니다.' },
+    evidence: 'limited',
+    desc: '함께 먹으면 좋다는 소규모 연구가 있으나 근거는 제한적입니다. 꼭 함께 먹어야 할 이유로 보기는 어렵습니다.' },
   { ingredientNames: ['비타민E', '셀레늄'],
     title: '비타민E + 셀레늄',
-    desc: '두 항산화제 시너지로 활성산소 제거 효과 ↑.' },
+    evidence: 'null',
+    desc: '둘 다 항산화 영양소지만, 3만 5천여 명이 참여한 SELECT 시험에서 함께 먹어도 암 예방 효과는 확인되지 않았습니다.' },
   { ingredientNames: ['아연', '비타민C'],
     title: '아연 + 비타민C',
-    desc: '면역력 강화 시너지.' },
+    evidence: 'limited',
+    desc: '감기 기간 단축 연구가 있으나 결과가 엇갈립니다. 아연 고용량 장기 복용은 구리 결핍 주의.' },
   { ingredientNames: ['프로바이오틱스', '프리바이오틱스'],
     title: '프로바이오틱스 + 프리바이오틱스',
-    desc: '유산균 (프로) + 유산균 먹이 (프리) 시너지로 장 건강 효과 ↑.' },
+    evidence: 'established',
+    desc: '프리바이오틱스(이눌린·올리고당 등)는 유산균의 먹이가 되는 성분으로, 둘을 함께 담은 제품을 신바이오틱스라 부릅니다.' },
 ]
 
 /* ─── 한국 인기 영양제 프리셋 (라벨 보고 입력 보조) ─── */

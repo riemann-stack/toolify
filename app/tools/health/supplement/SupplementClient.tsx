@@ -100,7 +100,7 @@ const TIMINGS: Timing[] = ['morningBefore', 'morningAfter', 'lunch', 'dinnerBefo
 
 const TIMING_REASONS: Record<Timing, string> = {
   morningBefore: '공복: 철분(+비타민C), 프로바이오틱스',
-  morningAfter:  '식후(지용성): 비타민A/D/E/K, 오메가3, CoQ10 — 식이지방과 흡수율 최대 50% ↑',
+  morningAfter:  '식후(지용성): 비타민A/D/E/K, 오메가3, CoQ10 — 지방이 든 식사와 함께 먹어야 흡수가 잘 됨',
   lunch:         '낮 시간대: 비타민B군(에너지 대사), 비타민C(항산화)',
   dinnerBefore:  '식전: 프로바이오틱스 (위산 낮을 때)',
   dinnerAfter:   '식후: 지용성·오메가3 남은 분량',
@@ -111,7 +111,7 @@ const SYNERGY: { a: string; b: string; effect: string }[] = [
   { a: '비타민D', b: '칼슘',     effect: '비타민D가 칼슘 흡수를 돕습니다.' },
   { a: '비타민C', b: '철분',     effect: '비타민C가 철분 흡수를 최대 3배 향상시킵니다.' },
   { a: '비타민D', b: '마그네슘', effect: '마그네슘이 비타민D 활성화에 필요합니다.' },
-  { a: '비타민B12', b: '엽산',   effect: '상호 활성화로 빈혈 예방 시너지를 냅니다.' },
+  { a: '비타민B12(코발라민)', b: '비타민B9(엽산)', effect: '상호 활성화로 빈혈 예방 시너지를 냅니다.' },
   { a: '비타민E', b: '비타민C',  effect: '비타민C가 산화된 비타민E를 재생합니다 (항산화 시너지).' },
   { a: '오메가3(EPA)', b: '비타민E', effect: '비타민E가 오메가3의 산화를 방지합니다.' },
   { a: '오메가3(DHA)', b: '비타민E', effect: '비타민E가 오메가3의 산화를 방지합니다.' },
@@ -296,7 +296,7 @@ export default function SupplementClient() {
           { label: 'FDA Dietary Supplements', href: 'https://www.fda.gov/food/dietary-supplements' },
         ]}
       >
-        본 도구는 「성분 정보 정리」 참고용이며 의학적 진단·처방·복용 권유 도구가 아닙니다. 처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사와 상담하세요. 도움: 식약처 식품안전정보 <strong>1577-1255</strong> · 의약품안전사용서비스 <strong>1577-2334</strong>. (참고: 한국영양학회·보건복지부 한국인 영양소 섭취 기준)
+        본 도구는 「성분 정보 정리」 참고용이며 의학적 진단·처방·복용 권유 도구가 아닙니다. 처방약 복용 중·임신·수유 중·만성질환·65세 이상·18세 미만은 반드시 의사·약사와 상담하세요. 도움: 식품의약품안전처 종합상담센터 <strong>1577-1255</strong>. (권장·상한 수치는 미국 NIH 영양소 섭취기준(DRI)을 중심으로 한국인 영양소 섭취기준 값을 일부 함께 쓴 성인 대표값입니다)
       </Disclaimer>
 
       <div className={s.tabs} role="tablist" aria-label="영양제 분석 탭">
@@ -517,7 +517,9 @@ interface Aggregate {
   adjusted: boolean // 특수 상황(임신·고령 등) 기준으로 보정됐는지
 }
 
-/* 특수 상황(임신·수유·청소년·고령)별 권장·상한 보정 — 데이터가 있고 단위가 일치할 때만 */
+/* 특수 상황(임신·수유·청소년·고령)별 권장·상한 보정 — 데이터가 있고 단위가 일치할 때만.
+   권장 범위의 상단(recommendedAmount.max)은 상한이 아니므로 UL로 쓰지 않고,
+   명시적 상한(alert.ul)이 있을 때만 UL을 바꾼다 (고령 비타민D 2,000IU를 상한으로 오판하던 문제) */
 function lifeStageAdjust(def: IngredientDef, lifeStage: LifeStage): { rda?: number; ul?: number; adjusted: boolean } {
   let rda = def.rda
   let ul = def.ul
@@ -526,9 +528,9 @@ function lifeStageAdjust(def: IngredientDef, lifeStage: LifeStage): { rda?: numb
     const match = (SPECIAL_MODE_ALERTS[lifeStage] ?? [])
       .find((a) => a.ingredientName === def.name && a.recommendedAmount && a.recommendedAmount.unit === def.canonUnit)
     if (match?.recommendedAmount) {
-      const { min, max } = match.recommendedAmount
+      const { min } = match.recommendedAmount
       if (min !== undefined) { rda = min; adjusted = true }
-      if (max !== undefined) { ul = max; adjusted = true }
+      if (match.ul !== undefined) { ul = match.ul; adjusted = true }
     }
   }
   return { rda, ul, adjusted }
@@ -641,7 +643,7 @@ function AnalysisTab({ sups, lifeStage }: { sups: Supplement[]; lifeStage: LifeS
             {omega3.statusLabel}
           </div>
           <div className={s.omega3Interpretation}>
-            <strong>📌 일반적 섭취 목표 250~500mg/일 (EPA·DHA 공식 권장량 미설정 — WHO·심장협회 참고치) · FDA 권고 한도 보충제 2,000mg(총 3,000mg)/일</strong><br />
+            <strong>📌 일반적 섭취 목표 250~500mg/일 (EPA·DHA 공식 권장량 미설정 — WHO·심장협회 참고치) · FDA 권고 한도 보충제 2,000mg/일 (식품 포함 총 3,000mg)</strong><br />
             {omega3.interpretation}
           </div>
         </div>
@@ -785,7 +787,7 @@ function AnalysisTab({ sups, lifeStage }: { sups: Supplement[]; lifeStage: LifeS
         </div>
       )}
       <div className={s.disclaimer}>
-        ⚕️ 상태는 <strong>상한(UL) 기준</strong>입니다 — 🔷 권장 이상은 상한 이내 <strong>안전 범위</strong>이고, 🟠 상한 근접·🚨 상한 초과만 실제 주의 대상입니다. 권장량(RDA)은 「부족하지 않을 목표치」이지 위험 기준이 아닙니다. 수치는 <strong>한국영양학회 한국인 영양소 섭취기준(KDRI)</strong> 기반 성인 일반값이며, 2025년 개정판이 배포되어 일부 값이 달라질 수 있으니 최신 기준·전문가 상담으로 확인하세요.
+        ⚕️ 상태는 <strong>상한(UL) 기준</strong>입니다 — 🔷 권장 이상은 상한 이내 <strong>안전 범위</strong>이고, 🟠 상한 근접·🚨 상한 초과만 실제 주의 대상입니다. 권장량(RDA)은 「부족하지 않을 목표치」이지 위험 기준이 아닙니다. 수치는 <strong>미국 NIH 영양소 섭취기준(DRI)</strong> 중심의 성인 대표값이고, 비타민C·B6·칼슘 등 일부 성분의 권장량은 한국인 영양소 섭취기준 값을 썼습니다. 성분마다 기준이 섞여 있고 성별·연령에 따라서도 달라지니 최신 기준과 전문가 상담으로 확인하세요.
       </div>
     </>
   )
@@ -818,14 +820,16 @@ function GuideTab({ sups }: { sups: Supplement[] }) {
   const activeSynergy = SYNERGY.filter((syn) => ingredientSet.has(syn.a) && ingredientSet.has(syn.b))
   const activeCaution = CAUTION.filter((c) => ingredientSet.has(c.a) && ingredientSet.has(c.b))
 
-  // 시간대별 그룹핑
+  // 시간대별 그룹핑 — 제품명이 없으면 분석 탭과 같은 '제품 N'으로 표시
+  const hasContent = (sp: Supplement) => !!sp.name.trim() || sp.ingredients.some((i) => i.name)
+  const named = sups.map((sp, i) => ({ ...sp, name: sp.name.trim() || `제품 ${i + 1}` }))
   const byTime = TIMINGS.map((t) => ({
     timing: t,
     label: TIMING_LABELS[t],
     reason: TIMING_REASONS[t],
-    sups: sups.filter((sp) => sp.timing === t && sp.name),
+    sups: named.filter((sp, i) => sp.timing === t && hasContent(sups[i])),
   }))
-  const unassigned = sups.filter((sp) => sp.timing === null && sp.name)
+  const unassigned = named.filter((sp, i) => sp.timing === null && hasContent(sups[i]))
 
   return (
     <>
@@ -884,7 +888,7 @@ function GuideTab({ sups }: { sups: Supplement[] }) {
               <div key={i} className={`${s.hintCard} ${s.cautionCard}`}>
                 <div className={s.hintHead}>⚡ {c.a} + {c.b}</div>
                 <div className={s.hintBody}>
-                  <strong style={{ color: '#FFB86B' }}>{c.issue}</strong><br />
+                  <strong style={{ color: 'var(--warning)' }}>{c.issue}</strong><br />
                   💡 {c.tip}
                 </div>
               </div>
@@ -1071,8 +1075,7 @@ function DrugSpecialTab({
         <strong>도움 받기:</strong>
         <ul>
           <li>단골 약사 직접 상담 (가장 가깝고 정확)</li>
-          <li>한국 식약처 식품안전정보: <strong>1577-1255</strong></li>
-          <li>의약품안전사용서비스: <strong>1577-2334</strong></li>
+          <li>식품의약품안전처 종합상담센터: <strong>1577-1255</strong></li>
         </ul>
       </div>
     </>
@@ -1095,7 +1098,12 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
 
   // 활성 조합
   const activeSynergy = SYNERGY.filter(syn => ingredientSet.has(syn.a) && ingredientSet.has(syn.b))
-  const activeExtraSynergy = EXTRA_SYNERGY.filter(c => ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1]))
+  // 근거 등급이 'established'인 확장 조합만 시너지로 집계 — 나머지는 중립 「근거 제한」 카드로 분리
+  const extraEstablished = EXTRA_SYNERGY.filter(c => c.evidence === 'established')
+  const extraWeak = EXTRA_SYNERGY.filter(c => c.evidence !== 'established')
+  const hasPair = (c: { ingredientNames: [string, string] }) => ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1])
+  const activeExtraSynergy = extraEstablished.filter(hasPair)
+  const activeWeak = extraWeak.filter(hasPair)
   const activeCaution = CAUTION.filter(c => ingredientSet.has(c.a) && ingredientSet.has(c.b))
 
   return (
@@ -1104,6 +1112,7 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
         <span className={s.cardLabel}>본인 영양제 기준 — 활성 조합 분석</span>
         <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.7 }}>
           시너지 {activeSynergy.length + activeExtraSynergy.length}건 / 주의 {activeCaution.length}건 감지.{' '}
+          {activeWeak.length > 0 && `근거가 약한 조합 ${activeWeak.length}건은 시너지에서 제외했습니다. `}
           {ingredientSet.size === 0 && '먼저 「영양제 등록」 탭에 입력해주세요.'}
         </p>
       </div>
@@ -1116,10 +1125,10 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
             title: `${syn.a} + ${syn.b}`,
             desc: syn.effect,
             active: ingredientSet.has(syn.a) && ingredientSet.has(syn.b),
-          })), ...EXTRA_SYNERGY.map(c => ({
+          })), ...extraEstablished.map(c => ({
             title: c.title,
             desc: c.desc,
-            active: ingredientSet.has(c.ingredientNames[0]) && ingredientSet.has(c.ingredientNames[1]),
+            active: hasPair(c),
           }))].map((c, i) => (
             <div key={i} className={`${s.hintCard} ${s.synergyCard}`}
               style={c.active ? { background: 'rgba(16,185,129,0.06)', borderColor: 'rgba(16,185,129,0.40)' } : { opacity: 0.6 }}>
@@ -1127,6 +1136,28 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
               <div className={s.hintBody}>{c.desc}</div>
             </div>
           ))}
+        </div>
+      </div>
+
+      {/* 근거 제한·효과 확인 안 됨 — 시너지로 세지 않음 */}
+      <div className={s.card}>
+        <span className={s.cardLabel}>근거 제한·효과 확인 안 됨 (시너지로 보지 않음)</span>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+          {extraWeak.map((c, i) => {
+            const active = hasPair(c)
+            return (
+              <div key={i} className={`${s.hintCard} ${s.neutralCard}`}
+                style={active ? { borderColor: 'var(--field-line)' } : { opacity: 0.6 }}>
+                <div className={s.hintHead}>
+                  {active ? '• ' : '○ '}{c.title}{' '}
+                  <span style={{ fontSize: 12, fontWeight: 600, color: 'var(--muted)' }}>
+                    ({c.evidence === 'null' ? '대규모 시험서 효과 없음' : '근거 제한적'}{active ? ' · 복용 중' : ''})
+                  </span>
+                </div>
+                <div className={s.hintBody}>{c.desc}</div>
+              </div>
+            )
+          })}
         </div>
       </div>
 
@@ -1141,7 +1172,7 @@ function SynergyDetailTab({ sups }: { sups: Supplement[] }) {
                 style={active ? { background: 'rgba(234,88,12,0.08)', borderColor: 'rgba(234,88,12,0.50)' } : { opacity: 0.6 }}>
                 <div className={s.hintHead}>{active ? '⚡' : '○'} {c.a} + {c.b}</div>
                 <div className={s.hintBody}>
-                  <strong style={{ color: '#FFB86B' }}>{c.issue}</strong><br />
+                  <strong style={{ color: 'var(--warning)' }}>{c.issue}</strong><br />
                   💡 {c.tip}
                 </div>
               </div>

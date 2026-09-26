@@ -6,7 +6,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
   min-width: 0;
 }
@@ -16,7 +16,7 @@
   color: var(--text);
   font-weight: 800;
   margin-bottom: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .cardHint {
   font-size: 12px;
@@ -29,7 +29,7 @@
   color: var(--muted);
   font-weight: 700;
   margin-bottom: 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* ── 필드 ── */
@@ -46,7 +46,7 @@
   font-size: 12px;
   color: var(--muted);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .dateInput {
   background: var(--bg3);
@@ -55,7 +55,7 @@
   padding: 11px 13px;
   font-size: 16px;
   color: var(--text);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   color-scheme: light;
   width: 100%;
@@ -74,16 +74,16 @@
   flex: 1;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }
 .toggleActive {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: var(--accent);
   color: var(--accent);
   font-weight: 700;
@@ -95,7 +95,7 @@
   font-size: 13px;
   color: var(--text);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   padding: 6px 0;
 }
 .toggleLabel input { accent-color: var(--accent); width: 16px; height: 16px; }
@@ -116,7 +116,7 @@
   padding: 10px 12px;
   cursor: pointer;
   text-align: left;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   display: flex;
   flex-direction: column;
   gap: 2px;
@@ -127,7 +127,7 @@
   .statusBtn:hover { border-color: var(--accent); }
 }
 .statusActive {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: var(--accent);
 }
 .statusBtn strong {
@@ -157,10 +157,10 @@
 .autoBoxLabel {
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .autoBoxVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--accent);
@@ -181,7 +181,7 @@
 }
 .slider { flex: 1; accent-color: var(--accent); min-width: 0; }
 .sliderVal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
   color: var(--accent);
@@ -223,12 +223,12 @@
   font-weight: 800;
 }
 @media (hover: hover) {
-  .numRow button:hover { background: rgba(14,165,233,0.14); }
+  .numRow button:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
 }
 .numRow span {
   flex: 1;
   text-align: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--text);
@@ -242,23 +242,23 @@
   padding: 10px 14px;
   background: rgba(16,185,129,0.14);
   border: 1px solid rgba(16,185,129,0.25);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .depSummary strong {
-  font-family: 'Inter', system-ui, sans-serif;
-  color: #059669;
+  font-family: var(--font-sans);
+  color: var(--emerald-600);
   font-size: 15px;
   margin-left: 4px;
 }
 
 /* ── 메인 히어로 ── */
 .heroCard {
-  background: linear-gradient(140deg, rgba(14,165,233,0.18), rgba(8,145,178,0.14));
-  border: 1px solid rgba(14,165,233,0.30);
-  border-radius: 16px;
+  background: linear-gradient(140deg, color-mix(in srgb, var(--accent) 18%, transparent), color-mix(in srgb, var(--cyan-600) 14%, transparent));
+  border: 1px solid color-mix(in srgb, var(--accent) 30%, transparent);
+  border-radius: var(--radius-card);
   padding: 22px 24px;
   text-align: center;
 }
@@ -277,13 +277,13 @@
   margin-top: 8px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(64px, 16vw, 96px);
   font-weight: 800;
   letter-spacing: -3px;
   line-height: 1;
   font-variant-numeric: tabular-nums;
-  text-shadow: 0 0 28px rgba(14,165,233,0.20);
+  text-shadow: 0 0 28px color-mix(in srgb, var(--accent) 20%, transparent);
 }
 .heroDenom {
   font-size: clamp(18px, 4vw, 24px);
@@ -296,9 +296,9 @@
   font-weight: 700;
   padding: 6px 14px;
   border: 1px solid;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   margin-top: 10px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 .barList { display: flex; flex-direction: column; gap: 6px; margin-top: 18px; }
@@ -314,31 +314,31 @@
 .barLabel {
   font-size: 12px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   text-align: right;
 }
 .barTrack {
   background: var(--bg3);
   height: 14px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   overflow: hidden;
 }
 .barFill {
   display: block;
   height: 100%;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   transition: width 0.5s;
 }
 .barValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
   text-align: right;
 }
-.barValue small { color: var(--muted); font-size: 10px; font-weight: 400; }
+.barValue small { color: var(--muted); font-size: 11px; font-weight: 400; }
 
 /* ── 커트라인 ── */
 .cutlineList { display: flex; flex-direction: column; gap: 6px; }
@@ -360,7 +360,7 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .cutlineDesc {
   font-size: 11px;
@@ -373,7 +373,7 @@
   flex-wrap: wrap;
 }
 .cutlineRange {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--muted);
   font-variant-numeric: tabular-nums;
@@ -382,13 +382,13 @@
   font-size: 11px;
   font-weight: 700;
   padding: 4px 10px;
-  border-radius: 999px;
-  font-family: 'Noto Sans KR', sans-serif;
+  border-radius: var(--radius-pill);
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
-.cutlineOk    { background: rgba(16,185,129,0.18); color: #059669; }
-.cutlineClose { background: rgba(217,119,6,0.18); color: #D97706; }
-.cutlineNo    { background: rgba(220,38,38,0.18); color: #DC2626; }
+.cutlineOk    { background: rgba(16,185,129,0.18); color: var(--emerald-600); }
+.cutlineClose { background: rgba(217,119,6,0.18); color: var(--amber-600); }
+.cutlineNo    { background: rgba(220,38,38,0.18); color: var(--red-600); }
 
 /* ── 시뮬레이션 ── */
 .simGrid {
@@ -414,7 +414,7 @@
   font-size: 13px;
   font-weight: 700;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .simDesc {
   font-size: 12px;
@@ -430,19 +430,19 @@
   border-top: 1px dashed var(--border);
 }
 .simTotal {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 17px;
   font-weight: 800;
   color: var(--text);
   font-variant-numeric: tabular-nums;
 }
 .simDelta {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 700;
   font-variant-numeric: tabular-nums;
 }
-.simDeltaUp { color: #059669; }
+.simDeltaUp { color: var(--emerald-600); }
 .simDeltaSame { color: var(--muted); }
 
 /* ── 특별공급 ── */
@@ -455,7 +455,7 @@
   transition: all 0.15s;
 }
 .specialActive {
-  background: rgba(14,165,233,0.14);
+  background: color-mix(in srgb, var(--accent) 14%, transparent);
   border-color: var(--accent);
 }
 .specialHead {
@@ -468,7 +468,7 @@
   width: 100%;
   cursor: pointer;
   text-align: left;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .specialEmoji { font-size: 20px; flex-shrink: 0; line-height: 1.2; }
 .specialBody { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; }
@@ -480,8 +480,8 @@
 .specialActive .specialName { color: var(--accent); }
 .specialRatio {
   font-size: 11px;
-  color: #A16207;
-  font-family: 'Inter', system-ui, sans-serif;
+  color: var(--yellow-700);
+  font-family: var(--font-sans);
 }
 .specialDesc {
   font-size: 12px;
@@ -501,7 +501,7 @@
   font-size: 12px;
   color: var(--text);
   line-height: 1.8;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .specialConditions li { margin-bottom: 2px; }
 
@@ -514,22 +514,25 @@
   border-radius: 10px;
   padding: 12px 14px;
 }
-.pitfallHigh { border-left-color: #DC2626; }
-.pitfallMid  { border-left-color: #D97706; }
+.pitfallHigh { border-left-color: var(--red-600); }
+.pitfallMid  { border-left-color: var(--amber-600); }
 .pitfallItem strong {
   display: block;
   font-size: 13px;
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 4px;
 }
-.pitfallHigh strong { color: #DC2626; }
-.pitfallMid strong  { color: #D97706; }
+.pitfallHigh strong { color: var(--red-600); }
+.pitfallMid strong  { color: var(--amber-600); }
 .pitfallItem p {
   font-size: 12px;
   color: var(--muted);
   margin: 0;
   line-height: 1.7;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
+
+/* overflow:hidden 컨테이너 안 버튼 — 전역 포커스 링(바깥 2px)이 잘리지 않게 안쪽으로 */
+.numRow :focus-visible { outline-offset: -3px; }

@@ -4,13 +4,13 @@
 .disclaimer {
   background: rgba(124,58,237,0.06);
   border: 1px solid rgba(124,58,237,0.30);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 13px 16px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.85;
 }
-.disclaimer strong { color: #9333EA; }
+.disclaimer strong { color: var(--purple-600); }
 
 /* ── 카테고리 탭 (전부 표시 · 줄바꿈) ── */
 .tabs {
@@ -19,17 +19,17 @@
   gap: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 9px 12px;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   white-space: nowrap;
@@ -41,7 +41,7 @@
 @media (max-width: 480px) { .tabBtn { padding: 10px 10px; font-size: 12px; } }
 .tabActive {
   background: rgba(124,58,237,0.15);
-  color: #9333EA;
+  color: var(--purple-600);
   font-weight: 700;
 }
 
@@ -49,7 +49,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 18px;
 }
 .cardLabel {
@@ -82,19 +82,19 @@
   margin: 8px 0 0;
   font-size: 12px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.6;
   padding: 7px 10px;
-  background: rgba(8,145,178,0.10);
-  border-radius: 8px;
-  border-left: 3px solid rgba(8,145,178,0.45);
+  background: color-mix(in srgb, var(--cyan-600) 10%, transparent);
+  border-radius: var(--radius-s);
+  border-left: 3px solid color-mix(in srgb, var(--cyan-600) 45%, transparent);
 }
 .numInput {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -104,7 +104,7 @@
   width: 100%;
   box-sizing: border-box;
 }
-.numInput:focus { border-color: #9333EA; }
+.numInput:focus { border-color: var(--purple-600); }
 .numInput::-webkit-inner-spin-button,
 .numInput::-webkit-outer-spin-button { -webkit-appearance: none; margin: 0; }
 .numInput { -moz-appearance: textfield; appearance: textfield; }
@@ -112,9 +112,9 @@
 .unitSelect {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 12px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   font-size: 16px; /* iOS Safari 포커스 시 자동 줌 방지(<16px) */
   color: var(--text);
@@ -144,7 +144,7 @@
   border: 1px solid var(--border);
   border-radius: 10px;
   padding: 11px 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: transform 0.12s, border-color 0.12s;
   /* button 리셋 (결과 행 전체가 복사 버튼) */
@@ -166,7 +166,7 @@
   border-color: rgba(124,58,237,0.25);
 }
 .resultRowSource {
-  background: rgba(14,165,233,0.18);
+  background: color-mix(in srgb, var(--accent) 18%, transparent);
   border-color: var(--accent);
 }
 
@@ -183,10 +183,10 @@
   font-weight: 400;
   line-height: 1.4;
 }
-.resultRowKorean .resultUnit small { color: #9333EA; }
+.resultRowKorean .resultUnit small { color: var(--purple-600); }
 
 .resultValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 800;
   font-variant-numeric: tabular-nums;
   text-align: right;
@@ -207,7 +207,7 @@
   min-width: 36px;
   font-size: 11px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .resultCopy:hover { color: var(--accent); border-color: var(--accent); }
 }
@@ -219,34 +219,34 @@
   gap: 8px;
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   user-select: none;
 }
-.toggleLabel input { accent-color: #9333EA; width: 16px; height: 16px; cursor: pointer; }
+.toggleLabel input { accent-color: var(--purple-600); width: 16px; height: 16px; cursor: pointer; }
 
 /* ── 정보 박스 ── */
 .infoBox {
-  background: rgba(8,145,178,0.14);
-  border: 1px solid rgba(8,145,178,0.30);
+  background: color-mix(in srgb, var(--cyan-600) 14%, transparent);
+  border: 1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent);
   border-radius: 10px;
   padding: 11px 14px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.75;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.infoBox strong { color: #0891B2; }
+.infoBox strong { color: var(--cyan-600); }
 
 .koreanNote {
   font-size: 12px;
   color: var(--muted);
   margin-top: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   line-height: 1.7;
   padding: 8px 12px;
   background: rgba(124,58,237,0.04);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   border-left: 3px solid rgba(124,58,237,0.40);
 }
-.koreanNote strong { color: #9333EA; }
+.koreanNote strong { color: var(--purple-600); }

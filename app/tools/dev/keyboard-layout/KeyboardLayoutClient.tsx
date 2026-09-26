@@ -120,7 +120,8 @@ function enToKo(input: string): string {
     } else if (cho >= 0 && jung < 0) {
       flush(); cho = CHO_IDX[t]
     } else if (jung >= 0 && jong < 0) {
-      if (isJong(t)) jong = JONG_IDX[t]
+      // 초성 없이 모음만 있는 상태(ㅠ·ㅜ 등)에서는 받침을 붙이지 않고 새 음절 시작 — 'nnzz' → ㅜㅜㅋㅋ
+      if (cho >= 0 && isJong(t)) jong = JONG_IDX[t]
       else { flush(); cho = CHO_IDX[t] }
     } else if (jong >= 0) {
       const combined = JONG_COMBINE[JONG[jong] + t]
@@ -175,6 +176,13 @@ function looksKorean(text: string): boolean {
   return false
 }
 
+const hasLatin = (text: string) => /[A-Za-z]/.test(text)
+
+// 한글·영문이 섞인 입력('오늘 dkssud') — 이미 한글인 부분은 두고 영문 구간만 한글로
+function enRunsToKo(text: string): string {
+  return text.replace(/[A-Za-z]+/g, run => enToKo(run))
+}
+
 type Dir = 'enToKo' | 'koToEn'
 
 // ─────────────────────────────────────────────
@@ -213,22 +221,25 @@ export default function KeyboardLayoutClient() {
   const [input, setInput] = useState<string>('dkssudgktpdy')
   const [copied, setCopied] = useState<boolean>(false)
 
-  // 자동 방향 추정 (auto일 때만): 입력에 한글이 있으면 한→영
+  // 자동 방향 추정 (auto일 때만): 한글만 있으면 한→영, 영문이 있으면 영→한, 섞여 있으면 영문 구간만 영→한
+  const mixed = auto && looksKorean(input) && hasLatin(input)
   const effectiveDir: Dir = useMemo(() => {
     if (!auto) return dir
-    return looksKorean(input) ? 'koToEn' : 'enToKo'
+    return looksKorean(input) && !hasLatin(input) ? 'koToEn' : 'enToKo'
   }, [auto, dir, input])
 
   const output = useMemo(() => {
     if (!input) return ''
+    if (mixed) return enRunsToKo(input)
     return effectiveDir === 'enToKo' ? enToKo(input) : koToEn(input)
-  }, [input, effectiveDir])
+  }, [input, effectiveDir, mixed])
 
   function copy() {
     if (!output || typeof navigator === 'undefined' || !navigator.clipboard) return
-    navigator.clipboard.writeText(output)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    navigator.clipboard.writeText(output).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    }).catch(() => { /* 권한 거부 등 — '복사됨'을 띄우지 않음 */ })
   }
 
   // 입력↔출력 스왑: 변환 결과를 입력으로 옮기고 방향 반전
@@ -238,7 +249,7 @@ export default function KeyboardLayoutClient() {
     if (!auto) setDir(d => (d === 'enToKo' ? 'koToEn' : 'enToKo'))
   }
 
-  const dirLabel = effectiveDir === 'enToKo' ? '영문 자판 → 한글' : '한글 → 영문 자판'
+  const dirLabel = mixed ? '영문 부분만 → 한글' : effectiveDir === 'enToKo' ? '영문 자판 → 한글' : '한글 → 영문 자판'
 
   return (
     <div className={s.wrap}>
@@ -274,7 +285,7 @@ export default function KeyboardLayoutClient() {
         </div>
         {auto && (
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>
-            현재 입력 기준 <strong style={{ color: 'var(--cat-dev)' }}>{dirLabel}</strong>으로 변환 중입니다. 버튼을 누르면 수동 고정됩니다.
+            현재 입력 기준 <strong style={{ color: 'var(--cat-dev)' }}>{dirLabel}</strong>으로 변환 중입니다.{mixed && ' 한글과 영문이 섞여 있어 이미 한글인 부분은 그대로 둡니다.'} 버튼을 누르면 수동 고정됩니다.
           </p>
         )}
       </div>
@@ -365,7 +376,7 @@ export default function KeyboardLayoutClient() {
                     minWidth: 40,
                     background: 'var(--bg3)',
                     border: '1px solid var(--border)',
-                    borderRadius: 8,
+                    borderRadius: 'var(--radius-s)',
                     padding: '6px 4px',
                     textAlign: 'center',
                     fontFamily: 'var(--font-mono)',
@@ -374,7 +385,7 @@ export default function KeyboardLayoutClient() {
                   <div style={{ fontSize: 11, color: 'var(--muted)' }}>{key.en}</div>
                   <div style={{ fontSize: 17, color: 'var(--cat-dev)', fontWeight: 700, lineHeight: 1.3 }}>{key.ko}</div>
                   {key.shift && (
-                    <div style={{ fontSize: 10, color: 'var(--muted)' }}>⇧ {key.shift}</div>
+                    <div style={{ fontSize: 11, color: 'var(--muted)' }}>⇧ {key.shift}</div>
                   )}
                 </div>
               ))}

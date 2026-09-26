@@ -1,124 +1,108 @@
+/* app/tools/page.tsx (server) — 전체 도구 목록 (Trust Ledger)
+   흰 히어로(브레드크럼·H1·리드) → ToolsBrowser(sticky 검색 · 분야 › 하위 분류 목록) → 분야별로 둘러보기 → FAQ
+   · 하위 분류는 허브와 같은 단일 소스(lib/categoryGuides resolveGroups), 배지는 lib/toolSignals(GA 인기·공개 60일 NEW)
+   · 규모 과시 문구(‘N가지 도구’) 대신 쓰임새로 설명한다(AdSense 감사 P1-4) */
 import Link from 'next/link'
-import { totalTools, categories } from '@/lib/tools'
-import AdSlot from '@/components/AdSlot'
-import CatIcon from '@/components/CatIcon'
-import FaqJsonLd from '@/components/FaqJsonLd'
-import ToolsBrowser from './ToolsBrowser'
+import { categories } from '@/lib/tools'
+import { resolveGroups } from '@/lib/categoryGuides'
+import { badgeMap } from '@/lib/toolSignals'
 import { buildMetadata } from '@/lib/seo'
+import CatIcon from '@/components/CatIcon'
+import UiIcon from '@/components/UiIcon'
+import Faq from '@/components/Faq'
+import ToolsBrowser, { type BrowserSection } from './ToolsBrowser'
+import styles from './tools.module.css'
 
 export const metadata = buildMetadata({
   path: '/tools',
-  title: `전체 도구 목록 — 무료 계산기·유틸리티 ${totalTools}가지`,
-  description: `연봉 계산기, BMI, 로또 번호 생성기, 부가세, 임신 주수 등 ${totalTools}가지 무료 온라인 도구를 11개 카테고리로. 로그인 없이 브라우저에서 바로 사용하세요.`,
+  title: '전체 도구 목록 — 분야별 계산기·변환기 찾기',
+  description: '연봉·세금·대출, 건강, 요리, 날짜, 단위 변환, 개발자 도구까지 분야와 하위 분류로 정리한 무료 계산기 목록입니다. 이름이나 하고 싶은 계산으로 검색하세요.',
 })
 
-/** 인덱스용 짧은 카테고리 한 줄 소개 (카테고리 본문과 중복되지 않게 별도 문구) */
+/** 분야 한 줄 소개 — 허브 본문과 겹치지 않게 별도 문구 */
 const CATEGORY_TAGLINES: Record<string, string> = {
-  finance: '월급·대출·세금·투자를 한국 세제와 2026년 기준으로 계산합니다.',
-  health: 'BMI·기초대사량·임신 주수·수면 부채를 검증된 공식으로 추정합니다.',
-  cooking: '레시피 비율·해동·발효·보관 기한을 자동으로 계산합니다.',
-  life: '로또·더치페이·여행 예산처럼 일상의 소소한 계산을 돕습니다.',
-  sports: '골프 스코어·러닝 페이스·근력 1RM 등 운동 기록을 관리합니다.',
-  interior: '평수·도배·페인트 양처럼 집을 꾸밀 때 필요한 계산을 미리 합니다.',
-  unit: '길이·무게·면적은 물론 평·돈·근 같은 전통 단위까지 변환합니다.',
-  date: 'D-day·만 나이·영업일·쉥겐 체류 한도를 정확히 계산합니다.',
-  art: '색상 변환·모스부호·비율 등 창작과 디자인용 도구입니다.',
-  edu: '과학 단위·유효숫자·천문 등 배우고 가르칠 때 쓰는 도구입니다.',
-  dev: '진법·인코딩·정규식 등 개발용 변환을 브라우저 안에서 처리합니다.',
+  finance: '월급·대출·세금·투자를 2026년 세율과 4대보험 요율로 계산합니다.',
+  health: 'BMI·기초대사량·임신 주수·수면 부채를 널리 쓰는 공식으로 추정합니다.',
+  cooking: '레시피 비율·해동·발효·보관 기한을 계산합니다.',
+  life: '더치페이·경조사·여행 예산처럼 일상의 소소한 계산을 돕습니다.',
+  sports: '러닝 페이스·근력 1RM·골프 핸디캡 등 운동 기록을 관리합니다.',
+  interior: '평수·도배·페인트 양처럼 집을 고칠 때 필요한 계산을 미리 합니다.',
+  unit: '면적·사이즈·연비처럼 헷갈리는 단위를 표준 계수로 바꿉니다.',
+  date: 'D-day·만 나이·연차·쉥겐 체류일을 계산합니다.',
+  art: '노래 키·색상 코드·사진 노출·글자수처럼 창작에 쓰는 도구입니다.',
+  edu: '내신·학점 환산, 유효숫자, 복습 간격처럼 공부에 쓰는 도구입니다.',
+  dev: '인코딩·정규식·JWT처럼 개발용 변환을 브라우저 안에서 처리합니다.',
 }
 
 const FAQS = [
   {
-    q: 'youtil의 도구는 무료인가요?',
-    a: `네. ${totalTools}가지 도구 모두 회원가입·로그인 없이 무료로 사용할 수 있습니다. 서비스 유지를 위한 최소한의 광고만 게재합니다.`,
+    q: '여기 있는 도구는 무료인가요?',
+    a: '네. 모든 도구를 회원가입·로그인 없이 무료로 쓸 수 있습니다. 운영비는 광고 수익으로 충당할 수 있으며, 광고는 계산 결과에 영향을 주지 않습니다.',
   },
   {
     q: '계산 결과는 얼마나 정확한가요?',
-    a: '각 도구는 공개된 공식·세율·기준을 근거로 계산하며 본문에 출처와 기준 연도를 표기합니다. 다만 세금·건강·금융 등은 개인 상황에 따라 달라지는 추정값이므로, 중요한 결정 전에는 해당 기관·전문가의 확인을 권장합니다.',
+    a: '각 도구는 공개된 공식·세율·기준을 근거로 계산하고, 법정 수치를 쓰는 도구에는 기준 연도와 출처를 적습니다. 다만 세금·건강·금융 결과는 개인 상황에 따라 달라지는 추정값이므로, 중요한 결정 전에는 해당 기관이나 전문가에게 확인하세요.',
   },
   {
     q: '입력한 정보가 저장되거나 전송되나요?',
-    a: '계산 입력값(연봉·건강 수치 등)은 여러분의 브라우저 안에서만 처리되고 저희가 수집하지 않습니다. 다만 서버 시간 확인·시세 조회처럼 외부 조회가 필요한 일부 도구는 이용자가 입력한 공개 정보(웹사이트 주소·조회 품목)를 서버로 보내 결과를 받아오며, 자세한 내용은 개인정보처리방침에 안내되어 있습니다.',
+    a: '계산 입력값(연봉·건강 수치 등)은 브라우저 안에서만 처리되고 수집하지 않습니다. 다만 서버 시간 확인·시세 조회·OG 미리보기처럼 외부 조회가 필요한 일부 도구는 입력한 공개 정보(웹사이트 주소·조회 품목)를 서버로 보내 결과를 받아오며, 자세한 내용은 개인정보처리방침에 있습니다.',
   },
   {
-    q: '모바일에서도 사용할 수 있나요?',
-    a: '네. 모든 도구가 휴대폰 화면에 맞춰 반응형으로 동작하며, 앱 설치 없이 모바일 브라우저에서 바로 쓸 수 있습니다.',
+    q: '찾는 도구가 없으면 어떻게 하나요?',
+    a: '검색창에 하고 싶은 계산을 문장으로 적어 보세요(예: 퇴직금 세금, 아파트 평수). 그래도 없다면 문의 페이지로 알려 주세요. 요청을 모아 새 도구를 만들 때 참고합니다.',
   },
 ]
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '22px',
-  fontWeight: 700,
-  letterSpacing: '-0.01em',
-  marginBottom: '14px',
-  color: 'var(--paper-ink)',
-}
-
 export default function ToolsPage() {
+  const sections: BrowserSection[] = categories.map((c) => ({
+    catId: c.id,
+    name: c.name,
+    tagline: c.tagline,
+    groups: resolveGroups(c.id, c.tools).map((g) => ({ name: g.name, hrefs: g.tools.map((t) => t.href) })),
+  }))
+  const badges = badgeMap()
+
   return (
-    <div style={{ background: 'var(--paper)' }}>
-    <div style={{ maxWidth: '900px', margin: '0 auto', padding: '48px 24px 80px', overflowX: 'hidden' }}>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 48px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px', color: 'var(--paper-ink)' }}>
-        전체 도구 목록
-      </h1>
-      <p style={{ fontSize: '15px', color: 'var(--paper-ink-soft)', lineHeight: 1.7, marginBottom: '24px' }}>
-        연봉·대출·세금부터 BMI·레시피·여행까지, 일상에서 자주 쓰는 <strong style={{ color: 'var(--paper-ink)' }}>{totalTools}가지</strong> 무료 도구를
-        11개 카테고리로 모았습니다. 로그인 없이 브라우저에서 즉시 사용하고, 입력값은 기기 밖으로 나가지 않습니다.
-      </p>
-
-      <ToolsBrowser />
-
-      {/* 카테고리 안내 — 둘러보기용 설명형 내비게이션 */}
-      <section style={{ marginTop: '56px' }}>
-        <h2 style={sectionTitle}>카테고리별로 둘러보기</h2>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))', gap: '12px' }}>
-          {categories.map((cat) => (
-            <Link
-              key={cat.id}
-              href={`/tools/${cat.id}`}
-              style={{
-                display: 'block',
-                padding: '16px',
-                borderRadius: '14px',
-                border: '1px solid var(--paper-line)',
-                background: 'var(--paper-card)',
-                textDecoration: 'none',
-              }}
-            >
-              <div style={{ display: 'flex', alignItems: 'center', gap: '8px', marginBottom: '6px' }}>
-                <span style={{ display: 'inline-flex', alignItems: 'center', color: cat.color }} aria-hidden="true"><CatIcon id={cat.id} size={18} /></span>
-                <span style={{ fontSize: '15px', fontWeight: 700, color: cat.color }}>{cat.name}</span>
-                <span style={{ fontSize: '12px', color: 'var(--paper-ink-faint)', marginLeft: 'auto' }}>{cat.tools.length}개</span>
-              </div>
-              <p style={{ fontSize: '13px', color: 'var(--paper-ink-soft)', lineHeight: 1.6, margin: 0 }}>
-                {CATEGORY_TAGLINES[cat.id] ?? `${cat.name} 관련 무료 도구 모음입니다.`}
-              </p>
-            </Link>
-          ))}
+    <div className={styles.tl}>
+      <section className={styles.tlBand} aria-labelledby="tl-h1">
+        <div className={styles.tlWrap}>
+          <nav className={styles.tlCrumb} aria-label="현재 위치">
+            <Link href="/">홈</Link>
+            <UiIcon name="chev-r" size={14} />
+            <span aria-current="page">전체 도구</span>
+          </nav>
+          <div className={styles.tlHero}>
+            <h1 className={styles.tlH1} id="tl-h1">전체 도구</h1>
+            <p className={styles.tlLead}>
+              연봉·세금·대출부터 BMI·레시피·여행까지, 모든 계산기를 분야와 하위 분류로 정리했습니다. 이름이나 하고 싶은 계산으로
+              검색하거나 분야를 골라 둘러보세요. 로그인 없이 브라우저에서 바로 계산합니다.
+            </p>
+          </div>
         </div>
       </section>
 
-      {/* 사이트 FAQ */}
-      <section style={{ marginTop: '48px' }}>
-        <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-        <FaqJsonLd items={FAQS} />
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-          {FAQS.map((faq, i) => (
-            <details key={i} style={{ background: 'var(--paper-card)', border: '1px solid var(--paper-line)', borderRadius: '12px', padding: '12px 14px' }}>
-              <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--paper-ink)' }}>{faq.q}</summary>
-              <p style={{ fontSize: '14px', color: 'var(--paper-ink-soft)', lineHeight: 1.8, margin: '8px 0 0' }}>{faq.a}</p>
-            </details>
-          ))}
-        </div>
-      </section>
+      <ToolsBrowser sections={sections} badges={badges} />
 
-      {/* 푸터 광고 슬롯 — /tools는 AD_FREE_EXACT라 현재 항상 null 렌더.
-          표시하려면 lib/ads.ts에서 이 경로를 제외 목록에서 빼야 함. */}
-      <div style={{ marginTop: '48px' }}>
-        <AdSlot position="footer" minHeight={250} />
+      <div className={styles.tlWrap}>
+        <section className={styles.hubs} aria-labelledby="tl-hubs-h">
+          <h2 className={styles.secH} id="tl-hubs-h">분야별로 둘러보기</h2>
+          <div className={styles.hubGrid}>
+            {categories.map((c) => (
+              <Link key={c.id} href={`/tools/${c.id}`} className={styles.hubCard} data-cat={c.id}>
+                <span className="ui-chipIc" aria-hidden="true"><CatIcon id={c.id} size={20} /></span>
+                <span>
+                  <b>{c.name}</b>
+                  <span>{CATEGORY_TAGLINES[c.id] ?? c.tagline ?? `${c.name} 관련 도구 모음입니다.`}</span>
+                </span>
+              </Link>
+            ))}
+          </div>
+        </section>
+
+        <section className={styles.faq} aria-label="자주 묻는 질문">
+          <Faq items={FAQS} />
+        </section>
       </div>
-    </div>
     </div>
   )
 }

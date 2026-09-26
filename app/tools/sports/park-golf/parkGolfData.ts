@@ -33,7 +33,7 @@ export function scoreTerm(strokes: number, par: number): ScoreTerm | null {
   if (strokes <= 0) return null
   if (strokes === 1) return { diff: strokes - par, label: '홀인원', color: 'var(--accent-ink)' }
   const d = strokes - par
-  if (strokes >= par * 2) return { diff: d, label: '더블파', color: 'var(--danger)' }
+  if (strokes === par * 2) return { diff: d, label: '더블파', color: 'var(--danger)' }
   if (d <= -3) return { diff: d, label: '알바트로스', color: 'var(--accent-ink)' }
   if (d === -2) return { diff: d, label: '이글', color: 'var(--accent-ink)' }
   if (d === -1) return { diff: d, label: '버디', color: 'var(--success)' }
@@ -66,14 +66,16 @@ export function playerTotal(scores: number[], pars: number[]): PlayerTotal {
   return { total, toPar: total - parSum, holesPlayed: played, front, back }
 }
 
-/** 순위 (총타수 오름차순, 미입력자는 뒤로) — 동타는 공동 순위 */
+/** 순위 (입력한 홀의 파 대비 타수 오름차순, 미입력자는 뒤로) — 동타는 공동 순위.
+    총타수로 비교하면 홀을 덜 입력한 사람이 앞서 보이므로, 입력 홀 수가 달라도 공정한 toPar를 쓴다.
+    모든 플레이어가 같은 홀을 마쳤다면 총타수 순위와 같다. */
 export function rankPlayers(totals: PlayerTotal[]): (number | null)[] {
   const entries = totals.map((t, i) => ({ i, t }))
   const played = entries.filter((e) => e.t.holesPlayed > 0)
-  played.sort((a, b) => a.t.total - b.t.total)
+  played.sort((a, b) => a.t.toPar - b.t.toPar || b.t.holesPlayed - a.t.holesPlayed)
   const ranks: (number | null)[] = totals.map(() => null)
   played.forEach((e, idx) => {
-    ranks[e.i] = idx > 0 && played[idx - 1].t.total === e.t.total ? ranks[played[idx - 1].i] : idx + 1
+    ranks[e.i] = idx > 0 && played[idx - 1].t.toPar === e.t.toPar ? ranks[played[idx - 1].i] : idx + 1
   })
   return ranks
 }

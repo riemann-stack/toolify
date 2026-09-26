@@ -9,7 +9,12 @@ import {
   type RepayMethod, type RateType,
 } from './dsrUtils'
 
+// 키 형식이 컨벤션(youtil:<slug>:<용도>-v<n>)과 다르지만 저장값 유실을 막기 위해 개명하지 않는다
 const STORAGE_KEY = 'youtil_dsr_v1'
+
+const isStr = (v: unknown): v is string => typeof v === 'string'
+const RATE_TYPES: RateType[] = ['variable', 'mixed', 'periodic', 'fixed']
+const isRateType = (v: unknown): v is RateType => RATE_TYPES.includes(v as RateType)
 
 const num = (v: string): number => {
   const x = parseFloat(v.replace(/,/g, ''))
@@ -36,39 +41,43 @@ export default function DsrClient() {
   const [ltvLimit, setLtvLimit] = useState('70')
   const [baseStress, setBaseStress] = useState('1.5')
   const [phase, setPhase] = useState<1 | 2 | 3>(3)
+  const [priceCap, setPriceCap] = useState(false) // 수도권·규제지역 주택구입 → 주택가격별 한도
 
   // 복원/저장
   const [hydrated, setHydrated] = useState(false)
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const j = JSON.parse(raw)
+        // 저장값은 타입 검증 후 사용 — 문자열이 아니면 num()의 replace가 렌더 중 TypeError를 던짐
+        const j: Record<string, unknown> = JSON.parse(raw) ?? {}
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (j.income) setIncome(j.income)
-        if (j.existing) setExisting(j.existing)
-        if (j.homePrice) setHomePrice(j.homePrice)
-        if (j.loan) setLoan(j.loan)
-        if (j.rate) setRate(j.rate)
-        if (j.years) setYears(j.years)
+        if (isStr(j.income) && j.income) setIncome(j.income)
+        if (isStr(j.existing) && j.existing) setExisting(j.existing)
+        if (isStr(j.homePrice) && j.homePrice) setHomePrice(j.homePrice)
+        if (isStr(j.loan) && j.loan) setLoan(j.loan)
+        if (isStr(j.rate) && j.rate) setRate(j.rate)
+        if (isStr(j.years) && j.years) setYears(j.years)
         if (j.method === 'equal' || j.method === 'principal') setMethod(j.method)
-        if (['variable', 'mixed', 'periodic', 'fixed'].includes(j.rateType)) setRateType(j.rateType)
-        if (j.dsrLimit) setDsrLimit(j.dsrLimit)
-        if (j.ltvLimit) setLtvLimit(j.ltvLimit)
-        if (j.baseStress) setBaseStress(j.baseStress)
+        if (isRateType(j.rateType)) setRateType(j.rateType)
+        if (isStr(j.dsrLimit) && j.dsrLimit) setDsrLimit(j.dsrLimit)
+        if (isStr(j.ltvLimit) && j.ltvLimit) setLtvLimit(j.ltvLimit)
+        if (isStr(j.baseStress) && j.baseStress) setBaseStress(j.baseStress)
         if (j.phase === 1 || j.phase === 2 || j.phase === 3) setPhase(j.phase)
+        if (typeof j.priceCap === 'boolean') setPriceCap(j.priceCap)
       }
     } catch {}
     setHydrated(true)
   }, [])
   useEffect(() => {
-    if (!hydrated) return
+    if (!hydrated || typeof window === 'undefined') return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        income, existing, homePrice, loan, rate, years, method, rateType, dsrLimit, ltvLimit, baseStress, phase,
+        income, existing, homePrice, loan, rate, years, method, rateType, dsrLimit, ltvLimit, baseStress, phase, priceCap,
       }))
     } catch {}
-  }, [hydrated, income, existing, homePrice, loan, rate, years, method, rateType, dsrLimit, ltvLimit, baseStress, phase])
+  }, [hydrated, income, existing, homePrice, loan, rate, years, method, rateType, dsrLimit, ltvLimit, baseStress, phase, priceCap])
 
   const r = useMemo(() => calcDsr({
     annualIncome: num(income),
@@ -83,7 +92,8 @@ export default function DsrClient() {
     ltvLimitPct: num(ltvLimit),
     baseStressPct: num(baseStress),
     phaseRatio: STRESS_PHASES.find(p => p.id === phase)?.ratio ?? 1,
-  }), [income, existing, homePrice, loan, rate, years, method, rateType, dsrLimit, ltvLimit, baseStress, phase])
+    priceCapEnabled: priceCap,
+  }), [income, existing, homePrice, loan, rate, years, method, rateType, dsrLimit, ltvLimit, baseStress, phase, priceCap])
 
   const dsrLimitN = num(dsrLimit)
   const ltvLimitN = num(ltvLimit)
@@ -92,7 +102,7 @@ export default function DsrClient() {
   const dsrStatus = (v: number) => v <= dsrLimitN ? s.statusOk : v <= dsrLimitN + 5 ? s.statusWarn : s.statusOver
   const ltvStatus = r.ltv <= ltvLimitN ? s.statusOk : s.statusOver
 
-  const gaugeColor = (v: number) => v <= dsrLimitN ? '#059669' : v <= dsrLimitN + 5 ? '#D97706' : '#DC2626'
+  const gaugeColor = (v: number) => v <= dsrLimitN ? 'var(--emerald-600)' : v <= dsrLimitN + 5 ? 'var(--amber-600)' : 'var(--red-600)'
 
   return (
     <div className={s.wrap}>
@@ -182,6 +192,13 @@ export default function DsrClient() {
             </div>
           </div>
         </div>
+        <label style={{ display: 'flex', alignItems: 'flex-start', gap: 8, marginTop: 12, fontSize: 13, color: 'var(--text)', cursor: 'pointer' }}>
+          <input type="checkbox" checked={priceCap} onChange={e => setPriceCap(e.target.checked)} style={{ marginTop: 3 }} />
+          <span>
+            수도권·규제지역 주택 구입 목적 주담대
+            <span className={s.fieldHint}> 주택가격별 한도 적용 (15억 이하 6억 · 25억 이하 4억 · 초과 2억)</span>
+          </span>
+        </label>
       </div>
 
       {/* 최종 한도 히어로 */}
@@ -189,11 +206,13 @@ export default function DsrClient() {
         <div className={s.heroLabel}>예상 최대 대출 한도</div>
         <div className={s.heroNum}>{fmtManwon(r.finalMaxLoan)}</div>
         <p className={s.heroSub}>
-          LTV {fmtManwon(r.ltvMaxLoan)} · 스트레스DSR {fmtManwon(r.stressMaxLoan)} 중 <strong>작은 값</strong>
+          {num(homePrice) > 0
+            ? <>LTV {fmtManwon(r.ltvMaxLoan)} · 스트레스DSR {fmtManwon(r.stressMaxLoan)}{r.priceCapMaxLoan != null && <> · 가격별 한도 {fmtManwon(r.priceCapMaxLoan)}</>} 중 <strong>가장 작은 값</strong></>
+            : <>주택 가격을 입력하면 담보(LTV)와 소득(스트레스DSR) 기준 중 작은 값으로 한도를 계산합니다</>}
         </p>
         {r.binding !== '-' && (
           <span className={s.bindBadge}>
-            {r.binding === 'LTV' ? 'LTV(담보)에 묶임' : 'DSR(소득)에 묶임'}
+            {r.binding === 'LTV' ? 'LTV(담보)에 묶임' : r.binding === 'CAP' ? '주택가격별 한도에 묶임' : 'DSR(소득)에 묶임'}
           </span>
         )}
       </div>
@@ -253,7 +272,7 @@ export default function DsrClient() {
           <span className={s.cardHint}>한도 {fmtPct(ltvLimitN)}%</span>
         </div>
         <div className={s.gauge}>
-          <div className={s.gaugeFill} style={{ width: `${Math.min(100, r.ltv)}%`, background: r.ltv <= ltvLimitN ? '#059669' : '#DC2626' }} />
+          <div className={s.gaugeFill} style={{ width: `${Math.min(100, r.ltv)}%`, background: r.ltv <= ltvLimitN ? 'var(--emerald-600)' : 'var(--red-600)' }} />
           <div className={s.gaugeLimit} style={{ left: `${Math.min(100, ltvLimitN)}%` }} />
         </div>
         <div className={s.gaugeLabel}><span>현재 희망대출 LTV</span><span className={ltvStatus}>{fmtPct(r.ltv)}%</span></div>

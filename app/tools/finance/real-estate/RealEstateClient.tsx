@@ -3,6 +3,8 @@
 
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
+import { calcHouseAcquisitionTax, calcNonHouseAcquisitionTax } from '@/lib/krAcquisitionTax'
+import { calcBrokerageFee, ppmToPct, OFFICETEL_FEE, OTHER_PROPERTY_FEE, type BrokerageProperty } from '@/lib/krBrokerageFee'
 import styles from './real-estate.module.css'
 
 /* ─────────────────────────────────────────────────────────
@@ -41,35 +43,35 @@ function displayDigits(s: string): string {
 }
 
 /* ─────────────────────────────────────────────────────────
- * 한국 취득세 자동 계산
+ * 한국 취득세 자동 계산 — 단일 소스 lib/krAcquisitionTax.ts
+ * (지방세법 §11·§13의2 + 지방교육세 + 농어촌특별세, 조정대상지역·주택 수·전용면적 반영)
  * ───────────────────────────────────────────────────────── */
-type HomeType = '1home' | '2home' | '3home+' | 'non'
-function calcAcquisitionTax(price: number, type: HomeType): number {
-  if (price <= 0) return 0
-  if (type === '1home') {
-    if (price <= 600_000_000) return price * 0.01
-    if (price <= 900_000_000) {
-      // 6억~9억: 1~3% 누진 (세율 = 취득가액 × 2/3억 − 3, %)
-      const rate = (price * 2 / 300_000_000 - 3) / 100
-      return price * rate
-    }
-    return price * 0.03
-  }
-  if (type === '2home')  return price * 0.08
-  if (type === '3home+') return price * 0.12
-  return price * 0.04
-}
+type AcqTarget = 'house' | 'non'
+const HOME_COUNT_OPTIONS: { n: number; label: string }[] = [
+  { n: 1, label: '1주택' },
+  { n: 2, label: '2주택' },
+  { n: 3, label: '3주택' },
+  { n: 4, label: '4주택+' },
+]
+const pctText = (v: number) => `${v.toLocaleString('ko-KR', { maximumFractionDigits: 3 })}%`
 
-/* 한국 주택 매매 중개보수 상한요율 (2021.10 개정 기준) */
-function calcBrokerFee(price: number): number {
-  if (price <= 0) return 0
-  if (price < 50_000_000)    return Math.min(price * 0.006, 250_000)  // 5천만 미만 0.6%(한도 25만)
-  if (price < 200_000_000)   return Math.min(price * 0.005, 800_000)  // 5천만~2억 0.5%(한도 80만)
-  if (price < 900_000_000)   return price * 0.004                      // 2억~9억 0.4%
-  if (price < 1_200_000_000) return price * 0.005                      // 9억~12억 0.5%
-  if (price < 1_500_000_000) return price * 0.006                      // 12억~15억 0.6%
-  return price * 0.007                                                  // 15억 이상 0.7%
+/* 매매 중개보수 상한 (한쪽, 부가세 별도) — 단일 소스 lib/krBrokerageFee.ts
+ * 주택: 공인중개사법 시행규칙 §20① 별표 1 / 주거용 오피스텔(전용 85㎡ 이하·전용 부엌·화장실·목욕시설): §20④1호 별표 2 /
+ * 상가·토지·주거용 요건 미충족 오피스텔: §20④2호 0.9% 이내 협의의 상한.
+ * 취득세의 '비주거'(오피스텔 전부 포함)와 중개보수 분류가 달라 중개 대상은 따로 고른다.
+ * 옛 하드코딩(주택 요율만)과 주택은 원 미만까지 같다(원 미만 버림) — tests/golden/brokerageFee.test.mts */
+function calcBrokerFee(price: number, property: BrokerageProperty): number {
+  return calcBrokerageFee({ deal: 'sale', property, amount: price }).maxFee
 }
+const BROKER_PROPERTY_OPTIONS: { id: BrokerageProperty; label: string }[] = [
+  { id: 'house', label: '주택' },
+  { id: 'officetel', label: '주거용 오피스텔' },
+  { id: 'other', label: '상가·토지 등' },
+]
+const brokerPropertyHint = (p: BrokerageProperty): string =>
+  p === 'house' ? '주택 상한요율'
+    : p === 'officetel' ? `주거용 오피스텔 ${ppmToPct(OFFICETEL_FEE.saleRatePpm)}% 상한`
+      : `상가·토지 등 ${ppmToPct(OTHER_PROPERTY_FEE.ratePpm)}% 상한`
 
 /* ─────────────────────────────────────────────────────────
  * 메인 컴포넌트
@@ -91,11 +93,17 @@ export default function RealEstateClient() {
 
   /* ── 취득세 ── */
   const [acqMode, setAcqMode] = useState<'auto' | 'manual'>('auto')
-  const [homeType, setHomeType] = useState<HomeType>('1home')
+  const [acqTarget, setAcqTarget] = useState<AcqTarget>('house')
+  const [homeCount, setHomeCount] = useState(1)          // 이번 취득 후 1세대 주택 수 (4 = 4주택 이상)
+  const [adjusted, setAdjusted] = useState(false)        // 취득 주택이 조정대상지역
+  const [over85, setOver85] = useState(false)            // 전용 85㎡ 초과 (농어촌특별세)
+  const [tempTwoHomes, setTempTwoHomes] = useState(false) // 조정 2주택 중 일시적 2주택
+  const [lowValueHouse, setLowValueHouse] = useState(false) // 시가표준액 1억(비수도권 2억) 이하(정비구역 외) → 중과 제외
   const [acqStr, setAcqStr] = useState('0')
 
   /* ── 중개수수료 ── */
   const [brokerMode, setBrokerMode] = useState<'auto' | 'manual'>('auto')
+  const [brokerProp, setBrokerProp] = useState<BrokerageProperty>('house') // 취득 대상 토글과 연동하되 따로 바꿀 수 있음
   const [brokerBuyStr,  setBrokerBuyStr]  = useState('0')
   const [brokerSellStr, setBrokerSellStr] = useState('0')
 
@@ -131,10 +139,18 @@ export default function RealEstateClient() {
   const price     = parseNum(priceStr)
   const salePrice = parseNum(salePriceStr)
   const loan      = loanMode === 'amount' ? parseNum(loanStr) : (price * ltv) / 100
-  const acqTaxAuto = calcAcquisitionTax(price, homeType)
+  // 중과 대상 조합(조정 2주택+ · 비조정 3주택+)일 때만 저가주택 중과 제외 체크가 의미 있음
+  const surchargeCombo = adjusted ? homeCount >= 2 : homeCount >= 3
+  const acqBreakdown = acqTarget === 'non'
+    ? calcNonHouseAcquisitionTax(price)
+    : calcHouseAcquisitionTax({
+        price, homeCount, adjusted, over85, temporaryTwoHomes: tempTwoHomes,
+        lowValueHouse: surchargeCombo && lowValueHouse,
+      })
+  const acqTaxAuto = acqBreakdown.total   // 취득세 + 지방교육세 + 농어촌특별세
   const acqTax    = acqMode === 'auto' ? acqTaxAuto : parseNum(acqStr)
-  const brokerBuyAuto  = calcBrokerFee(price)
-  const brokerSellAuto = calcBrokerFee(salePrice)
+  const brokerBuyAuto  = calcBrokerFee(price, brokerProp)
+  const brokerSellAuto = calcBrokerFee(salePrice, brokerProp)
   const brokerBuy  = brokerMode === 'auto' ? brokerBuyAuto  : parseNum(brokerBuyStr)
   const brokerSell = brokerMode === 'auto' ? brokerSellAuto : parseNum(brokerSellStr)
 
@@ -153,7 +169,8 @@ export default function RealEstateClient() {
     : 0
 
   /* 임대 수익 */
-  const deposit       = mode === 'detail' ? parseNum(depositStr) : 0
+  // 보증금은 임대 중일 때만 자기자본에서 차감 ('자가'로 바꾸면 숨겨진 입력값이 남아 ROE가 과대되던 문제)
+  const deposit       = mode === 'detail' && rentType !== 'self' ? parseNum(depositStr) : 0
   const monthlyRent   = mode === 'detail' ? parseNum(monthlyRentStr) : 0
   const rentMonths    = mode === 'detail'
     ? (rentMonthsCustom !== null ? rentMonthsCustom : holdMonths)
@@ -199,7 +216,7 @@ export default function RealEstateClient() {
   /* ─── 매도 시나리오 ─── */
   const scenarios = useMemo(() => {
     const buildScenario = (sp: number) => {
-      const bSell = brokerMode === 'auto' ? calcBrokerFee(sp) : brokerSell
+      const bSell = brokerMode === 'auto' ? calcBrokerFee(sp, brokerProp) : brokerSell
       const cost  = upfrontCost + totalInterest + bSell + earlyFee + otherCosts
       const profit = (sp - price) + rentalIncome - cost
       const roe_ = equityPositive ? (profit / initialInvestment) * 100 : NaN
@@ -210,7 +227,7 @@ export default function RealEstateClient() {
       base:         buildScenario(salePrice),
       optimistic:   buildScenario(salePrice * 1.1),
     }
-  }, [salePrice, price, brokerMode, brokerSell, upfrontCost, totalInterest, earlyFee, otherCosts, rentalIncome, initialInvestment, equityPositive])
+  }, [salePrice, price, brokerMode, brokerSell, brokerProp, upfrontCost, totalInterest, earlyFee, otherCosts, rentalIncome, initialInvestment, equityPositive])
 
   /* ─── 전액 현금 매수 시 비교 ─── */
   const allCashCompare = useMemo(() => {
@@ -248,7 +265,7 @@ export default function RealEstateClient() {
     ].join('\n')
     navigator.clipboard?.writeText(txt).then(() => {
       setCopied(true)
-      window.setTimeout(() => setCopied(false), 1200)
+      window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -309,9 +326,9 @@ export default function RealEstateClient() {
           <span>매물 정보</span>
         </div>
 
-        <span className={styles.subLabel}>매입가</span>
+        <label htmlFor="re-price" className={styles.subLabel}>매입가</label>
         <div className={styles.inputRow}>
-          <input
+          <input id="re-price"
             className={styles.numInput}
             type="text"
             inputMode="numeric"
@@ -324,9 +341,9 @@ export default function RealEstateClient() {
 
         <div style={{ height: 14 }} />
 
-        <span className={styles.subLabel}>매도 예상가</span>
+        <label htmlFor="re-sale-price" className={styles.subLabel}>매도 예상가</label>
         <div className={styles.inputRow}>
-          <input
+          <input id="re-sale-price"
             className={styles.numInput}
             type="text"
             inputMode="numeric"
@@ -339,9 +356,9 @@ export default function RealEstateClient() {
 
         <div style={{ height: 14 }} />
 
-        <span className={styles.subLabel}>보유 기간 (개월)</span>
+        <label htmlFor="re-hold-months" className={styles.subLabel}>보유 기간 (개월)</label>
         <div className={styles.inputRow}>
-          <input
+          <input id="re-hold-months"
             className={styles.numInput}
             type="number" inputMode="decimal"
             min={1}
@@ -356,6 +373,7 @@ export default function RealEstateClient() {
           <input
             className={styles.slider}
             type="range"
+            aria-label="보유 기간 (개월) 슬라이더"
             min={1}
             max={120}
             value={Math.min(120, holdMonths)}
@@ -397,6 +415,7 @@ export default function RealEstateClient() {
                 type="number" inputMode="decimal"
                 min={0}
                 max={100}
+                aria-label="LTV (%)"
                 value={ltv}
                 onChange={e => setLtv(Math.max(0, Math.min(100, Number(e.target.value) || 0)))}
                 style={{ maxWidth: 140 }}
@@ -434,6 +453,7 @@ export default function RealEstateClient() {
               className={styles.numInput}
               type="text"
               inputMode="numeric"
+              aria-label="대출 금액 (원)"
               value={displayDigits(loanStr)}
               onChange={e => setLoanStr(e.target.value.replace(/[^0-9]/g, ''))}
             />
@@ -444,9 +464,9 @@ export default function RealEstateClient() {
 
         <div style={{ height: 14 }} />
 
-        <span className={styles.subLabel}>대출 금리 (%/년)</span>
+        <label htmlFor="re-loan-rate" className={styles.subLabel}>대출 금리 (%/년)</label>
         <div className={styles.inputRow}>
-          <input
+          <input id="re-loan-rate"
             className={styles.smallInput}
             type="number" inputMode="decimal"
             step="0.1"
@@ -467,7 +487,7 @@ export default function RealEstateClient() {
       <div className={styles.card}>
         <div className={styles.cardLabel}>
           <span>취득세</span>
-          <span className={styles.cardLabelHint}>주택 종류별 누진</span>
+          <span className={styles.cardLabelHint}>지방교육세·농특세 포함</span>
         </div>
 
         <div className={styles.miniToggle} role="group" aria-label="취득세 입력 방식">
@@ -477,29 +497,129 @@ export default function RealEstateClient() {
 
         {acqMode === 'auto' ? (
           <>
-            <span className={styles.subLabel}>주택 종류</span>
-            <div className={styles.toggleGrid4} role="group" aria-label="주택 종류">
-              {[
-                { id: '1home',  label: '1주택' },
-                { id: '2home',  label: '다주택(2주택)' },
-                { id: '3home+', label: '다주택(3+)' },
-                { id: 'non',    label: '비주거' },
-              ].map(o => (
-                <button
-                  key={o.id}
-                  type="button"
-                  aria-pressed={homeType === o.id}
-                  className={`${styles.toggleBtn} ${homeType === o.id ? styles.toggleActive : ''}`}
-                  onClick={() => setHomeType(o.id as HomeType)}
-                >
-                  {o.label}
-                </button>
-              ))}
+            <div className={styles.acqGroup}>
+              <span className={styles.subLabel}>취득 대상</span>
+              <div className={styles.toggleGrid2} role="group" aria-label="취득 대상">
+                {([
+                  { id: 'house', label: '주택' },
+                  { id: 'non',   label: '비주거 (상가·오피스텔·토지)' },
+                ] as const).map(o => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    aria-pressed={acqTarget === o.id}
+                    className={`${styles.toggleBtn} ${acqTarget === o.id ? styles.toggleActive : ''}`}
+                    onClick={() => {
+                      setAcqTarget(o.id)
+                      // 중개 대상 연동: 주택 → 주택, 비주거 → (주택이었다면) 상가·토지 등. 주거용 오피스텔 선택은 유지
+                      setBrokerProp(p => (o.id === 'house' ? 'house' : p === 'house' ? 'other' : p))
+                    }}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {acqTarget === 'house' && (
+              <>
+                <div className={styles.acqGroup}>
+                  <span className={styles.subLabel}>취득 후 세대 보유 주택 수 (이번 주택 포함)</span>
+                  <div className={styles.toggleGrid4} role="group" aria-label="취득 후 주택 수">
+                    {HOME_COUNT_OPTIONS.map(o => (
+                      <button
+                        key={o.n}
+                        type="button"
+                        aria-pressed={homeCount === o.n}
+                        className={`${styles.toggleBtn} ${homeCount === o.n ? styles.toggleActive : ''}`}
+                        onClick={() => setHomeCount(o.n)}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className={styles.acqGroup}>
+                  <span className={styles.subLabel}>취득 주택 소재지</span>
+                  <div className={styles.toggleGrid2} role="group" aria-label="취득 주택 소재지">
+                    {[
+                      { v: false, label: '비조정지역' },
+                      { v: true,  label: '조정대상지역' },
+                    ].map(o => (
+                      <button
+                        key={o.label}
+                        type="button"
+                        aria-pressed={adjusted === o.v}
+                        className={`${styles.toggleBtn} ${adjusted === o.v ? styles.toggleActive : ''}`}
+                        onClick={() => setAdjusted(o.v)}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className={styles.acqGroup}>
+                  <span className={styles.subLabel}>전용면적</span>
+                  <div className={styles.toggleGrid2} role="group" aria-label="전용면적">
+                    {[
+                      { v: false, label: '85㎡ 이하' },
+                      { v: true,  label: '85㎡ 초과' },
+                    ].map(o => (
+                      <button
+                        key={o.label}
+                        type="button"
+                        aria-pressed={over85 === o.v}
+                        className={`${styles.toggleBtn} ${over85 === o.v ? styles.toggleActive : ''}`}
+                        onClick={() => setOver85(o.v)}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {surchargeCombo && (
+                  <div className={styles.acqCheck}>
+                    <input
+                      id="re-low-value-house"
+                      type="checkbox"
+                      checked={lowValueHouse}
+                      onChange={e => setLowValueHouse(e.target.checked)}
+                    />
+                    <label htmlFor="re-low-value-house">
+                      시가표준액(공시가격) 1억원 이하 주택 (비수도권은 2억원 이하, 정비구역 외) → 중과 대신 표준세율
+                    </label>
+                  </div>
+                )}
+
+                {homeCount === 2 && adjusted && (
+                  <div className={styles.acqCheck}>
+                    <input
+                      id="re-temp-two-homes"
+                      type="checkbox"
+                      checked={tempTwoHomes}
+                      onChange={e => setTempTwoHomes(e.target.checked)}
+                    />
+                    <label htmlFor="re-temp-two-homes">
+                      일시적 2주택 (종전 주택을 처분기한 내 매도 예정 → 8% 중과 대신 표준세율)
+                    </label>
+                  </div>
+                )}
+              </>
+            )}
+
             <div className={styles.autoResult} style={{ marginTop: 12 }}>
-              <span>자동 산정 취득세</span>
+              <span>자동 산정 취득세 합계</span>
               <strong>{fmtKRW(acqTaxAuto)}</strong>
             </div>
+            <p className={styles.acqDetail}>
+              {acqBreakdown.label} · 취득세 {fmtKRW(acqBreakdown.acquisitionTax)}({pctText(acqBreakdown.acquisitionRate)})
+              {' + '}지방교육세 {fmtKRW(acqBreakdown.educationTax)}({pctText(acqBreakdown.educationRate)})
+              {' + '}농어촌특별세 {acqBreakdown.ruralTax > 0 ? `${fmtKRW(acqBreakdown.ruralTax)}(${pctText(acqBreakdown.ruralRate)})` : '비과세'}
+              {' = '}실효 <strong>{pctText(acqBreakdown.totalRate)}</strong>
+            </p>
           </>
         ) : (
           <div className={styles.inputRow}>
@@ -507,6 +627,7 @@ export default function RealEstateClient() {
               className={styles.numInput}
               type="text"
               inputMode="numeric"
+              aria-label="취득세 합계 직접 입력 (원)"
               value={displayDigits(acqStr)}
               onChange={e => setAcqStr(e.target.value.replace(/[^0-9]/g, ''))}
             />
@@ -519,7 +640,7 @@ export default function RealEstateClient() {
       <div className={styles.card}>
         <div className={styles.cardLabel}>
           <span>중개수수료</span>
-          <span className={styles.cardLabelHint}>매수·매도 별도</span>
+          <span className={styles.cardLabelHint}>{brokerMode === 'auto' ? `${brokerPropertyHint(brokerProp)} · ` : ''}매수·매도 별도</span>
         </div>
 
         <div className={styles.miniToggle} role="group" aria-label="중개수수료 입력 방식">
@@ -529,6 +650,27 @@ export default function RealEstateClient() {
 
         {brokerMode === 'auto' ? (
           <>
+            <div className={styles.acqGroup}>
+              <span className={styles.subLabel}>중개 대상</span>
+              <div className={styles.toggleGrid3} role="group" aria-label="중개 대상">
+                {BROKER_PROPERTY_OPTIONS.map(o => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    aria-pressed={brokerProp === o.id}
+                    className={`${styles.toggleBtn} ${brokerProp === o.id ? styles.toggleActive : ''}`}
+                    onClick={() => setBrokerProp(o.id)}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+              {brokerProp === 'officetel' && (
+                <p className={styles.acqDetail}>
+                  전용 {OFFICETEL_FEE.maxAreaM2}㎡ 이하이고 전용 입식 부엌·수세식 화장실·목욕시설을 모두 갖춘 오피스텔만 해당합니다. 하나라도 빠지면 &lsquo;상가·토지 등&rsquo;을 고르세요.
+                </p>
+              )}
+            </div>
             <div className={styles.autoResult} style={{ marginBottom: 8 }}>
               <span>매수 중개수수료</span>
               <strong>{fmtKRW(brokerBuyAuto)}</strong>
@@ -540,9 +682,9 @@ export default function RealEstateClient() {
           </>
         ) : (
           <>
-            <span className={styles.subLabel}>매수 중개수수료</span>
+            <label htmlFor="re-broker-buy" className={styles.subLabel}>매수 중개수수료</label>
             <div className={styles.inputRow}>
-              <input
+              <input id="re-broker-buy"
                 className={styles.smallInput}
                 type="text"
                 inputMode="numeric"
@@ -552,9 +694,9 @@ export default function RealEstateClient() {
               <span className={styles.unit}>원</span>
             </div>
             <div style={{ height: 10 }} />
-            <span className={styles.subLabel}>매도 중개수수료</span>
+            <label htmlFor="re-broker-sell" className={styles.subLabel}>매도 중개수수료</label>
             <div className={styles.inputRow}>
-              <input
+              <input id="re-broker-sell"
                 className={styles.smallInput}
                 type="text"
                 inputMode="numeric"
@@ -577,23 +719,23 @@ export default function RealEstateClient() {
               <span className={styles.cardLabelHint}>법무·인테리어·중도상환</span>
             </div>
 
-            <span className={styles.subLabel}>법무비 (등기비)</span>
+            <label htmlFor="re-legal-fee" className={styles.subLabel}>법무비 (등기비)</label>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(legalFeeStr)} onChange={e => setLegalFeeStr(e.target.value.replace(/[^0-9]/g, ''))} />
+              <input id="re-legal-fee" className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(legalFeeStr)} onChange={e => setLegalFeeStr(e.target.value.replace(/[^0-9]/g, ''))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 10 }} />
-            <span className={styles.subLabel}>인테리어 비용</span>
+            <label htmlFor="re-interior" className={styles.subLabel}>인테리어 비용</label>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(interiorStr)} onChange={e => setInteriorStr(e.target.value.replace(/[^0-9]/g, ''))} />
+              <input id="re-interior" className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(interiorStr)} onChange={e => setInteriorStr(e.target.value.replace(/[^0-9]/g, ''))} />
               <span className={styles.unit}>원</span>
             </div>
 
             <div style={{ height: 10 }} />
-            <span className={styles.subLabel}>명도비</span>
+            <label htmlFor="re-relocate" className={styles.subLabel}>명도비</label>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(relocateStr)} onChange={e => setRelocateStr(e.target.value.replace(/[^0-9]/g, ''))} />
+              <input id="re-relocate" className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(relocateStr)} onChange={e => setRelocateStr(e.target.value.replace(/[^0-9]/g, ''))} />
               <span className={styles.unit}>원</span>
             </div>
 
@@ -605,7 +747,7 @@ export default function RealEstateClient() {
             </div>
             {earlyMode === 'manual' ? (
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(earlyStr)} onChange={e => setEarlyStr(e.target.value.replace(/[^0-9]/g, ''))} />
+                <input className={styles.smallInput} type="text" inputMode="numeric" aria-label="중도상환 수수료 (원)" value={displayDigits(earlyStr)} onChange={e => setEarlyStr(e.target.value.replace(/[^0-9]/g, ''))} />
                 <span className={styles.unit}>원</span>
               </div>
             ) : (
@@ -646,24 +788,24 @@ export default function RealEstateClient() {
             {rentType !== 'self' && (
               <>
                 <div style={{ height: 14 }} />
-                <span className={styles.subLabel}>임대보증금</span>
+                <label htmlFor="re-deposit" className={styles.subLabel}>임대보증금</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(depositStr)} onChange={e => setDepositStr(e.target.value.replace(/[^0-9]/g, ''))} />
+                  <input id="re-deposit" className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(depositStr)} onChange={e => setDepositStr(e.target.value.replace(/[^0-9]/g, ''))} />
                   <span className={styles.unit}>원</span>
                 </div>
                 {inlineKRW(parseNum(depositStr))}
 
                 <div style={{ height: 10 }} />
-                <span className={styles.subLabel}>월세</span>
+                <label htmlFor="re-monthly-rent" className={styles.subLabel}>월세</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(monthlyRentStr)} onChange={e => setMonthlyRentStr(e.target.value.replace(/[^0-9]/g, ''))} />
+                  <input id="re-monthly-rent" className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(monthlyRentStr)} onChange={e => setMonthlyRentStr(e.target.value.replace(/[^0-9]/g, ''))} />
                   <span className={styles.unit}>원/월</span>
                 </div>
 
                 <div style={{ height: 10 }} />
-                <span className={styles.subLabel}>임대 기간 (개월) — 비워두면 보유 기간과 동일</span>
+                <label htmlFor="re-rent-months" className={styles.subLabel}>임대 기간 (개월) — 비워두면 보유 기간과 동일</label>
                 <div className={styles.inputRow}>
-                  <input
+                  <input id="re-rent-months"
                     className={styles.smallInput}
                     type="number" inputMode="decimal"
                     min={0}
@@ -678,9 +820,9 @@ export default function RealEstateClient() {
                 </div>
 
                 <div style={{ height: 10 }} />
-                <span className={styles.subLabel}>공실 기간 (개월)</span>
+                <label htmlFor="re-vacancy" className={styles.subLabel}>공실 기간 (개월)</label>
                 <div className={styles.inputRow}>
-                  <input
+                  <input id="re-vacancy"
                     className={styles.smallInput}
                     type="number" inputMode="decimal"
                     min={0}
@@ -699,9 +841,9 @@ export default function RealEstateClient() {
                 {maintenancePayer === 'landlord' && (
                   <>
                     <div style={{ height: 10 }} />
-                    <span className={styles.subLabel}>월 관리비 (임대인 부담)</span>
+                    <label htmlFor="re-maintenance" className={styles.subLabel}>월 관리비 (임대인 부담)</label>
                     <div className={styles.inputRow}>
-                      <input className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(maintenanceStr)} onChange={e => setMaintenanceStr(e.target.value.replace(/[^0-9]/g, ''))} />
+                      <input id="re-maintenance" className={styles.smallInput} type="text" inputMode="numeric" value={displayDigits(maintenanceStr)} onChange={e => setMaintenanceStr(e.target.value.replace(/[^0-9]/g, ''))} />
                       <span className={styles.unit}>원/월</span>
                     </div>
                   </>
@@ -731,6 +873,7 @@ export default function RealEstateClient() {
                   className={styles.otherName}
                   type="text"
                   placeholder={`항목명 ${i + 1}`}
+                  aria-label={`기타 비용 ${i + 1} 항목명`}
                   value={n}
                   onChange={e => sn(e.target.value)}
                 />
@@ -739,6 +882,7 @@ export default function RealEstateClient() {
                   type="text"
                   inputMode="numeric"
                   placeholder="금액"
+                  aria-label={`기타 비용 ${i + 1} 금액 (원)`}
                   value={v === '0' ? '' : displayDigits(v)}
                   onChange={e => sv(e.target.value.replace(/[^0-9]/g, ''))}
                 />
@@ -750,6 +894,11 @@ export default function RealEstateClient() {
 
       {/* ─────────────────────────── 결과 ─────────────────────────── */}
 
+      {price <= 0 ? (
+        <div className={styles.hero} role="status">
+          <p className={styles.heroLead}>매입가를 입력하면 수익률을 계산합니다</p>
+        </div>
+      ) : (<>
       {/* 손실 경고 (손익분기 미달 시) */}
       {belowBreakEven && (
         <div className={styles.lossWarn}>
@@ -807,7 +956,7 @@ export default function RealEstateClient() {
         <table className={styles.breakdownTable}>
           <tbody>
             <tr><td>매입가</td><td>{fmtKRW(price)}</td></tr>
-            <tr><td>취득세</td><td>{fmtKRW(acqTax)}</td></tr>
+            <tr><td>취득세(교육세·농특세 포함)</td><td>{fmtKRW(acqTax)}</td></tr>
             <tr><td>법무비 (등기비)</td><td>{fmtKRW(legalFee)}</td></tr>
             <tr><td>매수 중개수수료</td><td>{fmtKRW(brokerBuy)}</td></tr>
             {mode === 'detail' && interior > 0 && <tr><td>인테리어</td><td>{fmtKRW(interior)}</td></tr>}
@@ -884,7 +1033,7 @@ export default function RealEstateClient() {
         <p className={styles.breakEvenLead}>⚠️ 손익분기 매도가</p>
         <p className={styles.breakEvenValue}>{fmtKRW(breakEvenPrice)}</p>
         <p className={styles.breakEvenSub}>
-          매입가 대비 최소 <strong>{((breakEvenPrice / price - 1) * 100).toFixed(1)}%</strong> 이상 상승해야 모든 거래 비용을 회수할 수 있습니다.
+          매입가 대비 최소 <strong>{price > 0 ? ((breakEvenPrice / price - 1) * 100).toFixed(1) : '—'}%</strong> 이상 상승해야 모든 거래 비용을 회수할 수 있습니다.
           {mode === 'detail' && rentType !== 'self' && rentalIncome > 0 && ' (임대 수익 반영)'}
         </p>
       </div>
@@ -946,6 +1095,7 @@ export default function RealEstateClient() {
       >
         {copied ? '✓ 복사 완료' : '결과 텍스트 복사'}
       </button>
+      </>)}
 
     </div>
   )

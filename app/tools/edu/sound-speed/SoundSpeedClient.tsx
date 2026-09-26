@@ -6,8 +6,9 @@ import s from './sound-speed.module.css'
 import {
   LIGHT_SPEED, calcSoundSpeed, fmtDist, fmtTime, THUNDER_WARNING,
   COMMON_DISTANCES, VEHICLE_SPEEDS, MACH_ROW_INDEX, MEDIUM_SPEEDS,
-  ABSORPTION, ROOM_PRESETS, calcEcho, calcRT60,
+  ROOM_PRESETS, calcEcho, calcRT60,
   DIST_SLIDER_MAX, DIST_MAX_M,
+  WALL_LABEL, FLOOR_LABEL, CEIL_LABEL,
   type WallMat, type FloorMat, type CeilMat,
 } from './soundData'
 
@@ -146,7 +147,7 @@ export default function SoundSpeedClient() {
         text = [
           `[잔향 시간 RT60]`,
           `공간: ${roomW} × ${roomD} × ${roomH}m (부피 ${rt60Result.V.toFixed(0)}m³)`,
-          `벽: ${wallMat} · 바닥: ${floorMat} · 천장: ${ceilMat}`,
+          `벽: ${WALL_LABEL[wallMat]} · 바닥: ${FLOOR_LABEL[floorMat]} · 천장: ${CEIL_LABEL[ceilMat]}`,
           `RT60: ${rt60Result.rt60.toFixed(2)}초`,
           ``,
           `https://youtil.kr/tools/edu/sound-speed`,
@@ -216,8 +217,8 @@ export default function SoundSpeedClient() {
           <span className={s.sliderValue}>{tempC}°C</span>
         </div>
         <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7, textAlign: 'center' }}>
-          현재 음속: <strong style={{ color: '#0F766E', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{soundSpeed.toFixed(1)} m/s</strong>
-          {' '}≈ {(soundSpeed * 3.6).toFixed(0)} km/h = <strong style={{ color: '#0F766E' }}>1마하</strong> (이 온도 기준)
+          현재 음속: <strong style={{ color: 'var(--teal-700)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{soundSpeed.toFixed(1)} m/s</strong>
+          {' '}≈ {(soundSpeed * 3.6).toFixed(0)} km/h = <strong style={{ color: 'var(--teal-700)' }}>1마하</strong> (이 온도 기준)
         </p>
       </div>
 
@@ -299,33 +300,33 @@ export default function SoundSpeedClient() {
             <svg viewBox="0 0 400 240" className={s.waveSvg} preserveAspectRatio="xMidYMid meet" role="img" aria-label="번개와 천둥 음파 전파 도해">
               <defs>
                 <radialGradient id={gradId} cx="50%" cy="50%" r="50%">
-                  <stop offset="0%"  stopColor="#A16207" stopOpacity="1" />
-                  <stop offset="100%" stopColor="#A16207" stopOpacity="0" />
+                  <stop offset="0%"  stopColor="var(--yellow-700)" stopOpacity="1" />
+                  <stop offset="100%" stopColor="var(--yellow-700)" stopOpacity="0" />
                 </radialGradient>
               </defs>
 
               {/* 번개 */}
               <circle cx="60" cy="110" r="36" fill={`url(#${gradId})`} opacity="0.7" />
               <text x="60" y="122" fontSize="44" textAnchor="middle">⚡</text>
-              <text x="60" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>번개</text>
-              <text x="60" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>T = 0</text>
+              <text x="60" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontWeight={600}>번개</text>
+              <text x="60" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle">T = 0</text>
 
               {/* 음파 */}
-              <circle cx="60" cy="110" r="14" fill="none" stroke="#0D9488" strokeWidth="2.5" opacity="0.6" className={s.soundRing} />
-              <circle cx="60" cy="110" r="14" fill="none" stroke="#0D9488" strokeWidth="2.5" opacity="0.5" className={s.soundRing2} />
-              <circle cx="60" cy="110" r="14" fill="none" stroke="#0D9488" strokeWidth="2.5" opacity="0.4" className={s.soundRing3} />
-              <circle cx="60" cy="110" r="14" fill="none" stroke="#0D9488" strokeWidth="2.5" opacity="0.3" className={s.soundRing4} />
+              <circle cx="60" cy="110" r="14" fill="none" stroke="var(--teal-600)" strokeWidth="2.5" opacity="0.6" className={s.soundRing} />
+              <circle cx="60" cy="110" r="14" fill="none" stroke="var(--teal-600)" strokeWidth="2.5" opacity="0.5" className={s.soundRing2} />
+              <circle cx="60" cy="110" r="14" fill="none" stroke="var(--teal-600)" strokeWidth="2.5" opacity="0.4" className={s.soundRing3} />
+              <circle cx="60" cy="110" r="14" fill="none" stroke="var(--teal-600)" strokeWidth="2.5" opacity="0.3" className={s.soundRing4} />
 
               {/* 거리 표시 */}
               <line x1="100" y1="110" x2="320" y2="110" stroke="var(--muted)" strokeWidth="1.5" strokeDasharray="5 4" />
-              <text x="210" y="95" fontSize="22" fill="#0F766E" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={800}>
+              <text x="210" y="95" fontSize="22" fill="var(--teal-700)" textAnchor="middle" fontWeight={800}>
                 {thunderResult.distM.toFixed(0)}m
               </text>
 
               {/* 관찰자 */}
               <text x="350" y="128" fontSize="46" textAnchor="middle">👤</text>
-              <text x="350" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif" fontWeight={600}>관찰자</text>
-              <text x="350" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>T = {thunderSec}초</text>
+              <text x="350" y="200" fontSize="15" fill="var(--text)" textAnchor="middle" fontWeight={600}>관찰자</text>
+              <text x="350" y="220" fontSize="13" fill="var(--muted)" textAnchor="middle">T = {thunderSec}초</text>
             </svg>
           </div>
 
@@ -445,7 +446,7 @@ export default function SoundSpeedClient() {
                         <td>{d.emoji} {d.name}</td>
                         <td>{d.meta}</td>
                         <td style={{ color: '#C2410C' }}>{fmtTime(sT)}</td>
-                        <td style={{ color: '#0F766E' }}>{lT < 0.001 ? '거의 즉시' : fmtTime(lT)}</td>
+                        <td style={{ color: 'var(--teal-700)' }}>{lT < 0.001 ? '거의 즉시' : fmtTime(lT)}</td>
                       </tr>
                     )
                   })}
@@ -476,21 +477,21 @@ export default function SoundSpeedClient() {
               <span>광속 vs 음속</span>
             </div>
             <div style={{
-              background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 12,
-              padding: '16px 18px', fontFamily: 'JetBrains Mono, Menlo, monospace',
+              background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+              padding: '16px 18px', fontFamily: 'var(--font-mono)',
               fontSize: 13, color: 'var(--text)', lineHeight: 2,
             }}>
-              <div>💡 <strong style={{ color: '#0F766E' }}>빛의 속도</strong>: 299,792,458 m/s ≈ 30만 km/s</div>
+              <div>💡 <strong style={{ color: 'var(--teal-700)' }}>빛의 속도</strong>: 299,792,458 m/s ≈ 30만 km/s</div>
               <div>🔊 <strong style={{ color: '#C2410C' }}>음속 (공기, {tempC}°C)</strong>: {soundSpeed.toFixed(1)} m/s</div>
               <div style={{ paddingLeft: 20, color: 'var(--muted)', fontSize: 12 }}>
-                → 빛은 소리의 약 <strong style={{ color: '#0F766E' }}>{Math.round(arrivalResult.ratio).toLocaleString()}배</strong> 빠름
+                → 빛은 소리의 약 <strong style={{ color: 'var(--teal-700)' }}>{Math.round(arrivalResult.ratio).toLocaleString()}배</strong> 빠름
               </div>
             </div>
           </div>
 
           {/* 같은 거리 1km 비교 시각화 */}
           <div className={s.vsBar}>
-            <p style={{ fontFamily: 'Noto Sans KR, sans-serif', fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 12, textAlign: 'center' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontWeight: 700, color: 'var(--text)', fontSize: 14, marginBottom: 12, textAlign: 'center' }}>
               같은 1km 거리 도달 시간
             </p>
             <div className={s.vsBarRow}>
@@ -508,7 +509,7 @@ export default function SoundSpeedClient() {
               <span className={s.vsBarValue}>{fmtTime(1000 / soundSpeed)}</span>
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, textAlign: 'center' }}>
-              ※ 막대는 시각화용. 실제 빛은 소리보다 약 87만 배 빠름.
+              ※ 막대는 시각화용. 실제 빛은 지금 온도의 소리보다 약 {Math.round(arrivalResult.ratio / 10_000).toLocaleString()}만 배 빠름.
             </p>
           </div>
 
@@ -566,7 +567,7 @@ export default function SoundSpeedClient() {
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
               * 마하수는 <strong style={{ color: 'var(--text)' }}>그 고도의 음속</strong> 기준입니다. 전투기·여객기의 공인 마하는
               고고도(성층권, 음속 약 295m/s) 기준이라 지상 음속으로 나눈 값과 다릅니다.
-              <br />⭐ 음속(1마하)은 자동차의 <strong style={{ color: '#0F766E' }}>약 12배</strong>, KTX의 <strong style={{ color: '#0F766E' }}>약 4배</strong> 빠릅니다.
+              <br />⭐ 음속(1마하)은 자동차의 <strong style={{ color: 'var(--teal-700)' }}>약 12배</strong>, KTX의 <strong style={{ color: 'var(--teal-700)' }}>약 4배</strong> 빠릅니다.
             </p>
           </div>
 
@@ -736,7 +737,7 @@ export default function SoundSpeedClient() {
                     <strong>{p.rt.toFixed(1)}초</strong>
                   </div>
                 ))}
-                <p style={{ fontSize: 11.5, color: 'var(--muted-strong)', marginTop: 8, lineHeight: 1.7 }}>
+                <p style={{ fontSize: 12, color: 'var(--muted-strong)', marginTop: 8, lineHeight: 1.7 }}>
                   ※ 실측 통계 기반 전형값. 이 계산기는 표면 흡음만 반영한 단순 모델이라
                   가구·청중·공기 흡음이 있는 실제 공간과 다를 수 있습니다.
                   프리셋의 재질은 전형 잔향을 재현하는 등가 조합입니다.

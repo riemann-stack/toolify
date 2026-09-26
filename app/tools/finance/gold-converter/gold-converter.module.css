@@ -9,7 +9,7 @@
   padding: 4px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
 }
 .tab {
   padding: 10px 12px;
@@ -22,7 +22,7 @@
   cursor: pointer;
   transition: all .15s;
   white-space: nowrap;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }@media (hover: hover) {
   .tab:hover { color: var(--text); }
 }
@@ -39,7 +39,7 @@
   padding: 24px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 16px;
+  border-radius: var(--radius-card);
 }
 
 .label {
@@ -57,7 +57,7 @@
   line-height: 1.7;
   margin: 8px 0 0;
 }
-.note strong { color: var(--text); font-family: 'Inter', system-ui, sans-serif; }
+.note strong { color: var(--text); font-family: var(--font-sans); }
 .note a { color: var(--accent); text-decoration: none; }@media (hover: hover) {
   .note a:hover { text-decoration: underline; }
 }
@@ -77,7 +77,7 @@
   border-radius: 10px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
 }
@@ -98,7 +98,7 @@
   text-align: left;
   transition: all .15s;
 }@media (hover: hover) {
-  .scenarioCard:hover { border-color: #A16207; }
+  .scenarioCard:hover { border-color: var(--yellow-700); }
 }
 .scenarioEmoji { font-size: 22px; flex-shrink: 0; }
 .scenarioLabel {
@@ -106,7 +106,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0 0 2px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .scenarioDesc {
   font-size: 11px;
@@ -127,7 +127,7 @@
   background: var(--bg3);
   border: 1px solid var(--border);
   border-radius: 10px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 700;
   color: var(--text);
@@ -145,7 +145,7 @@
   border-radius: 10px;
   font-size: 14px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   outline: none;
   cursor: pointer;
   min-width: 140px;
@@ -173,25 +173,26 @@
   padding: 8px 6px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 13px;
   font-weight: 700;
   color: var(--muted);
   cursor: pointer;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   min-height: 38px;
   transition: all .15s;
 }@media (hover: hover) {
   .karatPill:hover { color: var(--text); border-color: var(--karat-color); }
 }
 .karatPillActive {
-  background: var(--karat-color);
-  color: #ffffff;
+  /* 연한 금색(22K·21K) 배경에 흰 글자는 대비 부족 — 색은 옅은 배경·테두리로만 쓰고 글자는 본문색 */
+  background: color-mix(in srgb, var(--karat-color) 24%, var(--bg2));
+  color: var(--text);
   border-color: var(--karat-color);
 }
 @media (max-width: 480px) {
   .karatRow { gap: 4px; }
-  .karatPill { font-size: 12px; padding: 6px 2px; min-height: 32px; border-radius: 8px; }
+  .karatPill { font-size: 12px; padding: 6px 2px; min-height: 32px; border-radius: var(--radius-s); }
 }
 
 /* 한국/국제 섹션 타이틀 */
@@ -201,7 +202,7 @@
   letter-spacing: 0.04em;
   font-weight: 700;
   margin: 0 0 6px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 단위 변환 결과 그리드 */
@@ -220,7 +221,7 @@
   gap: 4px;
 }
 .unitCardActive {
-  background: rgba(14, 165, 233, 0.08);
+  background: color-mix(in srgb, var(--accent) 8%, transparent);
   border-color: var(--accent);
 }
 .unitCardLabel {
@@ -232,7 +233,7 @@
   font-weight: 600;
 }
 .unitCardValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 18px;
   font-weight: 800;
   color: var(--text);
@@ -248,10 +249,10 @@
   font-weight: 500;
 }
 .unitCardRegion {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   margin: 0;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 순도 환산 매트릭스 */
@@ -269,19 +270,19 @@
   position: relative;
 }
 .purityCardCurrent {
-  background: rgba(14, 165, 233, 0.05);
+  background: color-mix(in srgb, var(--accent) 5%, transparent);
   border-color: var(--karat-color);
   border-width: 2px;
 }
 .purityCardK {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 800;
-  color: var(--karat-color);
+  color: var(--text); /* karat hex(22K #FFC940 등)는 흰 배경 대비 약 1.5:1 — 글자에 쓰지 않음 */
   margin: 0 0 4px;
 }
 .purityCardWeight {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 17px;
   font-weight: 800;
   color: var(--text);
@@ -290,17 +291,17 @@
 }
 .purityCardWeight span { font-size: 11px; color: var(--muted); margin-left: 2px; }
 .purityCardRatio {
-  font-size: 10px;
+  font-size: 11px;
   color: var(--muted);
   margin: 4px 0 0;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 옵션 카드 */
 .optionCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px 20px;
 }
 .gapTitle {
@@ -308,7 +309,7 @@
   color: var(--text);
   font-weight: 700;
   margin: 0 0 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 
 /* 시각화 블록 */
@@ -319,7 +320,7 @@
   align-items: center;
   padding: 20px;
   background: var(--bg3);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
 }
 @media (max-width: 600px) {
   .visualBlock {
@@ -339,7 +340,7 @@
   margin: 0 0 6px;
 }
 .visualBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 28px;
   font-weight: 800;
   color: var(--text);
@@ -347,10 +348,10 @@
   margin: 0 0 6px;
 }
 .visualBigAccent {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 32px;
   font-weight: 800;
-  color: #A16207;
+  color: var(--yellow-700);
   letter-spacing: -0.02em;
   margin: 0 0 6px;
 }
@@ -376,7 +377,7 @@
 .numberRow > label {
   font-size: 13px;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   white-space: nowrap;
 }
 /* 모바일 — 라벨/입력 한 줄에서 세로로 잘리는 문제 해결: 가로로 풀어주되 label은 작은 폰트로 한 줄 유지 */
@@ -411,8 +412,8 @@
   padding: 8px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -425,8 +426,8 @@
   padding: 8px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -434,7 +435,7 @@
   outline: none;
 }
 .autoValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--accent);
@@ -451,10 +452,10 @@
 .preset {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 6px 12px;
   font-size: 12px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--muted);
   cursor: pointer;
@@ -485,7 +486,7 @@
   border-radius: 10px;
   padding: 10px 4px;
   font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--muted);
   cursor: pointer;
@@ -510,7 +511,7 @@
   font-size: 13px;
   cursor: pointer;
   color: var(--text);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-top: 8px;
 }
 .checkLabel input { width: 18px; height: 18px; accent-color: var(--accent); cursor: pointer; }
@@ -527,7 +528,7 @@
 .priceCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 18px;
   display: flex;
   flex-direction: column;
@@ -538,7 +539,7 @@
   border-color: rgba(220, 38, 38, 0.3);
 }
 .priceCardSell {
-  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, rgba(8, 145, 178, 0.04) 100%);
+  background: linear-gradient(135deg, rgba(16, 185, 129, 0.08) 0%, color-mix(in srgb, var(--cyan-600) 4%, transparent) 100%);
   border-color: rgba(16, 185, 129, 0.3);
 }
 .priceLabel {
@@ -548,17 +549,17 @@
   margin: 0;
 }
 .priceBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(24px, 5vw, 32px);
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.02em;
   margin: 0;
 }
-.priceCardBuy .priceBig { color: #DC2626; }
-.priceCardSell .priceBig { color: #059669; }
+.priceCardBuy .priceBig { color: var(--red-600); }
+.priceCardSell .priceBig { color: var(--emerald-600); }
 .priceFull {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   color: var(--muted);
   margin: 0 0 8px;
@@ -577,11 +578,11 @@
   color: var(--muted);
 }
 .priceBreak > div span:last-child {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   color: var(--text);
 }
-.warnRow span:first-child { color: #DC2626; }
+.warnRow span:first-child { color: var(--red-600); }
 .warnRow span:last-child { color: var(--muted) !important; }
 
 .spreadInfo {
@@ -592,7 +593,7 @@
   border-radius: 10px;
 }
 .spreadInfo p { margin: 0 0 4px; font-size: 13px; color: var(--text); line-height: 1.6; }
-.spreadInfo strong { color: #D97706; }
+.spreadInfo strong { color: var(--amber-600); }
 
 /* 가격표 */
 .priceTable {
@@ -610,22 +611,22 @@
 }
 .priceTableHead {
   background: var(--bg3);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   color: var(--muted);
   font-weight: 600;
   letter-spacing: 0.04em;
 }
 .priceTableRow {
   border-bottom: 1px solid var(--border);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
 }
 .priceTableRow span:first-child {
   color: var(--text);
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
-.tableBuy { color: #DC2626; font-weight: 700; }
-.tableSell { color: #059669; font-weight: 700; }
+.tableBuy { color: var(--red-600); font-weight: 700; }
+.tableSell { color: var(--emerald-600); font-weight: 700; }
 .tableDiff { color: var(--muted); }
 
 /* 코리아 프리미엄 */
@@ -650,7 +651,7 @@
   margin: 0 0 4px;
 }
 .premiumValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 700;
   color: var(--text);
@@ -670,14 +671,14 @@
   .premiumBig { border-left: none; padding-left: 0; text-align: left; padding-top: 8px; border-top: 1px solid var(--border); }
 }
 .premiumValueBig {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 800;
   margin: 0;
   letter-spacing: -0.02em;
 }
-.premiumPos { color: #D97706; }
-.premiumNeg { color: #059669; }
+.premiumPos { color: var(--amber-600); }
+.premiumNeg { color: var(--emerald-600); }
 
 /* 자산 합산 */
 .emptyMsg {
@@ -717,11 +718,11 @@
   padding: 8px 12px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 13px;
   color: var(--text);
   outline: none;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .assetNickname:focus { border-color: var(--accent); }
 .assetWeight {
@@ -729,8 +730,8 @@
   padding: 8px 10px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
-  font-family: 'Inter', system-ui, sans-serif;
+  border-radius: var(--radius-s);
+  font-family: var(--font-sans);
   font-size: 14px;
   font-weight: 700;
   color: var(--text);
@@ -743,7 +744,7 @@
   padding: 8px 10px;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   font-size: 12px;
   color: var(--text);
   outline: none;
@@ -752,13 +753,13 @@
 .assetRemove {
   background: transparent;
   border: 1px solid var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   width: 32px;
   height: 32px;
   color: var(--muted);
   cursor: pointer;
 }@media (hover: hover) {
-  .assetRemove:hover { border-color: #DC2626; color: #DC2626; }
+  .assetRemove:hover { border-color: var(--red-600); color: var(--red-600); }
 }
 @media (max-width: 640px) {
   .assetNickname, .assetWeight, .assetKarat { font-size: 16px; }
@@ -769,12 +770,12 @@
   width: 100%;
   background: var(--bg3);
   border: 1px dashed var(--border);
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px;
   font-size: 13px;
   color: var(--accent);
   cursor: pointer;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }@media (hover: hover) {
   .addBtn:hover { border-color: var(--accent); }
@@ -803,13 +804,13 @@
   letter-spacing: 0.04em;
 }
 .assetTotal strong {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 800;
   color: var(--text);
 }
 .assetTotalSub { font-size: 11px; color: var(--muted) !important; }
-.assetTotalAccent strong { color: #A16207 !important; }
+.assetTotalAccent strong { color: var(--yellow-700) !important; }
 
 /* 비교 카드 */
 .comparisonGrid {
@@ -820,7 +821,7 @@
 .compareCard {
   background: var(--bg3);
   border: 2px solid var(--c-color);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px;
   display: flex;
   flex-direction: column;
@@ -833,7 +834,7 @@
 }
 .compareEmoji { font-size: 28px; }
 .compareTitle {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: 16px;
   font-weight: 800;
   color: var(--c-color);
@@ -859,7 +860,7 @@
   font-weight: 700;
   text-align: right;
   font-size: 12px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .compareNote {
   font-size: 11px;
@@ -875,7 +876,7 @@
   font-size: 13px;
   color: var(--text);
   line-height: 2;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .guideList li { padding-left: 4px; }
 .guideList strong { color: var(--accent); }
@@ -905,7 +906,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 13px;
   font-weight: 800;
 }
@@ -914,7 +915,7 @@
   font-weight: 700;
   color: var(--text);
   margin: 0 0 4px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .costStepDesc {
   font-size: 12px;
@@ -947,7 +948,7 @@
 .disclaimer {
   background: rgba(217, 119, 6, 0.04);
   border: 1px solid rgba(217, 119, 6, 0.18);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
@@ -955,9 +956,9 @@
 }
 .disclaimer strong {
   display: block;
-  color: #D97706;
+  color: var(--amber-600);
   margin-bottom: 8px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .disclaimer ul {
   margin: 0;

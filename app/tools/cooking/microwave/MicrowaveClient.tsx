@@ -6,8 +6,9 @@ import s from './microwave.module.css'
 import {
   POWER_OPTIONS, FOODS, TEMPS, VESSELS, GOLDEN_TIPS,
   type PowerW, type StartTemp,
-  convertTime, portionFactor, getTemp, getFood,
-  fmtSec, fmtTimer,
+  convertTime, portionFactor, getTemp, getFood, tempFactor,
+  DEFROST_UNIT_G,
+  fmtSec, fmtTimer, splitMinSec,
 } from './microwaveUtils'
 
 type Tab = 'convert' | 'food' | 'timer' | 'guide'
@@ -30,13 +31,17 @@ export default function MicrowaveClient() {
   /* 탭 2: 식품 */
   const [foodId, setFoodId] = useState('rice')
   const [portions, setPortions] = useState('1')
-  const [startTemp, setStartTemp] = useState<StartTemp>('frozen')
+  /* 기본 시작 온도 = 선택 식품의 라벨 기준 보관 상태 (즉석밥은 상온) */
+  const [startTemp, setStartTemp] = useState<StartTemp>(() => getFood('rice').labelTemp)
   const [foodMyW, setFoodMyW] = useState<PowerW>(700)
 
   /* 탭 3: 타이머 */
   const [timerMin, setTimerMin] = useState('2')
   const [timerSec, setTimerSec] = useState('0')
-  const [remaining, setRemaining] = useState(0)
+  const [remaining, setRemainingState] = useState(0)
+  /* 인터벌 콜백이 최신 값을 읽도록 ref와 동기화 (updater 안에서 부수효과를 내지 않기 위함) */
+  const remainingRef = useRef(0)
+  const setRemaining = (v: number) => { remainingRef.current = v; setRemainingState(v) }
   const [running, setRunning] = useState(false)
   /* 다단계(가열→휴지→추가 가열) 타이머 */
   const [phases, setPhases] = useState<{ label: string; sec: number }[]>([])
@@ -52,15 +57,23 @@ export default function MicrowaveClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.refW) { setRefW(j.refW); setRefCustom(!(POWER_OPTIONS as readonly number[]).includes(j.refW)) }
-      if (j.myW) { setMyW(j.myW); setMyCustom(!(POWER_OPTIONS as readonly number[]).includes(j.myW)) }
-      if (j.refMin) setRefMin(j.refMin)
-      if (j.refSec) setRefSecState(j.refSec)
-      if (j.foodId) setFoodId(j.foodId)
-      if (j.portions) setPortions(j.portions)
-      if (j.startTemp) setStartTemp(j.startTemp)
-      if (j.foodMyW) setFoodMyW(j.foodMyW)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
+      const o = j as Record<string, unknown>
+      const isW = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v) && v >= 100 && v <= 3000
+      const isNumStr = (v: unknown): v is string => typeof v === 'string' && /^\d{1,3}$/.test(v)
+      if (isW(o.refW)) { setRefW(o.refW); setRefCustom(!(POWER_OPTIONS as readonly number[]).includes(o.refW)) }
+      if (isW(o.myW)) { setMyW(o.myW); setMyCustom(!(POWER_OPTIONS as readonly number[]).includes(o.myW)) }
+      if (isNumStr(o.refMin)) setRefMin(o.refMin)
+      if (isNumStr(o.refSec)) setRefSecState(o.refSec)
+      // 시작 온도는 복원하지 않고 식품의 라벨 기준 보관 상태로 맞춤
+      // (이전 버전이 기본값 '냉동'을 자동 저장해 두었기 때문 — 복원하면 햇반이 라벨보다 길게 나옴)
+      if (typeof o.foodId === 'string' && FOODS.some((f) => f.id === o.foodId)) {
+        setFoodId(o.foodId)
+        setStartTemp(getFood(o.foodId).labelTemp)
+      }
+      if (typeof o.portions === 'string' && ['1', '2', '3', '4', '5'].includes(o.portions)) setPortions(o.portions)
+      if (typeof o.foodMyW === 'number' && (POWER_OPTIONS as readonly number[]).includes(o.foodMyW)) setFoodMyW(o.foodMyW as PowerW)
     } catch {}
   }, [])
   useEffect(() => {
@@ -114,32 +127,33 @@ export default function MicrowaveClient() {
       const now = Date.now()
       const delta = (now - lastTickRef.current) / 1000
       lastTickRef.current = now
-      setRemaining((prev) => {
-        const next = prev - delta
-        if (next <= 0) {
-          const idx = phaseIdxRef.current
-          const ph = phasesRef.current
-          if (idx < ph.length - 1) {
-            // 다음 단계로 전환 (전환 비프 2회)
-            phaseIdxRef.current = idx + 1
-            setPhaseIdx(idx + 1)
-            beep(2, 880, 0.15)
-            lastTickRef.current = Date.now()
-            return ph[idx + 1].sec
-          }
-          // 마지막 단계 종료
-          setRunning(false)
-          beep(3, 880, 0.2)
-          return 0
+      const prev = remainingRef.current
+      const next = prev - delta
+      if (next <= 0) {
+        const idx = phaseIdxRef.current
+        const ph = phasesRef.current
+        if (idx < ph.length - 1) {
+          // 다음 단계로 전환 (전환 비프 2회)
+          phaseIdxRef.current = idx + 1
+          setPhaseIdx(idx + 1)
+          beep(2, 880, 0.15)
+          lastTickRef.current = Date.now()
+          setRemaining(ph[idx + 1].sec)
+          return
         }
-        // 마지막 3초 비프
-        const prevSec = Math.ceil(prev)
-        const nextSec = Math.ceil(next)
-        if (prevSec !== nextSec && nextSec <= 3 && nextSec > 0) {
-          beep(1, 660, 0.1)
-        }
-        return next
-      })
+        // 마지막 단계 종료
+        setRemaining(0)
+        setRunning(false)
+        beep(3, 880, 0.2)
+        return
+      }
+      // 마지막 3초 비프
+      const prevSec = Math.ceil(prev)
+      const nextSec = Math.ceil(next)
+      if (prevSec !== nextSec && nextSec <= 3 && nextSec > 0) {
+        beep(1, 660, 0.1)
+      }
+      setRemaining(next)
     }, 100)
     return () => {
       if (intervalRef.current) clearInterval(intervalRef.current)
@@ -159,19 +173,28 @@ export default function MicrowaveClient() {
 
   /* 식품 계산 (탭 2) */
   const food = getFood(foodId)
-  const portionN = parseInt(portions) || 1
+  const portionN = Math.min(5, Math.max(1, parseInt(portions) || 1))
   const tempMeta = getTemp(startTemp)
+  const labelTempMeta = getTemp(food.labelTemp)
+  // 라벨이 전제하는 보관 상태(labelTemp) 대비 배수. 해동 모드는 정의상 냉동 시작이라 미적용.
+  const tempMul = food.defrostMode ? 1 : tempFactor(startTemp, food.labelTemp)
+  // 해동은 무게에 비례(슬라이더 1칸 = 200g), 일반 가열은 비선형 N^0.75
+  const qtyMul = food.defrostMode ? portionN : portionFactor(portionN)
+  const qtyLabel = food.defrostMode ? `${portionN * DEFROST_UNIT_G}g` : `${portionN}인분`
   const foodConverted = useMemo(() => {
     if (food.forbidden) return 0
     // 해동 모드는 고정 ~200W라 출력 W 환산을 적용하지 않음
     const base = food.defrostMode ? food.baseSec : convertTime(food.baseW, food.baseSec, foodMyW)
-    return base * portionFactor(portionN) * tempMeta.factor
-  }, [food, foodMyW, portionN, tempMeta])
+    return base * qtyMul * tempMul
+  }, [food, foodMyW, qtyMul, tempMul])
   const foodRest = useMemo(() => {
     if (food.forbidden || food.restSec === 0) return 0
     const base = food.defrostMode ? food.restAdditionalSec : convertTime(food.baseW, food.restAdditionalSec, foodMyW)
-    return base * portionFactor(portionN) * tempMeta.factor
-  }, [food, foodMyW, portionN, tempMeta])
+    return base * qtyMul * tempMul
+  }, [food, foodMyW, qtyMul, tempMul])
+  const tempHelp = startTemp === food.labelTemp
+    ? `라벨 시간 기준 보관 상태(${labelTempMeta.label.split(' ')[0]})`
+    : `라벨 기준(${labelTempMeta.label.split(' ')[0]}) 대비 시간 ${tempMul > 1 ? '+' : ''}${Math.round((tempMul - 1) * 100)}%`
 
   /* 타이머 시작 — 다단계 시퀀스 (가열→휴지→추가) */
   const startSequence = (seq: { label: string; sec: number }[]) => {
@@ -238,9 +261,10 @@ export default function MicrowaveClient() {
           <div className={s.card}>
             <div className={s.compactRow}>
               <div className={s.compactField}>
-                <label className={s.compactLabel}>기준 출력 (W)</label>
+                <label className={s.compactLabel} htmlFor="microwave-ref-w">기준 출력 (W)</label>
                 <div className={s.compactWInput}>
                   <select
+                    id="microwave-ref-w"
                     className={s.compactSelect}
                     value={refCustom ? 'custom' : String(refW)}
                     onChange={(e) => {
@@ -265,9 +289,9 @@ export default function MicrowaveClient() {
                 </div>
               </div>
               <div className={s.compactField}>
-                <label className={s.compactLabel}>기준 시간</label>
+                <label className={s.compactLabel} htmlFor="microwave-ref-min">기준 시간</label>
                 <div className={s.compactTimeRow}>
-                  <input type="number" inputMode="decimal" className={s.compactNum} value={refMin}
+                  <input id="microwave-ref-min" type="number" inputMode="decimal" className={s.compactNum} value={refMin}
                     onChange={(e) => setRefMin(e.target.value)} min={0} max={60} step={1}
                     aria-label="분" placeholder="분" />
                   <span className={s.compactColon}>:</span>
@@ -277,9 +301,10 @@ export default function MicrowaveClient() {
                 </div>
               </div>
               <div className={s.compactField}>
-                <label className={s.compactLabel}>변환할 출력 (W)</label>
+                <label className={s.compactLabel} htmlFor="microwave-my-w">변환할 출력 (W)</label>
                 <div className={s.compactWInput}>
                   <select
+                    id="microwave-my-w"
                     className={s.compactSelect}
                     value={myCustom ? 'custom' : String(myW)}
                     onChange={(e) => {
@@ -313,7 +338,7 @@ export default function MicrowaveClient() {
               <strong>{fmtSec(convertedSec)}</strong>
             </p>
             <p className={s.heroSub}>
-              차이 <strong style={{ color: diff > 0 ? '#EA580C' : 'var(--accent)' }}>
+              차이 <strong style={{ color: diff > 0 ? 'var(--orange-600)' : 'var(--accent)' }}>
                 {diff > 0 ? '+' : ''}{Math.round(diff)}초
               </strong>
               {' · '}{myW > refW ? '⬇️ 더 짧게' : myW < refW ? '⬆️ 더 길게' : '동일'}
@@ -322,8 +347,9 @@ export default function MicrowaveClient() {
               className={s.playBtn}
               onClick={() => {
                 setTab('timer')
-                setTimerMin(String(Math.floor(convertedSec / 60)))
-                setTimerSec(String(Math.round(convertedSec % 60)))
+                const t = splitMinSec(convertedSec)
+                setTimerMin(String(t.m))
+                setTimerSec(String(t.s))
                 startTimer(convertedSec)
               }}
               type="button"
@@ -351,7 +377,7 @@ export default function MicrowaveClient() {
                         className={s.barFill}
                         style={{
                           width: `${Math.max(w, 4)}%`,
-                          background: isMine ? 'var(--accent)' : isRef ? '#0891B2' : 'rgba(234,88,12,0.5)',
+                          background: isMine ? 'var(--accent)' : isRef ? 'var(--cyan-600)' : 'rgba(234,88,12,0.5)',
                         }}
                       >
                         <span className={s.barValue}>{fmtSec(c.sec)}</span>
@@ -385,7 +411,8 @@ export default function MicrowaveClient() {
                 <button
                   key={f.id}
                   className={`${s.foodBtn} ${foodId === f.id ? s.foodBtnActive : ''} ${f.forbidden ? s.foodBtnDanger : ''}`}
-                  onClick={() => setFoodId(f.id)}
+                  onClick={() => { setFoodId(f.id); setStartTemp(f.labelTemp) }}
+                  aria-pressed={foodId === f.id}
                   type="button"
                 >
                   <span className={s.foodEmoji}>{f.emoji}</span>
@@ -411,8 +438,8 @@ export default function MicrowaveClient() {
                   </div>
                 ) : (
                   <div className={s.field}>
-                    <label className={s.fieldLabel}>내 전자레인지 W</label>
-                    <div className={s.pillRow}>
+                    <span className={s.fieldLabel} id="microwave-foodw-label">내 전자레인지 W</span>
+                    <div className={s.pillRow} role="group" aria-labelledby="microwave-foodw-label">
                       {POWER_OPTIONS.map((w) => (
                         <button
                           key={w}
@@ -428,7 +455,7 @@ export default function MicrowaveClient() {
                 )}
                 <div className={s.row2}>
                   <div className={s.field}>
-                    <label className={s.fieldLabel} htmlFor="microwave-time">인분 ({portionN}인분 → 시간 ×{portionFactor(portionN).toFixed(2)})</label>
+                    <label className={s.fieldLabel} htmlFor="microwave-time">{food.defrostMode ? '무게' : '인분'} ({qtyLabel} → 시간 ×{qtyMul.toFixed(2)})</label>
                     <input id="microwave-time"
                       type="range"
                       min={1}
@@ -441,38 +468,41 @@ export default function MicrowaveClient() {
                     <div className={s.pillRow} style={{ marginTop: 8 }}>
                       {[1, 2, 3, 4, 5].map((p) => (
                         <button key={p} className={`${s.pill} ${portionN === p ? s.pillActive : ''}`} onClick={() => setPortions(String(p))} type="button">
-                          {p}인분
+                          {food.defrostMode ? `${p * DEFROST_UNIT_G}g` : `${p}인분`}
                         </button>
                       ))}
                     </div>
                   </div>
+                  {!food.defrostMode && (
                   <div className={s.field}>
-                    <label className={s.fieldLabel}>시작 온도</label>
-                    <div className={s.pillRow}>
+                    <span className={s.fieldLabel} id="microwave-temp-label">시작 온도</span>
+                    <div className={s.pillRow} role="group" aria-labelledby="microwave-temp-label">
                       {TEMPS.map((t) => (
                         <button
                           key={t.id}
                           className={`${s.pill} ${startTemp === t.id ? s.pillActive : ''}`}
                           onClick={() => setStartTemp(t.id)}
+                          aria-pressed={startTemp === t.id}
                           type="button"
                         >
                           {t.emoji} {t.label.split(' ')[0]}
                         </button>
                       ))}
                     </div>
-                    <p className={s.helpText}>{tempMeta.desc}</p>
+                    <p className={s.helpText}>{tempHelp}</p>
                   </div>
+                  )}
                 </div>
               </div>
 
-              <div className={s.hero}>
-                <p className={s.heroLabel}>{food.emoji} {food.label} · {portionN}인분</p>
+              <div className={s.hero} role="status">
+                <p className={s.heroLabel}>{food.emoji} {food.label} · {qtyLabel}</p>
                 <p className={s.heroValue}>
                   <strong>{fmtSec(foodConverted)}</strong>
                 </p>
                 <p className={s.heroSub}>
                   {food.defrostMode
-                    ? <>해동 모드(약 200W) · {portionN}인분 · {tempMeta.label}</>
+                    ? <>해동 모드(약 200W) · {qtyLabel}</>
                     : <>표준 {food.baseW}W {fmtSec(food.baseSec)} → 내 {foodMyW}W ({tempMeta.label})</>}
                   {food.restSec > 0 && (
                     <><br />⏸️ 휴지 {fmtSec(food.restSec)} → 추가 가열 <strong>{fmtSec(foodRest)}</strong></>
@@ -482,8 +512,9 @@ export default function MicrowaveClient() {
                   className={s.playBtn}
                   onClick={() => {
                     setTab('timer')
-                    setTimerMin(String(Math.floor(foodConverted / 60)))
-                    setTimerSec(String(Math.round(foodConverted % 60)))
+                    const t = splitMinSec(foodConverted)
+                    setTimerMin(String(t.m))
+                    setTimerSec(String(t.s))
                     const seq = [{ label: '가열', sec: foodConverted }]
                     if (food.restSec > 0) seq.push({ label: '휴지', sec: food.restSec })
                     if (foodRest > 0) seq.push({ label: '추가 가열', sec: foodRest })
@@ -518,8 +549,10 @@ export default function MicrowaveClient() {
                       )}
                       <tr><td>권장 용기</td><td>{food.vessel}</td></tr>
                       <tr><td>용기 메모</td><td>{food.container}</td></tr>
-                      <tr><td>1인분 → {portionN}인분 보정</td><td className={s.cellMono}>×{portionFactor(portionN).toFixed(2)}</td></tr>
-                      <tr><td>{tempMeta.emoji} 온도 보정</td><td className={s.cellMono}>×{tempMeta.factor.toFixed(2)}</td></tr>
+                      <tr><td>{food.defrostMode ? `${DEFROST_UNIT_G}g → ${qtyLabel} 보정` : `1인분 → ${portionN}인분 보정`}</td><td className={s.cellMono}>×{qtyMul.toFixed(2)}</td></tr>
+                      {!food.defrostMode && (
+                        <tr><td>{tempMeta.emoji} 온도 보정 (라벨 {labelTempMeta.label.split(' ')[0]} 기준)</td><td className={s.cellMono}>×{tempMul.toFixed(2)}</td></tr>
+                      )}
                     </tbody>
                   </table>
                 </div>
@@ -594,7 +627,7 @@ export default function MicrowaveClient() {
                     <circle cx={100} cy={100} r={r} stroke="var(--bg3)" strokeWidth="14" fill="none" />
                     <circle
                       cx={100} cy={100} r={r}
-                      stroke={isLast10 ? '#DB2777' : 'var(--accent)'}
+                      stroke={isLast10 ? 'var(--pink-600)' : 'var(--accent)'}
                       strokeWidth="14"
                       fill="none"
                       strokeLinecap="round"
@@ -605,15 +638,14 @@ export default function MicrowaveClient() {
                     />
                     <text
                       x={100} y={106}
-                      fill={isLast10 ? '#DB2777' : 'var(--text)'}
+                      fill={isLast10 ? 'var(--pink-600)' : 'var(--text)'}
                       fontSize="36"
                       fontWeight="800"
                       textAnchor="middle"
-                      fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'
                     >
                       {fmtTimer(total)}
                     </text>
-                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif">
+                    <text x={100} y={130} fill="var(--muted)" fontSize="11" textAnchor="middle">
                       {running
                         ? (phases.length > 1 ? `${phases[phaseIdx]?.label ?? ''} (${phaseIdx + 1}/${phases.length})` : '실행 중')
                         : remaining > 0 ? '일시정지' : '대기'}
@@ -671,9 +703,9 @@ export default function MicrowaveClient() {
         <>
           {VESSELS.map((v) => {
             const titles = {
-              safe: { emoji: '✅', label: '사용 가능 용기', color: '#0D9488' },
-              caution: { emoji: '⚠️', label: '주의 용기', color: '#D97706' },
-              forbidden: { emoji: '❌', label: '절대 금지', color: '#DB2777' },
+              safe: { emoji: '✅', label: '사용 가능 용기', color: 'var(--teal-600)' },
+              caution: { emoji: '⚠️', label: '주의 용기', color: 'var(--amber-600)' },
+              forbidden: { emoji: '❌', label: '절대 금지', color: 'var(--pink-600)' },
             }[v.category]
             return (
               <div key={v.category} className={s.card}>

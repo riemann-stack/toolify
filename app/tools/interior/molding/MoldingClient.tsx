@@ -23,9 +23,9 @@ const MOLDING_TYPES: {
   color: string
 }[] = [
   { key: 'ceiling',   name: '천장 몰딩',     desc: '천장-벽 경계',     cls: s.tCeiling,    color: 'var(--accent)' },
-  { key: 'baseboard', name: '걸레받이',      desc: '벽-바닥 경계',     cls: s.tBaseboard,  color: '#EA580C' },
-  { key: 'belt',      name: '띠몰딩',        desc: '벽 중간 장식',     cls: s.tBelt,       color: '#9B59B6' },
-  { key: 'door',      name: '출입문 프레임', desc: '문틀 둘레 마감',   cls: s.tDoor,       color: '#0891B2' },
+  { key: 'baseboard', name: '걸레받이',      desc: '벽-바닥 경계',     cls: s.tBaseboard,  color: 'var(--orange-600)' },
+  { key: 'belt',      name: '띠몰딩',        desc: '벽 중간 장식',     cls: s.tBelt,       color: 'var(--amethyst)' },
+  { key: 'door',      name: '출입문 프레임', desc: '문틀 둘레 마감',   cls: s.tDoor,       color: 'var(--cyan-600)' },
 ]
 
 type MaterialKey = 'pvc' | 'mdf' | 'wood' | 'gypsum' | 'styrene' | 'custom'
@@ -36,10 +36,10 @@ const MATERIALS: {
   label: string
   cls: string
 }[] = [
-  { key: 'pvc',     name: 'PVC',     pricePerM: 1500, label: '저렴·셀프',   cls: s.matPvc },
+  { key: 'pvc',     name: 'PVC',     pricePerM: 1500, label: '저렴·욕실 OK', cls: s.matPvc },
   { key: 'mdf',     name: 'MDF',     pricePerM: 2500, label: '도장 후 사용', cls: s.matMdf },
   { key: 'wood',    name: '우드',    pricePerM: 5000, label: '천연 우드',   cls: s.matWood },
-  { key: 'gypsum',  name: '석고',    pricePerM: 4000, label: '고급·욕실',   cls: s.matGypsum },
+  { key: 'gypsum',  name: '석고',    pricePerM: 4000, label: '고급·곡선',   cls: s.matGypsum },
   { key: 'styrene', name: '스티렌',  pricePerM: 1000, label: '저렴·가벼움', cls: s.matStyrene },
   { key: 'custom',  name: '직접 입력', pricePerM: 2000, label: '사용자 가격', cls: s.matCustom },
 ]
@@ -172,9 +172,9 @@ export default function MoldingClient() {
       grandCost += cost
     }
 
-    // 시공비: m당 5,000원 (전문)
+    // 시공비: m당 5,000원 (전문) — 실제 설치 길이(기본 길이) 기준, 로스·모서리 여유분은 자재에만 반영
     const proLaborPerM = 5000
-    const proLaborCost = grandTotal * proLaborPerM
+    const proLaborCost = grandBase * proLaborPerM
 
     return {
       rows,
@@ -220,7 +220,7 @@ export default function MoldingClient() {
     try {
       await navigator.clipboard.writeText(lines.join('\n'))
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -268,15 +268,15 @@ export default function MoldingClient() {
         )}
         {/* 걸레받이 (아래쪽) - 문 위치 끊김 */}
         {showBaseboard && !doorPos && (
-          <line x1={x - 2} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="#EA580C" strokeWidth={4} strokeLinecap="round" />
+          <line x1={x - 2} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="var(--orange-600)" strokeWidth={4} strokeLinecap="round" />
         )}
         {showBaseboard && doorPos && (
           <>
-            <line x1={x - 2} y1={y + rectH} x2={doorStartX} y2={y + rectH} stroke="#EA580C" strokeWidth={4} strokeLinecap="round" />
-            <line x1={doorStartX + doorBreak} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="#EA580C" strokeWidth={4} strokeLinecap="round" />
+            <line x1={x - 2} y1={y + rectH} x2={doorStartX} y2={y + rectH} stroke="var(--orange-600)" strokeWidth={4} strokeLinecap="round" />
+            <line x1={doorStartX + doorBreak} y1={y + rectH} x2={x + rectW + 2} y2={y + rectH} stroke="var(--orange-600)" strokeWidth={4} strokeLinecap="round" />
             {/* 문 표시 */}
-            <rect x={doorStartX} y={y + rectH - 1} width={doorBreak} height={2} fill="#0891B2" opacity={0.8} />
-            <text x={doorStartX + doorBreak / 2} y={y + rectH + 16} fontSize="9" fill="#0891B2" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700}>
+            <rect x={doorStartX} y={y + rectH - 1} width={doorBreak} height={2} fill="var(--cyan-600)" opacity={0.8} />
+            <text x={doorStartX + doorBreak / 2} y={y + rectH + 16} fontSize="9" fill="var(--cyan-600)" textAnchor="middle" fontWeight={700}>
               문
             </text>
           </>
@@ -290,22 +290,22 @@ export default function MoldingClient() {
         )}
         {showBaseboard && (
           <>
-            <line x1={x} y1={y + rectH * 0.5} x2={x} y2={y + rectH} stroke="#EA580C" strokeWidth={2} opacity={0.6} />
-            <line x1={x + rectW} y1={y + rectH * 0.5} x2={x + rectW} y2={y + rectH} stroke="#EA580C" strokeWidth={2} opacity={0.6} />
+            <line x1={x} y1={y + rectH * 0.5} x2={x} y2={y + rectH} stroke="var(--orange-600)" strokeWidth={2} opacity={0.6} />
+            <line x1={x + rectW} y1={y + rectH * 0.5} x2={x + rectW} y2={y + rectH} stroke="var(--orange-600)" strokeWidth={2} opacity={0.6} />
           </>
         )}
         {/* 띠몰딩 (중앙) */}
         {showBelt && (
-          <line x1={x} y1={y + rectH * 0.45} x2={x + rectW} y2={y + rectH * 0.45} stroke="#9B59B6" strokeWidth={2} strokeDasharray="4 3" opacity={0.85} />
+          <line x1={x} y1={y + rectH * 0.45} x2={x + rectW} y2={y + rectH * 0.45} stroke="var(--amethyst)" strokeWidth={2} strokeDasharray="4 3" opacity={0.85} />
         )}
         {/* 모서리 빨간 점 (45도 절단 위치) */}
         {[
           [x, y], [x + rectW, y], [x, y + rectH], [x + rectW, y + rectH],
         ].map(([cx, cy], i) => (
-          <circle key={i} cx={cx} cy={cy} r={3.5} fill="#DC2626" />
+          <circle key={i} cx={cx} cy={cy} r={3.5} fill="var(--red-600)" />
         ))}
         {/* 라벨 */}
-        <text x={W / 2} y={y - 10} fontSize="10" fill="var(--muted)" textAnchor="middle" fontFamily="Noto Sans KR, sans-serif">
+        <text x={W / 2} y={y - 10} fontSize="10" fill="var(--muted)" textAnchor="middle">
           {mode === 'meter' ? `${width}m × ${depth}m` : `둘레 ${fmt(dims.perimeter, 1)}m`}
         </text>
       </svg>
@@ -558,6 +558,7 @@ export default function MoldingClient() {
                 <span>몰딩 종류별 분석</span>
                 <span className={s.cardLabelHint}>기본 + 모서리·로스 = 총 길이</span>
               </div>
+              <div className="tableScroll">
               <table className={s.analysisTable}>
                 <thead>
                   <tr>
@@ -587,6 +588,7 @@ export default function MoldingClient() {
                   </tr>
                 </tbody>
               </table>
+              </div>
             </div>
           )}
 
@@ -606,7 +608,7 @@ export default function MoldingClient() {
                 <strong>{fmtKRW(calc.grandCost)}</strong>
               </div>
               <div className={s.costRow}>
-                <span>전문 시공비 (m당 5,000원)</span>
+                <span>전문 시공비 (설치 {fmt(calc.grandBase, 1)}m × 5,000원)</span>
                 <strong>{fmtKRW(calc.proLaborCost)}</strong>
               </div>
               <div className={s.costSplit}>
@@ -632,9 +634,9 @@ export default function MoldingClient() {
               <div className={s.floorPlanWrap}>{planSvg}</div>
               <div style={{ display: 'flex', gap: 12, marginTop: 12, fontSize: 12, color: 'var(--muted)', flexWrap: 'wrap', justifyContent: 'center' }}>
                 {selectedTypes.has('ceiling')   && <span><span style={{ color: 'var(--accent)', fontWeight: 700 }}>━━</span> 천장 몰딩</span>}
-                {selectedTypes.has('baseboard') && <span><span style={{ color: '#EA580C', fontWeight: 700 }}>━━</span> 걸레받이</span>}
-                {selectedTypes.has('belt')      && <span><span style={{ color: '#9B59B6', fontWeight: 700 }}>┄┄</span> 띠몰딩</span>}
-                <span><span style={{ color: '#DC2626', fontWeight: 700 }}>●</span> 45° 절단 위치</span>
+                {selectedTypes.has('baseboard') && <span><span style={{ color: 'var(--orange-600)', fontWeight: 700 }}>━━</span> 걸레받이</span>}
+                {selectedTypes.has('belt')      && <span><span style={{ color: 'var(--amethyst)', fontWeight: 700 }}>┄┄</span> 띠몰딩</span>}
+                <span><span style={{ color: 'var(--red-600)', fontWeight: 700 }}>●</span> 45° 절단 위치</span>
               </div>
             </div>
           )}
@@ -654,6 +656,7 @@ export default function MoldingClient() {
               <div className={s.cardLabel}>
                 <span>평수별 빠른 참조 ({selectedMaterial.name} · {effectiveUnitLen}m, +{lossRate}% 로스)</span>
               </div>
+              <div className="tableScroll">
               <table className={s.refTable}>
                 <thead>
                   <tr>
@@ -691,6 +694,7 @@ export default function MoldingClient() {
                   })}
                 </tbody>
               </table>
+              </div>
               <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
                 * 걸레받이는 문 1개(폭 0.9m) 제외 가정. 천장 몰딩 + 걸레받이 모두 시공 기준.
               </p>
@@ -732,10 +736,10 @@ export default function MoldingClient() {
             <h3 className={s.guideCardTitle}>재질별 가격·특징</h3>
             <div className={s.guideRowGrid}>
               {[
-                { n: 'PVC 몰딩',     d: '가장 저렴. 셀프 시공 쉬움. 방수·변색 적음.',          s: '1,500원/m · 셀프 OK' },
+                { n: 'PVC 몰딩',     d: '가장 저렴. 셀프 시공 쉬움. 방수·변색 적어 욕실에도 OK.', s: '1,500원/m · 셀프 OK' },
                 { n: 'MDF 몰딩',     d: '도장 후 사용 (한국 인기). 깔끔한 마감. 표준 선택.',  s: '2,500원/m · 표준' },
                 { n: '우드 몰딩',    d: '천연 우드. 자연 무늬. 고급 인테리어용.',              s: '5,000~10,000원/m · 프리미엄' },
-                { n: '석고 몰딩',    d: '욕실·고급 인테리어. 곡선 디자인 가능.',               s: '4,000원/m · 고급' },
+                { n: '석고 몰딩',    d: '고급 인테리어·곡선 디자인 가능. 습기에 약해 욕실은 PVC 권장.', s: '4,000원/m · 고급' },
                 { n: '스티렌 몰딩',  d: '가장 저렴·가벼움. 임시·저예산용.',                    s: '1,000원/m · 저예산' },
               ].map((g, i) => (
                 <div key={i} className={s.guideRow}>

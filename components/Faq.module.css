@@ -1,0 +1,19 @@
+/* components/Faq.module.css — 괘선 목록형 아코디언 (스펙 §10.9, JSON-LD 동시 렌더 유지). 첫 항목만 기본 열림
+   .fqH: margin-top을 지정하지 않는다 → 본문 시트 안에서는 :where(.prose) h2의 48px, 레거시 flex 섹션 안에서는 gap이 간격을 맡는다 */
+.fqH { margin-bottom: 14px; font-size: 22px; font-weight: 700; line-height: 1.4; letter-spacing: -0.03em; color: var(--text); scroll-margin-top: calc(var(--header-h) + 16px); }
+.fq { border-top: 1.5px solid var(--rule); }
+.fq details { border-bottom: 1px solid var(--border); }
+.fq summary { list-style: none; display: flex; align-items: flex-start; gap: 12px; min-height: 56px; padding: 16px 4px; cursor: pointer; font-size: 16px; font-weight: 600; line-height: 1.55; color: var(--text); font-variant-numeric: normal; word-break: keep-all; }
+.fq summary::-webkit-details-marker { display: none; }
+.fqQ { flex-shrink: 0; width: 20px; font-weight: 700; color: var(--accent-ink); }
+.fqText { flex: 1; min-width: 0; }
+.fq summary svg { flex-shrink: 0; margin-top: 4px; color: var(--muted); transition: transform .2s; }
+.fq details[open] summary svg { transform: rotate(180deg); }
+@media (hover: hover) { .fq summary:hover .fqText { text-decoration: underline; text-decoration-color: var(--border-hover); text-underline-offset: 4px; } }
+.fqA { padding: 0 4px 20px 36px; font-size: 16px; line-height: 1.8; color: var(--text-body); font-variant-numeric: normal; word-break: keep-all; overflow-wrap: break-word; }
+.fqA strong, .fqA b { color: var(--text); font-weight: 600; }
+.fqA a { color: var(--accent-ink); text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 640px) {
+  .fqH { font-size: 20px; }
+  .fqA { padding-left: 32px; }
+}

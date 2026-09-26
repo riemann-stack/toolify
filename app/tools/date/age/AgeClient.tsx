@@ -1,11 +1,13 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
+import { useInitialTab } from '@/components/useInitialTab'
+import dynamic from 'next/dynamic'
 import { useEffect, useMemo, useState } from 'react'
 import s from './age.module.css'
 import {
-  calcAge, calcKoreanAge, calcYearAge, calcDaysAlive,
-  nextBirthday, dateAfterDays, dateAtAge, ddayUntil, calcLifeStats,
+  calcAge, calcKoreanAge, calcYearAge,
+  nextBirthday, dayCountSince, nthDayDate, dateAtAge, ddayUntil, calcLifeStats,
   getZodiacAnimal, getWesternZodiac, getBirthGift, getGeneration,
   formatBigKor, fmtDate, fmtDateKo, midnight,
 } from './ageUtils'
@@ -15,12 +17,24 @@ import {
 
 type Tab = 'age' | 'dday' | 'stats' | 'milestone' | 'culture'
 type RefPreset = 'today' | 'eoy' | 'eoyNext' | 'custom'
+/* 인생 통계 탭 내부 보기 — 'time' = 기존 시간 통계(기본), 'life' = 기대수명·남은 시간(구 /tools/date/life-time) */
+type StatsView = 'time' | 'life'
+
+/* ?tab= 딥링크 허용 목록 — 'life'는 구 /tools/date/life-time 301 목적지(= 인생 통계 탭 › 기대수명 보기 별칭) */
+const DEEP_LINK_TABS = ['life', 'age', 'dday', 'stats', 'milestone', 'culture'] as const
+type DeepLinkTab = typeof DEEP_LINK_TABS[number]
+
+/* 기대수명·남은 시간 보기(구 life-time) — 지연 로드로 기본 탭 번들 유지 */
+const LifeTimePanel = dynamic(() => import('./LifeTimePanel'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
 
 /* D-day 색 등급 — 전 탭 공통 기준: ≤30일 빨강 / ≤90일 노랑 / 그 외 */
 const DDAY_CLOSE_DAYS = 30
 const DDAY_MID_DAYS = 90
 const ddayClass = (d: number) => d <= DDAY_CLOSE_DAYS ? s.ddayClose : d <= DDAY_MID_DAYS ? s.ddayMid : s.ddayFar
 
+/* 모듈 평가 시점(클라이언트) 연도. SSG HTML엔 빌드 연도가 박히므로 연도 옵션은 마운트 후에만 렌더 (하이드레이션 불일치 방지) */
 const currentYear = new Date().getFullYear()
 const yearsRange = Array.from({ length: 110 }, (_, i) => currentYear - i)
 const monthsRange = Array.from({ length: 12 }, (_, i) => i + 1)
@@ -29,6 +43,14 @@ const daysRange = Array.from({ length: 31 }, (_, i) => i + 1)
 /* ═════════════════════════════════════════ Main ═════════════════════════════════════════ */
 export default function AgeClient() {
   const [tab, setTab] = useState<Tab>('age')
+  const [statsView, setStatsView] = useState<StatsView>('time')
+  useInitialTab<DeepLinkTab>(DEEP_LINK_TABS, t => {
+    if (t === 'life') { setTab('stats'); setStatsView('life') }
+    else setTab(t)
+  })
+  const [mounted, setMounted] = useState(false)
+  // eslint-disable-next-line react-hooks/set-state-in-effect
+  useEffect(() => { setMounted(true) }, [])
 
   /* 생년월일 */
   const [year, setYear] = useState('')
@@ -81,8 +103,11 @@ export default function AgeClient() {
           { href: '/tools/date/dday', label: 'D-day 계산기' },
           { href: '/tools/date/jet-lag', label: '시차 계산기' }
         ]}
+        sources={[
+          { label: '국가데이터처(구 통계청) 2024년 생명표', href: 'https://mods.go.kr/board.es?mid=a10301010000&bid=208&act=view&list_no=439533' },
+        ]}
       >
-        참고용 인생 통계·문화 정보 도구
+        참고용 인생 통계·문화 정보 도구입니다. 인생 통계 탭의 기대수명·남은 시간은 2024년 생명표 평균을 바탕으로 한 <strong>참고용 추정</strong>이며, 실제 수명을 예측하지 않습니다.
       </Disclaimer>
 
       {/* 탭 */}
@@ -120,7 +145,7 @@ export default function AgeClient() {
         <div className={s.dateRow}>
           <select className={s.dateSelect} aria-label="출생 연도" value={year} onChange={e => setYear(e.target.value)}>
             <option value="">년도</option>
-            {yearsRange.map(y => <option key={y} value={y}>{y}년</option>)}
+            {mounted && yearsRange.map(y => <option key={y} value={y}>{y}년</option>)}
           </select>
           <select className={s.dateSelect} aria-label="출생 월" value={month} onChange={e => setMonth(e.target.value)}>
             <option value="">월</option>
@@ -134,7 +159,11 @@ export default function AgeClient() {
       </div>
 
       {!birth && (
-        <div className={s.empty}>생년월일을 선택하면 만 나이부터 D-day, 인생 통계까지 한 번에 계산됩니다</div>
+        <div className={s.empty}>
+          {tab === 'stats' && statsView === 'life'
+            ? '생년월일을 선택하면 기대수명(2024년 생명표) 기준 남은 시간과 하루 습관의 가치가 계산됩니다'
+            : '생년월일을 선택하면 만 나이부터 D-day, 인생 통계까지 한 번에 계산됩니다'}
+        </div>
       )}
 
       {/* 미래 생년월일이면 나이·일수·통계가 모두 음수가 되므로 전 탭 공통 차단 */}
@@ -146,7 +175,7 @@ export default function AgeClient() {
 
       {birth && !birthInFuture && tab === 'age'       && <AgeTab       birth={birth} refDate={refDate} now={now} refPreset={refPreset} setRefPreset={setRefPreset} customRef={customRef} setCustomRef={setCustomRef} />}
       {birth && !birthInFuture && tab === 'dday'      && <DdayTab      birth={birth} now={now} />}
-      {birth && !birthInFuture && tab === 'stats'     && <StatsTab     birth={birth} now={now} />}
+      {birth && !birthInFuture && tab === 'stats'     && <StatsTab     birth={birth} now={now} view={statsView} setView={setStatsView} />}
       {birth && !birthInFuture && tab === 'milestone' && <MilestoneTab birth={birth} now={now} />}
       {birth && !birthInFuture && tab === 'culture'   && <CultureTab   birth={birth} now={now} />}
     </div>
@@ -287,7 +316,7 @@ function AgeTab({ birth, refDate, now, refPreset, setRefPreset, customRef, setCu
       {!refBeforeBirth && (
         <div className={s.infoGrid3}>
           <div className={s.infoCard}>
-            <div className={s.infoNum}>{calcDaysAlive(birth, refDate).toLocaleString()}</div>
+            <div className={s.infoNum}>{dayCountSince(birth, refDate).toLocaleString()}</div>
             <div className={s.infoLabel}>태어난 지</div>
             <div className={s.infoSub}>일째</div>
           </div>
@@ -327,11 +356,11 @@ function DdayTab({ birth, now }: { birth: Date; now: Date }) {
   const dMins  = Math.floor((diffMs % (1000 * 60 * 60)) / (1000 * 60))
   const dSecs  = Math.floor((diffMs % (1000 * 60)) / 1000)
 
-  // 다가오는 마일스톤 — 가까운 순 8개
-  const daysAlive = calcDaysAlive(birth, now)
+  // 다가오는 마일스톤 — 가까운 순 10개. 일수 기념일은 태어난 날 = 1일째 (백일 = 출생일 + 99일)
+  const dayNum = dayCountSince(birth, now)
   const upcomingDays = DAY_MILESTONES
-    .filter(m => m.days > daysAlive)
-    .map(m => ({ ...m, date: dateAfterDays(birth, m.days), daysUntil: m.days - daysAlive }))
+    .filter(m => m.days > dayNum)
+    .map(m => ({ ...m, date: nthDayDate(birth, m.days), daysUntil: m.days - dayNum }))
   const upcomingAges = AGE_MILESTONES
     .filter(m => m.age > calcAge(birth, now))
     .map(m => ({
@@ -416,18 +445,44 @@ function DdayTab({ birth, now }: { birth: Date; now: Date }) {
 }
 
 /* ═════════════════════════════════════════ 탭 3 — 인생 통계 ═════════════════════════════════════════ */
-function StatsTab({ birth, now }: { birth: Date; now: Date }) {
+type StatsTabProps = { birth: Date; now: Date; view: StatsView; setView: (v: StatsView) => void }
+function StatsTab({ birth, now, view, setView }: StatsTabProps) {
+  return (
+    <>
+      {/* 보기 전환 — 시간 통계(기본) / 기대수명·남은 시간(구 life-time, 지연 로드) */}
+      <div className={s.subTabs} role="group" aria-label="인생 통계 보기 전환">
+        {([
+          ['time', '⏱️ 시간 통계'],
+          ['life', '⏳ 기대수명·남은 시간'],
+        ] as [StatsView, string][]).map(([key, label]) => (
+          <button key={key}
+            type="button"
+            aria-pressed={view === key}
+            className={`${s.subTabBtn} ${view === key ? s.subTabActive : ''}`}
+            onClick={() => setView(key)}>
+            {label}
+          </button>
+        ))}
+      </div>
+
+      {view === 'life' ? <LifeTimePanel birth={birth} /> : <TimeStats birth={birth} now={now} />}
+    </>
+  )
+}
+
+/* 인생 통계 › 시간 통계 (기존 인생 통계 탭 내용 그대로) */
+function TimeStats({ birth, now }: { birth: Date; now: Date }) {
   const stats = calcLifeStats(birth, now)
 
   // 코스믹 비교 — 로그 스케일 (모두 가시화)
   // 우주 1년 = 437.5억 = 1.0 (비교 max)
   // 인류 문명 12000년 / 인류 등장 30만 년 / 사용자 인생
   const cosmicItems = [
-    { name: '우주 138억 년',    sec: 365.25 * 24 * 3600,                    color: '#9B59B6' },
-    { name: '공룡 시대',         sec: (165_000_000 / 437.5),                color: '#EA580C' },
-    { name: '인류 등장 (30만 년)', sec: (300_000   / 437.5),                color: '#A16207' },
-    { name: '인류 문명 (12천 년)', sec: (12_000    / 437.5),                color: '#059669' },
-    { name: '내 인생',           sec: stats.cosmicSeconds,                  color: '#0D9488' },
+    { name: '우주 138억 년',    sec: 365.25 * 24 * 3600,                    color: 'var(--amethyst)' },
+    { name: '공룡 시대',         sec: (165_000_000 / 437.5),                color: 'var(--orange-600)' },
+    { name: '인류 등장 (30만 년)', sec: (300_000   / 437.5),                color: 'var(--yellow-700)' },
+    { name: '인류 문명 (12천 년)', sec: (12_000    / 437.5),                color: 'var(--emerald-600)' },
+    { name: '내 인생',           sec: stats.cosmicSeconds,                  color: 'var(--teal-600)' },
   ]
   const max = cosmicItems[0].sec
   const itemsWithPct = cosmicItems.map(it => ({
@@ -450,7 +505,7 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
         <div className={s.statsGrid}>
           <div className={s.statBigCard}>
             <div className={s.statBigNum}>{stats.daysAlive.toLocaleString()}</div>
-            <div className={s.statBigLabel}>일</div>
+            <div className={s.statBigLabel}>일 지남</div>
             <div className={s.statBigSub}>{stats.weeksAlive.toLocaleString()}주 · {stats.monthsAlive.toLocaleString()}개월</div>
           </div>
           <div className={s.statBigCard}>
@@ -516,7 +571,7 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
           ))}
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-          우주 1년 환산 시, 당신의 인생은 <strong style={{ color: '#0D9488' }}>마지막 {stats.cosmicSeconds.toFixed(3)}초</strong> 동안에 해당합니다. 인류 문명 전체(12,000년)도 우주 시간으로 약 27.5초입니다.
+          우주 1년 환산 시, 당신의 인생은 <strong style={{ color: 'var(--teal-600)' }}>마지막 {stats.cosmicSeconds.toFixed(3)}초</strong> 동안에 해당합니다. 인류 문명 전체(12,000년)도 우주 시간으로 약 27.5초입니다.
         </p>
       </div>
     </>
@@ -525,12 +580,12 @@ function StatsTab({ birth, now }: { birth: Date; now: Date }) {
 
 /* ═════════════════════════════════════════ 탭 4 — 마일스톤 ═════════════════════════════════════════ */
 function MilestoneTab({ birth, now }: { birth: Date; now: Date }) {
-  const daysAlive = calcDaysAlive(birth, now)
+  const dayNum = dayCountSince(birth, now)  // 태어난 날 = 1일째
   const currentAge = calcAge(birth, now)
 
   const dayItems = DAY_MILESTONES.map(m => {
-    const date = dateAfterDays(birth, m.days)
-    const daysUntil = m.days - daysAlive
+    const date = nthDayDate(birth, m.days)
+    const daysUntil = m.days - dayNum
     return { ...m, date, daysUntil, passed: daysUntil < 0 }
   })
   // 다음 1개 강조
@@ -543,7 +598,7 @@ function MilestoneTab({ birth, now }: { birth: Date; now: Date }) {
   })
   const nextAgeMs = ageItems.find(it => !it.passed)
 
-  const fmtDday = (d: number) => d < 0 ? `D+${Math.abs(d).toLocaleString()}` : `D-${d.toLocaleString()}`
+  const fmtDday = (d: number) => d === 0 ? 'D-Day' : d < 0 ? `D+${Math.abs(d).toLocaleString()}` : `D-${d.toLocaleString()}`
 
   return (
     <>
@@ -551,7 +606,7 @@ function MilestoneTab({ birth, now }: { birth: Date; now: Date }) {
       <div className={s.card}>
         <label className={s.cardLabel}>
           일수 마일스톤
-          <span className={s.cardLabelHint}>지금까지 {daysAlive.toLocaleString()}일</span>
+          <span className={s.cardLabelHint}>오늘이 {dayNum.toLocaleString()}일째 (태어난 날 = 1일째)</span>
         </label>
         <div className={s.milestoneGroup}>
           {dayItems.map((m, i) => (
@@ -652,10 +707,10 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
         <div className={s.card}>
           <label className={s.cardLabel}>한국 세대 분류</label>
           <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
-            <span style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>
+            <span style={{ fontFamily: 'var(--font-sans)', fontWeight: 800, fontSize: 22, color: 'var(--accent)' }}>
               {generation.name}
             </span>
-            <span style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <span style={{ fontSize: 13, color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>
               {generation.range[0]}~{generation.range[1]}년생 · {generation.desc}
             </span>
           </div>
@@ -672,7 +727,7 @@ function CultureTab({ birth, now }: { birth: Date; now: Date }) {
           <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
             {traditionalToShow.map(n => (
               <div key={n.age} className={s.traditionalCard}
-                style={n.age === currentAge ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 3px rgba(14,165,233,0.10)' } : undefined}>
+                style={n.age === currentAge ? { borderColor: 'var(--accent)', boxShadow: '0 0 0 3px color-mix(in srgb, var(--accent) 10%, transparent)' } : undefined}>
                 <div className={s.traditionalHanja}>{n.korean.split('·')[0]}</div>
                 <div className={s.traditionalName}>만 {n.age}세 {n.age === currentAge ? '· 현재' : ''}</div>
                 <div className={s.traditionalMeaning}>{n.meaning}</div>

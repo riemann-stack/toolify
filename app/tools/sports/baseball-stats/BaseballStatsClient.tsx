@@ -3,16 +3,21 @@
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './baseball-stats.module.css'
+import { KBO_SEASON_RECORDS, KBO_LEGENDS, KBO_RECORDS_CHECKED } from './kboRecords'
 
 /* ─────────────────────────────────────────────────────────
  * 리그 프리셋
  * ───────────────────────────────────────────────────────── */
-const LEAGUES: Array<{ id: string; flag: string; name: string; games: number; cls: string; avgAVG: number; avgOPS: number; avgERA: number; avgWHIP: number }> = [
-  { id: 'kbo',     flag: '🇰🇷', name: 'KBO',     games: 144, cls: 'leagueKBO',     avgAVG: 0.275, avgOPS: 0.760, avgERA: 4.65, avgWHIP: 1.40 },
-  { id: 'mlb',     flag: '🇺🇸', name: 'MLB',     games: 162, cls: 'leagueMLB',     avgAVG: 0.247, avgOPS: 0.730, avgERA: 4.20, avgWHIP: 1.30 },
-  { id: 'npb',     flag: '🇯🇵', name: 'NPB',     games: 143, cls: 'leagueNPB',     avgAVG: 0.250, avgOPS: 0.700, avgERA: 3.50, avgWHIP: 1.27 },
-  { id: 'amateur', flag: '🥎',   name: '사회인',  games: 30,  cls: 'leagueAmateur', avgAVG: 0.250, avgOPS: 0.700, avgERA: 5.00, avgWHIP: 1.50 },
-  { id: 'custom',  flag: '⚙️',   name: '직접 입력', games: 100, cls: 'leagueCustom', avgAVG: 0.260, avgOPS: 0.730, avgERA: 4.20, avgWHIP: 1.30 },
+// fipConst: FIP 상수(= 리그 ERA − 리그 (13HR+3(BB+HBP)−2K)/IP)의 리그별 근사값. 시즌마다 달라지는 추정치다.
+//  MLB ≈ 3.1(FanGraphs guts 최근 시즌 약 3.1~3.3). KBO는 MLB 3.1을 평균 ERA 차이만큼 올린 근사(3.55).
+//  NPB는 홈런이 적어 같은 방식으로 내리면 과소(2.4)가 되므로 추정 범위(2.8~3.1) 상단 3.1 사용.
+//  사회인은 공식 통계가 없어 평균 ERA 5.00 기준 근사(3.9).
+const LEAGUES: Array<{ id: string; flag: string; name: string; games: number; cls: string; avgAVG: number; avgOPS: number; avgERA: number; avgWHIP: number; fipConst: number }> = [
+  { id: 'kbo',     flag: '🇰🇷', name: 'KBO',     games: 144, cls: 'leagueKBO',     avgAVG: 0.275, avgOPS: 0.760, avgERA: 4.65, avgWHIP: 1.40, fipConst: 3.55 },
+  { id: 'mlb',     flag: '🇺🇸', name: 'MLB',     games: 162, cls: 'leagueMLB',     avgAVG: 0.247, avgOPS: 0.730, avgERA: 4.20, avgWHIP: 1.30, fipConst: 3.10 },
+  { id: 'npb',     flag: '🇯🇵', name: 'NPB',     games: 143, cls: 'leagueNPB',     avgAVG: 0.250, avgOPS: 0.700, avgERA: 3.50, avgWHIP: 1.27, fipConst: 3.10 },
+  { id: 'amateur', flag: '🥎',   name: '사회인',  games: 30,  cls: 'leagueAmateur', avgAVG: 0.250, avgOPS: 0.700, avgERA: 5.00, avgWHIP: 1.50, fipConst: 3.90 },
+  { id: 'custom',  flag: '⚙️',   name: '직접 입력', games: 100, cls: 'leagueCustom', avgAVG: 0.260, avgOPS: 0.730, avgERA: 4.20, avgWHIP: 1.30, fipConst: 3.10 },
 ]
 
 /* OPS 수준 평가 */
@@ -63,8 +68,8 @@ function WarGuide() {
           <div key={t.range} style={{ display: 'flex', alignItems: 'center', gap: 12, fontSize: 13 }}>
             <span style={{
               flexShrink: 0, minWidth: 64, textAlign: 'center', fontWeight: 800,
-              fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', color: t.color,
-              background: `${t.color}1a`, borderRadius: 8, padding: '4px 8px',
+              fontFamily: 'var(--font-sans)', color: t.color,
+              background: `${t.color}1a`, borderRadius: 'var(--radius-s)', padding: '4px 8px',
             }}>{t.range}</span>
             <span style={{ color: 'var(--text)' }}>{t.label}</span>
           </div>
@@ -198,8 +203,6 @@ export default function BaseballStatsClient() {
     if (_h < _b2 + _b3 + _hr) validMsgs.push(`안타(${_h}) < 2B+3B+HR(${_b2 + _b3 + _hr}) — 1루타 음수 발생, 입력을 확인하세요.`)
     if (_ab > 0 && _h > _ab) validMsgs.push(`안타(${_h})가 타수(${_ab})보다 많습니다 — 타율 1.000 초과는 불가능합니다.`)
     if (_ab > 0 && _k > _ab) validMsgs.push(`삼진(${_k})이 타수(${_ab})보다 많습니다 — 입력을 확인하세요.`)
-    if (_ab > 0 && pa < _ab) validMsgs.push('타석 합계가 타수보다 작습니다.')
-    if (sbAttempts > 0 && _cs > _sb + _cs) validMsgs.push('도루 실패 수치를 확인하세요.')
 
     return {
       singles, pa, tb,
@@ -225,8 +228,10 @@ export default function BaseballStatsClient() {
     const k9   = ip > 0 ? (_k * 9) / ip : 0
     const bb9  = ip > 0 ? (_bb * 9) / ip : 0
     const kbb  = _bb > 0 ? _k / _bb : (_k > 0 ? _k : 0)
+    // FIP 상수는 정의상 리그마다 다르다(lgERA − lgFIP_raw) — 리그 프리셋의 근사 상수 사용
+    const fipConst = league.fipConst
     const fip  = ip > 0
-      ? ((13 * _hr + 3 * (_bb + _hbp) - 2 * _k) / ip) + 3.1
+      ? ((13 * _hr + 3 * (_bb + _hbp) - 2 * _k) / ip) + fipConst
       : 0
 
     // 이닝 표기 검증: 야구는 .1(⅓)·.2(⅔)만 유효 — 한 자리 소수 .3~.9는 표기 오류
@@ -234,8 +239,8 @@ export default function BaseballStatsClient() {
     const tenth = Math.round(frac * 10)
     const ipNotationWarn = ipRaw > 0 && tenth >= 3 && Math.abs(frac * 10 - tenth) < 0.001
 
-    return { ip, era, whip, k9, bb9, kbb, fip, ipNotationWarn }
-  }, [pIp, pEr, pH, pBb, pHbp, pHr, pK])
+    return { ip, era, whip, k9, bb9, kbb, fip, fipConst, ipNotationWarn }
+  }, [pIp, pEr, pH, pBb, pHbp, pHr, pK, league.fipConst])
 
   /* ───── 시즌 페이스 환산 ───── */
   const pace = useMemo(() => {
@@ -257,6 +262,8 @@ export default function BaseballStatsClient() {
   /* OPS 수준 */
   const opsLv = opsLevel(calc.ops)
   const eraLv = eraLevel(pcalc.era)
+  // 이닝을 비우면 ERA 0.00 → '에이스급'으로 보이던 문제 방지
+  const hasIp = pcalc.ip > 0
 
   /* ───── 리그 보정 지표 (OPS+ / ERA+) ─────
    * 타고투저·투고타저 메타를 보정해 "리그 평균=100" 척도로 환산.
@@ -293,6 +300,8 @@ export default function BaseballStatsClient() {
   const piePaths = useMemo(() => {
     const total = calc.singles + n(b2) + n(b3) + n(hr)
     if (total === 0) return [] as Array<{ d: string; color: string; label: string; value: number; pct: number }>
+    // 조각이 하나(100%)면 시작점=끝점이라 SVG arc가 생략됨 → 원 전체를 두 개의 반원 arc로 그린다
+    const FULL_CIRCLE = 'M 80 10 A 70 70 0 1 1 80 150 A 70 70 0 1 1 80 10 Z'
     const items = [
       { value: calc.singles, color: PIE_COLORS[0], label: '1루타' },
       { value: n(b2),        color: PIE_COLORS[1], label: '2루타' },
@@ -309,7 +318,9 @@ export default function BaseballStatsClient() {
       const x2 = 80 + 70 * Math.cos(end)
       const y2 = 80 + 70 * Math.sin(end)
       const large = end - start > Math.PI ? 1 : 0
-      const d = `M 80 80 L ${x1.toFixed(2)} ${y1.toFixed(2)} A 70 70 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`
+      const d = it.value >= total
+        ? FULL_CIRCLE
+        : `M 80 80 L ${x1.toFixed(2)} ${y1.toFixed(2)} A 70 70 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z`
       return { d, color: it.color, label: it.label, value: it.value, pct: (it.value / total) * 100 }
     })
   }, [calc.singles, b2, b3, hr])
@@ -338,8 +349,10 @@ export default function BaseballStatsClient() {
       text = [
         `── 투수 기록 (${league.name}) ──`,
         `${pIp}이닝 ${n(pEr)}자책 ${n(pK)}K ${n(pBb)}BB`,
-        `ERA ${pcalc.era.toFixed(2)} / WHIP ${pcalc.whip.toFixed(2)} / K/9 ${pcalc.k9.toFixed(1)}`,
-        `${eraLv.label}`,
+        ...(hasIp ? [
+          `ERA ${pcalc.era.toFixed(2)} / WHIP ${pcalc.whip.toFixed(2)} / K/9 ${pcalc.k9.toFixed(1)}`,
+          `${eraLv.label}`,
+        ] : ['투구 이닝 미입력']),
         'youtil.kr/tools/sports/baseball-stats',
       ].join('\n')
     } else if (pace) {
@@ -352,7 +365,7 @@ export default function BaseballStatsClient() {
       ].join('\n')
     }
     navigator.clipboard?.writeText(text).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -360,8 +373,8 @@ export default function BaseballStatsClient() {
   function StatCell(label: string, abbr: string, value: string, setter: (v: string) => void, cls?: string) {
     return (
       <div className={`${styles.statCell} ${cls ?? ''}`}>
-        <div className={styles.statLabel}>{label} <small>({abbr})</small></div>
-        <input className={styles.statInput} type="number" inputMode="numeric" min={0} aria-label={`${label} (${abbr})`} value={value} onChange={e => setter(e.target.value)} />
+        <label htmlFor={`bs-${abbr}`} className={styles.statLabel} style={{ display: 'block' }}>{label} <small>({abbr})</small></label>
+        <input id={`bs-${abbr}`} className={styles.statInput} type="number" inputMode="numeric" min={0} aria-label={`${label} (${abbr})`} value={value} onChange={e => setter(e.target.value)} />
       </div>
     )
   }
@@ -602,7 +615,7 @@ export default function BaseballStatsClient() {
               <span>역대 명선수 비교 (KBO)</span>
               <span className={styles.cardLabelHint}>통산 기록</span>
             </div>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table className={styles.legendTable}>
                 <thead>
                   <tr><th scope="col">선수</th><th scope="col">AVG</th><th scope="col">OBP</th><th scope="col">SLG</th><th scope="col">OPS</th></tr>
@@ -615,13 +628,13 @@ export default function BaseballStatsClient() {
                     <td>{calc.slg.toFixed(3)}</td>
                     <td>{calc.ops.toFixed(3)}</td>
                   </tr>
-                  <tr><td>이승엽</td><td>0.302</td><td>0.378</td><td>0.519</td><td>0.897</td></tr>
-                  <tr><td>양준혁</td><td>0.316</td><td>0.421</td><td>0.497</td><td>0.918</td></tr>
-                  <tr><td>장종훈</td><td>0.291</td><td>0.398</td><td>0.521</td><td>0.919</td></tr>
-                  <tr><td>이정후</td><td>0.340</td><td>0.407</td><td>0.491</td><td>0.898</td></tr>
+                  {KBO_LEGENDS.map(p => (
+                    <tr key={p.name}><td>{p.name}</td><td>{p.avg}</td><td>{p.obp}</td><td>{p.slg}</td><td>{p.ops}</td></tr>
+                  ))}
                 </tbody>
               </table>
             </div>
+            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.6 }}>KBO 통산 기록 기준 ({KBO_RECORDS_CHECKED} 확인)</p>
           </div>
 
           <WarGuide />
@@ -673,9 +686,15 @@ export default function BaseballStatsClient() {
           {/* 히어로 */}
           <div className={styles.hero} role="status">
             <p className={styles.heroLead}>ERA</p>
-            <p className={styles.heroNum}>{pcalc.era.toFixed(2)}</p>
-            <span className={`${styles.heroBadge} ${eraLv.cls}`}>{eraLv.label}</span>
-            <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.5 }}>등급은 KBO 절대 기준 · 리그 보정은 아래 간이 ERA+ 참고</p>
+            <p className={styles.heroNum}>{hasIp ? pcalc.era.toFixed(2) : '—'}</p>
+            {hasIp ? (
+              <>
+                <span className={`${styles.heroBadge} ${eraLv.cls}`}>{eraLv.label}</span>
+                <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.5 }}>등급은 KBO 절대 기준 · 리그 보정은 아래 간이 ERA+ 참고</p>
+              </>
+            ) : (
+              <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 8, lineHeight: 1.5 }}>투구 이닝을 입력하세요</p>
+            )}
           </div>
 
           {/* 4 KPI */}
@@ -721,15 +740,20 @@ export default function BaseballStatsClient() {
               <span className={styles.cardLabelHint}>{league.flag} 평균 ERA {league.avgERA.toFixed(2)} / WHIP {league.avgWHIP.toFixed(2)}</span>
             </div>
             <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              내 ERA <strong style={{ color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{pcalc.era.toFixed(2)}</strong> 는 리그 평균 {league.avgERA.toFixed(2)} 대비
-              <strong style={{ color: pcalc.era <= league.avgERA ? '#059669' : '#EA580C', marginLeft: 6 }}>
+              {hasIp ? (<>
+              내 ERA <strong style={{ color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>{pcalc.era.toFixed(2)}</strong> 는 리그 평균 {league.avgERA.toFixed(2)} 대비
+              <strong style={{ color: pcalc.era <= league.avgERA ? 'var(--success)' : 'var(--warning)', marginLeft: 6 }}>
                 {pcalc.era <= league.avgERA ? '−' : '+'}{Math.abs(pcalc.era - league.avgERA).toFixed(2)}
               </strong>
               {pcalc.era <= league.avgERA ? ' (좋음)' : ' (나쁨)'}.
-              {pcalc.fip > 0 && (
+              </>) : '투구 이닝을 입력하면 리그 평균과 비교합니다.'}
+              {hasIp && pcalc.fip > 0 && (
                 <>
                   <br />
-                  <strong style={{ color: 'var(--text)' }}>FIP({pcalc.fip.toFixed(2)})</strong> 가 ERA보다 {pcalc.fip < pcalc.era ? '낮음 → 운이 나빴을 가능성' : '높음 → 운이 좋았을 가능성'}.
+                  <strong style={{ color: 'var(--text)' }}>FIP({pcalc.fip.toFixed(2)})</strong> {Math.abs(pcalc.fip - pcalc.era) < 0.3
+                    ? '가 ERA와 비슷 → 수비·운의 영향이 크지 않은 편'
+                    : pcalc.fip < pcalc.era ? '가 ERA보다 낮음 → 수비·운 때문에 실점이 많았을 가능성' : '가 ERA보다 높음 → 수비·운의 도움을 받았을 가능성'}.
+                  <span style={{ fontSize: 11 }}> (FIP 상수 {pcalc.fipConst.toFixed(2)} — 리그별 근사값)</span>
                 </>
               )}
             </p>
@@ -738,9 +762,9 @@ export default function BaseballStatsClient() {
             <div className={styles.plusBox}>
               <div className={styles.plusHead}>
                 <span className={styles.plusName}>ERA+ (간이) <small>리그 평균 = 100</small></span>
-                <span className={styles.plusVal} style={{ color: eraPlusLv.color }}>
-                  {eraPlus}
-                  <small style={{ color: 'var(--muted)', marginLeft: 8, fontWeight: 600 }}>{eraPlusLv.label}</small>
+                <span className={styles.plusVal} style={{ color: hasIp ? eraPlusLv.color : 'var(--muted)' }}>
+                  {hasIp ? eraPlus : '—'}
+                  {hasIp && <small style={{ color: 'var(--muted)', marginLeft: 8, fontWeight: 600 }}>{eraPlusLv.label}</small>}
                 </span>
               </div>
               <p className={styles.plusDesc}>
@@ -784,7 +808,7 @@ export default function BaseballStatsClient() {
                 <p className={styles.heroLead}>시즌 종료 예상 기록</p>
                 <p className={styles.heroNum}>{pace.projHits}<span style={{ fontSize: 18, color: 'var(--muted)', marginLeft: 6, verticalAlign: 'middle' }}>안타</span></p>
                 <p style={{ marginTop: 8, fontSize: 13, color: 'var(--muted)' }}>
-                  현재 페이스 × <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{pace.ratio.toFixed(2)}</strong>
+                  현재 페이스 × <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{pace.ratio.toFixed(2)}</strong>
                 </p>
               </div>
 
@@ -861,9 +885,9 @@ export default function BaseballStatsClient() {
                   <span>KBO 역대 단일시즌 기록 비교</span>
                 </div>
                 <div style={{ display: 'flex', flexDirection: 'column', gap: 6, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-                  <div>최다 안타 — <strong style={{ color: 'var(--text)' }}>서건창 201개 (2014)</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{pace.projHits}개</strong></div>
-                  <div>최다 홈런 — <strong style={{ color: 'var(--text)' }}>이승엽 56개 (2003)</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{pace.projHr}개</strong></div>
-                  <div>최고 OPS — <strong style={{ color: 'var(--text)' }}>이승엽 1.124 (2003)</strong> · 내 OPS: <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{calc.ops.toFixed(3)}</strong></div>
+                  <div>최다 안타 — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.hits.holder} {KBO_SEASON_RECORDS.hits.value} ({KBO_SEASON_RECORDS.hits.year})</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{pace.projHits}개</strong></div>
+                  <div>최다 홈런 — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.homeRuns.holder} {KBO_SEASON_RECORDS.homeRuns.value} ({KBO_SEASON_RECORDS.homeRuns.year})</strong> · 내 페이스: <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{pace.projHr}개</strong></div>
+                  <div>최고 OPS — <strong style={{ color: 'var(--text)' }}>{KBO_SEASON_RECORDS.ops.holder} {KBO_SEASON_RECORDS.ops.value} ({KBO_SEASON_RECORDS.ops.year})</strong> · 내 OPS: <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{calc.ops.toFixed(3)}</strong></div>
                 </div>
               </div>
             </>

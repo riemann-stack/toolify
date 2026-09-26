@@ -3,8 +3,12 @@ import PlanetComparisonClient from './PlanetComparisonClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { PLANETS, earthDistance, fmtDistance, fmtLightTime, fmt, round, type Planet } from './planetData'
 
 export const metadata = buildMetadata({
   path: '/tools/edu/planet-comparison',
@@ -12,6 +16,22 @@ export const metadata = buildMetadata({
   description: '수성·금성·화성·목성 등 8개 행성에서 내 몸무게·나이·하루 길이가 어떻게 달라지는지 계산하는 교육용 시뮬레이터. 행성별 중력·공전주기·표면 온도 비교표와 2026년 행성 탐사 현황까지 한 페이지에.',
   keywords: ['행성비교', '태양계행성', '화성에서몸무게', '목성중력', '행성나이', '행성크기비교', '태양계시각화', '행성과학'],
 })
+
+/* 안내 표 — 손으로 적지 않고 도구와 같은 planetData(NASA Planetary Fact Sheet)와 같은 식으로 빌드 시 계산한다.
+   도구 기본값: 체중 75kg · 나이 35세 · 지구 점프 50cm · g₀ = 9.80665 m/s² */
+const REF_KG = 75
+const REF_AGE = 35
+const G0 = 9.80665
+const MARS = PLANETS.find(p => p.id === 'mars')!
+const marsAge = round((REF_AGE * 365.25) / MARS.yearDays, 1)
+
+const yearLabel = (p: Planet) =>
+  p.yearDays < 1000 ? `${fmt(p.yearDays, 0)}일` : `${fmt(p.yearDays, 0)}일 (${round(p.yearDays / 365.25, 1)}년)`
+const hoursLabel = (h: number) => (h >= 48 ? `${fmt(round(h / 24, 1), 1)}일` : `${round(h, 1)}시간`)
+
+const TH: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap' }
+const TD: React.CSSProperties = { padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }
+const zebra = (i: number): React.CSSProperties => ({ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' })
 
 const FAQ_LD = [
               {
@@ -24,30 +44,40 @@ const FAQ_LD = [
               },
               {
                 q: '다른 행성에서 점프하면 얼마나 높이 뛸 수 있나요?',
-                a: '점프 높이는 <strong>행성 중력에 반비례</strong>합니다. 지구에서 50cm 점프할 수 있다면: 화성·수성(중력 38%) 약 1.32m(지구의 2.6배), 달(중력 16%) 약 3.05m(지구의 6.1배), 목성(중력 236%) 약 21cm(지구의 절반)입니다. 달에서 농구 선수가 점프하면 <strong>골대 위로 가볍게 넘을 수 있습니다.</strong>',
+                a: '같은 속도로 뛰어오른다고 가정하면 점프 높이는 <strong>표면 중력에 반비례</strong>합니다(h = v² ÷ 2g). 지구에서 50cm 점프할 수 있다면: 수성 약 1.32m·화성 약 1.33m(중력 약 0.38배, 지구의 약 2.6배), 달(중력 약 0.165배) 약 3.0m(지구의 약 6배), 목성(중력 2.36배) 약 21cm(지구의 약 42%)입니다. 실제로는 우주복 무게와 발 디딤이 달라져 이보다 낮게 뛰게 되며, 목성은 단단한 표면이 없어 설 곳 자체가 없습니다.',
               },
               {
                 q: '인간이 다른 행성에서 살 수 있나요?',
-                a: '<strong>현재 기술로는 어떤 행성에서도 보호 장비 없이 생존할 수 없습니다.</strong> 수성·금성은 극단적 온도(427°C, 464°C), 화성은 산소 부족·대기압 1%·평균 -65°C, 목성·토성·천왕성·해왕성은 가스 행성으로 표면이 없습니다. 가장 가능성 있는 행성은 <strong>화성</strong>으로, NASA·SpaceX 등이 화성 정착 연구 중입니다. 단, 우주복·돔·온실 등 인공 환경이 필수적입니다.',
+                a: '<strong>현재 기술로는 어떤 행성에서도 보호 장비 없이 생존할 수 없습니다.</strong> 수성·금성은 극단적 온도(427°C, 464°C), 화성은 산소 부족·대기압이 지구의 1% 미만(약 0.6%)·평균 -65°C, 목성·토성·천왕성·해왕성은 가스·얼음 거대 행성으로 단단한 표면이 없습니다. 가장 많이 거론되는 후보는 <strong>화성</strong>으로, NASA·SpaceX 등이 유인 탐사와 정착 기술을 연구 중입니다. 단, 우주복·돔·온실 등 인공 환경이 필수적입니다.',
               },
               {
                 q: '빛 도달 시간이란 무엇인가요?',
-                a: '빛이 한 행성에서 다른 행성까지 가는 데 걸리는 시간입니다. 빛의 속도는 1초에 약 30만 km로 우주에서 가장 빠르지만, 행성 간 거리가 워낙 멀어 시간이 걸립니다. 화성에 메시지를 보내면 두 행성의 위치에 따라 <strong>편도 4~21분</strong>이 걸립니다(가장 가까울 때 ~ 태양 반대편일 때). 이 때문에 화성 탐사선과 실시간 조작이 불가능하고, 명령을 보내 응답을 받기까지 왕복 8~42분이 필요합니다. 해왕성까지는 약 4시간, 가장 가까운 별 (프록시마 센타우리)까지는 4.2년이 걸립니다.',
+                a: '빛이 한 행성에서 다른 행성까지 가는 데 걸리는 시간입니다. 빛의 속도는 1초에 약 30만 km로 우주에서 가장 빠르지만, 행성 간 거리가 워낙 멀어 시간이 걸립니다. 화성에 메시지를 보내면 두 행성의 위치에 따라 <strong>편도 약 3~22분</strong>이 걸립니다(가장 가까이 접근할 때 ~ 태양 반대편일 때). 이 때문에 화성 탐사선과 실시간 조작이 불가능하고, 명령을 보내 응답을 받기까지 왕복 약 6~44분이 필요합니다. 도구는 궤도를 원으로 근사하므로 편도 4.4~21분으로 조금 좁게 나옵니다. 해왕성까지는 약 4시간, 가장 가까운 별 (프록시마 센타우리)까지는 4.2년이 걸립니다.',
               },
             ]
 
 export default function PlanetComparisonPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        교육·학습
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/edu/planet-comparison">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="edu" />행성 비교 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         8개 행성에서 <strong style={{ color: 'var(--text)' }}>내 몸무게·나이·하루 길이</strong>가 어떻게 달라지는지 시각화.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="행성 물리량 = NASA Planetary Fact Sheet(표면 중력·공전주기·항성일·태양일·1bar 기준 온도) · 체중계 눈금 = 체중 × 표면중력비 · 행성 나이 = 나이 × 365.25 ÷ 공전일수 · 지구–행성 거리는 원궤도·동일 평면 근사 · 탐사 현황은 각 기관 발표 기준"
+        sources={[
+          { label: 'NASA Planetary Fact Sheet (NSSDCA)', href: 'https://nssdc.gsfc.nasa.gov/planetary/factsheet/' },
+          { label: 'NASA Science — Planets', href: 'https://science.nasa.gov/solar-system/planets/' },
+          { label: 'ESA — BepiColombo', href: 'https://www.esa.int/Science_Exploration/Space_Science/BepiColombo' },
+          { label: 'NASA — Europa Clipper', href: 'https://science.nasa.gov/mission/europa-clipper/' },
+          { label: 'NASA — Juno', href: 'https://science.nasa.gov/mission/juno/' },
+          { label: 'ESA — Juice', href: 'https://www.esa.int/Science_Exploration/Space_Science/Juice' },
+        ]}
+      />
 
       <PlanetComparisonClient />
 
@@ -59,18 +89,18 @@ export default function PlanetComparisonPage() {
 
         {/* ── 1. 태양계 8개 행성 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             태양계 8개 행성 한눈에
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '지구형 행성',     c: '#0891B2', d: '수성·금성·지구·화성 — 작고 단단한 암석질 행성' },
-              { t: '거대 가스 행성',  c: '#EA580C', d: '목성·토성 — 수소·헬륨이 주성분, 표면 없음' },
-              { t: '거대 얼음 행성',  c: '#0D9488', d: '천왕성·해왕성 — 메탄·물·암모니아 얼음 풍부' },
-              { t: '왜소행성',        c: '#A8A29E', d: '명왕성은 2006년 IAU에서 왜소행성으로 재분류' },
+              { t: '지구형 행성',     c: 'var(--cyan-600)', d: '수성·금성·지구·화성 — 작고 단단한 암석질 행성' },
+              { t: '거대 가스 행성',  c: 'var(--orange-600)', d: '목성·토성 — 수소·헬륨이 주성분, 단단한 표면 없음' },
+              { t: '거대 얼음 행성',  c: 'var(--teal-600)', d: '천왕성·해왕성 — 물·메탄·암모니아 같은 휘발성 물질이 풍부' },
+              { t: '왜소행성',        c: 'var(--gray-400)', d: '명왕성은 2006년 IAU 총회에서 왜소행성으로 재분류' },
             ].map((g, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{g.d}</p>
               </div>
             ))}
@@ -79,21 +109,21 @@ export default function PlanetComparisonPage() {
 
         {/* ── 2. 몸무게 변화 원리 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             각 행성에서 몸무게 변화 원리
           </h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            먼저 <strong style={{ color: 'var(--text)' }}>질량과 무게는 다른 것</strong>입니다. 질량(kg)은 물질의 양이라 어느 행성에 가도 그대로이고, 무게는 중력이 그 질량을 당기는 힘이라 행성마다 달라집니다. 무게의 단위는 원래 <strong style={{ color: 'var(--text)' }}>뉴턴(N)</strong>이에요.
+          <p className="g-p">
+            먼저 <strong>질량과 무게는 다른 것</strong>입니다. 질량(kg)은 물질의 양이라 어느 행성에 가도 그대로이고, 무게는 중력이 그 질량을 당기는 힘이라 행성마다 달라집니다. 무게의 단위는 원래 <strong>뉴턴(N)</strong>이에요.
           </p>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            그런데 우리가 쓰는 체중계는 힘을 재고서 <strong style={{ color: 'var(--text)' }}>지구 중력으로 나눈 값</strong>을 kg으로 보여 줍니다. 그래서 &ldquo;화성에서 28.3kg&rdquo;은 정확히 말하면 <strong style={{ color: 'var(--text)' }}>화성에 체중계를 가져가면 눈금이 28.3을 가리킨다</strong>는 뜻이지, 질량이 줄어든다는 뜻이 아닙니다. 이 도구가 &lsquo;체중계 눈금&rsquo;과 &lsquo;무게(N)&rsquo;를 나눠 보여 주는 이유입니다.
+          <p className="g-p">
+            그런데 우리가 쓰는 체중계는 힘을 재고서 <strong>지구 중력으로 나눈 값</strong>을 kg으로 보여 줍니다. 그래서 &ldquo;화성에서 28.3kg&rdquo;은 정확히 말하면 <strong>화성에 체중계를 가져가면 눈금이 28.3을 가리킨다</strong>는 뜻이지, 질량이 줄어든다는 뜻이 아닙니다. 이 도구가 &lsquo;체중계 눈금&rsquo;과 &lsquo;무게(N)&rsquo;를 나눠 보여 주는 이유입니다.
           </p>
           <div style={{
             background: 'var(--bg2)',
             border: '1px solid var(--border)',
-            borderRadius: '12px',
+            borderRadius: 'var(--radius-m)',
             padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
+            fontFamily: 'var(--font-mono)',
             fontSize: '13px',
             color: 'var(--text)',
             lineHeight: 2.1,
@@ -103,136 +133,122 @@ export default function PlanetComparisonPage() {
             <div style={{ paddingLeft: 20, fontSize: 12, color: 'var(--muted)' }}>화성에서는 75 × 3.70 = <strong style={{ color: 'var(--text)' }}>277 N</strong> → 체중계는 <strong style={{ color: 'var(--text)' }}>28.3kg</strong>을 가리킴</div>
           </div>
           <div className="tableScroll" style={{ marginTop: 12 }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <caption style={{ captionSide: 'bottom', textAlign: 'left', fontSize: 12, color: 'var(--muted)', paddingTop: 8 }}>
+                질량 {REF_KG}kg · 지구 제자리 점프 50cm 기준. 도구와 같은 표면중력비(NASA)로 계산했습니다.
+              </caption>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  {['행성', '표면중력 (지구=1)', '질량 75kg → 체중계 눈금'].map((h, i) => (
-                    <th scope="col" key={i} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>{h}</th>
+                  {['행성', '표면중력 (지구=1)', '체중계 눈금', '무게', '점프 높이'].map(h => (
+                    <th scope="col" key={h} style={TH}>{h}</th>
                   ))}
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { p: '수성·화성',           c: '#A8A29E', g: '0.378 · 0.377 g', w: '28.4 · 28.3 kg' },
-                  { p: '금성·토성·천왕성',    c: '#FFC857', g: '0.90~0.92 g', w: '67.5~69 kg' },
-                  { p: '지구',                 c: '#0891B2', g: '1.00 g', w: '75.0 kg' },
-                  { p: '해왕성',               c: '#3E5BFF', g: '1.12 g', w: '84.0 kg' },
-                  { p: '목성',                 c: '#EA580C', g: '2.36 g', w: '177.0 kg' },
-                ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.g}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.w}</td>
+                {PLANETS.map((p, i) => (
+                  <tr key={p.id} style={zebra(i)}>
+                    <td style={{ ...TD, fontWeight: 700 }}>{p.name}</td>
+                    <td style={TD}>{p.gravityRatio.toFixed(3)} g</td>
+                    <td style={{ ...TD, color: 'var(--teal-600)', fontWeight: 700 }}>{(REF_KG * p.gravityRatio).toFixed(1)} kg</td>
+                    <td style={{ ...TD, color: 'var(--muted)' }}>{fmt(round(REF_KG * p.gravityRatio * G0))} N</td>
+                    <td style={{ ...TD, color: 'var(--muted)' }}>{(0.5 / p.gravityRatio).toFixed(2)} m</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
+          <p className="g-p" style={{ marginTop: 12 }}>
+            눈여겨볼 점은 <strong>크기와 중력이 비례하지 않는다</strong>는 것입니다. 토성은 반지름이 지구의 9배가 넘지만 표면중력은 지구보다 약하고, 천왕성도 0.9배 수준입니다.
+            표면중력은 질량 ÷ 반지름²에 비례하는데, 거대 행성은 부피에 비해 밀도가 낮아 반지름이 커진 효과가 질량 증가를 상당 부분 상쇄하기 때문입니다.
+            다만 토성은 질량 ÷ 반지름²만 따지면 적도에서도 지구보다 약간 큰 값(약 1.06배)이 나옵니다. NASA 표의 표면중력은 1bar 높이의 적도에서 자전 효과까지 포함한 값이라, 약 10.7시간에 한 바퀴 도는 빠른 자전의 원심력만큼 줄어든 것입니다 — 토성이 지구보다 약간 약하게 나오는 것은 주로 이 효과 때문입니다.
+            또 거대 행성의 &lsquo;표면&rsquo;은 단단한 땅이 아니라 대기압이 1bar인 높이를 기준으로 삼은 값입니다.
+          </p>
         </div>
 
         {/* ── 3. 1년·1일 길이 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             행성 1년·1일의 길이
           </h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: 10 }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0D9488', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#0D9488', fontWeight: 700, marginBottom: 8 }}>🌀 공전주기 (1년)</p>
-              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>태양을 한 바퀴 도는 시간</p>
-              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>수성: 88일 (가장 짧음)</li>
-                <li>지구: 365일</li>
-                <li>화성: 687일 (1.88년)</li>
-                <li>목성: 4,333일 (12년)</li>
-                <li>토성: 10,759일 (29.5년)</li>
-                <li>천왕성: 30,689일 (84년)</li>
-                <li>해왕성: 60,182일 (165년)</li>
-              </ul>
-              <p style={{ fontSize: 12, color: '#0D9488', marginTop: 8, fontWeight: 700 }}>→ 해왕성에서 35년이면 지구에서 5,767년!</p>
-            </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 16px' }}>
-              <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>🔄 자전주기 (1일)</p>
-              <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 8 }}>한 바퀴 자전하는 시간</p>
-              <ul style={{ paddingLeft: 18, margin: 0, fontSize: 12, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>목성: 9.93h (가장 짧음)</li>
-                <li>토성: 10.7h</li>
-                <li>해왕성: 16.11h</li>
-                <li>천왕성: 17.24h <span style={{ color: '#DC2626' }}>(역행)</span></li>
-                <li>화성: 24.6h <span style={{ color: '#0891B2' }}>(지구와 비슷!)</span></li>
-                <li>지구: 24h</li>
-                <li>수성: 4,223h (176일)</li>
-                <li>금성: 5,833h (243일, <span style={{ color: '#DC2626' }}>역행</span>)</li>
-              </ul>
-            </div>
+          <p className="g-p">
+            &lsquo;1년&rsquo;은 태양을 한 바퀴 도는 공전주기이고, 도구의 행성 나이는 <strong>지구 나이 × 365.25 ÷ 그 행성의 공전일수</strong>로 구합니다.
+            예를 들어 {REF_AGE}세는 화성에서 {REF_AGE} × 365.25 ÷ {fmt(MARS.yearDays, 2)} ≈ <strong>{marsAge}세</strong>입니다.
+            &lsquo;하루&rsquo;는 두 가지로 셀 수 있습니다. 별을 기준으로 한 바퀴 도는 <strong>항성일</strong>과, 해가 다시 같은 자리에 올 때까지의 <strong>태양일</strong>입니다.
+            공전하는 동안 해의 방향이 바뀌기 때문에 둘은 다르며, 자전이 느린 수성·금성에서는 그 차이가 극단적으로 커집니다. 도구의 &lsquo;하루&rsquo;는 생활 감각에 맞는 태양일입니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['행성', '1년 (공전주기)', '하루 (태양일)', '자전 (항성일)', `지구 ${REF_AGE}세 →`].map(h => (
+                    <th scope="col" key={h} style={TH}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {PLANETS.map((p, i) => (
+                  <tr key={p.id} style={zebra(i)}>
+                    <td style={{ ...TD, fontWeight: 700 }}>{p.name}</td>
+                    <td style={TD}>{yearLabel(p)}</td>
+                    <td style={{ ...TD, color: 'var(--teal-600)', fontWeight: 700 }}>{hoursLabel(p.solarDayHours)}</td>
+                    <td style={{ ...TD, color: 'var(--muted)' }}>{hoursLabel(p.rotationHours)}{p.isRetrograde ? ' · 역행' : ''}</td>
+                    <td style={{ ...TD, color: 'var(--muted)' }}>{round((REF_AGE * 365.25) / p.yearDays, 1)}세</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
-          <div style={{
-            background: 'rgba(155,89,182,0.05)',
-            border: '1px solid rgba(155,89,182,0.30)',
-            borderRadius: 12,
-            padding: '12px 16px',
-            fontSize: 13,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.85,
-          }}>
-            ✨ <strong style={{ color: '#9333EA' }}>특별한 점:</strong> 금성은 자전축이 거꾸로 (역행),
-            천왕성은 자전축이 98° 기울어져 옆으로 굴러갑니다.
-          </div>
+          <Callout tone="note" title="특별한 점">
+            금성은 자전 방향이 공전과 반대(역행)라 해가 서쪽에서 뜹니다. 별 기준 자전(243일)이 공전(225일)보다 길지만, 해가 다시 뜨는 태양일은 약 117일입니다.
+            천왕성은 자전축이 98° 기울어져 옆으로 누운 채 공전합니다.
+          </Callout>
         </div>
 
         {/* ── 4. 빛 도달 시간 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             빛이 행성까지 도달하는 시간
           </h2>
-          <div style={{
-            background: 'var(--bg2)',
-            border: '1px solid var(--border)',
-            borderRadius: '12px',
-            padding: '18px 20px',
-            fontFamily: "'JetBrains Mono', Menlo, monospace",
-            fontSize: '13px',
-            color: 'var(--text)',
-            lineHeight: 2.1,
-            marginBottom: 12,
-          }}>
-            <span style={{ color: 'var(--muted)' }}>빛의 속도</span> = 약 <strong style={{ color: '#0D9488' }}>30만 km/초</strong>
+          <p className="g-p">
+            빛의 속도는 정의값 <strong>299,792.458 km/s</strong>(약 30만 km/초)입니다. 도구는 지구와 행성의 궤도를 원으로 보고, 가장 가까울 때를 두 궤도 반지름의 차,
+            태양 반대편에 있을 때를 합으로 잡아 거리 ÷ 광속으로 신호 시간을 구합니다. 달까지는 평균 약 38만 km라 1.3초 남짓, 태양계 밖 가장 가까운 별인 프록시마 센타우리까지는 약 4.2년이 걸립니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['행성', '가장 가까울 때', '가장 멀 때', '빛 편도'].map(h => (
+                    <th scope="col" key={h} style={TH}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {PLANETS.filter(p => p.id !== 'earth').map((p, i) => {
+                  const d = earthDistance(p)
+                  return (
+                    <tr key={p.id} style={zebra(i)}>
+                      <td style={{ ...TD, fontWeight: 700 }}>{p.name}</td>
+                      <td style={TD}>{fmtDistance(d.minKm)}</td>
+                      <td style={TD}>{fmtDistance(d.maxKm)}</td>
+                      <td style={{ ...TD, color: 'var(--teal-600)', fontWeight: 700 }}>{fmtLightTime(d.minLightMin)} ~ {fmtLightTime(d.maxLightMin)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 8 }}>
-            {[
-              { p: '달',      t: '1.3초',  c: '#A8A29E' },
-              { p: '수성·금성', t: '2~5분',   c: '#FFC857' },
-              { p: '화성',     t: '13분',    c: '#DC2626' },
-              { p: '목성',     t: '35분',    c: '#EA580C' },
-              { p: '토성',     t: '71분',    c: '#A16207' },
-              { p: '천왕성',   t: '2.5시간', c: '#0D9488' },
-              { p: '해왕성',   t: '4시간',   c: '#3E5BFF' },
-              { p: '프록시마 센타우리', t: '4.2년', c: '#9B59B6' },
-            ].map((r, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${r.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 12, color: 'var(--muted)' }}>{r.p}</p>
-                <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800, fontSize: 16, color: r.c, marginTop: 2 }}>{r.t}</p>
-              </div>
-            ))}
-          </div>
-          <div style={{
-            background: 'rgba(220,38,38,0.05)',
-            border: '1px solid rgba(220,38,38,0.25)',
-            borderRadius: 12,
-            padding: '12px 16px',
-            fontSize: 13,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.85,
-          }}>
-            ⚠️ 화성 탐사선과의 통신은 <strong style={{ color: 'var(--danger)' }}>편도 4~21분 지연</strong>(위치에 따라 변동) → 실시간 조작 불가능.
-            명령이 도착하기까지 편도 4~21분, 응답까지 왕복 8~42분이 걸립니다.
-          </div>
+          <p className="g-p" style={{ marginTop: 12 }}>
+            원궤도 근사이므로 실제 값과는 조금 다릅니다. 궤도가 찌그러진 정도(이심률)가 큰 수성은 실제로 약 7,700만 km까지 가까워지고, 화성도 가장 가까운 접근 때는 5,500만 km대까지 좁혀집니다.
+            표는 &lsquo;대략 몇 분이 걸리는가&rsquo;를 가늠하는 용도로 보세요.
+          </p>
+          <Callout tone="warn" title="화성 탐사선과의 통신">
+            신호가 편도 약 3~22분(도구의 원궤도 근사로는 4.4~21분) 걸려 실시간 조종이 불가능하고, 명령을 보내 응답을 받기까지 왕복 약 6~44분이 걸립니다. 그래서 로버는 미리 짠 명령을 묶음으로 받아 자율 주행 기능을 섞어 수행합니다.
+          </Callout>
         </div>
 
         {/* ── 5. 표면 온도 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             각 행성 표면 온도
           </h2>
           <div className="tableScroll">
@@ -246,62 +262,54 @@ export default function PlanetComparisonPage() {
               </thead>
               <tbody>
                 {[
-                  { p: '수성', c: '#A8A29E', r: '-173~427°C', avg: '167°C',  d: '극단적 변화 (대기 없음)' },
-                  { p: '금성', c: '#FFC857', r: '464°C',       avg: '464°C', d: '가장 뜨거움 — 두꺼운 CO2 대기' },
-                  { p: '지구', c: '#0891B2', r: '-89~56.7°C',  avg: '15°C',  d: '생명체 거주 가능' },
-                  { p: '화성', c: '#DC2626', r: '-143~35°C',   avg: '-65°C', d: '추움' },
-                  { p: '목성', c: '#EA580C', r: '-110°C',       avg: '-110°C', d: '가스 행성 — 표면 없음' },
-                  { p: '토성', c: '#A16207', r: '-140°C',       avg: '-140°C', d: '가스 행성' },
-                  { p: '천왕성', c: '#0D9488', r: '-195°C',      avg: '-195°C', d: '최저 -224°C 관측' },
-                  { p: '해왕성', c: '#3E5BFF', r: '-200°C',      avg: '-200°C', d: '평균 기온이 가장 낮음' },
+                  { p: '수성', r: '-173~427°C', avg: '167°C',  d: '극단적 변화 (대기가 거의 없음)' },
+                  { p: '금성', r: '464°C',       avg: '464°C', d: '가장 뜨거움 — 두꺼운 CO2 대기' },
+                  { p: '지구', r: '-89~56.7°C',  avg: '15°C',  d: '생명체 거주 가능' },
+                  { p: '화성', r: '-143~35°C',   avg: '-65°C', d: '추움 · 얇은 CO2 대기' },
+                  { p: '목성', r: '-110°C',       avg: '-110°C', d: '가스 행성 — 1bar 높이 기준' },
+                  { p: '토성', r: '-140°C',       avg: '-140°C', d: '가스 행성 — 1bar 높이 기준' },
+                  { p: '천왕성', r: '-195°C',      avg: '-195°C', d: '최저 -224°C 관측' },
+                  { p: '해왕성', r: '-200°C',      avg: '-200°C', d: '평균 기온이 가장 낮음' },
                 ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: r.c, fontWeight: 700 }}>{r.p}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.r}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#0D9488', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 800 }}>{r.avg}</td>
+                  <tr key={i} style={zebra(i)}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.p}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.r}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--teal-600)', fontFamily: 'var(--font-sans)', fontWeight: 800 }}>{r.avg}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.d}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.75 }}>
-            ※ 금성이 수성보다 뜨거운 이유: <strong style={{ color: 'var(--text)' }}>두꺼운 이산화탄소 대기 → 극심한 온실효과</strong>
+          <p className="g-p" style={{ marginTop: 12 }}>
+            금성이 태양에 더 가까운 수성보다 뜨거운 이유는 <strong>두꺼운 이산화탄소 대기가 만드는 극심한 온실효과</strong>입니다. 금성의 대기압은 지구의 약 90배라 낮과 밤, 적도와 극의 온도 차도 거의 없습니다.
+            반대로 대기가 거의 없는 수성은 열을 붙잡아 두지 못해 낮과 밤의 차이가 600°C에 이릅니다.
           </p>
         </div>
 
         {/* ── 6. 행성 탐사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             행성 탐사 현황 (2026년)
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '수성', d: '메신저호 2011~2015년 궤도 운용 후 종료 · 베피콜롬보 순항 중, 2026년 11월 궤도 진입 예정', c: '#A8A29E' },
-              { t: '금성', d: '비너스 익스프레스 2014년 종료 · 아카츠키 2025년 9월 운용 종료 → 현재 금성 궤도에 가동 중인 탐사선 없음', c: '#FFC857' },
-              { t: '화성', d: '큐리오시티·퍼서비어런스 활동 중 (인저뉴어티 헬기는 2024년 1월 72회 비행 후 임무 종료)', c: '#DC2626' },
-              { t: '목성', d: '주노는 연장 임무가 2025년 9월까지로 공지돼 있고 이후 공식 종료 발표는 확인되지 않았습니다 · Europa Clipper 순항 중(2030년 도착)', c: '#EA580C' },
-              { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: '#A16207' },
-              { t: '천왕성·해왕성', d: '보이저 2호만 1986/1989년 근접 통과', c: '#0D9488' },
+              { t: '수성', d: '메신저호 2011~2015년 궤도 운용 후 종료 · 베피콜롬보 순항 중, 2026년 11월 궤도 진입 예정', c: 'var(--gray-400)' },
+              { t: '금성', d: '비너스 익스프레스 2014년 종료 · 아카츠키 2025년 9월 운용 종료 → 현재 금성 궤도에 가동 중인 탐사선 없음', c: 'var(--amber-600)' },
+              { t: '화성', d: '큐리오시티·퍼서비어런스 활동 중 (인저뉴어티 헬기는 2024년 1월 72회 비행 후 임무 종료)', c: 'var(--red-600)' },
+              { t: '목성', d: '주노는 2016년부터 목성 궤도를 돌며 관측해 왔고, 발표된 연장 임무 기간은 2025년 9월까지 — 이후 운용 여부는 NASA 임무 페이지 확인 · Europa Clipper 순항 중(2030년 도착 예정) · ESA JUICE 순항 중(2031년 도착 예정)', c: 'var(--orange-600)' },
+              { t: '토성', d: '카시니 (1997-2017 종료, 데이터 분석 진행)', c: 'var(--yellow-700)' },
+              { t: '천왕성·해왕성', d: '보이저 2호만 1986/1989년 근접 통과', c: 'var(--teal-600)' },
             ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.c}`, borderRadius: 12, padding: '12px 14px' }}>
-                <p style={{ fontSize: 13, color: c.c, fontWeight: 700, marginBottom: 4 }}>{c.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${c.c}`, borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
+                <p style={{ fontSize: 13, color: 'var(--text)', fontWeight: 700, marginBottom: 4 }}>{c.t}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>{c.d}</p>
               </div>
             ))}
           </div>
-          <div style={{
-            background: 'rgba(13,148,136,0.05)',
-            border: '1px solid rgba(13,148,136,0.30)',
-            borderRadius: 12,
-            padding: '12px 16px',
-            fontSize: 13,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.85,
-          }}>
-            🚀 <strong style={{ color: 'var(--cat-edu)' }}>Europa Clipper</strong>(2024년 10월 발사, 2030년 목성 도착)와 <strong style={{ color: 'var(--cat-edu)' }}>베피콜롬보</strong>(2026년 11월 수성 궤도 진입 예정)가 항행 중입니다. 둘 다 이미 발사돼 목적지로 가고 있습니다.
-          </div>
+          <Callout tone="note" title="항행 중인 탐사선">
+            <strong>Europa Clipper</strong>(NASA, 2024년 10월 발사, 2030년 목성 도착 예정), <strong>JUICE</strong>(ESA, 2023년 4월 발사, 2031년 목성 도착 예정), <strong>베피콜롬보</strong>(ESA·JAXA, 2026년 11월 수성 궤도 진입 예정)가 이미 발사돼 목적지로 가고 있습니다. 일정은 기관 발표에 따라 바뀔 수 있습니다.
+          </Callout>
         </div>
 
         {/* FAQ 직후 광고 슬롯 */}
@@ -309,28 +317,12 @@ export default function PlanetComparisonPage() {
 
         {/* ── 7. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 8. 관련 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             함께 쓰면 좋은 도구
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
@@ -350,7 +342,7 @@ export default function PlanetComparisonPage() {
                   padding: '14px 16px',
                   background: 'var(--bg2)',
                   border: '1px solid var(--border)',
-                  borderRadius: '12px',
+                  borderRadius: 'var(--radius-m)',
                   textDecoration: 'none',
                   transition: 'border-color 0.15s',
                 }}
@@ -364,6 +356,6 @@ export default function PlanetComparisonPage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

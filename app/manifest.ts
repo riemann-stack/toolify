@@ -15,8 +15,9 @@ export default function manifest(): MetadataRoute.Manifest {
     start_url: '/',
     id: '/',
     display: 'standalone',
-    background_color: '#f0f7ff',
-    theme_color: '#f0f7ff',
+    // Trust Ledger (FINAL_SPEC §6.2): 헤더 흰색 = theme, 캔버스 --bg = 스플래시 배경. app/layout.tsx viewport.themeColor 와 일치
+    background_color: '#F6F7F9',
+    theme_color: '#FFFFFF',
     icons: [
       { src: '/icon-192.png', sizes: '192x192', type: 'image/png', purpose: 'any' },
       { src: '/icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'any' },

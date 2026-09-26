@@ -14,11 +14,11 @@ export interface Band {
 /** 0 입문 · 1 초급 · 2 중급 · 3 상급 · 4 고급 · 5 엘리트 */
 export const BANDS: Band[] = [
   { label: '입문',   color: '#94A3B8', desc: '클라이밍을 막 시작한 단계. 기본 홀드 잡기와 발 쓰기를 익힙니다.' },
-  { label: '초급',   color: '#059669', desc: '기본기를 다지는 단계. 실내 입문~초급 코스를 대부분 완등합니다.' },
-  { label: '중급',   color: '#0EA5E9', desc: '꾸준히 다닌 동호인 수준. 다양한 무브와 약간의 파워가 필요합니다.' },
-  { label: '상급',   color: '#EA580C', desc: '상위권 동호인. 파워·지구력·정교한 무브가 모두 요구됩니다.' },
-  { label: '고급',   color: '#DC2626', desc: '전문적 훈련 단계. 지역 대회 입상권 수준입니다.' },
-  { label: '엘리트', color: '#9333EA', desc: '세계 최상위 수준. 극소수만 도달하는 영역입니다.' },
+  { label: '초급',   color: 'var(--emerald-600)', desc: '기본기를 다지는 단계. 실내 입문~초급 코스를 대부분 완등합니다.' },
+  { label: '중급',   color: 'var(--sky-500)', desc: '꾸준히 다닌 동호인 수준. 다양한 무브와 약간의 파워가 필요합니다.' },
+  { label: '상급',   color: 'var(--orange-600)', desc: '상위권 동호인. 파워·지구력·정교한 무브가 모두 요구됩니다.' },
+  { label: '고급',   color: 'var(--red-600)', desc: '전문적 훈련 단계. 지역 대회 입상권 수준입니다.' },
+  { label: '엘리트', color: 'var(--purple-600)', desc: '세계 최상위 수준. 극소수만 도달하는 영역입니다.' },
 ]
 
 export interface BoulderRow { v: string; font: string; band: number }

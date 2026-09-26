@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useMemo } from 'react'
+import { useState, useMemo, useSyncExternalStore } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './thawing.module.css'
 import {
@@ -10,12 +10,10 @@ import {
   QUICK_WARNINGS,
   evaluateRisk,
   reverseStartTime,
-  type FoodKey as UFoodKey,
-  type Method as UMethod,
+  type FoodKey,
+  type Method,
 } from './thawingUtils'
 
-type FoodKey = 'beef_pork' | 'chicken' | 'fish' | 'vegetable' | 'bread' | 'cooked'
-type Method = 'fridge' | 'water' | 'room' | 'micro'
 type FrozenState = 'full' | 'partial'
 type InitialTemp = 'fridge' | 'room' | 'hot'
 type FreezerTemp = 'normal' | 'fast'
@@ -27,31 +25,52 @@ const FOODS: { key: FoodKey; icon: string; label: string; thawFactor: number; mi
   { key: 'fish',      icon: '🐟', label: '생선·해산물',   thawFactor: 1.5, microFactor: 1.4, fridgeFactor: 0.8,  storageMin: 2, storageMax: 3,  tip: '해동 후 물기 제거. 비브리오 주의로 당일 조리 권장.' },
   { key: 'vegetable', icon: '🥦', label: '채소·과일',     thawFactor: 1.0, microFactor: 1.0, fridgeFactor: 0.5,  storageMin: 8, storageMax: 12, tip: '블랜칭 후 냉동 시 영양소·색 유지. 해동 없이 바로 조리 가능.' },
   { key: 'bread',     icon: '🍞', label: '빵·반죽',       thawFactor: 1.8, microFactor: 1.2, fridgeFactor: 0.45, storageMin: 2, storageMax: 3,  tip: '슬라이스 후 냉동하면 필요한 양만 해동 가능.' },
-  { key: 'cooked',    icon: '🍱', label: '조리된 음식',   thawFactor: 1.2, microFactor: 1.5, fridgeFactor: 0.7,  storageMin: 1, storageMax: 3,  tip: '식힌 후 냉동. 해동 후 재가열 시 중심부 74°C 이상 확인.' },
+  { key: 'cooked',    icon: '🍱', label: '조리된 음식',   thawFactor: 1.2, microFactor: 1.5, fridgeFactor: 0.7,  storageMin: 1, storageMax: 3,  tip: '식힌 후 냉동. 해동 후 재가열 시 중심부 75°C에서 1분 이상 확인.' },
 ]
 
+// 분 단위로 먼저 반올림한 뒤 시·분으로 나눔 ('1시간 60분' 방지)
 function formatHours(h: number): { value: string; sub: string } {
-  if (h < 1) {
-    const min = Math.round(h * 60)
-    return { value: `${min}`, sub: '분' }
-  }
+  const totalMin = Math.round(h * 60)
+  if (totalMin < 60) return { value: `${totalMin}`, sub: '분' }
   if (h < 10) {
-    const hi = Math.floor(h)
-    const mm = Math.round((h - hi) * 60)
+    const hi = Math.floor(totalMin / 60)
+    const mm = totalMin % 60
     return mm === 0 ? { value: `${hi}`, sub: '시간' } : { value: `${hi}시간 ${mm}분`, sub: '' }
   }
   return { value: `${Math.round(h * 10) / 10}`, sub: '시간' }
 }
 
 function formatMinutes(m: number): { value: string; sub: string } {
-  if (m < 60) return { value: `${Math.round(m)}`, sub: '분' }
-  const h = Math.floor(m / 60)
-  const rest = Math.round(m - h * 60)
+  const total = Math.round(m)
+  if (total < 60) return { value: `${total}`, sub: '분' }
+  const h = Math.floor(total / 60)
+  const rest = total % 60
   return rest === 0 ? { value: `${h}`, sub: '시간' } : { value: `${h}시간 ${rest}분`, sub: '' }
 }
 
-function addMinutesToNow(minutes: number): string {
-  const now = new Date()
+/* 현재 시각 — SSR·하이드레이션 중엔 null(빌드 시각이 정적 HTML에 박히지 않도록),
+   마운트 후 실제 시각을 쓰고 30초마다 갱신. 스냅샷은 모듈 변수에 캐시해 렌더 간 안정적으로 유지. */
+let nowSnapshot = 0
+const subscribeNow = (cb: () => void) => {
+  nowSnapshot = Date.now()
+  const id = setInterval(() => { nowSnapshot = Date.now(); cb() }, 30_000)
+  return () => clearInterval(id)
+}
+const getNowSnapshot = () => nowSnapshot || (nowSnapshot = Date.now())
+const getServerNowSnapshot = () => 0
+function useNow(): Date | null {
+  const ms = useSyncExternalStore(subscribeNow, getNowSnapshot, getServerNowSnapshot)
+  return ms > 0 ? new Date(ms) : null
+}
+
+// 빈 값·하한 미만(0, 음수, 입력 중인 '5' 등) → 0(결과 숨김), 상한 초과만 max로 클램프.
+// 하한으로 끌어올리면 입력칸과 다른 값의 결과가 나오므로 무효로 처리 (음수 두께 → NaN시간도 방지)
+function clampPos(v: number, min: number, max: number): number {
+  if (!Number.isFinite(v) || v < min) return 0
+  return Math.min(max, v)
+}
+
+function addMinutesToNow(minutes: number, now: Date = new Date()): string {
   const eta = new Date(now.getTime() + minutes * 60 * 1000)
   const sameDay = eta.getDate() === now.getDate()
   const mm = String(eta.getMinutes()).padStart(2, '0')
@@ -71,15 +90,17 @@ function ThawTab() {
   const [method, setMethod] = useState<Method>('fridge')
   const [copied, setCopied] = useState(false)
   // ★ 새 입력
-  const [microPower, setMicroPower] = useState('900')
+  const [microPower, setMicroPower] = useState('700')
   const [reverseMode, setReverseMode] = useState(false)
   const [cookH, setCookH] = useState(19)
   const [cookM, setCookM] = useState(0)
 
   const f = FOODS.find(x => x.key === food)!
-  const t = parseFloat(thickness) || 0
-  const w = parseFloat(weight) || 0
+  // 입력 min/max로 클램프 (음수 → NaN시간 방지). 빈 값은 0으로 두어 결과를 숨김.
+  const t = clampPos(parseFloat(thickness), 0.5, 20)
+  const w = clampPos(parseFloat(weight), 50, 5000)
   const frozenFactor = frozen === 'full' ? 1.0 : 0.6
+  const now = useNow()
 
   // 냉장 해동 기준 시간 (시간) — 질량 주도 모델 (USDA: 냉장 해동 약 10h/kg)
   // 10.8 × 식품계수 × 두께보정(√(두께/3)) × 무게보정((무게kg)^0.75) × 냉동상태보정
@@ -99,7 +120,7 @@ function ThawTab() {
   }, [w, t, f.microFactor, frozenFactor])
 
   // 전자레인지 W 보정 — 선택한 출력을 결과(카드·히어로·ETA)에 반영
-  const microPowerObj = MICROWAVE_POWERS.find(p => p.id === microPower) ?? MICROWAVE_POWERS[1]
+  const microPowerObj = MICROWAVE_POWERS.find(p => p.id === microPower) ?? MICROWAVE_POWERS[0]
   const adjustedMicroMinutes = microMinutes * microPowerObj.factor
 
   const methods: { key: Method; icon: string; name: string; sub: string; time: { value: string; sub: string }; totalMin: number; safety: { label: string; cls: string }; warning: string; cardCls: string; heroCls: string }[] = [
@@ -172,7 +193,7 @@ function ThawTab() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 2000)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -183,8 +204,8 @@ function ThawTab() {
       : method === 'room' ? roomHours
       : adjustedMicroMinutes / 60
     return QUICK_WARNINGS.filter(w => w.matches({
-      foodKey: food as UFoodKey,
-      method: method as UMethod,
+      foodKey: food,
+      method,
       thicknessCm: t,
       expectedHours: expectedHrs,
     }))
@@ -196,19 +217,19 @@ function ThawTab() {
     : method === 'room' ? roomHours
     : adjustedMicroMinutes / 60
   const risk = useMemo(() => evaluateRisk({
-    foodKey: food as UFoodKey,
+    foodKey: food,
     thicknessCm: t,
     weightG: w,
-    method: method as UMethod,
+    method,
     expectedHours,
   }), [food, t, w, method, expectedHours])
 
   // 역산
   const reverseInfo = useMemo(() => {
-    if (!reverseMode) return null
+    if (!reverseMode || !now || !fridgeHours) return null
     const totalMin = method === 'micro' ? adjustedMicroMinutes : selected.totalMin
-    return reverseStartTime(cookH, cookM, totalMin)
-  }, [reverseMode, cookH, cookM, method, adjustedMicroMinutes, selected.totalMin])
+    return reverseStartTime(cookH, cookM, totalMin, now)
+  }, [reverseMode, cookH, cookM, method, adjustedMicroMinutes, selected.totalMin, now, fridgeHours])
 
   return (
     <div className={s.wrap}>
@@ -230,9 +251,7 @@ function ThawTab() {
         <div className={s.presetGrid2}>
           {KOREA_FROZEN_PRESETS.map(p => (
             <button key={p.id} className={s.presetBtn2} onClick={() => {
-              setFood(p.foodKey === 'beef_pork' || p.foodKey === 'chicken' || p.foodKey === 'fish' ||
-                p.foodKey === 'vegetable' || p.foodKey === 'bread' || p.foodKey === 'cooked'
-                ? (p.foodKey as FoodKey) : 'beef_pork')
+              setFood(p.foodKey)
               setWeight(String(p.weightG))
               setThickness(String(p.thicknessCm))
             }}>
@@ -384,14 +403,15 @@ function ThawTab() {
             </div>
             <span className={`${s.safetyBadge} ${selected.safety.cls}`}>{selected.safety.label}</span>
           </div>
-          <div>
+          {/* 라이브 리전은 결과 숫자에만 — 30초마다 갱신되는 완료 시각(etaBox)이 반복 낭독되지 않게 */}
+          <div role="status">
             <span className={s.heroNum}>{selected.time.value}</span>
             <span className={s.heroUnit}>{selected.time.sub}</span>
           </div>
           <div className={s.heroSub}>{selected.warning}</div>
           <div className={s.etaBox}>
             <span className={s.etaLabel}>지금 시작하면 완료</span>
-            <span className={s.etaTime}>{addMinutesToNow(selected.totalMin)}</span>
+            <span className={s.etaTime}>{now ? addMinutesToNow(selected.totalMin, now) : '—'}</span>
           </div>
         </div>
       )}
@@ -450,21 +470,21 @@ function ThawTab() {
           <>
             <div className={s.reverseRow}>
               <div>
-                <label className={s.fieldLabel}>조리 예정 시각</label>
+                <label className={s.fieldLabel} htmlFor="thawing-cook-h">조리 예정 시각</label>
                 <div className={s.btnGroup}>
-                  <select value={cookH} onChange={e => setCookH(+e.target.value)}
-                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Inter', system-ui, sans-serif", color: 'var(--text)', outline: 'none' }}>
+                  <select id="thawing-cook-h" aria-label="조리 예정 시" value={cookH} onChange={e => setCookH(+e.target.value)}
+                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: 'var(--font-sans)', color: 'var(--text)', outline: 'none' }}>
                     {Array.from({ length: 24 }, (_, i) => <option key={i} value={i}>{i < 10 ? '0' + i : i}시</option>)}
                   </select>
-                  <select value={cookM} onChange={e => setCookM(+e.target.value)}
-                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: "'Inter', system-ui, sans-serif", color: 'var(--text)', outline: 'none' }}>
+                  <select aria-label="조리 예정 분" value={cookM} onChange={e => setCookM(+e.target.value)}
+                    style={{ flex: 1, background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 14, fontFamily: 'var(--font-sans)', color: 'var(--text)', outline: 'none' }}>
                     {[0, 10, 20, 30, 40, 50].map(m => <option key={m} value={m}>{m < 10 ? '0' + m : m}분</option>)}
                   </select>
                 </div>
               </div>
               <div>
-                <label className={s.fieldLabel}>선택한 해동 방법</label>
-                <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+                <span className={s.fieldLabel}>선택한 해동 방법</span>
+                <div style={{ background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: 10, padding: '10px 14px', fontSize: 13, color: 'var(--text)', fontFamily: 'var(--font-sans)' }}>
                   {selected.icon} {selected.name}
                 </div>
               </div>
@@ -494,8 +514,9 @@ function ThawTab() {
         <div className={s.warnBox}>
           <strong>⚠️ 실온 해동은 비권장</strong><br/>
           실온(20~25°C)은 세균이 가장 빠르게 증식하는 위험 온도대입니다.
-          식약처는 실온 해동 시 <strong>2시간 이내</strong>를 권장하며, 초과 시 살모넬라·대장균 등이 급증할 수 있습니다.
-          가급적 냉장 해동이나 흐르는 물 해동을 사용하세요.
+          식약처는 실온 해동을 권하지 않고 냉장, 21°C 이하 흐르는 물, 전자레인지 해동을 안내합니다.
+          부득이한 경우에도 위험 온도대(4~60°C) 노출이 <strong>2시간</strong>을 넘지 않게 하세요(미국 USDA의 2시간 규칙).
+          초과하면 살모넬라·대장균 등이 급증할 수 있습니다.
         </div>
       )}
 
@@ -515,8 +536,9 @@ function FreezeTab() {
   const [freezerTemp, setFreezerTemp] = useState<FreezerTemp>('normal')
 
   const f = FOODS.find(x => x.key === food)!
-  const t = parseFloat(thickness) || 0
-  const w = parseFloat(weight) || 0
+  const t = clampPos(parseFloat(thickness), 0.5, 20)
+  const w = clampPos(parseFloat(weight), 50, 5000)
+  const now = useNow()
 
   // 초기 온도 보정
   const initialFactor = initialTemp === 'fridge' ? 1.0 : initialTemp === 'room' ? 1.3 : 1.8
@@ -542,9 +564,7 @@ function FreezeTab() {
         <div className={s.presetGrid2}>
           {KOREA_FROZEN_PRESETS.map(p => (
             <button key={p.id} className={s.presetBtn2} onClick={() => {
-              setFood(p.foodKey === 'beef_pork' || p.foodKey === 'chicken' || p.foodKey === 'fish' ||
-                p.foodKey === 'vegetable' || p.foodKey === 'bread' || p.foodKey === 'cooked'
-                ? (p.foodKey as FoodKey) : 'beef_pork')
+              setFood(p.foodKey)
               setWeight(String(p.weightG))
               setThickness(String(p.thicknessCm))
             }}>
@@ -607,8 +627,8 @@ function FreezeTab() {
         <span className={s.cardLabel}>3. 초기 온도 · 냉동고 온도</span>
         <div className={s.row2}>
           <div>
-            <label className={s.fieldLabel}>초기 온도</label>
-            <div className={s.btnGroup}>
+            <span className={s.fieldLabel} id="thawing-init-temp">초기 온도</span>
+            <div className={s.btnGroup} role="group" aria-labelledby="thawing-init-temp">
               <button
                 className={`${s.toggleBtnMini} ${initialTemp === 'fridge' ? s.toggleActive : ''}`}
                 onClick={() => setInitialTemp('fridge')}
@@ -624,8 +644,8 @@ function FreezeTab() {
             </div>
           </div>
           <div>
-            <label className={s.fieldLabel}>냉동고 온도</label>
-            <div className={s.btnGroup}>
+            <span className={s.fieldLabel} id="thawing-freezer-temp">냉동고 온도</span>
+            <div className={s.btnGroup} role="group" aria-labelledby="thawing-freezer-temp">
               <button
                 className={`${s.toggleBtnMini} ${freezerTemp === 'normal' ? s.toggleActive : ''}`}
                 onClick={() => setFreezerTemp('normal')}
@@ -659,7 +679,7 @@ function FreezeTab() {
           </div>
           <div className={s.etaBox}>
             <span className={s.etaLabel}>지금 넣으면 완료</span>
-            <span className={s.etaTime}>{addMinutesToNow(freezeHours * 60)}</span>
+            <span className={s.etaTime}>{now ? addMinutesToNow(freezeHours * 60, now) : '—'}</span>
           </div>
         </div>
       )}
@@ -715,10 +735,10 @@ function ThermometerBox() {
           <g key={i}>
             <rect x={seg.x} y={22} width={seg.w} height={34} fill={seg.color} opacity="0.85"
                   rx={i === 0 ? 6 : 0} ry={i === 0 ? 6 : 0} />
-            <text x={seg.x + seg.w / 2} y={16} fill="var(--text)" fontSize="15" fontFamily="Noto Sans KR" textAnchor="middle" fontWeight="700">
+            <text x={seg.x + seg.w / 2} y={16} fill="var(--text)" fontSize="15" textAnchor="middle" fontWeight="700">
               {seg.label}
             </text>
-            <text x={seg.x + seg.w / 2} y={74} fill="var(--muted)" fontSize="14" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' textAnchor="middle" fontWeight="600">
+            <text x={seg.x + seg.w / 2} y={74} fill="var(--muted)" fontSize="14" textAnchor="middle" fontWeight="600">
               {seg.range}
             </text>
           </g>
@@ -751,7 +771,7 @@ function GuideTab() {
             <ul className={s.foodGuideTipList}>
               {food.tips.map((tip, i) => <li key={i}>{tip}</li>)}
             </ul>
-            <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', fontFamily: 'Noto Sans KR, sans-serif' }}>
+            <div style={{ marginTop: 10, paddingTop: 8, borderTop: '1px solid var(--border)', fontSize: 12, color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>
               ⏰ 해동 후 조리 권장: <strong style={{ color: 'var(--text)' }}>{food.cookingHours}시간 내</strong>
             </div>
           </div>

@@ -10,19 +10,27 @@ export interface TennisGrip {
   inches: number
   cm: number         // 인치 → cm
   eu: string         // L0~L6
-  us: string         // 미국 사이즈
+  us: string         // 미국식 숫자 사이즈 — L 번호와 같다 (0 = 4", 1 = 4 1/8" …)
   desc: string
 }
 
 export const TENNIS_GRIPS: TennisGrip[] = [
-  { size: '4"',     inches: 4.0,    cm: 10.16, eu: 'L0', us: '0 (jr)', desc: '주니어·아주 작은 손' },
-  { size: '4 1/8"', inches: 4.125,  cm: 10.48, eu: 'L1', us: '0',      desc: '여성·청소년 평균' },
-  { size: '4 1/4"', inches: 4.25,   cm: 10.80, eu: 'L2', us: '1',      desc: '여성·체형 작은 남성' },
-  { size: '4 3/8"', inches: 4.375,  cm: 11.11, eu: 'L3', us: '2',      desc: '한국 남성 표준' },
-  { size: '4 1/2"', inches: 4.5,    cm: 11.43, eu: 'L4', us: '3',      desc: '큰 손 남성' },
-  { size: '4 5/8"', inches: 4.625,  cm: 11.75, eu: 'L5', us: '4',      desc: '매우 큰 손 (드뭄)' },
-  { size: '4 3/4"', inches: 4.75,   cm: 12.07, eu: 'L6', us: '5',      desc: '거의 안 쓰임 (특주)' },
+  { size: '4"',     inches: 4.0,    cm: 10.16, eu: 'L0', us: '0', desc: '주니어·아주 작은 손' },
+  { size: '4 1/8"', inches: 4.125,  cm: 10.48, eu: 'L1', us: '1', desc: '여성·청소년 평균' },
+  { size: '4 1/4"', inches: 4.25,   cm: 10.80, eu: 'L2', us: '2', desc: '여성·체형 작은 남성' },
+  { size: '4 3/8"', inches: 4.375,  cm: 11.11, eu: 'L3', us: '3', desc: '한국 남성 표준' },
+  { size: '4 1/2"', inches: 4.5,    cm: 11.43, eu: 'L4', us: '4', desc: '큰 손 남성' },
+  { size: '4 5/8"', inches: 4.625,  cm: 11.75, eu: 'L5', us: '5', desc: '매우 큰 손 (드뭄)' },
+  { size: '4 3/4"', inches: 4.75,   cm: 12.07, eu: 'L6', us: '6', desc: '거의 안 쓰임 (특주)' },
 ]
+
+/** 펜슬 테스트 — 지금 쓰는 라켓 그립(L 번호)과 검지 테스트 결과로 권장 사이즈 산출.
+ *  검지가 안 들어가면(그립 작음) 한 사이즈 위, 여유가 있으면(그립 큼) 한 사이즈 아래. */
+export function tennisFromPencil(currentIdx: number, result: 'snug' | 'fit' | 'gap'): TennisGrip {
+  const delta = result === 'snug' ? 1 : result === 'gap' ? -1 : 0
+  const idx = Math.min(TENNIS_GRIPS.length - 1, Math.max(0, Math.round(currentIdx) + delta))
+  return TENNIS_GRIPS[idx]
+}
 
 /** 손바닥+약지 길이 cm → 가장 가까운 테니스 그립 + 오버그립 보정
  *  오버그립 1겹 ≈ 그립 0.5단계 굵어짐 (≈ 0.16cm 가산 효과) */
@@ -38,18 +46,22 @@ export function recommendTennis(palmCm: number, overgrip: 0 | 1 | 2 = 0): { grip
 export interface GolfGrip {
   id: 'undersize' | 'standard' | 'midsize' | 'jumbo'
   name: string
-  diameter: string  // 0.580"
-  delta: string     // +1/16" 등
-  diameterMm: number
+  /** 표준 그립 대비 외경(바깥 지름) 차이 — 제조사 공칭 표기 (Golf Pride 등: 언더 −1/64" · 미드 +1/16" · 점보 +1/8") */
+  delta: string
+  /** delta의 mm 환산 (1인치 = 25.4mm) — 표준은 빈 문자열 */
+  deltaMm: string
   recommendedGlove: string
   desc: string
 }
 
+/* 예전 값(0.560"·0.580"·0.640"·0.680"을 '그립 지름'으로 표기)은 오류였다.
+   .580·.600은 그립 안쪽 구멍(코어) 지름 — 샤프트 끝(버트) 지름에 맞추는 규격이지 손에 닿는 굵기가 아니다.
+   사이즈 등급은 표준 대비 외경 차이로만 표기한다. */
 export const GOLF_GRIPS: GolfGrip[] = [
-  { id: 'undersize', name: '언더사이즈',  diameter: '0.560"', delta: '−1/64"', diameterMm: 14.22, recommendedGlove: '글러브 20~22호 (S)',   desc: '여성·청소년·작은 손' },
-  { id: 'standard',  name: '표준',        diameter: '0.580"', delta: '기본',   diameterMm: 14.73, recommendedGlove: '글러브 23~25호 (M·L)', desc: '한국 남성 약 60%가 사용' },
-  { id: 'midsize',   name: '미드사이즈',  diameter: '0.640"', delta: '+1/16"', diameterMm: 16.26, recommendedGlove: '글러브 26~27호 (XL)',  desc: '큰 손·관절염·그립 압력 ↓ 원할 때' },
-  { id: 'jumbo',     name: '점보',        diameter: '0.680"', delta: '+1/8"',  diameterMm: 17.27, recommendedGlove: '글러브 28호+ (XXL)',   desc: '아주 큰 손·드라이브 슬라이스 교정' },
+  { id: 'undersize', name: '언더사이즈',  delta: '−1/64"', deltaMm: '약 −0.4mm', recommendedGlove: '글러브 20~22호 (S)',   desc: '여성·청소년·작은 손' },
+  { id: 'standard',  name: '표준',        delta: '기준',   deltaMm: '',          recommendedGlove: '글러브 23~25호 (M·L)', desc: '대부분의 클럽에 기본 장착되는 굵기' },
+  { id: 'midsize',   name: '미드사이즈',  delta: '+1/16"', deltaMm: '약 +1.6mm', recommendedGlove: '글러브 26~27호 (XL)',  desc: '큰 손·관절염·그립 압력 ↓ 원할 때' },
+  { id: 'jumbo',     name: '점보',        delta: '+1/8"',  deltaMm: '약 +3.2mm', recommendedGlove: '글러브 28호+ (XXL)',   desc: '아주 큰 손·관절 부담 감소·훅 경향 완화' },
 ]
 
 /** 손 전체 길이(손목 주름 ~ 중지 끝) cm → 한국 글러브 호수
@@ -69,21 +81,24 @@ export function golfGripByGlove(gloveSize: number): GolfGrip {
 /* ─── 🏸 배드민턴 ─── */
 export interface BadmintonGrip {
   id: string  // G2~G6
-  circumferenceMm: number  // 그립 둘레
+  /** 맨 그립 둘레 안내 — 제조사·출처마다 수치가 달라 공칭값이 흔히 인용되는 G4·G5만 범위로 적고 나머지는 상대 표기 */
+  circumference: string
   desc: string
 }
 
+/* 둘레: Yonex 계열 G4 ≈ 84~86mm, G5 ≈ 81~83mm로 인용된다(판매처·가이드마다 ±2mm 차이, 2026-09 확인).
+   예전 값(G4 92mm 등)은 실제 맨 그립보다 6~8mm 커서 삭제. */
 export const BADMINTON_GRIPS: BadmintonGrip[] = [
-  { id: 'G2', circumferenceMm: 98, desc: '큰 손 (드뭄, 한국 출고 거의 없음)' },
-  { id: 'G3', circumferenceMm: 95, desc: '큰 손 남성 (드뭄)' },
-  { id: 'G4', circumferenceMm: 92, desc: '한국 남성 표준 — 라켓 기본 출고' },
-  { id: 'G5', circumferenceMm: 89, desc: '여성·작은 손 남성 표준' },
-  { id: 'G6', circumferenceMm: 86, desc: '여성·청소년·아주 작은 손' },
+  { id: 'G2', circumference: 'G4보다 두 단계 굵음',  desc: '큰 손 (드뭄, 한국 출고 거의 없음)' },
+  { id: 'G3', circumference: 'G4보다 한 단계 굵음',  desc: '큰 손 남성 (드뭄)' },
+  { id: 'G4', circumference: '둘레 약 84~86mm',     desc: '한국 남성 표준 — 라켓 기본 출고' },
+  { id: 'G5', circumference: '둘레 약 81~83mm',     desc: '여성·작은 손 남성 표준' },
+  { id: 'G6', circumference: 'G5보다 한 단계 가늚',  desc: '여성·청소년·아주 작은 손' },
 ]
 
 /** 손바닥+약지 cm → 배드민턴 그립 (오버그립 권장 사용 — 거의 모두 1~2겹) */
 export function recommendBadminton(palmCm: number, overgrip: 0 | 1 | 2 = 1): BadmintonGrip {
-  // 한국 배드민턴 동호인 80%가 오버그립 1~2겹 사용 → 한 단계 작게 추천
+  // 배드민턴은 오버그립을 1~2겹 감아 쓰는 경우가 흔해 기본 1겹을 가정 — 겹당 0.20cm를 빼고 판정(= 맨 그립은 한 단계 작게)
   const target = palmCm - overgrip * 0.20
   if (target < 10.0) return BADMINTON_GRIPS[4]   // G6
   if (target < 10.7) return BADMINTON_GRIPS[3]   // G5
@@ -147,7 +162,7 @@ export const INJURIES = [
       '회내근 과부하로 인한 전완 통증',
       '회전을 막으려 손목·전완 근육 과긴장',
     ],
-    color: '#DC2626',
+    color: 'var(--danger)',
   },
   {
     cause: '그립이 너무 큼',
@@ -157,7 +172,7 @@ export const INJURIES = [
       '컨트롤·스핀 감소 (스윙 일관성 ↓)',
       '엄지 관절 부담 (TFCC 자극)',
     ],
-    color: '#EA580C',
+    color: 'var(--warning)',
   },
   {
     cause: '골프 그립이 너무 가늘음',
@@ -167,7 +182,7 @@ export const INJURIES = [
       '훅(좌측 빠짐) 경향 ↑',
       '장기적으로 골프 엘보(내측 상과염)',
     ],
-    color: '#DC2626',
+    color: 'var(--danger)',
   },
   {
     cause: '골프 그립이 너무 굵음',
@@ -177,6 +192,6 @@ export const INJURIES = [
       '클럽 페이스 컨트롤 저하',
       '비거리 손실 (스피드 ↓)',
     ],
-    color: '#EA580C',
+    color: 'var(--warning)',
   },
 ]

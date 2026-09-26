@@ -7,7 +7,7 @@ import styles from './nuts.module.css'
 import {
   NUTS_DATA, PROC_DATA, POPULAR_MIXES,
   ALLERGY_GROUP_LABEL, SELENIUM_RDA, SELENIUM_UL,
-  loadSettings, saveSettings,
+  loadSettings, saveSettings, dangerThresholdOf,
   type ProcK, type AllergyGroup,
 } from './nutsData'
 
@@ -32,7 +32,19 @@ export default function NutsClient() {
     if (s.goal) setGoal(s.goal)
     if (s.dailyKcal) setDailyKcal(s.dailyKcal)
     if (s.proc) setProc(s.proc)
-    if (s.allergies) setAllergies(s.allergies)
+    if (s.allergies) {
+      const saved = s.allergies
+      setAllergies(saved)
+      // 복원한 알레르기 그룹의 견과(기본 선택 아몬드 등)는 숨겨진 채 합산되지 않도록 선택에서 제거
+      setAmounts((prev) => {
+        const next: AmountMap = {}
+        for (const [k, v] of Object.entries(prev)) {
+          const nut = NUTS_DATA.find((n) => n.key === k)
+          if (!nut || !saved.includes(nut.allergyGroup)) next[k] = v
+        }
+        return next
+      })
+    }
     setMounted(true)
   }, [])
 
@@ -42,7 +54,7 @@ export default function NutsClient() {
     saveSettings({ weight, goal, dailyKcal, proc, allergies })
   }, [weight, goal, dailyKcal, proc, allergies, mounted])
 
-  const procData = PROC_DATA.find((p) => p.key === proc)!
+  const procData = PROC_DATA.find((p) => p.key === proc) ?? PROC_DATA[0]
 
   const isAllergenic = (group: AllergyGroup) => allergies.includes(group)
 
@@ -95,12 +107,14 @@ export default function NutsClient() {
 
   // 선택 견과 + 양 계산 + 권장 비율
   const selectedNuts = useMemo(() => {
-    return NUTS_DATA.filter((n) => amounts[n.key] !== undefined && amounts[n.key] > 0)
+    // 알레르기 그룹 견과는 합산에서도 제외 (그리드에서 숨겨진 견과가 결과에 남지 않도록)
+    return NUTS_DATA.filter((n) => amounts[n.key] !== undefined && amounts[n.key] > 0 && !allergies.includes(n.allergyGroup))
       .map((n) => {
         const grams = amounts[n.key]
         const ratio = grams / n.servingGrams
         const dailyRatio = grams / n.maxDaily   // 1.0 = 권장 한도
-        const dangerThreshold = n.danger ? n.maxDaily * 1.5 : n.maxDaily * 3
+        // 브라질너트 등 셀레늄 위험 견과는 셀레늄 상한(UL) 도달량으로 위험 판정 — 셀레늄 바와 같은 기준
+        const dangerThreshold = dangerThresholdOf(n)
         let level: 'safe' | 'over' | 'danger' = 'safe'
         if (grams >= dangerThreshold) level = 'danger'
         else if (grams > n.maxDaily) level = 'over'
@@ -120,7 +134,7 @@ export default function NutsClient() {
           selenium: n.selenium * ratio,
         }
       })
-  }, [amounts, procData])
+  }, [amounts, procData, allergies])
 
   // 합계
   const totals = useMemo(() => {
@@ -237,6 +251,7 @@ export default function NutsClient() {
                 {isSelected && (
                   <div className={styles.nutAmountRow}>
                     <input type="number" inputMode="numeric" min={0} max={9999}
+                      aria-label={`${n.name} 양 (g)`}
                       className={styles.nutAmountInput}
                       value={amounts[n.key]}
                       onChange={(e) => setAmount(n.key, +e.target.value || 0)}
@@ -255,7 +270,7 @@ export default function NutsClient() {
                 {/* 즉시 경고 — 권장량 초과 시 */}
                 {isSelected && amounts[n.key] > n.maxDaily && (
                   <div className={styles.nutOverWarn}>
-                    {amounts[n.key] >= (n.danger ? n.maxDaily * 1.5 : n.maxDaily * 3) ? '🚨 위험' : '⚠️ 권장량 초과'}
+                    {amounts[n.key] >= dangerThresholdOf(n) ? '🚨 위험' : '⚠️ 권장량 초과'}
                   </div>
                 )}
               </div>
@@ -292,9 +307,9 @@ export default function NutsClient() {
         <label className={styles.cardLabel}>개인 정보 (선택)</label>
 
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>체중 (kg)</div>
+          <label htmlFor="nuts-weight" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>체중 (kg)</label>
           <div className={styles.sliderRow}>
-            <input type="range" min={40} max={120} step={1}
+            <input id="nuts-weight" type="range" min={40} max={120} step={1}
               className={styles.slider}
               value={weight}
               onChange={(e) => setWeight(parseInt(e.target.value, 10))} />
@@ -303,8 +318,8 @@ export default function NutsClient() {
         </div>
 
         <div style={{ marginBottom: 14 }}>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>목표</div>
-          <div className={styles.condRow}>
+          <div id="nuts-goal-label" style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>목표</div>
+          <div className={styles.condRow} role="group" aria-labelledby="nuts-goal-label">
             {[
               { k: 'diet',     label: '다이어트' },
               { k: 'maintain', label: '체중 유지' },
@@ -320,10 +335,10 @@ export default function NutsClient() {
         </div>
 
         <div>
-          <div style={{ fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>
+          <label htmlFor="nuts-kcal" style={{ display: 'block', fontSize: 12, color: 'var(--muted)', marginBottom: 8 }}>
             하루 칼로리 목표 (비우면 자동: <strong style={{ color: 'var(--accent)' }}>{autoKcal.toLocaleString()}kcal</strong>)
-          </div>
-          <input type="number" inputMode="numeric"
+          </label>
+          <input id="nuts-kcal" type="number" inputMode="numeric"
             className={styles.numInput}
             placeholder={`${autoKcal}`}
             value={dailyKcal}
@@ -342,7 +357,7 @@ export default function NutsClient() {
       ) : (
         <>
           {/* 합산 카드 */}
-          <div className={styles.summary}>
+          <div className={styles.summary} role="status">
             <div className={styles.summaryHead}>합산 — {selectedNuts.length}종 / 총 {Math.round(totals.grams)}g</div>
             <div className={styles.summaryKcal}>{Math.round(totals.kcal).toLocaleString()} kcal</div>
             <div className={styles.summaryKcalSub}>나트륨 {Math.round(totals.sodium)}mg · 셀레늄 {Math.round(totals.selenium)}μg</div>
@@ -385,7 +400,7 @@ export default function NutsClient() {
                 <div className={styles.seleniumHead}>
                   <span>셀레늄 {totals.selenium.toFixed(0)}μg</span>
                   <span className={styles.seleniumPct}>
-                    RDA {SELENIUM_RDA}μg의 {seleniumPct.toFixed(0)}% · UL {SELENIUM_UL}μg
+                    권장량 {SELENIUM_RDA}μg의 {seleniumPct.toFixed(0)}% · 상한 {SELENIUM_UL}μg
                   </span>
                 </div>
                 <div className={styles.seleniumBarTrack}>
@@ -399,7 +414,7 @@ export default function NutsClient() {
                 )}
                 {totals.selenium >= SELENIUM_RDA * 2 && totals.selenium < SELENIUM_UL && (
                   <p className={styles.seleniumMsg}>
-                    🟡 <strong>권장량 2배 초과.</strong> 매일이 아닌 주 2~3회로 제한 권장.
+                    🟡 <strong>권장량 2배 초과.</strong> 상한 이내지만, 셀레늄 영양제·종합비타민을 함께 먹는다면 합산량을 확인하세요.
                   </p>
                 )}
                 {totals.selenium < SELENIUM_RDA * 2 && (
@@ -474,7 +489,7 @@ export default function NutsClient() {
                 </div>
 
                 <div className={styles.badges}>
-                  <span className={styles.keyBadge}>★ {n.keyNutrient} · {n.keyNutrientAmount}</span>
+                  <span className={styles.keyBadge}>★ {n.keyNutrient} · {n.keyNutrientAmount} ({n.servingGrams}g 기준)</span>
                   {n.benefit.map((b, i) => (
                     <span key={i} className={styles.benefitBadge}>{b}</span>
                   ))}

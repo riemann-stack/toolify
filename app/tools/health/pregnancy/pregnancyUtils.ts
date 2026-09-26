@@ -19,9 +19,9 @@ export interface Trimester {
 }
 
 export const TRIMESTERS: Trimester[] = [
-  { id: 1, name: '1삼분기', startWeek: 1,  endWeek: 13, color: '#A16207', description: '배아·장기 형성기' },
-  { id: 2, name: '2삼분기', startWeek: 14, endWeek: 27, color: '#059669', description: '안정기, 태동 시작' },
-  { id: 3, name: '3삼분기', startWeek: 28, endWeek: 40, color: '#EA580C', description: '태아 급성장, 출산 준비' },
+  { id: 1, name: '1삼분기', startWeek: 1,  endWeek: 13, color: 'var(--yellow-700)', description: '배아·장기 형성기' },
+  { id: 2, name: '2삼분기', startWeek: 14, endWeek: 27, color: 'var(--emerald-600)', description: '안정기, 태동 시작' },
+  { id: 3, name: '3삼분기', startWeek: 28, endWeek: 40, color: 'var(--orange-600)', description: '태아 급성장, 출산 준비' },
 ]
 
 /* ─── 산전 검사 (보건복지부·대한산부인과학회 기준 일반 가이드) ─── */
@@ -76,7 +76,8 @@ export const FETAL_SIZE_COMPARISON: Record<number, FetalSize> = {
   18: { size: '피망',      length: '~14cm', emoji: '🫑', development: '태동 느낌 시작 가능 (초산모는 20~22주)' },
   19: { size: '망고',      length: '~15cm', emoji: '🥭', development: '피부 보호막(태지) 형성' },
   20: { size: '바나나',    length: '~17cm', emoji: '🍌', development: '임신 중반, 정밀 초음파 시기' },
-  21: { size: '당근',      length: '~26cm', emoji: '🥕', development: '눈썹·속눈썹 형성' },
+  // 21주부터는 머리~발끝 길이(그 전은 머리~엉덩이 길이)라 수치가 크게 늘어난다
+  21: { size: '당근',      length: '~26cm', emoji: '🥕', development: '눈썹·속눈썹 형성 (이 주부터 머리~발끝 길이)' },
   22: { size: '큰 양배추', length: '~28cm', emoji: '🥬', development: '체지방 축적 시작' },
   23: { size: '큰 망고',   length: '~29cm', emoji: '🥭', development: '청각 매우 발달, 심장 소리 들음' },
   24: { size: '옥수수',    length: '~30cm', emoji: '🌽', development: '폐 발달 (외부 생존 가능 시기 시작)' },
@@ -87,12 +88,12 @@ export const FETAL_SIZE_COMPARISON: Record<number, FetalSize> = {
   29: { size: '큰 호박',   length: '~38cm', emoji: '🎃', development: '근육·신경 빠르게 발달' },
   30: { size: '큰 양배추', length: '~40cm', emoji: '🥬', development: '눈 색깔 결정 시작' },
   31: { size: '코코넛',    length: '~41cm', emoji: '🥥', development: '폐 surfactant 생산 (호흡 준비)' },
-  32: { size: '큰 도자기', length: '~42cm', emoji: '🍯', development: '태아 위치 (머리 아래) 자리잡기' },
+  32: { size: '단호박',    length: '~42cm', emoji: '🎃', development: '태아 위치 (머리 아래) 자리잡기' },
   33: { size: '파인애플',  length: '~43cm', emoji: '🍍', development: '뼈 단단해짐 (두개골 제외)' },
   34: { size: '큰 멜론',   length: '~45cm', emoji: '🍈', development: '면역 체계 발달' },
   35: { size: '큰 멜론',   length: '~46cm', emoji: '🍈', development: '막달 검진 준비기 (GBS 검사 36~37주)' },
   36: { size: '파파야',    length: '~47cm', emoji: '🍈', development: '태아 성숙 거의 완료' },
-  37: { size: '루꼴라',    length: '~48cm', emoji: '🥬', development: '만삭 진입 (정상 분만 가능)' },
+  37: { size: '근대 한 단', length: '~48cm', emoji: '🥬', development: '만삭 진입 (정상 분만 가능)' },
   38: { size: '리크',      length: '~49cm', emoji: '🌿', development: '태아 거의 모든 발달 완료' },
   39: { size: '미니 수박', length: '~50cm', emoji: '🍉', development: '출산 임박' },
   40: { size: '큰 수박',   length: '~51cm', emoji: '🍉', development: '출산 예정일! (±2주는 정상)' },
@@ -184,13 +185,22 @@ function startOfDay(d: Date): Date {
 }
 
 function diffDays(a: Date, b: Date): number {
-  return Math.floor((startOfDay(b).getTime() - startOfDay(a).getTime()) / 86400000)
+  // DST 등으로 하루가 23/25시간이어도 날짜 차이가 어긋나지 않도록 반올림
+  return Math.round((startOfDay(b).getTime() - startOfDay(a).getTime()) / 86400000)
+}
+
+/* 'YYYY-MM-DD' → 로컬 자정 Date (new Date('YYYY-MM-DD')는 UTC 해석이라 음(−) 시간대에서 하루 밀림) */
+export function parseYmd(date: string): Date | null {
+  const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(date)
+  if (!m) return null
+  const d = new Date(Number(m[1]), Number(m[2]) - 1, Number(m[3]))
+  return isNaN(d.getTime()) ? null : d
 }
 
 export function calcPregnancy(input: PregnancyInput, today: Date = new Date()): PregnancyResult | null {
   if (!input.date) return null
-  const inputDate = new Date(input.date)
-  if (isNaN(inputDate.getTime())) return null
+  const inputDate = parseYmd(input.date)
+  if (!inputDate) return null
 
   // 표시용 LMP — LMP 모드는 입력값 그대로(사용자가 아는 날짜), 그 외는 역산
   let lmp: Date
@@ -224,7 +234,8 @@ export function calcPregnancy(input: PregnancyInput, today: Date = new Date()): 
   else if (currentWeek >= 14) trimester = 2
 
   const progressPercent = Math.min(100, Math.round((totalDays / PREGNANCY_TOTAL_DAYS) * 1000) / 10)
-  const monthsApprox = Math.floor(currentWeek / 4)
+  // 국내 관행: 4주 단위 서수 개월 (0~3주 = 1개월, 4~7주 = 2개월 … 36주~ = 10개월)
+  const monthsApprox = Math.min(10, Math.floor(currentWeek / 4) + 1)
 
   return {
     lmp, datingLmp, conceptionDate, dueDate,
@@ -248,7 +259,8 @@ export function generateTestSchedule(lmp: Date, today: Date = new Date()): Sched
   const todayMid = startOfDay(today)
   return PRENATAL_TESTS.map(test => {
     const startDate = new Date(lmp); startDate.setDate(startDate.getDate() + test.startWeek * 7)
-    const endDate = new Date(lmp); endDate.setDate(endDate.getDate() + test.endWeek * 7)
+    // 'N~M주' 권장 창은 M주 6일까지 포함
+    const endDate = new Date(lmp); endDate.setDate(endDate.getDate() + test.endWeek * 7 + 6)
     let status: ScheduledTest['status'] = 'upcoming'
     if (todayMid > endDate) status = 'past'
     else if (todayMid >= startOfDay(startDate)) status = 'current'
@@ -298,12 +310,35 @@ export function saveProfile(data: SavedPregnancy) {
   try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)) } catch { /* */ }
 }
 
+const INPUT_MODES: InputMode[] = ['lmp', 'conception', 'duedate']
+
 export function loadProfile(): SavedPregnancy | null {
   if (typeof window === 'undefined') return null
   try {
     const raw = localStorage.getItem(STORAGE_KEY)
     if (!raw) return null
-    return JSON.parse(raw)
+    const v: unknown = JSON.parse(raw)
+    if (!v || typeof v !== 'object' || Array.isArray(v)) return null
+    const r = v as Record<string, unknown>
+    if (typeof r.inputMode !== 'string' || !(INPUT_MODES as string[]).includes(r.inputMode)) return null
+    if (typeof r.date !== 'string' || (r.date !== '' && !parseYmd(r.date))) return null
+    const cycleLength = typeof r.cycleLength === 'number' && CYCLE_LENGTHS.some(c => c.value === r.cycleLength)
+      ? r.cycleLength : 28
+    const checklistProgress: Record<string, boolean> = {}
+    if (r.checklistProgress && typeof r.checklistProgress === 'object' && !Array.isArray(r.checklistProgress)) {
+      for (const [k, val] of Object.entries(r.checklistProgress as Record<string, unknown>)) {
+        if (typeof val === 'boolean') checklistProgress[k] = val
+      }
+    }
+    return {
+      inputMode: r.inputMode as InputMode,
+      date: r.date,
+      cycleLength,
+      isMultiple: r.isMultiple === true,
+      babyName: typeof r.babyName === 'string' ? r.babyName.slice(0, 10) : undefined,
+      checklistProgress,
+      savedAt: typeof r.savedAt === 'string' ? r.savedAt : '',
+    }
   } catch { return null }
 }
 
@@ -314,8 +349,8 @@ export function clearProfile() {
 
 /* ─── 포맷 ─── */
 export function fmtDateKo(d: Date | string): string {
-  const date = typeof d === 'string' ? new Date(d) : d
-  if (isNaN(date.getTime())) return ''
+  const date = typeof d === 'string' ? parseYmd(d) : d
+  if (!date || isNaN(date.getTime())) return ''
   const days = ['일', '월', '화', '수', '목', '금', '토']
   const yyyy = date.getFullYear()
   const mm = String(date.getMonth() + 1).padStart(2, '0')

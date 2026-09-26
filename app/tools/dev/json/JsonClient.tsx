@@ -1,30 +1,30 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, type CSSProperties } from 'react'
+import dynamic from 'next/dynamic'
 import s from '../dev.module.css'
+import { analyzeJson, jsonToCsv, jsonToInterfaces, unescapeJson } from './jsonUtils'
+import { useInitialTab } from '@/components/useInitialTab'
 
-// ─────────────────────────────────────────────
-// JSON 통계
-// ─────────────────────────────────────────────
-type JsonStats = { keys: number; arrays: number; objects: number; strings: number; numbers: number; depth: number }
-function analyzeJson(value: unknown, depth = 1, acc: JsonStats = { keys: 0, arrays: 0, objects: 0, strings: 0, numbers: 0, depth: 1 }): JsonStats {
-  acc.depth = Math.max(acc.depth, depth)
-  if (Array.isArray(value)) {
-    acc.arrays++
-    for (const v of value) analyzeJson(v, depth + 1, acc)
-  } else if (value !== null && typeof value === 'object') {
-    acc.objects++
-    const obj = value as Record<string, unknown>
-    for (const k of Object.keys(obj)) {
-      acc.keys++
-      analyzeJson(obj[k], depth + 1, acc)
-    }
-  } else if (typeof value === 'string') {
-    acc.strings++
-  } else if (typeof value === 'number') {
-    acc.numbers++
-  }
-  return acc
+type YamlDump = typeof import('js-yaml').dump
+
+// YAML ↔ JSON 탭 (구 /tools/dev/yaml-json) — 탭을 열 때만 청크 로드 (기본 탭 번들 유지)
+const YamlTab = dynamic(() => import('./YamlTab'), {
+  loading: () => <p style={{ padding: '24px 0', color: 'var(--muted)', fontSize: 13 }}>불러오는 중…</p>,
+})
+
+type Tab = 'format' | 'tree' | 'transform' | 'yaml'
+const TABS: Tab[] = ['yaml', 'format', 'tree', 'transform']
+
+/** JSON 파싱에 실패한 입력이 YAML처럼 보이는지 — '{'·'['로 시작하지 않고 'key:'·'- 항목'·'---' 줄이 있으면 */
+function looksLikeYaml(text: string): boolean {
+  return !/^\s*[[{]/.test(text) && /^(---|\s*[A-Za-z_][\w.-]*:(\s|$)|\s*-\s)/m.test(text)
+}
+
+/** 본문 속 링크 모양 버튼 — 전역 터치 44px(button)로 줄 높이가 벌어지지 않게 minHeight 0 */
+const inlineLinkBtn: CSSProperties = {
+  background: 'none', border: 'none', padding: 0, minHeight: 0, font: 'inherit',
+  color: 'var(--accent-ink)', fontWeight: 700, textDecoration: 'underline', cursor: 'pointer',
 }
 
 // ─────────────────────────────────────────────
@@ -41,102 +41,6 @@ function sortKeys(value: unknown): unknown {
     return sorted
   }
   return value
-}
-
-// ─────────────────────────────────────────────
-// JSON → TypeScript Interface
-// ─────────────────────────────────────────────
-function jsonToTsType(value: unknown): string {
-  if (value === null) return 'null'
-  if (Array.isArray(value)) {
-    if (value.length === 0) return 'unknown[]'
-    const inner = jsonToTsType(value[0])
-    return `${inner}[]`
-  }
-  if (typeof value === 'object') {
-    return 'object' // placeholder, expanded by caller
-  }
-  return typeof value
-}
-
-let interfaceCounter = 0
-function jsonToInterfaces(value: unknown, name: string): string[] {
-  interfaceCounter = 0
-  const interfaces: string[] = []
-  const seen = new Map<string, string>() // signature → name
-
-  function process(v: unknown, hint: string): string {
-    if (v === null) return 'null'
-    if (Array.isArray(v)) {
-      if (v.length === 0) return 'unknown[]'
-      // 배열의 첫 요소 타입
-      const inner = process(v[0], `${hint}Item`)
-      return `${inner.includes(' ') ? `(${inner})` : inner}[]`
-    }
-    if (typeof v === 'object') {
-      const obj = v as Record<string, unknown>
-      const keys = Object.keys(obj).sort()
-      const signature = keys.join('|')
-      if (seen.has(signature) && signature !== '') {
-        return seen.get(signature)!
-      }
-      const interfaceName = capitalizeFirst(hint) || `Type${++interfaceCounter}`
-      seen.set(signature, interfaceName)
-      const lines = [`interface ${interfaceName} {`]
-      for (const k of keys) {
-        const val = obj[k]
-        const valType = process(val, k)
-        const safeKey = /^[a-zA-Z_$][a-zA-Z0-9_$]*$/.test(k) ? k : `'${k}'`
-        const optional = val === null ? '?: ' : ': '
-        lines.push(`  ${safeKey}${optional}${valType}`)
-      }
-      lines.push('}')
-      interfaces.push(lines.join('\n'))
-      return interfaceName
-    }
-    return typeof v
-  }
-
-  process(value, name)
-  return interfaces.reverse() // root last
-}
-function capitalizeFirst(s: string): string {
-  if (!s) return ''
-  return s.charAt(0).toUpperCase() + s.slice(1)
-}
-
-// ─────────────────────────────────────────────
-// JSON → YAML (간단)
-// ─────────────────────────────────────────────
-function jsonToYaml(value: unknown, depth = 0): string {
-  const indent = '  '.repeat(depth)
-  if (value === null) return 'null'
-  if (typeof value === 'boolean' || typeof value === 'number') return String(value)
-  if (typeof value === 'string') {
-    if (/^[\w\s.,/-]*$/.test(value) && value !== '' && !/^(true|false|null|\d)/.test(value)) {
-      return value
-    }
-    return JSON.stringify(value)
-  }
-  if (Array.isArray(value)) {
-    if (value.length === 0) return '[]'
-    return '\n' + value.map(v => `${indent}- ${jsonToYaml(v, depth + 1).replace(/^\n/, '')}`).join('\n')
-  }
-  if (typeof value === 'object') {
-    const obj = value as Record<string, unknown>
-    const keys = Object.keys(obj)
-    if (keys.length === 0) return '{}'
-    const lines = keys.map(k => {
-      const v = obj[k]
-      const sub = jsonToYaml(v, depth + 1)
-      const isComplex = (typeof v === 'object' && v !== null)
-      if (isComplex && sub.startsWith('\n')) return `${indent}${k}:${sub}`
-      if (isComplex) return `${indent}${k}:\n${sub}`
-      return `${indent}${k}: ${sub}`
-    })
-    return depth === 0 ? lines.join('\n') : '\n' + lines.join('\n')
-  }
-  return ''
 }
 
 // ─────────────────────────────────────────────
@@ -212,7 +116,7 @@ function TreeNode({ node, nodeKey, isLast = true }: TreeProps) {
   let valStr = ''
   let valCls = ''
   if (node === null) { valStr = 'null'; valCls = s.treeNull }
-  else if (typeof node === 'string') { valStr = `"${node}"`; valCls = s.treeStr }
+  else if (typeof node === 'string') { valStr = JSON.stringify(node); valCls = s.treeStr }
   else if (typeof node === 'number') { valStr = String(node); valCls = s.treeNum }
   else if (typeof node === 'boolean') { valStr = String(node); valCls = s.treeBool }
 
@@ -243,11 +147,22 @@ const SAMPLE_JSON = `{
 }`
 
 export default function JsonClient() {
-  const [tab, setTab] = useState<'format' | 'tree' | 'transform'>('format')
+  const [tab, setTab] = useState<Tab>('format')
+  useInitialTab(TABS, setTab) // ?tab=yaml 딥링크 (구 /tools/dev/yaml-json 301 목적지)
   const [input, setInput] = useState('')
+  // 'YAML처럼 보입니다' 안내로 YAML ↔ JSON 탭을 열 때 넘길 입력 — YamlTab이 받아 넣으면 비운다
+  const [yamlSeed, setYamlSeed] = useState<string | null>(null)
   const [indent, setIndent] = useState<2 | 4>(2)
   const [transformMode, setTransformMode] = useState<'sortKeys' | 'escape' | 'unescape' | 'yaml' | 'ts' | 'csvFlat'>('ts')
   const [copied, setCopied] = useState<string>('')
+  // js-yaml은 YAML 변환을 고를 때만 불러온다 (첫 로드 번들 절약)
+  const [yamlDump, setYamlDump] = useState<YamlDump | null>(null)
+  useEffect(() => {
+    if (transformMode !== 'yaml' || yamlDump) return
+    let alive = true
+    import('js-yaml').then((m) => { if (alive) setYamlDump(() => m.dump) }).catch(() => {})
+    return () => { alive = false }
+  }, [transformMode, yamlDump])
 
   // 파싱
   const parsed = useMemo(() => {
@@ -286,40 +201,24 @@ export default function JsonClient() {
   }, [parsed, input, indent])
 
   // 변환 출력
-  const transformOutput = useMemo(() => {
+  const transformOutput = useMemo((): string => {
     if (!parsed.ok) return ''
     try {
       switch (transformMode) {
         case 'sortKeys': return JSON.stringify(sortKeys(parsed.data), null, indent)
         case 'escape':   return JSON.stringify(JSON.stringify(parsed.data))
-        case 'unescape': {
-          if (typeof parsed.data === 'string') {
-            try { return JSON.parse(parsed.data) } catch { return parsed.data }
-          }
-          return JSON.stringify(parsed.data, null, indent)
-        }
-        case 'yaml':     return jsonToYaml(parsed.data)
+        case 'unescape': return unescapeJson(parsed.data, indent)
+        case 'yaml':
+          // noCompatMode 기본(false): yes·on 같은 YAML 1.1 불리언 문자열과 날짜형 문자열은 따옴표로 감싸 타입이 바뀌지 않게 함
+          return yamlDump ? yamlDump(parsed.data, { indent: 2, lineWidth: -1, noRefs: true }) : ''
         case 'ts':       return jsonToInterfaces(parsed.data, 'Root').join('\n\n')
-        case 'csvFlat': {
-          if (!Array.isArray(parsed.data) || parsed.data.length === 0) return '⚠️ CSV 변환은 객체 배열이 필요합니다 (예: [{"a":1,"b":2}])'
-          const arr = parsed.data as Record<string, unknown>[]
-          if (typeof arr[0] !== 'object') return '⚠️ 배열의 요소가 객체가 아닙니다'
-          const headers = Array.from(new Set(arr.flatMap(o => Object.keys(o))))
-          const escapeCsv = (v: unknown) => {
-            if (v === null || v === undefined) return ''
-            const str = typeof v === 'object' ? JSON.stringify(v) : String(v)
-            if (/[",\n]/.test(str)) return `"${str.replace(/"/g, '""')}"`
-            return str
-          }
-          const rows = arr.map(o => headers.map(h => escapeCsv(o[h])).join(','))
-          return [headers.join(','), ...rows].join('\n')
-        }
+        case 'csvFlat':  return jsonToCsv(parsed.data)
       }
     } catch (e) {
       return '⚠️ 변환 오류: ' + (e as Error).message
     }
     return ''
-  }, [parsed, transformMode, indent])
+  }, [parsed, transformMode, indent, yamlDump])
 
   // 액션
   function handleFormat() {
@@ -336,11 +235,15 @@ export default function JsonClient() {
   function handleClear() {
     setInput('')
   }
-  function copyValue(v: string, key: string) {
+  async function copyValue(v: string, key: string) {
     if (!v) return
-    navigator.clipboard.writeText(v)
+    try {
+      await navigator.clipboard.writeText(v)
+    } catch {
+      return // 권한 거부 등 — 복사되지 않았으므로 '복사됨'을 띄우지 않음
+    }
     setCopied(key)
-    setTimeout(() => setCopied(''), 1200)
+    setTimeout(() => setCopied(''), 1500)
   }
 
   function fmtBytes(b: number): string {
@@ -360,60 +263,75 @@ export default function JsonClient() {
   return (
     <div className={s.wrap}>
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabsThree}`}>
+      <div className={`${s.tabs} ${s.tabsFour}`}>
         <button className={`${s.tabBtn} ${tab === 'format'     ? s.tabActive : ''}`} onClick={() => setTab('format')}>정렬·압축·검증</button>
         <button className={`${s.tabBtn} ${tab === 'tree'       ? s.tabActive : ''}`} onClick={() => setTab('tree')}>트리 뷰어</button>
         <button className={`${s.tabBtn} ${tab === 'transform'  ? s.tabActive : ''}`} onClick={() => setTab('transform')}>변환 (TS·YAML·CSV)</button>
+        <button className={`${s.tabBtn} ${tab === 'yaml'       ? s.tabActive : ''}`} onClick={() => setTab('yaml')}>YAML ↔ JSON</button>
       </div>
 
-      {/* 공통 입력 */}
-      <div className={s.card}>
-        <div className={s.cardTop}>
-          <label className={s.cardLabel}>JSON 입력</label>
-          <div style={{ display: 'flex', gap: 6 }}>
-            {!input && <button className={s.clearBtn} onClick={handleSample}>샘플</button>}
-            {input && <button className={s.clearBtn} onClick={handleClear}>지우기</button>}
-          </div>
-        </div>
-        <textarea
-          className={s.textarea}
-          placeholder={'{\n  "key": "value"\n}'}
-          value={input}
-          onChange={e => setInput(e.target.value)}
-          rows={tab === 'tree' ? 6 : 10}
-          spellCheck={false}
-        />
-        {/* 검증 상태 */}
-        {input.trim() && parsed.ok && (
-          <p style={{ fontSize: 12, color: '#059669', marginTop: 8, fontWeight: 600 }}>✓ 유효한 JSON</p>
-        )}
-        {input.trim() && !parsed.ok && (
-          <>
-            <div className={s.errorBox} style={{ marginTop: 8 }}>
-              <strong>⚠️ JSON 파싱 오류</strong>
-              <p>{parsed.error}</p>
-            </div>
-            {errPos && (
-              <div className={s.errorPosition}>
-                <div style={{ color: 'var(--muted)', fontSize: 11, marginBottom: 4 }}>
-                  Line {errPos.line}, Column {errPos.col}
-                </div>
-                <div>{errPos.lineText}</div>
-                <div className={s.errMarker}>{' '.repeat(Math.max(0, errPos.col - 1))}^</div>
+      {/* 공통 입력 — YAML ↔ JSON 탭은 자체 입력·검증을 쓰므로 숨김 (role=status 중복 방지) */}
+      {tab !== 'yaml' && (
+        <>
+          <div className={s.card}>
+            <div className={s.cardTop}>
+              <label className={s.cardLabel} htmlFor="json-input">JSON 입력</label>
+              <div style={{ display: 'flex', gap: 6 }}>
+                {!input && <button className={s.clearBtn} onClick={handleSample}>샘플</button>}
+                {input && <button className={s.clearBtn} onClick={handleClear}>지우기</button>}
               </div>
+            </div>
+            <textarea
+              id="json-input"
+              className={s.textarea}
+              placeholder={'{\n  "key": "value"\n}'}
+              value={input}
+              onChange={e => setInput(e.target.value)}
+              rows={tab === 'tree' ? 6 : 10}
+              spellCheck={false}
+            />
+            {/* 검증 상태 */}
+            {input.trim() && parsed.ok && (
+              <p role="status" style={{ fontSize: 12, color: 'var(--emerald-600)', marginTop: 8, fontWeight: 600 }}>✓ 유효한 JSON</p>
             )}
-          </>
-        )}
-      </div>
+            {input.trim() && !parsed.ok && (
+              <>
+                <div className={s.errorBox} style={{ marginTop: 8 }} role="status">
+                  <strong>⚠️ JSON 파싱 오류</strong>
+                  <p>{parsed.error}</p>
+                </div>
+                {/* YAML을 JSON 칸에 붙여 넣은 경우 — YAML ↔ JSON 탭으로 안내 ({·[로 시작하지 않고 'key:'·'- '·'---' 줄이 있으면) */}
+                {looksLikeYaml(input) && (
+                  <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.6, margin: '8px 0 0' }}>
+                    YAML처럼 보입니다 —{' '}
+                    <button type="button" onClick={() => { setYamlSeed(input); setTab('yaml') }} style={inlineLinkBtn}>
+                      이 입력을 YAML ↔ JSON 탭에서 변환하기 →
+                    </button>
+                  </p>
+                )}
+                {errPos && (
+                  <div className={s.errorPosition}>
+                    <div style={{ color: 'var(--muted)', fontSize: 11, marginBottom: 4 }}>
+                      Line {errPos.line}, Column {errPos.col}
+                    </div>
+                    <div>{errPos.lineText}</div>
+                    <div className={s.errMarker}>{' '.repeat(Math.max(0, errPos.col - 1))}^</div>
+                  </div>
+                )}
+              </>
+            )}
+          </div>
 
-      {/* 통계 (모든 탭 공통) */}
-      {parsed.ok && stats && sizes && (
-        <div className={s.jsonStatGrid}>
-          <div className={s.miniStat}><p className={s.miniStatLabel}>키 개수</p>     <p className={s.miniStatValue}>{stats.keys.toLocaleString()}</p></div>
-          <div className={s.miniStat}><p className={s.miniStatLabel}>객체 / 배열</p> <p className={s.miniStatValue}>{stats.objects} / {stats.arrays}</p></div>
-          <div className={s.miniStat}><p className={s.miniStatLabel}>최대 깊이</p>   <p className={s.miniStatValue}>{stats.depth}</p></div>
-          <div className={s.miniStat}><p className={s.miniStatLabel}>크기</p>       <p className={s.miniStatValue}>{fmtBytes(sizes.origBytes)}</p></div>
-        </div>
+          {/* 통계 (JSON 탭 3개 공통) */}
+          {parsed.ok && stats && sizes && (
+            <div className={s.jsonStatGrid}>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>키 개수</p>     <p className={s.miniStatValue}>{stats.keys.toLocaleString()}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>객체 / 배열</p> <p className={s.miniStatValue}>{stats.objects} / {stats.arrays}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>최대 깊이</p>   <p className={s.miniStatValue}>{stats.depth}</p></div>
+              <div className={s.miniStat}><p className={s.miniStatLabel}>크기</p>       <p className={s.miniStatValue}>{fmtBytes(sizes.origBytes)}</p></div>
+            </div>
+          )}
+        </>
       )}
 
       {/* ─── TAB 1: 정렬·압축·검증 ─── */}
@@ -453,9 +371,9 @@ export default function JsonClient() {
               </div>
               <div className={s.sizeRow}><span>원본 입력</span><strong>{fmtBytes(sizes.origBytes)}</strong></div>
               <div className={s.sizeRow}><span>정렬 (Beautify, 들여쓰기 {indent})</span><strong>{fmtBytes(sizes.fmtBytes)}</strong></div>
-              <div className={s.sizeRow}><span>압축 (Minify)</span><strong style={{ color: '#059669' }}>{fmtBytes(sizes.minBytes)}</strong></div>
+              <div className={s.sizeRow}><span>압축 (Minify)</span><strong style={{ color: 'var(--emerald-600)' }}>{fmtBytes(sizes.minBytes)}</strong></div>
               {sizes.saving > 0 && (
-                <div className={s.sizeRow}><span>압축 절약률</span><strong style={{ color: '#059669' }}>{sizes.saving.toFixed(1)}%</strong></div>
+                <div className={s.sizeRow}><span>압축 절약률</span><strong style={{ color: 'var(--emerald-600)' }}>{sizes.saving.toFixed(1)}%</strong></div>
               )}
             </div>
           )}
@@ -526,7 +444,8 @@ export default function JsonClient() {
               <p className={s.seoCardTitle}>TypeScript 인터페이스 활용</p>
               <p className={s.seoCardText}>
                 API 응답 JSON을 그대로 붙여넣으면 자동으로 TypeScript 타입을 생성합니다.
-                중첩 객체는 별도 인터페이스로 분리되며, 동일 구조는 재사용됩니다.
+                중첩 객체는 별도 인터페이스로 분리되고, 키와 값 타입이 모두 같은 구조만 재사용됩니다.
+                배열은 첫 번째 요소를 기준으로 타입을 정하니 요소마다 모양이 다르면 직접 보완하세요.
               </p>
             </div>
           )}
@@ -537,10 +456,23 @@ export default function JsonClient() {
                 Kubernetes·GitHub Actions·Docker Compose·Ansible 등에서 사용됩니다.
                 JSON 대비 가독성이 좋고 주석 작성이 가능합니다.
               </p>
+              <p className={s.seoCardText} style={{ marginTop: 6 }}>
+                YAML을 JSON으로 되돌리거나 YAML 문법을 검증하려면{' '}
+                <button
+                  type="button"
+                  onClick={() => setTab('yaml')}
+                  style={inlineLinkBtn}
+                >
+                  YAML ↔ JSON 탭 →
+                </button>
+              </p>
             </div>
           )}
         </>
       )}
+
+      {/* ─── TAB 4: YAML ↔ JSON (양방향 변환·검증·예시 12개) ─── */}
+      {tab === 'yaml' && <YamlTab seedInput={yamlSeed ?? undefined} onSeedApplied={() => setYamlSeed(null)} />}
     </div>
   )
 }

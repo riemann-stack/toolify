@@ -3,9 +3,11 @@ import CarbLoadingClient from './CarbLoadingClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/carb-loading',
@@ -18,7 +20,7 @@ export const metadata = buildMetadata({
 })
 
 const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
+  fontFamily: 'var(--font-sans)',
   fontSize: '20px',
   fontWeight: 700,
   marginBottom: '16px',
@@ -31,7 +33,7 @@ const FAQ_LD = [
   },
   {
     q: '탄수화물을 얼마나 먹어야 하나요?',
-    a: '풀코스·울트라처럼 <strong>90분을 넘는 경기</strong>는 대회 전 1~2일간 <strong>체중 1kg당 10~12g</strong>의 탄수화물이 권장됩니다(IOC·ACSM). 65kg이면 하루 650~780g입니다. 하프나 60~90분 경기는 8~10g/kg, 10km 이하 짧은 경기는 7~8g/kg 정도로 전날 일반 충전이면 충분하고 굳이 극단적인 로딩은 필요 없습니다. 위 계산기에 체중과 대회 유형을 넣으면 하루 목표량과 음식 환산이 나옵니다.',
+    a: '풀코스·울트라처럼 <strong>90분을 넘는 경기</strong>는 대회 전 1~2일간 <strong>체중 1kg당 10~12g</strong>의 탄수화물이 권장됩니다(IOC·ACSM). 65kg이면 하루 650~780g입니다. 기준은 종목이 아니라 경기 시간이라, 하프라도 완주에 90분 넘게 걸리면(대부분의 아마추어) 같은 10~12g/kg 로딩 대상입니다. 60~90분에 끝나는 경기는 8~10g/kg, 60분 이내 짧은 경기는 7~8g/kg 정도로 전날 일반 충전이면 충분하고 굳이 극단적인 로딩은 필요 없습니다. 위 계산기에 체중과 예상 경기 시간을 넣으면 하루 목표량과 음식 환산이 나옵니다.',
   },
   {
     q: '언제부터 시작해야 하나요?',
@@ -52,24 +54,20 @@ const FAQ_LD = [
 ]
 
 const RELATED = [
-  { href: '/tools/sports/race-plan', icon: '🏁', name: '레이스 페이스 플래너', desc: '구간별 목표 페이스' },
   { href: '/tools/health/heat-hydration', icon: '💧', name: '폭염 수분·전해질', desc: '대회 수분 전략' },
   { href: '/tools/sports/race-predictor', icon: '⏱️', name: '마라톤 기록 계산기', desc: '완주 예상 시간' },
-  { href: '/tools/sports/pace', icon: '🏃', name: '러닝 페이스 계산기', desc: '페이스↔기록 환산' },
+  { href: '/tools/sports/pace', icon: '🏃', name: '러닝 페이스 계산기', desc: '페이스↔기록 환산·레이스 플랜' },
   { href: '/tools/health/bmr', icon: '🔥', name: '기초대사량 계산기', desc: '하루 소비 칼로리' },
   { href: '/tools/sports/vo2max', icon: '🫁', name: 'VO₂ Max 계산기', desc: '심폐 체력 추정' },
 ]
 
 export default function CarbLoadingPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        스포츠
-      </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/sports/carb-loading">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />카보로딩 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         마라톤 대회 전 <strong style={{ color: 'var(--text)' }}>하루 탄수화물 목표량과 날짜별 플랜</strong> + 밥·바나나·젤 음식 환산.
       </p>
 
@@ -79,6 +77,7 @@ export default function CarbLoadingPage() {
         sources={[
           { label: 'ACSM/AND/DC 공동 성명 — Nutrition and Athletic Performance (2016)', href: 'https://pubmed.ncbi.nlm.nih.gov/26891166/' },
           { label: '농촌진흥청 농식품올바로 — 국가표준식품성분표', href: 'https://koreanfood.rda.go.kr/kfi/fct/fctFoodSrch/list' },
+          { label: 'IOC 스포츠영양 합의 — Burke 외 (2011) Carbohydrates for training and competition', href: 'https://doi.org/10.1080/02640414.2011.585473' },
         ]}
       />
 
@@ -89,13 +88,13 @@ export default function CarbLoadingPage() {
 
         {/* 1. 원리 */}
         <section>
-          <h2 style={sectionTitle}>카보로딩은 왜, 어떻게 효과가 있나</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+          <h2 className="g-h2">카보로딩은 왜, 어떻게 효과가 있나</h2>
+          <p className="g-p">
             우리 몸은 탄수화물을 <strong style={{ color: 'var(--text)' }}>글리코겐</strong> 형태로 근육과 간에 저장합니다. 하지만 저장량은 한정돼 있어, 마라톤처럼 오래 달리면 대개 <strong style={{ color: 'var(--text)' }}>30km 안팎에서 바닥</strong>나며 이때 몸이 급격히 무거워지는 &lsquo;벽&rsquo;을 만납니다. 대회 전 며칠간 탄수화물을 늘리고 운동량을 줄이면 이 저장고를 평소보다 크게 채워, 벽에 부딪히는 시점을 뒤로 미룰 수 있습니다.
           </p>
           <div style={{
-            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12,
-            padding: '18px 20px', fontFamily: "'JetBrains Mono', Menlo, monospace",
+            background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)',
+            padding: '18px 20px', fontFamily: 'var(--font-mono)',
             fontSize: 13, color: 'var(--text)', lineHeight: 2.1,
           }}>
             <div><span style={{ color: 'var(--muted)' }}>하루 목표(g)</span> = 체중(kg) × 탄수화물 계수(g/kg)</div>
@@ -106,8 +105,8 @@ export default function CarbLoadingPage() {
 
         {/* 2. 대회 유형별 표 */}
         <section>
-          <h2 style={sectionTitle}>대회 유형별 로딩 가이드</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">대회 유형별 로딩 가이드</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -118,13 +117,13 @@ export default function CarbLoadingPage() {
               </thead>
               <tbody>
                 {[
-                  ['풀코스·울트라', '10~12 g/kg', '대회 전 2일', '집중 로딩 효과 큼'],
-                  ['하프·장시간 훈련', '8~10 g/kg', '대회 전날', '가벼운 충전'],
-                  ['10km 이하', '7~8 g/kg', '대회 전날', '극단 로딩 불필요'],
+                  ['90분 초과 (풀코스·대부분의 하프)', '10~12 g/kg', '대회 전 2일', '집중 로딩 효과 큼'],
+                  ['60~90분 (빠른 하프 등)', '8~10 g/kg', '대회 전날', '가벼운 충전'],
+                  ['60분 이내 (10km 이하)', '7~8 g/kg', '대회 전날', '극단 로딩 불필요'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[3]}</td>
                   </tr>
@@ -136,11 +135,11 @@ export default function CarbLoadingPage() {
 
         {/* 3. 공식 지침 원문 수치 */}
         <section>
-          <h2 style={sectionTitle}>공식 지침 권장량 — ACSM/AND/DC 2016</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+          <h2 className="g-h2">공식 지침 권장량 — ACSM/AND/DC 2016</h2>
+          <p className="g-p">
             미국스포츠의학회(ACSM)·미국영양학회(AND)·캐나다영양사협회(DC)가 함께 낸 공동 성명 <strong style={{ color: 'var(--text)' }}>Nutrition and Athletic Performance(2016)</strong>의 Table 2는 경기 전·중 탄수화물 섭취량을 상황별로 못 박아 두었습니다. 아래는 그 표에서 지구력 대회에 해당하는 행을 그대로 옮긴 것입니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -161,34 +160,33 @@ export default function CarbLoadingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', whiteSpace: 'nowrap' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
+          <p className="g-note">
             같은 표의 하루 필요량은 훈련 강도에 따라 저강도 3~5, 중강도(약 1시간/일) 5~7, 지구성 프로그램(1~3시간/일) 6~10, 극단적 훈련량(4~5시간/일 초과) 8~12 g/kg/일입니다. 카보로딩의 10~12 g/kg는 훈련량이 가장 많은 선수의 평상시 상한과 맞먹는 양인 셈입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>이 계산기의 값은 표의 어디에 해당하나</p>
-            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>
-              &lsquo;풀코스·울트라(90분 초과)&rsquo;를 골랐을 때 나오는 <strong style={{ color: 'var(--text)' }}>10~12 g/kg</strong>는 표의 카보로딩 행 그대로입니다. 하프·10km에 쓰는 8~10·7~8 g/kg는 90분 미만 경기의 <strong style={{ color: 'var(--text)' }}>7~12 g/kg</strong> 범위 안에서 잡은 값으로, 지침상 상한은 12 g/kg입니다. 결과 카드의 &lsquo;대회 아침 체중×1~4g&rsquo;은 경기 전 식사 행(60분 초과 운동, 시작 1~4시간 전)에 해당합니다. 다만 <strong style={{ color: 'var(--text)' }}>경기 중 섭취는 이 계산기가 다루지 않으므로</strong> 위 표의 시간당 g을 따로 챙겨야 합니다 — 상한 90 g/h는 IOC 스포츠영양 합의문(2010)도 &lsquo;약 3시간을 넘는 경기&rsquo;의 목표치로 동일하게 제시하며, 장에서 흡수를 견디도록 훈련 때 미리 연습하라고 못 박습니다.
+          <Callout tone="note" title="이 계산기의 값은 표의 어디에 해당하나">
+            <p style={{ margin: 0 }}>
+              &lsquo;90분 넘게 걸리는 경기&rsquo;를 골랐을 때 나오는 <strong style={{ color: 'var(--text)' }}>10~12 g/kg</strong>는 표의 카보로딩 행 그대로입니다. 60~90분·60분 이내 경기에 쓰는 8~10·7~8 g/kg는 90분 미만 경기의 <strong style={{ color: 'var(--text)' }}>7~12 g/kg</strong> 범위 안에서 잡은 값으로, 지침상 상한은 12 g/kg입니다. 결과 카드의 &lsquo;대회 아침 체중×1~4g&rsquo;은 경기 전 식사 행(60분 초과 운동, 시작 1~4시간 전)에 해당합니다. 다만 <strong style={{ color: 'var(--text)' }}>경기 중 섭취는 이 계산기가 다루지 않으므로</strong> 위 표의 시간당 g을 따로 챙겨야 합니다 — 상한 90 g/h는 IOC 스포츠영양 합의문(2010)도 &lsquo;약 3시간을 넘는 경기&rsquo;의 목표치로 동일하게 제시하며, 장에서 흡수를 견디도록 훈련 때 미리 연습하라고 못 박습니다.
             </p>
-          </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
+          </Callout>
+          <p className="g-note">
             기준 시점 — ACSM은 2026년 6월 이 성명의 개정판 집필진을 공모했고(완료 예상 24개월), 2026년 7월 현재 인용 가능한 최신 현행판은 <strong style={{ color: 'var(--text)' }}>2016년판</strong>입니다.
           </p>
         </section>
 
         {/* 4. 섭취량 감 잡기 */}
         <section>
-          <h2 style={sectionTitle}>섭취량 감 잡기 — 100 g당 탄수화물</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
+          <h2 className="g-h2">섭취량 감 잡기 — 100 g당 탄수화물</h2>
+          <p className="g-p">
             &lsquo;하루 700 g&rsquo;이 얼마나 되는 양인지 감이 오지 않는다면 아래 표를 기준으로 잡으세요. 농촌진흥청 국가표준식품성분표(<strong style={{ color: 'var(--text)' }}>국가표준식품성분 DB 10.4, 2026</strong>) 수록값이며 모두 <strong style={{ color: 'var(--text)' }}>100 g 기준</strong>입니다. 면류는 삶으면 물을 머금어 100 g당 탄수화물이 크게 낮아지므로 조리 상태를 함께 봐야 합니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 440 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -217,46 +215,38 @@ export default function CarbLoadingPage() {
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontWeight: 700, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontWeight: 700, fontFamily: 'var(--font-sans)' }}>{r[1]}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)' }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
+          <p className="g-note">
             표의 &lsquo;이온 음료&rsquo;는 특정 브랜드 제품이 아니라 성분표에 실린 일반 대표값입니다(100 g당 나트륨 44 mg·칼륨 22 mg). mL 단위로 환산하려면 밀도 보정이 필요하므로 100 g 기준으로 적었고, 국내 시판 제품의 실제 값은 제품 라벨을 확인하세요. 성분표는 개정판마다 값이 조금씩 달라지므로 위 수치는 <strong style={{ color: 'var(--text)' }}>현행 DB 10.4(2026)</strong> 기준임을 함께 봐 주세요.
           </p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, margin: '10px 0 0' }}>
-            위 계산기 결과의 <strong style={{ color: 'var(--text)' }}>&lsquo;음식으로 환산하면&rsquo;</strong> 목록도 이 표와 같은 성분표 값에서 산출합니다(밥 1공기는 31.71 g/100 g × 210 g ≒ 67 g, 식빵 1장은 49.61 × 0.35 ≒ 17 g). 계산기 목록은 &lsquo;하루 목표를 한 가지 음식으로만 채우면 몇 인분인가&rsquo;를 가늠하는 용도이므로 정수로 반올림해 표시합니다. 에너지젤은 제조사 공식 표기가 Maurten 25 g · SiS 22 g · GU 21~23 g으로 달라 대표값 25 g을 씁니다.
+          <p className="g-note">
+            위 계산기 결과의 <strong style={{ color: 'var(--text)' }}>&lsquo;음식으로 환산하면&rsquo;</strong> 목록도 이 표와 같은 성분표 값에서 산출합니다(밥 1공기는 31.71 g/100 g × 210 g ≒ 67 g, 식빵 1장은 49.61 × 0.35 ≒ 17 g). 계산기 목록은 &lsquo;하루 목표를 한 가지 음식으로만 채우면 몇 인분인가&rsquo;를 가늠하는 용도이므로 소수 첫째 자리까지만 표시합니다. 에너지젤은 제조사 공식 표기가 Maurten 25 g · SiS 22 g · GU 21~23 g으로 달라 대표값 25 g을 씁니다.
           </p>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, margin: '16px 0 0' }}>
+          <p className="g-p" style={{ marginTop: 16 }}>
             보건복지부·한국영양학회의 2020 한국인 영양소 섭취기준은 곡류군 1인 1회 분량을 <strong style={{ color: 'var(--text)' }}>밥 210 g</strong>으로 잡습니다. 성분표 값으로 환산하면 밥 한 공기가 탄수화물 약 <strong style={{ color: 'var(--text)' }}>66.6 g</strong>(31.71×2.1로 계산한 값이며 성분표 수록값은 아님). 체중 70 kg이 카보로딩 하한 10 g/kg, 즉 하루 700 g을 흰밥만으로 채우려면 약 10.5공기가 필요하다는 뜻입니다. 그래서 같은 100 g에 흰밥의 약 1.5~1.7배가 들어가는 <strong style={{ color: 'var(--text)' }}>떡</strong>이나 꿀처럼 부피 대비 밀도가 높은 급원을 섞고, 끼니 사이 간식으로 나눠 넣는 것이 실전 요령입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', marginTop: 14 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>에너지젤 1회분 (제조사 공식 표기)</p>
-            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75, margin: 0 }}>
+          <Callout tone="note" title="에너지젤 1회분 (제조사 공식 표기)">
+            <p style={{ margin: 0 }}>
               Maurten GEL 100 = 사셰당 <strong style={{ color: 'var(--text)' }}>25 g</strong>(과당:포도당 0.8:1, 약 100 kcal) · SiS GO Isotonic 60 mL = <strong style={{ color: 'var(--text)' }}>22 g</strong> · GU Original = <strong style={{ color: 'var(--text)' }}>21~23 g</strong>(1개 100 kcal, 맛에 따라 차이). 시간당 90 g을 젤로만 채운다면 22 g 제품 기준 약 4개가 필요하다는 계산이 나오고, SiS도 &lsquo;종목·강도에 따라 시간당 1~3개로 60~90 g 목표&rsquo;라고 안내합니다. GU는 1~2시간 운동에서 20~30분마다 1개를 수분과 함께 섭취하도록 권합니다.
             </p>
-          </div>
+          </Callout>
         </section>
 
         {/* 5. 실수 */}
         <section>
-          <h2 style={sectionTitle}>흔한 실수 4가지</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
-            {[
-              { t: '새 음식 시도', d: '대회 전날·당일 처음 먹는 음식은 배탈 위험. 검증된 음식만.' },
-              { t: '지방·기름 과다', d: '삼겹살·튀김 등은 소화 느림. 탄수화물 위주로.' },
-              { t: '식이섬유 과다', d: '현미·잡곡·생채소는 화장실 문제. 로딩 땐 흰쌀·정제 탄수화물.' },
-              { t: '운동을 그대로', d: '로딩 기간에 훈련량 안 줄이면 채운 글리코겐을 다 써버림.' },
-            ].map((c, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px' }}>
-                <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' }}>❌ {c.t}</p>
-                <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>{c.d}</p>
-              </div>
-            ))}
-          </div>
+          <h2 className="g-h2">흔한 실수 4가지</h2>
+          <ul className="g-list">
+            <li><strong>새 음식 시도</strong> — 대회 전날·당일 처음 먹는 음식은 배탈 위험이 큽니다. 훈련 때 먹어 본 음식만 드세요.</li>
+            <li><strong>지방·기름 과다</strong> — 삼겹살·튀김처럼 기름진 음식은 소화가 느리고 탄수화물 자리를 차지합니다. 로딩 기간엔 탄수화물 위주로.</li>
+            <li><strong>식이섬유 과다</strong> — 현미·잡곡·생채소는 대회 당일 화장실 문제로 이어질 수 있습니다. 로딩 땐 흰쌀·떡·식빵 같은 정제 탄수화물이 낫습니다.</li>
+            <li><strong>운동을 그대로</strong> — 로딩 기간에 훈련량을 줄이지 않으면 채운 글리코겐을 다시 써 버립니다. D-2부터는 20~30분 가벼운 조깅 이하로.</li>
+          </ul>
         </section>
 
         {/* 6. FAQ */}
@@ -281,7 +271,7 @@ export default function CarbLoadingPage() {
           <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, minmax(0, 1fr))', gap: 10 }}>
             {RELATED.map((t, i) => (
-              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, textDecoration: 'none' }}>
+              <Link key={i} href={t.href} style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}>
                 <p style={{ fontSize: 20, marginBottom: 6 }}>{t.icon}</p>
                 <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 }}>{t.name}</p>
                 <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.5 }}>{t.desc}</p>
@@ -291,6 +281,6 @@ export default function CarbLoadingPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

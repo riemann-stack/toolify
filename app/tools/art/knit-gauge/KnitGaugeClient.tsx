@@ -9,7 +9,7 @@ import {
   type GaugeUnit, type YarnId, type BodyPartId, type ProjectId, type SizeMeta,
   normalizeGauge, gaugePerCm, estimateYarnWeight, needleSizeForGauge,
   convertPattern, sizeToCounts, distributeIncDec, distributeShaping, estimateYarn,
-  fitToRepeat, skeinPlan, fitPresetForEase, isBelowFitRange, panelWidthFor, denormalizeGauge,
+  fitToRepeat, skeinPlan, fitPresetForEase, isBelowFitRange, deriveWidthCm, denormalizeGauge,
   getBodyPart, getSize, getYarn,
   fmt, fmtInt, fmtSign,
 } from './knitGaugeUtils'
@@ -33,6 +33,8 @@ const clampNum = (raw: string, min: number, max: number): number => {
   if (!Number.isFinite(n)) return min
   return Math.min(max, Math.max(Math.min(0, min), n))
 }
+/** 코·단 수처럼 정수만 의미 있는 칸 — 60.5코를 넣으면 '× 17.5회' 같은 불가능한 지시가 나왔다 */
+const clampInt = (raw: string, min: number, max: number): number => Math.round(clampNum(raw, min, max))
 
 export default function KnitGaugeClient() {
   const [tab, setTab] = useState<Tab>('gauge')
@@ -94,30 +96,32 @@ export default function KnitGaugeClient() {
         typeof v === 'string' && (allowed as readonly string[]).includes(v) ? (v as T) : null
 
       const set = <T,>(val: T | null, fn: (v: T) => void) => { if (val !== null) fn(val) }
+      /* 정수 칸 — 예전 저장값에 소수가 남아 있을 수 있다 */
+      const int = (v: number | null): number | null => (v === null ? null : Math.round(v))
 
       set(num(j.stsInput, 0.5, 100), setStsInput)
       set(num(j.rowsInput, 0.5, 100), setRowsInput)
       set(oneOf<GaugeUnit>(j.unit, ['10cm', '4inch', '1cm']), setUnit)
       set(num(j.patternStsGauge, 1, 100), setPatternStsGauge)
       set(num(j.patternRowsGauge, 1, 100), setPatternRowsGauge)
-      set(num(j.patternSts, 1, 5000), setPatternSts)
-      set(num(j.patternRows, 1, 5000), setPatternRows)
+      set(int(num(j.patternSts, 1, 5000)), setPatternSts)
+      set(int(num(j.patternRows, 1, 5000)), setPatternRows)
       set(oneOf<BodyPartId>(j.bodyPartId, BODY_PARTS.map((b) => b.id)), setBodyPartId)
       set(num(j.widthCm, 1, 300), setWidthCm)
       set(num(j.heightCm, 1, 300), setHeightCm)
       set(num(j.easeUser, -0.5, 0.5), setEaseUser)
-      set(num(j.currentSts, 1, 1000), setCurrentSts)
-      set(num(j.targetSts, 1, 1000), setTargetSts)
+      set(int(num(j.currentSts, 1, 1000)), setCurrentSts)
+      set(int(num(j.targetSts, 1, 1000)), setTargetSts)
       set(oneOf<'코' | '단'>(j.incDecUnit, ['코', '단']), setIncDecUnit)
       set(oneOf<YarnId>(j.yarnId, YARN_WEIGHTS.map((y) => y.id)), setYarnId)
       set(oneOf<ProjectId>(j.projectId, PROJECTS.map((p) => p.id)), setProjectId)
       set(oneOf(j.yarnSizeId, ALL_SIZES.map((sz) => sz.id)), setYarnSizeId)
-      set(num(j.repeatMultiple, 0, 60), setRepeatMultiple)
-      set(num(j.repeatPlus, 0, 60), setRepeatPlus)
+      set(int(num(j.repeatMultiple, 0, 60)), setRepeatMultiple)
+      set(int(num(j.repeatPlus, 0, 60)), setRepeatPlus)
       set(num(j.fitEaseCm, -20, 40), setFitEaseCm)
       set(oneOf<'flat' | 'round'>(j.workMode, ['flat', 'round']), setWorkMode)
-      set(num(j.shapingRows, 1, 1000), setShapingRows)
-      set(num(j.stsPerEvent, 1, 20), setStsPerEvent)
+      set(int(num(j.shapingRows, 1, 1000)), setShapingRows)
+      set(int(num(j.stsPerEvent, 1, 20)), setStsPerEvent)
       if (typeof j.rsOnly === 'boolean') setRsOnly(j.rsOnly)
       set(num(j.skeinG, 1, 1000), setSkeinG)
       set(num(j.skeinM, 0, 5000), setSkeinM)
@@ -194,7 +198,6 @@ export default function KnitGaugeClient() {
     [widthCm, heightCm, stsPer10cm, rowsPer10cm, ease, lengthEaseCm],
   )
 
-  const round1 = (n: number) => Math.round(n * 10) / 10
   const round2 = (n: number) => Math.round(n * 100) / 100
 
   /* 측정 단위를 바꿀 때 값을 그대로 두면 22코/10cm가 22코/1cm(=220코/10cm)로 조용히 10배가 된다.
@@ -225,7 +228,7 @@ export default function KnitGaugeClient() {
      예전에는 칩이 무조건 '가슴/2'를 넣어서, 원형 몸통을 뜨면 둘레가 절반인 옷이 나오고
      여유분은 아예 0(몸에 붙는 핏)으로 고정돼 있었다. */
   const deriveWidth = (sz: SizeMeta, easeCm: number, mode: 'flat' | 'round') =>
-    round1(panelWidthFor(sz.bust + easeCm, mode))
+    deriveWidthCm(sz.bust, easeCm, mode)
 
   /** 사이즈 칩은 항상 스웨터 몸통 기준이다 — 모자·양말에서 눌러도 부위를 스웨터로 옮긴다.
       스웨터 몸통은 widthMeaning이 'either'라 유도 기준은 언제나 사용자가 고른 workMode다. */
@@ -381,7 +384,7 @@ export default function KnitGaugeClient() {
           </div>
 
           {/* 결과 영웅 카드 */}
-          <div className={s.heroCard}>
+          <div className={s.heroCard} role="status">
             <div className={s.heroPrimary}>
               <p className={s.heroLabel}>1cm 당</p>
               <p className={s.heroBig}>
@@ -414,7 +417,7 @@ export default function KnitGaugeClient() {
           {/* SVG 게이지 시각화 */}
           <div className={s.card}>
             <span className={s.cardLabel}>10×10cm 게이지 시각화</span>
-            <GaugeSvg stsPer10cm={stsPer10cm} rowsPer10cm={rowsPer10cm} />
+            <GaugeSvg stsPer10cm={stsPer10cm} rowsPer10cm={rowsPer10cm} ready={gaugeReady} />
             <p className={s.hint}>
               💡 격자가 빽빽할수록 가는 실(높은 게이지). 빨간 점선 = 5코·5단 단위 안내선.
             </p>
@@ -474,7 +477,7 @@ export default function KnitGaugeClient() {
                 <input id="knit-gauge-start"
                   type="number" inputMode="numeric" step={1} min={1} max={1000}
                   value={patternSts}
-                  onChange={(e) => setPatternSts(clampNum(e.target.value, 1, 1000))}
+                  onChange={(e) => setPatternSts(clampInt(e.target.value, 1, 1000))}
                   className={s.numInput}
                 />
               </div>
@@ -483,7 +486,7 @@ export default function KnitGaugeClient() {
                 <input id="knit-gauge-length"
                   type="number" inputMode="numeric" step={1} min={1} max={5000}
                   value={patternRows}
-                  onChange={(e) => setPatternRows(clampNum(e.target.value, 1, 5000))}
+                  onChange={(e) => setPatternRows(clampInt(e.target.value, 1, 5000))}
                   className={s.numInput}
                 />
               </div>
@@ -546,7 +549,7 @@ export default function KnitGaugeClient() {
                 <input id="knit-gauge-repeat"
                   type="number" inputMode="numeric" min={0} max={60}
                   value={repeatMultiple}
-                  onChange={(e) => setRepeatMultiple(clampNum(e.target.value, 0, 60))}
+                  onChange={(e) => setRepeatMultiple(clampInt(e.target.value, 0, 60))}
                   className={s.numInput}
                 />
               </div>
@@ -555,7 +558,7 @@ export default function KnitGaugeClient() {
                 <input id="knit-gauge-repeat-plus"
                   type="number" inputMode="numeric" min={0} max={60}
                   value={repeatPlus}
-                  onChange={(e) => setRepeatPlus(clampNum(e.target.value, 0, 60))}
+                  onChange={(e) => setRepeatPlus(clampInt(e.target.value, 0, 60))}
                   className={s.numInput}
                 />
               </div>
@@ -863,7 +866,7 @@ export default function KnitGaugeClient() {
                 <input id="knit-gauge-current"
                   type="number" inputMode="numeric" step={1} min={1} max={1000}
                   value={currentSts}
-                  onChange={(e) => setCurrentSts(clampNum(e.target.value, 1, 1000))}
+                  onChange={(e) => setCurrentSts(clampInt(e.target.value, 1, 1000))}
                   className={s.numInput}
                 />
               </div>
@@ -874,7 +877,7 @@ export default function KnitGaugeClient() {
                 <input id="knit-gauge-goal"
                   type="number" inputMode="numeric" step={1} min={1} max={1000}
                   value={targetSts}
-                  onChange={(e) => setTargetSts(clampNum(e.target.value, 1, 1000))}
+                  onChange={(e) => setTargetSts(clampInt(e.target.value, 1, 1000))}
                   className={s.numInput}
                 />
               </div>
@@ -908,7 +911,7 @@ export default function KnitGaugeClient() {
                   <input id="knit-gauge-shaping-rows"
                     type="number" inputMode="numeric" min={1} max={1000}
                     value={shapingRows}
-                    onChange={(e) => setShapingRows(clampNum(e.target.value, 1, 1000))}
+                    onChange={(e) => setShapingRows(clampInt(e.target.value, 1, 1000))}
                     className={s.numInput}
                   />
                 </div>
@@ -917,7 +920,7 @@ export default function KnitGaugeClient() {
                   <input id="knit-gauge-per-event"
                     type="number" inputMode="numeric" min={1} max={20}
                     value={stsPerEvent}
-                    onChange={(e) => setStsPerEvent(clampNum(e.target.value, 1, 20))}
+                    onChange={(e) => setStsPerEvent(clampInt(e.target.value, 1, 20))}
                     className={s.numInput}
                   />
                   <p className={s.hint} style={{ marginTop: 4 }}>
@@ -1163,7 +1166,8 @@ export default function KnitGaugeClient() {
                 </thead>
                 <tbody>
                   {YARN_WEIGHTS.map((y) => {
-                    const isCurrent = y.id === yarnEst.id
+                    /* 게이지가 비었을 때 폴백 추정(Jumbo) 행을 강조하지 않는다 */
+                    const isCurrent = gaugeReady && y.id === yarnEst.id
                     return (
                       <tr key={y.id} className={isCurrent ? s.rowHighlight : ''}>
                         <td className={s.mono}>{y.cyc}</td>
@@ -1188,7 +1192,7 @@ export default function KnitGaugeClient() {
    SVG 게이지 시각화
    10×10cm 사각형 안에 코·단 격자 표시
    ───────────────────────────────────────────── */
-function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm: number }) {
+function GaugeSvg({ stsPer10cm, rowsPer10cm, ready }: { stsPer10cm: number; rowsPer10cm: number; ready: boolean }) {
   const W = 320, H = 320
   const padding = 30
   const gridSize = W - padding * 2  /* 10cm을 픽셀로 표현 */
@@ -1201,12 +1205,12 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
   const stsStep = gridSize / stsCount
   const rowsStep = gridSize / rowsCount
 
-  /* 격자가 너무 빽빽한 경우(>30) 5단위마다만 표시 */
+  /* 격자가 너무 빽빽한 경우(>30) 한 칸 건너 표시 — 5코·5단 안내선은 홀수 번째(5·15·25…)도 항상 그린다 */
   const stsSkip = stsCount > 30 ? 2 : 1
   const rowsSkip = rowsCount > 30 ? 2 : 1
 
   return (
-    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ maxWidth: 360, display: 'block', margin: '0 auto', background: 'var(--bg3)', borderRadius: 8 }}>
+    <svg viewBox={`0 0 ${W} ${H}`} width="100%" style={{ maxWidth: 360, display: 'block', margin: '0 auto', background: 'var(--bg3)', borderRadius: 'var(--radius-s)' }}>
       {/* 외곽 사각형 (10×10cm) */}
       <rect
         x={padding} y={padding}
@@ -1218,7 +1222,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
 
       {/* 세로선 (코 = 가로 방향) */}
       {Array.from({ length: stsCount + 1 }).map((_, i) => {
-        if (i % stsSkip !== 0 && i !== 0 && i !== stsCount) return null
+        if (i % stsSkip !== 0 && i % 5 !== 0 && i !== 0 && i !== stsCount) return null
         const x = padding + i * stsStep
         const isFifth = i % 5 === 0
         return (
@@ -1236,7 +1240,7 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
 
       {/* 가로선 (단 = 세로 방향) */}
       {Array.from({ length: rowsCount + 1 }).map((_, i) => {
-        if (i % rowsSkip !== 0 && i !== 0 && i !== rowsCount) return null
+        if (i % rowsSkip !== 0 && i % 5 !== 0 && i !== 0 && i !== rowsCount) return null
         const y = padding + i * rowsStep
         const isFifth = i % 5 === 0
         return (
@@ -1253,20 +1257,22 @@ function GaugeSvg({ stsPer10cm, rowsPer10cm }: { stsPer10cm: number; rowsPer10cm
       })}
 
       {/* 라벨 */}
-      <text x={padding + gridSize / 2} y={padding - 10} textAnchor="middle" fill="var(--muted)" fontSize={11} fontFamily="Noto Sans KR, sans-serif">
-        ← 10cm ({stsCount}코) →
+      <text x={padding + gridSize / 2} y={padding - 10} textAnchor="middle" fill="var(--muted)" fontSize={11}>
+        ← 10cm{ready ? ` (${stsCount}코)` : ''} →
       </text>
       <text
         x={padding - 14} y={padding + gridSize / 2}
-        textAnchor="middle" fill="var(--muted)" fontSize={11} fontFamily="Noto Sans KR, sans-serif"
+        textAnchor="middle" fill="var(--muted)" fontSize={11}
         transform={`rotate(-90 ${padding - 14} ${padding + gridSize / 2})`}
       >
-        ← 10cm ({rowsCount}단) →
+        ← 10cm{ready ? ` (${rowsCount}단)` : ''} →
       </text>
 
       {/* 중앙 표시 — Yarn 이름 */}
-      <text x={W / 2} y={H - 8} textAnchor="middle" fill="var(--cat-art)" fontSize={12} fontWeight={700} fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
-        {getYarn(estimateYarnWeight(stsPer10cm).id).shortLabel} · {fmt(stsPer10cm, 0)} sts × {fmt(rowsPer10cm, 0)} rows / 10cm
+      <text x={W / 2} y={H - 8} textAnchor="middle" fill="var(--cat-art)" fontSize={12} fontWeight={700}>
+        {ready
+          ? `${getYarn(estimateYarnWeight(stsPer10cm).id).shortLabel} · ${fmt(stsPer10cm, 0)} sts × ${fmt(rowsPer10cm, 0)} rows / 10cm`
+          : '코·단 수를 입력하세요'}
       </text>
     </svg>
   )

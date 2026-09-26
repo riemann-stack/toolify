@@ -40,6 +40,14 @@ function calcTotalAmount(p: Product): number {
   return toBase(num(p.amount), p.unit) * num(p.count)
 }
 
+/** 계산에 쓰는 소비 가능량(%) — 직접입력이 있으면 그 값이 단일 진실(1~100 밖이면 null → 비교 제외),
+ *  비어 있으면 선택된 pill 값. 입력 도중 중간값('7' 등)이 consumption에 남지 않게 여기서만 파생한다. */
+function consumptionPct(p: Product): number | null {
+  if (!p.consumptionCustom) return p.consumption
+  const n = parseInt(p.consumptionCustom, 10)
+  return Number.isFinite(n) && n >= 1 && n <= 100 ? n : null
+}
+
 function calcFinalPrice(p: Product): number {
   // 가격 = 그대로 (할인·쿠폰·배송비 제거)
   return Math.max(0, num(p.price))
@@ -92,16 +100,18 @@ export default function UnitPriceClient() {
     const price = num(p.price); const amount = num(p.amount); const count = num(p.count)
     if (price <= 0 || amount <= 0 || count < 1) return null
     if (UNIT_KIND[p.unit] !== base.kind) return null  // 다른 단위 계열은 비교 제외(아래 hasMultipleKinds 경고로 안내)
+    const pct = consumptionPct(p)
+    if (pct == null) return null  // 소비 가능량 직접입력이 1~100 밖 → 카드에 오류 표시, 비교 제외
     const total = calcTotalAmount(p)
     const final = calcFinalPrice(p)
     const unitPrice = (final / total) * base.factor
-    const effectiveTotal = total * (p.consumption / 100)
+    const effectiveTotal = total * (pct / 100)
     const effectiveUnitPrice = effectiveTotal > 0 ? (final / effectiveTotal) * base.factor : 0
-    return { product: p, totalAmount: total, finalPrice: final, unitPrice, effectiveUnitPrice }
+    return { product: p, pct, totalAmount: total, finalPrice: final, unitPrice, effectiveUnitPrice }
   })
 
   type Calc = {
-    product: Product; totalAmount: number; finalPrice: number;
+    product: Product; pct: number; totalAmount: number; finalPrice: number;
     unitPrice: number; effectiveUnitPrice: number
   }
   const validCalcs: Calc[] = valid.filter((v): v is Calc => v !== null)
@@ -111,12 +121,16 @@ export default function UnitPriceClient() {
   const ranked = [...validCalcs].sort((a, b) => a.effectiveUnitPrice - b.effectiveUnitPrice)
   const winner = ranked.length > 0 ? ranked[0] : null
   const rankMap = new Map(ranked.map((c, i) => [c.product.id, i + 1]))
-  const anyPartial = validCalcs.some(c => c.product.consumption < 100)
+  const anyPartial = validCalcs.some(c => c.pct < 100)
 
   // 다른 단위 계열 감지
   const hasMultipleKinds = new Set(
     products.filter(p => num(p.amount) > 0).map(p => UNIT_KIND[p.unit])
   ).size > 1
+  // 개·매·장은 같은 개수 계열(의도된 설계)이지만, 섞였다면 낱개 기준으로 입력했는지 확인만 권유
+  const mixedCountUnits = validCalcs.length >= 2
+    && validCalcs.every(c => UNIT_KIND[c.product.unit] === 'count')
+    && new Set(validCalcs.map(c => c.product.unit)).size > 1
 
   const diff = (() => {
     if (!winner || ranked.length < 2) return null
@@ -146,7 +160,7 @@ export default function UnitPriceClient() {
     for (const c of validCalcs) {
       const name = c.product.name || `${c.product.id} 상품`
       const u = dispUnit(c.product)
-      const consNote = c.product.consumption < 100 ? ` ·${c.product.consumption}% 사용` : ''
+      const consNote = c.pct < 100 ? ` ·${c.pct}% 사용` : ''
       lines.push(`${c.product.id} ${name}: ${fmt1(c.effectiveUnitPrice)}원/${baseUnitLabel} (${fmt(c.totalAmount)}${u}, ${fmt(c.finalPrice)}원${consNote})`)
     }
     const wn = winner.product.name || `${winner.product.id} 상품`
@@ -202,6 +216,11 @@ export default function UnitPriceClient() {
       {hasMultipleKinds && (
         <div className={s.warnBox}>
           ⚠️ 액체(ml·L)와 무게(g·kg)는 직접 비교가 어렵습니다(밀도 다름). 같은 단위 계열로 통일해주세요.
+        </div>
+      )}
+      {mixedCountUnits && (
+        <div className={s.warnBox}>
+          개·매·장 단위가 섞여 있어요. 모두 낱개(1매·1장) 기준 수량으로 입력했는지 확인해 주세요.
         </div>
       )}
 
@@ -265,7 +284,7 @@ export default function UnitPriceClient() {
                   const rank = rankMap.get(c.product.id)!
                   const baseUnit = dispUnit(c.product)
                   const origIdx = products.findIndex(p => p.id === c.product.id)
-                  const hasConsumption = c.product.consumption < 100
+                  const hasConsumption = c.pct < 100
                   return (
                     <tr key={i} className={rank === 1 ? s.winnerRow : ''}>
                       <td>
@@ -277,7 +296,7 @@ export default function UnitPriceClient() {
                         {(num(c.product.count) > 1 || hasConsumption) && (
                           <div className={s.badgeRow}>
                             {num(c.product.count) > 1 && <span className={`${s.badge} ${s.badgeCount}`}>×{c.product.count}</span>}
-                            {hasConsumption && <span className={`${s.badge} ${s.badgeConsumption}`}>{c.product.consumption}% 사용</span>}
+                            {hasConsumption && <span className={`${s.badge} ${s.badgeConsumption}`}>{c.pct}% 사용</span>}
                           </div>
                         )}
                       </td>
@@ -295,16 +314,16 @@ export default function UnitPriceClient() {
           </div>
 
           {/* 실질 단가 (소비 가능량 < 100% 시) */}
-          {validCalcs.some(c => c.product.consumption < 100) && (
+          {anyPartial && (
             <div className={s.effectiveBox}>
               <p className={s.effectiveTitle}>실질 단가 (사용 가능량 반영)</p>
               {validCalcs.map(c => {
-                if (c.product.consumption >= 100) return null
+                if (c.pct >= 100) return null
                 return (
                   <p key={c.product.id} className={s.effectiveItem}>
-                    <strong>{c.product.id} {c.product.name || '상품'}</strong> ({c.product.consumption}% 사용 시) →
-                    실질 <strong style={{ color: '#EA580C' }}>{fmt1(c.effectiveUnitPrice)}원/{baseUnitLabel}</strong>
-                    <span style={{ color: 'var(--muted)' }}> (표시 단가의 {fmt1(100 / c.product.consumption)}배)</span>
+                    <strong>{c.product.id} {c.product.name || '상품'}</strong> ({c.pct}% 사용 시) →
+                    실질 <strong style={{ color: 'var(--orange-600)' }}>{fmt1(c.effectiveUnitPrice)}원/{baseUnitLabel}</strong>
+                    <span style={{ color: 'var(--muted)' }}> (표시 단가의 {fmt1(100 / c.pct)}배)</span>
                   </p>
                 )
               })}
@@ -368,6 +387,7 @@ function ProductCard({
   onChange: <K extends keyof Product>(key: K, value: Product[K]) => void
   onRemove: () => void
 }) {
+  const customInvalid = !!p.consumptionCustom && consumptionPct(p) == null
   const decCount = () => onChange('count', String(Math.max(1, num(p.count) - 1)))
   const incCount = () => onChange('count', String(Math.min(99, num(p.count) + 1)))
 
@@ -461,19 +481,18 @@ function ProductCard({
                   className={s.consumptionCustomInput}
                   placeholder="직접입력"
                   aria-label="소비 가능량 직접입력 (%)"
+                  aria-invalid={customInvalid || undefined}
                   value={p.consumptionCustom}
-                  onChange={e => {
-                    const v = e.target.value.replace(/[^0-9]/g, '').slice(0, 3)
-                    onChange('consumptionCustom', v)
-                    const n = parseInt(v, 10)
-                    if (Number.isFinite(n) && n > 0 && n <= 100) {
-                      onChange('consumption', n)
-                    }
-                  }}
+                  onChange={e => onChange('consumptionCustom', e.target.value.replace(/[^0-9]/g, '').slice(0, 3))}
                 />
                 <span className={s.consumptionCustomUnit}>%</span>
               </div>
             </div>
+            {customInvalid && (
+              <p className={s.countHint} style={{ color: 'var(--danger)' }}>
+                1~100 사이로 입력해 주세요. 지금 값으로는 이 상품을 비교에서 뺐어요.
+              </p>
+            )}
             <p className={s.countHint}>
               💡 매일 사용(생수·우유) 100% · 자주(샴푸·세제) 75% · 가끔(소스·조미료) 50%
             </p>

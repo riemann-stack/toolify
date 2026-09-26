@@ -6,9 +6,11 @@
 
 /* ─── 점수 테이블 ─── */
 
-/** 무주택 기간 점수 — 햇수 기준 (1년 이상부터 1년당 +2점, 1년 미만 2점) */
-export function unhomedScore(years: number): number {
-  if (years < 0) return 0
+/** 무주택 기간 점수 — 햇수 기준 (1년 이상부터 1년당 +2점, 1년 미만 2점).
+ *  years === null = 산정 대상 아님(만 30세 미만 미혼으로 기산 전, 또는 모집공고일 현재 주택 소유) → 0점.
+ *  '1년 미만 2점'은 무주택 기간 산정이 시작된 무주택자에게만 준다(주택공급에 관한 규칙 별표1). */
+export function unhomedScore(years: number | null): number {
+  if (years === null || years < 0) return 0
   if (years < 1) return 2
   if (years >= 15) return 32
   return Math.min(32, 2 + Math.floor(years) * 2)
@@ -30,17 +32,27 @@ export function bankbookScore(years: number): number {
   return Math.min(17, 2 + Math.floor(years))
 }
 
+/* ─── 기간 산정 (달력 기준 만 개월) ─── */
+
+/** from → to 사이의 달력 기준 만(滿) 개월 수. 기념일 당일에 만 N년이 된다(일수/365.25 방식은 당일에 한 단계 낮게 나옴). */
+export function fullMonthsBetween(from: Date, to: Date): number {
+  if (to.getTime() < from.getTime()) return 0
+  let m = (to.getFullYear() - from.getFullYear()) * 12 + (to.getMonth() - from.getMonth())
+  if (to.getDate() < from.getDate()) m -= 1
+  return Math.max(0, m)
+}
+
 /* ─── 무주택 기간 자동 산정 ─── */
 
-/** 만 30세 또는 결혼일 중 빠른 쪽부터 카운트
+/** 만 30세 또는 혼인신고일 중 빠른 쪽부터 카운트 (단위: 년, 만 개월 ÷ 12)
  *  - 30세 이전 결혼: 결혼일부터
  *  - 30세 이후 결혼·미혼: 만 30세 생일부터
- *  - 30세 미만 미혼: 0년 */
+ *  - 30세 미만 미혼(기산 전): null → 무주택 기간 가점 0점 */
 export function computeUnhomedYears(
   birthDate: Date,
   marriedDate: Date | null,
   refDate: Date,
-): number {
+): number | null {
   const age30 = new Date(birthDate)
   age30.setFullYear(age30.getFullYear() + 30)
 
@@ -51,15 +63,13 @@ export function computeUnhomedYears(
     startDate = age30
   }
 
-  if (refDate.getTime() < startDate.getTime()) return 0
-  const diffMs = refDate.getTime() - startDate.getTime()
-  return diffMs / (365.25 * 24 * 3600 * 1000)
+  if (refDate.getTime() < startDate.getTime()) return null
+  return fullMonthsBetween(startDate, refDate) / 12
 }
 
-/* ─── 통장 가입기간 ─── */
+/* ─── 통장 가입기간 (만 개월 ÷ 12 — 6개월·N년 경계를 달력 기준으로 판정) ─── */
 export function computeBankbookYears(joinedDate: Date, refDate: Date): number {
-  if (refDate.getTime() < joinedDate.getTime()) return 0
-  return (refDate.getTime() - joinedDate.getTime()) / (365.25 * 24 * 3600 * 1000)
+  return fullMonthsBetween(joinedDate, refDate) / 12
 }
 
 /* ─── 종합 등급 ─── */
@@ -71,12 +81,12 @@ export interface ScoreGrade {
 }
 
 export const GRADES: ScoreGrade[] = [
-  { grade: 'S', color: '#A16207', desc: '서울 인기 단지 당첨 가능권 (강남·송파·서초)', minScore: 70 },
-  { grade: 'A', color: '#059669', desc: '서울 일반·수도권 인기 단지 당첨권',          minScore: 60 },
-  { grade: 'B', color: '#0891B2', desc: '수도권 일반·지방 광역시 인기 단지권',          minScore: 50 },
-  { grade: 'C', color: '#D97706', desc: '지방 광역시 일반·중소도시 당첨권',            minScore: 40 },
-  { grade: 'D', color: '#EA580C', desc: '지방 중소도시 + 특별공급 검토 권장',         minScore: 25 },
-  { grade: 'E', color: '#DC2626', desc: '가점 부족 — 특별공급·추첨제 우선 검토',      minScore: 0 },
+  { grade: 'S', color: 'var(--yellow-700)', desc: '서울 인기 단지 당첨 가능권 (강남·송파·서초)', minScore: 70 },
+  { grade: 'A', color: 'var(--emerald-600)', desc: '서울 일반·수도권 인기 단지 당첨권',          minScore: 60 },
+  { grade: 'B', color: 'var(--cyan-600)', desc: '수도권 일반·지방 광역시 인기 단지권',          minScore: 50 },
+  { grade: 'C', color: 'var(--amber-600)', desc: '지방 광역시 일반·중소도시 당첨권',            minScore: 40 },
+  { grade: 'D', color: 'var(--orange-600)', desc: '지방 중소도시 + 특별공급 검토 권장',         minScore: 25 },
+  { grade: 'E', color: 'var(--red-600)', desc: '가점 부족 — 특별공급·추첨제 우선 검토',      minScore: 0 },
 ]
 
 export function getGrade(score: number): ScoreGrade {
@@ -98,7 +108,7 @@ export const CUTLINES: RegionCutline[] = [
   { region: '🏘️ 수도권 인기',           avg: 58, min: 50, desc: '판교·과천·분당·동탄2' },
   { region: '🏘️ 수도권 일반',           avg: 48, min: 40, desc: '용인·시흥·평택·의정부' },
   { region: '🏞️ 지방 광역시 인기',      avg: 50, min: 42, desc: '부산 해운대·대구 수성·대전 유성' },
-  { region: '🏞️ 지방 광역시 일반',      avg: 40, min: 32, desc: '광주·울산·인천 일반구' },
+  { region: '🏞️ 지방 광역시 일반',      avg: 40, min: 32, desc: '광주·울산·대전 일반구' },
   { region: '🌾 지방 중소도시',          avg: 32, min: 22, desc: '특별공급 추천 — 일반 가점 낮음' },
 ]
 
@@ -117,26 +127,40 @@ export const SPECIAL_SUPPLIES: SpecialSupply[] = [
     id: 'newlywed',
     name: '신혼부부',
     emoji: '💑',
-    ratio: '민영 20% / 공공 30%',
-    desc: '혼인 7년 이내 또는 만 6세 이하 자녀 있는 부부',
+    ratio: '민영·공공 모두 (비율은 입주자모집공고 확인)',
+    desc: '혼인 7년 이내 무주택 신혼부부 (만 6세 이하 자녀를 둔 한부모가족 포함)',
     conditions: [
-      '혼인 신고 7년 이내 (또는 만 6세 이하 자녀)',
+      '혼인신고일부터 입주자모집공고일까지 7년 이내 (한부모가족은 만 6세 이하 자녀)',
       '무주택 세대',
-      '소득 기준: 도시근로자 가구당 월평균 130% 이하 (맞벌이 140%)',
-      '자산 약 3.5억 원 이하 (매년 갱신 — 청약홈 확인)',
+      '소득 기준: 도시근로자 월평균소득 대비 일정 비율 이하 — 공급 유형·맞벌이 여부별로 다르며 2024년 맞벌이 기준 완화(청약홈 확인)',
+      '자산 기준 별도 (매년 갱신 — 청약홈 확인)',
     ],
   },
   {
     id: 'first-life',
     name: '생애최초',
     emoji: '🆕',
-    ratio: '민영 7% / 공공 25%',
-    desc: '평생 한 번도 주택 소유 X — 일반·생애최초 모두 가능',
+    ratio: '민영·공공 모두 (비율은 입주자모집공고 확인)',
+    desc: '세대원 전원이 과거 주택을 소유한 적 없는 세대 — 일반·생애최초 모두 가능',
     conditions: [
-      '평생 주택 소유 이력 없음 (배우자 포함)',
-      '청약통장 1순위 + 5년 이상 가입',
-      '근로소득세 5년 이상 납부 (최소 한 번)',
-      '소득 130% (맞벌이 140%), 자산 약 3.5억 이하 (매년 갱신)',
+      '세대원 전원 과거 주택 소유 이력 없음',
+      '해당 주택 일반공급 1순위 (국민주택은 저축액 선납금 포함 600만 원 이상)',
+      '근로자·자영업자로 소득세 5년 이상 납부',
+      '혼인 중이거나 미혼 자녀가 있을 것 (민영은 1인 가구도 일부 물량 신청 가능)',
+      '소득·자산 기준 충족 — 공급 유형·맞벌이 여부별로 다름(매년 갱신, 청약홈 확인)',
+    ],
+  },
+  {
+    id: 'newborn',
+    name: '신생아',
+    emoji: '👶',
+    ratio: '민영 10% (2026.6.15 신설) / 공공 신생아 특공',
+    desc: '입주자모집공고일 기준 만 2세 미만 자녀(임신·입양 포함) 가구 — 혼인 기간 무관',
+    conditions: [
+      '만 2세 미만 자녀(임신·입양 포함)',
+      '무주택 세대',
+      '공공은 2024년, 민영은 2026년 6월 15일부터 별도 신생아 특별공급 운영 (그전 민영은 신혼·생애최초 물량 일부 우선 배정)',
+      '소득·자산 기준은 공급 유형별로 다름 (청약홈 확인)',
     ],
   },
   {
@@ -144,11 +168,11 @@ export const SPECIAL_SUPPLIES: SpecialSupply[] = [
     name: '다자녀',
     emoji: '👨‍👩‍👧‍👦',
     ratio: '민영 10% / 공공 10%',
-    desc: '미성년 자녀 3명 이상 (최근 일부 단지 2자녀로 완화)',
+    desc: '미성년 자녀 2명 이상 (2024년 3월 25일부터 3자녀 → 2자녀 완화)',
     conditions: [
-      '미성년 자녀 3명 이상 (태아 포함, 2자녀 인정 단지 점차 확대)',
+      '미성년 자녀 2명 이상 (태아·입양 포함)',
       '무주택 세대',
-      '소득 120% (맞벌이 200%)',
+      '공공(국민주택)은 소득·자산 기준 적용 — 민영은 입주자모집공고 확인',
       '자녀 수·연령에 따른 가점제 별도',
     ],
   },
@@ -162,7 +186,7 @@ export const SPECIAL_SUPPLIES: SpecialSupply[] = [
       '만 65세 이상 직계존속 동거 3년 이상',
       '무주택 세대 + 일반공급 1순위',
       '본인·배우자·부양 부모 모두 무주택',
-      '가점제로 경쟁',
+      '민영은 가점제, 공공(국민주택)은 납입 횟수·저축총액 순차제',
     ],
   },
   {
@@ -196,7 +220,7 @@ export const PITFALLS: Pitfall[] = [
   {
     title: '1주택자 처분서약 미이행',
     level: 'high',
-    desc: '입주 시까지 기존 주택 미처분 시 분양 취소 + 향후 10년 청약 제한. 처분 시점·매매계약서 보관 필수.',
+    desc: '처분 조건으로 당첨된 뒤 기한 내 기존 주택을 처분하지 않으면 공급계약 취소 등 불이익이 따릅니다. 처분 시점을 증명할 매매계약서는 보관해 두세요.',
   },
   {
     title: '재당첨 제한 (5년·10년)',
@@ -206,29 +230,29 @@ export const PITFALLS: Pitfall[] = [
   {
     title: '부양가족 인정 기준 오해',
     level: 'mid',
-    desc: '형제·자매는 방계라 부양가족 X. 부모·조부모·외조부모는 직계존속으로 인정되나, 만 60세 이상 + 3년 이상 동일 세대 등록 + 무주택 요건을 모두 충족해야 합니다.',
+    desc: '형제·자매는 방계라 부양가족 X. 부모·조부모·외조부모는 직계존속으로 인정되지만, 신청자가 세대주이고 최근 3년 이상 같은 주민등록표에 올라 있어야 하며 직계존속과 그 배우자 모두 무주택이어야 합니다. 나이 요건은 없습니다.',
   },
   {
-    title: '자녀 만 30세 이상·기혼 = 부양가족 X',
+    title: '기혼 자녀 = 부양가족 X',
     level: 'mid',
-    desc: '미성년 또는 만 30세 미만 미혼 자녀만 부양가족으로 인정. 결혼·30세 이상이면 분리.',
+    desc: '미혼 자녀만 부양가족으로 인정. 만 30세 이상 미혼 자녀는 최근 1년 이상 같은 주민등록표에 올라 있어야 인정됩니다.',
   },
   {
     title: '청약통장 1순위 자격 별도',
     level: 'mid',
-    desc: '가입 12개월 + 납입 12회 이상 (수도권 24회). 가점은 가입기간만 보지만 1순위는 납입 횟수가 핵심.',
+    desc: '국민주택 1순위는 가입기간과 납입 횟수를 함께 봅니다 — 수도권 12개월·12회, 비수도권 6개월·6회, 투기과열지구·청약과열지역 24개월·24회. 민영주택은 납입 횟수 대신 지역·면적별 예치금을 채워야 합니다. 가점은 가입기간만 봅니다.',
   },
   {
-    title: '미혼·30세 미만 = 무주택 기간 0',
+    title: '미혼·30세 미만 = 무주택 기간 0점',
     level: 'mid',
-    desc: '만 30세 이전 미혼은 무주택 기간 0점. 결혼 시 결혼일부터 카운트 시작 → 결혼이 가점에 큰 영향.',
+    desc: '만 30세 이전 미혼은 무주택 기간 산정이 시작되지 않아 0점(1년 미만 2점도 받지 못함). 결혼 시 혼인신고일부터 카운트 시작 → 결혼이 가점에 큰 영향.',
   },
 ]
 
 /* ─── 종합 점수 계산 ─── */
 export interface ScoreResult {
   total: number
-  unhomedYears: number
+  unhomedYears: number | null
   unhomedPoints: number
   dependentCount: number
   dependentPoints: number
@@ -238,7 +262,7 @@ export interface ScoreResult {
 }
 
 export function calcTotalScore(opts: {
-  unhomedYears: number
+  unhomedYears: number | null
   dependentCount: number
   bankbookYears: number
 }): ScoreResult {
@@ -263,8 +287,8 @@ export interface Simulation {
   label: string
   emoji: string
   desc: string
-  apply: (current: { unhomedYears: number; dependentCount: number; bankbookYears: number }) => {
-    unhomedYears: number
+  apply: (current: { unhomedYears: number | null; dependentCount: number; bankbookYears: number }) => {
+    unhomedYears: number | null
     dependentCount: number
     bankbookYears: number
   }
@@ -276,7 +300,7 @@ export const SIMULATIONS: Simulation[] = [
     emoji: '⏳',
     desc: '무주택 1년 + 통장 1년 추가',
     apply: (c) => ({
-      unhomedYears: c.unhomedYears + 1,
+      unhomedYears: c.unhomedYears === null ? null : c.unhomedYears + 1,
       dependentCount: c.dependentCount,
       bankbookYears: c.bankbookYears + 1,
     }),
@@ -306,7 +330,7 @@ export const SIMULATIONS: Simulation[] = [
     emoji: '⏰',
     desc: '무주택 +3년 + 통장 +3년',
     apply: (c) => ({
-      unhomedYears: c.unhomedYears + 3,
+      unhomedYears: c.unhomedYears === null ? null : c.unhomedYears + 3,
       dependentCount: c.dependentCount,
       bankbookYears: c.bankbookYears + 3,
     }),

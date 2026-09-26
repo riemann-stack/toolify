@@ -3,14 +3,14 @@
 import { useEffect, useState } from 'react'
 import styles from './strength-level.module.css'
 import {
-  AGE_BAND_LABEL, AGE_FACTOR, FEMALE_FACTOR, BIG3_BASE_LEVELS,
+  AGE_BAND_LABEL, AGE_FACTOR, FEMALE_FACTOR, BIG3_BASE_LEVELS, adjustLevels,
   type AgeBand, type LevelTable,
 } from '../one-rm/oneRMUtils'
+import { wilks, dots, ipfGL, type Sex } from './strengthUtils'
 
 /* ─────────────────────────────────────────────────────────
  * 타입 & 기준 데이터
  * ───────────────────────────────────────────────────────── */
-type Sex = 'male' | 'female'
 type LiftKey = 'squat' | 'bench' | 'deadlift'
 type TabKey = 'level' | 'attempt' | 'plate' | 'record'
 
@@ -37,7 +37,7 @@ const BASE: Record<LiftKey, number[]> = {
 
 /* 레벨명 — index 0 = 초보 미만(입문) */
 const LEVELS = ['입문', '초보', '중급', '상급', '엘리트']
-const LEVEL_COLORS = ['var(--muted)', '#059669', '#0EA5E9', '#EA580C', '#DC2626']
+const LEVEL_COLORS = ['var(--muted)', 'var(--emerald-600)', 'var(--sky-500)', 'var(--orange-600)', 'var(--red-600)']
 
 /* ─────────────────────────────────────────────────────────
  * 헬퍼
@@ -63,36 +63,6 @@ function levelOf(ratio: number, thresholds: number[]): number {
   return idx
 }
 
-/* Wilks(원판) 점수 — 체중·합계 기반, 성별 다항식 */
-function wilks(total: number, bw: number, sex: Sex): number {
-  if (bw < 30 || total <= 0) return 0
-  const c = sex === 'male'
-    ? [-216.0475144, 16.2606339, -0.002388645, -0.00113732, 7.01863e-6, -1.291e-8]
-    : [594.31747775582, -27.23842536447, 0.82112226871, -0.00930733913, 4.731582e-5, -9.054e-8]
-  const d = c[0] + c[1] * bw + c[2] * bw ** 2 + c[3] * bw ** 3 + c[4] * bw ** 4 + c[5] * bw ** 5
-  return d !== 0 ? (total * 500) / d : 0
-}
-
-/* DOTS 점수 — 현대 표준, 성별 다항식 */
-function dots(total: number, bw: number, sex: Sex): number {
-  if (bw < 30 || total <= 0) return 0
-  const c = sex === 'male'
-    ? [-307.75076, 24.0900756, -0.1918759221, 0.0007391293, -0.000001093]
-    : [-57.96288, 13.6175032, -0.1126655495, 0.0005158568, -0.0000010706]
-  const d = c[0] + c[1] * bw + c[2] * bw ** 2 + c[3] * bw ** 3 + c[4] * bw ** 4
-  return d !== 0 ? (total * 500) / d : 0
-}
-
-/* IPF GL Points — 클래식(논장비) 풀파워 기준, 2020 공식 */
-function ipfGL(total: number, bw: number, sex: Sex): number {
-  if (bw < 40 || total <= 0) return 0
-  const [A, B, C] = sex === 'male'
-    ? [1199.72839, 1025.18162, 0.00921]
-    : [610.32796, 1045.59282, 0.03048]
-  const denom = A - B * Math.exp(-C * bw)
-  return denom > 0 ? (100 * total) / denom : 0
-}
-
 function scoreBand(s: number): string {
   if (s <= 0) return '—'
   if (s < 200) return '입문~초급 수준'
@@ -107,7 +77,12 @@ const round25 = (x: number) => Math.round(x / 2.5) * 2.5
 const floor25 = (x: number) => Math.floor(x / 2.5 + 1e-9) * 2.5
 function attemptSet(oneRM: number): { first: number; second: number; third: number } | null {
   if (oneRM <= 0) return null
-  return { first: floor25(oneRM * 0.90), second: round25(oneRM * 0.95), third: round25(oneRM) }
+  // 3차 = 현재 1RM 이하로 내림(반올림하면 1RM 103.75 → 105kg처럼 1RM을 넘김), 1·2차는 3차를 넘지 않게
+  const third = floor25(oneRM)
+  const first = Math.min(floor25(oneRM * 0.90), third)
+  let second = Math.min(round25(oneRM * 0.95), third)
+  if (second >= third && third - 2.5 > first) second = third - 2.5  // 2차=3차 중복 방지
+  return { first, second: Math.max(first, second), third }
 }
 
 /* 대회 원판 — IPF/IWF kg 색상, 바 20kg + 칼라 2.5kg×2 = 25kg base */
@@ -135,8 +110,20 @@ function platesFor(target: number): { side: Plate[]; loadable: boolean; actual: 
 /* 내 기록 (localStorage) */
 type Rec = { id: string; date: string; sex: Sex; bw: number; total: number; dots: number; ipfgl: number }
 const REC_KEY = 'youtil:strength-level:records-v1'
+const isFiniteNum = (v: unknown): v is number => typeof v === 'number' && Number.isFinite(v)
 function loadRecs(): Rec[] {
-  try { const r = localStorage.getItem(REC_KEY); const a = r ? JSON.parse(r) : []; return Array.isArray(a) ? a : [] }
+  if (typeof window === 'undefined') return []
+  try {
+    const r = localStorage.getItem(REC_KEY)
+    const a: unknown = r ? JSON.parse(r) : []
+    if (!Array.isArray(a)) return []
+    // 요소 필드 검증 — 손상된 항목은 버림(기록 탭 toFixed 크래시 방지)
+    return a.filter((x): x is Rec =>
+      !!x && typeof x === 'object' &&
+      typeof x.id === 'string' && typeof x.date === 'string' &&
+      (x.sex === 'male' || x.sex === 'female') &&
+      isFiniteNum(x.bw) && isFiniteNum(x.total) && isFiniteNum(x.dots) && isFiniteNum(x.ipfgl))
+  }
   catch { return [] }
 }
 function saveRecs(r: Rec[]): void {
@@ -172,7 +159,8 @@ export default function StrengthLevelClient() {
   const liftVals: Record<LiftKey, number> = { squat, bench, deadlift: dead }
   const perLift = LIFTS.map(({ key, label, emoji }) => {
     const w = liftVals[key]
-    const thresholds = BASE[key].map((t) => t * factor)
+    // 1RM 계산기와 같은 보정 임계(소수 2자리 반올림) — 경계값에서 두 도구 판정이 갈리지 않게
+    const thresholds = toThresholds(adjustLevels(BIG3_BASE_LEVELS[key], sex, age))
     const ratio = bw > 0 ? w / bw : 0
     const idx = w > 0 && bw > 0 ? levelOf(ratio, thresholds) : 0
     const nextThreshold = idx < 4 ? thresholds[idx] : null
@@ -218,7 +206,7 @@ export default function StrengthLevelClient() {
       `DOTS ${dotsScore.toFixed(1)} · Wilks ${wilksScore.toFixed(1)} · IPF GL ${ipfScore.toFixed(1)}`,
       'youtil.kr/tools/sports/strength-level',
     ].join('\n')
-    const done = () => { setCopied(true); window.setTimeout(() => setCopied(false), 1200) }
+    const done = () => { setCopied(true); window.setTimeout(() => setCopied(false), 1500) }
     try {
       if (navigator.clipboard?.writeText) {
         await navigator.clipboard.writeText(txt)
@@ -250,7 +238,7 @@ export default function StrengthLevelClient() {
     const id = `${d.getTime()}`
     const next = [{ id, date, sex, bw, total, dots: dotsScore, ipfgl: ipfScore }, ...recs].slice(0, 50)
     setRecs(next); saveRecs(next)
-    setSaved(true); window.setTimeout(() => setSaved(false), 1200)
+    setSaved(true); window.setTimeout(() => setSaved(false), 1500)
   }
   function delRecord(id: string) {
     const next = recs.filter((r) => r.id !== id)

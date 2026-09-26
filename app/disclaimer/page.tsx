@@ -1,6 +1,13 @@
+/* app/disclaimer/page.tsx (server) — 면책조항 (Trust Ledger 텍스트 페이지로 재조판)
+   ─ 분야별 박스의 임의 색·이모지 제거(스펙 §12: 제목·라벨 이모지 금지, 분야 색은 신호 전용) → 같은 괘선 블록.
+   ─ 2026-09-26 정정: 기관명(대한법률구조공단·금융감독원 1332), 국세청·홈택스 링크가 서로 바뀌어 있던 것, 근거가 불분명한 문장 1건 삭제.
+   번호가 원문에 있으므로 h2는 data-nonum. */
 import Link from 'next/link'
 import { buildMetadata } from '@/lib/seo'
 import { totalTools } from '@/lib/tools'
+import Callout from '@/components/Callout'
+import TrustPage from '../_trust/TrustPage'
+import s from '../_trust/trust.module.css'
 
 export const metadata = buildMetadata({
   path: '/disclaimer',
@@ -8,46 +15,15 @@ export const metadata = buildMetadata({
   description: 'Youtil의 모든 계산 도구는 일반 정보 제공 목적이며 전문가 자문을 대체하지 않습니다. 의료·건강, 세무·재무, 금융·투자, 법률, 식품·요리, 건축·인테리어, 화학·약품, 운동·스포츠, 예술·창작, 개발자 10개 분야별 강화 면책 안내.',
 })
 
-const LAST_UPDATED  = '2026년 5월 5일'
-const SITE_NAME     = 'Youtil'
-const CONTACT_EMAIL = 'contact@youtil.kr'
+const LAST_UPDATED     = '2026년 9월 26일'
+const LAST_UPDATED_ISO = '2026-09-26'
+const SITE_NAME        = 'Youtil'
+const CONTACT_EMAIL    = 'contact@youtil.kr'
 
-/* ─── 공통 스타일 ─── */
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-  fontSize: '20px',
-  fontWeight: 700,
-  color: 'var(--paper-ink)',
-  marginBottom: '14px',
-  marginTop: '40px',
-  letterSpacing: '-0.5px',
-}
-const card: React.CSSProperties = {
-  background: 'var(--paper-card)',
-  border: '1px solid var(--paper-line)',
-  borderRadius: '14px',
-  padding: '18px 22px',
-  marginBottom: '12px',
-}
-const para: React.CSSProperties = {
-  fontSize: '14px',
-  color: 'var(--paper-ink)',
-  lineHeight: 1.85,
-  margin: '0 0 10px',
-}
-const muted: React.CSSProperties = {
-  fontSize: '13px',
-  color: 'var(--paper-ink-soft)',
-  lineHeight: 1.8,
-  margin: '0 0 8px',
-}
-
-/* ─── 분야별 박스 데이터 ─── */
+/* ─── 분야별 블록 데이터 ─── */
 interface DomainBlock {
   id: string
-  emoji: string
   title: string
-  color: string
   tools: string
   warnings: string[]
   legal: string
@@ -57,9 +33,7 @@ interface DomainBlock {
 const DOMAINS: DomainBlock[] = [
   {
     id: 'medical',
-    emoji: '🏥',
     title: '의료·건강',
-    color: 'var(--cat-date)',
     tools: 'BMI · BMR · 다이어트 · 임신 주수 · 반려동물 나이 · 혈중알코올농도 · 영양제 상호작용 · 자외선 차단 · 생리 주기 추적',
     warnings: [
       '본 도구는 의학적 진단·치료·처방을 대체하지 않으며, 의사·약사·영양사 등 의료 전문가의 자문을 대신할 수 없습니다.',
@@ -69,13 +43,11 @@ const DOMAINS: DomainBlock[] = [
       '임신 주수·생리 주기 추적은 의료 진단이 아니며, 산부인과 정기 검진을 대체하지 않습니다.',
     ],
     legal: '「의료법」 제27조(무면허 의료행위 등 금지)·제56조(의료광고의 금지 등)·「약사법」 제68조에 따라 본 서비스는 의료 행위·의약품 권유·진단·치료를 제공하지 않습니다.',
-    recommend: '👉 응급 상황은 119·1339(질병관리청 콜센터). 정기 진료는 가까운 의원·종합병원·보건소 이용.',
+    recommend: '응급 상황은 119. 감염병 문의는 1339(질병관리청 콜센터). 정기 진료는 가까운 의원·종합병원·보건소 이용.',
   },
   {
     id: 'tax',
-    emoji: '💰',
     title: '세무·재무',
-    color: 'var(--cat-health)',
     tools: '연봉 실수령액 · 4대보험료 · 상속세 · 양도소득세 · 부동산 취득세 · 퇴직금 · 부가가치세 · 종합소득세 (해당 시) · 자동차 비용',
     warnings: [
       '세금 계산 결과는 2026년 기준 공식 요율을 적용하나, 비과세 항목·부양가족·세액공제·감면·중과세·이월결손금 등 개인 상황을 완전히 반영하지 못합니다.',
@@ -84,14 +56,12 @@ const DOMAINS: DomainBlock[] = [
       '4대보험료(국민연금·건강보험·고용보험·산재보험)는 사업장 형태(법인·개인사업자)·근무 형태(정규·일용·프리랜서)에 따라 요율이 다를 수 있습니다.',
       '세법은 매년·반기·임시 개정되며, 본 서비스가 항상 최신 개정을 반영한다고 보장하지 않습니다.',
     ],
-    legal: '「세무사법」 제2조에 따라 본 서비스는 세무대리(세무 신고·자문)를 수행하지 않습니다. 「전자상거래법」상 정보제공자에 해당.',
-    recommend: '👉 정확한 세무 계산·신고는 세무사·회계사 또는 국세청 홈택스(126·국세상담센터)·관할 세무서를 이용하세요.',
+    legal: '「세무사법」 제2조에 따라 본 서비스는 세무대리(세무 신고·자문)를 수행하지 않습니다.',
+    recommend: '정확한 세무 계산·신고는 세무사·회계사 또는 국세청 홈택스(126·국세상담센터)·관할 세무서를 이용하세요.',
   },
   {
     id: 'finance',
-    emoji: '📈',
     title: '금융·투자',
-    color: 'var(--cat-edu)',
     tools: '주식 평단가·손익 · 배당금 · 복리 · 적금·예금 · 공모주 청약 환급 · 종목 매수 결정 · 대출 이자 · 부동산 계산기 · 경매',
     warnings: [
       '본 서비스는 일반 금융 계산만 제공하며 「자본시장법」 제9조에 따른 투자권유·자문·매매중개·집합투자업에 해당하지 않습니다.',
@@ -102,13 +72,11 @@ const DOMAINS: DomainBlock[] = [
       '암호화폐·해외주식·파생상품 등 고위험 자산은 본 도구의 계산 범위가 아니며, 그 결과를 적용해서는 안 됩니다.',
     ],
     legal: '본 서비스는 「자본시장법」상 금융투자업·투자자문업·투자권유대행에 해당하지 않습니다.',
-    recommend: '👉 투자 결정은 금융감독원·금융소비자보호원(1332)·등록 투자자문업자·증권사 PB와 상담 후 본인 책임으로 진행하세요.',
+    recommend: '투자 결정은 금융감독원(1332)·등록 투자자문업자·증권사 PB와 상담 후 본인 책임으로 진행하세요.',
   },
   {
     id: 'legal',
-    emoji: '⚖️',
     title: '법률·민원',
-    color: 'var(--cat-cooking)',
     tools: '군 복무 D-day · 역사 시대 환산 · 한자·생활 단위 · 기타 법령 인용 도구',
     warnings: [
       '본 도구의 법률·법령 정보는 2026년 시점 공개 자료를 인용한 일반 정보입니다.',
@@ -117,13 +85,11 @@ const DOMAINS: DomainBlock[] = [
       '법령은 수시 개정되며, 본 서비스가 최신 개정을 즉시 반영한다고 보장하지 않습니다.',
     ],
     legal: '「변호사법」 제3조·제109조에 따라 본 서비스는 법률 자문·사건 알선·소송 대리 등을 수행하지 않습니다.',
-    recommend: '👉 법률 상담은 대한변협 법률구조공단(132)·서울지방변호사회(02-3476-4000)·국선변호인 제도 또는 가까운 변호사 사무실을 이용하세요.',
+    recommend: '법률 상담은 대한법률구조공단(132)·서울지방변호사회(02-3476-4000)·국선변호인 제도 또는 가까운 변호사 사무실을 이용하세요.',
   },
   {
     id: 'food',
-    emoji: '🍳',
     title: '식품·요리',
-    color: 'var(--cat-life)',
     tools: '식품 보관 기간 · 해동 시간 · 발효 일정 · 베이커 퍼센트 · 염도(절임·김치) · 시럽·당도 · 튀김 온도 · 차·커피 추출',
     warnings: [
       '식품 보관·해동 시간은 일반 권장치이며, 식품의 초기 신선도·냉장고 온도·포장 상태에 따라 실제 안전 기간이 크게 달라집니다.',
@@ -134,13 +100,11 @@ const DOMAINS: DomainBlock[] = [
       '본 도구는 식품의약품안전처(MFDS) 기준이 아닌 일반 가정 레시피 기준이며, 상업적 식품 제조에는 적용할 수 없습니다.',
     ],
     legal: '상업적 식품 제조·유통은 「식품위생법」·「축산물 위생관리법」·「식품등의 표시·광고에 관한 법률」 등 별도 규제를 따라야 합니다.',
-    recommend: '👉 식중독 의심 시 1339(질병관리청). 식품 안전 정보는 식품의약품안전처 식품안전나라(www.foodsafetykorea.go.kr).',
+    recommend: '식중독이 의심되면 의료기관 진료를 먼저 받고, 여러 명이 같은 증상을 보이면 관할 보건소에 신고. 식품 안전 정보는 식품의약품안전처 식품안전나라(www.foodsafetykorea.go.kr).',
   },
   {
     id: 'construction',
-    emoji: '🏗️',
     title: '건축·인테리어·구조',
-    color: 'var(--cat-art)',
     tools: '벽지·페인트·바닥재·몰딩·지붕 · 전선·배관·철근·볼트 토크·스크류 · 에어컨 평형 · 조명 와트',
     warnings: [
       '건축·인테리어 계산은 표준 시공 기준 어림치이며, 실제 자재 손실(10~15%)·시공 환경·구조 안전성을 고려하지 않습니다.',
@@ -151,30 +115,26 @@ const DOMAINS: DomainBlock[] = [
       '도장(페인트)·접착제·석면 함유 자재 시공 시 환기·보호장구·산업안전보건법 준수 필수.',
     ],
     legal: '「건축법」·「산업안전보건법」·「전기공사업법」에 따른 자격·인허가가 필요한 작업은 본 도구의 결과만으로 시공할 수 없습니다.',
-    recommend: '👉 셀프 인테리어는 안전 작업·조명·도장 수준까지. 전기·가스·구조·내력벽 변경은 반드시 자격 보유자(전기기사·가스기사·건축사) 시공.',
+    recommend: '셀프 인테리어는 안전 작업·조명·도장 수준까지. 전기·가스·구조·내력벽 변경은 반드시 자격 보유자(전기기사·가스기사·건축사) 시공.',
   },
   {
     id: 'chemical',
-    emoji: '🧪',
     title: '화학·약품',
-    color: 'var(--warning)',
     tools: '농도 변환 (%·ppm·ppb·mg/L·g/L) · 소독액 희석 · 비료 EC',
     warnings: [
       '약품·소독액 농도 계산은 수용액 가정의 일반 환산이며, 실제 사용 농도·반응 시간은 제조사 라벨을 우선해야 합니다.',
-      '⚠️ 산성 세제(식초·구연산·변기세정제) + 염소계 표백제(락스) 절대 혼합 금지 — 유독한 염소가스(Cl₂) 발생, 사망 사고 다수 보고.',
+      '산성 세제(식초·구연산·변기세정제) + 염소계 표백제(락스) 절대 혼합 금지 — 유독한 염소가스(Cl₂) 발생, 사망 사고 다수 보고.',
       '락스(차아염소산나트륨)·과산화수소·산성 세제는 저농도라도 피부·호흡기·눈을 자극합니다. 환기·장갑·고글 착용 필수.',
       '의료기기·전문 화학 실험에서는 보정된 기기·표준 시약 사용. 본 도구는 일반 가정 위생·정원 비료 수준만 참고.',
       '아기·반려동물·노약자가 있는 공간에서는 충분히 환기 후 잔여 화학물질을 닦아내세요.',
       '농약·살충제는 「농약관리법」 등록 제품을 안내된 농도로만 사용. 무허가 자가 혼합은 위험·불법.',
     ],
     legal: '의료용 소독·살균은 「의료기기법」·「약사법」, 농약은 「농약관리법」, 산업용 화학물질은 「화학물질관리법」을 따릅니다.',
-    recommend: '👉 약품 중독·노출 시 119·1339(질병관리청). 식품의약품안전처(MFDS)·환경부 화학물질안전원의 공식 가이드 우선 참조.',
+    recommend: '약품 중독·노출 시 119. 식품의약품안전처(MFDS)·환경부 화학물질안전원의 공식 가이드 우선 참조.',
   },
   {
     id: 'sports',
-    emoji: '🏃',
     title: '운동·스포츠',
-    color: 'var(--cat-edu)',
     tools: '러닝 페이스 · 마라톤 예측 · 1RM · 인터벌 트레이닝 · 골프 핸디캡·비거리·비용 · 야구·축구 통계 · 격투기 체급',
     warnings: [
       '1RM(1회 최대 중량) 추정은 Epley·Brzycki 등 공식 기반이며, 실제 시도 전 자격 트레이너 지도와 워밍업이 필수입니다.',
@@ -184,13 +144,11 @@ const DOMAINS: DomainBlock[] = [
       '경기 규칙·체급·핸디캡 산정은 해당 협회(KFA·KBA·KGA·KFC 등) 공식 규정을 우선합니다.',
     ],
     legal: '본 서비스는 「국민체육진흥법」상 전문 체육지도자(생활스포츠지도사·전문스포츠지도사)의 지도를 대체하지 않습니다.',
-    recommend: '👉 부상 시 정형외과·재활의학과. 운동 처방은 자격 트레이너·물리치료사·운동처방사와 상담.',
+    recommend: '부상 시 정형외과·재활의학과. 운동 처방은 자격 트레이너·물리치료사·운동처방사와 상담.',
   },
   {
     id: 'art',
-    emoji: '🎨',
     title: '예술·창작·공예',
-    color: 'var(--cat-art)',
     tools: '물감·잉크 혼합 · 색상 변환 · 사진 노출·화각 · 황금비율 · 뜨개질 게이지 · 글자수 · 더미 텍스트',
     warnings: [
       '본 도구의 색 시뮬레이션은 디지털 RGB 공간의 근사이며, 실제 물감·잉크의 안료 농도·매체(수성/유성)·건조 후 변색을 완전히 반영하지 않습니다. 정확한 색은 반드시 소량 테스트 후 작업하세요.',
@@ -202,13 +160,11 @@ const DOMAINS: DomainBlock[] = [
       '사진 노출·화각·심도 계산은 디지털 근사이며 실제 카메라·렌즈의 광학적 특성·색감·해상력은 별도 평가가 필요합니다.',
     ],
     legal: '의료용 소독·식용 색소는 「의료기기법」·「약사법」·「식품위생법」, 화학물질은 「화학물질관리법」을 따릅니다. 본 서비스의 색·안료 혼합 정보는 일반 가정·취미용 참고이며 상업적 식품 제조·의료 용도로 사용할 수 없습니다.',
-    recommend: '👉 화학·식용 색소 안전 정보는 식품의약품안전처(MFDS)·환경부 화학물질안전원. 뜨개질 패턴은 디자이너 원본 사이즈 표 우선 참조.',
+    recommend: '화학·식용 색소 안전 정보는 식품의약품안전처(MFDS)·환경부 화학물질안전원. 뜨개질 패턴은 디자이너 원본 사이즈 표 우선 참조.',
   },
   {
     id: 'dev',
-    emoji: '🖥️',
     title: '개발자·인코딩·암호',
-    color: 'var(--cat-dev)',
     tools: 'Base64 · JSON · CSS 변환 · 진법 변환 · 해시 생성기 · 정규식 테스트기 · YAML ↔ JSON 변환 · URL 인코더/디코더 · cURL 변환기 · HTTP 상태 코드 검색기',
     warnings: [
       '본 도구의 해시 알고리즘 중 MD5·SHA-1은 충돌 공격이 알려져 비밀번호 해싱·디지털 서명·SSL 인증서 용도로 사용 금지. 파일 무결성 확인 용도로만 사용하세요.',
@@ -224,215 +180,133 @@ const DOMAINS: DomainBlock[] = [
       'CSS·진법 변환 등 단순 도구라도 출력 결과의 정확성·호환성은 사용 환경(브라우저·OS·언어)에 따라 미세 차이가 있을 수 있습니다.',
     ],
     legal: '본 도구는 일반 개발 보조용이며 「전자서명법」상 공인 디지털 서명·「개인정보 보호법」상 안전성 확보 조치를 대체하지 않습니다. 「정보통신망법」상 보안 의무는 별도로 적용됩니다.',
-    recommend: '👉 보안 정밀 검토는 KISA(한국인터넷진흥원)·OWASP 가이드 참고. 인증·암호화 라이브러리는 검증된 표준(NIST·RFC) 우선. 의심 시 정보보호 전문가 자문.',
+    recommend: '보안 정밀 검토는 KISA(한국인터넷진흥원)·OWASP 가이드 참고. 인증·암호화 라이브러리는 검증된 표준(NIST·RFC) 우선. 의심 시 정보보호 전문가 자문.',
   },
+]
+
+
+const TOC = [
+  { id: 'general', label: '1. 일반 면책' },
+  { id: 'domains', label: '2. 분야별 강화 면책' },
+  { id: 'sources', label: '3. 외부 자료·법령 인용에 관한 면책' },
+  { id: 'user', label: '4. 사용자의 책임' },
+  { id: 'report', label: '5. 신고·정정 요청 채널' },
+  { id: 'history', label: '6. 변경 이력' },
 ]
 
 export default function DisclaimerPage() {
   return (
-    <div style={{ background: 'var(--paper)' }}>
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--paper-ink-soft)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>
-        법적 고지
+    <TrustPage
+      path="/disclaimer"
+      eyebrow="정책"
+      icon="info"
+      title="면책조항"
+      lead={<>{SITE_NAME}의 모든 도구는 <strong>일반 정보 제공·교육·참고 목적</strong>입니다. 의료·세무·금융·법률 등 전문가 자문이 필요한 사안에 계산 결과를 단독 근거로 쓰지 마세요.</>}
+      meta={[
+        <>최종 업데이트 <time dateTime={LAST_UPDATED_ISO}>{LAST_UPDATED}</time></>,
+        <><Link href="/terms">이용약관</Link> 제7조의 보강 문서</>,
+      ]}
+      toc={TOC}
+      tocNumbered={false}
+    >
+      <Callout tone="warn" title="핵심 요약">
+        {SITE_NAME}의 모든 도구는 <strong>일반 정보 제공·교육·참고 목적</strong>입니다. 의료·세무·금융·법률 등 전문가 자문이 필요한 사안에 본 서비스의 계산 결과를 단독 근거로 사용하지 마세요.
+        본 서비스는 <strong>「있는 그대로(As-Is)」</strong> 제공되며 정확성·완전성·최신성을 보장하지 않습니다.
+        서비스 이용으로 발생한 직접·간접 손해에 대해 운영자는 법적 책임을 지지 않습니다.
+      </Callout>
+
+      <h2 id="general" data-nonum="">1. 일반 면책 (As-Is · 무보증 · 책임 한계)</h2>
+      <p>
+        <strong>1.1 「있는 그대로(As-Is)」 제공</strong> — 본 서비스 및 모든 계산 도구는 현재 상태 그대로 제공되며, 명시적 또는 묵시적으로 어떠한 보증(상품성·특정 목적 적합성·정확성·완전성·최신성·무중단성·무오류성)도 하지 않습니다.
       </p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
-        ⚠️ 면책조항 (Disclaimer)
-      </h1>
-      <p style={{ fontSize: '13px', color: 'var(--paper-ink-soft)', marginBottom: '28px' }}>
-        최종 업데이트: {LAST_UPDATED} · 「<a href="/terms" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>이용약관</a>」 제7조의 보강 문서
+      <p>
+        <strong>1.2 정확성 보장 없음</strong> — {SITE_NAME}은 도구의 계산 로직·공식·외부 인용 자료(법령·공식 요율·공인 통계)의 정확성과 최신성을 보장하지 않습니다. 법령·세율·요율·물가·환율·이자율·공식 가이드는 수시로 변경되며, 본 서비스가 즉시 반영한다고 보장하지 않습니다.
       </p>
-
-      {/* 핵심 요약 */}
-      <div style={{
-        background: 'color-mix(in srgb, var(--warning) 6%, var(--paper-card))',
-        border: '1px solid color-mix(in srgb, var(--warning) 32%, var(--paper-line))',
-        borderRadius: '14px',
-        padding: '18px 22px',
-        marginBottom: '32px',
-      }}>
-        <p style={{ fontSize: '14px', color: 'var(--paper-ink)', lineHeight: 1.85, margin: 0 }}>
-          <strong style={{ color: 'var(--warning)' }}>핵심 요약</strong> — {SITE_NAME}의 모든 도구는{' '}
-          <strong>일반 정보 제공·교육·참고 목적</strong>입니다. 의료·세무·금융·법률 등 전문가 자문이 필요한 사안에 본 서비스의 계산 결과를 단독 근거로 사용하지 마세요.
-          본 서비스는 <strong>「있는 그대로(As-Is)」</strong> 제공되며 정확성·완전성·최신성을 보장하지 않습니다.
-          서비스 이용으로 발생한 직접·간접 손해에 대해 운영자는 법적 책임을 지지 않습니다.
-        </p>
-      </div>
-
-      {/* 분야 빠른 이동 */}
-      <div style={card}>
-        <p style={{ fontSize: 11, color: 'var(--paper-ink-soft)', textTransform: 'uppercase', letterSpacing: '0.06em', margin: '0 0 12px', fontWeight: 600 }}>
-          📑 분야별 빠른 이동
-        </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 6 }}>
-          {DOMAINS.map((d) => (
-            <a key={d.id} href={`#${d.id}`} style={{
-              background: 'var(--paper-dim)',
-              border: '1px solid var(--paper-line)',
-              borderRadius: 999,
-              padding: '6px 12px',
-              fontSize: 12,
-              color: 'var(--paper-ink)',
-              textDecoration: 'none',
-              fontWeight: 600,
-            }}>
-              {d.emoji} {d.title}
-            </a>
-          ))}
-        </div>
-      </div>
-
-      {/* 1. 일반 면책 */}
-      <h2 style={sectionTitle}>1. 일반 면책 (As-Is · 무보증 · 책임 한계)</h2>
-      <div style={card}>
-        <p style={para}>
-          <strong>1.1 「있는 그대로(As-Is)」 제공</strong> — 본 서비스 및 모든 계산 도구는 현재 상태 그대로 제공되며, 명시적 또는 묵시적으로 어떠한 보증(상품성·특정 목적 적합성·정확성·완전성·최신성·무중단성·무오류성)도 하지 않습니다.
-        </p>
-        <p style={para}>
-          <strong>1.2 정확성 보장 없음</strong> — {SITE_NAME}은 도구의 계산 로직·공식·외부 인용 자료(법령·공식 요율·공인 통계)의 정확성과 최신성을 보장하지 않습니다. 법령·세율·요율·물가·환율·이자율·공식 가이드는 수시로 변경되며, 본 서비스가 즉시 반영한다고 보장하지 않습니다.
-        </p>
-        <p style={para}>
-          <strong>1.3 책임 한계</strong> — 이용자가 본 서비스의 계산 결과를 사용함으로써 발생한 직접·간접·부수·결과·징벌적 손해(데이터 손실·이익 상실·기회비용·법적 책임·신체 상해·재산 피해 등)에 대해 {SITE_NAME}, 운영자, 기여자는 어떠한 법적 책임도 지지 않습니다.
-        </p>
-        <p style={para}>
-          <strong>1.4 전문가 자문 우선</strong> — 의료·세무·금융·법률·건축·화학·식품·운동 등 전문 분야 결정에는 반드시 해당 분야 자격 보유 전문가의 자문을 우선하세요. 본 서비스 결과만으로 결정·시행하지 마세요.
-        </p>
-        <p style={para}>
-          <strong>1.5 사용자 책임</strong> — 입력 데이터의 정확성, 계산 결과의 해석, 결과의 실제 적용은 전적으로 이용자 본인의 책임입니다.
-        </p>
-      </div>
-
-      {/* 2. 분야별 강화 면책 */}
-      <h2 style={sectionTitle}>2. 분야별 강화 면책</h2>
-      <p style={muted}>
-        {totalTools}개 도구가 {DOMAINS.length}개 위험 영역에 걸쳐 있어, 각 영역별로 추가 면책을 명시합니다. 도구 페이지 내 짧은 인라인 경고는 아래 박스의 요약입니다.
+      <p>
+        <strong>1.3 책임 한계</strong> — 이용자가 본 서비스의 계산 결과를 사용함으로써 발생한 직접·간접·부수·결과·징벌적 손해(데이터 손실·이익 상실·기회비용·법적 책임·신체 상해·재산 피해 등)에 대해 {SITE_NAME}, 운영자, 기여자는 어떠한 법적 책임도 지지 않습니다.
+      </p>
+      <p>
+        <strong>1.4 전문가 자문 우선</strong> — 의료·세무·금융·법률·건축·화학·식품·운동 등 전문 분야 결정에는 반드시 해당 분야 자격 보유 전문가의 자문을 우선하세요. 본 서비스 결과만으로 결정·시행하지 마세요.
+      </p>
+      <p>
+        <strong>1.5 사용자 책임</strong> — 입력 데이터의 정확성, 계산 결과의 해석, 결과의 실제 적용은 전적으로 이용자 본인의 책임입니다.
       </p>
 
+      <h2 id="domains" data-nonum="">2. 분야별 강화 면책</h2>
+      <p>
+        {totalTools}개 도구가 {DOMAINS.length}개 위험 영역에 걸쳐 있어, 각 영역별로 추가 면책을 명시합니다. 도구 페이지 내 짧은 인라인 경고는 아래 내용의 요약입니다.
+      </p>
+      <p>
+        분야 바로가기:{' '}
+        {DOMAINS.map((d, i) => (
+          <span key={d.id}>{i > 0 && ' · '}<a href={`#${d.id}`}>{d.title}</a></span>
+        ))}
+      </p>
       {DOMAINS.map((d) => (
-        <div
-          key={d.id}
-          id={d.id}
-          style={{
-            background: 'var(--paper-card)',
-            border: `1px solid color-mix(in srgb, ${d.color} 25%, var(--paper-line))`,
-            borderLeft: `4px solid ${d.color}`,
-            borderRadius: '14px',
-            padding: '20px 24px',
-            marginBottom: '14px',
-            scrollMarginTop: '80px',
-          }}
-        >
-          <h3 style={{
-            fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif',
-            fontSize: '18px',
-            fontWeight: 700,
-            color: `color-mix(in srgb, ${d.color} 70%, var(--paper-ink))`,
-            margin: '0 0 6px',
-          }}>
-            {d.emoji} {d.title}
-          </h3>
-          <p style={{ fontSize: 12, color: 'var(--paper-ink-soft)', margin: '0 0 14px', lineHeight: 1.7 }}>
-            관련 도구: <span style={{ color: 'var(--paper-ink)' }}>{d.tools}</span>
-          </p>
-          <ul style={{ paddingLeft: 18, margin: '0 0 12px', display: 'flex', flexDirection: 'column', gap: 8 }}>
-            {d.warnings.map((w, i) => (
-              <li key={i} style={{ fontSize: 13, color: 'var(--paper-ink)', lineHeight: 1.75 }}>{w}</li>
-            ))}
+        <section key={d.id} id={d.id} className={s.domain} aria-labelledby={`${d.id}-t`}>
+          <h3 id={`${d.id}-t`}>{d.title}</h3>
+          <p className={s.domainTools}><b>관련 도구</b> {d.tools}</p>
+          <ul>
+            {d.warnings.map((w) => <li key={w}>{w}</li>)}
           </ul>
-          <div style={{
-            background: 'var(--paper-dim)',
-            borderRadius: 8,
-            padding: '10px 14px',
-            marginBottom: 8,
-          }}>
-            <p style={{ fontSize: 12, color: 'var(--paper-ink-soft)', margin: 0, lineHeight: 1.7 }}>
-              ⚖️ <strong style={{ color: 'var(--paper-ink)' }}>법령 관계</strong> — {d.legal}
-            </p>
-          </div>
-          <p style={{ fontSize: 13, color: 'var(--paper-ink-soft)', margin: 0, lineHeight: 1.7 }}>
-            {d.recommend}
-          </p>
-        </div>
+          <p className={s.domainLaw}><b>법령 관계</b> — {d.legal}</p>
+          <p className={s.domainGo}>{d.recommend}</p>
+        </section>
       ))}
 
-      {/* 3. 외부 자료·법령 인용 */}
-      <h2 style={sectionTitle}>3. 외부 자료·법령 인용에 관한 면책</h2>
-      <div style={card}>
-        <p style={para}>
-          본 서비스의 도구 설명·계산 공식에는 정부 부처·공공기관·학술 자료 등의 공개 정보가 인용되어 있습니다. 인용 시점의 자료를 기반으로 작성되었으므로, 다음 사항을 유의해 주세요.
-        </p>
-        <ul style={{ paddingLeft: 20, margin: '0 0 10px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <li style={muted}>법령·세율·요율·통계는 개정 시점과 본 서비스 업데이트 시점 간에 시차가 발생할 수 있습니다.</li>
-          <li style={muted}>외부 사이트 링크는 편의 제공 목적이며, 해당 사이트의 콘텐츠·운영에 {SITE_NAME}은 책임지지 않습니다.</li>
-          <li style={muted}>인용된 공식·표준이 잘못 인용되었거나 누락된 경우 정정 요청을 환영합니다.</li>
-        </ul>
-        <p style={muted}>
-          정확한 최신 법령은 <a href="https://www.law.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>국가법령정보센터(www.law.go.kr)</a>, 세제는 <a href="https://www.nts.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>국세청 홈택스</a>·<a href="https://www.hometax.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>국세청 126</a>에서 확인하실 수 있습니다.
-        </p>
-      </div>
+      <h2 id="sources" data-nonum="">3. 외부 자료·법령 인용에 관한 면책</h2>
+      <p>
+        본 서비스의 도구 설명·계산 공식에는 정부 부처·공공기관·학술 자료 등의 공개 정보가 인용되어 있습니다. 인용 시점의 자료를 기반으로 작성되었으므로, 다음 사항을 유의해 주세요.
+      </p>
+      <ul>
+        <li>법령·세율·요율·통계는 개정 시점과 본 서비스 업데이트 시점 간에 시차가 발생할 수 있습니다.</li>
+        <li>외부 사이트 링크는 편의 제공 목적이며, 해당 사이트의 콘텐츠·운영에 {SITE_NAME}은 책임지지 않습니다.</li>
+        <li>인용된 공식·표준이 잘못 인용되었거나 누락된 경우 정정 요청을 환영합니다.</li>
+      </ul>
+      <p>
+        정확한 최신 법령은 <a href="https://www.law.go.kr" target="_blank" rel="noopener noreferrer">국가법령정보센터(www.law.go.kr)<span className="srOnly">(새 창)</span></a>,
+        세제는 <a href="https://www.nts.go.kr" target="_blank" rel="noopener noreferrer">국세청(www.nts.go.kr)<span className="srOnly">(새 창)</span></a>·<a href="https://www.hometax.go.kr" target="_blank" rel="noopener noreferrer">홈택스(www.hometax.go.kr)<span className="srOnly">(새 창)</span></a>·국세상담센터(126)에서 확인하실 수 있습니다.
+      </p>
 
-      {/* 4. 사용자 책임 */}
-      <h2 style={sectionTitle}>4. 사용자의 책임</h2>
-      <div style={card}>
-        <ul style={{ paddingLeft: 20, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
-          <li style={para}><strong>입력 데이터의 정확성</strong> — 잘못된 입력은 잘못된 결과를 만듭니다. 단위·소수점·기간을 반드시 확인하세요.</li>
-          <li style={para}><strong>결과의 해석</strong> — 단일 수치만 보지 말고 도구 페이지의 설명·표·FAQ를 함께 참고하세요.</li>
-          <li style={para}><strong>실제 적용 전 검증</strong> — 의료·금전·안전과 관련된 결과는 다른 출처(공식 기관·전문가)와 교차 확인 후 사용.</li>
-          <li style={para}><strong>법령 변경 추적</strong> — 본인이 사용하는 분야의 법령·요율 개정은 직접 모니터링해 주세요.</li>
-        </ul>
-      </div>
+      <h2 id="user" data-nonum="">4. 사용자의 책임</h2>
+      <ul>
+        <li><strong>입력 데이터의 정확성</strong> — 잘못된 입력은 잘못된 결과를 만듭니다. 단위·소수점·기간을 반드시 확인하세요.</li>
+        <li><strong>결과의 해석</strong> — 단일 수치만 보지 말고 도구 페이지의 설명·표·FAQ를 함께 참고하세요.</li>
+        <li><strong>실제 적용 전 검증</strong> — 의료·금전·안전과 관련된 결과는 다른 출처(공식 기관·전문가)와 교차 확인 후 사용.</li>
+        <li><strong>법령 변경 추적</strong> — 본인이 사용하는 분야의 법령·요율 개정은 직접 모니터링해 주세요.</li>
+      </ul>
 
-      {/* 5. 신고·정정 요청 */}
-      <h2 style={sectionTitle}>5. 신고·정정 요청 채널</h2>
-      <div style={card}>
-        <p style={para}>
-          계산 오류, 잘못된 인용, 부정확한 안내, 법령 개정 미반영 등을 발견하셨다면 아래 채널로 알려주세요. 빠르게 검토·수정하겠습니다.
-        </p>
-        <ul style={{ paddingLeft: 20, margin: '0 0 8px', display: 'flex', flexDirection: 'column', gap: 6 }}>
-          <li style={muted}>📧 <a href={`mailto:${CONTACT_EMAIL}`} style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>{CONTACT_EMAIL}</a> — 도구명·입력값·예상 결과·실제 결과를 함께 보내주시면 빠르게 처리됩니다.</li>
-          <li style={muted}>💬 <Link href="/contact" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>문의 페이지</Link> — 일반 문의·기능 요청·도구 추가 제안</li>
-        </ul>
-        <p style={muted}>
-          신고 시 개인정보(주민번호·계좌번호·연락처 등)는 절대 포함하지 마세요. 익명 신고도 환영합니다.
-        </p>
-      </div>
+      <h2 id="report" data-nonum="">5. 신고·정정 요청 채널</h2>
+      <p>
+        계산 오류, 잘못된 인용, 부정확한 안내, 법령 개정 미반영 등을 발견하셨다면 아래 채널로 알려주세요. 빠르게 검토·수정하겠습니다.
+      </p>
+      <dl className={s.facts}>
+        <dt>이메일</dt>
+        <dd><a href={`mailto:${CONTACT_EMAIL}`}>{CONTACT_EMAIL}</a><small>도구명·입력값·예상 결과·실제 결과를 함께 보내주시면 빠르게 처리됩니다.</small></dd>
+        <dt>문의 페이지</dt>
+        <dd><Link href="/contact">문의·오류 제보</Link><small>일반 문의·기능 요청·도구 추가 제안</small></dd>
+      </dl>
+      <p>
+        신고 시 개인정보(주민번호·계좌번호·연락처 등)는 절대 포함하지 마세요. 익명 신고도 환영합니다.
+        정정한 내용은 <Link href="/updates">업데이트 기록</Link>에 남깁니다.
+      </p>
 
-      {/* 6. 변경 이력 */}
-      <h2 style={sectionTitle}>6. 변경 이력</h2>
-      <div style={card}>
-        <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
-          <thead>
-            <tr style={{ borderBottom: '1px solid var(--paper-line)' }}>
-              <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--paper-ink-soft)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>날짜</th>
-              <th scope="col" style={{ padding: '8px 10px', textAlign: 'left', color: 'var(--paper-ink-soft)', fontSize: 11, textTransform: 'uppercase', letterSpacing: '0.05em' }}>변경 내용</th>
-            </tr>
-          </thead>
+      <h2 id="history" data-nonum="">6. 변경 이력</h2>
+      <div className={`tableScroll ${s.tableWrap}`}>
+        <table className={s.table}>
+          <thead><tr><th scope="col">날짜</th><th scope="col">변경 내용</th></tr></thead>
           <tbody>
-            <tr>
-              <td style={{ padding: '10px', color: 'var(--paper-ink)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>2026-05-05</td>
-              <td style={{ padding: '10px', color: 'var(--paper-ink)' }}>면책조항 페이지 신설(이용약관 제7조 보강) — 분야별 강화 면책 추가 (현재 10개 분야)</td>
-            </tr>
-            <tr>
-              <td style={{ padding: '10px', color: 'var(--paper-ink-soft)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>2026-04-12</td>
-              <td style={{ padding: '10px', color: 'var(--paper-ink)' }}>이용약관 제7조 면책조항 작성 (금융 일반)</td>
-            </tr>
+            <tr><td><time dateTime="2026-09-26">2026-09-26</time></td><td>문서 디자인 변경. 기관명·링크 오기 정정(대한법률구조공단, 금융감독원 1332, 국세청·홈택스 링크), 연락처 안내 정정(1339는 응급 번호가 아닌 질병관리청 콜센터 — 응급·중독은 119, 식중독은 진료 후 관할 보건소 신고), 근거가 불분명한 법령 언급 1건 삭제</td></tr>
+            <tr><td><time dateTime="2026-05-05">2026-05-05</time></td><td>면책조항 페이지 신설(이용약관 제7조 보강) — 분야별 강화 면책 추가 (현재 10개 분야)</td></tr>
+            <tr><td><time dateTime="2026-04-12">2026-04-12</time></td><td>이용약관 제7조 면책조항 작성 (금융 일반)</td></tr>
           </tbody>
         </table>
       </div>
 
-      {/* 마무리 */}
-      <div style={{
-        background: 'var(--paper-card)',
-        border: '1px solid var(--paper-line)',
-        borderRadius: '12px',
-        padding: '16px 20px',
-        marginTop: 24,
-      }}>
-        <p style={{ fontSize: 13, color: 'var(--paper-ink-soft)', margin: 0, lineHeight: 1.8 }}>
-          본 면책조항은 「<Link href="/terms" style={{ color: 'var(--paper-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>이용약관</Link>」의 일부를 구성합니다. 면책조항과 이용약관 간 해석상 충돌이 있을 경우, <strong style={{ color: 'var(--paper-ink)' }}>본 면책조항이 우선 적용</strong>됩니다.
-          서비스 이용으로 본 면책조항에 동의한 것으로 간주됩니다.
-        </p>
-      </div>
-    </div>
-    </div>
+      <Callout tone="note">
+        본 면책조항은 「<Link href="/terms">이용약관</Link>」의 일부를 구성합니다. 면책조항과 이용약관 간 해석상 충돌이 있을 경우, <strong>본 면책조항이 우선 적용</strong>됩니다.
+        서비스 이용으로 본 면책조항에 동의한 것으로 간주됩니다.
+      </Callout>
+    </TrustPage>
   )
 }

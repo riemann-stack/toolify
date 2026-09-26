@@ -15,6 +15,9 @@ import {
 
 type Profile = typeof CONSUMPTION_PROFILES[number]['id']
 
+// KAMIS 매핑된 항목만 실시간 조회
+const LIVE_TARGETS = ['baechu', 'mu', 'jjokpa', 'gochugaru', 'maneul', 'saenggang']
+
 interface PriceUpdate {
   id: string
   price: number
@@ -33,6 +36,8 @@ export default function KimjangClient() {
 
   // 가격 보정 (사용자가 직접 수정한 가격)
   const [priceOverrides, setPriceOverrides] = useState<Record<string, number>>({})
+  // 단가 입력 중인 문자열 — 칸을 비워도 기본가로 즉시 되돌아가지 않게 편집 중에는 따로 보관
+  const [priceDrafts, setPriceDrafts] = useState<Record<string, string>>({})
 
   // 실시간 가격
   const [livePrices, setLivePrices] = useState<Record<string, PriceUpdate>>({})
@@ -85,9 +90,7 @@ export default function KimjangClient() {
     setPriceLoading(true)
     setPriceError(false)
     try {
-      // KAMIS 매핑된 항목만
-      const target = ['baechu', 'mu', 'jjokpa', 'gochugaru', 'maneul', 'saenggang']
-      const res = await fetch(`/api/produce-price?items=${target.join(',')}`, { cache: 'no-store' })
+      const res = await fetch(`/api/produce-price?items=${LIVE_TARGETS.join(',')}`, { cache: 'no-store' })
       if (!res.ok) throw new Error(`HTTP ${res.status}`)
       const data = await res.json() as { ok: boolean; results?: PriceUpdate[] }
       if (data.ok && data.results) {
@@ -149,21 +152,31 @@ export default function KimjangClient() {
 
   /* 가격 직접 수정 */
   const onPriceEdit = (id: string, val: string) => {
+    setPriceDrafts(prev => ({ ...prev, [id]: val }))
     const n = parseFloat(val)
     if (!isFinite(n) || n < 0) {
+      // 빈칸·잘못된 값은 계산에서만 기본가로 대체하고, 입력칸은 사용자가 친 그대로 둠
       setPriceOverrides(prev => { const c = { ...prev }; delete c[id]; return c })
     } else {
-      setPriceOverrides(prev => ({ ...prev, [id]: n }))
+      setPriceOverrides(prev => ({ ...prev, [id]: Math.min(n, 10000000) }))
     }
   }
+  const onPriceBlur = (id: string) => {
+    setPriceDrafts(prev => { const c = { ...prev }; delete c[id]; return c })
+  }
 
+  // 실제로 KAMIS 값이 들어온 품목 수 — 일부만 받아졌는데 '6종 적용'으로 과장하지 않게
+  const liveCount = LIVE_TARGETS.filter(id => livePrices[id]?.source === 'kamis').length
   const priceSourceInfo = !priceLoaded
     ? '가격 조회 중…'
     : priceError
       ? '※ 시세 조회 실패 — 평균가로 계산 (참고용)'
-      : Object.values(livePrices).some(p => p.source === 'kamis')
-        ? '✓ KAMIS 실시간 시세 적용 (배추·무 등 농산물 6종)'
-        : '※ 평균가로 계산 (KAMIS 미연동, 참고용)'
+      : liveCount === LIVE_TARGETS.length
+        ? `✓ KAMIS 실시간 시세 적용 (배추·무 등 농산물 ${LIVE_TARGETS.length}종)`
+        : liveCount > 0
+          ? `✓ KAMIS 실시간 시세 ${liveCount}/${LIVE_TARGETS.length}종 적용 · 나머지는 평균가`
+          : '※ 평균가로 계산 (KAMIS 미연동, 참고용)'
+  const noPeople = adults + kids === 0
 
   return (
     <div className={s.wrap}>
@@ -180,6 +193,8 @@ export default function KimjangClient() {
 
       {/* ── 메인 히어로 ── */}
       <div className={s.heroCard}>
+        {/* 라이브 영역은 라벨+숫자만 — 새로고침 버튼·출처 문구(heroFootRow)는 제외 */}
+        <div role="status">
         <div className={s.heroLabel}>
           {adults}성인 {kids > 0 ? `+ ${kids}어린이 · ` : '·'} {months}개월 분량
         </div>
@@ -187,7 +202,7 @@ export default function KimjangClient() {
           <div className={s.heroBigItem}>
             <div className={s.heroNum}>{adjustedCabbages}</div>
             <div className={s.heroUnit}>포기</div>
-            <div className={s.heroSub}>배추 (≈{(adjustedCabbages * 3).toFixed(0)}kg)</div>
+            <div className={s.heroSub}>{noPeople ? '인원을 입력하면 다시 계산돼요' : `배추 (≈${(adjustedCabbages * 3).toFixed(0)}kg)`}</div>
           </div>
           <div className={s.heroDivider} />
           <div className={s.heroBigItem}>
@@ -195,6 +210,7 @@ export default function KimjangClient() {
             <div className={s.heroUnit}>{totalWon >= 10000 ? '만원' : '천원'}</div>
             <div className={s.heroSub}>예상 비용 ({totalWon.toLocaleString()}원)</div>
           </div>
+        </div>
         </div>
         <div className={s.heroFootRow}>
           <span className={s.priceSource}>{priceSourceInfo}</span>
@@ -215,22 +231,25 @@ export default function KimjangClient() {
 
         <div className={s.numRow}>
           <div className={s.numField}>
-            <label>성인</label>
-            <div className={s.numCtrl}>
+            <label id="kimjang-adults-label">성인</label>
+            <div className={s.numCtrl} role="group" aria-labelledby="kimjang-adults-label">
               <button type="button" aria-label="성인 한 명 줄이기" onClick={() => setAdults(Math.max(0, adults - 1))}>−</button>
               <span>{adults}</span>
               <button type="button" aria-label="성인 한 명 늘리기" onClick={() => setAdults(Math.min(15, adults + 1))}>+</button>
             </div>
           </div>
           <div className={s.numField}>
-            <label>어린이</label>
-            <div className={s.numCtrl}>
+            <label id="kimjang-kids-label">어린이</label>
+            <div className={s.numCtrl} role="group" aria-labelledby="kimjang-kids-label">
               <button type="button" aria-label="어린이 한 명 줄이기" onClick={() => setKids(Math.max(0, kids - 1))}>−</button>
               <span>{kids}</span>
               <button type="button" aria-label="어린이 한 명 늘리기" onClick={() => setKids(Math.min(10, kids + 1))}>+</button>
             </div>
           </div>
         </div>
+        {noPeople && (
+          <p className={s.priceSource} style={{ marginTop: 8 }}>성인·어린이가 모두 0명이라 최소 1포기로 표시했어요. 인원을 1명 이상 입력하세요.</p>
+        )}
 
         <div className={s.subLabel} style={{ marginTop: 14 }}>소비 패턴</div>
         <div className={s.profileGrid}>
@@ -295,7 +314,7 @@ export default function KimjangClient() {
               checked={reduceMain}
               onChange={e => setReduceMain(e.target.checked)}
             />
-            <span>배추김치 양을 부가 김치만큼 자동 줄이기 ({Math.round(totalReduce * 100)}%)</span>
+            <span>배추김치 양을 부가 김치만큼 자동 줄이기 ({Math.round(totalReduce * 100)}%) · 부가 김치 양념은 따로 더해져요</span>
           </label>
         )}
       </div>
@@ -329,8 +348,9 @@ export default function KimjangClient() {
                         <input
                           type="number" inputMode="decimal"
                           className={s.ingPriceInput}
-                          value={currentPrice}
+                          value={priceDrafts[it.ing.id] ?? currentPrice}
                           onChange={e => onPriceEdit(it.ing.id, e.target.value)}
+                          onBlur={() => onPriceBlur(it.ing.id)}
                           min={0}
                           step={1}
                           aria-label={`${it.ing.name} 단가`}

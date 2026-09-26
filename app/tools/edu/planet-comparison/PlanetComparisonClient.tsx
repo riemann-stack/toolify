@@ -1,7 +1,7 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import s from './planet-comparison.module.css'
 import { PLANETS, type Planet, fmtDistance, fmtLightTime, fmt, round, earthDistance } from './planetData'
 
@@ -22,7 +22,9 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
   const r = size / 2 - 4
   const cx = size / 2
   const cy = size / 2
-  const id = `grad-${planet.id}-${size}`
+  // 인스턴스별 고유 gradient id — 같은 행성·크기 일러스트가 두 번 렌더돼도 충돌하지 않게
+  const uid = useId().replace(/[^a-zA-Z0-9_-]/g, '')
+  const id = `grad-${planet.id}-${size}-${uid}`
 
   return (
     <svg width={size} height={size} viewBox={`0 0 ${size} ${size}`} aria-hidden="true">
@@ -36,7 +38,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
 
       {/* 토성 고리 (뒤쪽 절반) */}
       {planet.id === 'saturn' && (
-        <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#A16207" strokeWidth="2" opacity="0.55" />
+        <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="var(--yellow-700)" strokeWidth="2" opacity="0.55" />
       )}
 
       <circle cx={cx} cy={cy} r={r} fill={`url(#${id})`} stroke={planet.color} strokeWidth="0.5" opacity="0.95" />
@@ -45,7 +47,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
       {planet.id === 'saturn' && (
         <path
           d={`M ${cx - r * 1.55} ${cy} A ${r * 1.55} ${r * 0.30} 0 0 0 ${cx + r * 1.55} ${cy}`}
-          fill="none" stroke="#A16207" strokeWidth="2.5" opacity="0.9"
+          fill="none" stroke="var(--yellow-700)" strokeWidth="2.5" opacity="0.9"
         />
       )}
 
@@ -63,9 +65,9 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
       {/* 지구: 대륙 단순화 */}
       {planet.id === 'earth' && (
         <g clipPath={`circle(${r}px at ${cx}px ${cy}px)`} opacity="0.85">
-          <ellipse cx={cx - r * 0.30} cy={cy - r * 0.10} rx={r * 0.30} ry={r * 0.20} fill="#059669" />
-          <ellipse cx={cx + r * 0.20} cy={cy + r * 0.20} rx={r * 0.25} ry={r * 0.30} fill="#059669" />
-          <ellipse cx={cx - r * 0.50} cy={cy + r * 0.40} rx={r * 0.18} ry={r * 0.10} fill="#059669" />
+          <ellipse cx={cx - r * 0.30} cy={cy - r * 0.10} rx={r * 0.30} ry={r * 0.20} fill="var(--emerald-600)" />
+          <ellipse cx={cx + r * 0.20} cy={cy + r * 0.20} rx={r * 0.25} ry={r * 0.30} fill="var(--emerald-600)" />
+          <ellipse cx={cx - r * 0.50} cy={cy + r * 0.40} rx={r * 0.18} ry={r * 0.10} fill="var(--emerald-600)" />
         </g>
       )}
 
@@ -80,7 +82,7 @@ function PlanetIllustration({ planet, size = 80 }: { planet: Planet; size?: numb
 
       {/* 천왕성: 자전축 옆으로 굴러가는 느낌 */}
       {planet.id === 'uranus' && (
-        <ellipse cx={cx} cy={cy} rx={r * 1.15} ry={r * 0.12} fill="none" stroke="#0D9488" strokeWidth="1.5" opacity="0.5" transform={`rotate(80 ${cx} ${cy})`} />
+        <ellipse cx={cx} cy={cy} rx={r * 1.15} ry={r * 0.12} fill="none" stroke="var(--teal-600)" strokeWidth="1.5" opacity="0.5" transform={`rotate(80 ${cx} ${cy})`} />
       )}
 
       {/* 광택 하이라이트 */}
@@ -170,8 +172,7 @@ export default function PlanetComparisonClient() {
 
   // 공유 텍스트
   async function copyShare() {
-    /* ⚠️ 예전에는 수성·금성·화성·목성으로 고정돼 있어, 화성을 체크 해제해도 공유 카드에 남았다. */
-    const shown = (filteredCalcs.length ? filteredCalcs : planetCalcs).slice(0, 4)
+    const shown = shareCalcs
     const lines = [
       `🪐 우주 속의 ${userName ? userName + '님' : '나'}`,
       ``,
@@ -186,7 +187,7 @@ export default function PlanetComparisonClient() {
     try {
       await navigator.clipboard.writeText(lines.join('\n'))
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -227,7 +228,7 @@ export default function PlanetComparisonClient() {
             <g key={p.id}>
               {/* 행성 */}
               {p.id === 'saturn' && (
-                <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="#A16207" strokeWidth="1.5" opacity="0.7" />
+                <ellipse cx={cx} cy={cy} rx={r * 1.55} ry={r * 0.30} fill="none" stroke="var(--yellow-700)" strokeWidth="1.5" opacity="0.7" />
               )}
               <circle cx={cx} cy={cy} r={r} fill={p.color} opacity="0.95" />
               <ellipse cx={cx - r * 0.3} cy={cy - r * 0.3} rx={r * 0.3} ry={r * 0.15} fill="#fff" opacity="0.30" />
@@ -242,7 +243,7 @@ export default function PlanetComparisonClient() {
           )
         })}
         {/* 기준 라벨 */}
-        <text x={W / 2} y={20} textAnchor="middle" fill="#0D9488" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight={700} fontSize={12} letterSpacing="0.06em">
+        <text x={W / 2} y={20} textAnchor="middle" fill="var(--teal-600)" fontWeight={700} fontSize={12} letterSpacing="0.06em">
           크기 비교 (지구 = 1.0×)
         </text>
       </svg>
@@ -266,6 +267,13 @@ export default function PlanetComparisonClient() {
     }))
   }, [filteredCalcs])
 
+  /* 공유 카드와 복사 텍스트가 같은 목록을 쓴다 — 선택한 행성 중 지구를 뺀 앞 4개
+     (예전엔 카드는 수성·금성·화성·목성 고정, 복사는 선택 목록이라 서로 달랐다) */
+  const shareSelected = filteredCalcs.filter(c => c.planet.id !== 'earth')
+  const shareCalcs = (shareSelected.length ? shareSelected : planetCalcs.filter(c => c.planet.id !== 'earth')).slice(0, 4)
+  const marsDist = planetCalcs.find(c => c.planet.id === 'mars')?.dist
+  const neptuneDist = planetCalcs.find(c => c.planet.id === 'neptune')?.dist
+
   return (
     <div className={s.wrap}>
       {/* 면책 */}
@@ -273,7 +281,7 @@ export default function PlanetComparisonClient() {
         variant="default"
         related={[
           { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
-          { href: '/tools/edu/sci-units', label: '과학 단위 변환' },
+          { href: '/tools/edu/sig-figs?tab=notation', label: '과학적 표기·단위 변환' },
           { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
         ]}
       >
@@ -479,20 +487,21 @@ export default function PlanetComparisonClient() {
                     background: c.planet.color,
                     color: c.planet.color,
                     top: gravityRunning ? 'calc(100% - 14px)' : '0',
-                    transitionDuration: `${dur}s`,
+                    // 리셋 단계는 즉시 위로 스냅 — 두 상태 모두 dur였을 때 두 번째 클릭부터 재생되지 않았다
+                    transitionDuration: gravityRunning ? `${dur}s` : '0s',
                   }}
                 />
                 <span className={s.gravityLabel}>
                   {c.planet.name}
                   <br />
-                  <span style={{ fontSize: 9, color: c.planet.color }}>{round(c.planet.gravityRatio, 2)}g</span>
+                  <span style={{ fontSize: 11, color: c.planet.color }}>{round(c.planet.gravityRatio, 2)}g</span>
                 </span>
               </div>
             )
           })}
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 18, lineHeight: 1.7, textAlign: 'center' }}>
-          중력이 클수록 빨리 떨어집니다. 목성에서는 약 <strong style={{ color: '#EA580C' }}>1.5배 빠르게</strong>, 화성에서는 <strong style={{ color: '#DC2626' }}>1.6배 천천히</strong> 떨어집니다.
+          중력이 클수록 빨리 떨어집니다. 목성에서는 약 <strong style={{ color: 'var(--orange-600)' }}>1.5배 빠르게</strong>, 화성에서는 <strong style={{ color: 'var(--red-600)' }}>1.6배 천천히</strong> 떨어집니다.
         </p>
       </div>
 
@@ -592,7 +601,7 @@ export default function PlanetComparisonClient() {
           </table>
         </div>
         <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-          💡 지금 화성에 메시지를 보내면 빛의 속도로 약 <strong style={{ color: '#DC2626' }}>13분</strong>이 걸립니다. 해왕성까지는 약 <strong style={{ color: '#3E5BFF' }}>4시간</strong>.
+          💡 화성에 메시지를 보내면 빛의 속도로도 가장 가까울 때 약 <strong style={{ color: 'var(--red-600)' }}>{marsDist ? fmtLightTime(marsDist.minLightMin) : '4분'}</strong>, 가장 멀 때 약 <strong style={{ color: 'var(--red-600)' }}>{marsDist ? fmtLightTime(marsDist.maxLightMin) : '21분'}</strong>이 걸립니다. 해왕성까지는 약 <strong style={{ color: '#3E5BFF' }}>{neptuneDist ? fmtLightTime(neptuneDist.minLightMin) : '4시간'}</strong>.
         </p>
       </div>
 
@@ -603,12 +612,7 @@ export default function PlanetComparisonClient() {
           지구의 <strong>{age}세 {weight}kg</strong>인 {userName ? userName + '님은' : '나는'}...
         </p>
         <div className={s.shareList}>
-          {[
-            planetCalcs.find(c => c.planet.id === 'mercury'),
-            planetCalcs.find(c => c.planet.id === 'venus'),
-            planetCalcs.find(c => c.planet.id === 'mars'),
-            planetCalcs.find(c => c.planet.id === 'jupiter'),
-          ].filter((c): c is NonNullable<typeof c> => !!c).map(c => (
+          {shareCalcs.map(c => (
             <div key={c.planet.id} className={s.shareListItem}>
               <span>🌟 {c.planet.name}에서</span>
               <strong>{round(c.ageOnPlanet, 1)}세, {round(c.weightOnPlanet, 1)}kg</strong>
@@ -633,7 +637,7 @@ export default function PlanetComparisonClient() {
       <div className={s.warningCard}>
         <strong>⚠️ 실제로 인간이 다른 행성에 가면...</strong>
         <ul>
-          <li><strong style={{ color: 'var(--text)' }}>수성·금성:</strong> 표면 온도가 너무 극단적이라 즉시 사망 (수성 -173~427°C, 금성 462°C)</li>
+          <li><strong style={{ color: 'var(--text)' }}>수성·금성:</strong> 표면 온도가 너무 극단적이라 즉시 사망 (수성 -173~427°C, 금성 464°C)</li>
           <li><strong style={{ color: 'var(--text)' }}>화성:</strong> 산소 X, 기압 0.01 → 우주복 필수</li>
           <li><strong style={{ color: 'var(--text)' }}>목성·토성·천왕성·해왕성:</strong> 가스 행성이라 표면이 없음</li>
         </ul>
@@ -644,7 +648,7 @@ export default function PlanetComparisonClient() {
 
       <div className={s.sourceCard}>
         <strong>데이터 출처:</strong> 행성 데이터는 NASA Solar System Exploration 기준입니다.
-        거리는 <strong>궤도 반지름의 차·합</strong>으로 구한 값입니다(원 궤도로 단순화한 근사). 두 행성이 태양을 도는 위치에 따라 최소~최대 사이에서 계속 변합니다 — 화성은 가장 가까울 때와 멀 때가 7배 넘게 차이 납니다.
+        거리는 <strong>궤도 반지름의 차·합</strong>으로 구한 값입니다(원 궤도로 단순화한 근사). 두 행성이 태양을 도는 위치에 따라 최소~최대 사이에서 계속 변합니다 — 화성은 이 근사로도 가장 가까울 때와 멀 때가 약 5배 차이 나고, 궤도 이심률까지 반영하면 실제로는 7배 넘게 벌어집니다.
         정확한 천문 데이터는 NASA, KASI(한국천문연구원) 등 공식 기관 자료를 참조하세요.
       </div>
     </div>

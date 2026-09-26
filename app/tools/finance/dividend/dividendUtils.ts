@@ -6,6 +6,21 @@
    ────────────────────────────────────────────────────── */
 
 import { BRACKETS_2026, marginalRate } from '@/lib/krIncomeTax'
+import {
+  GENERAL_DIVIDEND_TAX_RATE, DIVIDEND_WITHHOLDING_RATE, LOCAL_INCOME_TAX_RATIO, ratePct,
+  COMPREHENSIVE_TAX_THRESHOLD as FIN_COMPREHENSIVE_THRESHOLD,
+} from '@/lib/krFinancialIncomeTax'
+
+/* 배당소득 일반과세 15.4% = 소득세 14%(소득세법 §129①2호) + 지방소득세 1.4%(지방세법 §103의13) — lib 단일 소스.
+   화면 문구(page·Client)도 이 값들을 보간해 쓴다 */
+export const GEN_PCT = ratePct(GENERAL_DIVIDEND_TAX_RATE)
+export const WH_PCT = ratePct(DIVIDEND_WITHHOLDING_RATE)
+export const LOCAL_PCT = ratePct(DIVIDEND_WITHHOLDING_RATE * LOCAL_INCOME_TAX_RATIO)
+/** 금융소득종합과세 기준 표기 '2,000만' (소득세법 §14③6호) */
+export const THRESHOLD_MAN = `${(FIN_COMPREHENSIVE_THRESHOLD / 10_000).toLocaleString('ko-KR')}만`
+/** 종합소득세 최저·최고 한계세율(지방세 포함, %) — lib/krIncomeTax 누진세율표 양 끝 (6.6 · 49.5) */
+export const BOTTOM_BRACKET_PCT = ratePct(marginalRate(0, { localTax: true }))
+export const TOP_BRACKET_PCT = ratePct(marginalRate(Infinity, { localTax: true }))
 
 /* ─── 한국 배당 세제 (2026년 기준) ─── */
 export interface TaxAccount {
@@ -24,9 +39,9 @@ export interface TaxAccount {
 
 export const TAX_ACCOUNTS: TaxAccount[] = [
   { id: 'general',        name: '일반 계좌',
-    taxRate: 0.154, annualLimit: Infinity, comprehensive: true,
-    desc: '배당소득세 15.4% (소득세 14% + 지방소득세 1.4%)',
-    pros: '제한 없음 · 자유 인출', cons: '연 2,000만↑ 종합과세 (최대 49.5%)' },
+    taxRate: GENERAL_DIVIDEND_TAX_RATE, annualLimit: Infinity, comprehensive: true,
+    desc: `배당소득세 ${GEN_PCT}% (소득세 ${WH_PCT}% + 지방소득세 ${LOCAL_PCT}%)`,
+    pros: '제한 없음 · 자유 인출', cons: `연 ${THRESHOLD_MAN}↑ 종합과세 (최대 ${TOP_BRACKET_PCT}%)` },
   { id: 'isa-saving',     name: 'ISA (서민형)',
     taxRate: 0.099, nonTaxableLimit: 4_000_000,
     annualLimit: 20_000_000, totalLimit: 100_000_000, comprehensive: false,
@@ -47,8 +62,8 @@ export const TAX_ACCOUNTS: TaxAccount[] = [
     pros: '추가 300만 세액공제', cons: '55세 이후 수령 · 중도해지 페널티' },
 ]
 
-/* ─── 종합과세 한도 ─── */
-export const COMPREHENSIVE_TAX_THRESHOLD = 20_000_000   // 연 2,000만
+/* ─── 종합과세 한도 (소득세법 §14③6호 — lib 단일 소스) ─── */
+export const COMPREHENSIVE_TAX_THRESHOLD = FIN_COMPREHENSIVE_THRESHOLD   // 연 2,000만
 
 /* ─── 종합과세 누진세율 (지방세 포함) — lib/krIncomeTax에서 파생 ─── */
 export interface ProgressiveBracket {
@@ -109,7 +124,7 @@ export interface ReverseInput {
   dividendYield: number           // % (배당수익률)
   capitalGainRate: number         // % (시세 차익 CAGR)
   reinvestDividends: boolean
-  taxRate: number                 // 0.154
+  taxRate: number                 // 소수 (일반 GENERAL_DIVIDEND_TAX_RATE = 0.154)
   safety: number                  // 1.0~1.3
 }
 
@@ -155,7 +170,7 @@ export function reverseCalcMonthlyContribution(input: ReverseInput): ReverseResu
       totalGrowth: simulate(0) - input.currentCapital,
       feasibility: 'easy',
       feasibilityLabel: '🟢 추가 적립 불필요',
-      feasibilityColor: '#059669',
+      feasibilityColor: 'var(--emerald-600)',
       feasibilityNote: '현재 자산만으로 목표 도달 가능',
     }
   }
@@ -180,16 +195,16 @@ export function reverseCalcMonthlyContribution(input: ReverseInput): ReverseResu
   let feasibilityNote: string
 
   if (requiredMonthly < 300_000) {
-    feasibility = 'easy'; feasibilityLabel = '🟢 매우 합리적'; feasibilityColor = '#059669'
+    feasibility = 'easy'; feasibilityLabel = '🟢 매우 합리적'; feasibilityColor = 'var(--emerald-600)'
     feasibilityNote = '월 30만 미만 — 일반 직장인 충분히 가능'
   } else if (requiredMonthly < 800_000) {
-    feasibility = 'reasonable'; feasibilityLabel = '🔵 합리적'; feasibilityColor = '#0891B2'
+    feasibility = 'reasonable'; feasibilityLabel = '🔵 합리적'; feasibilityColor = 'var(--cyan-600)'
     feasibilityNote = '월 30~80만 — 안정적 직장인에게 적합'
   } else if (requiredMonthly < 2_000_000) {
-    feasibility = 'tight'; feasibilityLabel = '🟡 도전적'; feasibilityColor = '#A16207'
+    feasibility = 'tight'; feasibilityLabel = '🟡 도전적'; feasibilityColor = 'var(--yellow-700)'
     feasibilityNote = '월 80~200만 — 부담 큼 · 기간 늘리기 검토'
   } else {
-    feasibility = 'unrealistic'; feasibilityLabel = '🔴 비현실적'; feasibilityColor = '#DC2626'
+    feasibility = 'unrealistic'; feasibilityLabel = '🔴 비현실적'; feasibilityColor = 'var(--red-600)'
     feasibilityNote = '월 200만+ — 일반 직장인 매우 부담 · 기간 ↑ 또는 목표 ↓ 권장'
   }
 
@@ -212,9 +227,8 @@ export interface ComprehensiveResult {
   level: 'safe' | 'caution' | 'near' | 'over'
   levelLabel: string
   levelColor: string
-  appliedRate: number             // 종합과세 적용 시 평균세율
-  bracket?: ProgressiveBracket
-  taxIfComprehensive: number
+  // (삭제) bracket·appliedRate·taxIfComprehensive — 금융소득 합계만으로 누진 구간을 찾아 세액을 과대 추정했음.
+  // 종합과세 세액은 종합소득 과세표준·비교과세·배당가산이 필요해 금융소득만으로 계산할 수 없다.
 }
 
 export function evaluateComprehensiveTax(
@@ -229,18 +243,14 @@ export function evaluateComprehensiveTax(
 
   let level: ComprehensiveResult['level'], levelLabel: string, levelColor: string
   if (pct < 50) {
-    level = 'safe'; levelLabel = '🟢 안전'; levelColor = '#059669'
+    level = 'safe'; levelLabel = '🟢 안전'; levelColor = 'var(--emerald-600)'
   } else if (pct < 80) {
-    level = 'caution'; levelLabel = '🟡 주의'; levelColor = '#A16207'
+    level = 'caution'; levelLabel = '🟡 주의'; levelColor = 'var(--yellow-700)'
   } else if (pct < 100) {
-    level = 'near'; levelLabel = '🟠 한도 임박'; levelColor = '#EA580C'
+    level = 'near'; levelLabel = '🟠 한도 임박'; levelColor = 'var(--orange-600)'
   } else {
-    level = 'over'; levelLabel = '🔴 종합과세 진입'; levelColor = '#DC2626'
+    level = 'over'; levelLabel = '🔴 종합과세 진입'; levelColor = 'var(--red-600)'
   }
-
-  const bracket = PROGRESSIVE_BRACKETS.find(b => total >= b.min && total < b.max)
-  const appliedRate = bracket ? bracket.rate : 0.154
-  const taxIfComprehensive = total > threshold ? total * appliedRate : total * 0.154
 
   return {
     totalFinancialIncome: Math.round(total),
@@ -248,8 +258,6 @@ export function evaluateComprehensiveTax(
     remainder: Math.round(remainder),
     pctOfThreshold: Math.round(pct * 10) / 10,
     level, levelLabel, levelColor,
-    appliedRate, bracket,
-    taxIfComprehensive: Math.round(taxIfComprehensive),
   }
 }
 
@@ -260,7 +268,7 @@ export interface PortfolioAsset {
   amount: number          // 투자금 (원)
   yieldPct: number        // 배당수익률 (%)
   frequency: Frequency
-  taxRate: number         // % (일반 15.4 / 해외 15.0)
+  taxRate: number         // % (일반 GENERAL_DIVIDEND_TAX_RATE×100 = 15.4 / 해외 15.0)
 }
 
 export interface PortfolioResult {
@@ -335,7 +343,7 @@ export interface TaxAccountCompareRow {
 }
 
 export function compareTaxAccounts(input: TaxAccountCompareInput): TaxAccountCompareRow[] {
-  const generalTaxAnnual = input.annualDividend * 0.154
+  const generalTaxAnnual = input.annualDividend * GENERAL_DIVIDEND_TAX_RATE
   const generalTaxTotal = generalTaxAnnual * input.years
   const yieldFrac = (input.dividendYield ?? 0) / 100
 
@@ -343,12 +351,12 @@ export function compareTaxAccounts(input: TaxAccountCompareInput): TaxAccountCom
     let annualTax = 0
     let overLimitDividend = 0
     if (acc.id === 'isa-saving' || acc.id === 'isa-general') {
-      // ISA 총 납입 한도(1억)로 담을 수 있는 최대 배당 — 초과분은 일반 15.4% 과세
+      // ISA 총 납입 한도(1억)로 담을 수 있는 최대 배당 — 초과분은 일반과세(15.4%)
       const maxShelter = acc.totalLimit && yieldFrac > 0 ? acc.totalLimit * yieldFrac : input.annualDividend
       const sheltered = Math.min(input.annualDividend, maxShelter)
       overLimitDividend = input.annualDividend - sheltered
       const taxableDiv = Math.max(0, sheltered - (acc.nonTaxableLimit ?? 0))
-      annualTax = taxableDiv * acc.taxRate + overLimitDividend * 0.154
+      annualTax = taxableDiv * acc.taxRate + overLimitDividend * GENERAL_DIVIDEND_TAX_RATE
     } else if (acc.id === 'pension-saving' || acc.id === 'irp') {
       // 단순화: 5.5% 분리과세 (수령 시점). 한도는 적립액 기준이라 별도 안내로 표기.
       annualTax = input.annualDividend * acc.taxRate

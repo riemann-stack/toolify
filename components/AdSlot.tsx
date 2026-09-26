@@ -2,18 +2,13 @@
 // 광고 슬롯. 자동광고(AutoAds)가 페이지에 광고를 직접 게재하므로,
 // 이 컴포넌트는 슬롯 ID(data-ad-slot)가 주어진 경우에만 실제 <ins> 광고를 렌더링합니다.
 // - 슬롯 ID가 없으면 프로덕션에서 아무것도 렌더링하지 않습니다(빈 공백 방지 → 심사 시 "의도 없는 공백" 제거).
-// - 광고 제외 경로(lib/ads)에서는 렌더링하지 않습니다.
+// - 광고 제외 경로(lib/ads)와 광고 금지 화면(<AdFreeScreen /> 마운트 중 — 오류 화면 등)에서는 렌더링하지 않습니다.
 'use client'
 
 import { usePathname } from 'next/navigation'
 import { useEffect, useRef } from 'react'
 import { adsAllowed, ADSENSE_CLIENT_ID } from '@/lib/ads'
-
-declare global {
-  interface Window {
-    adsbygoogle?: unknown[]
-  }
-}
+import { useAdsSuppressed } from '@/components/AutoAds'
 
 type AdSlotPosition = 'in-article' | 'sidebar' | 'footer' | 'between-tools'
 
@@ -28,7 +23,8 @@ interface AdSlotProps {
 
 export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProps) {
   const pathname = usePathname()
-  const allowed = adsAllowed(pathname)
+  const suppressed = useAdsSuppressed()
+  const allowed = adsAllowed(pathname) && !suppressed
   const isProd = process.env.NODE_ENV === 'production'
   const showIns = isProd && allowed && !!slotId && !!ADSENSE_CLIENT_ID
   const pushed = useRef(false)
@@ -43,7 +39,7 @@ export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProp
     }
   }, [showIns])
 
-  // 광고 비허용 경로(민감 카테고리 + 정책/내비/랜딩 페이지): 렌더링 안 함
+  // 광고 비허용 경로(민감·심사모드 제외 + 정책/내비/랜딩 페이지) 또는 광고 금지 화면: 렌더링 안 함
   if (!allowed) return null
 
   // 개발 환경: 시각적 자리표시자
@@ -54,15 +50,15 @@ export default function AdSlot({ slotId, position, minHeight = 250 }: AdSlotProp
         data-ad-slot-id={slotId}
         style={{
           minHeight,
-          background: 'rgba(14,165,233,0.04)',
-          border: '1px dashed rgba(14,165,233,0.25)',
-          borderRadius: 12,
+          background: 'color-mix(in srgb, var(--accent) 4%, transparent)',
+          border: '1px dashed color-mix(in srgb, var(--accent) 25%, transparent)',
+          borderRadius: 'var(--radius-m)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
           color: 'var(--muted)',
           fontSize: 12,
-          fontFamily: "'Noto Sans KR', sans-serif",
+          fontFamily: 'var(--font-sans)',
           letterSpacing: '0.04em',
           margin: '24px 0',
         }}

@@ -175,10 +175,10 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   sugar: {
     original: '설탕', emoji: '🍯', category: '감미료', group: 'sweet',
     options: [
-      { name: '꿀',         ratio: 0.75, ratioNote: '설탕 100g → 꿀 75g, 액체 1/4컵 줄이기', grade: 'good', useFor: ['머핀', '쿠키', '드레싱'], taste: '꿀 특유의 향', texture: '더 촉촉, 갈색 더 진함', warning: '160°C 이하로 굽기 (꿀이 빨리 탐)' },
+      { name: '꿀',         ratio: 0.75, ratioNote: '설탕 100g → 꿀 75g, 다른 액체 약 13ml 줄이기 (꿀 1컵 340g당 1/4컵)', grade: 'good', useFor: ['머핀', '쿠키', '드레싱'], taste: '꿀 특유의 향', texture: '더 촉촉, 갈색 더 진함', warning: '오븐 온도 약 15°C(25°F) 낮추기 — 꿀이 빨리 갈변' },
       { name: '메이플시럽',  ratio: 0.75, substituteUnit: 'ml', ratioNote: '설탕 100g → 시럽 75ml, 액체 줄이기', grade: 'good', useFor: ['팬케이크', '머핀', '쿠키'], taste: '메이플 향, 풍부함', texture: '약간 더 촉촉' },
       { name: '알룰로스',    ratio: 1.3,  ratioNote: '설탕 100g → 알룰로스 130g (단맛 약함)', grade: 'good', useFor: ['저당 디저트', '음료', '드레싱'], taste: '깔끔한 단맛', texture: '거의 동일', warning: '캐러멜화 약함 (색·풍미 약간 차이)' },
-      { name: '스테비아',    ratio: 0.01, ratioNote: '설탕 1컵 = 스테비아 1작은술', grade: 'okay', useFor: ['음료', '드레싱', '제로 디저트'], taste: '쓴맛 후미 (제품에 따라 다름)', texture: '부피 손실로 베이킹은 부피 보충 필요', warning: '베이킹은 다른 부피 재료 추가 필요' },
+      { name: '스테비아',    ratio: 0.02, ratioNote: '설탕 1컵 = 스테비아 1작은술', grade: 'okay', useFor: ['음료', '드레싱', '제로 디저트'], taste: '쓴맛 후미 (제품에 따라 다름)', texture: '부피 손실로 베이킹은 부피 보충 필요', warning: '베이킹은 다른 부피 재료 추가 필요' },
       { name: '바나나 (으깬 것)', ratio: 1.0, ratioNote: '설탕 100g → 바나나 100g, 액체 1/4 줄이기', grade: 'okay', useFor: ['머핀', '브라우니', '바나나브레드'], taste: '바나나 향', texture: '훨씬 촉촉, 진한 색' },
       { name: '코코넛 슈가',  ratio: 1.0, grade: 'good', useFor: ['쿠키', '머핀'], taste: '캐러멜 풍미', texture: '약간 더 진한 색' },
       { name: '황설탕',      ratio: 1.0, grade: 'good', useFor: ['쿠키', '브라우니'], taste: '캐러멜·당밀 풍미', texture: '약간 더 촉촉' },
@@ -217,7 +217,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
       { name: '두부 (으깬 것)',           ratio: 1.0, ratioNote: '계란 1개 = 부드러운 두부 60g', grade: 'okay', useFor: ['스크램블', '키슈', '베이킹'], taste: '거의 무미', texture: '부드럽고 촉촉' },
       { name: '으깬 바나나',              ratio: 1.0, ratioNote: '계란 1개 = 바나나 1/2개', grade: 'okay', useFor: ['머핀', '브라우니', '팬케이크'], taste: '바나나 향', texture: '촉촉, 색 진해짐' },
       { name: '사과소스 (무가당)',         ratio: 1.0, ratioNote: '계란 1개 = 사과소스 1/4컵', grade: 'good', useFor: ['머핀', '케이크'], taste: '약한 사과 향', texture: '촉촉' },
-      { name: '아쿠아파바 (병아리콩 삶은 물)', ratio: 1.0, ratioNote: '계란 1개 흰자 = 아쿠아파바 3큰술', grade: 'good', useFor: ['머랭', '비건 디저트'], taste: '거의 무미', texture: '거품 잘 남' },
+      { name: '아쿠아파바 (병아리콩 삶은 물)', ratio: 1.0, ratioNote: '계란 1개 = 아쿠아파바 3큰술 (흰자 1개 = 2큰술)', grade: 'good', useFor: ['머랭', '비건 디저트'], taste: '거의 무미', texture: '거품 잘 남' },
     ],
   },
   flour: {
@@ -253,7 +253,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   bakingSoda: {
     original: '베이킹소다', emoji: '🥄', category: '팽창제', group: 'flour',
     options: [
-      { name: '베이킹파우더', ratio: 3.0, ratioNote: '베이킹소다 1작은술 = 베이킹파우더 3작은술', grade: 'okay', useFor: ['일부 베이킹'], taste: '거의 동일', texture: '약간의 차이', warning: '소다보다 약함, 산성 재료가 많은 레시피는 부적합' },
+      { name: '베이킹파우더', ratio: 3.0, ratioNote: '베이킹소다 1작은술 = 베이킹파우더 3작은술', grade: 'okay', useFor: ['일부 베이킹'], taste: '거의 동일', texture: '약간의 차이', warning: '3배를 넣어야 해 쓴맛이 날 수 있고, 레시피 속 산(버터밀크·요거트)이 중화되지 않아 신맛이 남고 색이 옅어짐' },
     ],
   },
   lemonJuice: {
@@ -283,7 +283,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   gingerPaste: {
     original: '다진생강', emoji: '🧄', category: '양념', group: 'season',
     options: [
-      { name: '생강가루',         ratio: 0.25, ratioNote: '다진생강 1큰술 = 생강가루 1/4 작은술', grade: 'good', useFor: ['베이킹', '드레싱'], taste: '약간 다른 풍미', texture: '식감 없음' },
+      { name: '생강가루',         ratio: 0.08, ratioNote: '다진생강 1큰술 = 생강가루 1/4 작은술', grade: 'good', useFor: ['베이킹', '드레싱'], taste: '약간 다른 풍미', texture: '식감 없음' },
       { name: '생강 (생, 으깬 것)', ratio: 1.0, grade: 'perfect', useFor: ['모든 요리'], taste: '신선하고 더 매운', texture: '동일' },
     ],
   },
@@ -420,7 +420,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   gochugaru: {
     original: '고춧가루', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
     options: [
-      { name: '카이엔페퍼 + 파프리카', ratio: 1.0, ratioNote: '카이엔 1/2 + 파프리카 1/2', combinedWith: '파프리카', grade: 'good', useFor: ['김치·고추장 응급'], taste: '비슷한 매·색', texture: '동일' },
+      { name: '카이엔페퍼 + 파프리카', ratio: 1.0, ratioNote: '파프리카 가루 위주 + 카이엔 소량 (카이엔이 훨씬 매움 — 맛보며 조절)', combinedWith: '파프리카', grade: 'good', useFor: ['김치·고추장 응급'], taste: '비슷한 색·매운맛 조절 필요', texture: '입자 더 고움', warning: '카이엔을 반씩 섞으면 고춧가루보다 훨씬 매워짐' },
       { name: '레드 페퍼 플레이크',   ratio: 0.7, grade: 'okay', useFor: ['파스타·이탈리안'], taste: '비슷·거친 입자', texture: '거침' },
       { name: '칠리파우더 (멕시칸)',  ratio: 0.7, grade: 'okay', useFor: ['응급 대체'], taste: '쿠민·마늘 향 포함', texture: '동일', warning: '쿠민·마늘 향 포함' },
     ],
@@ -461,7 +461,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   moolyeot: {
     original: '물엿', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
     options: [
-      { name: '꿀',          ratio: 0.7, grade: 'good', useFor: ['조림·반찬'], taste: '단맛 ↑·향 추가', texture: '동일', warning: '160°C 이하 (탐)' },
+      { name: '꿀',          ratio: 0.7, grade: 'good', useFor: ['조림·반찬'], taste: '단맛 ↑·향 추가', texture: '동일', warning: '물엿보다 쉽게 타므로 약불에서 마지막에 넣기' },
       { name: '옥수수시럽',   ratio: 1.0, grade: 'good', useFor: ['모든 용도'], taste: '비슷', texture: '동일' },
       { name: '쌀엿',        ratio: 1.0, grade: 'good', useFor: ['전통 한과'], taste: '비슷·전통적', texture: '동일' },
       { name: '메이플시럽',   ratio: 0.8, grade: 'okay', useFor: ['응급 대체'], taste: '메이플 향', texture: '동일' },
@@ -649,6 +649,7 @@ function SearchTab(props: {
               type="text"
               className={styles.searchInput}
               placeholder="예: 버터, 설탕, 계란"
+              aria-label="재료 검색"
               value={searchTerm}
               onChange={e => { setSearchTerm(e.target.value); setShowSuggestions(true) }}
               onFocus={() => setShowSuggestions(true)}
@@ -697,8 +698,9 @@ function SearchTab(props: {
         {/* 양 + 단위 — 2열 그리드 */}
         <div className={styles.amountRow}>
           <div>
-            <span className={styles.fieldLabel}>원재료 양</span>
+            <label htmlFor="sub-amount" className={styles.fieldLabel}>원재료 양</label>
             <input
+              id="sub-amount"
               type="number" inputMode="decimal"
               className={`${styles.input} ${amount && parseFloat(amount) > 0 ? styles.inputFilled : ''}`}
               value={amount}
@@ -709,9 +711,9 @@ function SearchTab(props: {
             />
           </div>
           <div>
-            <span className={styles.fieldLabel}>단위</span>
+            <label htmlFor="sub-unit" className={styles.fieldLabel}>단위</label>
             <div className={styles.selectWrap}>
-              <select className={styles.select} value={unit} onChange={e => setUnit(e.target.value)}>
+              <select id="sub-unit" className={styles.select} value={unit} onChange={e => setUnit(e.target.value)}>
                 {UNIT_OPTIONS.map(u => <option key={u} value={u}>{u}</option>)}
               </select>
               <span className={styles.selectArrow}>▼</span>
@@ -772,10 +774,13 @@ function SearchTab(props: {
 // ──────────────────────────────────────
 function OptionCard({ opt, amount, unit }: { opt: SubstituteOption; amount: number; unit: string }) {
   const grade = GRADE_INFO[opt.grade]
-  const subUnit = opt.substituteUnit || unit
+  // substituteUnit(예: 'ml')은 'g 입력 → ml' 무게→부피 비율이라 g로 입력했을 때만 적용.
+  // 부피 단위(ml·큰술·작은술·컵)는 같은 단위에 ratio만 곱함 (버터 1컵 → 오일 3/4컵).
+  const subUnit = opt.substituteUnit !== undefined && unit === 'g' ? opt.substituteUnit : unit
   // 단위가 바뀌거나(가루·혼합·개수) substituteUnit이 없는데 환산 노트가 있으면
-  // 단순 ×ratio(같은 단위)는 오해를 줌 → 숫자 대신 단위 인식 노트만 표시
-  const reliableNumeric = opt.ratio > 0 && (opt.substituteUnit !== undefined || !opt.ratioNote)
+  // 단순 ×ratio(같은 단위)는 오해를 줌 → 숫자 대신 단위 인식 노트만 표시.
+  // substituteUnit이 있는 무게·부피 비율은 '개' 입력에 의미가 없으므로 숫자를 숨김.
+  const reliableNumeric = opt.ratio > 0 && (opt.substituteUnit !== undefined ? unit !== '개' : !opt.ratioNote)
   const showNumeric = amount > 0 && reliableNumeric
 
   return (
@@ -889,7 +894,7 @@ function BrowseTab({ onDetail }: { onDetail: (key: string) => void }) {
                             <div key={i} className={styles.browseOption}>
                               <span className={`${styles.browseOptionDot} ${gradeMeta.dotClass}`} />
                               <span className={styles.browseOptionName}>{opt.name}</span>
-                              <span className={styles.browseOptionRatio}>×{opt.ratio}</span>
+                              {opt.ratio > 0 && <span className={styles.browseOptionRatio}>×{opt.ratio}</span>}
                             </div>
                           )
                         })}

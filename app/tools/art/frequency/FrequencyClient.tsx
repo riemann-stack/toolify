@@ -61,7 +61,7 @@ function PianoKeyboard({ midiA, midiB }: { midiA: number | null; midiB?: number 
 
   const fill = (midi: number, isBlack: boolean) => {
     if (midi === midiA) return 'var(--accent)'
-    if (midi === midiB) return 'var(--cat-health)'
+    if (midi === midiB) return 'var(--cat-cooking)' // A(파랑)와 색상환상 먼 주황 — 청록은 A와 구분 불가
     return isBlack ? '#1A1A1A' : '#E8E8E8'
   }
 
@@ -80,6 +80,15 @@ function PianoKeyboard({ midiA, midiB }: { midiA: number | null; midiB?: number 
           <rect key={k.midi} x={k.x} y={0} width={BW} height={BH}
             rx={2} fill={fill(k.midi, true)} />
         ))}
+        {/* 색 구분이 어려운 환경을 위해 A/B 글자 표시 */}
+        {[...whites.map(k => ({ ...k, black: false })), ...blacks.map(k => ({ ...k, black: true }))]
+          .filter(k => midiB != null && (k.midi === midiA || k.midi === midiB))
+          .map(k => (
+            <text key={`t-${k.midi}`} x={k.x + (k.black ? BW : WW) / 2} y={(k.black ? BH : WH) - 6}
+              textAnchor="middle" fontSize="9" fontWeight="700" fill="#ffffff">
+              {k.midi === midiA && k.midi === midiB ? 'A=B' : k.midi === midiA ? 'A' : 'B'}
+            </text>
+          ))}
       </svg>
       <div style={{ fontSize: 11, color: 'rgba(255,255,255,0.72)', textAlign: 'center', marginTop: 6 }}>
         건반 표시 범위 C{startOct}–B{startOct + 1}
@@ -381,13 +390,13 @@ function IntervalTab({ a4 }: { a4: number }) {
             <div className={styles.neighborHz}>{result.hzA.toFixed(3)} Hz</div>
           </div>
           <div className={styles.neighborItem}>
-            <div className={styles.neighborLabel} style={{ color: 'var(--cat-health)' }}>● 음정 B</div>
+            <div className={styles.neighborLabel} style={{ color: 'var(--cat-cooking-ink)' }}>● 음정 B</div>
             <div className={styles.neighborNote}>{NOTE_NAMES[bNi]}{bOct}</div>
             <div className={styles.neighborHz}>{result.hzB.toFixed(3)} Hz</div>
           </div>
         </div>
 
-        <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz · 건반 파랑=A, 청록=B</p>
+        <p className={styles.stdNote}>* 기준음 A4 = {a4} Hz · 건반 파랑=A, 주황=B</p>
       </div>
     </div>
   )

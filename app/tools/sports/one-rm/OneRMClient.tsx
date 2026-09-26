@@ -7,7 +7,7 @@ import { todayStr } from '@/lib/date'
 import s from './one-rm.module.css'
 import {
   generateWarmup, suggestRestForIntensity, rpeAdjustReps, adjustLevels,
-  AGE_BAND_LABEL, BIG3_BASE_LEVELS,
+  AGE_BAND_LABEL, BIG3_BASE_LEVELS, REP_FACTOR, repFactor,
   type Gender, type AgeBand, type WarmupSet,
 } from './oneRMUtils'
 
@@ -40,12 +40,6 @@ const EXERCISES: Exercise[] = [
   { key: 'other',         emoji: '➕', name: '기타' },
 ]
 
-const FORMULAS = {
-  epley:    (w: number, r: number) => w * (1 + r / 30),
-  brzycki:  (w: number, r: number) => r < 37 ? w * (36 / (37 - r)) : w,
-  lombardi: (w: number, r: number) => w * Math.pow(r, 0.1),
-  oconner:  (w: number, r: number) => w * (1 + r / 40),
-} as const
 
 const FORMULA_META: { key: Exclude<FormulaKey, 'auto'>; name: string; note: string }[] = [
   { key: 'epley',    name: 'Epley',    note: '가장 널리 사용, 고반복에서 정확' },
@@ -67,12 +61,12 @@ const INTENSITIES: { pct: number; reps: string; purpose: string; type: 'strong' 
 
 const PLATE_COLORS: Record<number, string> = {
   25:   '#FF4646',
-  20:   '#0891B2',
-  15:   '#A16207',
-  10:   '#EA580C',
-  5:    '#059669',
-  2.5:  '#0EA5E9',
-  1.25: '#9B59B6',
+  20:   'var(--cyan-600)',
+  15:   'var(--yellow-700)',
+  10:   'var(--orange-600)',
+  5:    'var(--emerald-600)',
+  2.5:  'var(--sky-500)',
+  1.25: 'var(--amethyst)',
   0.5:  '#FFFFFF',
 }
 const DEFAULT_PLATES = [25, 20, 15, 10, 5, 2.5, 1.25, 0.5]
@@ -96,6 +90,10 @@ function fmt(n: number, d = 1): string {
 }
 function roundTo(val: number, unit: number): number {
   return Math.round(val / unit) * unit
+}
+// 표시 단위(kg/lb)에서 반올림 — 반올림 pill이 '2.5lb'면 lb 값을 2.5 단위로 맞춘다
+function dispRound(kg: number, unit: Unit, step: number): number {
+  return roundTo(unit === 'kg' ? kg : kgToLb(kg), step)
 }
 
 function copyText(text: string): Promise<void> {
@@ -148,7 +146,20 @@ export default function OneRMClient() {
   useEffect(() => {
     try {
       const raw = localStorage.getItem(LS_KEY)
-      if (raw) setHistory(JSON.parse(raw))
+      if (raw) {
+        const parsed: unknown = JSON.parse(raw)
+        if (Array.isArray(parsed)) {
+          // 요소 필드 검증 — 손상된 항목은 버림(기록 탭 크래시 방지)
+          const valid = parsed.filter((r): r is HistoryRecord =>
+            !!r && typeof r === 'object' &&
+            typeof r.id === 'string' &&
+            typeof r.date === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(r.date) &&
+            typeof r.exerciseKey === 'string' &&
+            typeof r.exerciseName === 'string' &&
+            typeof r.oneRM === 'number' && Number.isFinite(r.oneRM) && r.oneRM > 0)
+          setHistory(valid)
+        }
+      }
     } catch { /* ignore */ }
     setMounted(true)
   }, [])
@@ -163,48 +174,56 @@ export default function OneRMClient() {
   /* 1RM 계산 */
   const exercise = EXERCISES.find((e) => e.key === exerciseKey) ?? EXERCISES[0]
   const isBodyweight = BODYWEIGHT_KEYS.includes(exerciseKey)
+  const bwKg = parseFloat(bodyWeight)
+  const validBw = isFinite(bwKg) && bwKg > 0
   const weightKg = useMemo(() => {
-    const w = parseFloat(weight)
-    if (!isFinite(w) || w <= 0) return 0
+    const raw = parseFloat(weight)
+    // 맨몸 종목은 추가 중량 0(맨몸만)도 허용 — 빈칸도 0으로 본다
+    const w = BODYWEIGHT_KEYS.includes(exerciseKey) && weight.trim() === '' ? 0 : raw
+    if (!isFinite(w) || w < 0) return -1
     // '바벨 무게 포함' 해제 시 표준 바(20kg/45lb)를 더해 총 중량으로 환산.
-    // 맨몸 종목은 바가 없으므로 토글과 무관하게 입력값을 그대로 사용.
+    // 맨몸 종목은 바가 없으므로 토글과 무관하게 입력값(추가 중량)을 그대로 사용.
     const bw = BODYWEIGHT_KEYS.includes(exerciseKey)
     const total = (includesBar || bw) ? w : w + STD_BAR[unit]
     return unit === 'kg' ? total : lbToKg(total)
   }, [weight, unit, includesBar, exerciseKey])
-  const validCalc = weightKg > 0 && reps >= 1
+  // 맨몸 종목은 체중이 필수: 반복 공식은 실제로 들어 올린 전체 부하(체중+추가) 기준이다
+  const validCalc = reps >= 1 && (isBodyweight ? validBw && weightKg >= 0 : weightKg > 0)
 
   const oneRMs = useMemo(() => {
     if (!validCalc) return null
     // RPE 보정 — useRpe 활성화 시 reps 증가
     const effReps = useRpe ? rpeAdjustReps(reps, rpe) : reps
+    // 맨몸 종목: 1RM(추가) = f(체중+추가, r) − 체중
+    const base = isBodyweight ? bwKg : 0
+    const load = weightKg + base
+    const of = (k: keyof typeof REP_FACTOR) => load * REP_FACTOR[k](effReps) - base
     const vals = {
-      epley:    FORMULAS.epley(weightKg, effReps),
-      brzycki:  FORMULAS.brzycki(weightKg, effReps),
-      lombardi: FORMULAS.lombardi(weightKg, effReps),
-      oconner:  FORMULAS.oconner(weightKg, effReps),
+      epley:    of('epley'),
+      brzycki:  of('brzycki'),
+      lombardi: of('lombardi'),
+      oconner:  of('oconner'),
     }
     const avg = (vals.epley + vals.brzycki + vals.lombardi + vals.oconner) / 4
     return { ...vals, auto: avg }
-  }, [weightKg, reps, validCalc, useRpe, rpe])
+  }, [weightKg, reps, validCalc, useRpe, rpe, isBodyweight, bwKg])
 
   const oneRM = oneRMs ? oneRMs[formulaKey] : 0
-  const oneRMRounded = roundTo(oneRM, roundUnit)
-  const oneRMDisplay = unit === 'kg' ? oneRMRounded : kgToLb(oneRMRounded)
+  const oneRMDisplay = dispRound(oneRM, unit, roundUnit)
+  // 저장·훈련 탭용 kg 값 — lb 모드는 표시값(lb 반올림)을 kg로 되돌려 히어로와 일치시킴
+  const oneRMRounded = unit === 'kg' ? oneRMDisplay : lbToKg(oneRMDisplay)
 
   const rangeMin = oneRMs ? Math.min(oneRMs.epley, oneRMs.brzycki, oneRMs.lombardi, oneRMs.oconner) : 0
   const rangeMax = oneRMs ? Math.max(oneRMs.epley, oneRMs.brzycki, oneRMs.lombardi, oneRMs.oconner) : 0
-  const rangeMinDisplay = unit === 'kg' ? roundTo(rangeMin, roundUnit) : roundTo(kgToLb(rangeMin), roundUnit === 2.5 ? 5 : roundUnit)
-  const rangeMaxDisplay = unit === 'kg' ? roundTo(rangeMax, roundUnit) : roundTo(kgToLb(rangeMax), roundUnit === 2.5 ? 5 : roundUnit)
+  const rangeMinDisplay = dispRound(rangeMin, unit, roundUnit)
+  const rangeMaxDisplay = dispRound(rangeMax, unit, roundUnit)
 
-  const bwKg = parseFloat(bodyWeight)
-  const validBw = isFinite(bwKg) && bwKg > 0
   const bwRatio = validBw && oneRM > 0 ? oneRM / bwKg : 0
 
   // 수준 판정 — 성별·연령 보정
   const adjustedLevels = exercise.levels ? adjustLevels(exercise.levels, gender, ageBand) : null
   let level: string | null = null
-  if (validBw && adjustedLevels && oneRM > 0) {
+  if (validBw && adjustedLevels && (oneRM > 0 || (isBodyweight && oneRMs))) {
     const { 초보, 중급, 상급, 엘리트 } = adjustedLevels
     if (bwRatio >= 엘리트) level = '엘리트'
     else if (bwRatio >= 상급) level = '상급'
@@ -301,6 +320,9 @@ export default function OneRMClient() {
       {tab === 'training' && (
         <TrainingTab
           oneRMKg={oneRMForTraining}
+          bodyLoadKg={isBodyweight && validBw ? bwKg : 0}
+          noBar={isBodyweight || exercise.key === 'other'}
+          formulaKey={formulaKey}
           unit={unit}
           setUnit={setUnit}
           roundUnit={roundUnit}
@@ -443,7 +465,7 @@ function CalcTab(props: CalcTabProps) {
             aria-label={isBodyweight ? `추가 중량 (${unit})` : `중량 (${unit})`}
             onChange={(e) => setWeight(e.target.value)} />
           {isBodyweight ? (
-            <p className={s.rpeHint} style={{ marginTop: 4 }}>※ 체중을 뺀 <strong>추가 중량</strong>만 입력하세요 (예: 풀업 벨트 20kg).</p>
+            <p className={s.rpeHint} style={{ marginTop: 4 }}>※ 체중을 뺀 <strong>추가 중량</strong>만 입력하세요 (예: 풀업 벨트 20kg, 맨몸이면 0). 계산은 아래 <strong>체중</strong>을 더한 전체 부하로 합니다.</p>
           ) : (
             <label className={s.checkRow} style={{ marginTop: 4 }}>
               <input type="checkbox" checked={includesBar} onChange={(e) => setIncludesBar(e.target.checked)} />
@@ -502,9 +524,9 @@ function CalcTab(props: CalcTabProps) {
               <div className={s.rpeHint}>
                 {rpe === 10 && '한 번도 더 불가능 (AMRAP)'}
                 {rpe === 9 && '1회 더 가능'}
-                {rpe === 8 && '2~3회 더 가능'}
-                {rpe === 7 && '3~4회 더 가능'}
-                {rpe === 6 && '5회 이상 가능 (워밍업)'}
+                {rpe === 8 && '2회 더 가능'}
+                {rpe === 7 && '3회 더 가능'}
+                {rpe === 6 && '4회 이상 가능 (워밍업)'}
               </div>
             </div>
           )}
@@ -544,8 +566,11 @@ function CalcTab(props: CalcTabProps) {
         </div>
 
         <div className={s.field}>
-          <label className={s.fieldLabel} htmlFor="one-rm-kg">체중 (선택, kg) — 수준 판정용</label>
+          <label className={s.fieldLabel} htmlFor="one-rm-kg">{isBodyweight ? '체중 (kg) — 맨몸 종목은 필수' : '체중 (선택, kg) — 수준 판정용'}</label>
           <input id="one-rm-kg" type="number" inputMode="decimal" className={s.input} placeholder="75" value={bodyWeight} min={0} onChange={(e) => setBodyWeight(e.target.value)} />
+          {isBodyweight && !validBw && (
+            <div className={s.warnMsg}>맨몸 종목은 체중을 입력해야 1RM을 계산할 수 있어요. 반복 공식은 체중+추가 중량 전체에 적용됩니다.</div>
+          )}
         </div>
 
         <div className={s.field} style={{ marginBottom: 0 }}>
@@ -575,10 +600,10 @@ function CalcTab(props: CalcTabProps) {
       {oneRMs && (
         <>
           <div className={s.hero} role="status">
-            <p className={s.heroLabel}>예상 1RM</p>
-            <p className={s.heroValue}>약 {fmt(oneRMDisplay, roundUnit < 1 ? 1 : 0)}{unit}</p>
+            <p className={s.heroLabel}>{isBodyweight ? '예상 1RM (추가 중량)' : '예상 1RM'}</p>
+            <p className={s.heroValue}>약 {isBodyweight ? '+' : ''}{fmt(oneRMDisplay, 1)}{unit}</p>
             <p className={s.heroRange}>
-              범위: {fmt(rangeMinDisplay, 0)}~{fmt(rangeMaxDisplay, 0)}{unit} (공식별)
+              범위: {fmt(rangeMinDisplay, 1)}~{fmt(rangeMaxDisplay, 1)}{unit} (공식별)
               {' · '}
               <span style={{ color: 'var(--text)' }}>
                 {formulaKey === 'auto' ? '자동 평균' : FORMULA_META.find((f) => f.key === formulaKey)?.name} 기준
@@ -605,18 +630,18 @@ function CalcTab(props: CalcTabProps) {
               <tbody>
                 {FORMULA_META.map((f) => {
                   const val = oneRMs[f.key]
-                  const display = unit === 'kg' ? roundTo(val, roundUnit) : roundTo(kgToLb(val), roundUnit === 2.5 ? 5 : roundUnit)
+                  const display = dispRound(val, unit, roundUnit)
                   return (
                     <tr key={f.key}>
                       <td className={s.formulaName}>{f.name}</td>
-                      <td className={s.formulaVal}>{fmt(display, 0)}{unit}</td>
+                      <td className={s.formulaVal}>{fmt(display, 1)}{unit}</td>
                       <td className={s.formulaNote}>{f.note}</td>
                     </tr>
                   )
                 })}
                 <tr className={s.rowAccent}>
                   <td className={s.formulaName}>평균</td>
-                  <td className={s.formulaVal}>{fmt(unit === 'kg' ? roundTo(oneRMs.auto, roundUnit) : roundTo(kgToLb(oneRMs.auto), roundUnit === 2.5 ? 5 : roundUnit), 0)}{unit}</td>
+                  <td className={s.formulaVal}>{fmt(dispRound(oneRMs.auto, unit, roundUnit), 1)}{unit}</td>
                   <td className={s.formulaNote}>4개 공식 평균</td>
                 </tr>
               </tbody>
@@ -654,7 +679,7 @@ function CalcTab(props: CalcTabProps) {
           <div className={s.card}>
             <span className={s.cardLabel}>진행 추적 (로컬 저장)</span>
             <button type="button" className={s.addRecordBtn} onClick={addRecord}>
-              + 오늘 기록 추가 ({exercise.name} · {fmt(oneRMDisplay, 0)}{unit})
+              + 오늘 기록 추가 ({exercise.name} · {isBodyweight ? '+' : ''}{fmt(oneRMDisplay, 1)}{unit})
             </button>
             <div className={s.recordsHint}>
               저장된 기록 <strong>{historyCount}개</strong> · <strong>내 기록</strong> 탭에서 진행 그래프를 확인하세요.
@@ -694,10 +719,10 @@ function HistoryChart({ history }: { history: HistoryRecord[] }) {
         {sorted.map((r, i) => (
           <circle key={r.id} cx={xOf(i)} cy={yOf(r.oneRM)} r={3} fill="var(--accent)" />
         ))}
-        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmt(maxV, 0)}</text>
-        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{fmt(minV, 0)}</text>
-        <text x={padL} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{sorted[0].date.slice(5)}</text>
-        <text x={W - padR} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{sorted[sorted.length - 1].date.slice(5)}</text>
+        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{fmt(maxV, 0)}</text>
+        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{fmt(minV, 0)}</text>
+        <text x={padL} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="start">{sorted[0].date.slice(5)}</text>
+        <text x={W - padR} y={H - 10} fill="var(--muted)" fontSize="10" textAnchor="end">{sorted[sorted.length - 1].date.slice(5)}</text>
       </svg>
     </div>
   )
@@ -708,6 +733,10 @@ function HistoryChart({ history }: { history: HistoryRecord[] }) {
    ════════════════════════════════════════════════════════════ */
 interface TrainingTabProps {
   oneRMKg: number
+  // 맨몸 종목이면 체중(kg) — 처방 중량 = (1RM추가 + 체중) × % − 체중. 바벨 종목은 0
+  bodyLoadKg: number
+  noBar: boolean
+  formulaKey: FormulaKey
   unit: Unit
   setUnit: (u: Unit) => void
   roundUnit: number
@@ -716,70 +745,71 @@ interface TrainingTabProps {
   exercise: Exercise
 }
 
-function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setTrainingOverride, exercise }: TrainingTabProps) {
+function TrainingTab({ oneRMKg, bodyLoadKg, noBar, formulaKey, unit, setUnit, roundUnit, trainingOverride, setTrainingOverride, exercise }: TrainingTabProps) {
   const [copiedKey, setCopiedKey] = useState<string | null>(null)
   const [warmupPct, setWarmupPct] = useState<number>(80)
   const copy = async (text: string, key: string) => {
     try {
       await copyText(text)
       setCopiedKey(key)
-      setTimeout(() => setCopiedKey(null), 1000)
+      setTimeout(() => setCopiedKey(null), 1500)
     } catch { /* ignore */ }
   }
 
   const hasOneRM = oneRMKg > 0
+  const isBw = bodyLoadKg > 0
+  // 전체 부하 기준 1RM(맨몸 종목은 체중 포함)
+  const totalOneRM = oneRMKg + bodyLoadKg
+  // 전체 부하(kg) → 표시 문자열. 맨몸 종목은 체중을 뺀 추가/보조 중량으로 표시
+  const loadLabel = (totalKg: number): string => {
+    const kg = totalKg - bodyLoadKg
+    const v = fmt(dispRound(Math.abs(kg), unit, roundUnit), 1)
+    if (!isBw) return `${v}${unit}`
+    return kg >= 0 ? `+${v}${unit}` : `보조 ${v}${unit}`
+  }
 
   const warmupSets: WarmupSet[] = useMemo(() => {
-    if (!hasOneRM) return []
-    return generateWarmup(oneRMKg, warmupPct).map((w) => ({
-      ...w,
-      weightKg: roundTo(w.weightKg, roundUnit),
-    }))
-  }, [oneRMKg, warmupPct, roundUnit, hasOneRM])
+    if (!hasOneRM || isBw) return []
+    return generateWarmup(oneRMKg, warmupPct, { noBar })
+  }, [oneRMKg, warmupPct, hasOneRM, isBw, noBar])
 
   const restAdvice = useMemo(() => suggestRestForIntensity(warmupPct), [warmupPct])
 
-  const intensityRows = useMemo(() => {
-    if (!hasOneRM) return []
-    return INTENSITIES.map((row) => {
-      const wKg = roundTo((oneRMKg * row.pct) / 100, roundUnit)
-      const display = unit === 'kg' ? wKg : roundTo(kgToLb(wKg), roundUnit === 2.5 ? 5 : roundUnit)
-      return { ...row, display }
-    })
-  }, [oneRMKg, unit, roundUnit, hasOneRM])
+  const intensityRows = !hasOneRM ? [] :
+    INTENSITIES.map((row) => ({ ...row, label: loadLabel((totalOneRM * row.pct) / 100) }))
 
-  const repsRows = useMemo(() => {
-    if (!hasOneRM) return []
-    const reps = [1, 2, 3, 5, 8, 10, 12, 15]
-    return reps.map((r) => {
-      // Epley 역산
-      const wKg = oneRMKg / (1 + r / 30)
-      const rounded = roundTo(wKg, roundUnit)
-      const display = unit === 'kg' ? rounded : roundTo(kgToLb(rounded), roundUnit === 2.5 ? 5 : roundUnit)
-      const pct = Math.round((wKg / oneRMKg) * 100)
-      return { reps: r, display, pct }
-    })
-  }, [oneRMKg, unit, roundUnit, hasOneRM])
+  // 계산 탭에서 고른 공식의 역산 — 1회는 1RM 그대로(100%)
+  const repsRows = !hasOneRM ? [] : [1, 2, 3, 5, 8, 10, 12, 15].map((r) => {
+    const wKg = totalOneRM / repFactor(formulaKey, r)
+    const pct = Math.round((wKg / totalOneRM) * 100)
+    return { reps: r, label: loadLabel(wKg), pct }
+  })
 
   return (
     <>
       <div className={s.card}>
         <span className={s.cardLabel}>1RM 입력</span>
         <div className={s.rowInline} style={{ justifyContent: 'space-between', marginBottom: 10 }}>
-          <label className={s.fieldLabel}>직접 입력 (비우면 계산 탭 값 사용)</label>
+          <label className={s.fieldLabel} htmlFor="one-rm-training-override">직접 입력 (비우면 계산 탭 값 사용)</label>
           <div className={s.unitToggle}>
             <button type="button" aria-pressed={unit === 'kg'} className={`${s.unitBtn} ${unit === 'kg' ? s.unitBtnActive : ''}`} onClick={() => setUnit('kg')}>kg</button>
             <button type="button" aria-pressed={unit === 'lb'} className={`${s.unitBtn} ${unit === 'lb' ? s.unitBtnActive : ''}`} onClick={() => setUnit('lb')}>lb</button>
           </div>
         </div>
         <input
+          id="one-rm-training-override"
           type="number"
           inputMode="decimal"
           className={s.input}
-          placeholder={hasOneRM ? `${fmt(unit === 'kg' ? oneRMKg : kgToLb(oneRMKg), 0)}${unit} (계산 탭 값)` : '예: 100'}
+          placeholder={hasOneRM ? `${fmt(unit === 'kg' ? oneRMKg : kgToLb(oneRMKg), 1)}${unit} (계산 탭 값)` : '예: 100'}
           value={trainingOverride}
           onChange={(e) => setTrainingOverride(e.target.value)}
         />
+        {isBw && (
+          <p className={s.rpeHint} style={{ marginTop: 6 }}>
+            ※ 맨몸 종목은 1RM을 <strong>추가 중량</strong>으로 입력합니다. 아래 처방 중량은 체중 {fmt(bodyLoadKg, 1)}kg을 포함한 전체 부하의 %에서 체중을 뺀 값이며, &lsquo;보조&rsquo;는 밴드·머신으로 덜어 낼 무게입니다.
+          </p>
+        )}
       </div>
 
       {hasOneRM ? (
@@ -790,11 +820,11 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
               {intensityRows.map((row) => {
                 const typeClass = row.type === 'strong' ? s.intensityStrong : row.type === 'hyper' ? s.intensityHypertrophy : s.intensityEndurance
                 const k = `int-${row.pct}`
-                const decl = `${exercise.name} ${row.pct}% · ${fmt(row.display, 0)}${unit} · ${row.reps}`
+                const decl = `${exercise.name} ${row.pct}% · ${row.label} · ${row.reps}`
                 return (
                   <div key={row.pct} className={`${s.intensityRow} ${typeClass}`}>
                     <div className={s.intensityPct}>{row.pct}%</div>
-                    <div className={s.intensityWt}>{fmt(row.display, 0)}{unit}</div>
+                    <div className={s.intensityWt}>{row.label}</div>
                     <div className={s.intensityReps}>{row.reps}</div>
                     <div className={s.intensityPurpose}>{row.purpose}</div>
                     <button
@@ -838,11 +868,11 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
                   </thead>
                   <tbody>
                     {warmupSets.map((w) => {
-                      const display = unit === 'kg' ? w.weightKg : roundTo(kgToLb(w.weightKg), roundUnit === 2.5 ? 5 : roundUnit)
+                      const display = dispRound(w.weightKg, unit, roundUnit)
                       return (
                         <tr key={w.setNumber}>
                           <td className={s.formulaName}>{w.setNumber}세트 ({Math.round(w.weightPercent)}%)</td>
-                          <td className={s.formulaVal}>{fmt(display, 0)}{unit}</td>
+                          <td className={s.formulaVal}>{fmt(display, 1)}{unit}</td>
                           <td className={s.formulaNote}>×{w.reps}회</td>
                           <td className={s.formulaNote}>{w.restSec}초{w.notes ? ` · ${w.notes}` : ''}</td>
                         </tr>
@@ -855,7 +885,11 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
                 </div>
               </>
             ) : (
-              <div className={s.warmupHint}>1RM이 입력되면 워밍업이 자동 생성됩니다.</div>
+              <div className={s.warmupHint}>
+                {isBw
+                  ? '맨몸 종목은 맨몸 반복으로 몸을 푼 뒤 추가 중량을 단계적으로 올리세요. 바벨 기준 워밍업 표는 표시하지 않습니다.'
+                  : '본 세트가 빈 봉(20kg)보다 가벼워 별도 워밍업 세트가 필요 없습니다. 가벼운 동작 반복으로 몸을 푸세요.'}
+              </div>
             )}
           </div>
 
@@ -873,7 +907,7 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
                 {repsRows.map((r) => (
                   <tr key={r.reps}>
                     <td className={s.formulaName}>{r.reps}회</td>
-                    <td className={s.formulaVal}>{fmt(r.display, 0)}{unit}</td>
+                    <td className={s.formulaVal}>{r.label}</td>
                     <td className={s.formulaNote}>{r.pct}%</td>
                   </tr>
                 ))}
@@ -885,24 +919,20 @@ function TrainingTab({ oneRMKg, unit, setUnit, roundUnit, trainingOverride, setT
             <span className={s.cardLabel}>{exercise.name} 프로그램 예시</span>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
               {(() => {
-                const pct80 = roundTo(oneRMKg * 0.8, roundUnit)
-                const pct70 = roundTo(oneRMKg * 0.7, roundUnit)
-                const pct75 = roundTo(oneRMKg * 0.75, roundUnit)
-                const pct60 = roundTo(oneRMKg * 0.6, roundUnit)
-                const d = (kg: number) => unit === 'kg' ? fmt(kg, 0) : fmt(kgToLb(kg), 0)
+                const d = (pct: number) => loadLabel(totalOneRM * pct)
                 return (
                   <>
                     <div className={s.programCard}>
                       <div className={s.programHead}>근력 중심 (저반복·고중량)</div>
-                      <div className={s.programItem}><strong>5×5</strong> @ 80% — {d(pct80)}{unit} × 5회 × 5세트</div>
+                      <div className={s.programItem}><strong>5×5</strong> @ 80% — {d(0.8)} × 5회 × 5세트</div>
                     </div>
                     <div className={s.programCard}>
                       <div className={s.programHead}>근비대 (중반복)</div>
-                      <div className={s.programItem}><strong>4×8~12</strong> @ 70~75% — {d(pct70)}~{d(pct75)}{unit} × 8~12회 × 4세트</div>
+                      <div className={s.programItem}><strong>4×8~12</strong> @ 70~75% — {d(0.7)}~{d(0.75)} × 8~12회 × 4세트</div>
                     </div>
                     <div className={s.programCard}>
                       <div className={s.programHead}>볼륨/지구력</div>
-                      <div className={s.programItem}><strong>3×15</strong> @ 60% — {d(pct60)}{unit} × 15회 × 3세트</div>
+                      <div className={s.programItem}><strong>3×15</strong> @ 60% — {d(0.6)} × 15회 × 3세트</div>
                     </div>
                   </>
                 )
@@ -1064,13 +1094,13 @@ function PlateTab({
 
         <div className={s.field}>
           <div className={s.rowInline} style={{ justifyContent: 'space-between' }}>
-            <label className={s.fieldLabel}>목표 중량</label>
+            <label className={s.fieldLabel} htmlFor="one-rm-plate-target">목표 중량</label>
             <div className={s.unitToggle}>
               <button type="button" aria-pressed={unit === 'kg'} className={`${s.unitBtn} ${unit === 'kg' ? s.unitBtnActive : ''}`} onClick={() => setUnit('kg')}>kg</button>
               <button type="button" aria-pressed={unit === 'lb'} className={`${s.unitBtn} ${unit === 'lb' ? s.unitBtnActive : ''}`} onClick={() => setUnit('lb')}>lb</button>
             </div>
           </div>
-          <input type="number" inputMode="decimal" className={s.input} value={targetWeight} min={0} onChange={(e) => setTargetWeight(e.target.value)} />
+          <input id="one-rm-plate-target" type="number" inputMode="decimal" className={s.input} value={targetWeight} min={0} onChange={(e) => setTargetWeight(e.target.value)} />
         </div>
 
         <div className={s.field}>
@@ -1098,6 +1128,7 @@ function PlateTab({
               className={s.input}
               style={{ marginTop: 8 }}
               placeholder={`바벨 무게 (${unit})`}
+              aria-label={`바벨 무게 직접 입력 (${unit})`}
               value={barCustom}
               onChange={(e) => setBarCustom(e.target.value)}
             />
@@ -1156,13 +1187,17 @@ function PlateTab({
               <div style={{ height: 12 }} />
               <PlateViz barKg={actualBarKg} perSide={result.perSide} />
             </>
-          ) : (
+          ) : available.length === 0 && targetKg > actualBarKg + 0.01 ? (
+            <div className={s.plateError}>
+              <strong>사용 가능 원판을 하나 이상 선택하세요.</strong>
+            </div>
+          ) : targetKg <= actualBarKg + 0.01 ? (
             <div className={s.plateError}>
               <strong>바 무게 이하의 목표는 원판이 필요 없습니다.</strong>
             </div>
-          )}
+          ) : null}
 
-          {!result.exact && result.alt && (
+          {!result.exact && result.alt && available.length > 0 && (
             <div className={s.plateError} style={{ marginTop: 10 }}>
               선택한 원판으로 정확히 {displayWeight(targetKg)}{unit}을 만들 수 없습니다.<br />
               가능한 가장 가까운 중량: <strong>{displayWeight(result.alt.lower)}{unit}</strong>
@@ -1248,7 +1283,7 @@ function PlateViz({ barKg, perSide }: { barKg: number; perSide: number[] }) {
         })}
 
         {/* 라벨 */}
-        <text x={W / 2} y={H - 10} fill="var(--muted)" fontSize="11" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>
+        <text x={W / 2} y={H - 10} fill="var(--muted)" fontSize="11" textAnchor="middle">
           바 {fmt(barKg, 0)}kg
         </text>
       </svg>

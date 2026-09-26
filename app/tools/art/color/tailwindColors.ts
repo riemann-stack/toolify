@@ -1,6 +1,6 @@
 /* Tailwind CSS v4 기본 팔레트 — 26 색상 × 11 단계 = 286색
  * 소스: tailwindcss theme.css의 OKLCH 정의를 sRGB hex로 변환한 값 (색역 밖 값은 sRGB 클리핑).
- * v4.1+에서 taupe·mauve·mist·olive 4패밀리가 추가돼 26종. 확인일 2026-07-26. */
+ * v4.2.0에서 taupe·mauve·mist·olive 4패밀리가 추가돼 26종. 확인일 2026-07-26. */
 
 export const TAILWIND_COLORS: Record<string, Record<string, string>> = {
   slate: {

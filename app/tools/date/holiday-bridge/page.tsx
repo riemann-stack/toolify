@@ -6,6 +6,8 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
+import { computeBridge, DEFAULT_SETTINGS, shortKo } from './holidayBridgeUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/date/holiday-bridge',
@@ -39,7 +41,7 @@ const FAQ_LD = [
   },
   {
     q: '징검다리 연휴에 연차 1~2개로 최대 며칠 쉴 수 있나요?',
-    a: '구간에 따라 다릅니다. 2026년 기준 연차 <strong>1개</strong>면 5월 1일(노동절·금)~5월 5일(어린이날·화) 사이 5월 4일(월) 하루만 써도 <strong>5일 연휴</strong>가 됩니다(노동절 휴무 포함 시). 연차 <strong>2개</strong>면 설 연휴(2/16~18) 직후 평일 2개를 붙여 7~9일까지 늘릴 수 있습니다. 본 도구의 "최대 한 방" 모드가 보유 연차 안에서 가장 긴 구간을 골라줍니다.',
+    a: '구간에 따라 다릅니다. 2026년 기준 연차 <strong>1개</strong>면 5월 1일(노동절·금)~5월 5일(어린이날·화) 사이 5월 4일(월) 하루만 써도 <strong>5일 연휴</strong>가 됩니다(노동절 휴무 포함 시). 연휴 앞에 붙이는 방식까지 치면 설 연휴(2/16월~2/18수) 앞 2/13(금) 하루로 <strong>2/13~2/18 6일</strong>도 됩니다. 연차 <strong>2개</strong>면 설 연휴 직후 2/19(목)·2/20(금)을 써서 주말까지 이으면 <strong>2/14~2/22 9일</strong>입니다. 본 도구의 "최대 한 방" 모드는 보유 연차 안에서 양 끝이 주말·공휴일로 닫히는 가장 긴 징검다리를 골라줍니다.',
   },
   {
     q: '2027년 설날 연휴는 며칠인가요?',
@@ -63,17 +65,32 @@ const FAQ_LD = [
   },
 ]
 
-const cardBg = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px' }
-const h2Style = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' } as const
+const cardBg = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)' }
+
+/* 연도별 비교표 — 빌드 시 계산기와 같은 computeBridge로 산출 (기본 설정: 주 5일·노동절 휴무·회사 휴일 없음·연중 전체).
+   computeBridge는 양 끝이 OFF run인 구간(징검다리)만 만든다 — 연휴 앞뒤에 연차만 붙이는 확장은 셈에 없다(표 제목·주석에 명시).
+   2030년은 제외 — 그해 전국 선거일이 공휴일 데이터(lib/krHolidays)에 없다.
+   2028-04-12(수) 제23대 국선도 데이터에 없지만 평일 단독이라 표 값은 그대로다(회사휴일로 주입해 검산: 8회·10/10/16일 불변). */
+const COMPARE_YEARS = [2026, 2027, 2028, 2029]
+const COMPARE_K = [1, 2, 5]
+const YEAR_ROWS = COMPARE_YEARS.map(year => {
+  const base = computeBridge({ ...DEFAULT_SETTINGS, year, k: 0 })
+  const plans = COMPARE_K.map(k => {
+    const f = computeBridge({ ...DEFAULT_SETTINGS, year, k }).focus
+    return f
+      ? { range: `${shortKo(f.startDate)}~${shortKo(f.endDate)}`, days: f.totalDays, cost: f.cost }
+      : null
+  })
+  return { year, free: base.free.length, plans }
+})
 
 export default function HolidayBridgePage() {
   return (
-    <div style={{ maxWidth: '880px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>날짜·시간</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={880} slug="/tools/date/holiday-bridge">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="date" />징검다리 연휴 플래너
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '28px' }}>
+      <p className="tp-lead">
         보유 연차를 입력하면 2026~2030년 공휴일·대체공휴일에 맞춰 <strong style={{ color: 'var(--text)' }}>가장 길게 쉴 수 있는 연차 배치</strong>를 찾아줍니다. 효율(연차 1개당 며칠)과 연차 0개 기준 대비 추가 획득일까지 비교합니다. 올해를 볼 때는 오늘 이후에 시작하는 구간만 추천합니다.
       </p>
 
@@ -106,24 +123,24 @@ export default function HolidayBridgePage() {
 
         {/* 1. 징검다리 연휴란 */}
         <div>
-          <h2 style={h2Style}>징검다리 연휴란?</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">징검다리 연휴란?</h2>
+          <p className="g-p">
             공휴일과 주말 사이에 평일 하루이틀이 끼어 연휴가 끊길 때, 그 <strong style={{ color: 'var(--text)' }}>평일에 연차를 넣어 다리를 놓는 것</strong>을 징검다리 연휴라고 합니다. 예를 들어 2026년 추석은 9월 24일(목)부터 시작하는데, 그 앞 9/21(월)·9/22(화)·9/23(수)이 평일입니다. 이 사흘에 연차를 쓰면 직전 주말(9/19~20)부터 추석 끝(9/27)까지 <strong style={{ color: 'var(--text)' }}>9일이 한 번에 이어집니다</strong>. 연차 3개로 9일을 쉬니 효율은 3배입니다.
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8 }}>
+          <p className="g-p">
             핵심은 <strong style={{ color: 'var(--text)' }}>양 끝이 모두 쉬는 날</strong>이어야 한다는 점입니다. 연휴 양 끝이 주말·공휴일로 닫혀 있어야 가운데 평일을 연차로 메웠을 때 통째로 이어집니다. 끝이 평일이면 연차를 더 써야 하거나 효율이 떨어집니다.
           </p>
         </div>
 
         {/* 2. 2026 황금연휴 best */}
         <div>
-          <h2 style={h2Style}>2026년 황금연휴 best 구간</h2>
-          <div style={{ overflowX: 'auto' }}>
+          <h2 className="g-h2">2026년 황금연휴 best 구간</h2>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['연휴', '공휴일', '연차 활용', '결과'].map(h => (
-                    <th scope="col" key={h} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={{ padding: '10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -137,24 +154,27 @@ export default function HolidayBridgePage() {
                   ['개천절', '10/3(토)~10/5(월 대체)', '연차 0개', '10/3~10/5 (3일)'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r[1]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)' }}>{r[2]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent-ink)', fontWeight: 700 }}>{r[3]}</td>
+                    <td style={{ padding: '10px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
+                    <td style={{ padding: '10px', color: 'var(--muted)' }}>{r[1]}</td>
+                    <td style={{ padding: '10px', color: 'var(--muted)' }}>{r[2]}</td>
+                    <td style={{ padding: '10px', color: 'var(--accent-ink)', fontWeight: 700 }}>{r[3]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+          <p className="g-note">
             추석과 설은 연차 2~3개로 9일까지 늘어나 효율이 가장 좋습니다. 광복절·개천절은 토·일·월(대체)로 이미 3일이라 연차 없이 챙길 수 있는 구간입니다.
+          </p>
+          <p className="g-p">
+            추석 이후 2026년에 남은 구간은 두 곳입니다. 개천절 연휴(10/3~10/5)와 한글날(10/9 금) 사이 평일 <strong>10/6·10/7·10/8에 연차 3개</strong>를 쓰면 <strong>10/3~10/11 9일</strong>, 성탄절(12/25 금) 뒤 <strong>12/28~12/31에 연차 4개</strong>를 쓰면 2027년 신정 연휴까지 이어져 <strong>12/25~1/3 10일</strong>이 됩니다. 도구에서 연도를 2026으로 두면 오늘 이후 구간만 추천합니다.
           </p>
         </div>
 
         {/* 3. 2027 미리 보기 */}
         <div>
-          <h2 style={h2Style}>2027년 미리 보는 연휴</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">2027년 미리 보는 연휴</h2>
+          <p className="g-p">
             2027년은 설 연휴가 길게 잡힙니다. 설날 2월 7일(일)이라 <strong style={{ color: 'var(--text)' }}>2월 9일(화)이 대체공휴일</strong>로 붙어 2/6~2/9 4일이 연차 없이 생깁니다. 직후 2/10·2/11·2/12에 연차 3개를 넣으면 다음 주말까지 이어집니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '8px' }}>
@@ -174,10 +194,55 @@ export default function HolidayBridgePage() {
           </div>
         </div>
 
+        {/* 3-1. 연도별 비교 (빌드 시 계산) */}
+        <div>
+          <h2 className="g-h2">2026~2029 연도별 비교 — 연차 1·2·5개로 잇는 최장 징검다리</h2>
+          <p className="g-p">
+            아래 표는 이 도구의 「최대 한 방」 계산을 연도별로 그대로 돌린 결과입니다(주 5일 근무, 노동절 휴무, 회사 지정 휴일 없음, 연중 전체 기준).
+            도구와 마찬가지로 <strong>양 끝이 주말·공휴일로 닫힌 구간</strong>(가운데 평일을 연차로 메운 징검다리)만 셉니다.
+            연차 없이 생기는 3일 이상 연휴의 수는 해마다 크게 다릅니다 — 공휴일이 주말에 몰린 해는 대체공휴일 덕에 3일 연휴가 많고, 평일 한가운데 흩어진 해는 적습니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 600 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['연도', '연차 0개 3일+ 연휴', ...COMPARE_K.map(k => `연차 ${k}개로 잇는 최장`)].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {YEAR_ROWS.map((r, i) => (
+                  <tr key={r.year} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px', textAlign: 'left', color: 'var(--text)', fontWeight: 700 }}>{r.year}</th>
+                    <td style={{ padding: '10px', color: 'var(--text)' }}>{r.free}회</td>
+                    {r.plans.map((p, j) => (
+                      <td key={j} style={{ padding: '10px', color: 'var(--muted)' }}>
+                        {p ? (
+                          <>
+                            <strong style={{ color: 'var(--accent-ink)' }}>{p.days}일</strong> · {p.range}
+                            {p.cost < COMPARE_K[j] && <><br /><span style={{ fontSize: '12px' }}>연차 {p.cost}개로 충분</span></>}
+                          </>
+                        ) : '—'}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            ※ 같은 길이면 연차를 적게 쓰는 구간을 골랐습니다. 2028년은 추석 연휴와 개천절이 겹쳐 10/5(목)가 대체공휴일이 되므로 10/6(금) 하루만 쉬면 한글날(10/9 월)까지 10일이 이어집니다.
+            연휴 앞뒤에 연차를 붙이기만 하는 경우는 셈에서 빠집니다 — 예: 2026년 설 앞 2/13(금) 연차 1개 → 2/13~2/18 6일, 2029년 설 앞 2/9(금) → 2/9~2/14 6일로 표의 연차 1개 값보다 깁니다.
+            다만 이렇게 붙인 연차는 1개당 정확히 하루만 늘어나고(추가 획득 1배), 징검다리는 반대편 주말·공휴일까지 함께 이어져 1개로 이틀 이상을 더 얻는 경우가 많아 도구는 징검다리를 우선 찾습니다.
+            2030년은 선거일 데이터가 없어 표에서 뺐습니다(2028년 4/12 제23대 국회의원선거일도 데이터에 아직 없지만, 수요일 단독이라 표 결과에는 영향이 없습니다).
+          </p>
+        </div>
+
         {/* 4. 몰아 쓸까 분산할까 */}
         <div>
-          <h2 style={h2Style}>연차를 몰아 쓸까, 분산할까 — 효율배수로 따지기</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <h2 className="g-h2">연차를 몰아 쓸까, 분산할까 — 효율배수로 따지기</h2>
+          <p className="g-p">
             같은 연차라도 어디에 쓰느냐에 따라 결과가 다릅니다. 판단 기준은 <strong style={{ color: 'var(--text)' }}>효율배수 = 총 연속일수 ÷ 사용 연차</strong>입니다. 추석 앞에 연차 3개를 몰면 9일(3배)이 되고, 연차가 넉넉하면 같은 예산을 서로 겹치지 않는 여러 구간에 나눠 연중 여러 번 쉴 수도 있습니다. 다만 <strong style={{ color: 'var(--text)' }}>연차가 적을 때는 한 구간에 몰아 쓰는 쪽이 더 이득</strong>인 경우가 많습니다 — 이 도구의 「골고루 분산」은 예산 안에서 나눌 수 있는 조합을 모두 따져 추가 획득일 합이 가장 큰 배치를 고르므로, 그 답이 한 구간이면 한 구간을 그대로 보여줍니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
@@ -198,26 +263,26 @@ export default function HolidayBridgePage() {
 
         {/* 5. 토요일·노동절·회사휴일 */}
         <div>
-          <h2 style={h2Style}>토요일 근무·노동절·회사 지정휴일 반영하기</h2>
-          <ul style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 2, listStyle: 'none', padding: 0, margin: 0 }}>
-            <li>· <strong style={{ color: 'var(--text)' }}>토요일 근무</strong> — 주 6일 근무라면 토글을 켜세요. 토요일이 평일로 처리되어 연휴를 끊는 날이 되고, 같은 공휴일이라도 연차가 더 필요해집니다.</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>노동절(구 근로자의 날, 5/1)</strong> — 2026년부터 관공서의 공휴일이자 「노동절 제정에 관한 법률」상 유급휴일입니다. 다만 병원·교대제 등 실제로 근무하는 사업장이 있어(이때는 휴일근로수당 발생), 정상 근무면 토글을 끄세요. 5월 초 황금연휴 길이가 크게 달라집니다.</li>
-            <li>· <strong style={{ color: 'var(--text)' }}>회사 지정 휴일</strong> — 창립기념일·노조 창립일 등 회사만 쉬는 날을 날짜로 추가하면 그날도 휴무로 잡혀 연속 구간이 늘어납니다. 입력값은 이 브라우저에 저장됩니다.</li>
+          <h2 className="g-h2">토요일 근무·노동절·회사 지정휴일 반영하기</h2>
+          <ul className="g-list">
+            <li><strong>토요일 근무</strong> — 주 6일 근무라면 토글을 켜세요. 토요일이 평일로 처리되어 연휴를 끊는 날이 되고, 같은 공휴일이라도 연차가 더 필요해집니다.</li>
+            <li><strong>노동절(구 근로자의 날, 5/1)</strong> — 2026년부터 관공서의 공휴일이자 「노동절 제정에 관한 법률」상 유급휴일입니다. 다만 병원·교대제 등 실제로 근무하는 사업장이 있어(이때는 휴일근로수당 발생), 정상 근무면 토글을 끄세요. 5월 초 황금연휴 길이가 크게 달라집니다.</li>
+            <li><strong>회사 지정 휴일</strong> — 창립기념일·노조 창립일 등 회사만 쉬는 날을 날짜로 추가하면 그날도 휴무로 잡혀 연속 구간이 늘어납니다. 입력값은 이 브라우저에 저장됩니다.</li>
           </ul>
         </div>
 
         {/* 6. 대체공휴일 규칙 */}
         <div>
-          <h2 style={h2Style}>대체공휴일 규칙 한눈에</h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '14px' }}>
+          <h2 className="g-h2">대체공휴일 규칙 한눈에</h2>
+          <p className="g-p">
             대체공휴일은 <strong style={{ color: 'var(--text)' }}>관공서의 공휴일에 관한 규정 제3조</strong>에 따라 부여됩니다. 공휴일이 주말과 겹치면 평일 하루를 대신 쉬게 하는 제도이고, <strong style={{ color: 'var(--text)' }}>평일에 두 공휴일이 겹칠 때</strong>도 부여됩니다(예: 2028년 추석과 개천절이 10월 3일에 겹쳐 10월 5일이 대체공휴일). 2026년 개정(대통령령 제36290호)으로 <strong style={{ color: 'var(--text)' }}>제헌절·노동절이 대체 대상에 추가</strong>됐습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   {['공휴일', '대체 조건', '비고'].map(h => (
-                    <th scope="col" key={h} style={{ padding: '9px 10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                    <th scope="col" key={h} style={{ padding: '10px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -229,15 +294,15 @@ export default function HolidayBridgePage() {
                   ['위 공휴일끼리 평일에 겹치면', '토·일이 아닌 날에 중복', '겹친 만큼 대체공휴일 부여'],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '9px 10px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--accent-ink)', fontWeight: 600 }}>{r[1]}</td>
-                    <td style={{ padding: '9px 10px', color: 'var(--muted)', fontSize: '12px' }}>{r[2]}</td>
+                    <td style={{ padding: '10px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
+                    <td style={{ padding: '10px', color: 'var(--accent-ink)', fontWeight: 600 }}>{r[1]}</td>
+                    <td style={{ padding: '10px', color: 'var(--muted)', fontSize: '12px' }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
+          <p className="g-note">
             예: 2026년 광복절(8/15)은 토요일이라 8/17(월)이 대체공휴일입니다. 어린이날(5/5)은 화요일이라 대체 없이 그날만 쉽니다. 본 도구는 대체공휴일을 자동 반영합니다.
           </p>
         </div>
@@ -249,7 +314,7 @@ export default function HolidayBridgePage() {
 
         {/* 관련 도구 */}
         <div>
-          <h2 style={h2Style}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday', icon: '📅', name: 'D-Day 계산기', desc: '고른 연휴까지 카운트다운 + 영업일·N일 후 계산' },
@@ -260,7 +325,7 @@ export default function HolidayBridgePage() {
               <Link
                 key={i}
                 href={t.href}
-                style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', textDecoration: 'none' }}
+                style={{ display: 'block', padding: '14px 16px', background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', textDecoration: 'none' }}
               >
                 <p style={{ fontSize: '20px', marginBottom: '6px' }}>{t.icon}</p>
                 <p style={{ fontSize: '14px', fontWeight: 700, color: 'var(--text)', marginBottom: '4px' }}>{t.name}</p>
@@ -271,6 +336,6 @@ export default function HolidayBridgePage() {
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

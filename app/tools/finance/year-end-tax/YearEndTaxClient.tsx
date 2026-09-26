@@ -54,6 +54,7 @@ interface Stored {
   prepaidMode?: unknown
   dependents?: unknown
   children?: unknown
+  youngChildren?: unknown
   creditCard?: unknown
   checkCash?: unknown
   marketTransit?: unknown
@@ -81,6 +82,7 @@ export default function YearEndTaxClient() {
   const [prepaidMode, setPrepaidMode] = useState<PrepaidMode>('withLocal')
   const [dependents, setDependents] = useState('0')
   const [children, setChildren] = useState('0')
+  const [youngChildren, setYoungChildren] = useState('0')
   // [신용카드]
   const [creditCard, setCreditCard] = useState('')
   const [checkCash, setCheckCash] = useState('')
@@ -111,11 +113,13 @@ export default function YearEndTaxClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j: Stored = JSON.parse(raw)
+      // eslint-disable-next-line react-hooks/set-state-in-effect -- 마운트 1회 localStorage 복원 (dsr 패턴)
       if (isStr(j.gross)) setGross(commafy(j.gross))
       if (isStr(j.prepaid)) setPrepaid(commafy(j.prepaid))
       if (isPrepaidMode(j.prepaidMode)) setPrepaidMode(j.prepaidMode)
       if (isStr(j.dependents)) setDependents(String(parseCount(j.dependents)))
       if (isStr(j.children)) setChildren(String(parseCount(j.children)))
+      if (isStr(j.youngChildren)) setYoungChildren(String(parseCount(j.youngChildren)))
       if (isStr(j.creditCard)) setCreditCard(commafy(j.creditCard))
       if (isStr(j.checkCash)) setCheckCash(commafy(j.checkCash))
       if (isStr(j.marketTransit)) setMarketTransit(commafy(j.marketTransit))
@@ -141,7 +145,7 @@ export default function YearEndTaxClient() {
       localStorage.setItem(
         STORAGE_KEY,
         JSON.stringify({
-          gross, prepaid, prepaidMode, dependents, children,
+          gross, prepaid, prepaidMode, dependents, children, youngChildren,
           creditCard, checkCash, marketTransit,
           pensionSavings, irp, insurance,
           medical, education, donation,
@@ -151,7 +155,7 @@ export default function YearEndTaxClient() {
       )
     } catch {}
   }, [
-    gross, prepaid, prepaidMode, dependents, children,
+    gross, prepaid, prepaidMode, dependents, children, youngChildren,
     creditCard, checkCash, marketTransit,
     pensionSavings, irp, insurance,
     medical, education, donation,
@@ -166,6 +170,7 @@ export default function YearEndTaxClient() {
     gross: grossN,
     dependents: parseCount(dependents),
     children: parseCount(children),
+    youngChildren: parseCount(youngChildren),
     elderly: parseCount(elderly),
     disabled: parseCount(disabled),
     creditCard: parseAmount(creditCard),
@@ -184,7 +189,7 @@ export default function YearEndTaxClient() {
     prepaidTax: amountOrNull(prepaid),
     prepaidIncludesLocal: prepaidMode === 'withLocal',
   }), [
-    grossN, dependents, children, elderly, disabled,
+    grossN, dependents, children, youngChildren, elderly, disabled,
     creditCard, checkCash, marketTransit,
     pensionSavings, irp, insurance, medical, education, donation,
     monthlyRent, isHomeless, nationalPension, otherInsurance, prepaid, prepaidMode,
@@ -212,7 +217,18 @@ export default function YearEndTaxClient() {
   const pensionCurrent = Math.min(psEligible + parseAmount(irp), PENSION_TOTAL_LIMIT)
   const pensionHeadroom = Math.max(0, PENSION_TOTAL_LIMIT - pensionCurrent)
   const pensionRate = grossN <= PENSION_CREDIT_GROSS_CUT ? PENSION_CREDIT_RATE_HIGH : PENSION_CREDIT_RATE_LOW
-  const pensionExtraRefund = Math.round(pensionHeadroom * pensionRate)
+  /* 한도까지 채웠을 때 실제 줄어드는 결정세액(지방세 포함) — 결정세액이 남은 만큼만 줄어든다 */
+  const pensionExtraRefund = useMemo(() => {
+    if (pensionHeadroom <= 0) return 0
+    const rMax = calcYearEnd({ ...input, irp: input.irp + pensionHeadroom })
+    return Math.max(0, r.decidedTotal - rMax.decidedTotal)
+  }, [input, r.decidedTotal, pensionHeadroom])
+  const pensionUncappedRefund = Math.round(pensionHeadroom * pensionRate * 1.1)
+  const pensionTipCapped = pensionExtraRefund < pensionUncappedRefund - 10
+
+  /* 자녀 수가 부양가족 수보다 많으면 lib에서 자녀 수만큼 부양가족으로 반영 — 안내용 */
+  const kidsTotal = parseCount(children) + parseCount(youngChildren)
+  const dependentsRaisedToKids = kidsTotal > parseCount(dependents)
 
   /* 복사 요약 */
   const summary = useMemo(() => {
@@ -312,7 +328,7 @@ export default function YearEndTaxClient() {
               <span className={s.unitSuffix}>원</span>
             </div>
             <p className={s.helpText}>
-              원천징수영수증 ⑬ 결정세액 또는 매월 떼인 세금 합계. 비우면 자동 추정합니다.
+              급여명세서에서 매월 떼인 소득세(지방세 포함 여부 선택)를 1년치 더한 값, 또는 근로소득 원천징수영수증의 기납부세액 란입니다. 결정세액이 아닙니다. 비우면 자동 추정합니다.
             </p>
             <div className={s.segment} role="group" aria-label="기납부세액 포함 범위" style={{ marginTop: 8 }}>
               {([
@@ -334,11 +350,13 @@ export default function YearEndTaxClient() {
         </div>
 
         <div className={s.row2}>
-          {countInput('yet-dependents', '부양가족 수 (본인 외)', dependents, setDependents)}
+          {countInput('yet-dependents', '부양가족 수 (본인 외, 자녀 포함)', dependents, setDependents)}
           {countInput('yet-children', '8~20세 자녀 수', children, setChildren)}
+          {countInput('yet-young-children', '8세 미만 자녀 수', youngChildren, setYoungChildren)}
         </div>
         <p className={s.helpText}>
-          부양가족은 1인당 150만원 기본공제, 8~20세 자녀는 자녀세액공제(1명 25만·2명 55만)가 추가됩니다.
+          부양가족은 1인당 150만원 기본공제를 받고, 8~20세 자녀는 자녀세액공제(1명 25만·2명 55만)가 더해집니다. 자녀가 있으면 신용카드 공제 한도도 1인당 50만원(총급여 7천만원 초과 25만원), 최대 2명분까지 늘어납니다.
+          {dependentsRaisedToKids && <> 입력한 부양가족 수가 자녀 수보다 적어 자녀 {kidsTotal}명을 부양가족으로 계산했습니다.</>}
         </p>
       </div>
 
@@ -420,7 +438,7 @@ export default function YearEndTaxClient() {
                 <td className={s.cellMono}>−{won(r.pensionDeduction)}원</td>
               </tr>
               <tr>
-                <td>보험료 특별소득공제 (건보·고용)</td>
+                <td>보험료 특별소득공제 (건보·고용){r.usedStandard && <span className={s.estBadge}>표준 선택으로 미적용</span>}</td>
                 <td className={s.cellMono}>−{won(r.insuranceDeduction)}원</td>
               </tr>
               <tr>
@@ -470,7 +488,7 @@ export default function YearEndTaxClient() {
           </table>
         </div>
         <p className={s.helpText}>
-          특별·월세 세액공제 합계가 <strong>표준세액공제 {won(STANDARD_TAX_CREDIT)}원</strong>보다 작으면 표준을 자동 적용합니다. 결정세액(소득세)에 지방소득세 10%를 더한 값이 총 결정세액입니다.
+          <strong>표준세액공제 {won(STANDARD_TAX_CREDIT)}원</strong>은 건강·고용보험료 소득공제, 특별·월세 세액공제를 하나도 받지 않을 때만 적용됩니다. 두 경우를 모두 계산해 결정세액이 작은 쪽을 자동 적용합니다. 결정세액(소득세)에 지방소득세 10%를 더한 값이 총 결정세액입니다.
         </p>
       </div>
 
@@ -490,17 +508,18 @@ export default function YearEndTaxClient() {
       )}
 
       {/* ── 절세 팁 (한계세율 기반) ── */}
-      {(pensionHeadroom > 0 || r.usedStandard) && (
+      {((pensionHeadroom > 0 && pensionExtraRefund > 0) || r.usedStandard) && (
         <div className={s.card}>
           <span className={s.cardLabel}>막판 절세 팁</span>
-          {pensionHeadroom > 0 && (
+          {pensionHeadroom > 0 && pensionExtraRefund > 0 && (
             <div className={s.tipBox}>
-              💡 연금저축·IRP를 <strong>{manwon(pensionHeadroom)}만원</strong> 더 넣으면(합산 한도 {manwon(PENSION_TOTAL_LIMIT)}만원까지) 세액공제율 {Math.round(pensionRate * 100)}% 적용으로 결정세액이 약 <strong>{won(pensionExtraRefund)}원</strong> 줄어 환급이 그만큼 늘 수 있습니다.
+              💡 연금저축·IRP를 <strong>{manwon(pensionHeadroom)}만원</strong> 더 넣으면(합산 한도 {manwon(PENSION_TOTAL_LIMIT)}만원까지) 세액공제율 {Math.round(pensionRate * 100)}% 적용으로 결정세액(지방세 포함)이 약 <strong>{won(pensionExtraRefund)}원</strong> 줄어 환급이 그만큼 늘 수 있습니다.
+              {pensionTipCapped && <> 남은 결정세액이 적어 공제액 전부가 반영되지는 않으니, 이 금액만큼만 효과가 있다고 보세요.</>}
             </div>
           )}
           {r.usedStandard && (
             <div className={s.tipBox}>
-              💡 현재 특별·월세 세액공제 합계가 표준 {won(STANDARD_TAX_CREDIT)}원에 못 미쳐 <strong>표준세액공제 13만원</strong>이 적용 중입니다. 의료비·교육비·기부금·월세를 더 입력하면 항목별 공제가 표준을 넘는 시점부터 환급이 늘어납니다.
+              💡 지금은 건강·고용보험료 소득공제와 특별·월세 세액공제를 받는 것보다 <strong>표준세액공제 {won(STANDARD_TAX_CREDIT)}원</strong>이 유리해 표준을 적용했습니다. 의료비·교육비·기부금·월세가 더 있으면 항목별 공제가 유리해지는 시점부터 환급이 늘어납니다.
             </div>
           )}
         </div>
@@ -596,7 +615,7 @@ export default function YearEndTaxClient() {
           </div>
           <div className={s.row2}>
             {amountInput('yet-np', '국민연금 본인부담 (연)', nationalPension, setNationalPension, `비우면 추정 (약 ${won(r.pensionDeduction)}원)`)}
-            {amountInput('yet-other-ins', '건강·고용보험 본인부담 (연)', otherInsurance, setOtherInsurance, `비우면 추정 (약 ${won(r.insuranceDeduction)}원)`)}
+            {amountInput('yet-other-ins', '건강·고용보험 본인부담 (연)', otherInsurance, setOtherInsurance, `비우면 추정 (약 ${won(r.insurancePaid)}원)`)}
           </div>
         </div>
       </details>

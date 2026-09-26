@@ -1,10 +1,17 @@
 import Link from 'next/link'
 import HyroxClient from './HyroxClient'
+import {
+  WALLBALL_REPS, WALLBALL_NOTE, LEVELS, LEVEL_PRESETS, RUN_COUNT,
+  predict, requiredPace, fmtTime, fmtPace,
+} from './hyroxData'
 import AdSlot from '@/components/AdSlot'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import Callout from '@/components/Callout'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
   path: '/tools/sports/hyrox',
@@ -18,8 +25,24 @@ export const metadata = buildMetadata({
   ],
 })
 
-const h2: React.CSSProperties = { fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '14px' }
-const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '16px 20px' }
+const card: React.CSSProperties = { background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 20px' }
+
+/* ── 레벨별 예상 완주 — 도구와 같은 predict()로 빌드 시 계산 ── */
+const LEVEL_ROWS = [...LEVELS].reverse().map((lv) => {
+  const p = LEVEL_PRESETS[lv.id]
+  const r = predict({ runPaceSec: p.runPaceSec, stationSec: p.stations, roxzoneSec: p.roxzoneSec })
+  return { label: lv.label, pace: p.runPaceSec, ...r }
+})
+// 목표 역산 예시 — 중급 기본값(스테이션·록스존)을 그대로 두고 목표만 바꿨을 때
+const MID = LEVEL_PRESETS.intermediate
+const MID_RES = predict({ runPaceSec: MID.runPaceSec, stationSec: MID.stations, roxzoneSec: MID.roxzoneSec })
+const REQ_90 = requiredPace(90 * 60, MID_RES.stationTotalSec, MID.roxzoneSec)
+const REQ_80 = requiredPace(80 * 60, MID_RES.stationTotalSec, MID.roxzoneSec)
+// 스테이션을 합계 5분 줄였을 때 같은 80분 목표에 필요한 페이스
+const REQ_80_FAST = requiredPace(80 * 60, MID_RES.stationTotalSec - 300, MID.roxzoneSec)
+
+const TH: React.CSSProperties = { padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12, whiteSpace: 'nowrap' }
+const TDN: React.CSSProperties = { padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }
 
 const FAQ_LD = [
               {
@@ -27,12 +50,12 @@ const FAQ_LD = [
                 a: '개인전(Open) 기준 대략 <strong>엘리트 55~65분, 상급 70~80분, 중급 85~95분, 입문 100~120분</strong>입니다. 완주 자체가 목표라면 시간 제한은 사실상 없으며, 처음에는 90분~2시간을 잡고 페이싱하는 경우가 많습니다.',
               },
               {
-                q: '이 계산기의 예상 시간은 정확한가요?',
-                a: '스테이션 시간은 <strong>개인 편차가 매우 커서</strong> 레벨 기본값은 일반 참고 추정치입니다. 가장 정확하게 쓰려면 본인의 연습 기록(스키에르그·로잉·월볼 등)을 직접 입력하세요. 런 페이스도 「스테이션 직후의 지친 다리」 기준으로 평소보다 보수적으로 잡는 것이 현실적입니다.',
+                q: '레벨 기본값의 스테이션 시간이 내 기록과 다르면 어떻게 하나요?',
+                a: '스테이션 시간은 <strong>개인 편차가 매우 커서</strong> 레벨 기본값은 일반 참고 추정치입니다. 레벨 버튼은 런 페이스·스테이션 8개·록스존을 한꺼번에 채우므로, 가장 가까운 레벨을 먼저 고른 뒤 기록을 아는 스테이션(스키에르그·로잉 등)만 고쳐 넣으면 됩니다. 이후 레벨 버튼을 다시 누르면 고친 값이 모두 그 레벨의 기본값으로 덮어써지니 주의하세요.',
               },
               {
                 q: 'Open과 Pro의 차이는 무엇인가요?',
-                a: '운동 종류·순서는 같지만 <strong>중량이 다릅니다</strong>. 예) 썰매 밀기 Open 남 152kg → Pro 남 202kg, 월 볼 Open 남 6kg → Pro 남 9kg. 거리·횟수(런 8km, 월볼 100회 등)는 동일합니다. 입문이라면 Open으로 시작하는 것이 일반적입니다.',
+                a: `운동 종류·순서는 같지만 <strong>중량이 다릅니다</strong>. 예) 썰매 밀기 Open 남 152kg → Pro 남 202kg, 월 볼 Open 남 6kg → Pro 남 9kg. 런 8km와 스테이션 거리는 같고, 월 볼도 기본 ${WALLBALL_REPS}회입니다(여자 Open 횟수는 시즌에 따라 조정된 적이 있어 출전 시즌 룰북 확인 필요). 입문이라면 Open으로 시작하는 것이 일반적입니다.`,
               },
               {
                 q: '록스존(RoxZone)이 뭔가요?',
@@ -62,15 +85,22 @@ const FAQ_LD = [
 
 export default function HyroxPage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>스포츠</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/sports/hyrox">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="sports" />하이록스(HYROX) 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         8km 런 + 8개 스테이션 + 록스존을 합쳐 <strong style={{ color: 'var(--text)' }}>완주 시간을 예측</strong>하고,
         목표 시간에 필요한 런 페이스를 역산하며, <strong style={{ color: 'var(--text)' }}>부문별 중량·규격</strong>까지 한 곳에서 확인하세요.
       </p>
+
+      <UpdatedMeta
+        date="2026년 6월"
+        basis="HYROX 공식 룰북 시즌 25/26(경기 순서·부문별 중량·규격) · 월 볼 횟수는 26/27 시즌 안내 반영 · 국내 대회 현황은 2026년 6월까지의 공개 자료 기준"
+        sources={[
+          { label: 'HYROX 공식 사이트 — 룰북·대회 등록', href: 'https://hyrox.com' },
+        ]}
+      />
 
       <HyroxClient />
 
@@ -81,21 +111,21 @@ export default function HyroxPage() {
 
         {/* 1. 하이록스란 */}
         <section>
-          <h2 style={h2}>하이록스(HYROX)란?</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
-            하이록스는 <strong style={{ color: 'var(--text)' }}>1km 달리기와 기능성 운동(스테이션)을 8번 번갈아 수행</strong>하는 실내 피트니스 레이스입니다.
+          <h2 className="g-h2">하이록스(HYROX)란?</h2>
+          <p className="g-p">
+            하이록스는 <strong>1km 달리기와 기능성 운동(스테이션)을 8번 번갈아 수행</strong>하는 실내 피트니스 레이스입니다.
             전 세계 동일한 규격·중량으로 진행돼 기록을 직접 비교할 수 있는 것이 특징이며, 마라톤처럼 「완주」 자체가 목표가 되는 대중 종목으로 빠르게 성장하고 있습니다.
           </p>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9 }}>
-            총 거리는 <strong style={{ color: 'var(--text)' }}>달리기 8km + 8개 스테이션</strong>, 그리고 운동 사이를 이동·전환하는 <strong style={{ color: 'var(--text)' }}>록스존(RoxZone)</strong>까지 모두 기록에 포함됩니다.
+          <p className="g-p">
+            총 거리는 <strong>달리기 8km + 8개 스테이션</strong>, 그리고 운동 사이를 이동·전환하는 <strong>록스존(RoxZone)</strong>까지 모두 기록에 포함됩니다.
           </p>
         </section>
 
         {/* 2. 진행 순서 */}
         <section>
-          <h2 style={h2}>경기 진행 순서 (런 → 스테이션 8회 반복)</h2>
+          <h2 className="g-h2">경기 진행 순서 (런 → 스테이션 8회 반복)</h2>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -113,48 +143,97 @@ export default function HyroxPage() {
                     ['⑤ 런 ', '로잉 (Rowing)', '1,000m'],
                     ['⑥ 런 ', '파머스 캐리', '200m'],
                     ['⑦ 런 ', '샌드백 런지', '100m'],
-                    ['⑧ 런 ', '월 볼 (Wall Balls)', '100/75회'],
+                    ['⑧ 런 ', '월 볼 (Wall Balls)', `${WALLBALL_REPS}회`],
                   ].map((r, i) => (
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                      <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: '#A16207', fontWeight: 700 }}>1km</span></td>
+                      <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r[0]}<span style={{ color: 'var(--yellow-700)', fontWeight: 700 }}>1km</span></td>
                       <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[1]}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[2]}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 매 스테이션 직전에 1km 달리기가 들어가므로 런은 총 8회(8km)입니다. 월 볼은 여자 Open만 75회, 나머지 부문(남자 Open·Pro, 여자 Pro)은 100회(2025/26 시즌 조정).
+          <p className="g-note">
+            매 스테이션 직전에 1km 달리기가 들어가므로 런은 총 8회(8km)입니다. {WALLBALL_NOTE}
           </p>
         </section>
 
-        {/* 3. 부문 */}
+        {/* 3. 계산 방식 */}
         <section>
-          <h2 style={h2}>참가 부문 (Division)</h2>
+          <h2 className="g-h2">예상 완주 시간은 이렇게 계산합니다</h2>
+          <p className="g-p">
+            이 계산기는 기록을 세 덩어리로 나눠 더합니다. <strong>예상 완주 = 1km 런 페이스 × {RUN_COUNT} + 스테이션 8개 시간의 합 + 록스존 합계</strong>입니다.
+            구간별 분할표에서는 록스존 합계를 8등분해 각 스테이션 뒤에 나눠 붙이므로, 중간 체크포인트 시각이 실제 경기 흐름과 비슷하게 누적됩니다.
+          </p>
+          <p className="g-p">
+            목표 역산은 반대 방향입니다. <strong>필요한 런 페이스 = (목표 시간 − 스테이션 합 − 록스존) ÷ {RUN_COUNT}</strong>로, 스테이션과 전환에 쓰고 남은 시간을 8km에 나눠 줍니다.
+            남는 시간이 없으면(스테이션·록스존만으로 목표를 넘으면) 페이스를 계산하지 않습니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['레벨 기본값', '런 페이스/km', '런 8km', '스테이션 합', '록스존', '예상 완주', '런 비중'].map((h) => (
+                    <th scope="col" key={h} style={{ ...TH, textAlign: h === '레벨 기본값' ? 'left' : 'right' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {LEVEL_ROWS.map((r, i) => (
+                  <tr key={r.label} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ ...TH, color: 'var(--text)', fontWeight: 600, fontSize: 13 }}>{r.label}</th>
+                    <td style={TDN}>{fmtPace(r.pace)}</td>
+                    <td style={TDN}>{fmtTime(r.runTotalSec)}</td>
+                    <td style={TDN}>{fmtTime(r.stationTotalSec)}</td>
+                    <td style={TDN}>{fmtTime(r.roxzoneSec)}</td>
+                    <td style={{ ...TDN, fontWeight: 700, color: 'var(--accent-ink)' }}>{fmtTime(r.totalSec)}</td>
+                    <td style={TDN}>{r.runShare.toFixed(0)}%</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            계산기의 레벨 버튼이 채우는 기본값을 계산기와 같은 식으로 계산한 결과입니다.
+          </p>
+          <p className="g-p">
+            예를 들어 중급 기본값은 스테이션 합 {fmtTime(MID_RES.stationTotalSec)}, 록스존 {fmtTime(MID.roxzoneSec)}입니다. 이 상태로 목표를 1시간 30분으로 잡으면 필요한 런 페이스는 <strong>{fmtPace(REQ_90)}/km</strong>,
+            1시간 20분으로 당기면 <strong>{fmtPace(REQ_80)}/km</strong>가 됩니다. 같은 80분 목표라도 스테이션을 합계 5분 줄이면 필요한 페이스는 {fmtPace(REQ_80_FAST)}/km로 풀립니다.
+            목표를 올릴 때 런만 빨리 뛰려 하기보다 스테이션·전환에서 줄일 시간을 먼저 찾는 편이 현실적인 이유입니다.
+          </p>
+          <Callout tone="warn" title="자주 하는 입력 실수">
+            평소 1km 최고 기록을 런 페이스에 넣으면 완주 시간이 크게 짧게 나옵니다. 하이록스의 런은 썰매·런지 직후의 무거운 다리로 뛰므로 평소 10km 페이스보다 느리게 잡는 것이 보통입니다.
+            스테이션 시간도 몸이 쌩쌩할 때 단독으로 잰 기록이면 실제보다 짧으니, 가능하면 런과 붙여서 연습한 기록을 넣으세요.
+          </Callout>
+        </section>
+
+        {/* 4. 부문 */}
+        <section>
+          <h2 className="g-h2">참가 부문 (Division)</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: 'Open', d: '입문·일반. 표준 중량. 가장 많이 참가하는 부문.', c: '#0EA5E9' },
-              { t: 'Pro', d: '고중량 부문. 썰매·런지·월볼 중량이 더 무겁습니다.', c: '#DC2626' },
-              { t: 'Doubles (2인)', d: '둘이 한 팀으로 스테이션 작업을 분담. 런은 함께.', c: '#059669' },
-              { t: 'Relay (4인)', d: '4명이 코스를 나눠 이어 달리는 릴레이 방식.', c: '#9333EA' },
+              { t: 'Open', d: '입문·일반. 표준 중량. 가장 많이 참가하는 부문.', c: 'var(--sky-500)' },
+              { t: 'Pro', d: '고중량 부문. 썰매·런지·월볼 중량이 더 무겁습니다.', c: 'var(--red-600)' },
+              { t: 'Doubles (2인)', d: '둘이 한 팀으로 스테이션 작업을 분담. 런은 함께.', c: 'var(--emerald-600)' },
+              { t: 'Relay (4인)', d: '4명이 코스를 나눠 이어 달리는 릴레이 방식.', c: 'var(--purple-600)' },
             ].map((x, i) => (
               <div key={i} style={{ ...card, borderLeft: `4px solid ${x.c}` }}>
-                <p style={{ fontSize: 14, fontWeight: 700, color: x.c, marginBottom: 6 }}>{x.t}</p>
+                <p style={{ fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>{x.t}</p>
                 <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.75 }}>{x.d}</p>
               </div>
             ))}
           </div>
         </section>
 
-        {/* 4. 기록 단축 팁 */}
+        {/* 5. 기록 단축 팁 */}
         <section>
-          <h2 style={h2}>기록 단축 핵심 포인트</h2>
+          <h2 className="g-h2">기록 단축 핵심 포인트</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '런이 곧 기록이다', d: '완주 시간의 절반 가까이가 달리기. 스테이션 후 무거운 다리로도 페이스를 유지하는 「컴파운드 러닝」 훈련이 핵심.' },
-              { t: '월 볼 = 마지막 함정', d: '체력이 바닥난 상태의 100회. 폼 무너지면 노렙(no-rep). 평소 50회 연속 + 호흡 리듬을 연습.' },
+              { t: '런이 곧 기록이다', d: '위 레벨별 계산에서 달리기 비중은 절반 안팎. 스테이션 후 무거운 다리로도 페이스를 유지하는 「컴파운드 러닝」 훈련이 핵심.' },
+              { t: '월 볼 = 마지막 함정', d: '체력이 바닥난 상태에서 하는 마지막 스테이션. 폼이 무너지면 노렙(no-rep). 평소 50회 연속 + 호흡 리듬을 연습.' },
               { t: '썰매는 자세·각도', d: '낮은 자세로 다리로 밀고, 멈추지 않고 짧은 보폭으로. 그립·신발 마찰이 시간을 가른다.' },
               { t: '록스존을 줄여라', d: '전환 8회 합이 의외로 크다. 동선·장비 세팅을 미리 그려두면 수십 초 절약.' },
             ].map((x, i) => (
@@ -168,13 +247,13 @@ export default function HyroxPage() {
 
         {/* 한국 하이록스 현황 */}
         <section>
-          <h2 style={h2}>한국 하이록스 현황 (2026년 6월 기준)</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.9, marginBottom: 12 }}>
-            하이록스는 <strong style={{ color: 'var(--text)' }}>2024년 2월 인천 송도컨벤시아에서 국내 최초로 개최</strong>된 이후 매년 규모가 빠르게 커지고 있습니다.
+          <h2 className="g-h2">한국 하이록스 현황 (2026년 6월 기준)</h2>
+          <p className="g-p">
+            하이록스는 <strong>2024년 2월 인천 송도컨벤시아에서 국내 최초로 개최</strong>된 이후 매년 규모가 빠르게 커지고 있습니다.
             2025년 11월에는 서울 코엑스에서 첫 서울 대회가 열렸고(참가자의 약 22%가 외국인), 2026년 5월 인천 대회는 국내 최초로 3일간 진행될 만큼 성장했습니다.
           </p>
           <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-            <div style={{ overflowX: 'auto' }}>
+            <div className="tableScroll">
               <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 420 }}>
                 <thead>
                   <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -193,19 +272,19 @@ export default function HyroxPage() {
                     <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                       <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{r[0]}</td>
                       <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r[1]}</td>
-                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[2]}</td>
+                      <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[2]}</td>
                     </tr>
                   ))}
                 </tbody>
               </table>
             </div>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 참가비는 부문·시기마다 다르며, 2025년 11월 서울 대회 기준 <strong style={{ color: 'var(--text)' }}>1인 약 20만 원</strong> 수준으로 보도되었습니다(한국경제, 2025년 11월). 인기 부문은 조기 매진되는 경우가 많습니다.
+          <p className="g-note">
+            참가비는 부문·시기마다 다르며, 2025년 11월 서울 대회 기준 <strong style={{ color: 'var(--text)' }}>1인 약 20만 원</strong> 수준으로 보도되었습니다(한국경제, 2025년 11월). 인기 부문은 조기 매진되는 경우가 많습니다.
           </p>
-          <p style={{ fontSize: 13, color: 'var(--muted)', marginTop: 6, lineHeight: 1.7 }}>
-            ※ 차기 서울 대회는 2026년 하반기 개최가 예고되어 있으나, 확정 일정·장소·티켓 오픈은 공식 사이트{' '}
-            <a href="https://hyrox.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>hyrox.com</a>
+          <p className="g-note">
+            차기 서울 대회는 2026년 하반기 개최가 예고되어 있으나, 확정 일정·장소·티켓 오픈은 공식 사이트{' '}
+            <a href="https://hyrox.com" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>hyrox.com</a>
             에서 확인하세요. 공식 규정상 대회 등록은 hyrox.com을 통해서만 가능합니다. (출처: 인천광역시·인천관광공사 보도자료, 한국경제·우리일보 보도, HYROX 공식 룰북 시즌 25/26)
           </p>
         </section>
@@ -214,21 +293,12 @@ export default function HyroxPage() {
 
         {/* 5. FAQ */}
         <section>
-          <h2 style={h2}>자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ ...card, padding: '12px 16px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>Q{i + 1}. {f.q}</summary>
-                <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 10 }} dangerouslySetInnerHTML={{ __html: f.a }} />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 6. 관련 도구 */}
         <section>
-          <h2 style={h2}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 10 }}>
             {[
               { href: '/tools/sports/pace', icon: '🏃', name: '러닝 페이스 계산기', desc: '페이스 ↔ 완주 시간 환산' },
@@ -248,6 +318,6 @@ export default function HyroxPage() {
         </section>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

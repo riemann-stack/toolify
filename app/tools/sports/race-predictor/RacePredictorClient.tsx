@@ -5,6 +5,7 @@ import { useMemo, useState, useEffect } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import { todayStr } from '@/lib/date'
+import { DANIELS_PCT } from '@/lib/running'
 import styles from './race-predictor.module.css'
 import {
   DISTS, TARGETS, QUICK_TIMES,
@@ -18,6 +19,10 @@ import {
 
 type TabKey = 'predict' | 'reverse' | 'strategy' | 'records'
 
+// 세계기록 수준은 VDOT 약 85 — 이를 넘는 값은 입력 도중(5km '1:00' 등)이거나 오타라 결과를 숨기고 안내
+const MAX_VDOT = 90
+const vdotInRange = (v: number) => v > 0 && v <= MAX_VDOT
+
 const SUB_GOALS = [
   { label: '서브5',    sec: 5 * 3600 },
   { label: '서브4:30', sec: 4.5 * 3600 },
@@ -26,26 +31,29 @@ const SUB_GOALS = [
   { label: '서브3',    sec: 3 * 3600 },
 ]
 
-// intensity = Daniels %VO2max. paceFromVdot로 환산 시 Daniels 공식 훈련 페이스 표 재현
+// intensity = Daniels %VO2max (단일 소스 lib/running.ts DANIELS_PCT). paceFromVdot로 환산 시 Daniels 공식 훈련 페이스 표 재현
 // (예: VDOT 50 → M 4:30 / T 4:15 / I 3:54 / R 3:39 — 공식표 4:31/4:15/3:55/3:40과 일치)
 const PACE_ZONES = [
-  { key: 'E', name: 'Easy',       desc: '회복·지구력 (회복일·LSD)',           intensity: 0.59, color: '#0891B2' },
-  { key: 'M', name: 'Marathon',   desc: '대회 페이스 (장거리 페이스 런)',      intensity: 0.82, color: '#0EA5E9' },
-  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: 0.88, color: '#A16207' },
-  { key: 'I', name: 'Interval',   desc: 'V̇O₂max (3~5분 인터벌·심화는 인터벌 도구)', intensity: 0.97, color: '#EA580C' },
-  { key: 'R', name: 'Repetition', desc: '스피드·러닝 이코노미 (200~600m)',     intensity: 1.06, color: '#DC2626' },
+  { key: 'E', name: 'Easy',       desc: '회복·지구력 (회복일·LSD)',           intensity: DANIELS_PCT.E, color: '#0891B2' },
+  { key: 'M', name: 'Marathon',   desc: '대회 페이스 (장거리 페이스 런)',      intensity: DANIELS_PCT.M, color: '#0EA5E9' },
+  { key: 'T', name: 'Threshold',  desc: '젖산역치 (템포 런·크루즈 인터벌)',    intensity: DANIELS_PCT.T, color: '#A16207' },
+  { key: 'I', name: 'Interval',   desc: 'V̇O₂max (3~5분 인터벌·심화는 인터벌 도구)', intensity: DANIELS_PCT.I, color: '#EA580C' },
+  { key: 'R', name: 'Repetition', desc: '스피드·러닝 이코노미 (200~600m)',     intensity: DANIELS_PCT.R, color: '#DC2626' },
 ]
 
 // ─────────────────────────────────────────────────────────────
 // 시간 입력 — numeric 직접 입력 (모바일 친화)
 // ─────────────────────────────────────────────────────────────
 function TimeInput({
-  hours, min, sec, onChange, showHours = true,
+  hours, min, sec, onChange, showHours = true, label = '',
 }: {
   hours: number; min: number; sec: number
   onChange: (h: number, m: number, s: number) => void
   showHours?: boolean
+  /** aria-label 접두어 — 한 화면에 TimeInput이 여러 개일 때 '목표 시간 시'처럼 구분 */
+  label?: string
 }) {
+  const pre = label ? `${label} ` : ''
   const sanitize = (v: string, max: number): number => {
     const n = parseInt(v.replace(/\D/g, '').slice(0, 2)) || 0
     return Math.min(max, Math.max(0, n))
@@ -66,7 +74,7 @@ function TimeInput({
             value={hours === 0 ? '' : String(hours)}
             onChange={(e) => onChange(sanitize(e.target.value, 23), min, sec)}
             onFocus={(e) => e.target.select()}
-            aria-label="시"
+            aria-label={`${pre}시`}
           />
           <span className={styles.timeColon}>:</span>
         </>
@@ -81,7 +89,7 @@ function TimeInput({
         value={min === 0 && hours === 0 ? '' : String(min)}
         onChange={(e) => onChange(hours, sanitize(e.target.value, 59), sec)}
         onFocus={(e) => e.target.select()}
-        aria-label="분"
+        aria-label={`${pre}분`}
       />
       <span className={styles.timeColon}>:</span>
       <input
@@ -94,7 +102,7 @@ function TimeInput({
         value={sec === 0 && min === 0 && hours === 0 ? '' : String(sec)}
         onChange={(e) => onChange(hours, min, sanitize(e.target.value, 59))}
         onFocus={(e) => e.target.select()}
-        aria-label="초"
+        aria-label={`${pre}초`}
       />
     </div>
   )
@@ -128,9 +136,10 @@ export default function RacePredictorClient() {
   // 표시값과 계산 기준 일치 — 0.5km 미만은 silent 클램프 대신 '미입력' 처리(결과 미표시)
   const baseKm = baseDist === 'custom' ? customKm : DISTS.find((d) => d.key === baseDist)!.km
   const baseSec = hmsToSec(bh, bm, bs)
-  const validBase = baseSec >= 60 && baseKm >= 0.5
-
-  const vdot = useMemo(() => validBase ? vdotFromRace(baseKm, baseSec) : 0, [baseKm, baseSec, validBase])
+  const rawBase = baseSec >= 60 && baseKm >= 0.5
+  const vdot = useMemo(() => rawBase ? vdotFromRace(baseKm, baseSec) : 0, [baseKm, baseSec, rawBase])
+  const unrealisticBase = rawBase && !vdotInRange(vdot)
+  const validBase = rawBase && !unrealisticBase
   const level = useMemo(() => vdotLevel(vdot), [vdot])
 
   const predictions = useMemo(() => {
@@ -181,8 +190,10 @@ export default function RacePredictorClient() {
 
   const revKm = DISTS.find((d) => d.key === revDist)?.km ?? 42.195
   const revSec = hmsToSec(rh, rm, rs)
-  const validRev = revSec >= 60
-  const requiredVdot = useMemo(() => validRev ? vdotFromRace(revKm, revSec) : 0, [revKm, revSec, validRev])
+  const rawRev = revSec >= 60
+  const requiredVdot = useMemo(() => rawRev ? vdotFromRace(revKm, revSec) : 0, [revKm, revSec, rawRev])
+  const unrealisticRev = rawRev && !vdotInRange(requiredVdot)
+  const validRev = rawRev && !unrealisticRev
 
   const requiredAbilities = useMemo(() => {
     if (!validRev) return null
@@ -196,10 +207,12 @@ export default function RacePredictorClient() {
 
   const curKm = DISTS.find((d) => d.key === curDist)?.km ?? 10
   const curSec = hmsToSec(ch, cm, cs)
-  const validCur = curSec >= 60
-  const currentVdot = useMemo(() => validCur ? vdotFromRace(curKm, curSec) : 0, [curKm, curSec, validCur])
+  const rawCur = curSec >= 60
+  const currentVdot = useMemo(() => rawCur ? vdotFromRace(curKm, curSec) : 0, [curKm, curSec, rawCur])
+  const unrealisticCur = rawCur && !vdotInRange(currentVdot)
+  const validCur = rawCur && !unrealisticCur
   const vdotGap = validCur && validRev ? requiredVdot - currentVdot : 0
-  const monthsEstimate = vdotGap > 0 ? Math.round(vdotGap * 8) : 0  // VDOT 1↑ ≈ 6~12주 → 8주 평균
+  const weeksEstimate = vdotGap > 0 ? Math.round(vdotGap * 8) : 0  // VDOT 1↑ ≈ 6~12주 → 8주 평균
 
   // ── 페이스 전략 탭 ──────────────────
   const [stratDist, setStratDist] = useState<DistKey>('full')
@@ -292,12 +305,12 @@ export default function RacePredictorClient() {
       <Disclaimer
         variant="safety"
         related={[
-          { href: '/tools/sports/race-plan', label: '레이스 플래너' },
+          { href: '/tools/sports/pace?tab=plan', label: '레이스 페이스 플래너' },
           { href: '/tools/sports/pace', label: '러닝 페이스' },
           { href: '/tools/sports/one-rm', label: '1RM 계산기' }
         ]}
       >
-        본 도구는 일반 가이드입니다. 3공식 평균으로 오차를 줄였으나 5km→풀 예측은 거리차가 커 10km 이상 기록을 권장합니다. 환경·연령 보정도 평균 통계라 개인차가 큽니다(실제 ±20% 차이 가능). 25°C 이상은 열사병 위험 — 어지러움 즉시 중단·119.
+        본 도구는 일반 가이드입니다. 3공식 평균으로 오차를 줄였으나 5km→풀 예측은 거리차가 커 10km 이상 기록을 권장합니다. 환경·연령 보정은 도구 자체 근사 계수라 개인차가 큽니다(실제 ±20% 차이 가능). 25°C 이상은 열사병 위험 — 어지러움 즉시 중단·119.
       </Disclaimer>
 
       {/* ── 탭 헤더 ── */}
@@ -346,13 +359,13 @@ export default function RacePredictorClient() {
 
           <section>
             <label className={styles.label}>기록 (시:분:초)</label>
-            <TimeInput hours={bh} min={bm} sec={bs} onChange={(h, m, s) => { setBh(h); setBm(m); setBs(s) }} />
+            <TimeInput label="기준 기록" hours={bh} min={bm} sec={bs} onChange={(h, m, s) => { setBh(h); setBm(m); setBs(s) }} />
             {baseDist !== 'custom' && QUICK_TIMES[baseDist].length > 0 && (
               <div className={styles.quickRow}>
                 <span className={styles.quickLabel}>빠른 입력</span>
                 <div className={styles.quickChips}>
                   {QUICK_TIMES[baseDist].map((q) => (
-                    <button key={q.label} className={styles.quickChip}
+                    <button key={q.label} type="button" className={styles.quickChip}
                       onClick={() => applyQuick(q.h, q.m, q.s)}>{q.label}</button>
                   ))}
                 </div>
@@ -373,7 +386,15 @@ export default function RacePredictorClient() {
             </div>
           </section>
 
-          {/* 예상 기록 카드 그리드 — 선택한 모든 거리 */}
+          {/* 예상 기록 카드 그리드 — 선택한 모든 거리 (입력이 바뀌면 낭독되도록 status 영역) */}
+          <div role="status" aria-live="polite">
+          {unrealisticBase && (
+            <p style={{ fontSize: 13, color: 'var(--warning)', margin: 0, lineHeight: 1.7 }}>
+              {vdot > MAX_VDOT
+                ? '이 거리의 세계기록보다 빠른 기록이라 예측하지 않습니다. 시:분:초를 다시 확인하세요.'
+                : '기록이 너무 느려 예측 공식의 적용 범위를 벗어납니다. 시:분:초를 다시 확인하세요.'}
+            </p>
+          )}
           {validBase && predictions.length > 0 && (() => {
             // Primary 카드: 풀 마라톤 우선, 없으면 가장 긴 선택 거리
             const sorted = [...predictions].sort((a, b) => b.km - a.km)
@@ -411,6 +432,7 @@ export default function RacePredictorClient() {
               </section>
             )
           })()}
+          </div>
 
           {/* ── 환경 보정 ── */}
           <section className={styles.optionCard}>
@@ -520,7 +542,7 @@ export default function RacePredictorClient() {
                       <span className={styles.demoFactor}>(보정 계수 {demoBaseline.factor.toFixed(2)})</span>
                     </p>
                     <p className={styles.demoNote}>
-                      💡 WMA(World Masters Athletics) 통계 평균 — 개인차 큼. 꾸준한 훈련 = 연령 극복 가능.
+                      💡 WMA 연령 계수 경향을 10년 단위로 단순화한 근사값 — 개인차 큼. 꾸준한 훈련 = 연령 극복 가능.
                     </p>
                   </div>
                 )}
@@ -582,7 +604,7 @@ export default function RacePredictorClient() {
           {/* 기록 저장 안내 */}
           {validBase && (
             <section className={styles.optionCard}>
-              <button className={styles.saveBtn} onClick={addRecordFromCurrent}>
+              <button type="button" className={styles.saveBtn} onClick={addRecordFromCurrent}>
                 📈 이 기록 저장 (📈 내 기록 탭에서 추이 확인)
               </button>
             </section>
@@ -608,19 +630,27 @@ export default function RacePredictorClient() {
 
           <section>
             <label className={styles.label}>목표 시간</label>
-            <TimeInput hours={rh} min={rm} sec={rs} onChange={(h, m, s) => { setRh(h); setRm(m); setRs(s) }} />
+            <TimeInput label="목표 시간" hours={rh} min={rm} sec={rs} onChange={(h, m, s) => { setRh(h); setRm(m); setRs(s) }} />
             {QUICK_TIMES[revDist].length > 0 && (
               <div className={styles.quickRow}>
                 <span className={styles.quickLabel}>빠른 입력</span>
                 <div className={styles.quickChips}>
                   {QUICK_TIMES[revDist].map((q) => (
-                    <button key={q.label} className={styles.quickChip}
+                    <button key={q.label} type="button" className={styles.quickChip}
                       onClick={() => { setRh(q.h); setRm(q.m); setRs(q.s) }}>{q.label}</button>
                   ))}
                 </div>
               </div>
             )}
           </section>
+
+          {unrealisticRev && (
+            <p style={{ fontSize: 13, color: 'var(--warning)', margin: 0, lineHeight: 1.7 }} role="status">
+              {requiredVdot > MAX_VDOT
+                ? '목표 시간이 이 거리의 세계기록보다 빠릅니다. 시:분:초를 다시 확인하세요.'
+                : '목표 시간이 너무 길어 역산 공식의 적용 범위를 벗어납니다.'}
+            </p>
+          )}
 
           {validRev && requiredAbilities && (
             <>
@@ -667,9 +697,12 @@ export default function RacePredictorClient() {
                   ))}
                 </div>
                 <div style={{ marginTop: 8 }}>
-                  <TimeInput hours={ch} min={cm} sec={cs} onChange={(h, m, s) => { setCh(h); setCm(m); setCs(s) }} />
+                  <TimeInput label="현재 기록" hours={ch} min={cm} sec={cs} onChange={(h, m, s) => { setCh(h); setCm(m); setCs(s) }} />
                 </div>
 
+                {unrealisticCur && (
+                  <p style={{ fontSize: 12, color: 'var(--warning)', margin: '8px 0 0' }}>현재 기록이 현실적인 범위를 벗어났습니다. 시:분:초를 다시 확인하세요.</p>
+                )}
                 {validCur && (
                   <div className={styles.gapResult}>
                     <p>
@@ -682,7 +715,7 @@ export default function RacePredictorClient() {
                     </p>
                     {vdotGap > 0 && (
                       <p className={styles.gapEstimate}>
-                        💡 일반적으로 VDOT 1↑ ≈ 6~12주 꾸준한 훈련. 약 <strong>{monthsEstimate}주</strong> ({Math.round(monthsEstimate / 4)}개월) 예상.
+                        💡 일반적으로 VDOT 1↑ ≈ 6~12주 꾸준한 훈련. 약 <strong>{weeksEstimate}주</strong> ({Math.max(1, Math.round(weeksEstimate / 4.345))}개월) 예상.
                       </p>
                     )}
                   </div>
@@ -716,7 +749,7 @@ export default function RacePredictorClient() {
 
           <section>
             <label className={styles.label}>목표 시간</label>
-            <TimeInput hours={gh} min={gm} sec={gs} onChange={(h, m, s) => { setGh(h); setGm(m); setGs(s) }} />
+            <TimeInput label="목표 기록" hours={gh} min={gm} sec={gs} onChange={(h, m, s) => { setGh(h); setGm(m); setGs(s) }} />
           </section>
 
           <section>
@@ -794,7 +827,7 @@ export default function RacePredictorClient() {
           <section className={styles.koreaCard}>
             <p className={styles.gapTitle}>한국 마라톤 시즌 가이드</p>
             <table className={styles.envTable}>
-              <thead><tr><th scope="col">시즌</th><th scope="col">평균 기온</th><th scope="col">평가</th><th scope="col">주요 대회</th></tr></thead>
+              <thead><tr><th scope="col">시즌</th><th scope="col">월평균 기온(평년)</th><th scope="col">평가</th><th scope="col">주요 대회</th></tr></thead>
               <tbody>
                 {KOREA_SEASONS.map((s) => (
                   <tr key={s.name}>
@@ -841,7 +874,7 @@ export default function RacePredictorClient() {
                         <span className={styles.recordDist}>{distLabel}</span>
                         <span className={styles.recordTime}>{fmtHMS(r.timeSec)}</span>
                         <span className={styles.recordVdot}>VDOT {r.vdot.toFixed(1)}</span>
-                        <button className={styles.recordRemove}
+                        <button type="button" className={styles.recordRemove}
                           onClick={() => setRecords((p) => p.filter((x) => x.id !== r.id))}
                           aria-label="삭제">✕</button>
                       </div>
@@ -851,8 +884,8 @@ export default function RacePredictorClient() {
               </section>
 
               <section className={styles.optionCard}>
-                <button className={styles.saveBtn} onClick={downloadCSV}>CSV 다운로드</button>
-                <button className={styles.clearBtn}
+                <button type="button" className={styles.saveBtn} onClick={downloadCSV}>CSV 다운로드</button>
+                <button type="button" className={styles.clearBtn}
                   onClick={() => { if (confirm('모든 기록을 삭제하시겠습니까?')) setRecords([]) }}>
                   전체 기록 삭제
                 </button>
@@ -913,10 +946,10 @@ function RecordsChart({ records }: { records: RaceRecord[] }) {
         {sorted.map((r, i) => (
           <circle key={r.id} cx={xOf(i)} cy={yOf(r.vdot)} r={3.5} fill="var(--accent)" />
         ))}
-        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{maxV.toFixed(1)}</text>
-        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{minV.toFixed(1)}</text>
-        <text x={padL} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="start" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{first.date.slice(2)}</text>
-        <text x={W - padR} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{last.date.slice(2)}</text>
+        <text x={padL - 4} y={yOf(maxV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{maxV.toFixed(1)}</text>
+        <text x={padL - 4} y={yOf(minV) + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{minV.toFixed(1)}</text>
+        <text x={padL} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="start">{first.date.slice(2)}</text>
+        <text x={W - padR} y={H - 12} fill="var(--muted)" fontSize="10" textAnchor="end">{last.date.slice(2)}</text>
       </svg>
       <p className={styles.chartCaption}>
         {days}일간 VDOT <strong style={{ color: diff >= 0 ? '#059669' : '#DC2626' }}>

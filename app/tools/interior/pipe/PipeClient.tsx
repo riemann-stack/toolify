@@ -34,16 +34,26 @@ export default function PipeClient() {
 
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.size && PIPE_SIZES.includes(j.size)) setSize(j.size)
-      if (j.material && MATERIALS.some((m) => m.id === j.material)) setMaterial(j.material)
-      if (typeof j.grade === 'string') setGrade(j.grade)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object' || Array.isArray(j)) return
+      const o = j as Record<string, unknown>
+      const savedSize = PIPE_SIZES.find((p) => p === o.size)
+      if (savedSize) setSize(savedSize)
+      const savedMat = MATERIALS.find((m) => m.id === o.material)
+      if (savedMat) {
+        setMaterial(savedMat.id)
+        // 등급은 해당 재질의 등급 목록에 있을 때만 복원(그 외는 아래 리셋 effect가 첫 등급으로 맞춤)
+        const savedGrade = savedMat.grades?.find((g) => g.id === o.grade)
+        if (savedGrade) setGrade(savedGrade.id)
+      }
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ size, material, grade })) } catch {}
   }, [size, material, grade])
 
@@ -156,8 +166,8 @@ export default function PipeClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>호칭경 · 등급</span>
 
-            <div className={s.field}>
-              <label className={s.fieldLabel}>호칭 (A호칭·인치·DN — 모두 같은 값)</label>
+            <div className={s.field} role="group" aria-labelledby="pipe-size-label">
+              <span className={s.fieldLabel} id="pipe-size-label">호칭 (A호칭·인치·DN — 모두 같은 값)</span>
               <div className={s.pillRow}>
                 {PIPE_SIZES.map((p) => {
                   const m = getSizeMeta(p)
@@ -178,8 +188,8 @@ export default function PipeClient() {
             </div>
 
             {matMeta.grades && matMeta.grades.length > 0 && (
-              <div className={s.field}>
-                <label className={s.fieldLabel}>등급 / 두께 종류</label>
+              <div className={s.field} role="group" aria-labelledby="pipe-grade-label">
+                <span className={s.fieldLabel} id="pipe-grade-label">등급 / 두께 종류</span>
                 <div className={s.pillRow}>
                   {matMeta.grades.map((g) => (
                     <button
@@ -250,7 +260,7 @@ export default function PipeClient() {
           <div className={s.warnCard}>
             <strong>⚠️ 주의 — 호칭 ≠ 외경</strong>
             <p>
-              {size}는 <strong style={{ color: '#D97706' }}>모든 재질에서 같은 호칭</strong>이지만,
+              {size}는 <strong style={{ color: 'var(--amber-600)' }}>모든 재질에서 같은 호칭</strong>이지만,
               실제 외경은 재질별로 <strong>{size} 기준 최대 {fmt(odSpread, 1)}mm까지 차이</strong>가 납니다
               (⌀{fmt(minOd, 1)}~{fmt(maxOd, 1)}mm).
               <br />이종 재질 연결에는 반드시 <strong>이종 어댑터·이종조인</strong>이 필요합니다.
@@ -536,7 +546,7 @@ export default function PipeClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>두께 등급 가이드</span>
             <div className={s.gradeBox}>
-              <p className={s.gradeTitle}>강관 (STPG)</p>
+              <p className={s.gradeTitle}>강관 (SPPS)</p>
               <ul>
                 <li><strong>Sch 40</strong> — 일반 압력 배관 표준 (가장 흔함)</li>
                 <li><strong>Sch 80</strong> — 고압·증기·암모니아 (Sch 40보다 두껍고 무거움)</li>

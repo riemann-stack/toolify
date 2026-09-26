@@ -5,13 +5,13 @@
 .disclaimer {
   background: rgba(220,38,38,0.14);
   border: 1px solid rgba(220,38,38,0.25);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 18px;
   font-size: 13px;
   color: var(--text);
   line-height: 1.7;
 }
-.disclaimer strong { color: #DC2626; }
+.disclaimer strong { color: var(--red-600); }
 
 /* ── 종목 선택 (가로 스크롤 가능) ── */
 .sportScroller {
@@ -22,16 +22,16 @@
   scrollbar-width: thin;
 }
 .sportScroller::-webkit-scrollbar { height: 4px; }
-.sportScroller::-webkit-scrollbar-thumb { background: var(--border); border-radius: 999px; }
+.sportScroller::-webkit-scrollbar-thumb { background: var(--border); border-radius: var(--radius-pill); }
 .sportBtn {
   flex-shrink: 0;
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   padding: 9px 14px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   white-space: nowrap;
@@ -41,8 +41,8 @@
 .sportBoxing  { border-color: rgba(220,38,38,0.45); }
 .sportUFC     { border-color: rgba(161,98,7,0.45); }
 .sportONE     { border-color: rgba(16,185,129,0.45); }
-.sportKick    { border-color: rgba(8,145,178,0.45); }
-.sportJudo    { border-color: rgba(14,165,233,0.45); }
+.sportKick    { border-color: color-mix(in srgb, var(--cyan-600) 45%, transparent); }
+.sportJudo    { border-color: color-mix(in srgb, var(--accent) 45%, transparent); }
 .sportTKD     { border-color: rgba(155,89,182,0.45); }
 .sportMuay    { border-color: rgba(234,88,12,0.45); }
 .sportWrest   { border-color: rgba(255,107,213,0.45); }
@@ -60,17 +60,17 @@
   gap: 6px;
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 5px;
 }
 .tabBtn {
   background: transparent;
   border: none;
-  border-radius: 8px;
+  border-radius: var(--radius-s);
   padding: 10px 8px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   cursor: pointer;
   transition: all 0.15s;
@@ -79,7 +79,7 @@
 }
 .tabActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   font-weight: 700;
 }
 
@@ -87,7 +87,7 @@
 .card {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 20px 22px;
   width: 100%;
   box-sizing: border-box;
@@ -129,7 +129,7 @@
 @media (max-width: 480px) {
   .inputGrid3 { gap: 4px; }
   .inputGrid3 .inputCell { padding: 8px 8px; }
-  .inputGrid3 .inputLabel { font-size: 10px; }
+  .inputGrid3 .inputLabel { font-size: 11px; }
   .inputGrid3 .bigInput { font-size: 17px; }
   .inputGrid3 .unit { font-size: 11px; }
   .inputGrid3 .genderBtn { padding: 7px 4px; font-size: 16px; }
@@ -145,7 +145,7 @@
   color: var(--muted);
   margin-bottom: 4px;
   letter-spacing: 0.04em;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .inputRow {
   display: flex;
@@ -157,7 +157,7 @@
   background: transparent;
   border: none;
   font-size: 22px;
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--text);
   outline: none;
@@ -174,11 +174,10 @@
   background: transparent;
   border: none;
   font-size: 16px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   color: var(--text);
   outline: none;
   padding: 4px 0;
-  color-scheme: dark;
 }
 
 /* ── 성별 토글 ── */
@@ -194,7 +193,7 @@
   padding: 10px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
 }@media (hover: hover) {
@@ -202,7 +201,7 @@
 }
 .genderActive {
   background: var(--accent-dim);
-  color: var(--accent);
+  color: var(--accent-ink);
   border-color: var(--accent);
   font-weight: 700;
 }
@@ -215,7 +214,7 @@
   border-radius: 10px;
   padding: 12px 14px;
   font-size: 16px;       /* iOS 줌 방지 */
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 500;
   color: var(--text);
   outline: none;
@@ -229,19 +228,19 @@
   padding-right: 32px;
   box-sizing: border-box;
 }
-.classSelect:focus { border-color: rgba(14,165,233,0.5); }
+.classSelect:focus { border-color: color-mix(in srgb, var(--accent) 50%, transparent); }
 .classSelect option { background: var(--bg2); color: var(--text); }
 
 /* ── 추천 카드 ── */
 .recommendCard {
   background: rgba(16,185,129,0.14);
   border: 1px solid rgba(16,185,129,0.25);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
 }
 .recommendLead {
   font-size: 12px;
-  color: #059669;
+  color: var(--emerald-600);
   font-weight: 700;
   margin-bottom: 8px;
   letter-spacing: 0.04em;
@@ -251,13 +250,13 @@
   color: var(--text);
   line-height: 1.85;
 }
-.recommendBody strong { color: var(--accent); font-family: 'Inter, "Noto Sans KR", system-ui, sans-serif', 'Noto Sans KR', sans-serif; }
+.recommendBody strong { color: var(--accent); font-family: var(--font-sans); }
 
 /* ── HERO (감량 필요량) ── */
 .hero {
   background: var(--bg2);
-  border: 1px solid rgba(14,165,233,0.35);
-  border-radius: 16px;
+  border: 1px solid color-mix(in srgb, var(--accent) 35%, transparent);
+  border-radius: var(--radius-card);
   padding: 28px 24px;
   text-align: center;
   animation: fadeUp 0.3s ease;
@@ -268,18 +267,18 @@
   margin-bottom: 6px;
 }
 .heroNum {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(40px, 9vw, 64px);
   font-weight: 800;
   color: var(--accent);
   letter-spacing: -2px;
   line-height: 1;
 }
-.heroNumLoss { color: #059669; }
+.heroNumLoss { color: var(--emerald-600); }
 .heroUnit {
   font-size: 18px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-left: 6px;
   vertical-align: middle;
 }
@@ -295,7 +294,7 @@
 }
 /* 현재 체급 이름 (체급 검색 HERO) */
 .heroClassName {
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-size: clamp(26px, 6.5vw, 38px);
   font-weight: 800;
   color: var(--accent);
@@ -323,27 +322,27 @@
   font-size: 13px;
   color: var(--text);
   font-weight: 600;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
 }
 .ladderCurrent .ladderName { color: var(--accent); font-weight: 700; }
 .ladderLimit {
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   white-space: nowrap;
 }
 .ladderTag {
   font-size: 11px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   padding: 3px 9px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   white-space: nowrap;
 }
 .ladderTagCurrent { background: var(--accent-strong); color: #ffffff; }
-.ladderTagOver { background: rgba(220,38,38,0.14); color: #DC2626; }
-.ladderTagOk { background: rgba(16,185,129,0.16); color: #059669; }
+.ladderTagOver { background: rgba(220,38,38,0.14); color: var(--red-600); }
+.ladderTagOk { background: rgba(16,185,129,0.16); color: var(--emerald-600); }
 
 /* ── KPI ── */
 .kpiGrid {
@@ -357,7 +356,7 @@
 .kpiCard {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 12px;
   text-align: center;
 }
@@ -367,30 +366,30 @@
   margin-bottom: 4px;
 }
 .kpiValue {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-size: 24px;
   font-weight: 800;
   color: var(--text);
   letter-spacing: -0.5px;
 }
 .kpiValueAccent { color: var(--accent); }
-.kpiValuePos    { color: #059669; }
-.kpiValueWarn   { color: #EA580C; }
-.kpiValueDanger { color: #DC2626; }
+.kpiValuePos    { color: var(--emerald-600); }
+.kpiValueWarn   { color: var(--orange-600); }
+.kpiValueDanger { color: var(--red-600); }
 
 /* ── 위험도 배지 ── */
 .riskBadge {
   display: inline-block;
   padding: 7px 16px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 13px;
   font-weight: 700;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   margin-bottom: 8px;
 }
-.riskSafe    { background: rgba(16,185,129,0.15);  color: #059669; }
-.riskCaution { background: rgba(234,88,12,0.15);  color: #EA580C; }
-.riskDanger  { background: rgba(220,38,38,0.15); color: #DC2626; }
+.riskSafe    { background: rgba(16,185,129,0.15);  color: var(--emerald-600); }
+.riskCaution { background: rgba(234,88,12,0.15);  color: var(--orange-600); }
+.riskDanger  { background: rgba(220,38,38,0.15); color: var(--red-600); }
 .riskSevere  {
   background: rgba(255,70,70,0.18);
   color: #FF4646;
@@ -417,18 +416,18 @@
 }
 .scheduleTable td:nth-child(1),
 .scheduleTable td:nth-child(2) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
 }
 .scheduleTable td:nth-child(2) { color: var(--accent); }
 .scheduleTable .phaseFat td   { background: rgba(234,88,12,0.14); }
-.scheduleTable .phaseWater td { background: rgba(8,145,178,0.14); }
+.scheduleTable .phaseWater td { background: color-mix(in srgb, var(--cyan-600) 14%, transparent); }
 .scheduleTable .phaseRehy td  { background: rgba(16,185,129,0.14); }
 .scheduleTable .dDay td       {
   background: var(--accent-dim);
   font-weight: 800;
-  border-top: 2px solid rgba(14,165,233,0.4);
-  border-bottom: 2px solid rgba(14,165,233,0.4);
+  border-top: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
+  border-bottom: 2px solid color-mix(in srgb, var(--accent) 40%, transparent);
 }
 .scheduleTable .dDay td:first-child  { color: var(--accent); }
 .scheduleTable .dDay td:nth-child(2) { color: var(--accent); }
@@ -437,21 +436,21 @@
 .phaseChip {
   display: inline-block;
   padding: 2px 9px;
-  border-radius: 999px;
+  border-radius: var(--radius-pill);
   font-size: 11px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
 }
-.chipFat   { background: rgba(234,88,12,0.15); color: #EA580C; }
-.chipWater { background: rgba(8,145,178,0.15); color: #0891B2; }
-.chipRehy  { background: rgba(16,185,129,0.15); color: #059669; }
-.chipDday  { background: var(--accent-dim);     color: var(--accent); }
+.chipFat   { background: rgba(234,88,12,0.15); color: var(--orange-600); }
+.chipWater { background: color-mix(in srgb, var(--cyan-600) 15%, transparent); color: var(--cyan-600); }
+.chipRehy  { background: rgba(16,185,129,0.15); color: var(--emerald-600); }
+.chipDday  { background: var(--accent-dim);     color: var(--accent-ink); }
 
 /* ── 건강 경고 ── */
 .healthWarn {
   background: rgba(220,38,38,0.08);
   border: 2px solid rgba(220,38,38,0.45);
-  border-radius: 14px;
+  border-radius: var(--radius-card);
   padding: 16px 20px;
   font-size: 13px;
   color: var(--text);
@@ -460,7 +459,7 @@
   gap: 12px;
   align-items: flex-start;
 }
-.healthWarn strong { color: #DC2626; font-weight: 700; }
+.healthWarn strong { color: var(--red-600); font-weight: 700; }
 .healthWarn li { color: var(--text); }
 .healthWarn ul { margin: 8px 0 0 0; padding-left: 18px; }
 .healthWarn li { margin: 3px 0; }
@@ -475,7 +474,7 @@
 .policyCard {
   background: var(--bg3);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 12px 14px;
 }
 .policyTitle {
@@ -511,7 +510,7 @@
 }
 .classTable td:nth-child(3),
 .classTable td:nth-child(4) {
-  font-family: 'Inter', system-ui, sans-serif;
+  font-family: var(--font-sans);
   font-weight: 700;
   color: var(--accent);
   text-align: right;
@@ -522,7 +521,7 @@
   color: var(--muted);
 }
 .clickableRow { cursor: pointer; transition: background 0.12s; }@media (hover: hover) {
-  .clickableRow:hover { background: rgba(14,165,233,0.14); }
+  .clickableRow:hover { background: color-mix(in srgb, var(--accent) 14%, transparent); }
 }
 .clickableRow td:first-child::before { content: '→ '; opacity: 0; transition: opacity 0.12s; color: var(--accent); }@media (hover: hover) {
   .clickableRow:hover td:first-child::before { opacity: 1; }
@@ -532,11 +531,11 @@
 .copyBtn {
   background: var(--bg2);
   border: 1px solid var(--border);
-  border-radius: 12px;
+  border-radius: var(--radius-m);
   padding: 14px 16px;
   font-size: 13px;
   color: var(--muted);
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: var(--font-sans);
   cursor: pointer;
   transition: all 0.15s;
   width: 100%;
@@ -544,4 +543,4 @@
 }@media (hover: hover) {
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
-.copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+.copied { background: var(--accent-dim); color: var(--accent-ink); border-color: var(--accent); font-weight: 700; }

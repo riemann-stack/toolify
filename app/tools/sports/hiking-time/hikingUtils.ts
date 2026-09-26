@@ -112,7 +112,7 @@ export const MOUNTAINS: MountainPreset[] = [
   { id: 'unjangsan',         name: '운장산',         region: '전라', difficulty: '중급',   distanceKm:  9.0, elevGainM:  900, elevLossM:  900, baseHours: 5.5, description: '진안 운장산 (1,126m)' },
 
   // 제주 (3)
-  { id: 'hallasan-seongpan', name: '한라산 성판악',   region: '제주', difficulty: '상급',   distanceKm: 19.2, elevGainM: 1300, elevLossM: 1300, baseHours: 9.0, description: '성판악 → 백록담 (가장 긴 코스)' },
+  { id: 'hallasan-seongpan', name: '한라산 성판악',   region: '제주', difficulty: '상급',   distanceKm: 19.2, elevGainM: 1200, elevLossM: 1200, baseHours: 9.0, description: '성판악 → 백록담 (가장 긴 코스)' },
   { id: 'hallasan-gwaneum',  name: '한라산 관음사',   region: '제주', difficulty: '상급',   distanceKm: 17.6, elevGainM: 1300, elevLossM: 1300, baseHours: 9.5, description: '관음사 → 백록담 (가파름)' },
   { id: 'hallasan-yeongsil', name: '한라산 영실',     region: '제주', difficulty: '중급',   distanceKm: 11.7, elevGainM:  650, elevLossM:  650, baseHours: 5.0, description: '영실 → 윗세오름 (백록담 X)' },
 
@@ -309,16 +309,32 @@ export interface TimelineStep {
   isRest: boolean
 }
 
-/** 거리 기반 단계별 (1km 또는 2km 간격) */
+/** 거리 기반 단계별 (1km 또는 2km 간격)
+ *  오르막(표고 100m당 16분)과 내리막(100m당 7분)은 속도가 크게 달라, 이동시간을 거리에 균등 배분하면
+ *  정상 도착이 1시간 가까이 이르게 나온다 → 정상(거리 절반) 앞뒤로 구간별 분/km를 따로 쓴다. */
 export function buildTimeline(inputs: CalcInputs, result: CalcResult): TimelineStep[] {
   const startMinutes = parseHHMM(inputs.startTime)
   const totalDist = inputs.distanceKm
   const movingMin = result.movingMin
-  const minPerKm = movingMin / Math.max(1, totalDist)
+  const halfDist = totalDist / 2
+
+  // 오르막 구간 = 오르막 + 평지 절반, 내리막 구간 = 내리막 + 평지 절반 (합 = movingMin)
+  const sel = result.selected
+  const upMin = sel.ascendMin + sel.flatMin / 2
+  const downMin = sel.descendMin + sel.flatMin / 2
+  const movingAt = (km: number): number => {
+    if (halfDist <= 0) return 0
+    if (km <= halfDist) return (km / halfDist) * upMin
+    return upMin + ((km - halfDist) / halfDist) * downMin
+  }
+  // 휴식 누적: 자동은 50분 보행마다 10분, 수동은 총 휴식을 이동시간 비율로 배분
+  const restAt = (moving: number): number => {
+    if (inputs.restMode === 'auto') return Math.floor(moving / 50) * 10
+    return movingMin > 0 ? result.restMin * (moving / movingMin) : 0
+  }
 
   // 단계 간격: 짧은 코스 1km, 긴 코스 2km
   const stepKm = totalDist <= 8 ? 1 : 2
-  const halfDist = totalDist / 2
 
   const steps: TimelineStep[] = []
   steps.push({
@@ -328,42 +344,29 @@ export function buildTimeline(inputs: CalcInputs, result: CalcResult): TimelineS
     isSummit: false, isRest: false,
   })
 
-  let cumDist = stepKm
-  let cumMoving = stepKm * minPerKm
-  let summitAdded = false
-
-  while (cumDist < totalDist) {
-    let isSummit = false
-    let label = `${cumDist.toFixed(0)}km 지점`
-    // 정상 위치 보정: 거리의 절반쯤
-    if (!summitAdded && cumDist >= halfDist) {
-      isSummit = true
-      label = `🏔️ 정상 (약 ${cumDist.toFixed(0)}km)`
-      summitAdded = true
-    }
-    // 휴식 누적 (auto)
-    const restSoFar = inputs.restMode === 'auto' ? Math.floor(cumMoving / 50) * 10 : 0
+  for (let cumDist = stepKm; cumDist < totalDist - 1e-6; cumDist += stepKm) {
+    if (Math.abs(cumDist - halfDist) < 1e-6) continue  // 정상 행과 겹치면 정상으로만 표시
+    const moving = movingAt(cumDist)
+    const fromStart = moving + restAt(moving)
     steps.push({
       km: cumDist,
-      label,
-      minutesFromStart: cumMoving + restSoFar,
-      arrivalAtMinutes: startMinutes + cumMoving + restSoFar,
-      isSummit,
+      label: `${cumDist.toFixed(0)}km 지점`,
+      minutesFromStart: fromStart,
+      arrivalAtMinutes: startMinutes + fromStart,
+      isSummit: false,
       isRest: false,
     })
-    cumDist += stepKm
-    cumMoving += stepKm * minPerKm
   }
 
-  if (!summitAdded) {
-    // 정상이 아직 안 추가됐으면 (drop case)
-    steps.push({
-      km: halfDist, label: '🏔️ 정상',
-      minutesFromStart: halfDist * minPerKm,
-      arrivalAtMinutes: startMinutes + halfDist * minPerKm,
-      isSummit: true, isRest: false,
-    })
-  }
+  // 정상 = 거리 절반 지점 (오르막 구간이 끝나는 시점)
+  const summitFromStart = upMin + restAt(upMin)
+  steps.push({
+    km: halfDist,
+    label: `🏔️ 정상 (약 ${Number.isInteger(halfDist) ? halfDist : halfDist.toFixed(1)}km)`,
+    minutesFromStart: summitFromStart,
+    arrivalAtMinutes: startMinutes + summitFromStart,
+    isSummit: true, isRest: false,
+  })
 
   steps.push({
     km: totalDist,
@@ -399,6 +402,11 @@ export const SUN_AVERAGES: SunData[] = [
   { month: 12, seoul: { rise: '07:38', set: '17:14' }, busan: { rise: '07:26', set: '17:18' }, jeju: { rise: '07:34', set: '17:30' } },
 ]
 
+/** 해당 월 서울 평균 일몰(HH:MM) — 일몰 입력 기본값용 (월 평균 추정) */
+export function monthlySeoulSunset(date: Date = new Date()): string {
+  return SUN_AVERAGES[date.getMonth()]?.seoul.set ?? '18:30'
+}
+
 /* ─── 등산 체크리스트 ─── */
 export const CHECKLIST = [
   '👕 등산복 (땀 흡수·속건성, 면 X)',
@@ -416,7 +424,7 @@ export const CHECKLIST = [
 /* ─── 비상 대응 ─── */
 export const EMERGENCY = [
   { title: '저체온증 의심', steps: ['바람 막히는 곳으로', '젖은 옷 갈아입기', '단 음식·따뜻한 음료', '119 신고 (체온 35°C 이하)'] },
-  { title: '길을 잃었을 때', steps: ['STOP — 멈추고 침착', '왔던 길 100m 되돌아가기', '능선·계곡 따라 이동 X', '119 신고 + 좌표 전달 (산림청 좌표앱)'] },
+  { title: '길을 잃었을 때', steps: ['STOP — 멈추고 침착', '왔던 길 100m 되돌아가기', '계곡으로 내려가지 말고 능선으로 올라가 시야·통신 확보', '위치가 불확실하면 멈추고 119 신고 + 좌표 전달 (산림청 좌표앱)'] },
   { title: '발목·무릎 부상', steps: ['움직이지 말고 휴식', '얼음 또는 시원한 천', '압박 붕대 (있으면)', '심한 부상 시 119, 못 움직이면 SOS 호각'] },
   { title: '벌·뱀에 쏘임', steps: ['독침 카드로 긁어 빼기', '심장 아래 위치', '항히스타민 (있으면)', '아나필락시스 의심 시 119'] },
 ]

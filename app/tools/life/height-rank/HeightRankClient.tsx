@@ -49,7 +49,7 @@ function BellCurve({ mean, sd, height }: { mean: number; sd: number; height: num
       <circle cx={hPx} cy={hY} r="4" fill="var(--danger)" />
       {[mean - 2 * sd, mean, mean + 2 * sd].map((tick, i) => (
         <text key={i} x={xToPx(tick)} y={H - 1} textAnchor="middle"
-          fontSize="9" fill="var(--muted)" fontFamily="Inter, sans-serif">
+          fontSize="9" fill="var(--muted)">
           {tick.toFixed(0)}
         </text>
       ))}
@@ -189,7 +189,7 @@ export default function HeightRankClient() {
         <ul className={s.factList}>
           <li>한국 성인(20~69세) 전체 평균: 남성 <strong>{OVERALL_MEAN.M}cm</strong> · 여성 <strong>{OVERALL_MEAN.F}cm</strong> (8차 인체치수조사)</li>
           <li>2024년 병역판정검사(2005년생 남성 약 21.1만 명) 평균: <strong>{MMA_2024_MEAN}cm</strong> (병무청)</li>
-          <li>중앙값 근처에서는 1cm 차이가 백분위 약 {Math.round((stdNormalCdf(0.5 / band.sd) - 0.5) * 200) / 2}%p를 좌우해요 — 아침저녁 키 변화(1~2cm)만으로도 순위가 꽤 움직입니다.</li>
+          <li>중앙값 근처에서는 1cm 차이가 백분위 약 {Math.round((stdNormalCdf(0.5 / band.sd) - stdNormalCdf(-0.5 / band.sd)) * 1000) / 10}%p를 좌우해요 — 아침저녁 키 변화(1~2cm)만으로도 순위가 꽤 움직입니다.</li>
         </ul>
       </div>
 

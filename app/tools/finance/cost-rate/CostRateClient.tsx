@@ -27,12 +27,12 @@ interface Ingredient {
 
 /* breakdown 색상 팔레트 */
 const C = {
-  ingredient: '#EA580C',
-  packaging:  '#A16207',
-  commission: '#DC2626',
-  delivery:   '#9B59B6',
-  ad:         '#0891B2',
-  margin:     '#0EA5E9',
+  ingredient: 'var(--orange-600)',
+  packaging:  'var(--yellow-700)',
+  commission: 'var(--red-600)',
+  delivery:   'var(--amethyst)',
+  ad:         'var(--cyan-600)',
+  margin:     'var(--sky-500)',
 }
 
 /* ─────────────────────────────────────────────────────────
@@ -105,8 +105,9 @@ export default function CostRateClient() {
   const [deliveryBurdenStr, setDeliveryBurdenStr] = useState('1000')
   const [adCostStr, setAdCostStr] = useState('100')
 
-  /* 탭 2: 역산 */
+  /* 탭 2: 역산 — 목표 기준: 재료 원가율(업종 권장표와 같은 기준) / 실질 원가율(수수료·포장·배달비 포함) */
   const [targetCostRate, setTargetCostRate] = useState(35)
+  const [reverseBasis, setReverseBasis] = useState<'ingredient' | 'real'>('ingredient')
 
   /* 탭 3: 월 수익 */
   interface MonthlyMenu { id: string; name: string; margin: number; daily: number }
@@ -199,8 +200,9 @@ export default function CostRateClient() {
     if (channel !== 'all') return []
     // isDelivery: 포장재·배달비·광고비가 드는 배달 채널 여부. 자체 페이지도 배달이므로 true(앱 수수료만 0%).
     const buildRow = (label: string, appRate_: number, isDelivery: boolean, cls: string) => {
-      const comm = price * ((appRate_ + payRate) / 100)
-      const variable = ingredient + (isDelivery ? packaging : 0) + accessory
+      // 매장은 앱·결제 수수료 0 — 메인 계산의 '매장' 채널(useDelivery=false → 수수료 0)과 같은 기준
+      const comm = isDelivery ? price * ((appRate_ + payRate) / 100) : 0
+      const variable = ingredient + (isDelivery ? packaging + accessory : 0) // 매장은 포장재·1회용품 없음 (메인 계산과 같은 기준)
       const burden = isDelivery ? deliveryBurden : 0
       const ad = isDelivery ? adCost : 0
       const ded = variable + comm + burden + ad
@@ -219,19 +221,23 @@ export default function CostRateClient() {
   }, [channel, price, ingredient, packaging, accessory, deliveryBurden, adCost, payRate])
 
   /* ─────────────────────────────── 탭 2 — 역산 ─────────────────────────────── */
+  // 판매가에 비례하지 않는 주문당 고정 변동비 전체 (수수료만 가격 비례).
+  // packaging·accessory·deliveryBurden·adCost·commissionTotalRate는 채널별로 이미 0 처리됨.
+  const perOrderFixed = ingredient + packaging + accessory + deliveryBurden + adCost
   const reverseResult = useMemo(() => {
     if (ingredient <= 0 || targetCostRate <= 0) return null
-    const margin = targetCostRate / 100
-    // 판매가에 비례하지 않는 주문당 고정 변동비 전체 (수수료만 가격 비례).
-    // packaging·accessory·deliveryBurden·adCost·commissionTotalRate는 채널별로 이미 0 처리됨.
-    const perOrderFixed = ingredient + packaging + accessory + deliveryBurden + adCost
-    if (margin <= commissionTotalRate) return { exact: 0, possible: false }
-    const need = perOrderFixed / (margin - commissionTotalRate)
+    const target = targetCostRate / 100
+    if (reverseBasis === 'ingredient') {
+      // 재료 원가율 기준 — 업종별 권장 원가율(재료비 ÷ 판매가)과 같은 정의
+      return { exact: ingredient / target, possible: true }
+    }
+    if (target <= commissionTotalRate) return { exact: 0, possible: false }
+    const need = perOrderFixed / (target - commissionTotalRate)
     return { exact: need, possible: true }
-  }, [ingredient, packaging, accessory, deliveryBurden, adCost, commissionTotalRate, targetCostRate])
+  }, [ingredient, perOrderFixed, commissionTotalRate, targetCostRate, reverseBasis])
 
   /* ─────────────────────────────── 탭 3 — 월 수익 ─────────────────────────────── */
-  const businessDays = n(businessDaysStr, 1)
+  const businessDays = Math.min(31, Math.max(1, Math.round(n(businessDaysStr, 1))))
   const fixedCosts = parseComma(rentStr) + parseComma(laborStr) + parseComma(utilityStr)
 
   const monthlyMenuStats = useMemo(() => {
@@ -309,7 +315,7 @@ export default function CostRateClient() {
     } else if (tab === 'reverse' && reverseResult?.possible) {
       text = [
         `── 판매가 역산 ──`,
-        `재료비 ${fmt(ingredient)}원, 목표 원가율 ${targetCostRate}%`,
+        `재료비 ${fmt(ingredient)}원, 목표 ${reverseBasis === 'ingredient' ? '재료' : '실질'} 원가율 ${targetCostRate}%`,
         `필요 판매가: ${fmt(reverseResult.exact)}원`,
         'youtil.kr/tools/finance/cost-rate',
       ].join('\n')
@@ -322,7 +328,7 @@ export default function CostRateClient() {
       ].join('\n')
     }
     navigator.clipboard?.writeText(text).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -373,13 +379,13 @@ export default function CostRateClient() {
               <span>메뉴 정보</span>
             </div>
 
-            <span className={styles.subLabel}>메뉴명</span>
-            <input className={styles.textInput} type="text" value={menuName} onChange={e => setMenuName(e.target.value || '메뉴 1')} />
+            <label htmlFor="cr-menu-name" className={styles.subLabel}>메뉴명</label>
+            <input id="cr-menu-name" className={styles.textInput} type="text" value={menuName} onChange={e => setMenuName(e.target.value || '메뉴 1')} />
 
             <div style={{ height: 14 }} />
-            <span className={styles.subLabel}>판매가</span>
+            <label htmlFor="cr-price" className={styles.subLabel}>판매가</label>
             <div className={styles.inputRow}>
-              <input className={styles.numInput} type="text" inputMode="numeric" value={fmt(price)} onChange={e => setPriceStr(parseComma(e.target.value).toString())} />
+              <input id="cr-price" className={styles.numInput} type="text" inputMode="numeric" value={fmt(price)} onChange={e => setPriceStr(parseComma(e.target.value).toString())} />
               <span className={styles.unit}>원</span>
             </div>
             {price > 0 && <p className={styles.koreanLabel}>약 {fmtKRW(price)}</p>}
@@ -393,7 +399,7 @@ export default function CostRateClient() {
 
             {!showIngredients ? (
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(ingredientStr))} onChange={e => setIngredientStr(parseComma(e.target.value).toString())} />
+                <input className={styles.smallInput} type="text" inputMode="numeric" aria-label="재료비 (원)" value={fmt(parseComma(ingredientStr))} onChange={e => setIngredientStr(parseComma(e.target.value).toString())} />
                 <span className={styles.unit}>원</span>
               </div>
             ) : (
@@ -411,10 +417,10 @@ export default function CostRateClient() {
                   <tbody>
                     {ingredients.map(it => (
                       <tr key={it.id} className={styles.ingRow}>
-                        <td><input type="text" value={it.name} placeholder="재료명" onChange={e => updateIngredient(it.id, { name: e.target.value })} /></td>
-                        <td><input type="number" inputMode="decimal" min={0} value={it.amount} onChange={e => updateIngredient(it.id, { amount: n(e.target.value) })} /></td>
+                        <td><input type="text" aria-label="재료명" value={it.name} placeholder="재료명" onChange={e => updateIngredient(it.id, { name: e.target.value })} /></td>
+                        <td><input type="number" inputMode="decimal" min={0} aria-label={`${it.name || '재료'} 사용량`} value={it.amount} onChange={e => updateIngredient(it.id, { amount: n(e.target.value) })} /></td>
                         <td>
-                          <select value={it.unit} onChange={e => updateIngredient(it.id, { unit: e.target.value })}>
+                          <select aria-label={`${it.name || '재료'} 단위`} value={it.unit} onChange={e => updateIngredient(it.id, { unit: e.target.value })}>
                             <option value="g">g</option>
                             <option value="kg">kg</option>
                             <option value="ml">ml</option>
@@ -423,7 +429,7 @@ export default function CostRateClient() {
                             <option value="인분">인분</option>
                           </select>
                         </td>
-                        <td><input type="number" inputMode="decimal" min={0} value={it.unitPrice} onChange={e => updateIngredient(it.id, { unitPrice: n(e.target.value) })} /></td>
+                        <td><input type="number" inputMode="decimal" min={0} aria-label={`${it.name || '재료'} 단위당 가격`} value={it.unitPrice} onChange={e => updateIngredient(it.id, { unitPrice: n(e.target.value) })} /></td>
                         <td><button type="button" className={styles.ingRemove} onClick={() => removeIngredient(it.id)} aria-label="삭제">✕</button></td>
                       </tr>
                     ))}
@@ -455,16 +461,16 @@ export default function CostRateClient() {
             {(channel === 'delivery' || channel === 'pickup' || channel === 'all') && (
               <>
                 <div style={{ height: 14 }} />
-                <span className={styles.subLabel}>포장재 비용</span>
+                <label htmlFor="cr-packaging" className={styles.subLabel}>포장재 비용</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(packagingStr))} onChange={e => setPackagingStr(parseComma(e.target.value).toString())} />
+                  <input id="cr-packaging" className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(packagingStr))} onChange={e => setPackagingStr(parseComma(e.target.value).toString())} />
                   <span className={styles.unit}>원</span>
                 </div>
 
                 <div style={{ height: 10 }} />
-                <span className={styles.subLabel}>부재료·소모품 (냅킨·1회용품)</span>
+                <label htmlFor="cr-accessory" className={styles.subLabel}>부재료·소모품 (냅킨·1회용품)</label>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(accessoryStr))} onChange={e => setAccessoryStr(parseComma(e.target.value).toString())} />
+                  <input id="cr-accessory" className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(accessoryStr))} onChange={e => setAccessoryStr(parseComma(e.target.value).toString())} />
                   <span className={styles.unit}>원</span>
                 </div>
               </>
@@ -492,30 +498,30 @@ export default function CostRateClient() {
                 ))}
               </div>
 
-              <span className={styles.subLabel}>배달앱 수수료율 (%)</span>
+              <label htmlFor="cr-app-rate" className={styles.subLabel}>배달앱 수수료율 (%)</label>
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} step="0.1" value={appCommissionStr} onChange={e => { setAppCommissionStr(e.target.value); setAppPreset('custom') }} />
+                <input id="cr-app-rate" className={styles.smallInput} type="number" inputMode="decimal" min={0} step="0.1" value={appCommissionStr} onChange={e => { setAppCommissionStr(e.target.value); setAppPreset('custom') }} />
                 <span className={styles.unit}>%</span>
               </div>
 
               <div style={{ height: 10 }} />
-              <span className={styles.subLabel}>결제 수수료율 (%)</span>
+              <label htmlFor="cr-pay-rate" className={styles.subLabel}>결제 수수료율 (%)</label>
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} step="0.1" value={paymentRateStr} onChange={e => setPaymentRateStr(e.target.value)} />
+                <input id="cr-pay-rate" className={styles.smallInput} type="number" inputMode="decimal" min={0} step="0.1" value={paymentRateStr} onChange={e => setPaymentRateStr(e.target.value)} />
                 <span className={styles.unit}>%</span>
               </div>
 
               <div style={{ height: 10 }} />
-              <span className={styles.subLabel}>배달비 가게 부담 (1주문당)</span>
+              <label htmlFor="cr-delivery-burden" className={styles.subLabel}>배달비 가게 부담 (1주문당)</label>
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(deliveryBurdenStr))} onChange={e => setDeliveryBurdenStr(parseComma(e.target.value).toString())} />
+                <input id="cr-delivery-burden" className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(deliveryBurdenStr))} onChange={e => setDeliveryBurdenStr(parseComma(e.target.value).toString())} />
                 <span className={styles.unit}>원</span>
               </div>
 
               <div style={{ height: 10 }} />
-              <span className={styles.subLabel}>광고비 (주문당 환산, 월 광고비 ÷ 월 주문수)</span>
+              <label htmlFor="cr-ad-cost" className={styles.subLabel}>광고비 (주문당 환산, 월 광고비 ÷ 월 주문수)</label>
               <div className={styles.inputRow}>
-                <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(adCostStr))} onChange={e => setAdCostStr(parseComma(e.target.value).toString())} />
+                <input id="cr-ad-cost" className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(adCostStr))} onChange={e => setAdCostStr(parseComma(e.target.value).toString())} />
                 <span className={styles.unit}>원</span>
               </div>
             </div>
@@ -528,7 +534,7 @@ export default function CostRateClient() {
         <>
           <div className={styles.hero} role="status">
             <p className={styles.heroLead}>
-              <strong style={{ color: 'var(--text)' }}>{menuName}</strong>의 기본 원가율은 <strong style={{ color: '#0891B2' }}>{basicCostRate.toFixed(1)}%</strong>입니다.{useDelivery && <> 배달 수수료·포장비를 반영하면 <strong style={{ color: 'var(--accent)' }}>{realCostRate.toFixed(1)}%</strong>까지 올라갑니다.</>}
+              <strong style={{ color: 'var(--text)' }}>{menuName}</strong>의 기본 원가율은 <strong style={{ color: 'var(--cyan-600)' }}>{basicCostRate.toFixed(1)}%</strong>입니다.{useDelivery && <> 배달 수수료·포장비를 반영하면 <strong style={{ color: 'var(--accent)' }}>{realCostRate.toFixed(1)}%</strong>까지 올라갑니다.</>}
             </p>
             <div className={styles.heroDual}>
               <div>
@@ -544,8 +550,8 @@ export default function CostRateClient() {
           </div>
 
           <div className={styles.gradeLine}>
-            <span>외식업 권장 원가율 28~35% 기준 — <strong style={{ color: 'var(--text)' }}>{realCostRate.toFixed(1)}%</strong></span>
-            <span className={`${styles.gradeBadge} ${gradeOf(realCostRate).cls}`}>{gradeOf(realCostRate).label}</span>
+            <span>외식업 권장 재료 원가율 28~35% 기준 — 재료 원가율 <strong style={{ color: 'var(--text)' }}>{basicCostRate.toFixed(1)}%</strong></span>
+            <span className={`${styles.gradeBadge} ${gradeOf(basicCostRate).cls}`}>{gradeOf(basicCostRate).label}</span>
           </div>
 
           <div className={styles.card}>
@@ -563,7 +569,7 @@ export default function CostRateClient() {
                   <p className={styles.donutCenterValue}>{fmt(price)}</p>
                 </div>
               </div>
-              <table className={styles.breakdownTable}>
+              <div className="tableScroll"><table className={styles.breakdownTable}>
                 <tbody>
                   {breakdown.filter(b => b.value > 0 && !b.isMargin).map((b, i) => (
                     <tr key={i}>
@@ -578,7 +584,7 @@ export default function CostRateClient() {
                     <td>{Math.max(0, marginRate).toFixed(1)}%</td>
                   </tr>
                 </tbody>
-              </table>
+              </table></div>
             </div>
           </div>
 
@@ -626,6 +632,15 @@ export default function CostRateClient() {
               <span>목표 원가율</span>
               <span className={styles.cardLabelHint}>슬라이더 또는 직접 입력</span>
             </div>
+            <div className={styles.channelGrid} role="group" aria-label="목표 원가율 기준" style={{ marginBottom: 12 }}>
+              <button type="button" aria-pressed={reverseBasis === 'ingredient'} className={`${styles.channelBtn} ${reverseBasis === 'ingredient' ? styles.channelActive : ''}`} onClick={() => setReverseBasis('ingredient')}>재료 원가율 기준</button>
+              <button type="button" aria-pressed={reverseBasis === 'real'} className={`${styles.channelBtn} ${reverseBasis === 'real' ? styles.channelActive : ''}`} onClick={() => setReverseBasis('real')}>실질 원가율 기준</button>
+            </div>
+            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: '0 0 10px' }}>
+              {reverseBasis === 'ingredient'
+                ? '재료비 ÷ 판매가 기준입니다. 아래 업종별 권장 원가율과 같은 기준이에요.'
+                : '포장재·수수료·배달비·광고비까지 넣은 실질 원가율 기준입니다. 배달 채널은 이 값이 재료 원가율보다 훨씬 높게 나옵니다.'}
+            </p>
             <div className={styles.sliderRow}>
               <input
                 className={`${styles.slider} ${styles.sliderUp}`}
@@ -644,8 +659,8 @@ export default function CostRateClient() {
 
           {reverseResult && reverseResult.possible ? (
             <>
-              <div className={styles.netCard}>
-                <p className={styles.netCardLabel}>목표 원가율 {targetCostRate}% 를 위한 필요 판매가</p>
+              <div className={styles.netCard} role="status">
+                <p className={styles.netCardLabel}>목표 {reverseBasis === 'ingredient' ? '재료' : '실질'} 원가율 {targetCostRate}% 를 위한 필요 판매가</p>
                 <p className={styles.netCardValue}>
                   {fmt(reverseResult.exact)}<span style={{ fontSize: 20, color: 'var(--muted)', marginLeft: 4 }}>원</span>
                 </p>
@@ -670,14 +685,14 @@ export default function CostRateClient() {
                   return (
                     <div className={styles.priceRecGrid}>
                       {items.map((it, i) => {
-                        const actualRate = useDelivery
-                          ? ((ingredient + packaging + deliveryBurden + adCost + it.price * commissionTotalRate + accessory) / it.price) * 100
-                          : ((ingredient + accessory) / it.price) * 100
+                        // 역산과 같은 비용 구성 (채널별 0 처리된 값 그대로) — 포장 채널에서 포장재가 빠지던 문제
+                        const actualRate = ((perOrderFixed + it.price * commissionTotalRate) / it.price) * 100
+                        const ingredientRate = (ingredient / it.price) * 100
                         return (
                           <div key={i} className={`${styles.priceRecCard} ${it.highlight ? styles.priceRecRound : ''}`}>
                             <p className={styles.priceRecLabel}>{it.label}</p>
                             <p className={styles.priceRecValue}>{fmt(it.price)}원</p>
-                            <p className={styles.priceRecActual}>실질 원가율 {actualRate.toFixed(1)}%</p>
+                            <p className={styles.priceRecActual}>재료 원가율 {ingredientRate.toFixed(1)}% · 실질 {actualRate.toFixed(1)}%</p>
                             <p className={styles.priceRecActual}>{it.desc}</p>
                           </div>
                         )
@@ -715,9 +730,9 @@ export default function CostRateClient() {
             </div>
             {monthlyMenus.map(m => (
               <div key={m.id} className={styles.menuRow}>
-                <input className={styles.textInput} type="text" value={m.name} placeholder="메뉴명" onChange={e => updateMonthlyMenu(m.id, { name: e.target.value })} />
-                <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(m.margin)} onChange={e => updateMonthlyMenu(m.id, { margin: parseComma(e.target.value) })} />
-                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} value={m.daily} onChange={e => updateMonthlyMenu(m.id, { daily: n(e.target.value) })} />
+                <input className={styles.textInput} type="text" aria-label="메뉴명" value={m.name} placeholder="메뉴명" onChange={e => updateMonthlyMenu(m.id, { name: e.target.value })} />
+                <input className={styles.smallInput} type="text" inputMode="numeric" aria-label={`${m.name || '메뉴'} 개당 마진 (원)`} value={fmt(m.margin)} onChange={e => updateMonthlyMenu(m.id, { margin: parseComma(e.target.value) })} />
+                <input className={styles.smallInput} type="number" inputMode="decimal" min={0} aria-label={`${m.name || '메뉴'} 일 판매량`} value={m.daily} onChange={e => updateMonthlyMenu(m.id, { daily: n(e.target.value) })} />
                 <button type="button" className={styles.ingRemove} onClick={() => removeMonthlyMenu(m.id)} aria-label="삭제">✕</button>
               </div>
             ))}
@@ -726,9 +741,9 @@ export default function CostRateClient() {
             )}
 
             <div style={{ height: 14 }} />
-            <span className={styles.subLabel}>영업일 수 / 월</span>
+            <label htmlFor="cr-business-days" className={styles.subLabel}>영업일 수 / 월</label>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="number" inputMode="decimal" min={1} max={31} value={businessDays} onChange={e => setBusinessDaysStr(e.target.value)} />
+              <input id="cr-business-days" className={styles.smallInput} type="text" inputMode="numeric" value={businessDaysStr} onChange={e => setBusinessDaysStr(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} onBlur={() => setBusinessDaysStr(String(businessDays))} />
               <span className={styles.unit}>일</span>
             </div>
           </div>
@@ -738,25 +753,25 @@ export default function CostRateClient() {
               <span>월 고정비</span>
               <span className={styles.cardLabelHint}>임대료·인건비·공과금</span>
             </div>
-            <span className={styles.subLabel}>임대료 (월)</span>
+            <label htmlFor="cr-rent" className={styles.subLabel}>임대료 (월)</label>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(rentStr))} onChange={e => setRentStr(parseComma(e.target.value).toString())} />
+              <input id="cr-rent" className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(rentStr))} onChange={e => setRentStr(parseComma(e.target.value).toString())} />
               <span className={styles.unit}>원</span>
             </div>
             <div style={{ height: 8 }} />
-            <span className={styles.subLabel}>인건비 (월, 사장 인건비 포함 시)</span>
+            <label htmlFor="cr-labor" className={styles.subLabel}>인건비 (월, 사장 인건비 포함 시)</label>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(laborStr))} onChange={e => setLaborStr(parseComma(e.target.value).toString())} />
+              <input id="cr-labor" className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(laborStr))} onChange={e => setLaborStr(parseComma(e.target.value).toString())} />
               <span className={styles.unit}>원</span>
             </div>
             <div style={{ height: 8 }} />
-            <span className={styles.subLabel}>공과금·기타 (월)</span>
+            <label htmlFor="cr-utility" className={styles.subLabel}>공과금·기타 (월)</label>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(utilityStr))} onChange={e => setUtilityStr(parseComma(e.target.value).toString())} />
+              <input id="cr-utility" className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(utilityStr))} onChange={e => setUtilityStr(parseComma(e.target.value).toString())} />
               <span className={styles.unit}>원</span>
             </div>
             <div style={{ height: 8 }} />
-            <p style={{ fontSize: 12, color: 'var(--muted)' }}>월 고정비 합계 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtKRW(fixedCosts)}</strong></p>
+            <p style={{ fontSize: 12, color: 'var(--muted)' }}>월 고정비 합계 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{fmtKRW(fixedCosts)}</strong></p>
           </div>
 
           <div className={styles.kpiGrid}>
@@ -783,8 +798,8 @@ export default function CostRateClient() {
                   영업일 <strong>{businessDays}일</strong> 기준 → 일 평균 <strong>{monthlyMenuStats.breakEvenDaily}개</strong> 이상 판매 필요.<br />
                   현재 일 평균 주문 <strong>{monthlyMenuStats.dailyOrders}개</strong> →{' '}
                   {monthlyMenuStats.dailyOrders >= monthlyMenuStats.breakEvenDaily
-                    ? <span style={{ color: '#059669' }}>✅ 손익분기 통과</span>
-                    : <span style={{ color: '#DC2626' }}>❌ 손익분기까지 일 {monthlyMenuStats.breakEvenDaily - monthlyMenuStats.dailyOrders}개 부족</span>}
+                    ? <span style={{ color: 'var(--emerald-600)' }}>✅ 손익분기 통과</span>
+                    : <span style={{ color: 'var(--red-600)' }}>❌ 손익분기까지 일 {monthlyMenuStats.breakEvenDaily - monthlyMenuStats.dailyOrders}개 부족</span>}
                 </p>
               </>
             ) : (
@@ -796,9 +811,9 @@ export default function CostRateClient() {
             <div className={styles.cardLabel}>
               <span>목표 영업이익 시나리오</span>
             </div>
-            <span className={styles.subLabel}>월 목표 영업이익</span>
+            <label htmlFor="cr-target-profit" className={styles.subLabel}>월 목표 영업이익</label>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(targetProfitStr))} onChange={e => setTargetProfitStr(parseComma(e.target.value).toString())} />
+              <input id="cr-target-profit" className={styles.smallInput} type="text" inputMode="numeric" value={fmt(parseComma(targetProfitStr))} onChange={e => setTargetProfitStr(parseComma(e.target.value).toString())} />
               <span className={styles.unit}>원</span>
             </div>
             <div style={{ height: 12 }} />
@@ -806,7 +821,7 @@ export default function CostRateClient() {
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
                 {monthlyMenuStats.targetExtraItems === 0
                   ? <>✅ 이미 목표 영업이익 <strong style={{ color: 'var(--accent)' }}>{fmtKRW(parseComma(targetProfitStr))}</strong>를 달성하고 있습니다.</>
-                  : <>월 목표 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{fmtKRW(parseComma(targetProfitStr))}</strong> 달성을 위해 추가로 월 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraItems}개</strong> (일 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{monthlyMenuStats.targetExtraDaily}개</strong>) 더 판매가 필요합니다.</>}
+                  : <>월 목표 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{fmtKRW(parseComma(targetProfitStr))}</strong> 달성을 위해 추가로 월 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{monthlyMenuStats.targetExtraItems}개</strong> (일 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{monthlyMenuStats.targetExtraDaily}개</strong>) 더 판매가 필요합니다.</>}
               </p>
             ) : (
               <p style={{ fontSize: 13, color: 'var(--muted)' }}>메뉴 데이터를 먼저 입력해주세요.</p>

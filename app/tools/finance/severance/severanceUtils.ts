@@ -46,13 +46,46 @@ export function addMonths(d: Date, months: number): Date {
   return r
 }
 
+/** 입사일(기산일, 초일 산입)부터 N개월 기간의 만료일 — 민법 §160②③.
+ *  응당일의 전날에 만료하고, 마지막 달에 응당일이 없으면 그 달 말일에 만료.
+ *  예: 2023-03-01 + 12개월 → 2024-02-29 · 2024-02-29 + 12개월 → 2025-02-28 · 2021-01-01 + 60개월 → 2025-12-31 */
+export function periodEndDate(start: Date, months: number): Date {
+  const targetDay = start.getDate()
+  const first = new Date(start.getFullYear(), start.getMonth() + months, 1)
+  const lastDay = new Date(first.getFullYear(), first.getMonth() + 1, 0).getDate()
+  if (targetDay > lastDay) return new Date(first.getFullYear(), first.getMonth(), lastDay)
+  return new Date(first.getFullYear(), first.getMonth(), targetDay - 1) // day 0 → 전월 말일
+}
+
+/** 퇴사일(마지막 재직일)까지 계속근로 N년을 채웠는가 (달력 기준, 윤일 포함 구간도 정확) */
+export function hasServedYears(start: Date, end: Date, years: number): boolean {
+  return end.getTime() >= periodEndDate(start, 12 * years).getTime()
+}
+
+/** 세법상 근속연수 — 입사일~퇴사일의 만 연수, 1년 미만 잔여 기간은 1년으로 절상
+ *  (소득세법 §48·시행령 §105). 재직일수/365 올림은 윤일이 낀 만 N년 퇴사를 N+1년으로 과대 계산하므로 쓰지 않는다. */
+export function taxServiceYears(start: Date, end: Date): number {
+  if (!(end.getTime() >= start.getTime())) return 0
+  let y = Math.max(0, end.getFullYear() - start.getFullYear() + 1)
+  while (y > 0 && !hasServedYears(start, end, y)) y--
+  // 만 y년 만료일보다 하루라도 더 근무했으면(잔여 기간 > 0) 1년 절상
+  return periodEndDate(start, 12 * y).getTime() < end.getTime() ? y + 1 : y
+}
+
 /** 퇴사 전 3개월 산정기간 — 퇴사일(마지막 재직일) 포함
  *  checkEligibility의 재직일수 해석(퇴사일 포함)과 동일 기준.
+ *  산정 사유 발생일(퇴직일 = 마지막 근무일 다음 날) 이전 3개월 (근로기준법 §2①6).
  *  예: 퇴사일 12월 31일 → 10월 1일 ~ 12월 31일 (92일)
+ *      퇴사일 4월 30일 → 2월 1일 ~ 4월 30일 (89일, 평년) — 월말 퇴사는 직전 3개 역월 전체.
+ *      (이전 구현 '3개월 전 같은 날 + 1일'은 4/30·6/30·11/30·2월 말 퇴사를 1/31·3/31·8/31·11/29부터 잡아
+ *       분모가 1~2일 커지고 평균임금이 1~2% 낮게 나왔다)
  */
 export function calcThreeMonthPeriod(exitDate: Date): { start: Date; end: Date; days: number } {
   const end = new Date(exitDate)              // 퇴사일 포함
-  const start = addDays(addMonths(end, -3), 1) // 3개월 전 같은 날(월말 클램프) + 1일
+  const next = addDays(end, 1)                // 퇴직일(산정 사유 발생일)
+  const start = next.getDate() === 1
+    ? new Date(next.getFullYear(), next.getMonth() - 3, 1) // 월말 퇴사: 직전 3개 역월 (89~92일)
+    : addDays(addMonths(end, -3), 1)          // 그 외: 3개월 전 같은 날(월말 클램프) + 1일
   return {
     start,
     end,
@@ -181,10 +214,10 @@ export interface SeveranceTaxResult {
   taxRatePct: number           // 세율 (%)
 }
 
-export function calcSeveranceTax(severanceMan: number, daysWorked: number): SeveranceTaxResult {
-  /* 세법상 근속연수: 1년 미만은 절상하여 1년으로 (소득세법 §49) */
-  const yearsRaw = daysWorked / 365
-  const yearsTax = Math.ceil(yearsRaw)
+/** @param serviceYears 세법상 근속연수 (taxServiceYears — 달력 기준 만 연수, 1년 미만 절상) */
+export function calcSeveranceTax(severanceMan: number, serviceYears: number): SeveranceTaxResult {
+  /* 세법상 근속연수: 1년 미만은 절상하여 1년으로 (소득세법 §48·시행령 §105) — 호출측에서 taxServiceYears로 산정 */
+  const yearsTax = Number.isFinite(serviceYears) ? Math.max(0, Math.ceil(serviceYears)) : 0
   if (yearsTax <= 0 || severanceMan <= 0) {
     return {
       yearsTax: 0, yearsDeduction: 0, envWage: 0, envDeduction: 0,
@@ -230,13 +263,17 @@ export function checkEligibility(start: Date, end: Date, weekHours: number): Eli
   const reasons: string[] = []
   const warnings: string[] = []
 
-  if (daysWorked < 365) {
-    reasons.push(`계속근로기간 ${daysWorked}일 (1년 ${365 - daysWorked}일 부족) — 법정 퇴직금 발생 X`)
+  /* 1년 요건은 달력 기준(응당일 전날) — 윤일이 낀 구간은 366일째에 1년이 됨 */
+  const oneYearEnd = periodEndDate(start, 12)
+  const servedOneYear = hasServedYears(start, end, 1)
+  if (!servedOneYear) {
+    const short = daysBetween(end, oneYearEnd) - 1
+    reasons.push(`계속근로기간 ${daysWorked}일 (1년까지 ${short}일 부족 — ${oneYearEnd.getFullYear()}.${oneYearEnd.getMonth() + 1}.${oneYearEnd.getDate()}까지 근무해야 충족) — 법정 퇴직금 발생 X`)
   }
   if (weekHours < 15) {
     reasons.push(`주 ${weekHours}시간 (15시간 미만) — 법정 퇴직금 발생 X`)
   }
-  if (daysWorked >= 365 && daysWorked < 730) {
+  if (servedOneYear && !hasServedYears(start, end, 2)) {
     const yr = (daysWorked / 365).toFixed(2)
     warnings.push(`재직 1~2년 구간 — 퇴직금은 재직일수에 정확히 비례 계산됩니다 (현재 약 ${yr}년치, 1년치 고정이 아님)`)
   }

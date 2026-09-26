@@ -3,21 +3,45 @@ import DrakeEquationClient from './DrakeEquationClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { RADIO_START_YEAR, radioRangeLy, calcDistance, GALAXY_VOLUME_LY3, PRESETS } from './drakeUtils'
+import ToolPage from '@/components/ToolPage'
+
+// 인류 전파권은 해마다 1광년씩 넓어진다 — 빌드(배포) 시점 연도로 계산해 한 곳에서 관리.
+// 정적 페이지라 새해 첫 배포 때 갱신된다.
+const RADIO_ASOF_YEAR = new Date().getFullYear()
+const RADIO_LY = radioRangeLy(RADIO_ASOF_YEAR)
+
+/* 거리 표 — 계산기와 같은 calcDistance로 빌드 시 계산 (손으로 옮겨 적지 않는다) */
+const ly = (n: number) => `약 ${Math.round(n).toLocaleString('ko-KR')} 광년`
+const yr = (n: number) => `약 ${Math.round(n).toLocaleString('ko-KR')}년`
+const DIST_ROWS = [
+  { n: 100,       note: '' },
+  { n: 1_000,     note: '그린뱅크 회의(1961) 추정 범위의 하한' },
+  { n: 10_000,    note: '드레이크가 생전에 자주 제시한 값' },
+  { n: 100_000,   note: '' },
+  { n: 1_000_000, note: '칼 세이건 추정 수준' },
+].map(r => {
+  const d = calcDistance(r.n, RADIO_LY)!
+  const inRange = d.nearestDistance <= RADIO_LY
+  return { ...r, d, note: [r.note, inRange ? `인류 전파권(${RADIO_LY}ly) 안` : `인류 전파(${RADIO_LY}ly) 미도달`].filter(Boolean).join(' · ') }
+})
+
+/* 계산 예시 — 계산기 첫 화면의 '현실론' 예시값(drakeUtils PRESETS.realistic을 그대로 사용 → 계산기와 자동 동기화) */
+const EX = PRESETS.realistic
+const EX_N = EX.rStar * EX.fp * EX.ne * EX.fl * EX.fi * EX.fc * EX.L
+const EX_D = calcDistance(EX_N, RADIO_LY)!
+const EX_PER_YEAR = EX_N / EX.L   // 해마다 새로 교신 능력을 갖추는 문명 수
+const GALAXY_VOL_TRILLION = GALAXY_VOLUME_LY3 / 1e12
 
 export const metadata = buildMetadata({
   path: '/tools/life/drake',
   title: '드레이크 방정식 계산기 — 외계 문명 수·거리·페르미 역설',
-  description: '외계 문명은 몇 개나 존재할까. 드레이크 방정식 7개 변수 시뮬과 가장 가까운 문명 거리·왕복 통신 시간·인류 전파권 126광년·페르미 역설 가설까지.',
+  description: `외계 문명은 몇 개나 존재할까. 드레이크 방정식 7개 변수 시뮬과 가장 가까운 문명 거리·왕복 통신 시간·인류 전파권 ${RADIO_LY}광년·페르미 역설 가설까지.`,
   keywords: ['드레이크방정식계산기', '외계인존재확률', '드레이크방정식', '우주문명계산기', '외계생명체확률', '페르미역설', '지적생명체계산기', '대필터', '레어 어스 가설', '인류 전파권', '가장 가까운 외계'],
 })
-
-function parseNumParam(v: string | undefined, min: number, max: number): number | undefined {
-  if (!v) return undefined
-  const n = parseFloat(v)
-  if (!isFinite(n) || n < min || n > max) return undefined
-  return n
-}
 
 const FAQ_LD = [
               { q: '드레이크 방정식은 얼마나 신뢰할 수 있나요?',
@@ -31,62 +55,56 @@ const FAQ_LD = [
               { q: '실제로 외계 신호를 받은 적 있나요?',
                 a: '1977년 &ldquo;와우! 신호(Wow! Signal)&rdquo;가 가장 유명한 사례입니다. 72초간 강력한 협대역 전파 신호가 감지됐지만 이후 재현되지 않았습니다. 2016년 러시아 RATAN-600이 HD 164595(태양과 비슷한 별, 약 95광년) 방향에서 포착한 신호도 화제였으나 단발성이었고 후속 관측에서 재현되지 않았습니다. 현재까지 외계 기원으로 공식 확인된 신호는 없습니다.' },
               { q: '가장 가까운 외계 문명까지 거리는 어떻게 계산하나요?',
-                a: '우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, <strong>평균 간격 ≈ (은하 부피 / N)<sup>1/3</sup></strong>, 가장 가까운 거리 ≈ 평균 × 0.55(Poisson 통계 근사). 예: N = 1만 → 가장 가까운 약 507광년, N = 100만 → 약 109광년(인류 전파권 126ly 안). 본 도구가 N값에 따라 자동 계산합니다. ⚠️ 균등 분포 가정으로, 실제는 나선팔에 집중 가능성.' },
+                a: `우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, <strong>평균 간격 ≈ (은하 부피 / N)<sup>1/3</sup></strong>, 가장 가까운 거리 ≈ 평균 × 0.55(Poisson 통계 근사). 예: N = 1만 → 가장 가까운 약 507광년, N = 100만 → 약 109광년(인류 전파권 ${RADIO_LY}ly 안). 본 도구가 N값에 따라 자동 계산합니다. 단, 균등 분포를 가정한 값이라 실제로는 별이 몰린 나선팔에 문명이 집중돼 있을 수 있습니다.` },
               { q: '인류 전파는 어디까지 도달했나요?',
-                a: '약 <strong>126광년</strong> (1900년 첫 라디오부터 2026년 기준). 100광년 내 별 약 14,000개를 통과했습니다. 알파 센타우리(4.37광년) 1904년, 시리우스(8.6광년) 1909년, 베가(25광년) 1925년경 도달. ⚠️ 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다.' },
+                a: `약 <strong>${RADIO_LY}광년</strong> (${RADIO_START_YEAR}년 첫 라디오부터 ${RADIO_ASOF_YEAR}년 기준). 100광년 내 별 약 14,000개를 통과했습니다. 알파 센타우리(4.37광년) 1904년, 시리우스(8.6광년) 1909년, 베가(25광년) 1925년경 도달. 다만 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다.` },
               { q: 'N값에 따라 어떤 페르미 역설 가설이 유력한가요?',
                 a: '본 도구가 N값에 따라 자동으로 가장 유력한 가설 2개를 추천합니다. 대략적 경향: <br/>• N &lt; 10: 레어 어스 (지구가 특별)<br/>• N 10~10,000: 대필터·시끄러움<br/>• N 1,000~100만: 동물원·시끄러움<br/>• N 100만+: 디지털 문명·관찰 회피<br/>슬라이더로 변수를 조정하면 추천도 즉시 갱신됩니다.' },
               { q: '거리 계산이 실제 우주와 일치하나요?',
                 a: '본 도구의 거리 계산은 <strong>단순화된 모델</strong>입니다. 실제 우주는 ① 별이 나선팔에 집중(균등 분포 X) ② 은하 중심 vs 외곽 별 밀도 차이 ③ 거주 가능 영역(Galactic Habitable Zone) 제한이 있습니다. 태양 근처 별 평균 간격은 약 4광년. 본 도구는 평균 거리 직관용이며 실제 위치 예측이 아닙니다.' },
             ]
 
-export default async function DrakePage({
-  searchParams,
-}: {
-  searchParams?: Promise<{ r?: string; fp?: string; ne?: string; fl?: string; fi?: string; fc?: string; l?: string }>
-}) {
-  const sp = (await searchParams) ?? {}
-  const initial: {
-    rStar?: number; fp?: number; ne?: number; fl?: number; fi?: number; fc?: number; L?: number
-  } = {}
-  // 범위는 슬라이더 [min,max]와 일치 — 벗어난 URL 값은 무시하고 기본값 사용
-  const rStar = parseNumParam(sp.r, 1, 10);         if (rStar !== undefined) initial.rStar = rStar
-  const fp    = parseNumParam(sp.fp, 0.1, 1);       if (fp    !== undefined) initial.fp    = fp
-  const ne    = parseNumParam(sp.ne, 0.1, 5);       if (ne    !== undefined) initial.ne    = ne
-  const fl    = parseNumParam(sp.fl, 0.001, 1);     if (fl    !== undefined) initial.fl    = fl
-  const fi    = parseNumParam(sp.fi, 0.001, 1);     if (fi    !== undefined) initial.fi    = fi
-  const fc    = parseNumParam(sp.fc, 0.001, 1);     if (fc    !== undefined) initial.fc    = fc
-  const L     = parseNumParam(sp.l,  1, 100_000_000); if (L   !== undefined) initial.L     = L
-
+// 공유 링크 파라미터(?r=&fp=…)는 Client가 마운트 후 window.location.search로 읽는다 (페이지 SSG 유지)
+export default function DrakePage() {
   return (
-    <div style={{ maxWidth: '760px', margin: '0 auto', padding: '60px 24px 80px' }}>
-      <p style={{ fontSize: '12px', color: 'var(--muted)', letterSpacing: '0.08em', textTransform: 'uppercase', marginBottom: '10px' }}>생활·재미</p>
-      <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
+    <ToolPage width={760} slug="/tools/life/drake">
+      <h1 className="tp-h1">
         <ToolIconBadge catId="life" />드레이크 방정식 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p className="tp-lead">
         외계 문명은 몇 개나 존재할까. 7개 변수를 직접 조정하며 <strong style={{ color: 'var(--text)' }}>페르미 역설</strong>까지.
       </p>
 
-      <DrakeEquationClient initial={initial} />
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="드레이크 방정식(1961) 원형 · 탐사 현황은 NASA·Breakthrough Initiatives 발표 기준 · 거리는 은하 원반 균등 분포를 가정한 단순 모델"
+        sources={[
+          { label: 'SETI Institute — Drake Equation', href: 'https://www.seti.org/research/seti-101/drake-equation/' },
+          { label: 'NASA Exoplanet Archive', href: 'https://exoplanetarchive.ipac.caltech.edu/' },
+          { label: 'NASA Science — Europa Clipper', href: 'https://science.nasa.gov/mission/europa-clipper/' },
+          { label: 'Breakthrough Listen', href: 'https://breakthroughinitiatives.org/initiative/1' },
+        ]}
+      />
+
+      <DrakeEquationClient radioRangeLy={RADIO_LY} />
 
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '48px' }}>
 
         {/* ── 1. 공식 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             드레이크 방정식 공식
           </h2>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '14px', padding: '24px 22px', textAlign: 'center', marginBottom: '20px' }}>
-            <p style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(18px, 4vw, 24px)', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.3px', margin: 0 }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: 'var(--radius-card)', padding: '24px 22px', textAlign: 'center', marginBottom: '20px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: 'clamp(18px, 4vw, 24px)', fontWeight: 800, color: 'var(--text)', letterSpacing: '-0.3px', margin: 0 }}>
               <span style={{ color: 'var(--accent)' }}>N</span> = R<sub>*</sub> × f<sub>p</sub> × n<sub>e</sub> × f<sub>l</sub> × f<sub>i</sub> × f<sub>c</sub> × L
             </p>
             <p style={{ fontSize: '12px', color: 'var(--muted)', margin: '10px 0 0', letterSpacing: '0.04em' }}>
               7개 변수의 곱으로 은하 내 교신 가능 문명 수(N)를 추정
             </p>
           </div>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -107,10 +125,10 @@ export default async function DrakePage({
                   { sym: 'L',   mean: '문명 존속 기간',        unit: '년',     range: '100 ~ 10억' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.sym}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row.sym}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{row.mean}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row.unit}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{row.range}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{row.unit}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{row.range}</td>
                   </tr>
                 ))}
               </tbody>
@@ -118,18 +136,37 @@ export default async function DrakePage({
           </div>
         </div>
 
+        {/* ── 1-1. 계산 예시·해석 ── */}
+        <div>
+          <h2 className="g-h2">
+            계산 예시와 결과 읽는 법
+          </h2>
+          <p className="g-p">
+            계산기 첫 화면의 &lsquo;현실론&rsquo; 예시값은 R<sub>*</sub> = {EX.rStar}, f<sub>p</sub> = {EX.fp}, n<sub>e</sub> = {EX.ne}, f<sub>l</sub> = {EX.fl}, f<sub>i</sub> = {EX.fi}, f<sub>c</sub> = {EX.fc}, L = {EX.L.toLocaleString('ko-KR')}년입니다.
+            앞의 여섯 항을 곱하면 {EX_PER_YEAR.toLocaleString('ko-KR', { maximumFractionDigits: 4 })} — 우리 은하에서 <strong>해마다 새로 교신 능력을 갖추는 문명 수</strong>이고,
+            여기에 문명이 그 능력을 유지하는 기간 L을 곱하면 지금 이 순간 동시에 존재하는 문명 수 N = <strong>{Math.round(EX_N).toLocaleString('ko-KR')}</strong>가 나옵니다.
+          </p>
+          <p className="g-p">
+            이 N을 은하 원반 부피(반경 5만 광년 × 두께 1천 광년 ≈ {GALAXY_VOL_TRILLION.toFixed(2)}조 세제곱광년)에 고르게 흩어 놓으면 문명 사이 평균 간격은 {ly(EX_D.averageDistance)},
+            가장 가까운 문명까지는 {ly(EX_D.nearestDistance)}이고, 신호를 보내고 답을 받기까지 {yr(EX_D.roundTripCommYears)}이 걸립니다.
+            결과를 읽을 때 기억할 점은 세 가지입니다. 첫째, <strong>N은 모든 변수에 정비례</strong>합니다 — 어느 한 값을 10배 바꾸면 N도 정확히 10배가 되므로,
+            불확실성이 가장 큰 f<sub>l</sub>·f<sub>i</sub>·L이 결과를 좌우합니다. 둘째, <strong>N이 1보다 작다면</strong> 지금 우리 은하에서 교신 가능한 문명이 평균적으로 한 곳도 되지 않는다는 뜻으로,
+            인류가 예외적인 존재라는 해석(레어 어스)과 맞닿아 있습니다. 셋째, 거리 계산은 N에 세제곱근으로 반응하므로 <strong>N이 1,000배 늘어도 거리는 10분의 1로만 줄어듭니다</strong>.
+          </p>
+        </div>
+
         {/* ── 2. 역사 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             드레이크 방정식의 역사
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px' }}>
+          <p className="g-p">
             드레이크 방정식은 1961년 미국 천문학자 <strong style={{ color: 'var(--text)' }}>프랭크 드레이크(Frank Drake)</strong>가
             웨스트버지니아 그린뱅크 천문대에서 열린 외계지적생명체 탐사(SETI) 관련 회의를 위해 만들었습니다.
             특정 답을 얻기 위한 계산식이 아니라, <strong style={{ color: 'var(--text)' }}>&ldquo;외계 문명을 만나려면 어떤 것들을 알아야 하는가&rdquo;</strong>를
             구조화한 프레임워크로 제안된 것입니다.
           </p>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9 }}>
+          <p className="g-p">
             이후 천문학자이자 작가인 <strong style={{ color: 'var(--text)' }}>칼 세이건(Carl Sagan)</strong>이 저서와 TV 시리즈 &ldquo;코스모스&rdquo;를 통해 대중화했고,
             현재도 천문학·우주생물학의 핵심 사고 도구로 쓰이며 SETI 프로그램의 이론적 기반을 이루고 있습니다.
           </p>
@@ -137,10 +174,10 @@ export default async function DrakePage({
 
         {/* ── 3. 대표 추정 결과 비교 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             대표적 추정 결과 비교
           </h2>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -151,32 +188,34 @@ export default async function DrakePage({
               </thead>
               <tbody>
                 {[
-                  { who: '칼 세이건 (낙관, 1980년대)', n: '~100만 개',  color: '#059669', note: '생명 발생·진화 확률 높게 가정' },
-                  { who: '드레이크 본인 (1961)',    n: '~10,000 개',    color: 'var(--accent)', note: '그린뱅크 회의 추정' },
-                  { who: '본 도구 "현실론" 예시',    n: '수십~수백 개',   color: 'var(--accent)', note: '중간 가정 (공식 합의값 아님)' },
-                  { who: '비관론 (레어 어스)',     n: '< 1 개',        color: '#EA580C', note: '지구 조건이 매우 특별함' },
-                  { who: '페르미 역설 관점',       n: '수백만~수억',   color: '#0891B2', note: '계산상 많지만 신호 없음' },
+                  { who: '그린뱅크 회의 (1961)',    n: '1,000 ~ 1억 개', color: 'var(--accent-ink)', note: 'N ≈ L(문명 존속 연수)로 정리 — 불확실성이 커 범위로 제시' },
+                  { who: '칼 세이건 (낙관, 1960~80년대)', n: '~100만 개',  color: 'var(--success)', note: '생명 발생·진화 확률 높게 가정' },
+                  { who: '프랭크 드레이크 (후년)',    n: '~10,000 개',    color: 'var(--accent-ink)', note: 'L ≈ 1만 년 가정 — 강연·인터뷰에서 자주 제시' },
+                  { who: `본 도구 "현실론" 예시`,    n: `${Math.round(EX_N).toLocaleString('ko-KR')} 개`,   color: 'var(--accent-ink)', note: '중간 가정 (공식 합의값 아님)' },
+                  { who: '비관론 (레어 어스)',     n: '< 1 개',        color: 'var(--warning)', note: '지구 조건이 매우 특별함' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row.who}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: row.color, fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row.n}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: row.color, fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row.n}</td>
                     <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row.note}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            ⚠️ 위 값은 가정에 따른 <strong style={{ color: 'var(--text)' }}>예시</strong>입니다. fl(생명 발생)·fi(지능 진화)·L(문명 수명)은 아직 알려진 바가 없어 <strong style={{ color: 'var(--text)' }}>공식적으로 합의된 추정치나 &lsquo;중앙값&rsquo;은 존재하지 않습니다</strong> (SETI Institute). 결과는 입력값에 따라 수십 자릿수까지 달라집니다.
-          </p>
+          <div style={{ marginTop: 12 }}>
+            <Callout tone="warn" title="합의된 정답은 없습니다">
+              위 값은 가정에 따른 <strong>예시</strong>입니다. fl(생명 발생)·fi(지능 진화)·L(문명 수명)은 아직 알려진 바가 없어 <strong>공식적으로 합의된 추정치나 &lsquo;중앙값&rsquo;은 존재하지 않습니다</strong> (SETI Institute). 결과는 입력값에 따라 수십 자릿수까지 달라집니다.
+            </Callout>
+          </div>
         </div>
 
         {/* ── 4. 페르미 역설 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '12px' }}>
+          <h2 className="g-h2">
             페르미 역설 — 그들은 어디에 있는가?
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             드레이크 방정식이 많은 문명을 예측한다면, 왜 우리는 아직 단 하나의 외계 신호도 받지 못했을까요?
             이탈리아 물리학자 <strong style={{ color: 'var(--text)' }}>엔리코 페르미</strong>가 1950년 점심 식사 중 던진 이 질문이 &ldquo;페르미 역설&rdquo;이 되었고,
             이를 해명하기 위한 수많은 가설이 제시됐습니다.
@@ -189,7 +228,7 @@ export default async function DrakePage({
               { n: '④', title: '이미 지나쳐 감',      desc: '초문명은 생물학적 형태를 벗어난 디지털·기계 존재로, 이미 전파 통신을 벗어나 우리가 알아채지 못함.',                      color: '#9333EA' },
               { n: '⑤', title: '우리가 유일함',       desc: '레어 어스 가설 — 지구와 같은 안정된 항성, 거대 위성(달), 자기장, 판 구조 등의 조합은 극도로 드물다.',                  color: '#DB2777' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: '12px', padding: '14px 16px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${item.color}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: '13px', color: item.color, fontWeight: 700, marginBottom: '6px' }}>{item.n} {item.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
               </div>
@@ -199,37 +238,37 @@ export default async function DrakePage({
 
         {/* ── 5. 현재 탐사 현황 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
+          <h2 className="g-h2">
             현재 외계 생명체 탐사 현황
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { title: '케플러 · TESS 망원경', desc: '확인된 외계행성 약 6,000개 (NASA, 2025). 거주 가능 구역(골디락스 존) 후보 행성도 다수 확인되어 fp 추정값을 크게 끌어올림.' },
+              { title: '케플러 · TESS 망원경', desc: 'NASA가 집계한 확인된 외계행성은 2025년 9월 6,000개를 넘었고, 이후에도 계속 늘고 있습니다(NASA Exoplanet Archive에서 실시간 확인). 거주 가능 구역(골디락스 존) 후보 행성도 다수 확인되어 fp 추정값을 크게 끌어올림.' },
               { title: 'Breakthrough Listen',  desc: '2015년 7월 출범한 10년·1억 달러 규모의 SETI 프로젝트(관측은 2016년부터). 가까운 별 100만 개와 100개 은하의 전파·광학 신호를 스캔.' },
               { title: '제임스 웹 우주망원경(JWST)', desc: '외계행성 대기 성분 분석 가능. 산소·메탄 등 생명 활동 지표(바이오시그니처)를 찾는 중.' },
-              { title: '엔셀라두스 · 유로파',   desc: '태양계 내 얼음 밑 바다를 가진 위성들. NASA Europa Clipper는 2024년 발사돼 목성으로 항해 중 — 2030년 유로파 도착·탐사 예정.' },
+              { title: '엔셀라두스 · 유로파',   desc: '태양계 내 얼음 밑 바다를 가진 위성들. NASA Europa Clipper는 2024년 10월 발사돼 항해 중 — 2030년 4월 목성 궤도에 진입하고, 2031년부터 유로파 근접 비행 탐사 예정.' },
               { title: '중국 톈옌(FAST) 전파망원경', desc: '세계 최대 단일 전파망원경. 2022년 보고된 후보 신호는 이후 전파 간섭(RFI)으로 외계 기원 가능성이 거의 배제됨.' },
             ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '4px' }}>🔭 {item.title}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--accent-ink)', fontWeight: 700, marginBottom: '4px' }}>{item.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{item.desc}</p>
               </div>
             ))}
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '12px', lineHeight: 1.6 }}>
-            출처: NASA Exoplanet Archive · NASA Science(Europa Clipper) · Breakthrough Initiatives · SETI Institute. 거리·문명 수는 본문 모델 가정에 따른 추정입니다. <strong style={{ color: 'var(--text)' }}>최종 검토: 2026-07.</strong>
+            출처: NASA Exoplanet Archive · NASA Science(Europa Clipper) · Breakthrough Initiatives · SETI Institute (2026년 9월 확인). 거리·문명 수는 본문 모델 가정에 따른 추정입니다.
           </p>
         </div>
 
         {/* ── 6. 가장 가까운 외계 문명까지 거리 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            📏 가장 가까운 외계 문명까지 거리
+          <h2 className="g-h2">
+            가장 가까운 외계 문명까지 거리
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
+          <p className="g-p">
             우리 은하를 디스크(반경 50,000광년 × 두께 1,000광년)로 가정하고 N개 문명이 균등 분포한다고 보면, 평균 문명 간 거리 ≈ (은하 부피 / N)<sup>1/3</sup>, 가장 가까운 문명 ≈ 평균 × 0.55 (Poisson 통계 근사). 본 도구의 결과 카드에 자동 표시됩니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -241,18 +280,12 @@ export default async function DrakePage({
                 </tr>
               </thead>
               <tbody>
-                {[
-                  { n: '100',       avg: '약 4,282 광년', near: '약 2,355 광년', rt: '약 4,711년',  note: '인류 전파(126ly) 미도달' },
-                  { n: '1,000',     avg: '약 1,988 광년', near: '약 1,093 광년', rt: '약 2,187년',  note: '균형론 · 전파권 밖' },
-                  { n: '10,000',    avg: '약 923 광년',   near: '약 507 광년',   rt: '약 1,015년',  note: '드레이크 본인 추정' },
-                  { n: '100,000',   avg: '약 428 광년',   near: '약 236 광년',   rt: '약 471년',     note: '전파권 밖 (근접)' },
-                  { n: '1,000,000', avg: '약 199 광년',   near: '약 109 광년',   rt: '약 219년',     note: '낙관론(칼 세이건) — 전파권 안' },
-                ].map((r, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>N = {r.n}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.avg}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: '#DC2626', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r.near}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r.rt}</td>
+                {DIST_ROWS.map((r, i) => (
+                  <tr key={r.n} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>N = {r.n.toLocaleString('ko-KR')}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}>{ly(r.d.averageDistance)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--danger)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{ly(r.d.nearestDistance)}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', fontFamily: 'var(--font-sans)', whiteSpace: 'nowrap' }}>{yr(r.d.roundTripCommYears)}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', fontSize: 12 }}>{r.note}</td>
                   </tr>
                 ))}
@@ -266,13 +299,13 @@ export default async function DrakePage({
 
         {/* ── 7. 인류 전파권 시간선 (NEW) ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '6px' }}>
-            📡 인류 전파권 시간선
+          <h2 className="g-h2">
+            인류 전파권 시간선
           </h2>
-          <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '16px' }}>
-            인류는 1900년경 첫 라디오 방송을 시작했습니다. 2026년 기준 전파 도달 거리는 약 <strong style={{ color: 'var(--text)' }}>126광년</strong>, 100광년 내 별 약 <strong style={{ color: 'var(--text)' }}>14,000개</strong>를 통과했습니다. 가까운 별 도달 시점은 다음과 같습니다.
+          <p className="g-p">
+            인류는 {RADIO_START_YEAR}년경 첫 라디오 송신을 시작했습니다. {RADIO_ASOF_YEAR}년 기준 전파 도달 거리는 약 <strong style={{ color: 'var(--text)' }}>{RADIO_LY}광년</strong>, 100광년 내 별 약 <strong style={{ color: 'var(--text)' }}>14,000개</strong>를 통과했습니다. 가까운 별 도달 시점은 다음과 같습니다.
           </p>
-          <div style={{ overflowX: 'auto' }}>
+          <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -289,20 +322,22 @@ export default async function DrakePage({
                   ['베가 (직녀성)',                    '25.0 광년',   '약 1925년'],
                   ['알타이르 (견우성)',                '16.7 광년',   '약 1917년'],
                   ['100광년 거리 별',                  '100 광년',    '약 2000년'],
-                  ['현재 전파 최외곽',                 '126 광년',    '2026년 (현재)'],
+                  ['현재 전파 최외곽',                 `${RADIO_LY} 광년`, `${RADIO_ASOF_YEAR}년 (현재)`],
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{r[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontFamily: 'var(--font-sans)' }}>{r[2]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.6 }}>
-            ⚠️ 인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다. 또한 그들이 응답을 보내고 우리에게 도달하기까지 같은 시간이 추가로 걸립니다(왕복 통신).
-          </p>
+          <div style={{ marginTop: 12 }}>
+            <Callout tone="note" title="도달했다고 들리는 것은 아닙니다">
+              인류 전파는 약하고 분산되어 실제 외계 문명이 감지하려면 매우 큰 안테나가 필요합니다. 또한 그들이 응답을 보내고 우리에게 도달하기까지 같은 시간이 추가로 걸립니다(왕복 통신).
+            </Callout>
+          </div>
         </div>
 
         {/* ── 8. FAQ (accordion) ── */}
@@ -312,7 +347,7 @@ export default async function DrakePage({
 
         {/* ── 7. 함께 쓰면 좋은 도구 ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/life/lotto',        icon: '🎰', name: '로또 번호 생성기',   desc: '확률의 재미 · 당첨 확률 1/814만' },
@@ -323,7 +358,7 @@ export default async function DrakePage({
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',
                 background: 'var(--bg2)', border: '1px solid var(--border)',
-                borderRadius: '12px', padding: '14px 16px', textDecoration: 'none',
+                borderRadius: 'var(--radius-m)', padding: '14px 16px', textDecoration: 'none',
               }}>
                 <span style={{ fontSize: '22px', flexShrink: 0 }}>{t.icon}</span>
                 <div>
@@ -336,6 +371,6 @@ export default async function DrakePage({
         </div>
 
       </div>
-    </div>
+    </ToolPage>
   )
 }

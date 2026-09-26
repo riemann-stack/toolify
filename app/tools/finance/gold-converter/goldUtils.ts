@@ -37,7 +37,7 @@ export interface KaratDef {
 }
 
 export const KARATS: KaratDef[] = [
-  { key: '24k',  label: '24K',  ratio: 1.000, desc: '순금 100% 기준점 (실물 품위 999~999.9 = 99.9~99.99%) — 골드바·돌반지·투자', color: '#A16207' },
+  { key: '24k',  label: '24K',  ratio: 1.000, desc: '순금 100% 기준점 (실물 품위 999~999.9 = 99.9~99.99%) — 골드바·돌반지·투자', color: 'var(--yellow-700)' },
   { key: '22k',  label: '22K',  ratio: 0.917, desc: '91.7% — 동남아 결혼반지',                color: '#FFC940' },
   { key: '21k',  label: '21K',  ratio: 0.875, desc: '87.5% — 중동 보석',                      color: '#FFB938' },
   { key: '18k',  label: '18K',  ratio: 0.750, desc: '75.0% — 한국 결혼반지·보석 표준',         color: '#E8A838' },
@@ -178,14 +178,43 @@ export function koreaPremium(p: PriceInputs): { koreaPerOz: number; intlPerOzKrw
 }
 
 /* ─── 자산 합산 항목 ─── */
-let _assetIdCounter = 0
-export const nextAssetId = () => `gold-${++_assetIdCounter}`
+/** 자산 id — 모듈 카운터는 새로고침마다 0으로 돌아가 복원된 id와 겹치므로(삭제·수정이 두 행에 동시 적용) 시각+난수로 생성 */
+export const nextAssetId = () =>
+  `gold-${Date.now().toString(36)}-${Math.random().toString(36).slice(2, 8)}`
 
 export interface AssetItem {
   id: string
   nickname: string
   weightG: number
   karat: string
+}
+
+/* ─── localStorage 복원 검증 ─── */
+export const isWeightUnit = (v: unknown): v is WeightUnit => UNITS.some((u) => u.key === v)
+export const isKaratKey = (v: unknown): v is string => KARATS.some((k) => k.key === v)
+export const isGoldProduct = (v: unknown): v is GoldProduct => v === 'bar' || v === 'krx' || v === 'bankbook'
+
+/** 저장된 자산 목록 정제 — 형식이 틀린 항목은 버리고, 중복 id(옛 카운터 id)는 새 id로 다시 부여 */
+export function sanitizeAssets(raw: unknown): AssetItem[] {
+  if (!Array.isArray(raw)) return []
+  const seen = new Set<string>()
+  const out: AssetItem[] = []
+  for (const x of raw) {
+    if (!x || typeof x !== 'object') continue
+    const o = x as Record<string, unknown>
+    if (typeof o.weightG !== 'number' || !Number.isFinite(o.weightG) || o.weightG < 0) continue
+    if (!isKaratKey(o.karat)) continue
+    let id = typeof o.id === 'string' && o.id ? o.id : nextAssetId()
+    while (seen.has(id)) id = nextAssetId()
+    seen.add(id)
+    out.push({
+      id,
+      nickname: typeof o.nickname === 'string' ? o.nickname.slice(0, 40) : '',
+      weightG: Math.min(100_000, o.weightG),
+      karat: o.karat,
+    })
+  }
+  return out
 }
 
 /* ─── 무게별 가격표 ─── */

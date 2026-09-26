@@ -2,6 +2,7 @@
 
 import { useState, useMemo, useEffect } from 'react'
 import s from './css-converter.module.css'
+import { LEN_UNITS, convertLength, parseRatio, percentBase, type LenCfg, type LenUnit } from './cssConverterUtils'
 
 type TabKey = 'length' | 'lineheight' | 'letterspacing' | 'aspect' | 'clamp' | 'time'
 
@@ -26,7 +27,7 @@ function useCopy() {
     try {
       await navigator.clipboard.writeText(text)
       setCopiedKey(key)
-      setTimeout(() => setCopiedKey(null), 1000)
+      setTimeout(() => setCopiedKey(null), 1500)
     } catch {
       /* ignore */
     }
@@ -64,17 +65,12 @@ export default function CssConverterClient() {
 /* ════════════════════════════════════════════════════════════
    TAB 1 — 길이 단위 변환기
    ════════════════════════════════════════════════════════════ */
-type LenUnit = 'px' | 'rem' | 'em' | '%' | 'vw' | 'vh'
-const LEN_UNITS: LenUnit[] = ['px', 'rem', 'em', '%', 'vw', 'vh']
 const LEN_PROPS = ['font-size', 'width', 'height', 'padding', 'margin', 'gap']
 
-interface LenCfg {
-  rootFontSize: number
-  parentFontSize: number
-  viewportWidth: number
-  viewportHeight: number
-  baseValue: number
-}
+/* 설정 입력 — 비우면 NaN으로 두고(0으로 바꾸지 않음) 해당 단위 결과만 '—' 처리 */
+const cfgNum = (v: string) => parseFloat(v)
+const cfgVal = (n: number) => (Number.isFinite(n) ? n : '')
+const cfgText = (n: number) => (Number.isFinite(n) ? String(n) : '—')
 
 function LengthTab() {
   const { copiedKey, copy } = useCopy()
@@ -91,38 +87,21 @@ function LengthTab() {
   })
 
   const num = parseFloat(value)
-  const valid = isFinite(num) && num >= 0
-
-  const toPx = (v: number, u: LenUnit): number => {
-    switch (u) {
-      case 'px':  return v
-      case 'rem': return v * cfg.rootFontSize
-      case 'em':  return v * cfg.parentFontSize
-      case '%':   return (v / 100) * cfg.baseValue
-      case 'vw':  return (v / 100) * cfg.viewportWidth
-      case 'vh':  return (v / 100) * cfg.viewportHeight
-    }
-  }
-  const fromPx = (px: number, u: LenUnit): number => {
-    switch (u) {
-      case 'px':  return px
-      case 'rem': return px / cfg.rootFontSize
-      case 'em':  return px / cfg.parentFontSize
-      case '%':   return (px / cfg.baseValue) * 100
-      case 'vw':  return (px / cfg.viewportWidth) * 100
-      case 'vh':  return (px / cfg.viewportHeight) * 100
-    }
-  }
+  // 음수는 margin에서만 유효 — font-size·width·height·padding·gap에 음수를 쓰면 CSS에서 무효 선언
+  const negBlocked = isFinite(num) && num < 0 && prop !== 'margin'
+  const valid = isFinite(num) && !negBlocked
 
   const results = useMemo(() => {
     if (!valid) return []
-    const px = toPx(num, fromUnit)
-    return LEN_UNITS.map((u) => {
-      const v = fromPx(px, u)
-      return { unit: u, value: v, display: `${fmt(v)}${u}` }
-    })
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [num, fromUnit, cfg, valid])
+    // % 기준은 속성에 따라 다름: font-size → 부모 글꼴 크기, 그 외 → 부모(컨테이너) 크기
+    return convertLength(num, fromUnit, prop, cfg).map((r) => ({
+      unit: r.unit,
+      value: r.value,
+      ok: Number.isFinite(r.value),
+      display: Number.isFinite(r.value) ? `${fmt(r.value)}${r.unit}` : '—',
+    }))
+  }, [num, fromUnit, prop, cfg, valid])
+  const pctBase = percentBase(prop, cfg)
 
   const applyPreset = (preset: string) => {
     switch (preset) {
@@ -143,7 +122,6 @@ function LengthTab() {
             inputMode="decimal"
             className={s.input}
             value={value}
-            min={0}
             onChange={(e) => setValue(e.target.value)}
           />
         </div>
@@ -181,8 +159,8 @@ function LengthTab() {
               <input id="css-converter-root-font-size-px"
                 type="number" inputMode="decimal"
                 className={s.configInput}
-                value={cfg.rootFontSize}
-                onChange={(e) => setCfg({ ...cfg, rootFontSize: parseFloat(e.target.value) || 0 })}
+                value={cfgVal(cfg.rootFontSize)}
+                onChange={(e) => setCfg({ ...cfg, rootFontSize: cfgNum(e.target.value) })}
               />
             </div>
             <div className={s.configField}>
@@ -190,8 +168,8 @@ function LengthTab() {
               <input id="css-converter-parent-font-size-px"
                 type="number" inputMode="decimal"
                 className={s.configInput}
-                value={cfg.parentFontSize}
-                onChange={(e) => setCfg({ ...cfg, parentFontSize: parseFloat(e.target.value) || 0 })}
+                value={cfgVal(cfg.parentFontSize)}
+                onChange={(e) => setCfg({ ...cfg, parentFontSize: cfgNum(e.target.value) })}
               />
             </div>
             <div className={s.configField}>
@@ -200,8 +178,8 @@ function LengthTab() {
                 <input id="css-converter-viewport-width-px"
                   type="number" inputMode="decimal"
                   className={s.configInput}
-                  value={cfg.viewportWidth}
-                  onChange={(e) => setCfg({ ...cfg, viewportWidth: parseFloat(e.target.value) || 0 })}
+                  value={cfgVal(cfg.viewportWidth)}
+                  onChange={(e) => setCfg({ ...cfg, viewportWidth: cfgNum(e.target.value) })}
                 />
                 <button
                   type="button"
@@ -216,8 +194,8 @@ function LengthTab() {
                 <input id="css-converter-viewport-height-px"
                   type="number" inputMode="decimal"
                   className={s.configInput}
-                  value={cfg.viewportHeight}
-                  onChange={(e) => setCfg({ ...cfg, viewportHeight: parseFloat(e.target.value) || 0 })}
+                  value={cfgVal(cfg.viewportHeight)}
+                  onChange={(e) => setCfg({ ...cfg, viewportHeight: cfgNum(e.target.value) })}
                 />
                 <button
                   type="button"
@@ -227,12 +205,12 @@ function LengthTab() {
               </div>
             </div>
             <div className={s.configField}>
-              <label className={s.configLabel}>기준값 base (px) — % 계산용</label>
-              <input
+              <label className={s.configLabel} htmlFor="css-converter-base-px">부모(컨테이너) 크기 base (px) — width·padding 등의 % 기준</label>
+              <input id="css-converter-base-px"
                 type="number" inputMode="decimal"
                 className={s.configInput}
-                value={cfg.baseValue}
-                onChange={(e) => setCfg({ ...cfg, baseValue: parseFloat(e.target.value) || 0 })}
+                value={cfgVal(cfg.baseValue)}
+                onChange={(e) => setCfg({ ...cfg, baseValue: cfgNum(e.target.value) })}
               />
             </div>
           </div>
@@ -243,18 +221,19 @@ function LengthTab() {
         <span className={s.cardLabel}>변환 결과</span>
 
         <div className={s.summaryLine}>
-          root {cfg.rootFontSize}px · parent {cfg.parentFontSize}px · viewport {cfg.viewportWidth}×{cfg.viewportHeight} · base {cfg.baseValue}px 기준
+          root {cfgText(cfg.rootFontSize)}px · parent {cfgText(cfg.parentFontSize)}px · viewport {cfgText(cfg.viewportWidth)}×{cfgText(cfg.viewportHeight)} · % 기준 {prop === 'font-size' ? '부모 글꼴' : '부모 크기'} {cfgText(pctBase)}px
         </div>
 
         <div className={s.propSelectRow}>
-          <span className={s.propSelectLabel}>CSS 속성</span>
-          <select className={s.select} style={{ width: 'auto', flex: '0 1 auto' }} value={prop} onChange={(e) => setProp(e.target.value)}>
+          <label className={s.propSelectLabel} htmlFor="css-converter-len-prop">CSS 속성</label>
+          <select id="css-converter-len-prop" className={s.select} style={{ width: 'auto', flex: '0 1 auto' }} value={prop} onChange={(e) => setProp(e.target.value)}>
             {LEN_PROPS.map((p) => <option key={p} value={p}>{p}</option>)}
           </select>
         </div>
 
+        <div role="status">
         {valid ? (
-          <table className={s.resultTable}>
+          <div className="tableScroll"><table className={s.resultTable}>
             <thead>
               <tr>
                 <th scope="col">단위</th>
@@ -265,7 +244,7 @@ function LengthTab() {
             </thead>
             <tbody>
               {results.map((r) => {
-                const decl = `${prop}: ${r.display};`
+                const decl = r.ok ? `${prop}: ${r.display};` : '기준값을 입력하세요'
                 const k = `len-${r.unit}`
                 return (
                   <tr key={r.unit}>
@@ -276,6 +255,7 @@ function LengthTab() {
                       <button
                         className={`${s.copyBtn} ${copiedKey === k ? s.copyBtnDone : ''}`}
                         onClick={() => copy(decl, k)}
+                        disabled={!r.ok}
                       >
                         {copiedKey === k ? '✅' : '복사'}
                       </button>
@@ -284,10 +264,11 @@ function LengthTab() {
                 )
               })}
             </tbody>
-          </table>
+          </table></div>
         ) : (
-          <p style={{ fontSize: 13, color: 'var(--muted)' }}>값을 입력하세요.</p>
+          <p style={{ fontSize: 13, color: 'var(--muted)' }}>{negBlocked ? `${prop} 속성은 음수를 쓸 수 없습니다. 음수는 margin에서만 유효합니다.` : '값을 입력하세요.'}</p>
         )}
+        </div>
       </div>
     </>
   )
@@ -379,7 +360,7 @@ function LineHeightTab() {
         <span className={s.cardLabel}>변환 결과</span>
         {valid ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <thead>
                 <tr>
                   <th scope="col">형식</th>
@@ -409,7 +390,7 @@ function LineHeightTab() {
                   )
                 })}
               </tbody>
-            </table>
+            </table></div>
 
             <div className={s.sectionDivider} />
             <p className={s.sectionTitle}>추천 코드</p>
@@ -466,7 +447,7 @@ function LetterSpacingTab() {
   const rows = valid ? [
     { fmt: 'px', val: `${fmt(px, 3)}px`,          recommend: false, supported: true },
     { fmt: 'em', val: `${fmt(px / fs, 4)}em`,     recommend: true,  supported: true },
-    { fmt: '%',  val: `${fmt((px / fs) * 100, 3)}%`, recommend: false, supported: false },
+    { fmt: '%',  val: `${fmt((px / fs) * 100, 3)}%`, recommend: false, supported: false /* CSS Text 4 신규 값 — 구형 브라우저 미지원 */ },
   ] : []
 
   return (
@@ -494,7 +475,7 @@ function LetterSpacingTab() {
         <span className={s.cardLabel}>변환 결과</span>
         {valid ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <thead>
                 <tr>
                   <th scope="col">형식</th>
@@ -511,7 +492,7 @@ function LetterSpacingTab() {
                     <tr key={r.fmt} className={r.recommend ? s.resultRowRecommend : ''}>
                       <td className={s.unitCell}>
                         {r.fmt}
-                        {!r.supported && <span className={s.noteCell} style={{ marginLeft: 6 }}>(비공식)</span>}
+                        {!r.supported && <span className={s.noteCell} style={{ marginLeft: 6 }}>(CSS Text 4)</span>}
                       </td>
                       <td className={s.valCell}>{r.val}</td>
                       <td>
@@ -530,13 +511,13 @@ function LetterSpacingTab() {
                   )
                 })}
               </tbody>
-            </table>
+            </table></div>
 
             <div className={`${s.hintCard} ${s.hintRecommend}`}>
               ✅ <strong>em 단위 권장</strong> — font-size 변경 시 자간이 자동으로 비례 조정됩니다.
             </div>
             <div className={`${s.hintCard} ${s.hintWarn}`}>
-              ⚠️ CSS 명세상 <strong>letter-spacing에 % 단위는 공식 지원하지 않습니다</strong>. 위 % 값은 Figma와의 호환을 위한 참고용입니다.
+              ⚠️ <strong>letter-spacing의 %</strong>는 CSS Text Level 4에 추가된 값으로, Firefox·Safari에 이어 Chrome도 145 버전부터 지원합니다. 구형 브라우저까지 고려하면 em이 가장 안전하니, 위 % 값은 Figma 표기와 맞춰 보는 참고용으로 쓰세요.
             </div>
             <div className={`${s.hintCard} ${s.hintTip}`}>
               📐 <strong>Figma → CSS</strong>: Figma의 letter-spacing은 font-size의 %로 표시됩니다.<br />
@@ -573,15 +554,6 @@ function AspectTab() {
   const [w, setW] = useState('1920')
   const [h, setH] = useState('1080')
 
-  const parseRatio = (input: string): [number, number] | null => {
-    const m = input.trim().match(/^(\d+(?:\.\d+)?)[:/](\d+(?:\.\d+)?)$/)
-    if (!m) return null
-    const a = parseFloat(m[1])
-    const b = parseFloat(m[2])
-    if (a <= 0 || b <= 0) return null
-    return [a, b]
-  }
-
   const pair = useMemo<[number, number] | null>(() => {
     if (mode === 'ratio') return parseRatio(ratio)
     const wN = parseFloat(w)
@@ -612,7 +584,10 @@ function AspectTab() {
     ? `.container {\n  position: relative;\n  padding-top: ${paddingTopPct}%; /* ${fmt(pair[0], 2)}:${fmt(pair[1], 2)} */\n}\n.content {\n  position: absolute;\n  inset: 0;\n}`
     : ''
 
-  const previewHeight = pair ? Math.round(320 * (pair[1] / pair[0])) : 0
+  // 세로로 긴 비율(9:16, 1×10000 등)은 높이를 480px로 제한하고 너비를 줄여 비율을 유지
+  const rawPreviewH = pair ? 320 * (pair[1] / pair[0]) : 0
+  const previewHeight = Math.min(480, Math.max(4, Math.round(rawPreviewH)))
+  const previewWidth = pair && rawPreviewH > 480 ? Math.max(4, Math.round(480 * (pair[0] / pair[1]))) : undefined
 
   return (
     <>
@@ -629,11 +604,11 @@ function AspectTab() {
           </div>
         ) : (
           <div className={s.field}>
-            <label className={s.fieldLabel}>width × height (px)</label>
+            <label className={s.fieldLabel} htmlFor="css-converter-ar-w">width × height (px)</label>
             <div className={s.whPair}>
-              <input type="number" inputMode="decimal" className={s.input} value={w} min={1} onChange={(e) => setW(e.target.value)} />
+              <input id="css-converter-ar-w" aria-label="width (px)" type="number" inputMode="decimal" className={s.input} value={w} min={1} onChange={(e) => setW(e.target.value)} />
               <span className={s.whSep}>×</span>
-              <input type="number" inputMode="decimal" className={s.input} value={h} min={1} onChange={(e) => setH(e.target.value)} />
+              <input aria-label="height (px)" type="number" inputMode="decimal" className={s.input} value={h} min={1} onChange={(e) => setH(e.target.value)} />
             </div>
           </div>
         )}
@@ -649,7 +624,7 @@ function AspectTab() {
         <span className={s.cardLabel}>변환 결과</span>
         {pair ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <tbody>
                 <tr>
                   <td className={s.unitCell}>aspect-ratio</td>
@@ -675,10 +650,10 @@ function AspectTab() {
                   <td></td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
 
             <div className={s.previewWrap}>
-              <div className={s.previewBox} style={{ height: `${previewHeight}px` }}>
+              <div className={s.previewBox} style={{ height: `${previewHeight}px`, ...(previewWidth ? { width: `${previewWidth}px` } : {}) }}>
                 {fmt(pair[0], 2)} : {fmt(pair[1], 2)}
               </div>
             </div>
@@ -907,14 +882,14 @@ function ClampTab() {
                   <line x1={graph.xStart} y1={graph.padT} x2={graph.xStart} y2={graph.H - graph.padB} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 3" opacity="0.3" />
                   <line x1={graph.xEnd} y1={graph.padT} x2={graph.xEnd} y2={graph.H - graph.padB} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3 3" opacity="0.3" />
                   <path d={graph.path} stroke="var(--accent)" strokeWidth="2.5" fill="none" strokeLinejoin="round" strokeLinecap="round" />
-                  <text x={graph.xStart} y={graph.H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{nMinVw}px</text>
-                  <text x={graph.xEnd} y={graph.H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{nMaxVw}px</text>
-                  <text x={graph.padL - 6} y={graph.minLineY + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{nMinPx}px</text>
-                  <text x={graph.padL - 6} y={graph.maxLineY + 3} fill="var(--muted)" fontSize="10" textAnchor="end" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>{nMaxPx}px</text>
+                  <text x={graph.xStart} y={graph.H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle">{nMinVw}px</text>
+                  <text x={graph.xEnd} y={graph.H - 10} fill="var(--muted)" fontSize="10" textAnchor="middle">{nMaxVw}px</text>
+                  <text x={graph.padL - 6} y={graph.minLineY + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{nMinPx}px</text>
+                  <text x={graph.padL - 6} y={graph.maxLineY + 3} fill="var(--muted)" fontSize="10" textAnchor="end">{nMaxPx}px</text>
                   {graph.markerX !== null && (
                     <>
                       <line x1={graph.markerX} y1={graph.padT} x2={graph.markerX} y2={graph.H - graph.padB} stroke="var(--text)" strokeWidth="1.5" />
-                      <text x={graph.markerX} y={graph.padT - 2} fill="var(--text)" fontSize="10" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif' fontWeight="700">
+                      <text x={graph.markerX} y={graph.padT - 2} fill="var(--text)" fontSize="10" textAnchor="middle" fontWeight="700">
                         {curVw}px → {graph.curValue !== null ? fmt(graph.curValue, 2) : ''}px
                       </text>
                     </>
@@ -1025,7 +1000,7 @@ function TimeAngleTab() {
 
         {tValid ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <thead>
                 <tr><th scope="col">단위</th><th scope="col">값</th><th scope="col"></th></tr>
               </thead>
@@ -1045,11 +1020,11 @@ function TimeAngleTab() {
                   </td>
                 </tr>
               </tbody>
-            </table>
+            </table></div>
 
             <div className={s.propSelectRow} style={{ marginTop: 12 }}>
-              <span className={s.propSelectLabel}>CSS 속성</span>
-              <select className={s.select} style={{ width: 'auto', flex: '0 1 auto' }} value={tProp} onChange={(e) => setTProp(e.target.value)}>
+              <label className={s.propSelectLabel} htmlFor="css-converter-time-prop">CSS 속성</label>
+              <select id="css-converter-time-prop" className={s.select} style={{ width: 'auto', flex: '0 1 auto' }} value={tProp} onChange={(e) => setTProp(e.target.value)}>
                 {TIME_PROPS.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </div>
@@ -1090,7 +1065,7 @@ function TimeAngleTab() {
 
         {aValid ? (
           <>
-            <table className={s.resultTable}>
+            <div className="tableScroll"><table className={s.resultTable}>
               <thead>
                 <tr><th scope="col">단위</th><th scope="col">값</th><th scope="col"></th></tr>
               </thead>
@@ -1107,11 +1082,11 @@ function TimeAngleTab() {
                   </tr>
                 ))}
               </tbody>
-            </table>
+            </table></div>
 
             <div className={s.propSelectRow} style={{ marginTop: 12 }}>
-              <span className={s.propSelectLabel}>CSS 속성</span>
-              <select className={s.select} style={{ width: 'auto', flex: '0 1 auto' }} value={aProp} onChange={(e) => setAProp(e.target.value)}>
+              <label className={s.propSelectLabel} htmlFor="css-converter-angle-prop">CSS 속성</label>
+              <select id="css-converter-angle-prop" className={s.select} style={{ width: 'auto', flex: '0 1 auto' }} value={aProp} onChange={(e) => setAProp(e.target.value)}>
                 {ANG_PROPS.map((p) => <option key={p} value={p}>{p}</option>)}
               </select>
             </div>

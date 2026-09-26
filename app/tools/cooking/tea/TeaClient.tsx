@@ -1,7 +1,7 @@
 /* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
-import { useEffect, useState } from 'react'
+import { useEffect, useId, useState } from 'react'
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
 import s from './tea.module.css'
@@ -20,6 +20,11 @@ const STORAGE_KEY = 'youtil_tea_v1'
 const LEAF_PRESETS = [2, 3, 5]
 const WATER_PRESETS = [200, 350, 500]
 const ALL_VESSELS: Vessel[] = VESSELS.map((v) => v.id)
+const COLD_MODES: ColdMode[] = COLD_GUIDES.map((g) => g.mode)
+
+/* 숫자 입력 문자열 복원 — 형식이 맞는 값만 */
+const numStr = (v: unknown): string | undefined =>
+  typeof v === 'string' && v.length <= 10 && /^\d*\.?\d*$/.test(v) ? v : undefined
 
 export default function TeaClient() {
   const [tab, setTab] = useState<Tab>('calc')
@@ -36,28 +41,52 @@ export default function TeaClient() {
   /* 떫음 게이지용 시간 */
   const [actualSec, setActualSec] = useState('60')
 
-  /* localStorage */
+  /* localStorage — 저장값은 목록·형식 검증 후에만 반영 (알 수 없는 teaId 등으로 깨지지 않게) */
+  const [hydrated, setHydrated] = useState(false)
   useEffect(() => {
     try {
-      const raw = localStorage.getItem(STORAGE_KEY)
-      if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.teaId) setTeaId(j.teaId)
-      if (j.vessel) setVessel(j.vessel)
-      if (j.strength) setStrength(j.strength)
-      if (j.leafG) setLeafG(j.leafG)
-      if (j.waterMl) setWaterMl(j.waterMl)
-      if (typeof j.coldOn === 'boolean') setColdOn(j.coldOn)
-      if (j.coldMode) setColdMode(j.coldMode)
+      const raw = typeof window !== 'undefined' ? localStorage.getItem(STORAGE_KEY) : null
+      const j: unknown = raw ? JSON.parse(raw) : null
+      if (j && typeof j === 'object' && !Array.isArray(j)) {
+        const o = j as Record<string, unknown>
+        const t = TEAS.find((x) => x.id === o.teaId)
+        const v = ALL_VESSELS.includes(o.vessel as Vessel) ? (o.vessel as Vessel) : null
+        const st = typeof o.strength === 'string' && Object.prototype.hasOwnProperty.call(STRENGTHS, o.strength) ? (o.strength as Strength) : null
+        if (t) {
+          setTeaId(t.id)
+          const ev: Vessel = v && (t.vessels ?? ALL_VESSELS).includes(v) ? v : t.vessel
+          setActualSec(String(recommendTime(t, st ?? 'normal', ev)))
+        }
+        if (v) setVessel(v)
+        if (st) setStrength(st)
+        const lg = numStr(o.leafG); if (lg) setLeafG(lg)
+        const wm = numStr(o.waterMl); if (wm) setWaterMl(wm)
+        if (typeof o.coldOn === 'boolean') setColdOn(o.coldOn)
+        if (COLD_MODES.includes(o.coldMode as ColdMode)) setColdMode(o.coldMode as ColdMode)
+      }
     } catch {}
+    setHydrated(true)
   }, [])
   useEffect(() => {
+    if (!hydrated) return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ teaId, vessel, strength, leafG, waterMl, coldOn, coldMode }))
     } catch {}
-  }, [teaId, vessel, strength, leafG, waterMl, coldOn, coldMode])
+  }, [hydrated, teaId, vessel, strength, leafG, waterMl, coldOn, coldMode])
+
+  const tanninGradId = `tanninGrad-${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
 
   const tea = getTea(teaId)
+  // 말차는 우리지 않고 격불해 가루째 마시므로 떫음 게이지·다탕 스케줄이 맞지 않음
+  const isWhisked = tea.id === 'matcha'
+
+  /* 차를 바꾸면 실제 우림 시간을 새 차의 권장 1탕 시간으로 초기화 — 이전 차의 60초가 남아 과추출로 보이지 않게 */
+  const selectTea = (id: TeaId) => {
+    const next = getTea(id)
+    const nextVessel: Vessel = (next.vessels ?? ALL_VESSELS).includes(vessel) ? vessel : next.vessel
+    setTeaId(id)
+    setActualSec(String(recommendTime(next, strength, nextVessel)))
+  }
   const leaf = parseFloat(leafG) || 0
   const water = parseFloat(waterMl) || 0
   const sec = parseInt(actualSec) || 0
@@ -128,7 +157,7 @@ export default function TeaClient() {
                   key={t.id}
                   aria-pressed={teaId === t.id}
                   className={`${s.teaBtn} ${teaId === t.id ? s.teaBtnActive : ''}`}
-                  onClick={() => setTeaId(t.id)}
+                  onClick={() => selectTea(t.id)}
                   type="button"
                 >
                   <span className={s.teaHead}>
@@ -254,7 +283,7 @@ export default function TeaClient() {
 
           {/* 메인 결과 — 냉침 OFF/ON 분기 */}
           {coldOn ? (
-            <div className={s.hero}>
+            <div className={s.hero} role="status">
               <p className={s.heroLabel}>{tea.emoji} {tea.shortName} · {coldGuide.label}</p>
               <div className={s.heroResult}>
                 <div className={s.heroBlock}>
@@ -277,7 +306,7 @@ export default function TeaClient() {
               </p>
             </div>
           ) : (
-            <div className={s.hero}>
+            <div className={s.hero} role="status">
               <p className={s.heroLabel}>{tea.emoji} {tea.shortName} · {STRENGTHS[strength].emoji} {STRENGTHS[strength].label}</p>
               <div className={s.heroResult}>
                 <div className={s.heroBlock}>
@@ -323,14 +352,15 @@ export default function TeaClient() {
             </div>
           )}
 
-          {/* 떫음 게이지 — 핫 추출일 때만 */}
-          {!coldOn && (
+          {/* 떫음 게이지 — 핫 추출일 때만 (격불하는 말차는 제외) */}
+          {!coldOn && !isWhisked && (
             <div className={s.card}>
               <span className={s.cardLabel}>떫어질 위험도 (실제 우림 시간 기준)</span>
               <div className={s.field}>
-                <label className={s.fieldLabel}>실제 우림 시간 (초) — 권장 {fmtTime(timeReco)}</label>
+                <label className={s.fieldLabel} htmlFor="tea-actual-sec">실제 우림 시간 (초) — 권장 {fmtTime(timeReco)}</label>
                 <input
                   type="range"
+                  aria-label="실제 우림 시간 (초) 슬라이더"
                   min={5}
                   max={Math.max(timeReco * 3, 600)}
                   step={5}
@@ -338,7 +368,7 @@ export default function TeaClient() {
                   onChange={(e) => setActualSec(e.target.value)}
                   className={s.slider}
                 />
-                <input
+                <input id="tea-actual-sec"
                   type="number" inputMode="decimal"
                   className={s.input}
                   value={actualSec}
@@ -350,19 +380,19 @@ export default function TeaClient() {
 
               <svg viewBox="0 0 420 60" width="100%" style={{ maxWidth: 600 }} role="img" aria-label="우림 시간 탄닌 추출 게이지">
                 <defs>
-                  <linearGradient id="tanninGrad" x1="0%" y1="0%" x2="100%" y2="0%">
-                    <stop offset="0%" stopColor="#0D9488" />
-                    <stop offset="40%" stopColor="#0D9488" />
-                    <stop offset="50%" stopColor="#D97706" />
-                    <stop offset="70%" stopColor="#D97706" />
-                    <stop offset="80%" stopColor="#DB2777" />
-                    <stop offset="100%" stopColor="#DB2777" />
+                  <linearGradient id={tanninGradId} x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" stopColor="var(--teal-600)" />
+                    <stop offset="40%" stopColor="var(--teal-600)" />
+                    <stop offset="50%" stopColor="var(--amber-600)" />
+                    <stop offset="70%" stopColor="var(--amber-600)" />
+                    <stop offset="80%" stopColor="var(--pink-600)" />
+                    <stop offset="100%" stopColor="var(--pink-600)" />
                   </linearGradient>
                 </defs>
                 <rect x={0} y={20} width={420} height={22} rx={5} fill="var(--bg3)" />
-                <rect x={0} y={20} width={(risk / 100) * 420} height={22} rx={5} fill="url(#tanninGrad)" />
+                <rect x={0} y={20} width={(risk / 100) * 420} height={22} rx={5} fill={`url(#${tanninGradId})`} />
                 <line x1={(30 / 100) * 420} y1={15} x2={(30 / 100) * 420} y2={47} stroke="var(--muted)" strokeWidth="1" strokeDasharray="3,2" />
-                <text x={(30 / 100) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle" fontFamily='Inter, "Noto Sans KR", system-ui, sans-serif'>권장</text>
+                <text x={(30 / 100) * 420} y={56} fill="var(--muted)" fontSize="9" textAnchor="middle">권장</text>
               </svg>
 
               <div className={s.hero} style={{ marginTop: 12 }}>
@@ -376,7 +406,7 @@ export default function TeaClient() {
           )}
 
           {/* 진하기 조절 원칙 */}
-          {!coldOn && (
+          {!coldOn && !isWhisked && (
             <div className={s.tipCard}>
               <strong>진하게 마시고 싶다면</strong>
               <ul>
@@ -388,8 +418,8 @@ export default function TeaClient() {
             </div>
           )}
 
-          {/* 다탕 스케줄 — 탕마다 시간 (핫 추출 시) */}
-          {!coldOn && (
+          {/* 다탕 스케줄 — 탕마다 시간 (핫 추출 시, 격불하는 말차 제외) */}
+          {!coldOn && !isWhisked && (
             <div className={s.card}>
               <span className={s.cardLabel}>
                 다탕 스케줄 — 탕마다 시간{effVessel === 'teabag' ? ' (티백 −30%)' : ''}
@@ -407,7 +437,7 @@ export default function TeaClient() {
                 ))}
               </div>
               <p className={s.helpText} style={{ marginTop: 8 }}>
-                💡 같은 찻잎으로 최대 <strong>{tea.maxSteeps}탕</strong>{tea.rinse ? ' · 세차(헹굼) 후 본 추출' : ''}. 탕마다 향·바디가 달라집니다.
+                💡 기본 <strong>{tea.maxSteeps}탕</strong> 스케줄{tea.rinse ? ' · 세차(헹굼) 후 본 추출' : ''}. 탕마다 향·바디가 달라집니다.{tea.id === 'oolong' ? ' 이후에도 시간을 늘리면 7~8탕까지 가능해요.' : tea.id === 'puer' ? ' 이후에도 시간을 늘리면 8~10탕까지 가능해요.' : ''}
               </p>
             </div>
           )}
@@ -417,10 +447,12 @@ export default function TeaClient() {
             <strong>다탕(多湯) 우림 팁</strong>
             <ul>
               <li>같은 찻잎으로 여러 번 우려 풍미 변화를 즐기는 방식</li>
-              <li>우롱·보이는 <strong>5~8탕</strong>까지, 녹차·홍차는 보통 <strong>2~3탕</strong></li>
+              <li>우롱은 <strong>5~8탕</strong>, 보이는 <strong>6~10탕</strong>까지, 녹차·홍차는 보통 <strong>2~3탕</strong></li>
               <li>탕마다 다른 면이 드러남 — 1탕 산뜻 / 2탕 균형 / 3탕 후미</li>
               <li>보이·우롱은 <strong>세차(헹굼) 10초 후 버림</strong>이 정석</li>
-              <li>현재 <strong>{tea.shortName}</strong>은 최대 <strong>{tea.maxSteeps}탕</strong>{tea.rinse ? ' · 세차 권장' : ''}</li>
+              <li>{isWhisked
+                ? <><strong>말차</strong>는 우리지 않고 격불해 가루째 마시므로 다탕하지 않아요</>
+                : <>현재 <strong>{tea.shortName}</strong>은 기본 <strong>{tea.maxSteeps}탕</strong> 스케줄{tea.rinse ? ' · 세차 권장' : ''}</>}</li>
             </ul>
           </div>
 
@@ -433,7 +465,7 @@ export default function TeaClient() {
                   <tr><td>권장 온도</td><td className={s.cellMono}>{tea.tempMin}~{tea.tempMax}°C</td></tr>
                   <tr><td>표준 비율</td><td className={s.cellMono}>1:{tea.ratioWaterPerLeaf}</td></tr>
                   <tr><td>카페인</td><td className={s.cellMono}>{tea.caffeineMgPerG} mg/g · 추정 {fmt(caffeine, 0)} mg</td></tr>
-                  <tr><td>다탕 가능</td><td className={s.cellMono}>{tea.maxSteeps}회 ({tea.rinse ? '세차 후' : '바로'})</td></tr>
+                  <tr><td>다탕 스케줄</td><td className={s.cellMono}>{isWhisked ? '격불 1회' : `기본 ${tea.maxSteeps}탕 (${tea.rinse ? '세차 후' : '바로'})`}</td></tr>
                   <tr><td>추천 다구</td><td>{getVessel(tea.vessel).emoji} {getVessel(tea.vessel).label}</td></tr>
                   <tr><td>주요 산지</td><td style={{ textAlign: 'right', fontFamily: 'inherit', fontWeight: 'normal', fontSize: 12 }}>{tea.origin}</td></tr>
                 </tbody>
@@ -501,8 +533,8 @@ export default function TeaClient() {
               })}
             </div>
             <p className={s.helpText} style={{ marginTop: 10 }}>
-              ※ 같은 1g당 카페인. 실제 1잔 카페인은 사용 찻잎량과 추출 강도에 따라 달라집니다.
-              <br />⚠️ 임산부·아이·수면 민감자: 허브티·루이보스(0mg), 백차(저카페인) 권장.
+              ※ 같은 1g당 카페인(말차는 일본식품표준성분표 8정 기준 32mg/g). 우려 마시는 차는 잎 속 카페인이 다 우러나지 않아 실제 1잔 카페인은 이보다 적고, 가루째 마시는 말차는 거의 전부를 섭취합니다.
+              <br />⚠️ 임산부·아이·수면 민감자: 카페인 없는 루이보스를 권장해요. 허브티는 종류별로 임신 중 안전성이 달라 확인이 필요하고, 백차는 녹차와 카페인이 비슷해 저카페인 차가 아닙니다.
             </p>
           </div>
 

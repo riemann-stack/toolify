@@ -1,0 +1,21 @@
+/* components/ToolHeader.module.css — 분야 아이브로우 → H1 → 리드 → 메타 한 줄(기준 점검/업데이트 · 검산 · 작성자 · 출처 N건) (스펙 §10.2)
+   .thMeta는 레거시 머리(<ToolPage>가 자동으로 붙이는 ToolByline)에서도 쓰인다 → .thMetaLegacy 여백 보정은 ToolPage.module.css */
+.th { padding: 16px 0 24px; }
+.thEyebrow { display: inline-flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 700; color: var(--c-ink, var(--accent-ink)); }
+.thEyebrow a { display: inline-flex; align-items: center; min-height: 28px; color: inherit; }
+@media (pointer: coarse) { .thEyebrow a { min-height: 44px; margin-block: -8px; } } /* 히트 영역만 44 — 음수 마진으로 머리 높이 불변 */
+@media (hover: hover) { .thEyebrow a:hover { text-decoration: underline; text-underline-offset: 3px; } }
+.thSub { font-weight: 500; color: var(--muted); }
+.thTitle { margin: 10px 0 8px; font-size: clamp(28px, 6vw, 36px); font-weight: 700; line-height: 1.3; letter-spacing: -0.035em; color: var(--text); word-break: keep-all; }
+.thLead { max-width: 640px; margin: 0; font-size: 16px; line-height: 1.65; color: var(--muted-strong); font-variant-numeric: normal; word-break: keep-all; }
+.thLead b, .thLead strong { color: var(--text); font-weight: 600; }
+.thMeta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 14px; margin-top: 14px; font-size: 13px; line-height: 1.6; color: var(--muted); word-break: keep-all; font-variant-numeric: normal; }
+.thMeta > span { display: inline-flex; align-items: center; gap: 4px; }
+.thDate { color: var(--muted-strong); font-weight: 600; font-variant-numeric: tabular-nums; }
+.thDate svg { color: var(--muted); }
+.thVerified { color: var(--success); font-weight: 600; }
+.thCases { font-weight: 500; }
+.thMeta a { color: var(--muted-strong); font-weight: 500; text-decoration: underline; text-decoration-color: var(--border-hover); text-underline-offset: 3px; }
+@media (hover: hover) { .thMeta a:hover { color: var(--accent-ink); text-decoration-color: currentColor; } }
+.thSep { width: 4px; height: 4px; border-radius: 50%; background: var(--gray-400); }
+@media (max-width: 640px) { .th { padding: 12px 0 20px; } .thMeta { gap: 4px 12px; margin-top: 12px; } .thSep { display: none; } }

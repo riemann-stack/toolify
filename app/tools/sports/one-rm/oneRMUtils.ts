@@ -38,6 +38,23 @@ export const BIG3_BASE_LEVELS: Record<'squat' | 'bench' | 'deadlift', LevelTable
 }
 
 // ─────────────────────────────────────────────────────────────
+// 반복수 → 1RM 배수 (1RM = 들어 올린 전체 중량 × 배수)
+// 1회는 정의상 그 무게가 곧 1RM이라 모든 공식에서 1.0으로 고정
+// ─────────────────────────────────────────────────────────────
+export type RepFormulaKey = 'epley' | 'brzycki' | 'lombardi' | 'oconner'
+export const REP_FACTOR: Record<RepFormulaKey, (r: number) => number> = {
+  epley:    (r) => r <= 1 ? 1 : 1 + r / 30,
+  brzycki:  (r) => r <= 1 ? 1 : r < 37 ? 36 / (37 - r) : 1,
+  lombardi: (r) => r <= 1 ? 1 : Math.pow(r, 0.1),
+  oconner:  (r) => r <= 1 ? 1 : 1 + r / 40,
+}
+// 'auto' = 4개 공식 평균 — 1RM 평균과 같은 배수라 역산(반복수별 중량)에도 그대로 쓴다
+export function repFactor(key: RepFormulaKey | 'auto', r: number): number {
+  if (key !== 'auto') return REP_FACTOR[key](r)
+  return (REP_FACTOR.epley(r) + REP_FACTOR.brzycki(r) + REP_FACTOR.lombardi(r) + REP_FACTOR.oconner(r)) / 4
+}
+
+// ─────────────────────────────────────────────────────────────
 // 워밍업 자동 생성
 // ─────────────────────────────────────────────────────────────
 export type WarmupSet = {
@@ -49,9 +66,11 @@ export type WarmupSet = {
   notes?: string
 }
 
-export function generateWarmup(oneRM: number, workingPercent: number): WarmupSet[] {
+// noBar: 맨몸·기타 종목처럼 바벨을 쓰지 않을 때 — 빈 봉 세트 없이 %만으로 세트 구성
+export function generateWarmup(oneRM: number, workingPercent: number, opts: { noBar?: boolean } = {}): WarmupSet[] {
   if (!oneRM || oneRM <= 0) return []
   const intensityRatio = workingPercent / 100
+  const noBar = opts.noBar === true
 
   const baseSets: WarmupSet[] = [
     { setNumber: 1, weightKg: 20,         weightPercent: 20 / oneRM * 100, reps: 10, restSec: 60,  notes: '빈 봉 (폼 워밍업)' },
@@ -65,7 +84,7 @@ export function generateWarmup(oneRM: number, workingPercent: number): WarmupSet
   let selected: WarmupSet[]
   if (intensityRatio < 0.6) selected = baseSets.slice(0, 2)
   else if (intensityRatio < 0.8) selected = baseSets.slice(0, 3)
-  else if (intensityRatio > 0.95) {
+  else if (intensityRatio >= 0.95) {
     // 95%+ 도전이면 워밍업 ↑
     selected = [
       ...baseSets,
@@ -74,13 +93,16 @@ export function generateWarmup(oneRM: number, workingPercent: number): WarmupSet
   } else selected = baseSets
 
   // 가벼운 1RM 보정: 빈 봉(20kg)보다 가벼운 % 세트는 봉에 실을 수 없어 물리적으로 불가 →
-  // 빈 봉 미만 세트 제거 + 중량이 단조 증가하는 세트만 남기고 번호 재부여
+  // 빈 봉 미만 세트 제거 + 중량이 단조 증가하는 세트만 남기고 번호 재부여.
+  // 빈 봉 세트 자체도 본 세트 중량보다 가벼울 때만 넣는다(1RM 20kg 이하에서 봉이 1RM을 넘던 문제).
   const BAR_KG = 20
+  const workingKg = oneRM * intensityRatio
   const out: WarmupSet[] = []
   let prevKg = 0
   for (const set of selected) {
     const isBar = set.weightKg === BAR_KG && set.setNumber === 1
-    if (!isBar && set.weightKg < BAR_KG - 0.001) continue
+    if (isBar && (noBar || BAR_KG >= workingKg - 0.001)) continue
+    if (!isBar && !noBar && set.weightKg < BAR_KG - 0.001) continue
     if (set.weightKg <= prevKg + 0.001) continue
     out.push(set)
     prevKg = set.weightKg

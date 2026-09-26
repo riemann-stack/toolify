@@ -2,6 +2,7 @@
 
 import Disclaimer from '@/components/Disclaimer'
 import { useEffect, useMemo, useState } from 'react'
+import { todayStr } from '@/lib/date'
 import s from './fruit-syrup.module.css'
 
 // ─────────────────────────────────────────────
@@ -15,12 +16,15 @@ interface FruitPreset {
   readyDays: number    // 사용 가능 시작(일)
   harvestDays: number  // 과일 건지기 시점(일), 0 = 건지지 않고 그대로 보관
   keepMonths: number   // 권장 소비기한(냉장, 개월)
+  /** 과일을 건진 뒤 추가 숙성 기간(개월) — 매실: 식약처 안내 '매실 제거 후 서늘한 곳에서 6개월 이상 숙성'.
+   *  있으면 소비기한도 담근 날이 아니라 건진 날부터 셈 */
+  agingMonths?: number
   prep: string         // 손질 팁
   season: string       // 제철
 }
 
 const FRUITS: FruitPreset[] = [
-  { id: 'maesil',     name: '매실',   ratio: 1.0, stirDays: 20, readyDays: 100, harvestDays: 100, keepMonths: 12, prep: '깨끗이 씻어 물기를 완전히 말리고 꼭지를 제거합니다.',        season: '5~6월' },
+  { id: 'maesil',     name: '매실',   ratio: 1.0, stirDays: 20, readyDays: 100, harvestDays: 100, keepMonths: 12, agingMonths: 6, prep: '깨끗이 씻어 물기를 완전히 말리고 꼭지를 제거합니다.',        season: '5~6월' },
   { id: 'lemon',      name: '레몬',   ratio: 1.0, stirDays: 7,  readyDays: 7,   harvestDays: 14,  keepMonths: 2,  prep: '베이킹소다·굵은소금으로 껍질을 문질러 세척 후 얇게 슬라이스.', season: '연중(겨울이 제맛)' },
   { id: 'yuja',       name: '유자',   ratio: 1.0, stirDays: 10, readyDays: 14,  harvestDays: 0,   keepMonths: 6,  prep: '껍질째 채 썰고 씨는 제거합니다.',                            season: '11~12월' },
   { id: 'ginger',     name: '생강',   ratio: 1.0, stirDays: 10, readyDays: 14,  harvestDays: 0,   keepMonths: 6,  prep: '껍질을 벗겨 최대한 얇게 편으로 썹니다.',                       season: '가을~겨울' },
@@ -54,7 +58,13 @@ function parseISO(iso: string): Date | null {
   return new Date(m[0], m[1] - 1, m[2])
 }
 function addDays(d: Date, n: number): Date { const x = new Date(d); x.setDate(x.getDate() + n); return x }
-function addMonths(d: Date, n: number): Date { const x = new Date(d); x.setMonth(x.getMonth() + n); return x }
+// 월말 넘침 방지 — 1/31 + 1개월 = 2/28(29) (setMonth만 쓰면 3/3이 됨)
+function addMonths(d: Date, n: number): Date {
+  const x = new Date(d.getFullYear(), d.getMonth() + n, 1)
+  const lastDay = new Date(x.getFullYear(), x.getMonth() + 1, 0).getDate()
+  x.setDate(Math.min(d.getDate(), lastDay))
+  return x
+}
 function fmtDate(d: Date): string { return `${d.getFullYear()}.${pad(d.getMonth() + 1)}.${pad(d.getDate())} (${WD[d.getDay()]})` }
 function fmtG(n: number): string { return Math.round(n).toLocaleString('ko-KR') }
 
@@ -71,17 +81,16 @@ export default function FruitSyrupClient() {
 
   // SSR 안전 — 마운트 후 오늘 날짜로 초기화
   useEffect(() => {
-    const t = new Date()
     // eslint-disable-next-line react-hooks/set-state-in-effect
-    setStartDate(`${t.getFullYear()}-${pad(t.getMonth() + 1)}-${pad(t.getDate())}`)
+    setStartDate(todayStr())
   }, [])
 
   const fruit = FRUITS.find(f => f.id === fruitId) ?? FRUITS[0]
   const weight = parseFloat(weightStr) || 0
 
+  // 과일을 바꿔도 사용자가 고른 설탕 비율은 유지 (과일별 권장 비율이 모두 1:1이라 덮어쓸 이유가 없음)
   function pickFruit(f: FruitPreset) {
     setFruitId(f.id)
-    if (!ratioCustom) setRatio(f.ratio)
   }
 
   const calc = useMemo(() => {
@@ -107,18 +116,37 @@ export default function FruitSyrupClient() {
   const schedule = useMemo(() => {
     const base = startDate ? parseISO(startDate) : null
     if (!base) return []
+    const aging = fruit.agingMonths && fruit.harvestDays > 0 ? fruit.agingMonths : 0
+    const harvestDate = fruit.harvestDays > 0 ? addDays(base, fruit.harvestDays) : null
     const rows: { key: string; label: string; date: string; note: string }[] = [
       { key: 'start', label: '담근 날', date: fmtDate(base), note: '과일과 설탕을 켜켜이 담고 맨 위를 설탕으로 덮습니다.' },
       { key: 'stir',  label: '저어주기', date: `~ ${fmtDate(addDays(base, fruit.stirDays))}`, note: `설탕이 다 녹을 때까지 약 ${fruit.stirDays}일간 하루 1회 위아래로 섞어줍니다.` },
-      { key: 'ready', label: '사용 가능', date: fmtDate(addDays(base, fruit.readyDays)), note: '설탕이 녹고 맛이 어우러지면 음료·요리에 쓸 수 있습니다.' },
+      { key: 'ready', label: aging ? '사용 가능 (관행)' : '사용 가능', date: fmtDate(addDays(base, fruit.readyDays)),
+        note: aging
+          ? `관행상 이때부터 마시기도 하지만, 식약처는 ${fruit.name}을 건진 뒤 ${aging}개월 이상 더 숙성해 먹도록 안내합니다.`
+          : '설탕이 녹고 맛이 어우러지면 음료·요리에 쓸 수 있습니다.' },
     ]
-    if (fruit.harvestDays > 0) {
-      rows.push({ key: 'harvest', label: '과일 건지기', date: fmtDate(addDays(base, fruit.harvestDays)), note: '이 시점에 과일을 건져내면 떫은맛·잡내 없이 깔끔하게 보관됩니다.' })
+    if (harvestDate) {
+      rows.push({ key: 'harvest', label: '과일 건지기', date: fmtDate(harvestDate),
+        note: aging
+          ? '식약처 안내는 그늘진 실온에서 약 3~4개월(90~120일) 담근 뒤 매실을 건져내는 것입니다. 떫은맛·잡내도 줄어듭니다.'
+            + (ratio < 1.0 ? ` 식약처 안내는 1:1 비율 기준입니다. 저당(1:${ratio})으로 담갔다면 오래 숙성하기보다 냉장 보관하고 아래 소비기한 안에 드세요.` : '')
+          : '이 시점에 과일을 건져내면 떫은맛·잡내 없이 깔끔하게 보관됩니다.' })
     }
-    rows.push({ key: 'best', label: '권장 소비기한', date: fmtDate(addMonths(base, effKeepMonths)),
+    // 숙성 완료 행은 1:1 이상일 때만 — 저당은 소비기한(건진 날+2개월)이 숙성 완료보다 먼저 와서 모순
+    if (harvestDate && aging && ratio >= 1.0) {
+      rows.push({ key: 'aging', label: '숙성 완료 (식약처 권장)', date: fmtDate(addMonths(harvestDate, aging)),
+        note: `건진 청을 서늘한 곳에서 ${aging}개월 이상 두면 시안화합물이 더 줄어듭니다. 이 날 이후에 드시는 것이 공식 안내에 맞습니다.` })
+    }
+    // 소비기한을 건진 날부터 세는 경우: 추가 숙성이 있는 과일(매실), 또는 저당으로 기한이 단축된 건지는 과일(오미자·모과)
+    // — 사용 가능일·숙성 완료보다 소비기한이 먼저 오지 않게. 단축이 없는 과일(레몬·자몽, 원래 2개월)은
+    //   건진 날부터 세면 저당이 표준보다 길어지므로 담근 날 기준 유지
+    const keepFromHarvest = !!harvestDate && (aging > 0 || (ratio < 1.0 && effKeepMonths < fruit.keepMonths))
+    const keepBase = keepFromHarvest && harvestDate ? harvestDate : base
+    rows.push({ key: 'best', label: '권장 소비기한', date: fmtDate(addMonths(keepBase, effKeepMonths)),
       note: ratio < 1.0
-        ? `저당(1:${ratio})이라 보존성이 낮습니다 — 반드시 냉장, 약 ${effKeepMonths}개월 내 소비하세요. 곰팡이·이취 시 즉시 폐기.`
-        : `냉장 보관 기준 약 ${effKeepMonths}개월. 곰팡이·이취가 나면 즉시 폐기하세요.` })
+        ? `저당(1:${ratio})이라 보존성이 낮습니다 — 반드시 냉장, ${keepFromHarvest ? '건진 날부터 ' : ''}약 ${effKeepMonths}개월 내 소비하세요. 곰팡이·이취 시 즉시 폐기.`
+        : `냉장 보관 기준 ${keepFromHarvest ? '건진 날부터 ' : ''}약 ${effKeepMonths}개월. 곰팡이·이취가 나면 즉시 폐기하세요.` })
     return rows
   }, [startDate, fruit, ratio, effKeepMonths])
 
@@ -135,7 +163,7 @@ export default function FruitSyrupClient() {
     }
     lines.push('youtil.kr/tools/cooking/fruit-syrup')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); setTimeout(() => setCopied(false), 1800)
+      setCopied(true); setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -177,6 +205,7 @@ export default function FruitSyrupClient() {
         <div className={s.inputRow}>
           <input
             type="number" min={0} step={100} inputMode="decimal" className={s.numInput}
+            aria-label="과일 무게 (g)"
             value={weightStr}
             onChange={e => setWeightStr(e.target.value)}
             onBlur={() => { const v = parseFloat(weightStr); setWeightStr(isNaN(v) ? '' : String(Math.max(0, v))) }}
@@ -220,11 +249,12 @@ export default function FruitSyrupClient() {
           <div className={s.inputRow} style={{ marginTop: 10 }}>
             <span className={s.unit} style={{ marginRight: 8 }}>1 :</span>
             <input type="number" inputMode="decimal" min={0.1} max={2} step={0.1} className={s.numInput} style={{ maxWidth: 120 }}
+              aria-label="설탕 비율 직접 입력 (과일 1 대비)"
               value={ratio} onChange={e => setRatio(Math.min(2, Math.max(0, parseFloat(e.target.value) || 0)))} />
           </div>
         )}
         {ratio < 1.0 && (
-          <p style={{ fontSize: '13px', lineHeight: 1.6, margin: '10px 0 0', fontWeight: 600, color: ratio < 0.8 ? '#DC2626' : '#D97706' }}>
+          <p style={{ fontSize: '13px', lineHeight: 1.6, margin: '10px 0 0', fontWeight: 600, color: ratio < 0.8 ? 'var(--danger)' : 'var(--warning)' }}>
             {ratio < 0.8
               ? '⚠️ 보존에 필요한 설탕이 부족합니다 (권장 최소 1:0.8). 발효·부패 위험이 큽니다.'
               : '⚠️ 저당 비율 — 반드시 냉장 보관하고 1~2개월 내 소비하세요. 아래 소비기한이 자동 단축됩니다.'}
@@ -235,7 +265,7 @@ export default function FruitSyrupClient() {
       {/* 4. 담근 날짜 */}
       <div className={s.card}>
         <span className={s.cardLabel}>담근 날짜 <small className={s.cardHint}>숙성 일정 계산용</small></span>
-        <input type="date" className={s.dateInput} value={startDate} onChange={e => setStartDate(e.target.value)} />
+        <input type="date" className={s.dateInput} aria-label="담근 날짜" value={startDate} onChange={e => setStartDate(e.target.value)} />
       </div>
 
       {/* ── 결과 ── */}

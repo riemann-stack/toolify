@@ -223,6 +223,12 @@ function RouletteTab() {
   const [spinning, setSpinning] = useState(false)
   const [winner, setWinner] = useState<string | null>(null)
   const [showWeights, setShowWeights] = useState(false)
+  const [copied, setCopied] = useState(false)
+  const copyWinner = (w: string) => {
+    navigator.clipboard.writeText(w).then(() => {
+      setCopied(true); setTimeout(() => setCopied(false), 1500)
+    }).catch(() => { /* 클립보드 권한 거부 등 */ })
+  }
 
   // 가중치 토글이 꺼져 있으면 모두 동일 확률(1)로 취급 — 표시·룰렛·추첨이 일관되게 균등
   const ew = (w: number) => (showWeights ? Math.max(1, w) : 1)
@@ -297,6 +303,8 @@ function RouletteTab() {
           항목
           <span className={s.cardLabelHint}>{namesOnly.length}/16 · 가중치는 토글로 조정</span>
         </label>
+        {/* 회전 중에는 항목 편집을 잠가 — 회전각(시작 시점 배치 기준)과 휠 배치가 어긋나지 않게 */}
+        <fieldset disabled={spinning} style={{ border: 0, padding: 0, margin: 0, minWidth: 0 }}>
         <NamesChips
           names={namesOnly}
           onChange={onNamesChange}
@@ -318,7 +326,7 @@ function RouletteTab() {
                 <input type="range" className={s.weightSlider} min={1} max={10} step={1} aria-label="가중치 (1~10)"
                   value={Math.min(10, Math.max(1, it.weight))}
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
-                <span className={s.weightPct} style={{ color: '#DC2626' }}>×{it.weight}</span>
+                <span className={s.weightPct} style={{ color: 'var(--red-600)' }}>×{it.weight}</span>
               </div>
             ))}
           </div>
@@ -338,13 +346,14 @@ function RouletteTab() {
                 <input type="range" className={s.weightSlider} min={1} max={10} step={1} aria-label="가중치 (1~10)"
                   value={Math.min(10, Math.max(1, it.weight))}
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
-                <span className={s.weightPct} style={{ color: '#DC2626' }}>×{it.weight}</span>
+                <span className={s.weightPct} style={{ color: 'var(--red-600)' }}>×{it.weight}</span>
                 <button className={s.removeBtn} onClick={() => removeItem(it.id)}
                   disabled={items.length <= 2} aria-label="항목 삭제">×</button>
               </div>
             ))}
           </div>
         )}
+        </fieldset>
       </div>
 
       <div className={s.rouletteWrap}>
@@ -374,10 +383,10 @@ function RouletteTab() {
         <div className={s.rouletteResult} role="status" aria-live="polite">
           <div className={s.rouletteResultLabel}>결과 발표</div>
           <div className={s.rouletteResultName}>{winner}</div>
-          <button className={s.copyBtn}
-            onClick={() => navigator.clipboard.writeText(winner)}
+          <button className={s.copyBtn} type="button"
+            onClick={() => copyWinner(winner)}
             style={{ marginTop: 14, maxWidth: 180, marginLeft: 'auto', marginRight: 'auto' }}>
-            결과 복사
+            {copied ? '✓ 복사됨' : '결과 복사'}
           </button>
         </div>
       )}
@@ -423,7 +432,7 @@ function WeightedTab() {
     if (results.length === 0) return
     navigator.clipboard.writeText(results.join(', ')).then(() => {
       setCopied(true); setTimeout(() => setCopied(false), 1500)
-    })
+    }).catch(() => { /* 클립보드 권한 거부 등 */ })
   }
 
   const colors = useMemo(() => genColors(valid.length, 70, 60), [valid.length])
@@ -561,7 +570,7 @@ function TeamTab() {
     ).join('\n\n')
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true); setTimeout(() => setCopied(false), 1500)
-    })
+    }).catch(() => { /* 클립보드 권한 거부 등 */ })
   }
 
   const leaderSet = new Set(leaders)
@@ -777,7 +786,7 @@ function OrderTab() {
     if (!text) return
     navigator.clipboard.writeText(text).then(() => {
       setCopied(true); setTimeout(() => setCopied(false), 1500)
-    })
+    }).catch(() => { /* 클립보드 권한 거부 등 */ })
   }
 
   const fixedSet = new Set([firstName.trim(), lastName.trim()].filter(Boolean))
@@ -989,7 +998,7 @@ function FairnessTab() {
                 <input type="range" className={s.weightSlider} min={1} max={20} step={1} aria-label="가중치 (1~20)"
                   value={Math.min(20, Math.max(1, it.weight))}
                   onChange={e => updateItem(it.id, { weight: parseInt(e.target.value) })} />
-                <span className={s.weightPct} style={{ color: '#059669' }}>{expected.toFixed(1)}%</span>
+                <span className={s.weightPct} style={{ color: 'var(--emerald-600)' }}>{expected.toFixed(1)}%</span>
                 <button className={s.removeBtn} onClick={() => removeItem(it.id)}
                   disabled={items.length <= 2} aria-label={`항목 ${idx + 1} 삭제`}>×</button>
               </div>
@@ -1064,14 +1073,14 @@ function FairnessTab() {
                       style={{ left: `${maxBar > 0 ? (r.expectedPct / maxBar) * 100 : 0}%` }}
                       title="기대 비율" />
                   </span>
-                  <span className={s.weightPct} style={{ color: '#059669' }}>
+                  <span className={s.weightPct} style={{ color: 'var(--emerald-600)' }}>
                     {r.actualPct.toFixed(1)}%
                   </span>
                 </div>
               ))}
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8 }}>
-              ⓘ 흰색 마커는 <strong style={{ color: 'var(--text)' }}>기대 비율</strong>, 초록 막대는 <strong style={{ color: '#059669' }}>실제 비율</strong>입니다.
+              ⓘ 흰색 마커는 <strong style={{ color: 'var(--text)' }}>기대 비율</strong>, 초록 막대는 <strong style={{ color: 'var(--emerald-600)' }}>실제 비율</strong>입니다.
             </p>
           </div>
 

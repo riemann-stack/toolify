@@ -52,15 +52,15 @@ export interface MaterialMeta {
 
 export const MATERIALS: MaterialMeta[] = [
   {
-    id: 'steel', emoji: '🔩', label: '강관 (SGP/STPG)',
+    id: 'steel', emoji: '🔩', label: '강관 (SPP/SPPS)',
     std: 'KS D 3507 / D 3562',
     desc: '가장 전통적인 배관. 압력·내구성 우수. 부식 방지 위해 백관(아연도금)·코팅 사용.',
     use: '소방·산업 압력·증기·일반 배관',
     grades: [
-      { id: 'sgp_white', label: '백관 (SGP 아연도금)', note: 'KS D 3507 · 일반 배관·소방·급수' },
-      { id: 'sgp_black', label: '흑관 (SGP)',          note: 'KS D 3507 · 난방·기름·증기' },
-      { id: 'sch40',     label: 'STPG Sch 40',         note: 'KS D 3562 · 압력 배관 표준' },
-      { id: 'sch80',     label: 'STPG Sch 80',         note: 'KS D 3562 · 고압·두꺼움' },
+      { id: 'sgp_white', label: '백관 (SPP 아연도금)', note: 'KS D 3507 · 일반 배관·소방' },
+      { id: 'sgp_black', label: '흑관 (SPP)',          note: 'KS D 3507 · 난방·기름·증기' },
+      { id: 'sch40',     label: 'SPPS Sch 40',         note: 'KS D 3562 · 압력 배관 표준' },
+      { id: 'sch80',     label: 'SPPS Sch 80',         note: 'KS D 3562 · 고압·두꺼움' },
     ],
   },
   {
@@ -120,7 +120,7 @@ export interface PipeDim {
   variants?: Record<string, { od: number; id: number; t: number }>
 }
 
-/* 강관 SGP (KS D 3507) — 일반 배관용 */
+/* 강관 SPP (KS D 3507, JIS G 3452 SGP와 같은 치수) — 일반 배관용 */
 const STEEL_SGP: Record<PipeSize, PipeDim> = {
   '15A':  { od: 21.7,  id: 16.1,  t: 2.8 },
   '20A':  { od: 27.2,  id: 21.6,  t: 2.8 },
@@ -135,7 +135,13 @@ const STEEL_SGP: Record<PipeSize, PipeDim> = {
   '150A': { od: 165.2, id: 155.2, t: 5.0 },
 }
 
-/* 강관 STPG Sch 80 두께 보정 (ASME B36.10M / KS D 3562) */
+/* 강관 SPPS Sch 40 두께 (KS D 3562 / JIS G 3454 STPG) — 외경은 SPP와 같고 두께만 다름 */
+const STEEL_SCH40_T: Record<PipeSize, number> = {
+  '15A': 2.8, '20A': 2.9, '25A': 3.4, '32A': 3.6, '40A': 3.7, '50A': 3.9,
+  '65A': 5.2, '80A': 5.5, '100A': 6.0, '125A': 6.6, '150A': 7.1,
+}
+
+/* 강관 SPPS Sch 80 두께 보정 (KS D 3562 / JIS G 3454 STPG) */
 const STEEL_SCH80_T: Record<PipeSize, number> = {
   '15A': 3.7, '20A': 3.9, '25A': 4.5, '32A': 4.9, '40A': 5.1, '50A': 5.5,
   '65A': 7.0, '80A': 7.6, '100A': 8.6, '125A': 9.5, '150A': 11.0,
@@ -192,7 +198,7 @@ const XL_DATA: Record<PipeSize, PipeDim> = {
   '150A': { od: 160,  id: 128.0, t: 16.0 },
 }
 
-/* 동관 (KS D 5301) — L Type 기준 */
+/* 동관 (KS D 5301 = ASTM B88 치수) — L Type 기준 */
 const COPPER_L: Record<PipeSize, PipeDim> = {
   '15A':  { od: 15.88, id: 13.84, t: 1.02 },
   '20A':  { od: 22.22, id: 19.94, t: 1.14 },
@@ -201,20 +207,20 @@ const COPPER_L: Record<PipeSize, PipeDim> = {
   '40A':  { od: 41.28, id: 38.23, t: 1.52 },
   '50A':  { od: 53.98, id: 50.42, t: 1.78 },
   '65A':  { od: 66.68, id: 62.61, t: 2.03 },
-  '80A':  { od: 79.38, id: 75.06, t: 2.16 },
-  '100A': { od: 104.78, id: 99.95, t: 2.41 },
-  '125A': { od: 130.18, id: 125.0,  t: 2.59 },
-  '150A': { od: 155.58, id: 149.99, t: 2.79 },
+  '80A':  { od: 79.38, id: 74.80, t: 2.29 },
+  '100A': { od: 104.78, id: 99.20, t: 2.79 },
+  '125A': { od: 130.18, id: 123.82, t: 3.18 },
+  '150A': { od: 155.58, id: 148.46, t: 3.56 },
 }
 
 /* 동관 K Type (두꺼움) / M Type (얇음) — 두께 보정 */
 const COPPER_K_T: Record<PipeSize, number> = {
-  '15A': 1.24, '20A': 1.65, '25A': 1.65, '32A': 1.83, '40A': 1.83, '50A': 2.11,
-  '65A': 2.41, '80A': 2.77, '100A': 3.05, '125A': 3.40, '150A': 3.61,
+  '15A': 1.24, '20A': 1.65, '25A': 1.65, '32A': 1.65, '40A': 1.83, '50A': 2.11,
+  '65A': 2.41, '80A': 2.77, '100A': 3.40, '125A': 4.06, '150A': 4.88,
 }
 const COPPER_M_T: Record<PipeSize, number> = {
   '15A': 0.71, '20A': 0.81, '25A': 0.89, '32A': 1.07, '40A': 1.24, '50A': 1.47,
-  '65A': 1.65, '80A': 1.83, '100A': 2.11, '125A': 2.41, '150A': 2.77,
+  '65A': 1.65, '80A': 1.83, '100A': 2.41, '125A': 2.77, '150A': 3.10,
 }
 
 /* 스테인리스 Su 위생관 (KS D 3595) */
@@ -237,11 +243,11 @@ export function getDim(material: Material, size: PipeSize, grade?: string): Pipe
   switch (material) {
     case 'steel': {
       const base = STEEL_SGP[size]
-      if (grade === 'sch80') {
-        const t = STEEL_SCH80_T[size]
+      if (grade === 'sch40' || grade === 'sch80') {
+        const t = (grade === 'sch40' ? STEEL_SCH40_T : STEEL_SCH80_T)[size]
         return { od: base.od, id: +(base.od - 2 * t).toFixed(2), t }
       }
-      // sch40 ≈ SGP, white/black 외경 동일
+      // 백관·흑관(SPP)은 외경·두께 동일
       return base
     }
     case 'pvc': {

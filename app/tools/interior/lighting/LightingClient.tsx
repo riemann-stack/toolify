@@ -1,9 +1,12 @@
-/* eslint-disable react-hooks/static-components */
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
 import styles from './lighting.module.css'
+import {
+  parseClamp, LUMEN_PER_LIGHT_LIMIT, INPUT_W_LIMIT, INPUT_LM_LIMIT, KWH_PRICE_LIMIT,
+  KEPCO_RESIDENTIAL_TIER_KRW, DEFAULT_KRW_PER_KWH,
+} from './lightingUtils'
 
 /* ─────────────────────────────────────────────────────────
  * 공간 종류 12개
@@ -56,7 +59,6 @@ const BULB_EFFICIENCY = [
 ]
 
 const PYUNG_TO_M2 = 3.3058
-const KRW_PER_KWH = 130   // 한국 평균 가정용 전기료 1kWh당 (단순화)
 
 function n(v: string | number, min = 0): number {
   const x = typeof v === 'number' ? v : Number(v)
@@ -79,31 +81,35 @@ export default function LightingClient() {
   /* 공간 정보 */
   const [sizeMode, setSizeMode] = useState<SizeMode>('pyung')
   const [pyung, setPyung] = useState(15)
-  const [pyungCustom, setPyungCustom] = useState<number | null>(null)
+  const [pyungCustom, setPyungCustom] = useState<string | null>(null)
   const [widthM, setWidthM]   = useState('5.0')
   const [lengthM, setLengthM] = useState('4.0')
-  const [heightM, setHeightM] = useState(2.4)
+  const [heightStr, setHeightStr] = useState('2.4')
+  const heightM = parseClamp(heightStr, 1.5, 5, 2.4)
 
   const [spaceId, setSpaceId] = useState('livingRoom')
   const [intensity, setIntensity] = useState<'dim' | 'standard' | 'bright'>('standard')
   const [lightingType, setLightingType] = useState<'direct' | 'indirect' | 'mixed'>('direct')
 
-  /* 조명당 루멘 입력 */
-  const [lumenPerLight, setLumenPerLight] = useState(1500)
+  /* 조명당 루멘 입력 — 문자열로 보관하고 계산 단계에서만 클램프(50lm 미만 첫 타자 치환 방지) */
+  const [lumenPerLight, setLumenPerLight] = useState('1500')
   const [ledPresetId, setLedPresetId] = useState<number | null>(15)  // W로 식별
 
   /* 탭 2: 환산 */
   const [convertMode, setConvertMode] = useState<'w-to-lm' | 'lm-to-w'>('w-to-lm')
-  const [inputW, setInputW] = useState(60)
-  const [inputLm, setInputLm] = useState(800)
+  const [inputWStr, setInputWStr] = useState('60')
+  const [inputLmStr, setInputLmStr] = useState('800')
   const [referenceBulb, setReferenceBulb] = useState('incandescent')
-  const [kwhPrice, setKwhPrice] = useState(KRW_PER_KWH)   // 전기 단가 (원/kWh) — 사용자 조정 가능
+  const [kwhPriceStr, setKwhPriceStr] = useState(String(DEFAULT_KRW_PER_KWH))   // 전기 단가 (원/kWh) — 사용자 조정 가능
+  const inputW = parseClamp(inputWStr, INPUT_W_LIMIT.min, INPUT_W_LIMIT.max)
+  const inputLm = parseClamp(inputLmStr, INPUT_LM_LIMIT.min, INPUT_LM_LIMIT.max)
+  const kwhPrice = parseClamp(kwhPriceStr, KWH_PRICE_LIMIT.min, KWH_PRICE_LIMIT.max, DEFAULT_KRW_PER_KWH)
 
   /* 복사 피드백 */
   const [copied, setCopied] = useState(false)
 
   /* ─── 공간 면적 ─── */
-  const effectivePyung = pyungCustom ?? pyung
+  const effectivePyung = pyungCustom !== null ? parseClamp(pyungCustom, 1, 300) : pyung
   const dims = useMemo(() => {
     if (sizeMode === 'pyung') {
       const m2 = effectivePyung * PYUNG_TO_M2
@@ -129,7 +135,7 @@ export default function LightingClient() {
     if (lightingType === 'mixed')    typeFactor = 1.2
 
     const totalLumens = area * actualLux * ceilingFactor * typeFactor
-    const lpl = Math.max(50, lumenPerLight)   // 입력 최소값(50lm)과 일치
+    const lpl = parseClamp(lumenPerLight, LUMEN_PER_LIGHT_LIMIT.min, LUMEN_PER_LIGHT_LIMIT.max, 1500)   // 50lm 이상 · 빈 값은 기본 1,500lm
     const lightCount = area > 0 ? Math.max(1, Math.ceil(totalLumens / lpl)) : 0   // 면적 0이면 0개
     const installedLumens = lightCount * lpl
     const installedLux = area > 0 ? installedLumens / (area * ceilingFactor * typeFactor) : 0   // 보정 후 체감 lux
@@ -141,6 +147,7 @@ export default function LightingClient() {
       ceilingFactor,
       typeFactor,
       totalLumens,
+      lpl,
       lightCount,
       installedLumens,
       installedLux,
@@ -189,11 +196,11 @@ export default function LightingClient() {
   function selectLed(w: number) {
     const led = LED_PRESETS.find(p => p.w === w)
     if (led) {
-      setLumenPerLight(led.lm)
+      setLumenPerLight(String(led.lm))
       setLedPresetId(w)
     }
   }
-  function onLumenChange(v: number) {
+  function onLumenChange(v: string) {
     setLumenPerLight(v)
     setLedPresetId(null)
   }
@@ -241,8 +248,8 @@ export default function LightingClient() {
         `공간: ${space.name} ${fmt(dims.area)}㎡ (${fmt(dims.area / PYUNG_TO_M2, 1)}평) × ${heightM}m`,
         `목표: ${fmt(calc.targetLux)} lux × 보정 ${calc.ceilingFactor.toFixed(2)} × ${calc.typeFactor}`,
         `필요 총 루멘: ${fmt(calc.totalLumens)} lm`,
-        `조명 1개당 ${lumenPerLight}lm → ${calc.lightCount}개 필요`,
-        `실제 설치 시 약 ${fmt(calc.installedLux)} lux`,
+        `조명 1개당 ${fmt(calc.lpl)}lm → ${calc.lightCount}개 필요`,
+        `설치 광량: 목표의 약 ${fmt(calc.totalLumens > 0 ? (calc.installedLumens / calc.totalLumens) * 100 : 0)}% (조명률 미반영 약식)`,
       )
     } else if (tab === 'convert') {
       lines.push(
@@ -256,14 +263,14 @@ export default function LightingClient() {
     }
     lines.push('youtil.kr/tools/interior/lighting')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
   const pyungOptions = [5, 7, 10, 12, 15, 18, 20, 22, 25, 28, 30, 33, 35, 40]
 
-  /* 조명 배치 SVG (2×2 격자 또는 메인+보조) */
-  function LayoutSvg() {
+  /* 조명 배치 SVG (2×2 격자 또는 메인+보조) — 컴포넌트가 아닌 렌더 함수로 호출(매 입력 재마운트 방지) */
+  function renderLayoutSvg() {
     const VBW = 360, VBH = 220, padding = 32
     const w = dims.width, l = dims.length
     if (w <= 0 || l <= 0) {
@@ -299,7 +306,7 @@ export default function LightingClient() {
     return (
       <svg className={styles.layoutSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
         {/* 방 */}
-        <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(234,88,12,0.05)" stroke="#fff" strokeWidth={1.5} />
+        <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(234,88,12,0.05)" stroke="var(--border-hover)" strokeWidth={1.5} />
         <text x={x0 + drawW / 2} y={y0 - 8} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="monospace">{w.toFixed(1)}m</text>
         <text x={x0 - 8} y={y0 + drawH / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="10" fontFamily="monospace">{l.toFixed(1)}m</text>
         {/* 조명 빛 영역 */}
@@ -309,8 +316,8 @@ export default function LightingClient() {
         {/* 조명 점 */}
         {positions.map((p, i) => (
           <g key={`l-${i}`}>
-            <circle cx={p.x} cy={p.y} r={5} fill="#A16207" stroke="#fff" strokeWidth={1} />
-            <circle cx={p.x} cy={p.y} r={9} fill="none" stroke="#A16207" strokeWidth={0.6} opacity={0.5} />
+            <circle cx={p.x} cy={p.y} r={5} fill="var(--yellow-700)" stroke="#fff" strokeWidth={1} />
+            <circle cx={p.x} cy={p.y} r={9} fill="none" stroke="var(--yellow-700)" strokeWidth={0.6} opacity={0.5} />
           </g>
         ))}
         {/* 조명 개수 라벨 */}
@@ -325,7 +332,7 @@ export default function LightingClient() {
     <div className={styles.wrap}>
 
       <Disclaimer
-        variant="safety"
+        variant="default"
         related={[
           { href: '/tools/interior/wallpaper', label: '도배 소요량' },
           { href: '/tools/interior/paint', label: '페인트 계산' },
@@ -354,7 +361,7 @@ export default function LightingClient() {
             {sizeMode === 'pyung' ? (
               <>
                 <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
-                  if (e.target.value === 'custom') { setPyungCustom(15) }
+                  if (e.target.value === 'custom') { setPyungCustom('15') }
                   else { setPyungCustom(null); setPyung(Number(e.target.value)) }
                 }}>
                   {pyungOptions.map(p => <option key={p} value={p}>{p}평</option>)}
@@ -364,7 +371,7 @@ export default function LightingClient() {
                   <div style={{ marginTop: 8 }}>
                     <input className={styles.smallInput} aria-label="평수 직접 입력" type="number" inputMode="decimal" min={1} max={300}
                       value={pyungCustom}
-                      onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
+                      onChange={e => setPyungCustom(e.target.value)} />
                   </div>
                 )}
                 <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (정사각형 가정)</p>
@@ -385,12 +392,12 @@ export default function LightingClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>천장 높이 <span style={{ fontWeight: 400, color: 'var(--muted)' }}>(2.4m 기준 · 높을수록 보정↑)</span></span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightM} onChange={e => setHeightM(Math.max(1.5, Math.min(5, Number(e.target.value) || 2.4)))} />
+              <input className={styles.smallInput} aria-label="천장 높이 (m)" type="number" inputMode="decimal" step={0.1} min={1.5} max={5} value={heightStr} onChange={e => setHeightStr(e.target.value)} />
               <span className={styles.unit}>m</span>
             </div>
             <div className={styles.pills}>
               {[2.3, 2.4, 2.5, 2.7, 3.0].map(h => (
-                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightM(h)}>{h}m</button>
+                <button key={h} type="button" aria-pressed={heightM === h} className={`${styles.pill} ${heightM === h ? styles.pillActive : ''}`} onClick={() => setHeightStr(String(h))}>{h}m</button>
               ))}
             </div>
           </div>
@@ -410,7 +417,7 @@ export default function LightingClient() {
               ))}
             </div>
             <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-              현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{space.range}</strong>
+              현재 선택 — <strong style={{ color: 'var(--text)' }}>{space.name}</strong> 권장 <strong style={{ color: 'var(--accent)', fontFamily: 'var(--font-sans)' }}>{space.range}</strong>
               <br /><span style={{ fontSize: 11 }}>※ KS A 3011(조도 기준)을 가정용으로 참고한 대표 중앙값입니다. 실제 권장값은 작업·연령·취향에 따라 달라집니다.</span>
             </p>
           </div>
@@ -463,7 +470,7 @@ export default function LightingClient() {
             </div>
             <span className={styles.subLabel}>또는 직접 입력 (lm)</span>
             <div className={styles.inputRow}>
-              <input className={styles.smallInput} aria-label="조명 1개당 루멘 (lm)" type="number" inputMode="decimal" min={50} step={50} value={lumenPerLight} onChange={e => onLumenChange(n(e.target.value, 50))} />
+              <input className={styles.smallInput} aria-label="조명 1개당 루멘 (lm)" type="number" inputMode="decimal" min={50} step={50} value={lumenPerLight} onChange={e => onLumenChange(e.target.value)} />
               <span className={styles.unit}>lm</span>
             </div>
           </div>
@@ -486,12 +493,15 @@ export default function LightingClient() {
                 <tr><td>천장 높이 보정 ({heightM}m)</td><td>× {calc.ceilingFactor.toFixed(2)}</td></tr>
                 <tr><td>조명 방식 보정 ({lightingType === 'direct' ? '직접' : lightingType === 'indirect' ? '간접' : '혼합'})</td><td>× {calc.typeFactor.toFixed(1)}</td></tr>
                 <tr className={styles.totalRow}><td>필요 총 루멘</td><td>{fmt(calc.totalLumens)} lm</td></tr>
-                <tr><td>조명 1개당</td><td>{fmt(lumenPerLight)} lm</td></tr>
+                <tr><td>조명 1개당</td><td>{fmt(calc.lpl)} lm</td></tr>
                 <tr className={styles.totalRow}><td>필요 조명 개수</td><td>{calc.lightCount}개</td></tr>
-                <tr><td>설치 총 광량 (단순 lm/㎡)</td><td>{fmt(calc.installedLuxRaw)} lux</td></tr>
-                <tr><td>보정 후 체감 밝기 (목표 대비)</td><td>{fmt(calc.installedLux)} lux {calc.lightCount === 0 ? '' : calc.installedLux <= calc.targetLux * 1.4 ? '✅ 적정' : '⚠️ 과다(권장보다 밝음)'}</td></tr>
+                <tr><td>설치 총 광량 (면적당)</td><td>{fmt(calc.installedLuxRaw)} lm/㎡</td></tr>
+                <tr><td>필요 광량 대비 설치 광량</td><td>{fmt(calc.totalLumens > 0 ? (calc.installedLumens / calc.totalLumens) * 100 : 0)}% {calc.lightCount === 0 ? '' : calc.installedLux <= calc.targetLux * 1.4 ? '✅ 적정' : '⚠️ 과다(권장보다 밝음)'}</td></tr>
               </tbody>
             </table>
+            <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
+              ※ 이 계산은 조명률(등에서 나온 빛이 바닥·책상 높이까지 닿는 비율)을 1로 둔 약식입니다. 실제 작업면 조도는 천장 높이와 벽·천장 마감에 따라 이보다 30~50% 낮게 나오는 경우가 많으니, 어둡게 느껴지면 한 단계 밝은 제품을 고르거나 보조 조명을 더하세요.
+            </p>
           </div>
 
           <div className={styles.card}>
@@ -538,7 +548,7 @@ export default function LightingClient() {
               <span className={styles.cardLabelHint}>{calc.lightCount}개 균등 분산</span>
             </div>
             <div className={styles.layoutWrap}>
-              <LayoutSvg />
+              {renderLayoutSvg()}
             </div>
           </div>
         </>
@@ -571,7 +581,7 @@ export default function LightingClient() {
               <>
                 <span className={styles.subLabel}>입력 — 와트 (W)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} aria-label="와트 (W)" type="number" inputMode="decimal" min={1} max={2000} step={1} value={inputW} onChange={e => setInputW(Math.min(2000, n(e.target.value, 1)))} />
+                  <input className={styles.bigInput} aria-label="와트 (W)" type="number" inputMode="decimal" min={1} max={2000} step={1} value={inputWStr} onChange={e => setInputWStr(e.target.value)} />
                   <span className={styles.unit}>W</span>
                 </div>
               </>
@@ -579,7 +589,7 @@ export default function LightingClient() {
               <>
                 <span className={styles.subLabel}>입력 — 루멘 (lm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.bigInput} aria-label="루멘 (lm)" type="number" inputMode="decimal" min={1} max={100000} step={50} value={inputLm} onChange={e => setInputLm(Math.min(100000, n(e.target.value, 1)))} />
+                  <input className={styles.bigInput} aria-label="루멘 (lm)" type="number" inputMode="decimal" min={1} max={100000} step={50} value={inputLmStr} onChange={e => setInputLmStr(e.target.value)} />
                   <span className={styles.unit}>lm</span>
                 </div>
               </>
@@ -612,7 +622,7 @@ export default function LightingClient() {
                       <td>{r.name}</td>
                       <td>{r.lmPerW}lm/W</td>
                       <td>{r.w.toFixed(1)}W</td>
-                      <td style={{ fontFamily: "'Noto Sans KR', sans-serif", fontWeight: 400, color: 'var(--muted)', fontSize: 11 }}>{r.lifespan}</td>
+                      <td style={{ fontFamily: 'var(--font-sans)', fontWeight: 400, color: 'var(--muted)', fontSize: 11 }}>{r.lifespan}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -625,14 +635,14 @@ export default function LightingClient() {
 
           {/* 연간 전기료 비교 */}
           <div className={styles.savingCard}>
-            <div className={styles.cardLabel} style={{ marginBottom: 0, color: '#059669' }}>
+            <div className={styles.cardLabel} style={{ marginBottom: 0, color: 'var(--emerald-600)' }}>
               <span>연간 전기료 비교</span>
               <span className={styles.cardLabelHint}>1일 5시간 사용 기준</span>
             </div>
             <p className={styles.savingLead}>같은 밝기를 내는 백열전구 vs LED 1년 전기료</p>
             <div className={styles.inputRow} style={{ marginBottom: 8 }}>
               <span className={styles.subLabel} style={{ marginRight: 8 }}>전기 단가</span>
-              <input className={styles.smallInput} aria-label="전기 단가 (원/kWh)" type="number" inputMode="decimal" min={10} max={1000} step={10} value={kwhPrice} onChange={e => setKwhPrice(Math.min(1000, n(e.target.value, 10)))} />
+              <input className={styles.smallInput} aria-label="전기 단가 (원/kWh)" type="number" inputMode="decimal" min={10} max={1000} step={10} value={kwhPriceStr} onChange={e => setKwhPriceStr(e.target.value)} />
               <span className={styles.unit}>원/kWh</span>
             </div>
             <div className={styles.savingBars}>
@@ -656,7 +666,7 @@ export default function LightingClient() {
               {annualCost.incCost > 0 && <> (약 <strong>{fmt((annualCost.saving / annualCost.incCost) * 100, 0)}%</strong> 절감)</>}
             </p>
             <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 6, lineHeight: 1.6 }}>
-              ※ 단순 참고 단가입니다. 실제 가정용 전기요금은 누진제·계절·계약종별에 따라 달라집니다(2024년 기준 주택용 약 110~280원/kWh).
+              ※ 단순 참고 단가입니다. 주택용 전력량요금은 누진 구간에 따라 {KEPCO_RESIDENTIAL_TIER_KRW[0]}원·{KEPCO_RESIDENTIAL_TIER_KRW[1]}원·{KEPCO_RESIDENTIAL_TIER_KRW[2]}원/kWh로 오르며(한전 주택용 저압), 기후환경·연료비조정요금과 부가세는 별도입니다.
             </p>
           </div>
         </>
