@@ -3,7 +3,8 @@ import SalaryClient from './SalaryClient'
 import { buildMetadata } from '@/lib/seo'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
-import { buildSalaryTable, buildNetTargetTable, calcSalary, formatEok } from './salaryUtils'
+import { buildSalaryTable, buildNetTargetTable, calcSalary, formatEok, SALARY_PENSION_BASE } from './salaryUtils'
+import { INSURANCE_RATES, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
 import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
@@ -22,6 +23,14 @@ export const metadata = buildMetadata({
 })
 
 const won = (n: number) => Math.round(n).toLocaleString('ko-KR') + '원'
+
+/* 법정 수치 표기 — lib 단일 소스에서 보간 (빌드 시점 기준, 서버 컴포넌트라 hydration 무관) */
+const R25 = INSURANCE_RATES[2025]
+const R26 = INSURANCE_RATES[2026]
+const ltcRatioPct = (r: typeof R26) => (Math.round(r.ltc.rateOfSalary / r.health.total * 1e4) / 100).toFixed(2)
+const PB = SALARY_PENSION_BASE
+const PB_LABEL = pensionBasePeriodLabel(PB)
+const man = (n: number) => `${(n / 10_000).toLocaleString('ko-KR')}만원`
 
 /* 부양가족 1인·비과세 0원 기준 2026년 연봉 실수령액표 (1,800만~2억, 빌드 시 생성) */
 const SALARY_TABLE = buildSalaryTable(1, 0, 0)
@@ -86,7 +95,7 @@ export default function SalaryPage() {
         <strong style={{ color: 'var(--text)' }}>2026년 최신 세법 기준</strong>, 4대보험·근로소득세를 자동 반영한 실수령액 추정 계산기.
       </p>
 
-      <UpdatedMeta date="2026년 7월" basis="2026년 4대보험 요율·근로소득 간이세액표 기준, 연봉 분포는 국세청 2024년 귀속 연말정산 국세통계(2025-12 공표) 기준" sources={[{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"},{"label":"근로소득 백분위 자료(공공데이터포털)","href":"https://www.data.go.kr/data/15082063/fileData.do"}]} />
+      <UpdatedMeta date="2026년 9월" basis={`2026년 4대보험 요율·국민연금 기준소득월액 상·하한(${PB_LABEL})·근로소득 간이세액표 기준, 연봉 분포는 국세청 2024년 귀속 연말정산 국세통계(2025-12 공표) 기준`} sources={[{"label":"홈택스","href":"https://hometax.go.kr"},{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"},{"label":"근로소득 백분위 자료(공공데이터포털)","href":"https://www.data.go.kr/data/15082063/fileData.do"}]} />
 
       <SalaryClient />
 
@@ -154,10 +163,10 @@ export default function SalaryPage() {
               </thead>
               <tbody>
                 {[
-                  ['국민연금',     '4.75%',             '4.75%',      '▲ 4.5% → 4.75%'],
-                  ['건강보험',     '3.595%',            '3.595%',     '▲ 3.545% → 3.595%'],
-                  ['장기요양보험', '건보료 × 13.14%',   '동일',       '▲ 12.95% → 13.14%'],
-                  ['고용보험',     '0.9%',              '0.9%+α',     '동결'],
+                  ['국민연금',     `${R26.pension.employee}%`, `${R26.pension.employer}%`, `▲ ${R25.pension.employee}% → ${R26.pension.employee}%`],
+                  ['건강보험',     `${R26.health.employee}%`,  `${R26.health.employer}%`,  `▲ ${R25.health.employee}% → ${R26.health.employee}%`],
+                  ['장기요양보험', `건보료 × ${ltcRatioPct(R26)}%`, '동일', `▲ ${ltcRatioPct(R25)}% → ${ltcRatioPct(R26)}%`],
+                  ['고용보험',     `${R26.unemp.employee}%`,   `${R26.unemp.employer}%+α`, R25.unemp.employee === R26.unemp.employee ? '동결' : `${R25.unemp.employee}% → ${R26.unemp.employee}%`],
                   ['산재보험',     '없음',              '업종별',     '근로자 부담 없음'],
                 ].map(([label, worker, employer, change], i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -171,7 +180,7 @@ export default function SalaryPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', marginBottom: '16px', lineHeight: 1.8 }}>
-            ※ <strong style={{ color: 'var(--text)' }}>국민연금</strong>은 월 보수 상한 <strong style={{ color: 'var(--text)' }}>637만원</strong>까지만 부과 (초과분 적용 X). <strong style={{ color: 'var(--text)' }}>장기요양보험</strong>은 건강보험료에 연동(건보료 × 13.14%)됩니다.
+            ※ <strong style={{ color: 'var(--text)' }}>국민연금</strong>은 기준소득월액 상한 <strong style={{ color: 'var(--text)' }}>{man(PB.max)}</strong>까지만 부과(초과분 적용 X)하고, 하한 {man(PB.min)} 미만이면 하한으로 부과합니다({PB_LABEL} 적용 · 매년 7월 조정). <strong style={{ color: 'var(--text)' }}>장기요양보험</strong>은 건강보험료에 연동(건보료 × {ltcRatioPct(R26)}%)됩니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid rgba(14,165,233,0.2)', borderRadius: '12px', padding: '16px 20px' }}>
             <p style={{ fontSize: '13px', fontWeight: 600, color: 'var(--accent)', marginBottom: '6px' }}>💡 2026년 국민연금 인상 배경</p>

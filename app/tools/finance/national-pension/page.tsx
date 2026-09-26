@@ -7,6 +7,13 @@ import Faq from '@/components/Faq'
 import Disclaimer from '@/components/Disclaimer'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { todayStr } from '@/lib/date'
+import { PENSION_BASE_CURRENT, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
+
+/* 기준소득월액 상·하한 — lib 스케줄에서 빌드 시점 구간 보간 (매년 7월 개정) */
+const PB = PENSION_BASE_CURRENT
+const PB_LABEL = pensionBasePeriodLabel(PB)
+const man = (v: number) => `${(v / 10_000).toLocaleString('ko-KR')}만원`
 
 export const metadata = buildMetadata({
   path: '/tools/finance/national-pension',
@@ -119,7 +126,8 @@ export default function NationalPensionPage() {
         본 계산기는 국민연금공단 간단계산 산식(1.29×(A+B)×지급률)을 단순화한 추정값입니다. 실제 연금액은 가입연도별 재평가율·소득대체율·비례상수 가중과 기준소득월액 이력에 따라 달라지며, 수급 자격(최소 가입 10년)·정확한 금액은 「내 곁에 국민연금」 앱 또는 국민연금공단(1355)에서 확인하세요. 수급 가능 여부를 단정하지 않습니다.
       </Disclaimer>
 
-      <NationalPensionClient />
+      {/* buildDate: SSG와 hydration이 같은 기준일을 쓰도록 빌드 시점 날짜 전달 */}
+      <NationalPensionClient buildDate={todayStr()} />
 
       <AdSlot position="in-article" minHeight={200} />
 
@@ -173,7 +181,7 @@ export default function NationalPensionPage() {
             <strong style={strong}>A값</strong>은 전체 국민연금 가입자의 최근 3년 평균 소득월액으로, 소득재분배(균등) 요소입니다. 2026년 적용 A값은 <strong style={strong}>3,193,511원</strong>(적용기간 2025.12~2026.11)입니다. 소득이 낮은 가입자일수록 A값 비중이 커서 상대적으로 유리하게 작용합니다.
           </p>
           <p style={{ ...para, marginBottom: 0 }}>
-            <strong style={strong}>B값</strong>은 본인의 가입기간 평균 기준소득월액(소득비례 요소)입니다. 기준소득월액은 상·하한이 있어 너무 높거나 낮은 소득은 일정 범위로 조정되며, 계산기는 41만원~659만원 범위로 클램프해 반영합니다.
+            <strong style={strong}>B값</strong>은 본인의 가입기간 평균 기준소득월액(소득비례 요소)입니다. 기준소득월액은 상·하한이 있어 너무 높거나 낮은 소득은 일정 범위로 조정되며, 계산기는 {man(PB.min)}~{man(PB.max)}({PB_LABEL} 적용, 매년 7월 조정) 범위로 클램프해 반영합니다.
           </p>
         </div>
 

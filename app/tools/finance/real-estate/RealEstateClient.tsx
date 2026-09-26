@@ -3,6 +3,7 @@
 
 import Disclaimer from '@/components/Disclaimer'
 import { useMemo, useState } from 'react'
+import { calcHouseAcquisitionTax, calcNonHouseAcquisitionTax } from '@/lib/krAcquisitionTax'
 import styles from './real-estate.module.css'
 
 /* ─────────────────────────────────────────────────────────
@@ -41,24 +42,17 @@ function displayDigits(s: string): string {
 }
 
 /* ─────────────────────────────────────────────────────────
- * 한국 취득세 자동 계산
+ * 한국 취득세 자동 계산 — 단일 소스 lib/krAcquisitionTax.ts
+ * (지방세법 §11·§13의2 + 지방교육세 + 농어촌특별세, 조정대상지역·주택 수·전용면적 반영)
  * ───────────────────────────────────────────────────────── */
-type HomeType = '1home' | '2home' | '3home+' | 'non'
-function calcAcquisitionTax(price: number, type: HomeType): number {
-  if (price <= 0) return 0
-  if (type === '1home') {
-    if (price <= 600_000_000) return price * 0.01
-    if (price <= 900_000_000) {
-      // 6억~9억: 1~3% 누진 (세율 = 취득가액 × 2/3억 − 3, %)
-      const rate = (price * 2 / 300_000_000 - 3) / 100
-      return price * rate
-    }
-    return price * 0.03
-  }
-  if (type === '2home')  return price * 0.08
-  if (type === '3home+') return price * 0.12
-  return price * 0.04
-}
+type AcqTarget = 'house' | 'non'
+const HOME_COUNT_OPTIONS: { n: number; label: string }[] = [
+  { n: 1, label: '1주택' },
+  { n: 2, label: '2주택' },
+  { n: 3, label: '3주택' },
+  { n: 4, label: '4주택+' },
+]
+const pctText = (v: number) => `${v.toLocaleString('ko-KR', { maximumFractionDigits: 3 })}%`
 
 /* 한국 주택 매매 중개보수 상한요율 (2021.10 개정 기준) */
 function calcBrokerFee(price: number): number {
@@ -91,7 +85,11 @@ export default function RealEstateClient() {
 
   /* ── 취득세 ── */
   const [acqMode, setAcqMode] = useState<'auto' | 'manual'>('auto')
-  const [homeType, setHomeType] = useState<HomeType>('1home')
+  const [acqTarget, setAcqTarget] = useState<AcqTarget>('house')
+  const [homeCount, setHomeCount] = useState(1)          // 이번 취득 후 1세대 주택 수 (4 = 4주택 이상)
+  const [adjusted, setAdjusted] = useState(false)        // 취득 주택이 조정대상지역
+  const [over85, setOver85] = useState(false)            // 전용 85㎡ 초과 (농어촌특별세)
+  const [tempTwoHomes, setTempTwoHomes] = useState(false) // 조정 2주택 중 일시적 2주택
   const [acqStr, setAcqStr] = useState('0')
 
   /* ── 중개수수료 ── */
@@ -131,7 +129,10 @@ export default function RealEstateClient() {
   const price     = parseNum(priceStr)
   const salePrice = parseNum(salePriceStr)
   const loan      = loanMode === 'amount' ? parseNum(loanStr) : (price * ltv) / 100
-  const acqTaxAuto = calcAcquisitionTax(price, homeType)
+  const acqBreakdown = acqTarget === 'non'
+    ? calcNonHouseAcquisitionTax(price)
+    : calcHouseAcquisitionTax({ price, homeCount, adjusted, over85, temporaryTwoHomes: tempTwoHomes })
+  const acqTaxAuto = acqBreakdown.total   // 취득세 + 지방교육세 + 농어촌특별세
   const acqTax    = acqMode === 'auto' ? acqTaxAuto : parseNum(acqStr)
   const brokerBuyAuto  = calcBrokerFee(price)
   const brokerSellAuto = calcBrokerFee(salePrice)
@@ -467,7 +468,7 @@ export default function RealEstateClient() {
       <div className={styles.card}>
         <div className={styles.cardLabel}>
           <span>취득세</span>
-          <span className={styles.cardLabelHint}>주택 종류별 누진</span>
+          <span className={styles.cardLabelHint}>지방교육세·농특세 포함</span>
         </div>
 
         <div className={styles.miniToggle} role="group" aria-label="취득세 입력 방식">
@@ -477,29 +478,111 @@ export default function RealEstateClient() {
 
         {acqMode === 'auto' ? (
           <>
-            <span className={styles.subLabel}>주택 종류</span>
-            <div className={styles.toggleGrid4} role="group" aria-label="주택 종류">
-              {[
-                { id: '1home',  label: '1주택' },
-                { id: '2home',  label: '다주택(2주택)' },
-                { id: '3home+', label: '다주택(3+)' },
-                { id: 'non',    label: '비주거' },
-              ].map(o => (
-                <button
-                  key={o.id}
-                  type="button"
-                  aria-pressed={homeType === o.id}
-                  className={`${styles.toggleBtn} ${homeType === o.id ? styles.toggleActive : ''}`}
-                  onClick={() => setHomeType(o.id as HomeType)}
-                >
-                  {o.label}
-                </button>
-              ))}
+            <div className={styles.acqGroup}>
+              <span className={styles.subLabel}>취득 대상</span>
+              <div className={styles.toggleGrid2} role="group" aria-label="취득 대상">
+                {([
+                  { id: 'house', label: '주택' },
+                  { id: 'non',   label: '비주거 (상가·오피스텔·토지)' },
+                ] as const).map(o => (
+                  <button
+                    key={o.id}
+                    type="button"
+                    aria-pressed={acqTarget === o.id}
+                    className={`${styles.toggleBtn} ${acqTarget === o.id ? styles.toggleActive : ''}`}
+                    onClick={() => setAcqTarget(o.id)}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
             </div>
+
+            {acqTarget === 'house' && (
+              <>
+                <div className={styles.acqGroup}>
+                  <span className={styles.subLabel}>취득 후 세대 보유 주택 수 (이번 주택 포함)</span>
+                  <div className={styles.toggleGrid4} role="group" aria-label="취득 후 주택 수">
+                    {HOME_COUNT_OPTIONS.map(o => (
+                      <button
+                        key={o.n}
+                        type="button"
+                        aria-pressed={homeCount === o.n}
+                        className={`${styles.toggleBtn} ${homeCount === o.n ? styles.toggleActive : ''}`}
+                        onClick={() => setHomeCount(o.n)}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className={styles.acqGroup}>
+                  <span className={styles.subLabel}>취득 주택 소재지</span>
+                  <div className={styles.toggleGrid2} role="group" aria-label="취득 주택 소재지">
+                    {[
+                      { v: false, label: '비조정지역' },
+                      { v: true,  label: '조정대상지역' },
+                    ].map(o => (
+                      <button
+                        key={o.label}
+                        type="button"
+                        aria-pressed={adjusted === o.v}
+                        className={`${styles.toggleBtn} ${adjusted === o.v ? styles.toggleActive : ''}`}
+                        onClick={() => setAdjusted(o.v)}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <div className={styles.acqGroup}>
+                  <span className={styles.subLabel}>전용면적</span>
+                  <div className={styles.toggleGrid2} role="group" aria-label="전용면적">
+                    {[
+                      { v: false, label: '85㎡ 이하' },
+                      { v: true,  label: '85㎡ 초과' },
+                    ].map(o => (
+                      <button
+                        key={o.label}
+                        type="button"
+                        aria-pressed={over85 === o.v}
+                        className={`${styles.toggleBtn} ${over85 === o.v ? styles.toggleActive : ''}`}
+                        onClick={() => setOver85(o.v)}
+                      >
+                        {o.label}
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                {homeCount === 2 && adjusted && (
+                  <div className={styles.acqCheck}>
+                    <input
+                      id="re-temp-two-homes"
+                      type="checkbox"
+                      checked={tempTwoHomes}
+                      onChange={e => setTempTwoHomes(e.target.checked)}
+                    />
+                    <label htmlFor="re-temp-two-homes">
+                      일시적 2주택 (종전 주택을 처분기한 내 매도 예정 → 8% 중과 대신 표준세율)
+                    </label>
+                  </div>
+                )}
+              </>
+            )}
+
             <div className={styles.autoResult} style={{ marginTop: 12 }}>
-              <span>자동 산정 취득세</span>
+              <span>자동 산정 취득세 합계</span>
               <strong>{fmtKRW(acqTaxAuto)}</strong>
             </div>
+            <p className={styles.acqDetail}>
+              {acqBreakdown.label} · 취득세 {fmtKRW(acqBreakdown.acquisitionTax)}({pctText(acqBreakdown.acquisitionRate)})
+              {' + '}지방교육세 {fmtKRW(acqBreakdown.educationTax)}({pctText(acqBreakdown.educationRate)})
+              {' + '}농어촌특별세 {acqBreakdown.ruralTax > 0 ? `${fmtKRW(acqBreakdown.ruralTax)}(${pctText(acqBreakdown.ruralRate)})` : '비과세'}
+              {' = '}실효 <strong>{pctText(acqBreakdown.totalRate)}</strong>
+            </p>
           </>
         ) : (
           <div className={styles.inputRow}>
@@ -807,7 +890,7 @@ export default function RealEstateClient() {
         <table className={styles.breakdownTable}>
           <tbody>
             <tr><td>매입가</td><td>{fmtKRW(price)}</td></tr>
-            <tr><td>취득세</td><td>{fmtKRW(acqTax)}</td></tr>
+            <tr><td>취득세(교육세·농특세 포함)</td><td>{fmtKRW(acqTax)}</td></tr>
             <tr><td>법무비 (등기비)</td><td>{fmtKRW(legalFee)}</td></tr>
             <tr><td>매수 중개수수료</td><td>{fmtKRW(brokerBuy)}</td></tr>
             {mode === 'detail' && interior > 0 && <tr><td>인테리어</td><td>{fmtKRW(interior)}</td></tr>}

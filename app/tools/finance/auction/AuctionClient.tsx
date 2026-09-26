@@ -7,7 +7,8 @@ import s from './auction.module.css'
 import {
   PROPERTIES, OWNERS, REGIONS, COST_ITEMS, AUTO_ITEMS, MANUAL_ITEMS,
   type PropertyType, type OwnerType, type Region,
-  calcAcquisitionTax, getAcquisitionRate, calcLegalFee, calcStampTax, calcHousingBond,
+  calcAcquisitionTax, acquisitionTaxBreakdown, getAcquisitionRate, getProperty,
+  calcLegalFee, calcStampTax, calcHousingBond,
   calcLoan, fmt, fmtMan,
 } from './auctionUtils'
 
@@ -249,8 +250,9 @@ export default function AuctionClient() {
           </div>
         </div>
         <p className={s.helpText}>
-          💡 적용 취득세율: <strong className={s.cellAccent}>{acqRate.toFixed(1)}%</strong>{' '}
-          ({fmtMan(calcAcquisitionTax(price, property, owner, region))})
+          💡 적용 취득세율: <strong className={s.cellAccent}>{acqRate.toFixed(2)}%</strong>{' '}
+          ({fmtMan(calcAcquisitionTax(price, property, owner, region))}) · {acquisitionTaxBreakdown(price, property, owner, region).label}
+          {getProperty(property).isHouse ? ' · 지방교육세 포함, 전용 85㎡ 이하 기준(초과 시 농어촌특별세 0.2~1.0% 추가)' : ' · 지방교육세·농어촌특별세 포함'}
         </p>
       </div>
 

@@ -7,6 +7,27 @@ import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { calcHouseAcquisitionTax, calcNonHouseAcquisitionTax } from '@/lib/krAcquisitionTax'
+
+/* 취득세 예시표 — lib/krAcquisitionTax 단일 소스로 빌드 시 생성 (취득세+지방교육세+농특세 합계) */
+const ACQ_PRICES = [500_000_000, 750_000_000, 1_200_000_000]
+const ACQ_CASES: { label: string; homeCount: number; adjusted: boolean }[] = [
+  { label: '1주택 (비조정 2주택·일시적 2주택 포함)', homeCount: 1, adjusted: false },
+  { label: '조정 2주택 · 비조정 3주택 (8%)',       homeCount: 2, adjusted: true },
+  { label: '조정 3주택+ · 비조정 4주택+ · 법인 (12%)', homeCount: 3, adjusted: true },
+]
+const eokLabel = (won: number) => `${(won / 100_000_000).toLocaleString('ko-KR')}억`
+const manLabel = (won: number) => `${Math.round(won / 10_000).toLocaleString('ko-KR')}만원`
+const pctLabel = (v: number) => `${v.toLocaleString('ko-KR', { maximumFractionDigits: 3 })}%`
+const ACQ_ROWS = ACQ_CASES.map(c => ({
+  label: c.label,
+  cells: ACQ_PRICES.map(price => ({
+    le85: calcHouseAcquisitionTax({ price, homeCount: c.homeCount, adjusted: c.adjusted, over85: false }),
+    gt85: calcHouseAcquisitionTax({ price, homeCount: c.homeCount, adjusted: c.adjusted, over85: true }),
+  })),
+}))
+const NON_HOUSE = calcNonHouseAcquisitionTax(ACQ_PRICES[0])
+const SEVEN_EOK = calcHouseAcquisitionTax({ price: 700_000_000, homeCount: 1, adjusted: false, over85: false })
 
 export const metadata = buildMetadata({
   path: '/tools/finance/real-estate',
@@ -55,7 +76,7 @@ const FAQ_LD = [
               },
               {
                 q: '상가(비주거)와 주택의 수익률 계산은 무엇이 다른가요?',
-                a: '본 계산기에서 주택 종류를 <strong>‘비주거’</strong>로 선택하면 취득세가 4%(농어촌특별세·지방교육세 별도)로 적용되어 주택(1주택 1~3%, 다주택 8~12%)과 초기 비용부터 달라집니다. 또한 1세대 1주택 비과세(양도가액 12억원 이하) 같은 주택 전용 혜택은 상가에 적용되지 않아 매도 차익에 대한 세금 부담 구조가 다릅니다. 상가는 월세 수익 비중이 큰 대신 공실·상권 변화가 수익률을 좌우하므로, 공실 기간을 보수적으로 입력해 시나리오를 비교해 보세요.',
+                a: '본 계산기에서 취득 대상을 <strong>‘비주거’</strong>로 선택하면 취득세 4%에 지방교육세 0.4%·농어촌특별세 0.2%를 더한 <strong>4.6%</strong>가 적용되어, 주택(1주택 1~3%, 다주택 중과 8~12% + 부가세목)과 초기 비용부터 달라집니다. 또한 1세대 1주택 비과세(양도가액 12억원 이하) 같은 주택 전용 혜택은 상가에 적용되지 않아 매도 차익에 대한 세금 부담 구조가 다릅니다. 상가는 월세 수익 비중이 큰 대신 공실·상권 변화가 수익률을 좌우하므로, 공실 기간을 보수적으로 입력해 시나리오를 비교해 보세요.',
               },
             ]
 
@@ -72,7 +93,7 @@ export default function RealEstatePage() {
         매매가·임대·대출 레버리지를 반영한 <strong style={{ color: 'var(--text)' }}>자기자본 수익률</strong>. 진짜 남는 돈을 확인.
       </p>
 
-      <UpdatedMeta date="2026년 6월" basis="부동산 정책·시세 참고" sources={[{"label":"국토교통부","href":"https://www.molit.go.kr"},{"label":"한국부동산원","href":"https://www.reb.or.kr"},{"label":"국세청","href":"https://www.nts.go.kr"}]} />
+      <UpdatedMeta date="2026년 9월" basis="취득세: 지방세법 §11·§13의2·§151·농어촌특별세법(2026년 시행) · 양도세·중개보수: 2026년 6월 기준 참고" sources={[{"label":"위택스(취득세)","href":"https://www.wetax.go.kr"},{"label":"국가법령정보센터 지방세법","href":"https://www.law.go.kr/법령/지방세법"},{"label":"국토교통부","href":"https://www.molit.go.kr"},{"label":"국세청","href":"https://www.nts.go.kr"}]} />
 
       <RealEstateClient />
 
@@ -121,31 +142,65 @@ export default function RealEstatePage() {
             한국 취득세 자동 계산 기준
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', marginBottom: '14px', lineHeight: 1.7 }}>
-            본 계산기는 아래 기준으로 자동 산정합니다. 농어촌특별세(0.2%)·지방교육세(0.4%)는 별도이며 실제 신고 세액과 차이가 있을 수 있습니다.
+            본 계산기는 지방세법 §11(표준세율)·§13의2(다주택·법인 중과) 기준으로 <strong style={{ color: 'var(--text)' }}>취득세·지방교육세·농어촌특별세(전용 85㎡ 초과)</strong>를 합산합니다.
+            중과 여부는 <strong style={{ color: 'var(--text)' }}>취득 주택의 조정대상지역 여부</strong>와 <strong style={{ color: 'var(--text)' }}>이번 취득 후 세대 주택 수</strong>로 정해집니다.
           </p>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#059669', fontWeight: 700, marginBottom: '8px' }}>1주택자</p>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginBottom: '14px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--success)', fontWeight: 700, marginBottom: '8px' }}>표준세율 (1주택 등)</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                6억 이하 → <strong style={{ color: 'var(--accent)' }}>1.0%</strong><br/>
-                6~9억 → <strong style={{ color: 'var(--accent)' }}>1~3% 누진</strong><br/>
-                9억 초과 → <strong style={{ color: 'var(--accent)' }}>3.0%</strong>
+                6억 이하 → <strong style={{ color: 'var(--accent-ink)' }}>1%</strong><br/>
+                6~9억 → <strong style={{ color: 'var(--accent-ink)' }}>(가액×2/3억−3)%</strong>, 0.01%p 단위 반올림 (7억 → {pctLabel(SEVEN_EOK.acquisitionRate)})<br/>
+                9억 초과 → <strong style={{ color: 'var(--accent-ink)' }}>3%</strong><br/>
+                지방교육세 = 취득세율의 10% (0.1~0.3%)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#EA580C', fontWeight: 700, marginBottom: '8px' }}>다주택자 (조정대상지역)</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--warning)', fontWeight: 700, marginBottom: '8px' }}>중과세율</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                2주택 → <strong style={{ color: '#EA580C' }}>8.0%</strong><br/>
-                3주택 이상 → <strong style={{ color: '#DC2626' }}>12.0%</strong>
+                조정 2주택 · 비조정 3주택 → <strong style={{ color: 'var(--warning)' }}>8%</strong><br/>
+                조정 3주택+ · 비조정 4주택+ · 법인 → <strong style={{ color: 'var(--danger)' }}>12%</strong><br/>
+                비조정 2주택·일시적 2주택·시가표준액 1억 이하 → 표준세율<br/>
+                지방교육세 0.4% (중과 공통)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '14px 16px' }}>
-              <p style={{ fontSize: '12px', color: '#0891B2', fontWeight: 700, marginBottom: '8px' }}>비주거 부동산</p>
+            <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+              <p style={{ fontSize: '12px', color: 'var(--cat-finance-ink)', fontWeight: 700, marginBottom: '8px' }}>농어촌특별세 · 비주거</p>
               <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.8 }}>
-                토지·상가·오피스 → <strong style={{ color: '#0891B2' }}>4.0%</strong>
+                전용 85㎡ 이하 주택 → 비과세<br/>
+                85㎡ 초과: 표준 0.2% · 8% 중과 0.6% · 12% 중과 1.0%<br/>
+                토지·상가·오피스텔 → 4% + 0.4% + 0.2% = <strong>{pctLabel(NON_HOUSE.totalRate)}</strong>
               </p>
             </div>
           </div>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px' }}>세금 합계 (85㎡ 이하 / 초과)</th>
+                  {ACQ_PRICES.map(p => (
+                    <th scope="col" key={p} style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap' }}>{eokLabel(p)}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {ACQ_ROWS.map((row, i) => (
+                  <tr key={row.label} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 600 }}>{row.label}</th>
+                    {row.cells.map((c, j) => (
+                      <td key={j} style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--text)', whiteSpace: 'nowrap' }}>
+                        {manLabel(c.le85.total)} <span style={{ color: 'var(--muted)', fontSize: '12px' }}>({pctLabel(c.le85.totalRate)})</span><br/>
+                        {manLabel(c.gt85.total)} <span style={{ color: 'var(--muted)', fontSize: '12px' }}>({pctLabel(c.gt85.totalRate)})</span>
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.7 }}>
+            ※ 생애최초·신혼부부 등 감면, 분양권·입주권·주거용 오피스텔의 주택 수 산입, 일시적 2주택 사후 추징, 수도권 외 읍·면(100㎡ 기준)은 반영하지 않습니다. 실제 신고 세액은 위택스·관할 지자체에서 확인하세요.
+          </p>
         </div>
 
         {/* ── 4. 한국 중개수수료 법정 요율표 ── */}

@@ -5,7 +5,10 @@
    ────────────────────────────────────────────────────── */
 
 import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit } from '@/lib/krIncomeTax'
-import { INSURANCE_RATES, MIN_HOURLY_WAGE } from '@/lib/krInsuranceRates'
+import {
+  INSURANCE_RATES, MIN_HOURLY_WAGE,
+  PENSION_BASE_CURRENT, clampPensionBase, type PensionBasePeriod,
+} from '@/lib/krInsuranceRates'
 
 /* ─── 2026년 4대보험 요율 (근로자 부담분) — lib/krInsuranceRates에서 파생 ─── */
 const R26 = INSURANCE_RATES[2026]
@@ -20,8 +23,11 @@ export const RATES_2026 = {
   employmentIns:      frac(R26.unemp.employee),     // 고용보험 0.9%
 }
 
-// 국민연금 기준소득월액 상한 (2026년)
-export const NP_MAX_MONTHLY = R26.pension.maxBase
+/* 국민연금 기준소득월액 상·하한 — lib 스케줄(매년 7월 개정)에서 '오늘' 기준 구간.
+   서버(page.tsx) 표·문구는 빌드 시점 값으로 정적 생성된다. 클라이언트(SalaryClient) 초기 렌더의 기본 입력
+   (연봉 5,000만 → 월 약 417만)은 어느 구간의 상·하한에도 걸리지 않아 빌드일·방문일이 달라도 SSG와 동일하다.
+   특정 시점으로 고정하려면 calcSalary({ ..., pensionBase: pensionBaseAt('2026-07') })처럼 명시. */
+export const SALARY_PENSION_BASE: PensionBasePeriod = PENSION_BASE_CURRENT
 
 /* ─── 비과세 항목 ─── */
 export interface NonTaxableItem {
@@ -80,6 +86,8 @@ export interface SalaryInput {
   childrenCount: number
   nonTaxableMonthly: number
   isInsured: boolean
+  /** 국민연금 기준소득월액 상·하한 (생략 시 SALARY_PENSION_BASE = 오늘 기준 구간) */
+  pensionBase?: Pick<PensionBasePeriod, 'min' | 'max'>
 }
 
 export interface SalaryResult {
@@ -107,9 +115,10 @@ export function calcSalary(input: SalaryInput): SalaryResult {
   const nonTaxable = Math.max(0, input.nonTaxableMonthly)
   const taxableMonthly = Math.max(0, grossMonthly - nonTaxable)
 
-  // 4대보험 (과세 급여 기준)
+  // 4대보험 (과세 급여 기준). 국민연금은 기준소득월액 상·하한 클램프 (국민연금법 시행령 §5)
+  const pensionBase = clampPensionBase(taxableMonthly, input.pensionBase ?? SALARY_PENSION_BASE)
   const pension = input.isInsured
-    ? Math.floor(Math.min(taxableMonthly, NP_MAX_MONTHLY) * RATES_2026.nationalPension / 10) * 10
+    ? Math.floor(pensionBase * RATES_2026.nationalPension / 10) * 10
     : 0
   const health = input.isInsured
     ? Math.floor(taxableMonthly * RATES_2026.healthInsurance / 10) * 10

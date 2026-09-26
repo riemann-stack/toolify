@@ -6,6 +6,16 @@ import UpdatedMeta from '@/components/UpdatedMeta'
 import { GuideDivider } from "@/components/ToolSection"
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import { todayStr } from '@/lib/date'
+import { INSURANCE_RATES, PENSION_BASE_CURRENT, previousPensionBase, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
+
+const R26 = INSURANCE_RATES[2026]
+
+/* 국민연금 기준소득월액 상·하한 — lib 스케줄에서 빌드 시점 구간을 보간 (매년 7월 개정) */
+const PB = PENSION_BASE_CURRENT
+const PB_PREV = previousPensionBase(PB)
+const PB_LABEL = pensionBasePeriodLabel(PB)
+const man = (v: number) => `${(v / 10_000).toLocaleString('ko-KR')}만`
 
 export const metadata = buildMetadata({
   path: '/tools/finance/4-insurance',
@@ -50,9 +60,10 @@ export default function FourInsurancePage() {
         국민연금·건강·고용·산재 — 근로자/사업주 부담 정확히. <strong style={{ color: 'var(--text)' }}>알바·프리랜서 비교</strong>까지.
       </p>
 
-      <UpdatedMeta date="2026년 5월" basis="2026년 4대보험 요율 기준" sources={[{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"},{"label":"국민연금공단","href":"https://www.nps.or.kr"}]} />
+      <UpdatedMeta date="2026년 9월" basis={`2026년 4대보험 요율·국민연금 기준소득월액 상·하한(${PB_LABEL}) 기준`} sources={[{"label":"4대 사회보험 정보연계센터","href":"https://www.4insure.or.kr"},{"label":"국민연금공단","href":"https://www.nps.or.kr"}]} />
 
-      <FourInsuranceClient />
+      {/* buildDate: SSG와 hydration이 같은 기준일을 쓰도록 빌드 시점 날짜를 전달 (FourInsuranceClient useAsOfDate 참고) */}
+      <FourInsuranceClient buildDate={todayStr()} />
 
       {/* 본문 광고 */}
       <AdSlot position="in-article" minHeight={200} />
@@ -76,11 +87,11 @@ export default function FourInsurancePage() {
               </thead>
               <tbody>
                 {[
-                  { n: '국민연금',          c: '#0EA5E9', t: '9.5%',  e: '4.75%',  r: '4.75%' },
-                  { n: '건강보험',          c: '#DC2626', t: '7.19%', e: '3.595%', r: '3.595%' },
-                  { n: '장기요양보험*',     c: '#EA580C', t: '0.9448%', e: '0.4724%', r: '0.4724%' },
-                  { n: '고용보험 (실업급여)', c: '#0891B2', t: '1.8%',  e: '0.9%',  r: '0.9%' },
-                  { n: '고용보험 (사업주 추가)', c: '#0891B2', t: '0.25~0.85%', e: '0%', r: '0.25~0.85%' },
+                  { n: '국민연금',          c: '#0EA5E9', t: `${R26.pension.total}%`,  e: `${R26.pension.employee}%`,  r: `${R26.pension.employer}%` },
+                  { n: '건강보험',          c: '#DC2626', t: `${R26.health.total}%`, e: `${R26.health.employee}%`, r: `${R26.health.employer}%` },
+                  { n: '장기요양보험*',     c: '#EA580C', t: `${R26.ltc.rateOfSalary}%`, e: `${R26.ltc.employee}%`, r: `${R26.ltc.employer}%` },
+                  { n: '고용보험 (실업급여)', c: '#0891B2', t: `${Math.round((R26.unemp.employee + R26.unemp.employer) * 1e4) / 1e4}%`,  e: `${R26.unemp.employee}%`,  r: `${R26.unemp.employer}%` },
+                  { n: '고용보험 (사업주 추가)', c: '#0891B2', t: `${R26.unemp.extra.under150}~${R26.unemp.extra.over1000}%`, e: '0%', r: `${R26.unemp.extra.under150}~${R26.unemp.extra.over1000}%` },
                   { n: '산재보험',          c: '#A16207', t: '업종별 0.07~3.6%', e: '0%', r: '100%' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -118,8 +129,8 @@ export default function FourInsurancePage() {
               <li>장기요양 <strong style={{ color: 'var(--accent)' }}>0.9182% → 0.9448%</strong> (2.9% ↑)</li>
               <li>고용보험 <strong>1.8% 동결</strong></li>
               <li>산재보험 — 업종별 변동 (12월 말 고시)</li>
-              <li>국민연금 기준소득월액 상한 <strong style={{ color: 'var(--accent)' }}>617만 → 637만원</strong></li>
-              <li>국민연금 기준소득월액 하한 <strong style={{ color: 'var(--accent)' }}>39만 → 40만원</strong></li>
+              <li>국민연금 기준소득월액 상한 <strong style={{ color: 'var(--accent)' }}>{PB_PREV ? `${man(PB_PREV.max)} → ` : ''}{man(PB.max)}원</strong> ({PB_LABEL} 적용 · 매년 7월 조정)</li>
+              <li>국민연금 기준소득월액 하한 <strong style={{ color: 'var(--accent)' }}>{PB_PREV ? `${man(PB_PREV.min)} → ` : ''}{man(PB.min)}원</strong></li>
             </ul>
           </div>
         </div>
@@ -131,7 +142,7 @@ export default function FourInsurancePage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { n: '국민연금',     c: '#0EA5E9', d: '만 60세까지 가입 (수령 만 65세부터). 노령·유족·장애연금 보장. 기준소득월액 40만~637만원.' },
+              { n: '국민연금',     c: '#0EA5E9', d: `만 60세까지 가입 (수령 만 65세부터). 노령·유족·장애연금 보장. 기준소득월액 ${man(PB.min)}~${man(PB.max)}원(${PB_LABEL}).` },
               { n: '건강보험',     c: '#DC2626', d: '직장가입자(사업장 통해)·지역가입자(자영업자). 본인부담금 외 의료 혜택. 피부양자 등록 가능.' },
               { n: '장기요양보험', c: '#EA580C', d: '65세 이상·노인성 질병 환자 대상. 건강보험료에 자동 부과. 방문요양·요양시설 지원.' },
               { n: '고용보험',     c: '#0891B2', d: '실업급여(비자발 퇴사 90~270일), 출산휴가급여·육아휴직급여, 국민내일배움카드.' },

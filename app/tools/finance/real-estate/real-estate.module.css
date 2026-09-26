@@ -660,3 +660,35 @@
   .copyBtn:hover { border-color: var(--accent); color: var(--accent); }
 }
 .copied { background: var(--accent-dim); color: var(--accent); border-color: var(--accent); font-weight: 700; }
+
+/* ── 취득세 입력 (lib/krAcquisitionTax) ── */
+.acqGroup {
+  margin-bottom: 12px;
+}
+.toggleGrid2 {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 6px;
+}
+.acqCheck {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  margin: 2px 0 4px;
+  font-size: 13px;
+  line-height: 1.6;
+  color: var(--text);
+}
+.acqCheck input {
+  margin-top: 4px;
+  accent-color: var(--accent);
+}
+.acqDetail {
+  margin-top: 8px;
+  font-size: 12px;
+  line-height: 1.7;
+  color: var(--muted);
+}
+.acqDetail strong {
+  color: var(--text);
+}

@@ -1,13 +1,11 @@
 'use client'
 
-import { useEffect, useMemo, useState } from 'react'
+import { useEffect, useMemo, useState, useSyncExternalStore } from 'react'
 import {
   calcPension,
   pensionStartAge,
   NP_A_VALUE_2026,
   NP_PROPORTION_CONSTANT,
-  NP_INCOME_FLOOR,
-  NP_INCOME_CAP,
   NP_MIN_COVERAGE_MONTHS,
   NP_DEPENDENT_SPOUSE_YEAR,
   NP_DEPENDENT_OTHER_YEAR,
@@ -20,6 +18,8 @@ import {
   adjustPct,
   calcBreakEven,
 } from './nationalPensionUtils'
+import { pensionBaseAt, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
+import { todayStr } from '@/lib/date'
 import s from './nationalPension.module.css'
 
 const STORAGE_KEY = 'youtil:national-pension:inputs-v1'
@@ -30,7 +30,7 @@ const MODES: { id: PensionMode; label: string }[] = [
   { id: 'defer', label: '연기연금' },
 ]
 
-/* 입력 상한 — lib이 최종 클램프하지만 입력단에서도 상식 범위 (월 41만~659만은 lib, 표시는 0~2천만) */
+/* 입력 상한 — lib이 기준소득월액 상·하한(매년 7월 개정, lib/krInsuranceRates 스케줄)으로 최종 클램프, 입력단은 0~2천만 */
 const INCOME_INPUT_MAX = 20_000_000
 const MAX_YEARS = 50
 const CURRENT_YEAR = 2026
@@ -50,7 +50,16 @@ function isMode(v: unknown): v is PensionMode {
   return v === 'normal' || v === 'early' || v === 'defer'
 }
 
-export default function NationalPensionClient() {
+/* 기준일 — 기준소득월액 상·하한 구간 선택용. SSG와 hydration 첫 렌더는 page.tsx가 빌드 때 넘긴 날짜를
+   함께 쓰고(불일치 없음), hydration 직후 기기 날짜(todayStr)로 다시 렌더한다. */
+const noopSubscribe = () => () => {}
+function useAsOfDate(buildDate: string): string {
+  return useSyncExternalStore(noopSubscribe, todayStr, () => buildDate)
+}
+
+export default function NationalPensionClient({ buildDate }: { buildDate?: string }) {
+  const asOf = useAsOfDate(buildDate ?? todayStr())
+  const incomeBase = pensionBaseAt(asOf)
   const [birthYear, setBirthYear] = useState('1985')
   const [years, setYears] = useState('20')
   const [months, setMonths] = useState('0')
@@ -116,8 +125,9 @@ export default function NationalPensionClient() {
         adjustYears: adjustYearsN,
         spouse,
         dependents: dependentsN,
+        incomeBase,
       }),
-    [totalMonths, incomeN, mode, adjustYearsN, spouse, dependentsN],
+    [totalMonths, incomeN, mode, adjustYearsN, spouse, dependentsN, incomeBase],
   )
 
   /* 비교용 정상수령 결과 (보정 없는 기준선) — 통계 재계산 금지, lib 재호출 */
@@ -173,7 +183,7 @@ export default function NationalPensionClient() {
   }
 
   const hasIncome = incomeN > 0 // 소득 입력 전에는 결과를 숨겨 '빈칸→숫자' 오해 방지
-  const incomeClamped = incomeN > 0 && incomeN !== result.B // lib이 41만~659만으로 클램프했는지 (빈칸은 제외)
+  const incomeClamped = incomeN > 0 && incomeN !== result.B // lib이 상·하한으로 클램프했는지 (빈칸은 제외)
 
   return (
     <div className={s.wrap}>
@@ -218,7 +228,7 @@ export default function NationalPensionClient() {
               {incomeClamped && (
                 <>
                   {' · '}
-                  <span className={s.cellAccent}>{fmtWon(result.B)}원으로 적용</span> (상·하한 {fmtWon(NP_INCOME_FLOOR)}~{fmtWon(NP_INCOME_CAP)}원)
+                  <span className={s.cellAccent}>{fmtWon(result.B)}원으로 적용</span> (상·하한 {fmtWon(incomeBase.min)}~{fmtWon(incomeBase.max)}원 · {pensionBasePeriodLabel(incomeBase)})
                 </>
               )}
             </p>

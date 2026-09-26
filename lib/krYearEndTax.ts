@@ -3,7 +3,7 @@
    ※ 핵심 공제만 반영한 추정 — 난임 의료비·중기감면·주택자금·부녀자/한부모 등 미반영(면책). 단위: 원. */
 
 import { progressiveTax, earnedIncomeDeduction, earnedTaxCredit } from './krIncomeTax'
-import { INSURANCE_RATES } from './krInsuranceRates'
+import { INSURANCE_RATES, clampPensionBase, pensionBaseAt } from './krInsuranceRates'
 
 export const PERSONAL_DEDUCTION = 1_500_000 // 기본공제 1인당 150만
 export const ELDERLY_ADD = 1_000_000 // 경로우대(70세↑) 1인 100만
@@ -43,11 +43,17 @@ export function childTaxCredit(children: number): number {
   return 550_000 + (children - 2) * 400_000
 }
 
-/** 국민연금 본인부담 연액 추정 (입력 없을 때) */
+/** 국민연금 본인부담 연액 추정 (입력 없을 때) — 2026 귀속.
+ *  기준소득월액 상·하한은 7월에 바뀌므로 월별로 적용: 1~6월 2025.7 고시(40만~637만), 7~12월 2026.7 고시(41만~659만).
+ *  (단일 소스 lib/krInsuranceRates PENSION_BASE_SCHEDULE — 날짜 무관·결정적) */
 export function estimateNationalPension(gross: number): number {
-  const r = INSURANCE_RATES[2026].pension
-  const monthlyBase = Math.min(r.maxBase, Math.max(0, gross / 12))
-  return Math.round(monthlyBase * (r.employee / 100) * 12)
+  const rate = INSURANCE_RATES[2026].pension.employee / 100
+  const monthly = gross / 12
+  let sum = 0
+  for (let month = 1; month <= 12; month++) {
+    sum += clampPensionBase(monthly, pensionBaseAt({ year: 2026, month })) * rate
+  }
+  return Math.round(sum)
 }
 
 /** 건강·장기요양·고용보험 본인부담 연액 추정 (입력 없을 때). 각 요율은 보수(총급여) 대비 % */

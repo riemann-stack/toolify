@@ -2,8 +2,10 @@
 
 import Link from 'next/link'
 import Disclaimer from '@/components/Disclaimer'
-import { INSURANCE_RATES, MIN_HOURLY_WAGE } from '@/lib/krInsuranceRates'
-import { useMemo, useState } from 'react'
+import { MIN_HOURLY_WAGE, previousPensionBase, pensionBasePeriodLabel } from '@/lib/krInsuranceRates'
+import { todayStr } from '@/lib/date'
+import { useMemo, useState, useSyncExternalStore } from 'react'
+import { calc4Insurance, pensionBaseForYear } from './fourInsuranceUtils'
 import s from './four-insurance.module.css'
 
 // ─────────────────────────────────────────────
@@ -22,10 +24,17 @@ const fmtComma = (v: string): string => {
   return parseInt(num, 10).toLocaleString('ko-KR')
 }
 
+const man = (v: number): string => `${(v / 10_000).toLocaleString('ko-KR')}만`
+
 // ─────────────────────────────────────────────
-// 4대보험 요율 (2025 / 2026) — 단일 소스 lib/krInsuranceRates.ts
+// 기준일 — 국민연금 기준소득월액 상·하한(매년 7월 개정) 구간 선택용
+// SSG(빌드)와 hydration 첫 렌더는 page.tsx가 빌드 때 넘긴 날짜(buildDate)를 같이 쓰고(불일치 없음),
+// hydration 직후 기기 날짜(todayStr)로 다시 렌더한다 → 7월 1일 전 빌드·후 방문이어도 값이 맞다.
 // ─────────────────────────────────────────────
-const RATES = INSURANCE_RATES
+const noopSubscribe = () => () => {}
+function useAsOfDate(buildDate: string): string {
+  return useSyncExternalStore(noopSubscribe, todayStr, () => buildDate)
+}
 
 // 산재보험 업종 예시 (% 단위)
 const WORKERS_COMP_INDUSTRIES = [
@@ -41,60 +50,19 @@ const WORKERS_COMP_INDUSTRIES = [
 // 2026년 최저시급 (참고) — lib/krInsuranceRates 단일 소스 (고용노동부 고시 10,320원)
 const MIN_WAGE_2026 = MIN_HOURLY_WAGE[2026]
 
-// ─────────────────────────────────────────────
-// 핵심 계산
-// ─────────────────────────────────────────────
-type CalcInput = {
-  monthlySalary: number
-  taxFreeAmount: number
-  workersCompRate: number
-  companySize: 'under150' | 'under1000' | 'over1000'
-  year: 2025 | 2026
-}
-
-function calc4Insurance(input: CalcInput) {
-  const r = RATES[input.year]
-  const taxableSalary = Math.max(0, input.monthlySalary - input.taxFreeAmount)
-  const pensionBase = Math.min(Math.max(taxableSalary, r.pension.minBase), r.pension.maxBase)
-
-  const pensionEmp  = pensionBase * (r.pension.employee / 100)
-  const pensionEmpr = pensionBase * (r.pension.employer / 100)
-  const healthEmp   = taxableSalary * (r.health.employee / 100)
-  const healthEmpr  = taxableSalary * (r.health.employer / 100)
-  const ltcEmp      = taxableSalary * (r.ltc.employee / 100)
-  const ltcEmpr     = taxableSalary * (r.ltc.employer / 100)
-  const unempEmp    = taxableSalary * (r.unemp.employee / 100)
-  const unempEmpr   = taxableSalary * (r.unemp.employer / 100)
-  const unempExtra  = taxableSalary * (r.unemp.extra[input.companySize] / 100)
-  const workersEmpr = taxableSalary * (input.workersCompRate / 100)
-
-  const employeeTotal = pensionEmp + healthEmp + ltcEmp + unempEmp
-  const employerTotal = pensionEmpr + healthEmpr + ltcEmpr + unempEmpr + unempExtra + workersEmpr
-
-  return {
-    pensionEmp, pensionEmpr,
-    healthEmp,  healthEmpr,
-    ltcEmp,     ltcEmpr,
-    unempEmp,   unempEmpr: unempEmpr + unempExtra,
-    workersEmp: 0, workersEmpr,
-    employeeTotal,
-    employerTotal,
-    grandTotal: employeeTotal + employerTotal,
-    netSalary: input.monthlySalary - employeeTotal,
-    companyTotalCost: input.monthlySalary + employerTotal,
-    pensionBase,
-    isPensionMinApplied: taxableSalary < r.pension.minBase,
-    isPensionMaxApplied: taxableSalary > r.pension.maxBase,
-    rates: r,
-  }
-}
+// 핵심 계산: ./fourInsuranceUtils.ts (calc4Insurance — 골든 테스트 대상)
 
 // ─────────────────────────────────────────────
 // 컴포넌트
 // ─────────────────────────────────────────────
-export default function FourInsuranceClient() {
+export default function FourInsuranceClient({ buildDate }: { buildDate?: string }) {
   const [tab, setTab] = useState<'employee' | 'employer' | 'partTime' | 'freelance'>('employee')
   const [year, setYear] = useState<2025 | 2026>(2026)
+  const asOf = useAsOfDate(buildDate ?? todayStr())
+  const { pensionPeriod, pensionPrev, pensionLabel } = useMemo(() => {
+    const p = pensionBaseForYear(year, asOf)
+    return { pensionPeriod: p, pensionPrev: previousPensionBase(p), pensionLabel: pensionBasePeriodLabel(p) }
+  }, [year, asOf])
 
   // ── TAB 1 ─
   const [salary, setSalary] = useState<string>('3,000,000')
@@ -129,7 +97,8 @@ export default function FourInsuranceClient() {
     workersCompRate: 0,
     companySize: 'under150',
     year,
-  }), [salary, taxFree, year])
+    pensionPeriod,
+  }), [salary, taxFree, year, pensionPeriod])
 
   // ─────────────────────────────────────────────
   // TAB 2 계산
@@ -147,7 +116,8 @@ export default function FourInsuranceClient() {
     workersCompRate: totalWorkersRate,
     companySize,
     year,
-  }), [empSalary, empTaxFree, totalWorkersRate, companySize, year])
+    pensionPeriod,
+  }), [empSalary, empTaxFree, totalWorkersRate, companySize, year, pensionPeriod])
 
   const headN = Math.max(1, parseInt(headCount, 10) || 1)
   const annualPerEmployee = employerCalc.companyTotalCost * 12 + parseComma(bonus)
@@ -180,6 +150,7 @@ export default function FourInsuranceClient() {
       workersCompRate: 0,
       companySize: 'under150',
       year,
+      pensionPeriod,
     })
     // 월 60시간 미만이면 국민·건강·고용 가입 의무가 없어 근로자 공제 0 (산재는 사업주 부담)
     const employeeDeduction = isOver60h ? calc.employeeTotal : 0
@@ -198,7 +169,7 @@ export default function FourInsuranceClient() {
         net: monthlySalary,
       },
     }
-  }, [hourlyWage, weekHours, year])
+  }, [hourlyWage, weekHours, year, pensionPeriod])
 
   // ─────────────────────────────────────────────
   // TAB 4 계산
@@ -215,6 +186,7 @@ export default function FourInsuranceClient() {
       workersCompRate: 0,
       companySize: 'under150',
       year,
+      pensionPeriod,
     })
     const empNet = empResult.netSalary
 
@@ -227,7 +199,7 @@ export default function FourInsuranceClient() {
       diffNet: flNet - empNet,
       diffCompanyCost: empResult.companyTotalCost - amt,
     }
-  }, [flAmount, flTaxFree, year])
+  }, [flAmount, flTaxFree, year, pensionPeriod])
 
   // ─────────────────────────────────────────────
   // 복사
@@ -287,7 +259,7 @@ export default function FourInsuranceClient() {
     try {
       await navigator.clipboard.writeText(text)
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -399,8 +371,9 @@ export default function FourInsuranceClient() {
                 <div className={s.pensionCapNote}>
                   📌 국민연금 기준소득월액 <strong>{empCalc.isPensionMinApplied ? '하한' : '상한'}</strong> 적용 — 실제 보수
                   {empCalc.isPensionMinApplied
-                    ? ` ${fmtKRW(parseComma(salary) - parseComma(taxFree))} → 하한 ${fmtKRW(empCalc.rates.pension.minBase)} 기준 부과`
-                    : ` ${fmtKRW(parseComma(salary) - parseComma(taxFree))} → 상한 ${fmtKRW(empCalc.rates.pension.maxBase)} 기준 부과`}
+                    ? ` ${fmtKRW(parseComma(salary) - parseComma(taxFree))} → 하한 ${fmtKRW(empCalc.pensionPeriod.min)} 기준 부과`
+                    : ` ${fmtKRW(parseComma(salary) - parseComma(taxFree))} → 상한 ${fmtKRW(empCalc.pensionPeriod.max)} 기준 부과`}
+                  {` (${pensionLabel} 적용)`}
                 </div>
               )}
             </div>
@@ -415,8 +388,8 @@ export default function FourInsuranceClient() {
                 <li>국민연금 <strong>9% → 9.5%</strong> (0.5%p ↑, 1998년 이후 28년 만의 인상)</li>
                 <li>건강보험 <strong>7.09% → 7.19%</strong> (0.1%p ↑)</li>
                 <li>장기요양 <strong>0.9182% → 0.9448%</strong> (2.9% ↑)</li>
-                <li>국민연금 기준소득월액 상한 <strong>617만 → 637만원</strong></li>
-                <li>국민연금 기준소득월액 하한 <strong>39만 → 40만원</strong></li>
+                <li>국민연금 기준소득월액 상한 <strong>{pensionPrev ? `${man(pensionPrev.max)} → ` : ''}{man(pensionPeriod.max)}원</strong> ({pensionLabel} · 매년 7월 조정)</li>
+                <li>국민연금 기준소득월액 하한 <strong>{pensionPrev ? `${man(pensionPrev.min)} → ` : ''}{man(pensionPeriod.min)}원</strong></li>
               </ul>
             </div>
           )}

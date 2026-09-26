@@ -1,5 +1,9 @@
 /* 경매 비용 계산기 — 데이터·계산 유틸 */
 
+import {
+  calcHouseAcquisitionTax, calcNonHouseAcquisitionTax, type AcqTaxBreakdown,
+} from '@/lib/krAcquisitionTax'
+
 export type PropertyType = 'apt' | 'villa' | 'house' | 'office' | 'shop' | 'land'
 export type OwnerType = 'live1' | 'own1' | 'multi2' | 'multi3' | 'corp'
 export type Region = 'normal' | 'adjusted' | 'speculative'
@@ -46,79 +50,54 @@ export const getOwner = (id: OwnerType) => OWNERS.find((o) => o.id === id)!
 export interface RegionMeta {
   id: Region
   label: string
-  surcharge: number   // 다주택 가산세 (조정대상 +4%, 투기과열 +4%)
 }
 
+/* 취득세 중과 판단에는 '조정대상지역' 여부만 쓰인다 (지방세법 §13의2). 투기과열지구는 조정대상지역으로 함께 지정됨 */
 export const REGIONS: RegionMeta[] = [
-  { id: 'normal',     label: '비규제지역',     surcharge: 0  },
-  { id: 'adjusted',   label: '조정대상지역',    surcharge: 4  },
-  { id: 'speculative', label: '투기과열지구',   surcharge: 4  },
+  { id: 'normal',     label: '비규제지역' },
+  { id: 'adjusted',   label: '조정대상지역' },
+  { id: 'speculative', label: '투기과열지구' },
 ]
 
 /* ─────────────────────────────────────────────
-   취득세 계산 (2025~2026 일반 가이드)
-   세율 = 취득세 + 지방교육세 통합 (전용 85㎡ 이하 기준, 농특세 제외)
-   ※ 85㎡ 초과 주택은 농어촌특별세 추가: 1주택 +0.2%p,
-     중과 8%대 +0.6%p, 12%대 +1.0%p — 본 도구는 ≤85㎡ 기준
+   취득세 — 단일 소스 lib/krAcquisitionTax.ts (지방세법 §11·§13의2, 지방교육세 §151, 농특세)
+   이 도구는 전용면적을 묻지 않으므로 **전용 85㎡ 이하**(농어촌특별세 비과세)로 계산한다.
+   · 1주택: 1~3% + 지방교육세(취득세율의 10%) → 1.1~3.3% (6~9억은 0.01%p 단위 반올림 세율)
+   · 1주택 보유 → 2주택: 비조정 표준세율 / 조정·투기과열 8% + 0.4% (일시적 2주택 특례는 미반영 — 해당 시 '실거주 1주택'과 같음)
+   · 2주택 → 3주택: 비조정 8.4% / 조정 12.4%   · 4주택+·법인: 12.4%
+   · 오피스텔·상가·토지(비주택): 4% + 교육세 0.4% + 농특세 0.2% = 4.6%
    ───────────────────────────────────────────── */
 
-/**
- * 취득세 자동 계산 (만원 단위 입력 → 세액 만원 반환)
- * 1주택 (실거주):
- *  - 6억 이하: 1.1%
- *  - 6~9억:   1.1~3.3% (선형)
- *  - 9억 초과: 3.3%
- * 2주택: 8.4% (조정 +4 = 12.4%) — 취득세 8% + 지방교육세 0.4%
- * 3주택+: 12.4% (조정 무관) — 취득세 12% + 지방교육세 0.4%
- * 법인: 12.4% (전 지역)
- * 오피스텔·상가·토지: 4.6%
- */
-/** 1주택 통합 취득세율(지방교육세 포함, 소수). 6~9억은 선형 1.1~3.3% */
-function oneHouseRate(priceEok: number): number {
-  if (priceEok <= 6) return 0.011
-  // 6~9억: 취득세율 = 가액(억)×2/3 − 3 (1~3%) → 지방교육세 포함 ×1.1
-  if (priceEok <= 9) return ((priceEok * 2) / 3 - 3) * 1.1 / 100
-  return 0.033
+const OWNER_HOME_COUNT: Record<Exclude<OwnerType, 'corp'>, number> = {
+  live1: 1, own1: 2, multi2: 3, multi3: 4,
 }
 
+/** 취득세 세목별 내역 (만원 입력 → 원 단위 내역) */
+export function acquisitionTaxBreakdown(
+  priceMan: number,
+  property: PropertyType,
+  owner: OwnerType,
+  region: Region,
+): AcqTaxBreakdown {
+  const priceWon = Math.max(0, priceMan) * 10_000
+  if (!getProperty(property).isHouse) return calcNonHouseAcquisitionTax(priceWon)
+  return calcHouseAcquisitionTax({
+    price: priceWon,
+    homeCount: owner === 'corp' ? 1 : OWNER_HOME_COUNT[owner],
+    corporate: owner === 'corp',
+    adjusted: region !== 'normal',   // 투기과열지구는 조정대상지역과 함께 지정됨
+    over85: false,
+  })
+}
+
+/** 취득세 + 지방교육세 (+ 비주택 농특세) 합계 — 만원 */
 export function calcAcquisitionTax(
   priceMan: number,
   property: PropertyType,
   owner: OwnerType,
   region: Region,
 ): number {
-  const meta = getProperty(property)
-  const priceEok = priceMan / 10000 // 억원 단위
-
-  /* 비주택은 단일 세율 4.6% */
-  if (!meta.isHouse) {
-    return priceMan * 0.046
-  }
-
-  /* 법인은 12.4% (취득세 12% + 지방교육세 0.4%) */
-  if (owner === 'corp') {
-    return priceMan * 0.124
-  }
-
-  /* 다주택 가산 (지방교육세 0.4%p 포함) */
-  const regionMeta = REGIONS.find((r) => r.id === region)!
-  if (owner === 'multi3') {
-    return priceMan * 0.124  // 4주택+ 조정 무관 12% + 지방교육세 0.4%
-  }
-  if (owner === 'multi2') {
-    const baseRate = 8 + regionMeta.surcharge + 0.4  // 비조정 8.4 / 조정 12.4
-    return priceMan * (baseRate / 100)
-  }
-  if (owner === 'own1') {
-    /* 1주택 → 2주택: 조정대상이면 8.4%, 비규제면 일반 1주택 세율 */
-    if (region === 'normal') {
-      return priceMan * oneHouseRate(priceEok)
-    }
-    return priceMan * 0.084
-  }
-
-  /* 실거주 1주택 (live1) */
-  return priceMan * oneHouseRate(priceEok)
+  return acquisitionTaxBreakdown(priceMan, property, owner, region).total / 10_000
 }
 
 /** 취득세율 % 조회 (UI 표시용) */
