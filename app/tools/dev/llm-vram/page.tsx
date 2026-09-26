@@ -34,15 +34,15 @@ const FAQ_LD = [
   },
   {
     q: '8GB GPU로는 어떤 모델까지 가능한가요?',
-    a: '<strong>7~8B급 Q4_K_M(가중치 약 4.7~4.9GB)</strong>이 현실적인 상한입니다. 짧은 컨텍스트(4~8K)라면 여유 있게 돌고, 32K 이상 긴 컨텍스트는 KV 캐시를 Q8_0으로 양자화하면 가능해요. 12~14B는 Q3 계열로 내려야 해서 품질 타협이 필요합니다. 위 계산기에서 GPU를 선택하면 양자화별 판정을 한눈에 볼 수 있어요.',
+    a: '<strong>7~8B급 Q4_K_M(가중치 약 4.7~4.9GB)</strong>이 현실적인 상한입니다. 이 계산기 기준으로 컨텍스트 4K면 여유(약 7.5GB), 8K면 빠듯(약 8.0GB)합니다. 32K 이상은 KV 캐시를 Q8_0으로 줄여도 Q4_K_M은 8GB를 넘으므로, Q3_K_M으로 내리거나 컨텍스트를 줄여야 빠듯하게 들어가요. 12~14B는 Q2_K에 짧은 컨텍스트일 때만 겨우 들어가고 품질 손실이 큽니다. 위 계산기에서 GPU를 선택하면 양자화별 판정을 한눈에 볼 수 있어요.',
   },
   {
     q: '70B 모델을 로컬에서 돌릴 수 있나요?',
-    a: 'Q4_K_M 기준 가중치만 <strong>약 42.5GB</strong>라 단일 소비자 GPU(최대 32GB)로는 불가능합니다. 현실적인 방법은 ① 24GB×2 등 <strong>멀티 GPU</strong>, ② <strong>Mac 통합메모리 64GB 이상</strong>(GPU 가용 약 48GB), ③ Q2_K(약 26GB)로 낮춰 32GB급에서 구동 — 단 품질 저하 감수. CPU 오프로딩도 가능하지만 속도가 크게 떨어집니다.',
+    a: 'Q4_K_M 기준 가중치만 <strong>약 42.5GB</strong>라 단일 소비자 GPU(최대 32GB)로는 불가능합니다. 현실적인 방법은 ① 24GB×2 등 <strong>멀티 GPU</strong>, ② <strong>Mac 통합메모리 64GB 이상</strong>(GPU 가용 48GiB, 10진 단위로 약 51.5GB), ③ Q2_K(약 26GB)로 낮춰 32GB급에서 구동 — 단 품질 저하 감수. CPU 오프로딩도 가능하지만 속도가 크게 떨어집니다.',
   },
   {
-    q: 'Mac 통합메모리는 왜 75%만 계산하나요?',
-    a: 'macOS의 Metal은 기본적으로 <strong>통합메모리의 약 75%까지만 GPU 작업 영역</strong>으로 허용합니다(recommendedMaxWorkingSetSize, 소용량 기기는 65~70% 수준). 예를 들어 32GB Mac이면 GPU 가용은 약 24GB예요. <code>sysctl iogpu.wired_limit_mb</code>로 상한을 올릴 수 있지만 시스템용 메모리를 침범하므로 OS·앱용 여유를 남겨두는 게 안전합니다.',
+    q: 'Mac 통합메모리는 왜 일부만 계산하나요?',
+    a: 'macOS의 Metal은 기본적으로 <strong>통합메모리의 일부만 GPU 작업 영역</strong>으로 허용합니다(recommendedMaxWorkingSetSize). 관측치로는 36GB 이하 기기는 약 2/3, 그보다 큰 기기는 약 75%라서 이 계산기도 그렇게 잡습니다. 예를 들어 32GB Mac이면 GPU 가용은 약 21.3GiB(10진 단위로 약 22.9GB), 64GB Mac이면 48GiB(약 51.5GB)예요. 계산기는 필요량과 같은 10진 GB로 바꿔 비교합니다. <code>sysctl iogpu.wired_limit_mb</code>로 상한을 올릴 수 있지만 시스템용 메모리를 침범하므로 OS·앱용 여유를 남겨두는 게 안전합니다.',
   },
   {
     q: 'KV 캐시 양자화(Q8_0·Q4_0)는 써도 되나요?',
@@ -50,7 +50,7 @@ const FAQ_LD = [
   },
   {
     q: 'Gemma 3는 왜 KV 캐시가 유난히 작게 나오나요?',
-    a: 'Gemma 3는 <strong>슬라이딩 윈도 어텐션(SWA)</strong> 구조로, 6개 레이어 중 5개는 최근 1,024토큰만 보고 1개만 전체 컨텍스트를 봅니다. 그래서 일반 공식으로 계산하면 5~6배 과대 추정돼요(27B 128K 기준 나이브 66GB vs 실제 약 12GB). 이 계산기는 llama.cpp의 iSWA 구현 기준으로 글로벌/로컬 레이어를 분리 계산합니다.',
+    a: 'Gemma 3는 <strong>슬라이딩 윈도 어텐션(SWA)</strong> 구조로, 6개 레이어 중 5개는 최근 1,024토큰만 보고 1개만 전체 컨텍스트를 봅니다. 그래서 일반 공식으로 계산하면 5~6배 과대 추정돼요(27B 128K 기준 나이브 약 67GB vs 실제 약 11GB). 이 계산기는 llama.cpp의 iSWA 구현 기준으로 글로벌/로컬 레이어를 분리 계산합니다.',
   },
 ]
 
@@ -62,11 +62,11 @@ type MatrixCell = [quant: string, size: string, tight?: boolean] | null
 const GPU_MATRIX: { gpu: string; cells: MatrixCell[] }[] = [
   { gpu: 'RTX 4060 (8GB)', cells: [['Q3_K_M', '7.1GB'], null, null, null, null, null] },
   { gpu: 'RTX 4070 (12GB)', cells: [['Q8_0', '11.6GB', true], ['Q3_K_M', '10.7GB'], null, null, null, null] },
-  { gpu: 'RTX 4080 / 5080 (16GB)', cells: [['Q8_0', '11.6GB'], ['Q6_K', '15.5GB', true], ['Q3_K_M', '15.1GB'], null, ['Q2_K', '14.0GB'], null] },
-  { gpu: 'RTX 4090 / 3090 (24GB)', cells: [['F16', '19.1GB'], ['Q8_0', '19.1GB'], ['Q6_K', '22.7GB'], ['Q3_K_M', '20.5GB'], ['Q5_K_M', '22.7GB'], null] },
+  { gpu: 'RTX 4080 / 5080 (16GB)', cells: [['Q8_0', '11.6GB'], ['Q6_K', '15.5GB', true], ['Q3_K_M', '15.1GB'], null, ['Q2_K', '13.9GB'], null] },
+  { gpu: 'RTX 4090 / 3090 (24GB)', cells: [['F16', '19.1GB'], ['Q8_0', '19.1GB'], ['Q6_K', '22.7GB'], ['Q3_K_M', '20.5GB'], ['Q5_K_M', '22.6GB'], null] },
   { gpu: 'RTX 5090 (32GB)', cells: [['F16', '19.1GB'], ['Q8_0', '19.1GB'], ['Q8_0', '28.4GB'], ['Q6_K', '31.1GB', true], ['Q6_K', '25.6GB'], null] },
-  { gpu: 'Mac 32GB (가용 24GB)', cells: [['F16', '19.1GB'], ['Q8_0', '19.1GB'], ['Q6_K', '22.7GB'], ['Q3_K_M', '20.5GB'], ['Q5_K_M', '22.7GB'], null] },
-  { gpu: 'Mac 64GB (가용 48GB)', cells: [['F16', '19.1GB'], ['F16', '32.9GB'], ['Q8_0', '28.4GB'], ['Q8_0', '39.0GB'], ['Q8_0', '32.3GB'], ['Q3_K_M', '39.9GB']] },
+  { gpu: 'Mac 32GB (가용 약 21.3GiB≈22.9GB)', cells: [['F16', '19.1GB'], ['Q8_0', '19.1GB'], ['Q5_K_M', '20.2GB'], ['Q3_K_M', '20.5GB'], ['Q4_K_M', '19.9GB'], null] },
+  { gpu: 'Mac 64GB (가용 48GiB≈51.5GB)', cells: [['F16', '19.1GB'], ['F16', '32.9GB'], ['Q8_0', '28.4GB'], ['Q8_0', '39.0GB'], ['Q8_0', '32.2GB'], ['Q3_K_M', '39.9GB']] },
 ]
 
 /** Llama 3.1 8B · Q4_K_M · KV F16 — 컨텍스트별 KV/총량 (KV 비중은 두 값의 비) */
@@ -82,7 +82,7 @@ const Q4_ROWS = [
   ['Llama 3.1 8B', '4.9GB', '1.07GB', '2.0GB', '8.0GB'],
   ['Qwen3 14B', '9.1GB', '1.34GB', '2.0GB', '12.4GB'],
   ['Mistral Small 3 24B', '14.4GB', '1.34GB', '2.0GB', '17.8GB'],
-  ['Gemma 3 27B', '16.8GB', '1.17GB', '2.0GB', '19.9GB'],
+  ['Gemma 3 27B', '16.8GB', '1.11GB', '2.0GB', '19.9GB'],
   ['Qwen3 32B', '20.1GB', '2.15GB', '2.0GB', '24.2GB'],
   ['Llama 3.3 70B', '43.2GB', '2.68GB', '2.0GB', '47.9GB'],
 ]
@@ -224,12 +224,12 @@ export default function LlmVramPage() {
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.75 }}>
             ※ <strong style={{ color: 'var(--text)' }}>—</strong> 는 8K 컨텍스트에서 92% 기준을 통과하는 양자화가 하나도 없다는 뜻 — 해당 GPU 단독으로는 어렵고 멀티 GPU·CPU 오프로딩·통합메모리를 검토해야 합니다.
             <strong style={{ color: 'var(--text)' }}> †</strong> 는 같은 GiB 환산 기준으로 90%를 넘겨 위 계산기가 <strong style={{ color: 'var(--warning)' }}>&lsquo;빠듯&rsquo;</strong>으로 판정하는 조합이에요.
-            Mac은 Metal 기본 상한(통합메모리의 약 75%)을 가용 용량으로 잡았고, 총량에는 오버헤드 2.0GB가 포함돼 있습니다(공식 수치가 아닌 커뮤니티 관행치).
+            Mac은 Metal 기본 상한(통합메모리 36GB 이하 약 2/3, 그보다 크면 약 75%)을 가용 용량으로 잡았고, 총량에는 오버헤드 2.0GB가 포함돼 있습니다(공식 수치가 아닌 커뮤니티 관행치).
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             📌 <strong style={{ color: 'var(--text)' }}>읽는 법:</strong> <strong style={{ color: 'var(--accent-ink)' }}>24GB가 분수령</strong>입니다 — 8B는 F16 원본, 14B는 Q8_0, 24B·27B는 Q5~Q6까지 올라가요.
             16GB에서는 24B가 Q3_K_M, 27B가 Q2_K로 내려가 품질 타협이 시작되고, 32B를 Q6_K로 쓰려면 32GB가 필요합니다.
-            70B는 Mac 64GB(가용 48GB)의 Q3_K_M이 표에서 유일한 통과 조합이에요.
+            70B는 Mac 64GB(가용 48GiB≈51.5GB)의 Q3_K_M이 표에서 유일한 통과 조합이에요.
             8GB가 Q3_K_M인 것도 컨텍스트 8K를 잡았기 때문 — 4K로 줄이면 Q4_K_M(아래 표의 총 7.4GB)도 같은 기준을 통과합니다.
           </div>
         </section>

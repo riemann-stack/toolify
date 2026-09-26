@@ -4,9 +4,8 @@ import { useEffect, useMemo, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './tokenCounter.module.css'
 import {
-  MODELS, SAMPLES, VENDOR_COLOR,
-  countTokens, koreanRatio, estimateEnglishTokens,
-  type Vendor,
+  MODELS, SAMPLES, VENDOR_COLOR, PRICE_CHECKED, MAX_CONTEXT,
+  countTokens, koreanRatio, estimateEnglishTokens, priceFor, fmtContext,
 } from './tokenCounterData'
 
 const STORAGE_KEY = 'youtil_token_counter_v1'
@@ -30,28 +29,42 @@ const fmtKRW = (usd: number, rate = 1380) => {
   return `₩${Math.round(krw).toLocaleString('ko-KR')}`
 }
 const fmtTokens = (n: number) => n.toLocaleString('en-US')
+const MAX_CALLS = 10_000_000
+/* 호출 횟수 입력 문자열 → 숫자 (빈 값은 1회로 계산, 상한 클램프) */
+const parseCalls = (s: string) => {
+  const n = parseInt(s.replace(/[^0-9]/g, ''), 10)
+  return Number.isFinite(n) && n >= 1 ? Math.min(MAX_CALLS, n) : 1
+}
 
 export default function TokenCounterClient() {
   const [text, setText] = useState('')
-  const [bulkCalls, setBulkCalls] = useState(1)
+  /* 입력 중에는 빈 칸을 허용하기 위해 문자열로 보관 — 계산할 때만 1 이상으로 클램프 */
+  const [bulkInput, setBulkInput] = useState('1')
+  const bulkCalls = parseCalls(bulkInput)
   const [outputRatio, setOutputRatio] = useState(1.0)
 
   // localStorage
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (raw) {
-        const j = JSON.parse(raw)
+        const j: unknown = JSON.parse(raw)
+        const o = (j && typeof j === 'object' ? j : {}) as { text?: unknown; bulkCalls?: unknown; outputRatio?: unknown }
         // eslint-disable-next-line react-hooks/set-state-in-effect
-        if (typeof j.text === 'string') setText(j.text)
-        if (typeof j.bulkCalls === 'number') setBulkCalls(j.bulkCalls)
-        if (typeof j.outputRatio === 'number') setOutputRatio(j.outputRatio)
+        if (typeof o.text === 'string') setText(o.text)
+        if (typeof o.bulkCalls === 'number' && Number.isFinite(o.bulkCalls) && o.bulkCalls >= 1) {
+          setBulkInput(Math.min(MAX_CALLS, Math.floor(o.bulkCalls)).toLocaleString('en-US'))
+        }
+        const ratio = o.outputRatio
+        if (typeof ratio === 'number' && OUTPUT_RATIO_PRESETS.some((p) => p.ratio === ratio)) setOutputRatio(ratio)
       } else {
         setText(SAMPLES[0].text)  // 첫 방문 시 한국어 샘플
       }
     } catch { setText(SAMPLES[0].text) }
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ text, bulkCalls, outputRatio })) } catch {}
   }, [text, bulkCalls, outputRatio])
 
@@ -79,13 +92,13 @@ export default function TokenCounterClient() {
           { href: '/tools/dev/hash', label: '해시 생성기' },
         ]}
       >
-        토큰 수는 문자 분류 기반 휴리스틱 추정치입니다 — 실제 토크나이저와 ±10~20% 차이날 수 있어요. 정확한 청구 비용은 각 공급사 콘솔에서 확인하세요. 가격은 2026년 5월 기준 참고치이며 변동 가능.
+        토큰 수는 문자 분류 기반 휴리스틱 추정치입니다 — 실제 토크나이저와 ±10~20% 차이날 수 있어요. 정확한 청구 비용은 각 공급사 콘솔에서 확인하세요. 가격은 {PRICE_CHECKED}에 점검한 각 사 공개 표준 단가(대표 모델 일부)이며, 새 모델 출시·가격 변경이 잦으니 결제 전 공식 가격표를 확인하세요.
       </Disclaimer>
 
       {/* 입력 영역 */}
       <div className={s.card}>
         <div className={s.cardHead}>
-          <span className={s.cardLabel}>프롬프트 / 텍스트 입력</span>
+          <label htmlFor="tc-text" className={s.cardLabel}>프롬프트 / 텍스트 입력</label>
           <div className={s.sampleRow}>
             {SAMPLES.map((sm) => (
               <button key={sm.id} type="button" className={s.sampleBtn} onClick={() => setText(sm.text)}>
@@ -98,6 +111,7 @@ export default function TokenCounterClient() {
           </div>
         </div>
         <textarea
+          id="tc-text"
           className={s.textarea}
           value={text}
           onChange={(e) => setText(e.target.value)}
@@ -147,10 +161,11 @@ export default function TokenCounterClient() {
         <span className={s.cardLabel}>비용 계산 옵션</span>
         <div className={s.optRow}>
           <div className={s.optBlock}>
-            <label className={s.optLabel}>예상 출력 길이</label>
-            <div className={s.toggleRow}>
+            <span className={s.optLabel} id="tc-ratio-label">예상 출력 길이</span>
+            <div className={s.toggleRow} role="group" aria-labelledby="tc-ratio-label">
               {OUTPUT_RATIO_PRESETS.map((p) => (
-                <button key={p.id}
+                <button key={p.id} type="button"
+                  aria-pressed={outputRatio === p.ratio}
                   className={`${s.toggleBtn} ${outputRatio === p.ratio ? s.toggleActive : ''}`}
                   onClick={() => setOutputRatio(p.ratio)}>
                   <span>{p.label}</span>
@@ -161,21 +176,28 @@ export default function TokenCounterClient() {
             <p className={s.optHint}>입력 토큰 기준 배수 — 출력이 입력의 {outputRatio}배라고 가정</p>
           </div>
           <div className={s.optBlock}>
-            <label className={s.optLabel}>API 호출 횟수</label>
+            <label htmlFor="tc-bulk" className={s.optLabel}>API 호출 횟수</label>
             <div className={s.toggleRow}>
               {BULK_PRESETS.map((n) => (
-                <button key={n}
+                <button key={n} type="button"
+                  aria-pressed={bulkCalls === n}
                   className={`${s.toggleBtn} ${bulkCalls === n ? s.toggleActive : ''}`}
-                  onClick={() => setBulkCalls(n)}>
+                  onClick={() => setBulkInput(n.toLocaleString('en-US'))}>
                   {n.toLocaleString()}회
                 </button>
               ))}
             </div>
             <input
-              type="number" inputMode="decimal" min={1} max={10_000_000} step={1}
+              id="tc-bulk"
+              type="text" inputMode="numeric" autoComplete="off"
               className={s.bulkInput}
-              value={bulkCalls}
-              onChange={(e) => setBulkCalls(Math.max(1, Math.min(10_000_000, parseInt(e.target.value) || 1)))}
+              value={bulkInput}
+              placeholder="1"
+              onChange={(e) => {
+                const digits = e.target.value.replace(/[^0-9]/g, '').replace(/^0+/, '').slice(0, 8)
+                const n = digits ? Math.min(MAX_CALLS, parseInt(digits, 10)) : 0
+                setBulkInput(digits ? n.toLocaleString('en-US') : '')
+              }}
             />
           </div>
         </div>
@@ -193,8 +215,9 @@ export default function TokenCounterClient() {
             const inputTokens = cnt.tokens
             const outputTokens = Math.ceil(inputTokens * outputRatio)
             const ctxUsed = inputTokens / m.contextWindow
-            const inputCost = (inputTokens / 1_000_000) * m.inputPricePerM * bulkCalls
-            const outputCost = (outputTokens / 1_000_000) * m.outputPricePerM * bulkCalls
+            const price = priceFor(m, inputTokens)
+            const inputCost = (inputTokens / 1_000_000) * price.input * bulkCalls
+            const outputCost = (outputTokens / 1_000_000) * price.output * bulkCalls
             const total = inputCost + outputCost
             return (
               <div key={m.id} className={s.modelCard} style={{ borderTopColor: VENDOR_COLOR[m.vendor] }}>
@@ -220,17 +243,17 @@ export default function TokenCounterClient() {
                       }} />
                   </div>
                   <div className={s.ctxLabel}>
-                    컨텍스트 {(ctxUsed * 100).toFixed(ctxUsed < 0.01 ? 4 : 2)}% · 한도 {(m.contextWindow / 1000).toLocaleString()}K
+                    컨텍스트 {(ctxUsed * 100).toFixed(ctxUsed < 0.01 ? 4 : 2)}% · 한도 {fmtContext(m.contextWindow)}
                   </div>
                 </div>
 
                 <div className={s.priceBlock}>
                   <div className={s.priceRow}>
-                    <span>입력 {fmtUSD(m.inputPricePerM)}/M</span>
+                    <span>입력 {fmtUSD(price.input)}/M</span>
                     <strong>{fmtUSD(inputCost)}</strong>
                   </div>
                   <div className={s.priceRow}>
-                    <span>출력 {fmtUSD(m.outputPricePerM)}/M</span>
+                    <span>출력 {fmtUSD(price.output)}/M</span>
                     <strong>{fmtUSD(outputCost)}</strong>
                   </div>
                   <div className={`${s.priceRow} ${s.priceTotal}`}>
@@ -262,18 +285,18 @@ export default function TokenCounterClient() {
                   <span
                     className={s.ctxMeterFill}
                     style={{
-                      width: `${Math.min(100, (m.contextWindow / 2_000_000) * 100)}%`,
+                      width: `${Math.min(100, (m.contextWindow / MAX_CONTEXT) * 100)}%`,
                       background: VENDOR_COLOR[m.vendor],
                     }}
                   />
                 </span>
               </span>
-              <span className={s.ctxNum}>{(m.contextWindow / 1000).toLocaleString()}K</span>
+              <span className={s.ctxNum}>{fmtContext(m.contextWindow)}</span>
             </div>
           ))}
         </div>
         <p className={s.note}>
-          ⓘ 위 그래프는 2M 토큰 기준 상대 길이. <strong>1K = 약 750단어 영문 / 약 400자 한국어</strong> (추정).
+          ⓘ 위 그래프는 가장 긴 한도({fmtContext(MAX_CONTEXT)}) 기준 상대 길이. <strong>1K 토큰 ≈ 영문 약 750단어 / 한국어 약 650자(Claude)~1,000자(GPT·Gemini)</strong> — 이 도구 가중치로 본 추정.
         </p>
       </div>
     </div>

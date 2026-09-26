@@ -2,6 +2,7 @@
 
 import { useMemo, useRef, useState } from 'react'
 import s from '../dev.module.css'
+import { decodeB64, bytesToHex, tryDecodeEucKr, fmtTimestamp, fmtDuration, isJwtExpired } from './base64Utils'
 
 // ─────────────────────────────────────────────
 // 인코딩 함수
@@ -15,32 +16,12 @@ function strToB64(text: string, urlSafe = false): string {
   }
 }
 function b64ToStr(b64: string, urlSafe = false): string | null {
-  try {
-    let cleaned = b64.trim().replace(/\s/g, '')
-    if (urlSafe) cleaned = cleaned.replace(/-/g, '+').replace(/_/g, '/')
-    while (cleaned.length % 4 !== 0) cleaned += '='
-    return decodeURIComponent(escape(atob(cleaned)))
-  } catch {
-    return null
-  }
+  const r = decodeB64(b64, urlSafe)
+  return r.ok ? r.text : null
 }
 function strToHex(text: string): string {
   const bytes = new TextEncoder().encode(text)
   return Array.from(bytes).map(b => b.toString(16).padStart(2, '0')).join('')
-}
-function hexToStr(hex: string): string | null {
-  try {
-    const cleaned = hex.replace(/[\s,0x]/gi, '').toLowerCase()
-    if (cleaned.length === 0 || cleaned.length % 2 !== 0) return null
-    if (!/^[0-9a-f]+$/.test(cleaned)) return null
-    const bytes = new Uint8Array(cleaned.length / 2)
-    for (let i = 0; i < cleaned.length; i += 2) {
-      bytes[i / 2] = parseInt(cleaned.substr(i, 2), 16)
-    }
-    return new TextDecoder().decode(bytes)
-  } catch {
-    return null
-  }
 }
 function strToBin(text: string): string {
   const bytes = new TextEncoder().encode(text)
@@ -77,13 +58,6 @@ function decodeJwt(token: string): JwtParts | null {
   }
 }
 
-// 타임스탬프 포맷
-function fmtTimestamp(ts: number): string {
-  if (!ts) return '-'
-  const d = new Date(ts * 1000)
-  return d.toLocaleString('ko-KR')
-}
-
 // ─────────────────────────────────────────────
 // 컴포넌트
 // ─────────────────────────────────────────────
@@ -113,16 +87,42 @@ export default function Base64Client() {
   // ─────────────────────────────────────────────
   // TEXT 탭 — 출력
   // ─────────────────────────────────────────────
-  const textOutput = useMemo(() => {
-    if (input.trim() === '') return { value: '', error: '' }
+  const textOutput = useMemo((): { value: string; error: string; binary: Uint8Array | null } => {
+    if (input.trim() === '') return { value: '', error: '', binary: null }
     if (mode === 'encode') {
       const v = strToB64(input, urlSafe)
-      return { value: v, error: v ? '' : '인코딩 실패' }
+      return { value: v, error: v ? '' : '인코딩 실패', binary: null }
     } else {
-      const v = b64ToStr(input, urlSafe)
-      return { value: v ?? '', error: v === null ? '디코딩 실패: 유효한 Base64가 아닙니다' : '' }
+      const r = decodeB64(input, urlSafe)
+      if (r.ok) return { value: r.text, error: '', binary: null }
+      if (r.reason === 'not-utf8') return { value: '', error: '', binary: r.bytes }
+      return {
+        value: '',
+        error: urlSafe || !/[-_]/.test(input)
+          ? '디코딩 실패: 유효한 Base64가 아닙니다'
+          : '디코딩 실패: -·_ 문자가 있습니다. URL-safe 모드를 켜 보세요',
+        binary: null,
+      }
     }
   }, [input, mode, urlSafe])
+
+  // 바이너리 디코딩 결과 — hex 미리보기와 EUC-KR 해석 시도
+  const binaryInfo = useMemo(() => {
+    const bytes = textOutput.binary
+    if (!bytes) return null
+    return { size: bytes.length, hex: bytesToHex(bytes, 4096), truncated: bytes.length > 4096, eucKr: tryDecodeEucKr(bytes) }
+  }, [textOutput.binary])
+
+  function downloadBinary() {
+    const bytes = textOutput.binary
+    if (!bytes) return
+    const url = URL.createObjectURL(new Blob([bytes.slice()], { type: 'application/octet-stream' }))
+    const a = document.createElement('a')
+    a.href = url
+    a.download = 'decoded.bin'
+    a.click()
+    setTimeout(() => URL.revokeObjectURL(url), 1000)
+  }
 
   // 사이즈 분석 (텍스트 인코딩 시)
   const sizeAnalysis = useMemo(() => {
@@ -185,7 +185,7 @@ export default function Base64Client() {
     const now = Math.floor(Date.now() / 1000)
     return {
       exp, iat,
-      isExpired: exp !== null && exp < now,
+      isExpired: exp !== null && isJwtExpired(exp, now),
       remainingSec: exp !== null ? exp - now : null,
     }
   }, [jwtData])
@@ -208,11 +208,15 @@ export default function Base64Client() {
   // ─────────────────────────────────────────────
   // 복사 헬퍼
   // ─────────────────────────────────────────────
-  function copyValue(value: string, key: string) {
+  async function copyValue(value: string, key: string) {
     if (!value) return
-    navigator.clipboard.writeText(value)
+    try {
+      await navigator.clipboard.writeText(value)
+    } catch {
+      return // 권한 거부 등 — 복사되지 않았으므로 '복사됨'을 띄우지 않음
+    }
     setCopied(key)
-    setTimeout(() => setCopied(''), 1200)
+    setTimeout(() => setCopied(''), 1500)
   }
 
   function fmtBytes(bytes: number): string {
@@ -247,8 +251,9 @@ export default function Base64Client() {
           </div>
 
           <div className={s.card}>
-            <label className={s.cardLabel}>{mode === 'encode' ? '원문 텍스트' : 'Base64 문자열'}</label>
+            <label className={s.cardLabel} htmlFor="b64-text-input">{mode === 'encode' ? '원문 텍스트' : 'Base64 문자열'}</label>
             <textarea
+              id="b64-text-input"
               className={s.textarea}
               placeholder={mode === 'encode' ? '인코딩할 텍스트를 입력하세요...' : 'Base64 문자열을 입력하세요...'}
               value={input}
@@ -274,13 +279,39 @@ export default function Base64Client() {
                 </button>
               )}
             </div>
-            <div className={`${s.outputBox} ${textOutput.error ? s.outputError : ''}`}>
+            <div className={`${s.outputBox} ${textOutput.error ? s.outputError : ''}`} role="status">
               {textOutput.error
                 ? <span style={{ color: '#DC2626' }}>⚠️ {textOutput.error}</span>
-                : (textOutput.value || <span className={s.outputPlaceholder}>결과가 여기에 표시됩니다</span>)
+                : binaryInfo
+                  ? <span style={{ color: 'var(--warning)' }}>유효한 Base64지만 UTF-8 텍스트가 아닙니다 ({binaryInfo.size.toLocaleString()}바이트 바이너리). 아래 HEX로 확인하거나 파일로 저장하세요.</span>
+                  : (textOutput.value || <span className={s.outputPlaceholder}>결과가 여기에 표시됩니다</span>)
               }
             </div>
           </div>
+
+          {/* 바이너리 디코딩 결과 (이미지·압축 파일·EUC-KR 텍스트 등) */}
+          {binaryInfo && (
+            <div className={s.card}>
+              <div className={s.cardTop}>
+                <label className={s.cardLabel}>
+                  HEX ({binaryInfo.truncated ? '앞 4,096바이트' : `${binaryInfo.size.toLocaleString()}바이트`})
+                </label>
+                <div style={{ display: 'flex', gap: 6 }}>
+                  <button className={s.copyBtn} onClick={() => copyValue(binaryInfo.hex, 'binHex')}>
+                    {copied === 'binHex' ? '✓ 복사됨' : '복사'}
+                  </button>
+                  <button className={s.clearBtn} onClick={downloadBinary}>파일로 저장</button>
+                </div>
+              </div>
+              <div className={s.outputSmall}>{binaryInfo.hex}</div>
+              {binaryInfo.eucKr && (
+                <>
+                  <p className={s.cardLabel} style={{ marginTop: 12 }}>EUC-KR(CP949)로 해석한 텍스트</p>
+                  <div className={s.outputSmall}>{binaryInfo.eucKr}</div>
+                </>
+              )}
+            </div>
+          )}
 
           {/* 사이즈 분석 */}
           {sizeAnalysis && (
@@ -346,23 +377,23 @@ export default function Base64Client() {
               {/* Base64 출력 */}
               <div className={s.card}>
                 <div className={s.cardTop}>
-                  <label className={s.cardLabel}>Base64 (순수)</label>
+                  <label className={s.cardLabel} htmlFor="b64-file-out">Base64 (순수)</label>
                   <button className={s.copyBtn} onClick={() => copyValue(fileB64, 'fileB64')}>
                     {copied === 'fileB64' ? '✓ 복사됨' : '복사'}
                   </button>
                 </div>
-                <textarea className={s.textarea} value={fileB64} readOnly rows={6} />
+                <textarea id="b64-file-out" className={s.textarea} value={fileB64} readOnly rows={6} />
               </div>
 
               {/* Data URI 출력 */}
               <div className={s.card}>
                 <div className={s.cardTop}>
-                  <label className={s.cardLabel}>Data URI (HTML/CSS 사용)</label>
+                  <label className={s.cardLabel} htmlFor="b64-datauri-out">Data URI (HTML/CSS 사용)</label>
                   <button className={s.copyBtn} onClick={() => copyValue(dataUri, 'dataUri')}>
                     {copied === 'dataUri' ? '✓ 복사됨' : '복사'}
                   </button>
                 </div>
-                <textarea className={s.textarea} value={dataUri} readOnly rows={6} />
+                <textarea id="b64-datauri-out" className={s.textarea} value={dataUri} readOnly rows={6} />
                 <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
                   💡 사용 예시: <code style={{ background: 'var(--bg3)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>{`<img src="${dataUri.slice(0, 40)}...">`}</code>
                 </p>
@@ -377,10 +408,11 @@ export default function Base64Client() {
         <>
           <div className={s.card}>
             <div className={s.cardTop}>
-              <label className={s.cardLabel}>JWT 토큰 입력</label>
+              <label className={s.cardLabel} htmlFor="b64-jwt-input">JWT 토큰 입력</label>
               {jwtToken && <button className={s.clearBtn} onClick={() => setJwtToken('')}>지우기</button>}
             </div>
             <textarea
+              id="b64-jwt-input"
               className={s.textarea}
               placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJzdWIiOiIxMjM0NTY3ODkwIiwibmFtZSI6IkpvaG4gRG9lIiwiaWF0IjoxNTE2MjM5MDIyfQ.SflKxwRJSMeKKF2QT4fwpMeJf36POk6yJV_adQssw5c"
               value={jwtToken}
@@ -418,29 +450,29 @@ export default function Base64Client() {
               </div>
 
               {/* 만료 정보 */}
-              {jwtExpInfo && (jwtExpInfo.exp || jwtExpInfo.iat) && (
+              {jwtExpInfo && (jwtExpInfo.exp != null || jwtExpInfo.iat != null) && (
                 <div className={s.card}>
                   <div className={s.cardTop}>
                     <label className={s.cardLabel}>시간 클레임 분석</label>
                   </div>
-                  {jwtExpInfo.iat && (
+                  {jwtExpInfo.iat != null && (
                     <div className={s.sizeRow}>
                       <span>iat (발급 시간)</span>
                       <strong>{fmtTimestamp(jwtExpInfo.iat)}</strong>
                     </div>
                   )}
-                  {jwtExpInfo.exp && (
+                  {jwtExpInfo.exp != null && (
                     <>
                       <div className={s.sizeRow}>
                         <span>exp (만료 시간)</span>
                         <strong>{fmtTimestamp(jwtExpInfo.exp)}</strong>
                       </div>
                       <div className={s.sizeRow}>
-                        <span>상태</span>
+                        <span>상태 (토큰을 넣은 시각 기준)</span>
                         <strong style={{ color: jwtExpInfo.isExpired ? '#DC2626' : '#059669' }}>
                           {jwtExpInfo.isExpired
-                            ? `❌ 만료됨 (${Math.abs(jwtExpInfo.remainingSec ?? 0)}초 전)`
-                            : `✓ 유효 (남은 ${jwtExpInfo.remainingSec}초)`}
+                            ? `❌ 만료됨 (${fmtDuration(jwtExpInfo.remainingSec ?? 0)} 전)`
+                            : `✓ 유효 (남은 시간 ${fmtDuration(jwtExpInfo.remainingSec ?? 0)})`}
                         </strong>
                       </div>
                     </>
@@ -457,10 +489,11 @@ export default function Base64Client() {
         <>
           <div className={s.card}>
             <div className={s.cardTop}>
-              <label className={s.cardLabel}>원문 텍스트 (여러 인코딩 동시 변환)</label>
+              <label className={s.cardLabel} htmlFor="b64-multi-input">원문 텍스트 (여러 인코딩 동시 변환)</label>
               {multiInput && <button className={s.clearBtn} onClick={() => setMultiInput('')}>지우기</button>}
             </div>
             <textarea
+              id="b64-multi-input"
               className={s.textarea}
               placeholder="텍스트를 입력하면 Base64·Base64URL·Hex·Binary·URL·HTML 인코딩을 동시에 보여줍니다..."
               value={multiInput}

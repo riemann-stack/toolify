@@ -1,33 +1,17 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import s from '../dev.module.css'
+import {
+  type Base, type BitWidth, type BitOp,
+  isValidInput, normalizeInput, parseBig, parseDecBig, toBase, unsignedMax, signedRange, toUnsigned, padBits,
+  applyOp, toggleBit as toggleBitValue, powerOfTwo, decompose, decToBaseSteps,
+} from './numberBaseUtils'
 
 // ─────────────────────────────────────────────
-// 유틸
+// 유틸 (계산은 numberBaseUtils — BigInt 기반)
 // ─────────────────────────────────────────────
-type Base = 2 | 8 | 10 | 16
-type BitWidth = 8 | 16 | 32 | 64
-
-const BASE_PATTERNS: Record<Base, RegExp> = {
-  2:  /^[01]*$/,
-  8:  /^[0-7]*$/,
-  10: /^-?[0-9]*$/,
-  16: /^[0-9A-Fa-f]*$/,
-}
-
-function safeParse(value: string, base: Base): number | null {
-  const trimmed = value.trim().replace(/_/g, '')
-  if (trimmed === '' || trimmed === '-') return null
-  if (!BASE_PATTERNS[base].test(trimmed)) return null
-  if (base === 10) {
-    const n = parseInt(trimmed, 10)
-    return Number.isFinite(n) ? n : null
-  }
-  // BigInt-free 방식: 16진수가 매우 큰 경우 부정확할 수 있지만 일반 사용 범위 OK
-  const n = parseInt(trimmed, base)
-  return Number.isFinite(n) ? n : null
-}
+const B0 = BigInt(0)
 
 // 4비트씩 그룹화 (오른쪽부터)
 function groupBinary(b: string): string {
@@ -42,96 +26,25 @@ function groupHex(h: string): string {
   return grouped.map(g => g.split('').reverse().join('')).reverse().join(' ')
 }
 
-// 비트 폭에 맞춰 0 패딩
-function padBits(value: number, bits: BitWidth): string {
-  if (value < 0) {
-    // 2의 보수
-    const max = Math.pow(2, bits)
-    const v = max + value
-    if (v < 0) return '0'.repeat(bits) // 범위 초과
-    return v.toString(2).padStart(bits, '0')
-  }
-  const b = value.toString(2)
-  if (b.length > bits) return b.slice(-bits)
-  return b.padStart(bits, '0')
-}
-
-// 부호 있는 정수 범위
-function signedRange(bits: BitWidth): { min: number; max: number } {
-  return {
-    min: -Math.pow(2, bits - 1),
-    max: Math.pow(2, bits - 1) - 1,
-  }
-}
-function unsignedMax(bits: BitWidth): number {
-  return Math.pow(2, bits) - 1
-}
-
-// 자리값 분해
-type ConvStep = { digit: string; value: number; place: number; product: number }
-function decompose(value: string, base: Base): ConvStep[] {
-  const trimmed = value.trim().replace(/-/, '')
-  const digits = trimmed.split('').reverse()
-  return digits.map((d, i) => {
-    const v = parseInt(d, base)
-    const place = Math.pow(base, i)
-    return { digit: d, value: v, place, product: v * place }
-  }).reverse()
-}
-
-// 10진수 → N진수 변환 단계 (나누기 방식)
-function decToBaseSteps(dec: number, base: Base): { quotient: number; remainder: number }[] {
-  if (dec === 0) return [{ quotient: 0, remainder: 0 }]
-  const steps: { quotient: number; remainder: number }[] = []
-  let n = Math.abs(dec)
-  while (n > 0) {
-    const r = n % base
-    const q = Math.floor(n / base)
-    steps.push({ quotient: q, remainder: r })
-    n = q
-  }
-  return steps
-}
-
-const HEX_DIGIT = (n: number) => n.toString(16).toUpperCase()
-
 // 의미 부여 (자동 학습 코멘트)
-function meaningfulNote(dec: number, bits: BitWidth): string[] {
+function meaningfulNote(dec: bigint): string[] {
   const notes: string[] = []
-  if (dec === 0) notes.push('0 — 모든 비트가 OFF')
-  if (dec === unsignedMax(8))  notes.push('255 — 8비트 부호 없는 최대값 (2⁸ − 1)')
-  if (dec === unsignedMax(16)) notes.push('65,535 — 16비트 부호 없는 최대값 (2¹⁶ − 1)')
-  if (dec === 256)  notes.push('256 — 1바이트 다음 값 (2⁸)')
-  if (dec === 1024) notes.push('1024 — 1KiB 단위 (2¹⁰)')
-  if (dec === 1_048_576) notes.push('1,048,576 — 1MiB (2²⁰)')
-  if (dec >= 0 && dec <= 16777215 && dec >= 0x100000) notes.push('0x000000~0xFFFFFF 범위 — RGB 색상 코드로 사용 가능')
-  if (dec === 127)   notes.push('127 — 8비트 부호 있는 최대값 (2⁷ − 1)')
-  if (dec === -128)  notes.push('−128 — 8비트 부호 있는 최소값 (−2⁷)')
+  const n = dec >= BigInt(Number.MIN_SAFE_INTEGER) && dec <= BigInt(Number.MAX_SAFE_INTEGER) ? Number(dec) : NaN
+  if (n === 0) notes.push('0 — 모든 비트가 OFF')
+  if (n === 255)  notes.push('255 — 8비트 부호 없는 최대값 (2⁸ − 1)')
+  if (n === 65535) notes.push('65,535 — 16비트 부호 없는 최대값 (2¹⁶ − 1)')
+  if (dec === unsignedMax(32)) notes.push('4,294,967,295 — 32비트 부호 없는 최대값 (2³² − 1)')
+  if (dec === unsignedMax(64)) notes.push('18,446,744,073,709,551,615 — 64비트 부호 없는 최대값 (2⁶⁴ − 1)')
+  if (n === 256)  notes.push('256 — 1바이트 다음 값 (2⁸)')
+  if (n === 1024) notes.push('1024 — 1KiB 단위 (2¹⁰)')
+  if (n === 1_048_576) notes.push('1,048,576 — 1MiB (2²⁰)')
+  if (n >= 0x100000 && n <= 16777215) notes.push('0x000000~0xFFFFFF 범위 — RGB 색상 코드로 사용 가능')
+  if (n === 127)   notes.push('127 — 8비트 부호 있는 최대값 (2⁷ − 1)')
+  if (n === -128)  notes.push('−128 — 8비트 부호 있는 최소값 (−2⁷)')
   // 2의 거듭제곱 일반
-  const log = Math.log2(dec)
-  if (dec > 0 && Number.isInteger(log)) {
-    notes.push(`정확히 2의 ${log}제곱 (2^${log})`)
-  }
+  const log = powerOfTwo(dec)
+  if (log !== null) notes.push(`정확히 2의 ${log}제곱 (2^${log})`)
   return notes
-}
-
-// ─────────────────────────────────────────────
-// 비트 연산
-// ─────────────────────────────────────────────
-type BitOp = 'AND' | 'OR' | 'XOR' | 'NOT' | 'LSHIFT' | 'RSHIFT'
-function applyOp(a: number, b: number, op: BitOp, bits: BitWidth): number {
-  const mask = bits === 32 ? 0xFFFFFFFF : (Math.pow(2, bits) - 1)
-  // JS bitwise는 32-bit 한계, 큰 수는 32-bit 클램프
-  const aSafe = Math.floor(a) & 0xFFFFFFFF
-  const bSafe = Math.floor(b) & 0xFFFFFFFF
-  switch (op) {
-    case 'AND': return ((aSafe & bSafe) >>> 0) & mask
-    case 'OR':  return ((aSafe | bSafe) >>> 0) & mask
-    case 'XOR': return ((aSafe ^ bSafe) >>> 0) & mask
-    case 'NOT': return ((~aSafe) >>> 0) & mask
-    case 'LSHIFT': return ((aSafe << b) >>> 0) & mask
-    case 'RSHIFT': return (aSafe >>> b) & mask
-  }
 }
 
 const OP_DESCRIPTION: Record<BitOp, string> = {
@@ -156,7 +69,7 @@ export default function NumberBaseClient() {
 
   // ─ TAB 2 ─
   const [bitWidth, setBitWidth] = useState<BitWidth>(8)
-  const [bitValue, setBitValue] = useState<number>(170) // 10101010
+  const [bitValue, setBitValue] = useState<bigint>(() => BigInt(170)) // 10101010
   const [opA, setOpA] = useState<string>('12')
   const [opB, setOpB] = useState<string>('10')
   const [opShift, setOpShift] = useState<string>('2')
@@ -176,69 +89,79 @@ export default function NumberBaseClient() {
   // ─────────────────────────────────────────────
   // TAB 1 결과
   // ─────────────────────────────────────────────
-  const isInputValid = useMemo(() => BASE_PATTERNS[fromBase].test(inputValue.trim().replace(/_/g, '')), [inputValue, fromBase])
-  const decimalValue = useMemo(() => safeParse(inputValue, fromBase), [inputValue, fromBase])
+  const isInputValid = useMemo(() => isValidInput(inputValue, fromBase), [inputValue, fromBase])
+  const decimalValue = useMemo(() => parseBig(inputValue, fromBase), [inputValue, fromBase])
 
   const conversion = useMemo(() => {
     if (decimalValue === null) return null
-    const isNegative = decimalValue < 0
-    const absVal = Math.abs(decimalValue)
     return {
       decimal: decimalValue,
-      binary: (isNegative ? '-' : '') + absVal.toString(2),
-      octal: (isNegative ? '-' : '') + absVal.toString(8),
-      hex: (isNegative ? '-' : '') + absVal.toString(16).toUpperCase(),
+      binary: toBase(decimalValue, 2),
+      octal: toBase(decimalValue, 8),
+      hex: toBase(decimalValue, 16),
     }
   }, [decimalValue])
 
   // 의미 부여
   const meanings = useMemo(() => {
     if (decimalValue === null) return []
-    return meaningfulNote(decimalValue, bitWidth)
-  }, [decimalValue, bitWidth])
+    return meaningfulNote(decimalValue)
+  }, [decimalValue])
 
   // 색상 코드 가능 여부 (24-bit 범위)
   const isRgbCandidate = useMemo(() => {
-    return decimalValue !== null && decimalValue >= 0 && decimalValue <= 0xFFFFFF
+    return decimalValue !== null && decimalValue >= B0 && decimalValue <= BigInt(0xFFFFFF)
   }, [decimalValue])
 
   // ─────────────────────────────────────────────
   // TAB 2: 비트 토글
   // ─────────────────────────────────────────────
   function toggleBit(pos: number) {
-    const mask = 1 << pos
-    setBitValue(prev => (prev ^ mask) >>> 0)
+    setBitValue(prev => toggleBitValue(prev, pos, bitWidth))
   }
+  // 비트 폭을 줄였을 때 넘치는 상위 비트는 버린 값으로 표시
+  const bitValueW = toUnsigned(bitValue, bitWidth)
 
   const bitArray = useMemo(() => {
     return padBits(bitValue, bitWidth).split('')
   }, [bitValue, bitWidth])
 
+  // 좁은 화면에서는 비트 그리드를 8열로 (16열이면 셀이 카드 밖으로 넘침)
+  const [narrow, setNarrow] = useState(false)
+  useEffect(() => {
+    const mq = window.matchMedia('(max-width: 600px)')
+    const update = () => setNarrow(mq.matches)
+    update()
+    mq.addEventListener('change', update)
+    return () => mq.removeEventListener('change', update)
+  }, [])
+
   // 2의 보수 분석
   const tcParse = useMemo(() => {
-    const n = parseInt(tcInput.replace(/_/g, ''), 10)
-    if (Number.isNaN(n)) return null
+    const n = parseDecBig(tcInput)
+    if (n === null) return null
     const range = signedRange(bitWidth)
     if (n < range.min || n > range.max) {
-      return { error: `이 비트 폭에서 표현 불가 (범위: ${range.min} ~ ${range.max})`, value: n }
+      return { error: `이 비트 폭에서 표현 불가 (범위: ${range.min.toLocaleString('ko-KR')} ~ ${range.max.toLocaleString('ko-KR')})`, value: n }
     }
+    const u = toUnsigned(n, bitWidth)
     return {
       value: n,
       twosComp: padBits(n, bitWidth),
-      asUnsigned: n < 0 ? (Math.pow(2, bitWidth) + n) : n,
-      hex: (n < 0 ? Math.pow(2, bitWidth) + n : n).toString(16).toUpperCase().padStart(Math.ceil(bitWidth / 4), '0'),
+      asUnsigned: u,
+      hex: u.toString(16).toUpperCase().padStart(bitWidth / 4, '0'),
     }
   }, [tcInput, bitWidth])
 
   // 비트 연산 결과
   const opCalc = useMemo(() => {
-    const a = parseInt(opA.replace(/_/g, ''), 10) || 0
-    const b = parseInt(opB.replace(/_/g, ''), 10) || 0
-    const shift = parseInt(opShift.replace(/_/g, ''), 10) || 0
+    const a = parseDecBig(opA) ?? B0
+    const b = parseDecBig(opB) ?? B0
+    const shift = parseDecBig(opShift) ?? B0
     const aBits = padBits(a, bitWidth).split('')
     const bBits = padBits(b, bitWidth).split('')
-    let result = 0
-    if (op === 'NOT') result = applyOp(a, 0, 'NOT', bitWidth)
+    let result: bigint
+    if (op === 'NOT') result = applyOp(a, B0, 'NOT', bitWidth)
     else if (op === 'LSHIFT') result = applyOp(a, shift, 'LSHIFT', bitWidth)
     else if (op === 'RSHIFT') result = applyOp(a, shift, 'RSHIFT', bitWidth)
     else result = applyOp(a, b, op, bitWidth)
@@ -298,31 +221,37 @@ export default function NumberBaseClient() {
   // ─────────────────────────────────────────────
   // TAB 4: 학습 단계
   // ─────────────────────────────────────────────
-  const learnDecValue = useMemo(() => safeParse(learnValue, learnFrom), [learnValue, learnFrom])
+  const learnDecValue = useMemo(() => parseBig(learnValue, learnFrom), [learnValue, learnFrom])
   const learnSteps = useMemo(() => {
     if (learnDecValue === null) return null
     if (learnFrom === 10) {
       // 10진수 → 2진수 변환 단계 (나누기 방식)
-      const steps = decToBaseSteps(Math.abs(learnDecValue), 2)
+      const steps = decToBaseSteps(learnDecValue, 2)
       return { kind: 'divide' as const, target: 2 as Base, dec: learnDecValue, steps }
     }
-    // N진수 → 10진수 자리값 분해
-    const steps = decompose(learnValue.trim().replace(/-/, ''), learnFrom)
+    // N진수 → 10진수 자리값 분해 (밑줄·접두사는 decompose에서 제거)
+    const steps = decompose(learnValue, learnFrom)
     return { kind: 'expand' as const, source: learnFrom, dec: learnDecValue, steps }
   }, [learnDecValue, learnValue, learnFrom])
+  const learnNorm = normalizeInput(learnValue, learnFrom)
+  const learnAbs = learnDecValue !== null && learnDecValue < B0 ? -learnDecValue : (learnDecValue ?? B0)
 
   // ─────────────────────────────────────────────
   // 복사
   // ─────────────────────────────────────────────
-  function copyValue(val: string, key: string) {
+  async function copyValue(val: string, key: string) {
     if (!val) return
-    navigator.clipboard.writeText(val)
+    try {
+      await navigator.clipboard.writeText(val)
+    } catch {
+      return // 권한 거부 등 — 복사되지 않았으므로 '복사됨'을 띄우지 않음
+    }
     setCopiedKey(key)
-    setTimeout(() => setCopiedKey(''), 1200)
+    setTimeout(() => setCopiedKey(''), 1500)
   }
 
-  function fmtForLang(dec: number) {
-    if (dec < 0) return null
+  function fmtForLang(dec: bigint) {
+    if (dec < B0) return null
     return {
       hex: '0x' + dec.toString(16).toUpperCase(),
       hexLow: '0x' + dec.toString(16),
@@ -342,7 +271,8 @@ export default function NumberBaseClient() {
         padding: '12px 16px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7,
       }}>
         <strong style={{ color: '#EA580C' }}>참고:</strong> 정수 변환을 지원합니다. 부동소수점(IEEE 754) 변환은 별도 도구를 권장하며,
-        실제 시스템 구현 시 비트 폭·엔디안·부호 처리에 따라 결과가 다를 수 있습니다. 본 도구는 32-bit 정밀도로 동작합니다.
+        실제 시스템 구현 시 비트 폭·엔디안·부호 처리에 따라 결과가 다를 수 있습니다. 진법 변환은 자릿수 제한 없이 정확하게(BigInt) 계산하고,
+        비트 표현·연산은 선택한 비트 폭(8~64-bit)에 맞춰 넘치는 상위 비트를 버리고 계산합니다.
       </div>
 
       {/* 탭 */}
@@ -375,10 +305,11 @@ export default function NumberBaseClient() {
             </div>
 
             <div className={s.cardTop} style={{ marginTop: 14 }}>
-              <label className={s.cardLabel}>입력 값 (밑줄 _ 는 자동 무시)</label>
+              <label className={s.cardLabel} htmlFor="number-base-input">입력 값 (밑줄 _·공백·0x 같은 접두사는 자동 무시)</label>
               {inputValue && <button className={s.clearBtn} onClick={() => setInputValue('')}>지우기</button>}
             </div>
             <input
+              id="number-base-input"
               type="text"
               className={`${s.textarea} ${!isInputValid ? s.inputInvalid : ''}`}
               value={inputValue}
@@ -411,7 +342,7 @@ export default function NumberBaseClient() {
           {/* 결과 */}
           {conversion && (
             <>
-              <div className={s.baseGrid}>
+              <div className={s.baseGrid} role="status">
                 <div className={`${s.baseCard} ${s.baseBin}`}>
                   <div className={s.baseCardHeader}>
                     <span className={s.baseCardLabel}>2진수 (Binary)</span>
@@ -438,7 +369,7 @@ export default function NumberBaseClient() {
                     <span className={s.basePrefix}>—</span>
                   </div>
                   <p className={s.baseValue}>{conversion.decimal.toLocaleString('ko-KR')}</p>
-                  <button className={s.copyBtn} style={{ marginTop: 8 }} onClick={() => copyValue(String(conversion.decimal), 'dec')}>
+                  <button className={s.copyBtn} style={{ marginTop: 8 }} onClick={() => copyValue(conversion.decimal.toString(), 'dec')}>
                     {copiedKey === 'dec' ? '✓ 복사됨' : '복사'}
                   </button>
                 </div>
@@ -465,7 +396,7 @@ export default function NumberBaseClient() {
               )}
 
               {/* 언어별 표기 */}
-              {decimalValue !== null && decimalValue >= 0 && (() => {
+              {decimalValue !== null && decimalValue >= B0 && (() => {
                 const f = fmtForLang(decimalValue)
                 if (!f) return null
                 return (
@@ -479,7 +410,7 @@ export default function NumberBaseClient() {
                           { l: 'C / C++ / Java',  hex: f.hex,    bin: f.bin,    oct: f.oct.replace('0o', '0') },
                           { l: 'Python',          hex: f.hexLow, bin: f.bin,    oct: f.oct },
                           { l: 'JavaScript',      hex: f.hex,    bin: f.bin,    oct: f.oct },
-                          { l: 'CSS 색상',         hex: '#' + decimalValue.toString(16).toUpperCase().padStart(6, '0').slice(-6), bin: '—', oct: '—' },
+                          { l: 'CSS 색상',         hex: isRgbCandidate ? '#' + decimalValue.toString(16).toUpperCase().padStart(6, '0') : '— (0xFFFFFF 초과)', bin: '—', oct: '—' },
                         ].map((row, i) => (
                           <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
                             <td style={{ padding: '8px 10px', color: 'var(--muted)', fontSize: 12 }}>{row.l}</td>
@@ -499,12 +430,12 @@ export default function NumberBaseClient() {
                 <div className={s.meaningCard} style={{ background: 'rgba(234,88,12,0.05)', borderLeftColor: '#EA580C' }}>
                   <strong style={{ color: '#EA580C' }}>색상 코드:</strong>
                   &nbsp;<code style={{ background: 'var(--bg3)', padding: '2px 8px', borderRadius: 4, fontFamily: 'var(--font-mono)' }}>
-                    #{decimalValue.toString(16).toUpperCase().padStart(6, '0').slice(-6)}
+                    #{decimalValue.toString(16).toUpperCase().padStart(6, '0')}
                   </code>
                   &nbsp;
                   <span style={{
                     display: 'inline-block', width: 18, height: 18, borderRadius: 4,
-                    background: '#' + decimalValue.toString(16).padStart(6, '0').slice(-6),
+                    background: '#' + decimalValue.toString(16).padStart(6, '0'),
                     border: '1px solid var(--border)', verticalAlign: 'middle', marginLeft: 4,
                   }} />
                   &nbsp;&nbsp;<a href="/tools/art/color" style={{ color: '#EA580C', textDecoration: 'underline', fontSize: 12 }}>색상 코드 변환기에서 보기 →</a>
@@ -540,12 +471,13 @@ export default function NumberBaseClient() {
           <div className={s.card}>
             <div className={s.cardTop}>
               <label className={s.cardLabel}>비트 토글 ({bitWidth}-bit)</label>
-              <button className={s.clearBtn} onClick={() => setBitValue(0)}>전체 0</button>
+              <button className={s.clearBtn} onClick={() => setBitValue(B0)}>전체 0</button>
             </div>
-            <div className={s.bitGrid} style={{ gridTemplateColumns: `repeat(${Math.min(16, bitWidth)}, 1fr)` }}>
+            <div className={s.bitGrid} style={{ gridTemplateColumns: `repeat(${Math.min(narrow ? 8 : 16, bitWidth)}, minmax(0, 1fr))` }}>
               {bitArray.map((b, i) => {
                 const pos = bitWidth - 1 - i
-                const placeValue = pos >= 30 ? '2^' + pos : Math.pow(2, pos).toString()
+                // 1024 이상은 2^n 표기 — 셀 폭을 넘지 않도록
+                const placeValue = pos >= 10 ? '2^' + pos : String(2 ** pos)
                 return (
                   <button
                     key={pos}
@@ -553,6 +485,8 @@ export default function NumberBaseClient() {
                     onClick={() => toggleBit(pos)}
                     type="button"
                     title={`bit ${pos}`}
+                    aria-label={`bit ${pos}: ${b}`}
+                    aria-pressed={b === '1'}
                   >
                     <div className={s.bitValue}>{b}</div>
                     <div className={s.bitPosition}>{pos}</div>
@@ -564,8 +498,8 @@ export default function NumberBaseClient() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, marginTop: 14 }}>
               <tbody>
                 <tr><td style={{ padding: '6px 0', color: 'var(--muted)', width: 100 }}>2진수</td><td style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}>{groupBinary(padBits(bitValue, bitWidth))}</td></tr>
-                <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>10진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#0891B2' }}>{bitValue.toLocaleString('ko-KR')}</td></tr>
-                <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>16진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#EA580C' }}>0x{bitValue.toString(16).toUpperCase()}</td></tr>
+                <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>10진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#0891B2' }}>{bitValueW.toLocaleString('ko-KR')}</td></tr>
+                <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>16진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#EA580C' }}>0x{bitValueW.toString(16).toUpperCase()}</td></tr>
                 <tr>
                   <td style={{ padding: '6px 0', color: 'var(--muted)' }}>ON / OFF</td>
                   <td style={{ fontFamily: 'var(--font-mono)' }}>
@@ -598,7 +532,7 @@ export default function NumberBaseClient() {
               <div style={{ marginTop: 12 }}>
                 <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13 }}>
                   <tbody>
-                    <tr><td style={{ padding: '6px 0', color: 'var(--muted)', width: 140 }}>부호 있는 (signed)</td><td style={{ fontFamily: 'var(--font-mono)', color: tcParse.value < 0 ? '#DC2626' : 'var(--accent)' }}>{tcParse.value}</td></tr>
+                    <tr><td style={{ padding: '6px 0', color: 'var(--muted)', width: 140 }}>부호 있는 (signed)</td><td style={{ fontFamily: 'var(--font-mono)', color: tcParse.value < B0 ? '#DC2626' : 'var(--accent)' }}>{tcParse.value.toString()}</td></tr>
                     <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>2의 보수 ({bitWidth}-bit)</td><td style={{ fontFamily: 'var(--font-mono)', color: 'var(--accent)' }}>{groupBinary(tcParse.twosComp)}</td></tr>
                     <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>부호 없는 해석 (unsigned)</td><td style={{ fontFamily: 'var(--font-mono)', color: '#0891B2' }}>{tcParse.asUnsigned.toLocaleString('ko-KR')}</td></tr>
                     <tr><td style={{ padding: '6px 0', color: 'var(--muted)' }}>16진수</td><td style={{ fontFamily: 'var(--font-mono)', color: '#EA580C' }}>0x{tcParse.hex}</td></tr>
@@ -624,19 +558,19 @@ export default function NumberBaseClient() {
 
             <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10, marginTop: 12 }}>
               <div>
-                <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>A (10진수)</span>
-                <input type="number" inputMode="decimal" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opA} onChange={e => setOpA(e.target.value)} />
+                <label htmlFor="number-base-op-a" style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>A (10진수)</label>
+                <input id="number-base-op-a" type="number" inputMode="numeric" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opA} onChange={e => setOpA(e.target.value)} />
               </div>
               {(op === 'AND' || op === 'OR' || op === 'XOR') && (
                 <div>
-                  <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>B (10진수)</span>
-                  <input type="number" inputMode="decimal" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opB} onChange={e => setOpB(e.target.value)} />
+                  <label htmlFor="number-base-op-b" style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>B (10진수)</label>
+                  <input id="number-base-op-b" type="number" inputMode="numeric" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opB} onChange={e => setOpB(e.target.value)} />
                 </div>
               )}
               {(op === 'LSHIFT' || op === 'RSHIFT') && (
                 <div>
-                  <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>이동 수 (bits)</span>
-                  <input type="number" inputMode="decimal" min="0" max="32" className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opShift} onChange={e => setOpShift(e.target.value)} />
+                  <label htmlFor="number-base-op-shift" style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>이동 수 (bits)</label>
+                  <input id="number-base-op-shift" type="number" inputMode="numeric" min="0" max={bitWidth} className={s.textarea} style={{ resize: 'none', minHeight: 'unset', padding: '10px 12px', fontSize: 14 }} value={opShift} onChange={e => setOpShift(e.target.value)} />
                 </div>
               )}
             </div>
@@ -644,7 +578,7 @@ export default function NumberBaseClient() {
             {/* 비트 연산 시각화 */}
             <div style={{ marginTop: 14, padding: 14, background: 'var(--bg3)', borderRadius: 10, fontFamily: 'var(--font-mono)' }}>
               <div className={s.opGrid}>
-                <span className={s.opLabel}>A = {opCalc.a}</span>
+                <span className={s.opLabel}>A = {opCalc.a.toString()}</span>
                 <div className={s.opBits}>
                   {opCalc.aBits.map((b, i) => (
                     <span key={i} className={`${s.opBit} ${b === '1' ? s.opBitOn : ''}`}>{b}</span>
@@ -653,7 +587,7 @@ export default function NumberBaseClient() {
               </div>
               {(op === 'AND' || op === 'OR' || op === 'XOR') && (
                 <div className={s.opGrid}>
-                  <span className={s.opLabel}>{op} B = {opCalc.b}</span>
+                  <span className={s.opLabel}>{op} B = {opCalc.b.toString()}</span>
                   <div className={s.opBits}>
                     {opCalc.bBits.map((b, i) => (
                       <span key={i} className={`${s.opBit} ${b === '1' ? s.opBitOn : ''}`}>{b}</span>
@@ -809,7 +743,7 @@ export default function NumberBaseClient() {
                 <span className={s.learnStepNum}>STEP 1</span>
                 <p className={s.learnStepTitle}>자리값 분해</p>
                 <div className={s.learnStepBody}>
-                  {learnValue.trim()} = {learnSteps.steps.map((s, i) => {
+                  {learnNorm} = {learnSteps.steps.map((s, i) => {
                     const power = learnSteps.steps.length - 1 - i
                     return `${s.digit}×${learnSteps.source}${power > 0 ? '^' + power : '⁰'}`
                   }).join(' + ')}
@@ -821,10 +755,10 @@ export default function NumberBaseClient() {
                 <div className={s.learnStepBody}>
                   {learnSteps.steps.map((step, i) => {
                     const power = learnSteps.steps.length - 1 - i
-                    const digit = isNaN(parseInt(step.digit, 16)) ? step.digit : (step.value > 9 ? `${step.digit}=${step.value}` : step.digit)
+                    const digit = step.value > 9 ? `${step.digit}=${step.value.toString()}` : step.digit
                     return (
                       <div key={i}>
-                        {digit} × {learnSteps.source}^{power} = {step.value} × {step.place} = <strong>{step.product}</strong>
+                        {digit} × {learnSteps.source}^{power} = {step.value.toString()} × {step.place.toString()} = <strong>{step.product.toString()}</strong>
                       </div>
                     )
                   })}
@@ -834,14 +768,14 @@ export default function NumberBaseClient() {
                 <span className={s.learnStepNum}>STEP 3</span>
                 <p className={s.learnStepTitle}>합산</p>
                 <div className={s.learnStepBody}>
-                  {learnSteps.steps.map(s => s.product).join(' + ')} = <strong>{learnSteps.dec}</strong>
+                  {learnSteps.steps.map(s => s.product.toString()).join(' + ')} = <strong>{learnSteps.dec.toString()}</strong>
                 </div>
               </div>
               <div className={s.meaningCard}>
-                결과: <strong>{learnValue.trim()}</strong>
+                결과: <strong>{learnNorm}</strong>
                 <sub style={{ fontSize: 10 }}>{learnSteps.source}</sub>
                 {' '}={' '}
-                <strong>{learnSteps.dec}</strong>
+                <strong>{learnSteps.dec.toString()}</strong>
                 <sub style={{ fontSize: 10 }}>10</sub>
               </div>
             </>
@@ -853,7 +787,7 @@ export default function NumberBaseClient() {
                 <span className={s.learnStepNum}>STEP 1</span>
                 <p className={s.learnStepTitle}>나누기 방식 (10진수 → 2진수)</p>
                 <div className={s.learnStepBody}>
-                  {Math.abs(learnSteps.dec)}을 2로 계속 나누고 나머지를 기록 (LSB → MSB 순):
+                  {learnAbs.toString()}을 2로 계속 나누고 나머지를 기록 (LSB → MSB 순):
                 </div>
               </div>
               <div className={s.learnStep}>
@@ -861,13 +795,13 @@ export default function NumberBaseClient() {
                 <p className={s.learnStepTitle}>나눗셈 단계</p>
                 <div className={s.learnStepBody}>
                   {(() => {
-                    let n = Math.abs(learnSteps.dec)
+                    let n = learnAbs
                     return learnSteps.steps.map((step, i) => {
                       const before = n
                       n = step.quotient
                       return (
                         <div key={i}>
-                          {before} ÷ 2 = {step.quotient} ... <strong>{step.remainder}</strong> {i === 0 ? '(LSB)' : i === learnSteps.steps.length - 1 ? '(MSB)' : ''}
+                          {before.toString()} ÷ 2 = {step.quotient.toString()} ... <strong>{step.remainder.toString()}</strong> {i === 0 ? '(LSB)' : i === learnSteps.steps.length - 1 ? '(MSB)' : ''}
                         </div>
                       )
                     })
@@ -878,15 +812,15 @@ export default function NumberBaseClient() {
                 <span className={s.learnStepNum}>STEP 3</span>
                 <p className={s.learnStepTitle}>나머지를 아래에서 위로 읽기</p>
                 <div className={s.learnStepBody}>
-                  {learnSteps.steps.map(s => s.remainder).reverse().join('')} (2진수)
+                  {learnSteps.steps.map(s => s.remainder.toString()).reverse().join('')} (2진수)
                 </div>
               </div>
               <div className={s.meaningCard}>
-                결과: <strong>{learnSteps.dec}</strong>
+                결과: <strong>{learnSteps.dec.toString()}</strong>
                 <sub style={{ fontSize: 10 }}>10</sub>
                 {' '}={' '}
-                {learnSteps.dec < 0 && '−'}
-                <strong>{groupBinary(Math.abs(learnSteps.dec).toString(2))}</strong>
+                {learnSteps.dec < B0 && '−'}
+                <strong>{groupBinary(learnAbs.toString(2))}</strong>
                 <sub style={{ fontSize: 10 }}>2</sub>
               </div>
             </>

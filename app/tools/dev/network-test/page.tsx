@@ -4,6 +4,7 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/network-test',
@@ -92,6 +93,15 @@ export default function NetworkTestPage() {
         핑·지터·실패율·다운로드 + 인터파크·예스24·멜론·KBO 응답으로 <strong style={{ color: 'var(--text)' }}>티켓팅 적합도</strong> 판정.
       </p>
 
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="LTE·5G 평균: 과기정통부·NIA 2025 통신서비스 품질평가 (2025.12.30 발표)"
+        sources={[
+          { label: '과기정통부 보도자료(정책브리핑)', href: 'https://www.korea.kr/briefing/pressReleaseView.do?newsId=156737428' },
+          { label: 'KDI 경제정보센터 게시본', href: 'https://eiec.kdi.re.kr/policy/materialView.do?num=275568' },
+        ]}
+      />
+
       <NetworkTestClient />
 
       <GuideDivider />
@@ -133,7 +143,7 @@ export default function NetworkTestPage() {
                   </tr>
                   <tr>
                     <td style={cell}><strong>지터 (Jitter)</strong></td>
-                    <td style={cell}>핑의 변동성 (표준편차)</td>
+                    <td style={cell}>핑의 변동성 (연속 측정값 차이의 평균)</td>
                     <td style={cell}><strong style={{ color: '#059669' }}>&lt; 10ms</strong></td>
                   </tr>
                   <tr>

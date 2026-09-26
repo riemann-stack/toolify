@@ -4,12 +4,16 @@ import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import FaqJsonLd from '@/components/FaqJsonLd'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import { MODELS, PRICE_CHECKED, fmtContext } from './tokenCounterData'
+
+const fmtPrice = (n: number) => `$${n.toFixed(2)}`
 
 export const metadata = buildMetadata({
   path: '/tools/dev/token-counter',
   title: 'AI 프롬프트 토큰 카운터 — GPT·Claude·Gemini 토큰 수·API 비용 동시 계산',
   description:
-    '한국어 텍스트의 토큰 수와 컨텍스트 윈도우 사용량을 GPT-4o·Claude·Gemini 등 8개 모델 동시 추정. 입력·출력 단가 반영 API 비용 + 한국어 비효율 인사이트.',
+    '한국어 텍스트의 토큰 수와 컨텍스트 윈도우 사용량을 GPT·Claude·Gemini 대표 8개 모델로 동시 추정. 입력·출력 단가 반영 API 비용 + 한국어 비효율 인사이트.',
   keywords: [
     'AI 토큰 카운터', 'GPT 토큰 계산', 'Claude 토큰', 'Gemini 토큰',
     'API 비용 계산기', 'OpenAI 가격', 'Anthropic 가격', 'Google AI 가격',
@@ -53,7 +57,7 @@ const FAQ_LD = [
               },
               {
                 q: 'API 비용을 효과적으로 줄이려면?',
-                a: '<strong>1) 모델 선택</strong> — 분류·요약은 mini/Haiku/Flash, 복잡한 추론만 GPT-4o/Opus. <strong>2) 출력 제한</strong> — max_tokens 설정 + "300자 이내" 같은 지시. <strong>3) 프롬프트 캐싱</strong> — 반복 시스템 프롬프트 활용. <strong>4) 영문 프롬프트</strong> — 시스템·context는 영문으로. <strong>5) 배치 API</strong> — OpenAI/Anthropic의 batch는 50% 할인.',
+                a: '<strong>1) 모델 선택</strong> — 분류·요약은 mini/Haiku/Flash, 복잡한 추론만 상위 모델(GPT-5·Claude Opus 등). <strong>2) 출력 제한</strong> — max_tokens 설정 + "300자 이내" 같은 지시. <strong>3) 프롬프트 캐싱</strong> — 반복 시스템 프롬프트 활용. <strong>4) 영문 프롬프트</strong> — 시스템·context는 영문으로. <strong>5) 배치 API</strong> — OpenAI/Anthropic의 batch는 50% 할인.',
               },
               {
                 q: '환율은 어떻게 계산되나요?',
@@ -71,6 +75,15 @@ export default function TokenCounterPage() {
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
         GPT·Claude·Gemini 토큰 수와 컨텍스트 사용량을 한 화면에. <strong style={{ color: 'var(--text)' }}>한국어 비효율과 API 비용</strong>까지 동시 추정.
       </p>
+      <UpdatedMeta
+        date={PRICE_CHECKED}
+        basis="각 사 공개 API 표준 단가(대표 모델, 배치·캐시 할인 제외)"
+        sources={[
+          { label: 'Anthropic 가격', href: 'https://platform.claude.com/docs/en/about-claude/pricing' },
+          { label: 'OpenAI 가격', href: 'https://openai.com/api/pricing/' },
+          { label: 'Gemini API 가격', href: 'https://ai.google.dev/gemini-api/docs/pricing' },
+        ]}
+      />
 
       <TokenCounterClient />
 
@@ -83,13 +96,13 @@ export default function TokenCounterPage() {
           <p style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
             LLM은 문자가 아닌 <strong style={{ color: 'var(--text)' }}>토큰</strong>이라는 단위로 텍스트를 처리합니다. 한 토큰은
             영문 기준 약 <strong style={{ color: 'var(--text)' }}>4글자(¾ 단어)</strong>에 해당하며, 한국어는 한 음절이
-            <strong style={{ color: 'var(--text)' }}> 1~2 토큰</strong>으로 쪼개집니다. 모델 가격·컨텍스트 한도·응답 속도가 모두 토큰 단위로 매겨지므로
+            대략 <strong style={{ color: 'var(--text)' }}> 1~1.5 토큰</strong>으로 쪼개집니다(모델마다 다름). 모델 가격·컨텍스트 한도·응답 속도가 모두 토큰 단위로 매겨지므로
             프롬프트를 최적화하려면 토큰 수를 의식하는 게 첫걸음.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: 10 }}>
             {[
               { t: '영문', e: '4 chars ≈ 1 token', c: '#059669' },
-              { t: '한국어', e: '1~1.5 자 ≈ 1 token', c: '#D97706' },
+              { t: '한국어', e: '1자 ≈ 1~1.5 token', c: '#D97706' },
               { t: '코드', e: '3 chars ≈ 1 token', c: '#0891B2' },
               { t: '숫자·공백', e: '3 chars ≈ 1 token', c: '#9333EA' },
             ].map((g, i) => (
@@ -103,7 +116,7 @@ export default function TokenCounterPage() {
 
         {/* 2. 모델별 한도·가격 */}
         <section>
-          <h2 style={sectionTitle}>모델별 컨텍스트 한도·가격 (2026.05 기준)</h2>
+          <h2 style={sectionTitle}>모델별 컨텍스트 한도·가격 ({PRICE_CHECKED} 점검)</h2>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
               <thead>
@@ -114,15 +127,9 @@ export default function TokenCounterPage() {
                 </tr>
               </thead>
               <tbody>
-                {[
-                  ['GPT-4o',        '128K', '$2.50',  '$10.00', '범용 주력, 멀티모달 강함'],
-                  ['GPT-4o mini',   '128K', '$0.15',  '$0.60',  '저가 + 빠름, 분류·요약'],
-                  ['Claude Opus 4', '200K', '$15.00', '$75.00', '추론·코드 최강, 장문 안정'],
-                  ['Claude Sonnet 4','200K', '$3.00',  '$15.00', '균형형 — 대부분 작업에 적합'],
-                  ['Claude Haiku 4.5','200K','$0.80', '$4.00',  '빠르고 저렴, 분류·태깅'],
-                  ['Gemini 2.5 Pro','2M',   '$1.25',  '$10.00', '초장문 — 책·논문 한 번에'],
-                  ['Gemini 2.5 Flash','1M', '$0.30',  '$2.50',  '저가 + 1M 컨텍스트'],
-                ].map((row, i) => (
+                {MODELS.map((m) => [
+                  m.name, fmtContext(m.contextWindow), fmtPrice(m.inputPricePerM), fmtPrice(m.outputPricePerM), m.note,
+                ]).map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '9px 12px', color: 'var(--accent)', fontWeight: 700 }}>{row[0]}</td>
                     <td style={{ padding: '9px 12px', color: 'var(--text)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontWeight: 700 }}>{row[1]}</td>
@@ -135,7 +142,7 @@ export default function TokenCounterPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
-            ⚠️ 가격은 변동될 수 있습니다. 결제 전 <strong style={{ color: 'var(--text)' }}>OpenAI / Anthropic / Google AI Studio</strong> 공식 페이지에서 최신 단가 확인 권장.
+            ⚠️ 대표 모델 일부만 추린 표입니다. 새 모델이 자주 나오고 가격도 바뀌므로 결제 전 <strong style={{ color: 'var(--text)' }}>OpenAI / Anthropic / Google AI Studio</strong> 공식 페이지에서 최신 단가를 확인하세요.
           </p>
         </section>
 
@@ -163,10 +170,10 @@ export default function TokenCounterPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
-              { t: '128K (GPT-4o)', d: '책 1권의 ¼ 수준', desc: '단일 PDF·코드 파일 1~2개, 일반 대화에 충분' },
-              { t: '200K (Claude)', d: '책 한 권 절반', desc: '긴 문서 요약·코드베이스 분석에 안정적' },
-              { t: '1M (Gemini Flash)', d: '책 4~5권', desc: '여러 문서 비교, 영상 자막 요약' },
-              { t: '2M (Gemini Pro)', d: '책 10권 분량', desc: '대형 코드베이스·논문 묶음 한 번에' },
+              { t: '128K (GPT-4o)', d: '긴 문서 1~2개', desc: '단일 PDF·코드 파일 1~2개, 일반 대화에 충분' },
+              { t: '200K (Claude Haiku 4.5)', d: '긴 보고서 여러 편', desc: '긴 문서 요약·중간 규모 코드 분석' },
+              { t: '400K (GPT-5)', d: '긴 문서 여러 편', desc: '출력 토큰까지 합친 한도 — 긴 답을 받으려면 입력을 그만큼 줄여야 함' },
+              { t: '1M (Claude Opus·Sonnet 5, Gemini 2.5)', d: '문서 묶음 한 번에', desc: '여러 문서 비교, 대형 코드베이스·논문 묶음' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', borderRadius: 10, padding: '12px 14px', border: '1px solid var(--border)' }}>
                 <p style={{ fontSize: 13, color: 'var(--accent)', fontWeight: 700, margin: '0 0 4px', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>{g.t}</p>

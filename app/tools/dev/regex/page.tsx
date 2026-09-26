@@ -7,8 +7,8 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
   path: '/tools/dev/regex',
-  title: '정규식 테스트기 — 매칭·캡처 그룹·치환·한국 데이터 패턴 30+',
-  description: 'JavaScript 정규식 실시간 매칭·하이라이트 + 캡처 그룹·치환·분할 + 6 flags + 한국 데이터 패턴 30+(휴대폰·주민번호·사업자번호).',
+  title: '정규식 테스트기 — 매칭·캡처 그룹·치환·정규식 패턴 30+',
+  description: 'JavaScript 정규식 실시간 매칭·하이라이트 + 캡처 그룹·치환·분할 + 6 flags + 정규식 패턴 30+(한국 데이터 10종: 휴대폰·주민번호·사업자번호 등).',
   keywords: [
     '정규식 테스트', '정규식 테스터', 'regex 테스터', 'regex tester',
     '정규식 매칭', '정규식 캡처 그룹', '정규식 치환', '정규식 분할',
@@ -67,16 +67,16 @@ const codeStyle: React.CSSProperties = {
 }
 
 const FAQ_LD = [
-  { "q":"JavaScript 정규식과 PCRE/Python의 차이는?","a":"본 도구는 JavaScript regex 엔진(브라우저 네이티브)을 사용합니다. 다른 엔진과의 차이: 가변폭 lookbehind는 JS가 지원(모던 브라우저)하고 PCRE는 고정폭만 지원합니다. atomic group (?>...)과 재귀 패턴 (?R), possessive quantifier a*+는 PCRE 전용으로 JS 미지원이며, verbose flag re.X는 Python 전용입니다. 유니코드 속성 \\p{...}는 JS에서 u flag가 필수이고 PCRE는 항상 가능합니다." },
+  { "q":"JavaScript 정규식과 PCRE/Python의 차이는?","a":"본 도구는 JavaScript regex 엔진(브라우저 네이티브)을 사용합니다. 다른 엔진과의 차이: 가변폭 lookbehind는 JS가 지원(모던 브라우저)하고 PCRE는 전통적으로 고정폭만 허용합니다. atomic group (?>...)과 재귀 패턴 (?R), possessive quantifier a*+는 PCRE 전용으로 JS 미지원이며, verbose flag re.X는 Python 전용입니다. 유니코드 속성 \\p{...}는 JS에서 u flag가 필수이고 PCRE는 항상 가능합니다." },
   { "q":"greedy(.*)와 lazy(.*?)의 차이는?","a":"greedy(.*)는 가능한 한 많이 매치하려 합니다(기본값). lazy(.*?)는 가능한 한 적게 매치합니다. 예를 들어 b 태그와 i 태그가 이어진 HTML 문자열에서 꺾쇠 사이에 .*를 넣은 greedy 패턴은 문자열 전체를 한 번에 매치하지만, .*?로 바꾼 lazy 패턴은 여는 태그·닫는 태그 4개를 각각 따로 매치합니다. HTML 태그·JSON 키 추출 등 중첩 가능한 데이터는 lazy가 안전합니다." },
   { "q":"캡처 그룹과 비캡처 그룹의 차이?","a":"캡처 그룹 (...)는 매치한 부분을 저장해 $1·$2로 참조할 수 있습니다. 비캡처 그룹 (?:...)는 그룹화만 하고 저장하지 않습니다. 비캡처 그룹을 쓰면 메모리·시간이 절약되어 성능이 좋아지고, $1·$2 같은 그룹 번호를 진짜 필요한 그룹만 차지합니다. 예를 들어 (?:https?|ftp)://(\\w+) 패턴은 프로토콜은 그룹화만 하고 도메인만 $1로 캡처합니다." },
   { "q":"이름 캡처 그룹 (?<name>...)이란?","a":"ES2018부터 추가된 기능으로, (? 뒤 꺾쇠괄호에 이름을 적어 그룹에 이름을 붙입니다. 예를 들어 연·월·일 그룹에 각각 year·month·day 이름을 붙인 날짜 패턴으로 \"2026-05-15\"를 매치하면 match.groups.year는 \"2026\", match.groups.month는 \"05\", match.groups.day는 \"15\"가 되고, 치환 문자열에서도 이름으로 참조합니다. $1·$2·$3처럼 번호로 셀 필요 없이 의미 있는 이름으로 접근해 코드 가독성이 높아집니다." },
   { "q":"lookahead와 lookbehind는?","a":"매치 위치를 검사만 하고 소비(consume)하지 않는 zero-width 어서션입니다. lookahead 양수 (?=...)는 뒤가 ...일 때, 음수 (?!...)는 뒤가 ...이 아닐 때 매치하고, lookbehind 양수는 앞이 ...일 때, 음수는 앞이 ...이 아닐 때 매치합니다. 예를 들어 \\d+(?=원) 패턴에 1000원, 2000$를 입력하면 1000만 매치됩니다(2000은 뒤가 $라서 제외). 비밀번호 검증의 (?=.*\\d)(?=.*[A-Z])도 lookahead 활용입니다." },
   { "q":"flags g와 y의 차이는?","a":"• g (Global) — matchAll·replace로 모든 매치 찾기. 어디서든 매치 가능. • y (Sticky) — regex.lastIndex 위치에서 정확히 매치 시도. 그 위치에서 매치 안 되면 실패. 차이 예: 입력 foo bar, lastIndex=4 • /bar/g → 4번 인덱스부터 검색 → 매치 (4-7) • /bar/y → 4번 인덱스에서 정확히 매치 → 매치 (4-7) 하지만 lastIndex=3이면: • /bar/g → 3번부터 검색 → 매치 (4-7) • /bar/y → 3번에 \"bar\"가 없음 → 실패 y flag는 토큰화·파서 작성 시 유용 (현재 위치만 검사)." },
-  { "q":"flags u 플래그가 왜 필요한가요?","a":"유니코드 인식 모드를 켭니다. 한글·이모지·기타 BMP 외 문자를 정확히 매치해요. u flag가 없으면 이모지(서로게이트 페어)가 한 글자인데 두 코드 단위로 분리되고, \\p{...} 유니코드 속성 매칭이 오류가 납니다. u flag를 켜면 \\p{Emoji}(이모지), \\p{L}(모든 문자 Letter), \\p{N}(숫자 Number), \\p{Script=Hangul}(한글 스크립트)을 쓸 수 있습니다. 한글·이모지 정확 매칭이 필요하면 u flag가 거의 필수입니다." },
-  { "q":"한글·이모지 매칭은 어떻게 하나요?","a":"한글 매칭: 완성형 한글은 [가-힣]이 가장 일반적이고, 초성·중성 자모는 [ㄱ-ㅎㅏ-ㅣ], 옛한글까지 포함하려면 \\p{Script=Hangul}(u flag 필수)을 씁니다. 이모지 매칭: 기본은 \\p{Emoji}(u flag 필수), 피부톤·복합 이모지는 \\p{Emoji_Presentation} 또는 \\p{Extended_Pictographic}을 사용합니다. 다만 가족 이모지 같은 ZWJ 시퀀스는 정규식만으론 정확히 한 단위로 매치하기 어렵습니다. 본 도구의 패턴 라이브러리에서 한글·자모·한자·이모지 패턴을 클릭으로 적용 가능합니다." },
+  { "q":"flags u 플래그가 왜 필요한가요?","a":"유니코드 인식 모드를 켭니다. 한글·이모지·기타 BMP 외 문자를 정확히 매치해요. u flag가 없으면 이모지(서로게이트 페어)가 한 글자인데 두 코드 단위로 분리되고, \\p{...}가 유니코드 속성이 아니라 글자 p{...} 그대로로 해석돼 오류 없이 엉뚱한 결과가 나옵니다. u flag를 켜면 \\p{Emoji}(이모지), \\p{L}(모든 문자 Letter), \\p{N}(숫자 Number), \\p{Script=Hangul}(한글 스크립트)을 쓸 수 있습니다. 한글·이모지 정확 매칭이 필요하면 u flag가 거의 필수입니다." },
+  { "q":"한글·이모지 매칭은 어떻게 하나요?","a":"한글 매칭: 완성형 한글은 [가-힣]이 가장 일반적이고, 초성·중성 자모는 [ㄱ-ㅎㅏ-ㅣ], 옛한글까지 포함하려면 \\p{Script=Hangul}(u flag 필수)을 씁니다. 이모지 매칭: \\p{Emoji}(u flag 필수)는 숫자 0~9와 #·*까지 포함하므로, 이모지만 찾으려면 \\p{Extended_Pictographic}을 쓰는 편이 안전합니다. 국기·피부톤·가족 이모지 같은 조합 이모지는 Regional_Indicator 쌍과 ZWJ(\\u200D) 연결까지 패턴에 넣어야 한 단위로 잡힙니다. 본 도구의 패턴 라이브러리에서 한글·자모·한자·이모지 패턴을 클릭으로 적용 가능합니다." },
   { "q":"주민번호·카드번호 검증 정규식 안전한가요?","a":"형식만 검증할 뿐 실제 유효성은 보장하지 않습니다. • 주민번호 — 형식 검증 외 체크섬(7자리 검증 알고리즘) + 출생연도·성별 코드 일관성 검증 필수 • 카드번호 — Luhn 알고리즘으로 체크섬 검증 + 카드사 BIN 확인 필요 • 사업자등록번호 — 자체 체크섬 (마지막 자리 검증) 개인정보 처리 시 주의: • 「개인정보 보호법」상 주민번호·카드번호는 고유식별정보 — 수집·저장·전송 시 암호화 의무 • 실 운영에서는 토큰화·마스킹 권장 (직접 저장 금지) • 본 도구의 패턴은 형식 검증 어림이며, 실제 검증·저장은 KISA·OWASP 가이드 + 검증 알고리즘(체크섬) + 안전한 암호화 절차가 추가로 필요합니다. 면책조항 참조." },
-  { "q":"정규식이 너무 느려요 (catastrophic backtracking)","a":"중첩된 양화 한정자가 있으면 입력 길이에 지수적으로 시간이 늘어납니다. 위험 패턴: (a+)+$는 a를 N개 쓴 뒤 !가 오는 입력에서 2의 N제곱 번 시도하고, (a|aa)+는 분기 백트래킹이 폭발하며, (.*)*는 무한 분기입니다. 해결 방법: ① 중첩 양화 한정자 제거 — (a+)+를 a+로, ② 분기 명확화 — a|aa 대신 a{1,2}, ③ 구체적 character class — .+ 대신 [^\"]+ 같은 패턴, ④ lazy 양화 한정자 .*? 사용. 본 도구는 100ms 초과 시 경고를 표시하며, 입력 100KB · 매치 1만 개로 자동 제한합니다." }
+  { "q":"정규식이 너무 느려요 (catastrophic backtracking)","a":"중첩된 양화 한정자가 있으면 입력 길이에 지수적으로 시간이 늘어납니다. 위험 패턴: (a+)+$는 a를 N개 쓴 뒤 !가 오는 입력에서 2의 N제곱 번 시도하고, (a|aa)+는 분기 백트래킹이 폭발하며, (.*)*는 무한 분기입니다. 해결 방법: ① 중첩 양화 한정자 제거 — (a+)+를 a+로, ② 분기 명확화 — a|aa 대신 a{1,2}, ③ 구체적 character class — .+ 대신 [^\"]+ 같은 패턴, ④ lazy 양화 한정자 .*? 사용. 본 도구는 정규식을 별도 작업 스레드(Web Worker)에서 실행해 1초가 넘으면 자동으로 중단하고, 100ms를 넘기면 경고를 표시하며, 입력 100KB · 매치 1만 개로 제한합니다." }
 ]
 
 export default function RegexPage() {
@@ -89,7 +89,7 @@ export default function RegexPage() {
         <ToolIconBadge catId="dev" />정규식 테스트기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '24px' }}>
-        JavaScript 정규식 실시간 매칭·하이라이트 + 캡처·치환·분할 + <strong style={{ color: 'var(--text)' }}>한국 데이터 패턴 30+</strong>.
+        JavaScript 정규식 실시간 매칭·하이라이트 + 캡처·치환·분할 + <strong style={{ color: 'var(--text)' }}>정규식 패턴 30+ (한국 데이터 10종)</strong>.
       </p>
 
       {/* 면책 박스 */}
@@ -103,8 +103,8 @@ export default function RegexPage() {
         <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
           ⚠️ 본 도구의 정규식 매칭은 모두 <strong>브라우저에서 실행</strong>되며 입력 데이터는 외부로 전송되지 않습니다.
           주민번호·카드번호 등 <strong>개인정보를 다룰 때는 본 도구가 아닌 KISA·OWASP 가이드</strong>를 따른 안전한 검증 절차를 사용하세요.
-          잘못된 정규식은 브라우저를 일시 정지시킬 수 있습니다 (catastrophic backtracking) —{' '}
-          <strong>입력 100KB · 매치 1만 개 · 실행 시간 자동 제한</strong>. 분야별 안전 안내는 <Link href="/disclaimer#dev" style={{ color: 'var(--accent)' }}>면책조항</Link> 참고.
+          잘못된 정규식은 브라우저를 멈추게 할 수 있어(catastrophic backtracking) 별도 스레드에서 실행하고{' '}
+          <strong>입력 100KB · 매치 1만 개 · 실행 1초</strong>로 제한합니다. 분야별 안전 안내는 <Link href="/disclaimer#dev" style={{ color: 'var(--accent)' }}>면책조항</Link> 참고.
         </p>
       </div>
 
@@ -118,11 +118,11 @@ export default function RegexPage() {
         <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
           <li><strong>탭 1 매칭</strong> — 정규식 + flags + 테스트 문자열 → 하이라이트 + 매치 카드(인덱스·길이·캡처 그룹·이름 그룹) 자동 표시</li>
           <li><strong>탭 2 치환·분할</strong> — 같은 정규식·flags로 치환($1·$&·$<code>{`<name>`}</code>) 또는 split 결과 + JS/Python/Java/PHP 코드 스니펫 자동 생성</li>
-          <li><strong>탭 3 패턴 라이브러리</strong> — 한국 휴대폰·주민번호·사업자번호·우편번호 + 이메일·URL·UUID·HTML·마크다운 등 30+ 카드. 클릭 시 자동 적용</li>
+          <li><strong>탭 3 패턴 라이브러리</strong> — 한국 데이터 10종(휴대폰·주민번호·사업자번호·우편번호 등)과 이메일·URL·UUID·HTML·마크다운 등 30여 개 카드. 클릭 시 자동 적용</li>
           <li><strong>탭 4 치트시트</strong> — 메타문자·양화한정자·문자클래스·그룹·앵커·룩어라운드·flags 6종 + JS regex 한계 + 흔한 실수</li>
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 정규식·flags·테스트 문자열·치환 패턴은 자동 저장됩니다. 200ms 디바운스로 입력 변화 시 즉시 재계산.
+          💡 정규식·flags·치환 패턴은 자동 저장됩니다(테스트 문자열은 개인정보가 들어갈 수 있어 저장하지 않음). 200ms 디바운스로 입력 변화 시 즉시 재계산.
         </p>
       </div>
 
@@ -254,7 +254,7 @@ $1 = "example" (도메인만 캡처)
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
           잘못된 정규식은 <strong>지수적 시간 복잡도</strong>로 브라우저·서버를 멈출 수 있습니다.
-          본 도구는 <strong>입력 100KB · 매치 1만 개 · 실행 시간 측정</strong> 3중 안전망을 제공합니다.
+          본 도구는 정규식을 별도 작업 스레드(Web Worker)에서 돌려 <strong>1초가 넘으면 자동 중단</strong>하고, 입력 100KB · 매치 1만 개로 제한합니다.
         </p>
         <div style={{ background: 'rgba(219, 39, 119, 0.06)', border: '1px solid #DB2777', borderRadius: 10, padding: '14px 16px', marginTop: 14 }}>
           <p style={{ fontSize: 13, color: '#DB2777', fontWeight: 700, margin: '0 0 8px' }}>🚨 위험 패턴 사례</p>
@@ -285,7 +285,7 @@ $1 = "example" (도메인만 캡처)
         <summary style={faqSummary}>Q1. JavaScript 정규식과 PCRE/Python의 차이는?</summary>
         <p style={faqAnswer}>
           본 도구는 <strong>JavaScript regex 엔진</strong>(브라우저 네이티브)을 사용합니다. 다른 엔진과 차이:<br />
-          • <strong>가변폭 lookbehind</strong>: JS는 가변폭 지원 (모던 브라우저), PCRE는 고정폭만<br />
+          • <strong>가변폭 lookbehind</strong>: JS는 가변폭 지원 (모던 브라우저), PCRE는 전통적으로 고정폭만 허용<br />
           • <strong>Atomic group</strong> <code>{`(?>...)`}</code>: PCRE 전용, JS 미지원<br />
           • <strong>재귀 패턴</strong> <code>{`(?R)`}</code>: PCRE 전용<br />
           • <strong>Verbose flag</strong> <code>re.X</code>: Python 전용 (한 줄에 모두 작성)<br />
@@ -369,9 +369,9 @@ match.groups.day    = "15"
           <strong>유니코드 인식 모드</strong>를 켭니다. 한글·이모지·기타 BMP 외 문자를 정확히 매치해요.<br />
           <strong>u flag 없을 때 문제</strong>:<br />
           • 이모지(서로게이트 페어) → 한 글자가 두 코드 단위로 분리됨<br />
-          • <code style={codeStyle}>{`\\p{...}`}</code> 유니코드 속성 매칭 → <strong>오류</strong><br />
+          • <code style={codeStyle}>{`\\p{...}`}</code> → 유니코드 속성이 아니라 글자 <code style={codeStyle}>{`p{...}`}</code>로 해석 — <strong>오류 없이 조용히 틀림</strong><br />
           <strong>u flag 사용 시 가능</strong>:<br />
-          • <code style={codeStyle}>{`\\p{Emoji}`}</code> — 이모지<br />
+          • <code style={codeStyle}>{`\\p{Emoji}`}</code> — 이모지 (숫자·#·*도 포함되니 주의)<br />
           • <code style={codeStyle}>{`\\p{L}`}</code> — 모든 문자 (Letter)<br />
           • <code style={codeStyle}>{`\\p{N}`}</code> — 숫자 (Number)<br />
           • <code style={codeStyle}>{`\\p{Script=Hangul}`}</code> — 한글 스크립트<br />
@@ -387,9 +387,8 @@ match.groups.day    = "15"
           • <strong>자모 분리</strong>: <code style={codeStyle}>{`[ㄱ-ㅎㅏ-ㅣ]`}</code> — 초성·중성<br />
           • <strong>유니코드 속성</strong>: <code style={codeStyle}>{`\\p{Script=Hangul}`}</code> (u flag 필수) — 옛한글 포함<br />
           <strong>이모지 매칭</strong>:<br />
-          • <strong>기본</strong>: <code style={codeStyle}>{`\\p{Emoji}`}</code> (u flag 필수)<br />
-          • <strong>피부톤·복합 이모지</strong>: <code style={codeStyle}>{`\\p{Emoji_Presentation}`}</code> 또는 <code style={codeStyle}>{`\\p{Extended_Pictographic}`}</code><br />
-          • <strong>주의</strong>: 가족 이모지 같은 ZWJ 시퀀스는 정규식만으론 정확히 한 단위로 매치 어려움<br />
+          • <strong>기본</strong>: <code style={codeStyle}>{`\\p{Extended_Pictographic}`}</code> (u flag 필수) — <code style={codeStyle}>{`\\p{Emoji}`}</code>는 숫자 0~9·#·*까지 매치하니 주의<br />
+          • <strong>조합 이모지</strong>: 국기(🇰🇷)는 <code style={codeStyle}>{`\\p{Regional_Indicator}{2}`}</code>, 피부톤·가족 이모지는 ZWJ(<code style={codeStyle}>{`\\u200D`}</code>) 연결까지 패턴에 넣어야 한 단위로 잡힘<br />
           본 도구의 [📚 패턴 라이브러리]에서 한글·자모·한자·이모지 패턴을 클릭으로 적용 가능합니다.
         </p>
       </details>
@@ -421,7 +420,7 @@ match.groups.day    = "15"
           2. <strong>분기 명확화</strong> — <code style={codeStyle}>{`a|aa`}</code> 대신 <code style={codeStyle}>{`a{1,2}`}</code><br />
           3. <strong>구체적 character class</strong> — <code style={codeStyle}>{`.+`}</code> 대신 <code style={codeStyle}>{`[^"]+`}</code><br />
           4. <strong>lazy 양화 한정자</strong> — <code style={codeStyle}>{`.*?`}</code><br />
-          본 도구는 100ms 초과 시 ⚠️ 경고를 표시하며, 입력 100KB · 매치 1만 개로 자동 제한합니다.
+          본 도구는 정규식을 별도 작업 스레드에서 실행해 <strong>1초가 넘으면 자동 중단</strong>하고, 100ms를 넘기면 ⚠️ 경고를 표시하며, 입력 100KB · 매치 1만 개로 제한합니다.
         </p>
       </details>
 

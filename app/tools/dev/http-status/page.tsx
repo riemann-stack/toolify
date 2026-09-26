@@ -70,14 +70,14 @@ const codeStyle: React.CSSProperties = {
 const FAQ_LD = [
   { "q":"401과 403의 차이는?","a":"가장 흔한 혼동입니다. • 401 Unauthorized: 인증 정보가 없거나 만료됨 (이름과 달리 \"권한 부족\"이 아님). 실제 의미는 \"Unauthenticated\" • 403 Forbidden: 인증은 됐지만 해당 리소스에 권한 없음 (스코프 부족·IP 차단·CDN 서명 만료) 예시: • Authorization 헤더 없이 API 호출 → 401 (토큰 자체 없음) • 일반 사용자 토큰으로 관리자 API 호출 → 403 (토큰은 있지만 권한 부족) • JWT exp 시간 지남 → 401 (재로그인 필요) 본 도구의 [🔍 검색]에서 401·403을 비교하며 확인 가능." },
   { "q":"301과 302 어떤 걸 써야 하나요?","a":"SEO·캐시 관점에서 매우 다릅니다. • 301 Moved Permanently: 영구 이동. 검색엔진이 새 URL로 인덱스 갱신, 브라우저 캐시. SEO 점수 이전. • 302 Found: 임시 이동. 검색엔진은 원본 URL 유지, 캐시 X 사용 가이드: • 도메인 영구 변경 (daum.net → kakao.com) → 301 • A/B 테스트·임시 분기·점검 페이지 → 302 • POST → POST 메서드 보존 필요 → 307 (임시) / 308 (영구) ⚠️ 301은 캐시되므로 신중히. 한 번 잘못 설정하면 사용자 브라우저에 영구 캐시." },
-  { "q":"502와 504 차이는?","a":"둘 다 게이트웨이(nginx·CDN) 관련 5xx지만 원인이 다릅니다. • 502 Bad Gateway: 게이트웨이가 백엔드에서 잘못된 응답 받음 (TCP RST·헤더 깨짐·백엔드 다운) • 504 Gateway Timeout: 게이트웨이가 백엔드 응답을 기다리다 timeout (백엔드 너무 느림) 구분 방법: • 백엔드 서비스가 systemctl status에서 active이면 → 504 (응답 느림) • 백엔드 다운이면 → 502 일반적 원인: 502 - nginx upstream 다운·헬스체크 실패 / 504 - Lambda 30초 초과·DB 슬로우 쿼리·외부 API 무응답" },
+  { "q":"502와 504 차이는?","a":"둘 다 게이트웨이(nginx·CDN) 관련 5xx지만 원인이 다릅니다. • 502 Bad Gateway: 게이트웨이가 백엔드에서 잘못된 응답 받음 (TCP RST·헤더 깨짐·백엔드 다운) • 504 Gateway Timeout: 게이트웨이가 백엔드 응답을 기다리다 timeout (백엔드 너무 느림) 구분 방법: • 백엔드 서비스가 systemctl status에서 active이면 → 504 (응답 느림) • 백엔드 다운이면 → 502 일반적 원인: 502 - nginx upstream 다운·헬스체크 실패 / 504 - API Gateway 29초 한도 초과·DB 슬로우 쿼리·외부 API 무응답" },
   { "q":"CORS 오류는 몇 번 코드인가요?","a":"고정된 코드 없음 — 상황에 따라 다릅니다. • preflight OPTIONS 미응답 → 405 Method Not Allowed 또는 응답 자체 없음 • Allow-Origin 헤더 누락 → 200 OK이지만 브라우저가 차단 (네트워크 탭은 200, 콘솔은 CORS 오류) • credentials: include + Allow-Origin: * → 200이지만 브라우저 차단 해결: 본 도구의 [🐛 디버깅] 탭에서 \"CORS preflight 실패\" 시나리오 참조. 핵심: 서버 응답에 Access-Control-Allow-Origin, Access-Control-Allow-Methods, Access-Control-Allow-Headers 헤더를 설정해야 합니다." },
   { "q":"429 Too Many Requests 발생 시?","a":"API rate limit 초과. 응답에 따라 대응: • Retry-After 헤더 확인 (대기 시간 sec) → 그 시간만큼 대기 후 재시도 • X-RateLimit-Remaining·X-RateLimit-Reset 헤더 모니터링 • Exponential backoff 패턴: 1초 → 2초 → 4초 → 8초 (랜덤 지터 추가) • 캐싱·요청 묶기 (배치)로 호출 줄이기 • API 플랜 업그레이드 (paid tier) 한국 API 한도: • 네이버 검색: 25,000회/일 • 카카오 메시지: 분당 한도 (계정별 다름) • OpenAI: tier별 RPM·TPM • GitHub: 시간당 5000 (인증), 60 (비인증)" },
-  { "q":"Cloudflare 521·522·524 차이?","a":"모두 Cloudflare ↔ Origin 서버 통신 문제이지만 단계가 다릅니다. • 521 Web Server Is Down: TCP 연결 거부 — Origin 서버 다운·방화벽이 Cloudflare IP 차단 • 522 Connection Timed Out: TCP 핸드셰이크 timeout — 네트워크 지연·과부하 • 524 A Timeout Occurred: 연결은 됐지만 100초 내 HTTP 응답 못 받음 — Origin 처리 너무 느림 해결: • 521/522: Origin 서버 상태 확인 + Cloudflare IP 화이트리스트 (cloudflare.com/ips) • 524: Origin 처리 시간 단축, 비동기 처리, Cloudflare Enterprise는 100초 → 6000초 가능 WebSocket·SSE 장기 연결은 524 자주 발생 → Cloudflare Enterprise 또는 Cloudflare Tunnel 사용." },
+  { "q":"Cloudflare 521·522·524 차이?","a":"모두 Cloudflare ↔ Origin 서버 통신 문제이지만 단계가 다릅니다. • 521 Web Server Is Down: TCP 연결 거부 — Origin 서버 다운·방화벽이 Cloudflare IP 차단 • 522 Connection Timed Out: TCP 핸드셰이크 timeout — 네트워크 지연·과부하 • 524 A Timeout Occurred: 연결은 됐지만 100초 내 HTTP 응답 못 받음 — Origin 처리 너무 느림 해결: • 521/522: Origin 서버 상태 확인 + Cloudflare IP 화이트리스트 (cloudflare.com/ips) • 524: Origin 처리 시간 단축, 비동기 처리, Cloudflare Enterprise는 100초 → 6000초 가능 WebSocket은 모든 플랜에서 쓸 수 있지만 100초 동안 데이터가 없으면 끊기므로 ping·keepalive를 보내고, SSE도 주기적으로 heartbeat를 보내세요." },
   { "q":"200 vs 204 vs 201 언제 쓰나요?","a":"REST API 설계 시 의도를 명확히: • 200 OK: 성공 + 응답 본문 있음 — GET·PUT·PATCH 결과 반환 • 201 Created: 성공 + 새 리소스 생성 — POST. Location 헤더 필수 (새 URL) • 204 No Content: 성공 + 응답 본문 없음 — DELETE 성공 / PUT으로 변경했지만 결과 안 보낼 때 / CORS preflight 실수: • DELETE 후 200 + 빈 본문 → 잘못 (204가 명확) • POST 후 200 + 새 리소스 → 잘못 (201 + Location 헤더) • 204 응답에 response.json() 호출 → 오류 (본문 없음)" },
-  { "q":"422 Unprocessable Entity는 언제?","a":"400과 다른 점이 핵심: • 400 Bad Request: 구문 오류 (JSON 파싱 실패·콤마 누락) • 422 Unprocessable Entity: 구문은 맞지만 의미 검증 실패 (이메일 형식 X·필수 필드 빈 값·비즈니스 규칙 위반) 프레임워크 자동 사용: • FastAPI: Pydantic validation 실패 시 자동 422 • Spring Boot: @Valid 실패 시 기본 400 (수동 422 권장) • Rails ActiveRecord: validation 실패 시 422 REST 베스트 프랙티스는 422 사용으로 의미 명확화. 응답 본문에 필드별 오류 배열(detail)을 포함하는 것이 관례입니다." },
+  { "q":"422 Unprocessable Entity는 언제?","a":"400과 다른 점이 핵심: • 400 Bad Request: 구문 오류 (JSON 파싱 실패·콤마 누락) • 422 Unprocessable Content(옛 명칭 Unprocessable Entity, RFC 9110): 구문은 맞지만 의미 검증 실패 (이메일 형식 X·필수 필드 빈 값·비즈니스 규칙 위반) 프레임워크 자동 사용: • FastAPI: Pydantic validation 실패 시 자동 422 • Spring Boot: @Valid 실패 시 기본 400 (수동 422 권장) • Rails ActiveRecord: validation 실패 시 422 REST 베스트 프랙티스는 422 사용으로 의미 명확화. 응답 본문에 필드별 오류 배열(detail)을 포함하는 것이 관례입니다." },
   { "q":"JWT 만료가 401인가 403인가?","a":"401 Unauthorized가 정답입니다. • JWT exp 시간 지남 = 인증 정보 만료 = 인증 안 됨 상태 → 401 • 401 응답으로 클라이언트는 refresh_token으로 재발급할 수 있음을 알 수 있음 • 403은 \"토큰은 유효한데 권한 부족\" (다른 사용자 데이터 접근 등) 실제 동작: 1. JWT 만료 → 서버가 401 + WWW-Authenticate 헤더 응답 2. 클라이언트(axios interceptor 등)가 401 감지 3. refresh_token으로 새 access_token 발급 4. 원래 요청 재시도 일부 잘못된 구현: JWT 만료에 403 반환 — 클라이언트 재시도 로직이 작동 X. 401이 표준." },
-  { "q":"본 도구의 데이터 출처는?","a":"본 도구의 데이터는 다음을 종합한 정보입니다: • RFC 표준: 7231 (HTTP/1.1), 9110 (최신 의미론, 2022), 7235 (인증), 7232 (조건부), 6585·8297·7538·7540 (확장) • WebDAV: RFC 4918, 5842 • 비표준 출처: - Cloudflare 5xx (520·521·522·523·524·525·526·530): Cloudflare 공식 docs - nginx (444·494·499): nginx 공식 wiki • 한국 사이트 사례: 카카오·네이버·토스·쿠팡·AWS Lambda 운영 경험 • 해결 힌트: 일반적·검증된 디버깅 단계만 (위험한 워크어라운드 X) 정확한 명세는 외부 RFC·MDN·Cloudflare docs를 우선 참조하세요. 본 도구는 모든 데이터가 정적이며 외부 API 호출 0개." }
+  { "q":"본 도구의 데이터 출처는?","a":"본 도구의 데이터는 다음을 종합한 정보입니다: • RFC 표준: 9110 (HTTP 의미론, 2022 — 이전 7231·7232·7233·7235·7538을 대체), 6585·8297·8470·7725 (확장) • WebDAV: RFC 4918, 5842 • 비표준 출처: - Cloudflare 5xx (520·521·522·523·524·525·526·530): Cloudflare 공식 docs - nginx (444·494·499): nginx 공식 wiki • 한국 사이트 사례: 널리 알려진 일반적 상황을 예로 든 것으로, 해당 기업의 공식 발표는 아님 • 해결 힌트: 일반적·검증된 디버깅 단계만 (위험한 워크어라운드 X) 정확한 명세는 외부 RFC·MDN·Cloudflare docs를 우선 참조하세요. 본 도구는 모든 데이터가 정적이며 외부 API 호출 0개." }
 ]
 
 export default function HttpStatusPage() {
@@ -102,7 +102,7 @@ export default function HttpStatusPage() {
         marginBottom: '32px',
       }}>
         <p style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.75, margin: 0 }}>
-          ⚠️ 본 도구의 HTTP 상태 코드 설명·해결 힌트는 <strong>RFC 7231·9110 등 표준 명세와 일반적 운영 경험을 정리한 어림</strong>이며, 모든 시나리오를 완전히 커버하지 않습니다.
+          ⚠️ 본 도구의 HTTP 상태 코드 설명·해결 힌트는 <strong>RFC 9110 등 표준 명세와 일반적 운영 경험을 정리한 어림</strong>이며, 모든 시나리오를 완전히 커버하지 않습니다.
           실제 운영 환경에서 마주친 오류는 <strong>서버 로그·DevTools Network 탭·CDN 대시보드</strong> 등 추가 진단이 필요합니다.
           <strong> Cloudflare(521·524)·nginx(499) 등 비표준 코드는 해당 벤더의 공식 문서를 우선</strong> 참조하세요.
           분야별 안전 안내는 <Link href="/disclaimer#dev" style={{ color: 'var(--accent)' }}>면책조항</Link> 참고.
@@ -180,7 +180,7 @@ export default function HttpStatusPage() {
       <h2 style={sectionTitle}>📜 표준 vs 비표준 출처</h2>
       <div style={card}>
         <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
-          <li>📖 <strong>표준 RFC</strong>: 7231 (HTTP/1.1)·6585 (추가 코드 428·429·431·511)·8297 (103 Early Hints)·7235 (인증)·7232 (조건부)·7538 (308)·7540 (HTTP/2)·4918 (WebDAV)·9110 (HTTP 의미론, 2022 최신)</li>
+          <li>📖 <strong>표준 RFC</strong>: 9110 (HTTP 의미론, 2022 — 7231·7232·7233·7235·7538을 대체)·6585 (추가 코드 428·429·431·511)·8297 (103 Early Hints)·4918 (WebDAV)</li>
           <li>☁️ <strong>Cloudflare 5xx (520~530)</strong>: Cloudflare 자체 정의 — Origin 서버 통신 문제 진단</li>
           <li>🔌 <strong>nginx (444·494·499)</strong>: nginx 내부 코드 — 클라이언트 종료·헤더 크기·차단</li>
           <li>🟦 <strong>Microsoft IIS</strong>: 440 (Login Time-out)·449 (Retry With)·451 (Redirect)</li>
@@ -270,7 +270,7 @@ export default function HttpStatusPage() {
           <strong>구분 방법</strong>:<br />
           • 백엔드 서비스가 <code style={codeStyle}>systemctl status</code>에서 active이면 → <strong>504</strong> (응답 느림)<br />
           • 백엔드 다운이면 → <strong>502</strong><br />
-          <strong>일반적 원인</strong>: 502 - nginx upstream 다운·헬스체크 실패 / 504 - Lambda 30초 초과·DB 슬로우 쿼리·외부 API 무응답
+          <strong>일반적 원인</strong>: 502 - nginx upstream 다운·헬스체크 실패 / 504 - API Gateway 29초 한도 초과·DB 슬로우 쿼리·외부 API 무응답
         </p>
       </details>
 
@@ -313,7 +313,7 @@ export default function HttpStatusPage() {
           <strong>해결</strong>:<br />
           • 521/522: Origin 서버 상태 확인 + Cloudflare IP 화이트리스트 (cloudflare.com/ips)<br />
           • 524: Origin 처리 시간 단축, 비동기 처리, Cloudflare Enterprise는 100초 → 6000초 가능<br />
-          <strong>WebSocket·SSE 장기 연결</strong>은 524 자주 발생 → Cloudflare Enterprise 또는 Cloudflare Tunnel 사용.
+          <strong>WebSocket·SSE 장기 연결</strong>: WebSocket은 모든 플랜에서 지원되지만 100초 동안 데이터가 없으면 끊기므로 ping·keepalive를 보내고, SSE도 주기적으로 heartbeat를 보내세요.
         </p>
       </details>
 
@@ -336,7 +336,7 @@ export default function HttpStatusPage() {
         <div style={faqAnswer}>
           400과 다른 점이 핵심:<br />
           • <strong>400 Bad Request</strong>: <strong>구문 오류</strong> (JSON 파싱 실패·콤마 누락)<br />
-          • <strong>422 Unprocessable Entity</strong>: 구문은 맞지만 <strong>의미 검증 실패</strong> (이메일 형식 X·필수 필드 빈 값·비즈니스 규칙 위반)<br />
+          • <strong>422 Unprocessable Content</strong>(옛 명칭 Unprocessable Entity, RFC 9110): 구문은 맞지만 <strong>의미 검증 실패</strong> (이메일 형식 X·필수 필드 빈 값·비즈니스 규칙 위반)<br />
           <strong>프레임워크 자동 사용</strong>:<br />
           • <strong>FastAPI</strong>: Pydantic validation 실패 시 자동 422<br />
           • <strong>Spring Boot</strong>: @Valid 실패 시 기본 400 (수동 422 권장)<br />
@@ -370,12 +370,12 @@ export default function HttpStatusPage() {
         <summary style={faqSummary}>Q10. 본 도구의 데이터 출처는?</summary>
         <p style={faqAnswer}>
           본 도구의 데이터는 다음을 종합한 정보입니다:<br />
-          • <strong>RFC 표준</strong>: 7231 (HTTP/1.1), 9110 (최신 의미론, 2022), 7235 (인증), 7232 (조건부), 6585·8297·7538·7540 (확장)<br />
+          • <strong>RFC 표준</strong>: 9110 (HTTP 의미론, 2022 — 이전 7231·7232·7233·7235·7538을 대체), 6585·8297·8470·7725 (확장)<br />
           • <strong>WebDAV</strong>: RFC 4918, 5842<br />
           • <strong>비표준 출처</strong>:<br />
           &nbsp;&nbsp;- Cloudflare 5xx (520·521·522·523·524·525·526·530): Cloudflare 공식 docs<br />
           &nbsp;&nbsp;- nginx (444·494·499): nginx 공식 wiki<br />
-          • <strong>한국 사이트 사례</strong>: 카카오·네이버·토스·쿠팡·AWS Lambda 운영 경험<br />
+          • <strong>한국 사이트 사례</strong>: 널리 알려진 일반적 상황을 예로 든 것으로, 해당 기업의 공식 발표는 아님<br />
           • <strong>해결 힌트</strong>: 일반적·검증된 디버깅 단계만 (위험한 워크어라운드 X)<br />
           정확한 명세는 외부 RFC·MDN·Cloudflare docs를 우선 참조하세요.
           본 도구는 모든 데이터가 <strong>정적</strong>이며 외부 API 호출 0개.

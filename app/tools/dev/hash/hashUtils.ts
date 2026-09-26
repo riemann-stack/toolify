@@ -3,7 +3,7 @@
    SHA-1/256/384/512: Web Crypto API
    HMAC: Web Crypto API */
 
-export type AlgorithmId = 'md5' | 'sha1' | 'sha256' | 'sha512'
+export type AlgorithmId = 'md5' | 'sha1' | 'sha256' | 'sha384' | 'sha512'
 export type HmacAlgorithmId = 'sha1' | 'sha256' | 'sha384' | 'sha512'
 export type Safety = 'safe' | 'integrity' | 'unsafe'
 export type OutputFormat = 'hex_lower' | 'hex_upper' | 'base64' | 'base64url'
@@ -62,6 +62,18 @@ export const ALGORITHMS: AlgorithmMeta[] = [
     description: 'SHA-2 계열. 현재 가장 널리 쓰이는 안전한 해시. NIST 표준.',
     useCases: 'HTTPS, 블록체인, JWT, SRI, 디지털 서명',
     speed: '빠름',
+  },
+  {
+    id: 'sha384',
+    name: 'SHA-384',
+    bits: 384,
+    hexLen: 96,
+    safety: 'safe',
+    badgeLabel: '🟢 안전',
+    badgeColor: '#0D9488',
+    description: 'SHA-2 계열 384bit(SHA-512를 잘라 쓴 변형). SRI integrity 값에 가장 흔히 쓰임.',
+    useCases: 'SRI(integrity), TLS, 고보안',
+    speed: '64bit 시스템에서 SHA-256보다 빠름',
   },
   {
     id: 'sha512',
@@ -185,13 +197,48 @@ export function formatHash(buf: ArrayBuffer, format: OutputFormat): string {
   }
 }
 
-export function compareHashes(a: string, b: string): boolean {
-  /* hex 비교: 대소문자·공백·콜론·하이픈 무시 */
-  const norm = (s: string) => s.replace(/[^0-9a-fA-F]/g, '').toLowerCase()
-  return norm(a).length > 0 && norm(a) === norm(b)
+/** 붙여넣은 텍스트에서 해시 후보(hex)만 뽑는다.
+ *  'hash  file.iso'(sha256sum), 'SHA256 (file) = hash'(BSD), certutil의 'e3 b0 c4 …',
+ *  'E3:B0:C4:…' 같은 형식을 지원 — 파일명 속 a-f·숫자가 섞이지 않도록 토큰 단위로 추출 */
+export function extractHexTokens(input: string): string[] {
+  const out: string[] = []
+  /* 바이트 구분자(공백·콜론·하이픈)로 나뉜 형식 — 16바이트(MD5) 이상 */
+  const sep = input.match(/(?:\b[0-9a-fA-F]{2}[ :-]){15,}[0-9a-fA-F]{2}\b/g) ?? []
+  for (const t of sep) out.push(t.replace(/[ :-]/g, '').toLowerCase())
+  /* 연속된 hex 32~128자 */
+  const plain = input.match(/\b[0-9a-fA-F]{32,128}\b/g) ?? []
+  for (const t of plain) out.push(t.toLowerCase())
+  return out
+}
+
+export type VerifyStatus =
+  | { status: 'match' }
+  | { status: 'mismatch' }
+  | { status: 'wrong-length'; length: number; guess: AlgorithmId | null }
+  | { status: 'no-hash' }
+
+/** 계산된 hex 해시(computed)와 사용자가 붙여넣은 값(input)을 비교.
+ *  길이가 선택한 알고리즘과 다르면 '변조'가 아니라 '알고리즘 불일치'로 따로 알려준다. */
+export function verifyHashInput(computedHex: string, input: string, algorithm: AlgorithmId): VerifyStatus {
+  const expectLen = getAlgorithm(algorithm).hexLen
+  const tokens = extractHexTokens(input)
+  if (tokens.length === 0) return { status: 'no-hash' }
+  const sameLen = tokens.filter((t) => t.length === expectLen)
+  if (sameLen.length === 0) {
+    const len = tokens[0].length
+    const guess = ALGORITHMS.find((a) => a.hexLen === len)?.id as AlgorithmId | undefined
+    return { status: 'wrong-length', length: len, guess: guess ?? null }
+  }
+  const c = computedHex.toLowerCase()
+  return sameLen.includes(c) ? { status: 'match' } : { status: 'mismatch' }
 }
 
 /** 텍스트 인코딩 */
+/** ASCII 모드에서 ?로 바뀌는(0x7F 초과) 문자가 있는지 */
+export function hasNonAscii(text: string): boolean {
+  return /[^\u0000-\u007F]/.test(text)
+}
+
 export function encodeText(text: string, encoding: TextEncoding): ArrayBuffer {
   if (encoding === 'ascii') {
     /* 0x7F 초과는 ?로 대체 */
@@ -216,6 +263,16 @@ export function parseKey(key: string, format: KeyFormat): ArrayBuffer {
    해시 함수
    ═════════════════════════════════════════════ */
 
+/** Web Crypto 알고리즘 이름 */
+function subtleName(algorithm: Exclude<AlgorithmId, 'md5'>): string {
+  switch (algorithm) {
+    case 'sha1':   return 'SHA-1'
+    case 'sha256': return 'SHA-256'
+    case 'sha384': return 'SHA-384'
+    case 'sha512': return 'SHA-512'
+  }
+}
+
 export async function hashText(
   text: string,
   algorithm: AlgorithmId,
@@ -223,8 +280,7 @@ export async function hashText(
 ): Promise<ArrayBuffer> {
   const data = encodeText(text, encoding)
   if (algorithm === 'md5') return md5Buffer(data)
-  const subtleAlg = algorithm === 'sha1' ? 'SHA-1' : algorithm === 'sha256' ? 'SHA-256' : 'SHA-512'
-  return crypto.subtle.digest(subtleAlg, data)
+  return crypto.subtle.digest(subtleName(algorithm), data)
 }
 
 export async function hashBuffer(
@@ -232,8 +288,7 @@ export async function hashBuffer(
   algorithm: AlgorithmId,
 ): Promise<ArrayBuffer> {
   if (algorithm === 'md5') return md5Buffer(data)
-  const subtleAlg = algorithm === 'sha1' ? 'SHA-1' : algorithm === 'sha256' ? 'SHA-256' : 'SHA-512'
-  return crypto.subtle.digest(subtleAlg, data)
+  return crypto.subtle.digest(subtleName(algorithm), data)
 }
 
 /** 파일 해시 — MD5는 청크, SHA는 한 번 (Web Crypto가 스트리밍 미지원) */
@@ -263,8 +318,7 @@ export async function hashFile(
   if (onProgress) onProgress(10)
   const data = await file.arrayBuffer()
   if (onProgress) onProgress(60)
-  const subtleAlg = algorithm === 'sha1' ? 'SHA-1' : algorithm === 'sha256' ? 'SHA-256' : 'SHA-512'
-  const result = await crypto.subtle.digest(subtleAlg, data)
+  const result = await crypto.subtle.digest(subtleName(algorithm), data)
   if (onProgress) onProgress(100)
   return result
 }

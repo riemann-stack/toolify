@@ -8,6 +8,25 @@ export type IndentId = '2' | '4' | 'tab'
 export type CategoryId = 'k8s' | 'docker' | 'ci' | 'spring' | 'openapi' | 'node'
 
 export const MAX_INPUT_BYTES = 500 * 1024  /* 500KB */
+
+/* 읽기 스키마: JSON_SCHEMA(yes/no·날짜를 문자열로 유지) + 병합 키(<<: *anchor).
+   JSON_SCHEMA만 쓰면 '<<'가 펼쳐지지 않고 그대로 키로 남음. @types/js-yaml에 types가 없어 직접 정의 */
+const MergeType = new yaml.Type('tag:yaml.org,2002:merge', {
+  kind: 'scalar',
+  resolve: (data: unknown) => data === '<<' || data === null,
+})
+const LOAD_SCHEMA = yaml.JSON_SCHEMA.extend({ implicit: [MergeType] })
+
+/** js-yaml 오류 메시지에 사람이 읽을 안내를 덧붙임 */
+function explainYamlError(msg: string): string {
+  let hint = ''
+  if (/unknown tag/i.test(msg)) hint = 'CloudFormation의 !Ref·!Sub 같은 커스텀 태그는 해석하지 않습니다. 태그를 지우거나 Fn::Sub 같은 긴 형식으로 바꿔 주세요'
+  else if (/duplicated mapping key/i.test(msg)) hint = '같은 레벨에 같은 키가 두 번 있습니다 (YAML 스펙상 오류)'
+  if (!hint) return msg
+  /* 첫 줄(오류 요약) 뒤에 안내를 붙이고, js-yaml의 코드 발췌는 그대로 둔다 */
+  const nl = msg.indexOf('\n')
+  return nl < 0 ? `${msg} — ${hint}` : `${msg.slice(0, nl)} — ${hint}${msg.slice(nl)}`
+}
 export const MAX_DEPTH_WARN = 100
 
 /* ─────────────────────────────────────────────
@@ -414,7 +433,8 @@ export function detectFormat(text: string): Format {
   if (first === '{' || first === '[') return 'json'
   /* YAML 단서: # 주석, --- 구분자, key: 패턴, - 리스트 */
   if (first === '#' || trimmed.startsWith('---')) return 'yaml'
-  if (/^[a-zA-Z_][\w-]*\s*:/m.test(trimmed)) return 'yaml'
+  /* key: 패턴 — 한글·숫자·$ 키, 따옴표 키까지 ('http://' 같은 콜론 뒤 공백 없는 경우 제외) */
+  if (/^[ \t]*(?:"[^"\n]*"|'[^'\n]*'|[^\s#:\-{}[\],&*!|>'"%@`][^:\n]*?)[ \t]*:(?:[ \t]|$)/m.test(trimmed)) return 'yaml'
   if (/^-\s/m.test(trimmed)) return 'yaml'
   return 'ambiguous'
 }
@@ -456,7 +476,7 @@ export function yamlToJson(yamlText: string, opts: ConvertOpts): ConvertResult {
   try {
     const indent = getIndent(opts.indent)
     /* 멀티 도큐먼트 우선 시도 */
-    const docs = yaml.loadAll(yamlText, undefined, { schema: yaml.JSON_SCHEMA })
+    const docs = yaml.loadAll(yamlText, undefined, { schema: LOAD_SCHEMA })
     let parsed: unknown
     let isMultiDoc = false
     if (docs.length > 1) {
@@ -480,7 +500,7 @@ export function yamlToJson(yamlText: string, opts: ConvertOpts): ConvertResult {
       isMultiDoc,
     }
   } catch (e) {
-    const msg = e instanceof Error ? e.message : 'YAML 파싱 오류'
+    const msg = explainYamlError(e instanceof Error ? e.message : 'YAML 파싱 오류')
     /* js-yaml YAMLException은 line/column 정보 포함 */
     let line: number | undefined, col: number | undefined
     if (e && typeof e === 'object' && 'mark' in e) {
@@ -504,7 +524,9 @@ export function jsonToYaml(jsonText: string, opts: ConvertOpts): ConvertResult {
       sortKeys: opts.sortKeys,
       lineWidth: -1,    /* 자동 줄바꿈 비활성 */
       noRefs: true,     /* 앵커 자동 생성 X */
-      schema: yaml.JSON_SCHEMA,
+      /* 따옴표 판단은 DEFAULT_SCHEMA 기준 — '2026-09-26' 같은 날짜형·'<<' 문자열을 따옴표로 감싸
+         PyYAML·SnakeYAML(Spring) 등 YAML 1.1 로더에서 날짜·병합 키로 바뀌지 않게 함 */
+      schema: yaml.DEFAULT_SCHEMA,
       forceQuotes: false,
       quotingType: '"',
     })
@@ -553,16 +575,15 @@ export interface LossyFeatures {
 
 export function detectLossyFeatures(yamlText: string): LossyFeatures {
   const messages: string[] = []
-  /* # 주석 (단, 문자열 안의 # 은 제외 — 간단 휴리스틱) */
-  const lines = yamlText.split('\n')
-  const hasComments = lines.some((l) => {
-    const t = l.trim()
-    return t.startsWith('#') || /\s#\s/.test(t)
-  })
+  /* 따옴표 문자열 안의 #·&·*·!는 주석·앵커·태그가 아니므로 먼저 지운다 (간단 휴리스틱) */
+  const lines = yamlText.split('\n').map((l) => l.replace(/"(?:[^"\\]|\\.)*"|'(?:[^']|'')*'/g, '""'))
+  const stripped = lines.join('\n')
+  /* # 주석: 줄 맨 앞이거나 공백 뒤의 # */
+  const hasComments = lines.some((l) => /(^|\s)#/.test(l))
   if (hasComments) messages.push('💬 주석(#) 발견 — JSON 변환 시 사라집니다')
 
   /* & 앵커 / * 별칭 */
-  const hasAnchors = /(\s|^)[&*]\w/.test(yamlText)
+  const hasAnchors = /(\s|^)[&*]\w/.test(stripped)
   if (hasAnchors) messages.push('🔗 앵커(&)/별칭(*) 발견 — 펼쳐져 데이터 중복으로 변환됩니다')
 
   /* --- 멀티 도큐먼트 */
@@ -570,8 +591,8 @@ export function detectLossyFeatures(yamlText: string): LossyFeatures {
   const isMultiDoc = docCount > 0 && yamlText.replace(/^---\s*$/gm, '').trim().length > 0
   /* 멀티 도큐먼트 메시지는 yamlToJson 에서 처리 (실제 도큐먼트 수에 따라) */
 
-  /* !!tag 커스텀 태그 */
-  const hasTags = /!!?\w+/.test(yamlText)
+  /* !!tag 커스텀 태그 — 값 맨 앞(키: 뒤·리스트 - 뒤·줄 시작)에 올 때만. ${{ !cancelled() }} 같은 식은 제외 */
+  const hasTags = /(?:^[ \t]*|:[ \t]+|^[ \t]*-[ \t]+)!{1,2}[A-Za-z][\w/.:-]*(?=\s|$)/m.test(stripped)
   if (hasTags) messages.push('🏷️ 커스텀 태그(!!) 발견 — 일부 환경에서 동작 다름')
 
   return { hasComments, hasAnchors, isMultiDoc, hasTags, lossyMessages: messages }
@@ -584,6 +605,8 @@ export interface ValidateResult {
   format: Format
   detectedAs: 'yaml' | 'json' | 'invalid' | 'empty'
   valid: boolean
+  /** 참고 안내 (예: JSON으로는 틀렸지만 YAML flow 스타일로는 유효) */
+  note?: string
   error?: string
   errorLine?: number
   errorCol?: number
@@ -609,6 +632,14 @@ export function validateData(text: string): ValidateResult {
       }
     } catch (e) {
       if (detected === 'json') {
+        /* JSON으로 감지됐으면 JSON 오류를 그대로 보고한다.
+           { a: 1 } 같은 YAML flow 스타일로는 읽히더라도 콤마 누락·오타가 조용히 문자열로 바뀌므로
+           valid 로 바꾸지 않고 안내(note)만 덧붙인다. */
+        let note: string | undefined
+        try {
+          yaml.loadAll(text, undefined, { schema: LOAD_SCHEMA })
+          note = 'YAML flow 스타일로는 읽히지만 JSON 문법으로는 오류입니다. YAML이 맞다면 YAML → JSON으로 변환하세요.'
+        } catch { /* YAML로도 실패 → JSON 오류만 표시 */ }
         const msg = e instanceof Error ? e.message : 'JSON 오류'
         let line: number | undefined, col: number | undefined
         if (e instanceof SyntaxError) {
@@ -620,7 +651,7 @@ export function validateData(text: string): ValidateResult {
             col = pos - before.lastIndexOf('\n')
           }
         }
-        return { format: 'json', detectedAs: 'invalid', valid: false, error: msg, errorLine: line, errorCol: col }
+        return { format: 'json', detectedAs: 'invalid', valid: false, error: msg, errorLine: line, errorCol: col, note }
       }
       /* ambiguous 면 YAML 시도로 fall through */
     }
@@ -628,7 +659,7 @@ export function validateData(text: string): ValidateResult {
 
   /* YAML 시도 */
   try {
-    const docs = yaml.loadAll(text, undefined, { schema: yaml.JSON_SCHEMA })
+    const docs = yaml.loadAll(text, undefined, { schema: LOAD_SCHEMA })
     const data = docs.length === 1 ? docs[0] : docs
     return {
       format: detected === 'ambiguous' ? 'yaml' : detected, detectedAs: 'yaml',
@@ -636,7 +667,7 @@ export function validateData(text: string): ValidateResult {
       stats: computeStats(data, text, performance.now() - t0),
     }
   } catch (e) {
-    const msg = e instanceof Error ? e.message : 'YAML 오류'
+    const msg = explainYamlError(e instanceof Error ? e.message : 'YAML 오류')
     let line: number | undefined, col: number | undefined
     if (e && typeof e === 'object' && 'mark' in e) {
       const mark = (e as { mark?: { line?: number; column?: number } }).mark

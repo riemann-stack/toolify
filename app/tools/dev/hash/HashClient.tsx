@@ -7,13 +7,28 @@ import {
   type AlgorithmId, type HmacAlgorithmId,
   type OutputFormat, type TextEncoding, type KeyFormat,
   hashText, hashFile, hmacSign, formatHash,
-  parseKey, encodeText, compareHashes, fmtBytes, countBytes,
+  parseKey, encodeText, verifyHashInput, hasNonAscii, fmtBytes, countBytes,
   getAlgorithm, getHmacAlgorithm,
 } from './hashUtils'
 
 type Tab = 'text' | 'file' | 'hmac' | 'guide'
 
-const STORAGE_KEY = 'youtil_hash_v1'
+const STORAGE_KEY = 'youtil_hash_v1' // 기존 키 유지 (개명 시 저장값 유실)
+
+const ALGO_IDS = ALGORITHMS.map((a) => a.id as AlgorithmId)
+const emptyHashes = (): Record<AlgorithmId, string> => ({ md5: '', sha1: '', sha256: '', sha384: '', sha512: '' })
+
+/* localStorage 복원값 검증 (enum 화이트리스트) */
+const OUTPUT_FORMATS: OutputFormat[] = ['hex_lower', 'hex_upper', 'base64', 'base64url']
+const TEXT_ENCODINGS: TextEncoding[] = ['utf8', 'ascii']
+const KEY_FORMATS: KeyFormat[] = ['text', 'base64', 'hex']
+const HMAC_IDS = HMAC_ALGORITHMS.map((a) => a.id as HmacAlgorithmId)
+function pick<T extends string>(v: unknown, allowed: readonly T[]): T | null {
+  return typeof v === 'string' && (allowed as readonly string[]).includes(v) ? (v as T) : null
+}
+
+let fileSeq = 0
+const newFileId = () => (typeof crypto !== 'undefined' && 'randomUUID' in crypto ? crypto.randomUUID() : `f${Date.now()}-${++fileSeq}`)
 
 export default function HashClient() {
   const [tab, setTab] = useState<Tab>('text')
@@ -22,9 +37,7 @@ export default function HashClient() {
   const [textInput, setTextInput] = useState<string>('')
   const [textEncoding, setTextEncoding] = useState<TextEncoding>('utf8')
   const [textFormat, setTextFormat] = useState<OutputFormat>('hex_lower')
-  const [textHashes, setTextHashes] = useState<Record<AlgorithmId, string>>({
-    md5: '', sha1: '', sha256: '', sha512: '',
-  })
+  const [textHashes, setTextHashes] = useState<Record<AlgorithmId, string>>(emptyHashes)
 
   /* ═══ 탭 2: 파일 해시 ═══ */
   const fileInputRef = useRef<HTMLInputElement>(null)
@@ -39,8 +52,12 @@ export default function HashClient() {
   const [hmacKeyFormat, setHmacKeyFormat] = useState<KeyFormat>('text')
   const [hmacMessage, setHmacMessage] = useState<string>('')
   const [hmacFormat, setHmacFormat] = useState<OutputFormat>('hex_lower')
-  const [hmacResult, setHmacResult] = useState<string>('')
-  const [hmacError, setHmacError] = useState<string>('')
+  /* 결과는 계산 당시 입력값(snap)과 함께 저장 — 입력이 바뀌면 옛 서명을 보여주지 않음 */
+  const [hmacOut, setHmacOut] = useState<{ snap: string; value: string; error: string } | null>(null)
+  const hmacSnap = JSON.stringify([hmacAlg, hmacKey, hmacKeyFormat, hmacMessage, hmacFormat])
+  const hmacFresh = hmacOut && hmacOut.snap === hmacSnap ? hmacOut : null
+  const hmacResult = hmacFresh?.value ?? ''
+  const hmacError = hmacFresh?.error ?? ''
 
   /* ═══ 복사 상태 ═══ */
   const [copiedKey, setCopiedKey] = useState<string>('')
@@ -50,13 +67,15 @@ export default function HashClient() {
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.textEncoding) setTextEncoding(j.textEncoding)
-      if (j.textFormat) setTextFormat(j.textFormat)
-      if (j.verifyAlgorithm) setVerifyAlgorithm(j.verifyAlgorithm)
-      if (j.hmacAlg) setHmacAlg(j.hmacAlg)
-      if (j.hmacKeyFormat) setHmacKeyFormat(j.hmacKeyFormat)
-      if (j.hmacFormat) setHmacFormat(j.hmacFormat)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
+      const o = j as Record<string, unknown>
+      const te = pick(o.textEncoding, TEXT_ENCODINGS); if (te) setTextEncoding(te)
+      const tf = pick(o.textFormat, OUTPUT_FORMATS); if (tf) setTextFormat(tf)
+      const va = pick(o.verifyAlgorithm, ALGO_IDS); if (va) setVerifyAlgorithm(va)
+      const ha = pick(o.hmacAlg, HMAC_IDS); if (ha) setHmacAlg(ha)
+      const hk = pick(o.hmacKeyFormat, KEY_FORMATS); if (hk) setHmacKeyFormat(hk)
+      const hf = pick(o.hmacFormat, OUTPUT_FORMATS); if (hf) setHmacFormat(hf)
     } catch {}
   }, [])
   useEffect(() => {
@@ -70,9 +89,8 @@ export default function HashClient() {
   /* ═══ 텍스트 해시 자동 재계산 (디바운스 200ms) ═══ */
   useEffect(() => {
     const handle = setTimeout(async () => {
-      const algos: AlgorithmId[] = ['md5', 'sha1', 'sha256', 'sha512']
-      const results: Record<AlgorithmId, string> = { md5: '', sha1: '', sha256: '', sha512: '' }
-      for (const a of algos) {
+      const results = emptyHashes()
+      for (const a of ALGO_IDS) {
         try {
           const buf = await hashText(textInput, a, textEncoding)
           results[a] = formatHash(buf, textFormat)
@@ -106,46 +124,47 @@ export default function HashClient() {
   const handleFiles = (newFiles: FileList | File[]) => {
     const arr = Array.from(newFiles)
     const entries: FileEntry[] = arr.map((f) => ({
+      id: newFileId(),
       file: f,
       name: f.name,
       size: f.size,
       type: f.type || '—',
       progress: 0,
-      hashes: { md5: '', sha1: '', sha256: '', sha512: '' },
+      hashes: emptyHashes(),
+      sri: '',
       computing: false,
     }))
     setFiles((prev) => [...prev, ...entries])
-    /* 비동기 해시 계산 */
-    entries.forEach((entry, idx) => {
-      const baseIdx = files.length + idx
-      computeFileHashes(entry, baseIdx)
-    })
+    /* 비동기 해시 계산 — 목록 위치(인덱스)가 아니라 고유 id로 갱신해, 계산 중 다른 파일을 제거해도 섞이지 않음 */
+    entries.forEach((entry) => { computeFileHashes(entry) })
   }
 
-  const computeFileHashes = async (entry: FileEntry, indexInList: number) => {
-    setFiles((prev) => prev.map((e, i) => i === indexInList ? { ...e, computing: true } : e))
-    const algos: AlgorithmId[] = ['md5', 'sha1', 'sha256', 'sha512']
-    const results: Record<AlgorithmId, string> = { md5: '', sha1: '', sha256: '', sha512: '' }
+  const computeFileHashes = async (entry: FileEntry) => {
+    const update = (patch: Partial<FileEntry>) =>
+      setFiles((prev) => prev.map((e) => e.id === entry.id ? { ...e, ...patch } : e))
+    update({ computing: true })
+    const results = emptyHashes()
+    let sri = ''
     let totalDone = 0
-    const totalSteps = algos.length
-    for (const a of algos) {
+    const totalSteps = ALGO_IDS.length
+    for (const a of ALGO_IDS) {
       try {
         const buf = await hashFile(entry.file, a, (pct) => {
           /* 알고리즘별 진행률을 합쳐서 표시 */
-          const overall = ((totalDone * 100 + pct) / (totalSteps * 100)) * 100
-          setFiles((prev) => prev.map((e, i) => i === indexInList ? { ...e, progress: overall } : e))
+          update({ progress: ((totalDone * 100 + pct) / (totalSteps * 100)) * 100 })
         })
         results[a] = formatHash(buf, 'hex_lower')
+        if (a === 'sha384') sri = `sha384-${formatHash(buf, 'base64')}`
       } catch {
         results[a] = '오류'
       }
       totalDone++
     }
-    setFiles((prev) => prev.map((e, i) => i === indexInList ? { ...e, hashes: results, progress: 100, computing: false } : e))
+    update({ hashes: results, sri, progress: 100, computing: false })
   }
 
-  const removeFile = (idx: number) => {
-    setFiles((prev) => prev.filter((_, i) => i !== idx))
+  const removeFile = (id: string) => {
+    setFiles((prev) => prev.filter((e) => e.id !== id))
   }
 
   const onDrop = (e: React.DragEvent) => {
@@ -156,16 +175,15 @@ export default function HashClient() {
 
   /* ═══ HMAC 계산 ═══ */
   const runHmac = async () => {
-    setHmacError('')
-    setHmacResult('')
-    if (!hmacKey) { setHmacError('Secret Key를 입력하세요'); return }
+    const snap = hmacSnap
+    if (!hmacKey) { setHmacOut({ snap, value: '', error: 'Secret Key를 입력하세요' }); return }
     try {
       const keyBuf = parseKey(hmacKey, hmacKeyFormat)
       const msgBuf = encodeText(hmacMessage, 'utf8')
       const sigBuf = await hmacSign(keyBuf, msgBuf, hmacAlg)
-      setHmacResult(formatHash(sigBuf, hmacFormat))
+      setHmacOut({ snap, value: formatHash(sigBuf, hmacFormat), error: '' })
     } catch (err) {
-      setHmacError(err instanceof Error ? err.message : '계산 오류')
+      setHmacOut({ snap, value: '', error: err instanceof Error ? err.message : '계산 오류' })
     }
   }
 
@@ -189,8 +207,9 @@ export default function HashClient() {
       {tab === 'text' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>입력 텍스트</span>
+            <label className={s.cardLabel} htmlFor="hash-text-input">입력 텍스트</label>
             <textarea
+              id="hash-text-input"
               value={textInput}
               onChange={(e) => setTextInput(e.target.value)}
               placeholder="해시할 텍스트 입력 (예: hello world)"
@@ -213,6 +232,9 @@ export default function HashClient() {
                 <button className={`${s.optBtn} ${textEncoding === 'utf8' ? s.optBtnActive : ''}`} onClick={() => setTextEncoding('utf8')}>UTF-8</button>
                 <button className={`${s.optBtn} ${textEncoding === 'ascii' ? s.optBtnActive : ''}`} onClick={() => setTextEncoding('ascii')}>ASCII</button>
               </div>
+              {textEncoding === 'ascii' && hasNonAscii(textInput) && (
+                <p className={s.warnText} role="status">⚠️ ASCII 모드에서는 한글·이모지 등 ASCII 밖 문자가 모두 ?(0x3F)로 바뀐 뒤 해시됩니다. 원문 그대로의 해시가 필요하면 UTF-8을 쓰세요.</p>
+              )}
               <div className={s.optGroup}>
                 <span className={s.optLabel}>출력</span>
                 <button className={`${s.optBtn} ${textFormat === 'hex_lower' ? s.optBtnActive : ''}`} onClick={() => setTextFormat('hex_lower')}>hex</button>
@@ -223,7 +245,7 @@ export default function HashClient() {
             </div>
           </div>
 
-          {/* 4 알고리즘 결과 */}
+          {/* 알고리즘별 결과 */}
           {ALGORITHMS.map((alg) => (
             <HashResultCard
               key={alg.id}
@@ -264,9 +286,10 @@ export default function HashClient() {
 
           {/* 검증 모드 */}
           <div className={s.card}>
-            <span className={s.cardLabel}>무결성 검증 (옵션)</span>
+            <label className={s.cardLabel} htmlFor="hash-verify-input">무결성 검증 (옵션)</label>
             <div className={s.verifyRow}>
               <select
+                aria-label="검증할 알고리즘"
                 value={verifyAlgorithm}
                 onChange={(e) => setVerifyAlgorithm(e.target.value as AlgorithmId)}
                 className={s.select}
@@ -276,6 +299,7 @@ export default function HashClient() {
                 ))}
               </select>
               <input
+                id="hash-verify-input"
                 type="text"
                 value={verifyHash}
                 onChange={(e) => setVerifyHash(e.target.value)}
@@ -284,32 +308,28 @@ export default function HashClient() {
               />
             </div>
             <p className={s.hint}>
-              💡 다운로드 사이트가 제공한 해시(예: SHA256SUMS 파일)를 붙여넣으세요. 위 파일과 비교해 일치하면 ✅ 무결성 확인됨.
+              💡 다운로드 사이트가 제공한 해시를 붙여넣으세요. SHA256SUMS의 한 줄(해시 + 파일명)이나 certutil 출력을 통째로 넣어도 해시 부분만 골라 비교합니다.
             </p>
           </div>
 
           {files.length === 0 && (
             <div className={s.emptyState}>
-              <p>파일을 추가하면 4개 알고리즘 해시가 자동 계산됩니다.</p>
+              <p>파일을 추가하면 {ALGORITHMS.length}개 알고리즘 해시와 SRI 값이 자동 계산됩니다.</p>
             </div>
           )}
 
-          {files.map((entry, idx) => {
-            const matches: { alg: AlgorithmId; match: boolean }[] = []
-            if (verifyHash) {
-              const m = compareHashes(entry.hashes[verifyAlgorithm], verifyHash)
-              matches.push({ alg: verifyAlgorithm, match: m })
-            }
-            const verified = matches.find((m) => m.alg === verifyAlgorithm)
+          {files.map((entry) => {
+            const verified = verifyHash.trim() ? verifyHashInput(entry.hashes[verifyAlgorithm], verifyHash, verifyAlgorithm) : null
+            const algName = getAlgorithm(verifyAlgorithm).name
             const isLarge = entry.size > 100 * 1024 * 1024  /* 100MB */
             return (
-              <div key={idx} className={s.fileCard}>
+              <div key={entry.id} className={s.fileCard}>
                 <div className={s.fileHeader}>
                   <div className={s.fileMeta}>
                     <p className={s.fileName}>{entry.name}</p>
                     <p className={s.fileSpec}>{fmtBytes(entry.size)} · {entry.type}</p>
                   </div>
-                  <button className={s.smBtn} onClick={() => removeFile(idx)}>제거</button>
+                  <button className={s.smBtn} onClick={() => removeFile(entry.id)}>제거</button>
                 </div>
                 {isLarge && entry.computing && (
                   <p className={s.warnText}>⚠️ 100MB 초과 — 메모리 사용↑, 시간 소요. 잠시 기다려 주세요.</p>
@@ -320,11 +340,15 @@ export default function HashClient() {
                     <p className={s.progressText}>{entry.progress.toFixed(0)}%</p>
                   </div>
                 )}
-                {!entry.computing && verified && verifyHash && (
-                  <div className={`${s.verifyBox} ${verified.match ? s.verifyOk : s.verifyFail}`}>
-                    {verified.match
-                      ? `✅ ${getAlgorithm(verified.alg).name} 무결성 확인됨 — 파일 변조 없음`
-                      : `❌ ${getAlgorithm(verified.alg).name} 해시 불일치 — 파일 손상 또는 변조 의심`}
+                {!entry.computing && verified && (
+                  <div className={`${s.verifyBox} ${verified.status === 'match' ? s.verifyOk : s.verifyFail}`} role="status">
+                    {verified.status === 'match'
+                      ? `✅ ${algName} 무결성 확인됨 — 파일 변조 없음`
+                      : verified.status === 'mismatch'
+                        ? `❌ ${algName} 해시 불일치 — 파일 손상 또는 변조 의심`
+                        : verified.status === 'wrong-length'
+                          ? `⚠️ 입력한 해시는 ${verified.length}자라 ${algName}(${getAlgorithm(verifyAlgorithm).hexLen}자)와 길이가 다릅니다${verified.guess ? ` — 알고리즘을 ${getAlgorithm(verified.guess).name}(으)로 바꿔 비교하세요` : ''}`
+                          : '⚠️ 입력값에서 해시(16진수 32~128자)를 찾지 못했습니다'}
                   </div>
                 )}
                 {/* 4 알고리즘 작은 표 */}
@@ -344,14 +368,36 @@ export default function HashClient() {
                         <td>
                           <button
                             className={s.smBtn}
-                            onClick={() => copy(`file-${idx}-${alg.id}`, entry.hashes[alg.id as AlgorithmId])}
+                            onClick={() => copy(`file-${entry.id}-${alg.id}`, entry.hashes[alg.id as AlgorithmId])}
                             disabled={!entry.hashes[alg.id as AlgorithmId]}
+                            aria-label={`${alg.name} 복사`}
                           >
-                            {copiedKey === `file-${idx}-${alg.id}` ? '✓' : '📋'}
+                            {copiedKey === `file-${entry.id}-${alg.id}` ? '✓' : '📋'}
                           </button>
                         </td>
                       </tr>
                     ))}
+                    <tr>
+                      <td>
+                        <span className={s.algBadge}>
+                          <strong>SRI</strong>
+                          <span className={s.algBits}>integrity</span>
+                        </span>
+                      </td>
+                      <td>
+                        <code className={s.hashCode}>{entry.sri || '...'}</code>
+                      </td>
+                      <td>
+                        <button
+                          className={s.smBtn}
+                          onClick={() => copy(`file-${entry.id}-sri`, entry.sri)}
+                          disabled={!entry.sri}
+                          aria-label="SRI integrity 값 복사"
+                        >
+                          {copiedKey === `file-${entry.id}-sri` ? '✓' : '📋'}
+                        </button>
+                      </td>
+                    </tr>
                   </tbody>
                 </table>
               </div>
@@ -380,7 +426,7 @@ export default function HashClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>Secret Key</span>
+            <label className={s.cardLabel} htmlFor="hash-hmac-key">Secret Key</label>
             <div className={s.optGroup} style={{ marginBottom: 10 }}>
               <span className={s.optLabel}>형식</span>
               <button className={`${s.optBtn} ${hmacKeyFormat === 'text' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('text')}>Text</button>
@@ -388,6 +434,7 @@ export default function HashClient() {
               <button className={`${s.optBtn} ${hmacKeyFormat === 'hex' ? s.optBtnActive : ''}`} onClick={() => setHmacKeyFormat('hex')}>Hex</button>
             </div>
             <input
+              id="hash-hmac-key"
               type="text"
               value={hmacKey}
               onChange={(e) => setHmacKey(e.target.value)}
@@ -397,8 +444,9 @@ export default function HashClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>Message</span>
+            <label className={s.cardLabel} htmlFor="hash-hmac-message">Message</label>
             <textarea
+              id="hash-hmac-message"
               value={hmacMessage}
               onChange={(e) => setHmacMessage(e.target.value)}
               placeholder="서명할 메시지 (UTF-8)"
@@ -420,7 +468,7 @@ export default function HashClient() {
           </div>
 
           {hmacResult && (
-            <div className={s.heroCard}>
+            <div className={s.heroCard} role="status">
               <div className={s.heroPrimary}>
                 <p className={s.heroLabel}>{getHmacAlgorithm(hmacAlg).name} 서명 결과</p>
                 <code className={s.heroHash}>{hmacResult}</code>
@@ -531,7 +579,8 @@ export default function HashClient() {
             <span className={s.cardLabel}>SRI (Subresource Integrity) 사용법</span>
             <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.85, margin: '0 0 10px' }}>
               CDN에서 로드하는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다.
-              본 도구의 [📝 텍스트] 탭에서 <strong>SHA-384</strong> + <strong>Base64</strong> 출력을 사용하세요.
+              스크립트 파일을 본 도구의 [📁 파일] 탭에 넣으면 <strong>SRI</strong> 행에서 <code>sha384-…</code> 값을 그대로 복사할 수 있습니다.
+              텍스트 탭에 코드를 붙여넣으면 줄바꿈(CRLF)이 LF로 바뀌어 실제 파일과 해시가 달라질 수 있으니 파일 탭을 권장합니다.
             </p>
             <pre className={s.codeBlock}>
 {`<!-- 예시 -->
@@ -558,6 +607,7 @@ export default function HashClient() {
                 <tr><td>MD5</td><td><code>md5sum file</code> (Linux) / <code>md5 file</code> (macOS)</td><td><code>certutil -hashfile FILE MD5</code></td></tr>
                 <tr><td>SHA-1</td><td><code>shasum -a 1 file</code></td><td><code>certutil -hashfile FILE SHA1</code></td></tr>
                 <tr><td>SHA-256</td><td><code>shasum -a 256 file</code></td><td><code>certutil -hashfile FILE SHA256</code></td></tr>
+                <tr><td>SHA-384</td><td><code>shasum -a 384 file</code></td><td><code>certutil -hashfile FILE SHA384</code></td></tr>
                 <tr><td>SHA-512</td><td><code>shasum -a 512 file</code></td><td><code>certutil -hashfile FILE SHA512</code></td></tr>
                 <tr><td>HMAC-SHA256</td><td><code>openssl dgst -sha256 -hmac KEY file</code></td><td>(PowerShell HMACSHA256 클래스)</td></tr>
               </tbody>
@@ -577,12 +627,15 @@ export default function HashClient() {
    ═════════════════════════════════════════════ */
 
 interface FileEntry {
+  id: string
   file: File
   name: string
   size: number
   type: string
   progress: number
   hashes: Record<AlgorithmId, string>
+  /** SRI integrity 값 (sha384-<base64>) */
+  sri: string
   computing: boolean
 }
 

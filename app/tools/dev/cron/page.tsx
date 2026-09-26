@@ -9,7 +9,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/dev/cron',
   title: 'Cron 표현식 생성기·해석기 — 한국어 해석 + 다음 실행 시각',
-  description: '크론 표현식을 한국어로 해석하고 다음 실행 시각을 KST로 계산. 빌더·프리셋·요일/월 별칭·일·요일 OR 규칙 지원.',
+  description: '크론 표현식을 한국어로 해석하고 다음 실행 시각을 이 기기 시간(한국이면 KST)으로 계산. 빌더·프리셋·@별칭·요일/월 영문 이름·일·요일 OR 규칙 지원.',
   keywords: ['크론 표현식', '크론 생성기', 'cron 해석기', '크론 다음 실행', '크론탭', '스케줄 표현식', '크론 평일'],
 })
 
@@ -148,6 +148,7 @@ export default function CronPage() {
           <div style={{ ...CARD, marginTop: 12 }}>
             요일은 숫자만 표준입니다(0~7). <code style={CODE}>MON</code>·<code style={CODE}>SUN</code> 같은 영문 약어와
             <code style={CODE}>JAN</code>~<code style={CODE}>DEC</code> 월 약어는 일부 구현만 지원하므로, 호환을 위해 숫자 사용을 권장합니다.
+            이 도구는 해석할 때 영문 약어도 숫자로 바꿔 읽습니다.
           </div>
         </div>
 
@@ -155,8 +156,9 @@ export default function CronPage() {
         <div>
           <h2 style={H2}>일과 요일 동시 지정 시 OR 규칙</h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            일(3번째)과 요일(5번째)을 <strong style={{ color: 'var(--text)' }}>둘 다</strong> <code style={CODE}>*</code>가 아닌 값으로 지정하면,
+            일(3번째)과 요일(5번째)을 <strong style={{ color: 'var(--text)' }}>둘 다</strong> <code style={CODE}>*</code>로 시작하지 않는 값으로 지정하면,
             표준 cron은 두 조건을 <strong style={{ color: 'var(--text)' }}>OR</strong>로 묶습니다 — 둘 중 하나라도 맞으면 실행합니다.
+            반대로 한쪽이 <code style={CODE}>*/2</code>처럼 <code style={CODE}>*</code>로 시작하면 Vixie·cronie는 그 칸을 &lsquo;제한 없음&rsquo;으로 보고 AND로 판정하며, 이 도구도 같은 규칙을 따릅니다(구현마다 다를 수 있음).
           </p>
           <div style={{
             background: 'rgba(234,88,12,0.05)', border: '1px solid rgba(234,88,12,0.30)', borderRadius: 12,

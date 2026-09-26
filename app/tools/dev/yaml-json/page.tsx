@@ -189,7 +189,7 @@ export default function YamlJsonPage() {
           <li><strong>📚 멀티 도큐먼트 (---)</strong> — JSON 배열로 통합 변환 (구분 정보 손실)</li>
           <li><strong>🏷️ 커스텀 태그 (!!)</strong> — <code style={codeStyle}>!!python/object</code> 등은 라이브러리별 동작 다름</li>
           <li><strong>📅 특수 타입</strong> — 날짜·정규식 등 JSON에 없는 타입은 문자열로 변환</li>
-          <li><strong>⚠️ YAML 1.1 자동 타입 추론</strong> — <code style={codeStyle}>yes</code>/<code style={codeStyle}>no</code>가 boolean, 8자리 숫자가 8진수로 해석 (본 도구는 JSON_SCHEMA로 엄격 처리해 문자열 유지)</li>
+          <li><strong>⚠️ YAML 1.1 자동 타입 추론</strong> — <code style={codeStyle}>yes</code>/<code style={codeStyle}>no</code>가 boolean, 0으로 시작하는 숫자(예: <code style={codeStyle}>0755</code>)가 8진수로 해석 (본 도구는 JSON_SCHEMA 기준이라 yes/no는 문자열로 유지하지만, <code style={codeStyle}>0755</code>는 8진수가 아닌 10진수 755로 읽습니다. 파일 권한처럼 앞자리 0을 살려야 하면 따옴표로 감싸세요)</li>
         </ul>
       </div>
 
@@ -201,7 +201,7 @@ export default function YamlJsonPage() {
           <li><strong>콜론 뒤 공백 누락</strong> — <code style={codeStyle}>key:value</code> ❌ → <code style={codeStyle}>key: value</code> ✅</li>
           <li><strong>들여쓰기 불일치</strong> — 같은 레벨에서 2/4 spaces 혼용 금지. 한 파일 내 통일</li>
           <li><strong>특수문자 escape</strong> — <code style={codeStyle}>${`{}`}</code>·콜론·따옴표 포함 시 따옴표로 감싸기 (<code style={codeStyle}>{`url: "https://api.com"`}</code>)</li>
-          <li><strong>중복 키</strong> — 같은 레벨 같은 키 → 마지막 값으로 덮어쓰기. 오류 아니지만 디버깅 어려움</li>
+          <li><strong>중복 키</strong> — 같은 레벨 같은 키는 YAML 스펙상 오류. 본 도구는 오류로 알려 주지만 일부 파서는 마지막 값으로 조용히 덮어써 디버깅이 어려움</li>
         </ol>
       </div>
 

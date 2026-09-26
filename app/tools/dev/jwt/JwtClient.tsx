@@ -1,6 +1,6 @@
 'use client'
 
-import { useMemo, useState } from 'react'
+import { useEffect, useMemo, useState } from 'react'
 import s from '../dev.module.css'
 
 // ─────────────────────────────────────────────
@@ -45,8 +45,14 @@ const KST_FMT = new Intl.DateTimeFormat('ko-KR', {
 })
 
 function formatKst(epochSeconds: number): string {
-  return KST_FMT.format(new Date(epochSeconds * 1000)) + ' (KST)'
+  const d = new Date(epochSeconds * 1000)
+  // Date 표현 범위(±8.64e15ms)를 넘으면 Intl.format이 RangeError를 던짐 → 도구 전체 오류 화면 방지
+  if (!Number.isFinite(d.getTime())) return '표시 범위 밖 시각'
+  return KST_FMT.format(d) + ' (KST)'
 }
+
+/* 13자리 이상(≥1e12)은 밀리초로 추정 — toString 자릿수는 1e21부터 지수 표기라 크기로 판정 */
+const isMsEpoch = (v: number) => Math.abs(v) >= 1e12
 
 // 남은 시간/경과 시간 사람 표기
 function humanizeDuration(totalSeconds: number): string {
@@ -100,6 +106,7 @@ type ExpStatus =
   | { kind: 'valid'; remain: string; kst: string }
   | { kind: 'soon'; remain: string; kst: string }
   | { kind: 'expired'; ago: string; kst: string }
+  | { kind: 'notyet'; wait: string; kst: string; expKst?: string }
   | { kind: 'none' }
 
 type DecodedPart = {
@@ -140,8 +147,7 @@ function buildRows(obj: Record<string, unknown>, labels: Record<string, { ko: st
     let msHint: boolean | undefined
     if (isTime && typeof rawValue === 'number') {
       // 13자리(밀리초 추정): 1e12 이상이면 ms로 보고 초로 환산해 표기
-      const digits = Math.trunc(Math.abs(rawValue)).toString().length
-      if (digits >= 13) {
+      if (isMsEpoch(rawValue)) {
         msHint = true
         kst = formatKst(rawValue / 1000)
       } else {
@@ -162,7 +168,8 @@ function buildRows(obj: Record<string, unknown>, labels: Record<string, { ko: st
 }
 
 function decodeJwt(token: string, nowSec: number): DecodeResult {
-  const trimmed = token.trim().replace(/^Bearer\s+/i, '')
+  // 터미널·로그에서 복사하며 섞인 줄바꿈·공백 제거 (JWT에는 공백 문자가 없음)
+  const trimmed = token.trim().replace(/^Bearer\s+/i, '').replace(/\s+/g, '')
   if (trimmed === '') return { state: 'empty' }
 
   const parts = trimmed.split('.')
@@ -198,12 +205,15 @@ function decodeJwt(token: string, nowSec: number): DecodeResult {
   const header = decodePart(headerB64, HEADER_CLAIMS)
   const payload = decodePart(payloadB64, STANDARD_CLAIMS)
 
-  // exp 상태 판정
+  // exp·nbf 상태 판정 (만료 > 활성 전 > 임박 > 유효 순)
+  const toSec = (v: unknown): number | null => {
+    if (typeof v !== 'number' || !Number.isFinite(v)) return null
+    return isMsEpoch(v) ? v / 1000 : v // ms 추정 시 초로 환산
+  }
   let expStatus: ExpStatus = { kind: 'none' }
-  if (payload.ok && typeof payload.obj.exp === 'number') {
-    let expSec = payload.obj.exp
-    const digits = Math.trunc(Math.abs(expSec)).toString().length
-    if (digits >= 13) expSec = expSec / 1000 // ms 추정 시 초로 환산
+  const expSec = payload.ok ? toSec(payload.obj.exp) : null
+  const nbfSec = payload.ok ? toSec(payload.obj.nbf) : null
+  if (expSec !== null) {
     const diff = expSec - nowSec
     const kst = formatKst(expSec)
     if (diff <= 0) {
@@ -213,6 +223,14 @@ function decodeJwt(token: string, nowSec: number): DecodeResult {
       expStatus = { kind: 'soon', remain: humanizeDuration(diff), kst }
     } else {
       expStatus = { kind: 'valid', remain: humanizeDuration(diff), kst }
+    }
+  }
+  if (nbfSec !== null && nbfSec > nowSec && expStatus.kind !== 'expired') {
+    expStatus = {
+      kind: 'notyet',
+      wait: humanizeDuration(nbfSec - nowSec),
+      kst: formatKst(nbfSec),
+      expKst: expStatus.kind === 'none' ? undefined : expStatus.kst,
     }
   }
 
@@ -236,18 +254,38 @@ export default function JwtClient() {
   const [token, setToken] = useState<string>('')
   const [copiedKey, setCopiedKey] = useState<string>('')
 
-  // 마운트 시각 기준 — exp 비교용 (재렌더마다 흔들리지 않게 token 의존)
-  const result = useMemo(() => {
-    const nowSec = Math.floor(Date.now() / 1000)
-    return decodeJwt(token, nowSec)
+  // 현재 시각 — 30초마다 갱신해 만료 배지(남은 시간·임박·만료)가 붙여넣은 시점에 멈추지 않게
+  const [nowSec, setNowSec] = useState(() => Math.floor(Date.now() / 1000))
+  useEffect(() => {
+    if (!token) return
+    const id = setInterval(() => setNowSec(Math.floor(Date.now() / 1000)), 30_000)
+    return () => clearInterval(id)
   }, [token])
+  // 토큰을 바꾸는 모든 경로에서 기준 시각도 함께 갱신 — 페이지를 오래 열어 둔 뒤 붙여넣어도 즉시 정확한 만료 판정
+  function updateToken(v: string) {
+    setToken(v)
+    setNowSec(Math.floor(Date.now() / 1000))
+  }
+
+  const result = useMemo((): DecodeResult => {
+    try {
+      return decodeJwt(token, nowSec)
+    } catch (e) {
+      // 예상 못 한 값으로 예외가 나도 입력한 토큰이 사라지지 않게 오류 상태로 표시
+      return { state: 'error', message: `디코드 중 오류: ${e instanceof Error ? e.message : String(e)}` }
+    }
+  }, [token, nowSec])
 
   function copyValue(val: string, key: string) {
     if (!val) return
     if (typeof navigator !== 'undefined' && navigator.clipboard) {
-      navigator.clipboard.writeText(val)
-      setCopiedKey(key)
-      setTimeout(() => setCopiedKey(''), 1500)
+      navigator.clipboard.writeText(val).then(() => {
+        setCopiedKey(key)
+        setTimeout(() => setCopiedKey(''), 1500)
+      }).catch(() => {
+        setCopiedKey(`${key}:fail`)
+        setTimeout(() => setCopiedKey(''), 1500)
+      })
     }
   }
 
@@ -266,19 +304,19 @@ export default function JwtClient() {
       <div className={s.card}>
         <div className={s.cardTop}>
           <label className={s.cardLabel} htmlFor="jwt-input">JWT 붙여넣기</label>
-          {token && <button className={s.clearBtn} onClick={() => setToken('')} type="button">지우기</button>}
+          {token && <button className={s.clearBtn} onClick={() => updateToken('')} type="button">지우기</button>}
         </div>
         <textarea
           id="jwt-input"
           className={s.textarea}
           value={token}
-          onChange={e => setToken(e.target.value)}
+          onChange={e => updateToken(e.target.value)}
           placeholder="eyJhbGciOiJIUzI1Ni... 형태의 JWT를 붙여넣으세요 (Bearer 접두사는 자동 제거)"
           spellCheck={false}
           style={{ minHeight: 120, fontSize: 16 }}
         />
         <div className={s.subActionRow} style={{ marginTop: 10 }}>
-          <button className={s.subActionBtn} onClick={() => setToken(SAMPLE_JWT)} type="button">샘플 JWT 넣기</button>
+          <button className={s.subActionBtn} onClick={() => updateToken(SAMPLE_JWT)} type="button">샘플 JWT 넣기</button>
         </div>
       </div>
 
@@ -305,7 +343,7 @@ export default function JwtClient() {
                 <label className={s.cardLabel} style={{ color: '#DC2626' }}>① Header — 알고리즘·타입</label>
                 {result.header.ok && (
                   <button className={s.copyBtn} onClick={() => copyValue(result.header.ok ? result.header.prettyText : '', 'header')} type="button">
-                    {copiedKey === 'header' ? '✓ 복사됨' : '복사'}
+                    {copiedKey === 'header' ? '✓ 복사됨' : copiedKey === 'header:fail' ? '복사 실패' : '복사'}
                   </button>
                 )}
               </div>
@@ -322,7 +360,7 @@ export default function JwtClient() {
                 <label className={s.cardLabel} style={{ color: 'var(--accent)' }}>② Payload — 클레임</label>
                 {result.payload.ok && (
                   <button className={s.copyBtn} onClick={() => copyValue(result.payload.ok ? result.payload.prettyText : '', 'payload')} type="button">
-                    {copiedKey === 'payload' ? '✓ 복사됨' : '복사'}
+                    {copiedKey === 'payload' ? '✓ 복사됨' : copiedKey === 'payload:fail' ? '복사 실패' : '복사'}
                   </button>
                 )}
               </div>
@@ -367,12 +405,14 @@ function ExpBadge({ status }: { status: ExpStatus }) {
     valid:   { bg: 'rgba(5,150,105,0.10)',  bd: 'rgba(5,150,105,0.35)',  fg: '#059669', icon: '✓', title: '유효 (만료 전)' },
     soon:    { bg: 'rgba(217,119,6,0.10)',  bd: 'rgba(217,119,6,0.40)',  fg: '#D97706', icon: '⏳', title: '만료 임박 (5분 이내)' },
     expired: { bg: 'rgba(220,38,38,0.10)',  bd: 'rgba(220,38,38,0.40)',  fg: '#DC2626', icon: '⚠️', title: '만료됨' },
+    notyet:  { bg: 'color-mix(in srgb, var(--warning) 10%, transparent)', bd: 'color-mix(in srgb, var(--warning) 40%, transparent)', fg: 'var(--warning)', icon: '…', title: '아직 사용 전 (nbf 이전)' },
   } as const
   const c = styleMap[status.kind]
   let detail = ''
   if (status.kind === 'valid') detail = `만료까지 ${status.remain} 남음 · ${status.kst}`
   else if (status.kind === 'soon') detail = `만료까지 ${status.remain} 남음 · ${status.kst}`
   else if (status.kind === 'expired') detail = `${status.ago} 전에 만료됨 · ${status.kst}`
+  else if (status.kind === 'notyet') detail = `${status.wait} 뒤부터 사용 가능 · ${status.kst}${status.expKst ? ` · 만료 ${status.expKst}` : ''}`
   return (
     <div style={{
       background: c.bg, border: `1px solid ${c.bd}`, borderRadius: 12,

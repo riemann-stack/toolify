@@ -5,9 +5,9 @@ import { useEffect, useMemo, useState } from 'react'
 import s from './curl.module.css'
 import {
   EXAMPLES, CATEGORIES, METHOD_COLORS, LANG_META,
-  type LangId, type CategoryId, type GenOpts, type ParsedCurl,
+  type LangId, type CategoryId, type GenOpts, type ParsedCurl, type ParseError,
   parseCurl, generateCode, prettyJson, byteLength, formatBytes, fmtInt,
-  maskValue,
+  maskValue, isSensitiveHeader,
   MAX_INPUT_BYTES,
 } from './curlUtils'
 
@@ -19,6 +19,17 @@ const DEFAULT_INPUT = `curl -X POST 'https://api.example.com/users' \\
   -H 'Authorization: Bearer YOUR_TOKEN' \\
   -H 'Content-Type: application/json' \\
   -d '{"name": "홍길동", "email": "test@example.com"}'`
+
+/* 저장 여부 판단용 — 민감 헤더·쿠키·Basic Auth가 들어 있으면 true */
+function hasSensitiveInput(input: string): boolean {
+  try {
+    const r = parseCurl(input)
+    if ('error' in r) return /authorization|cookie|api[-_]?key|token/i.test(input)
+    return !!r.auth || r.cookies.length > 0 || r.headers.some((h) => h.sensitive || isSensitiveHeader(h.key))
+  } catch {
+    return true
+  }
+}
 
 export default function CurlClient() {
   const [tab, setTab] = useState<Tab>('convert')
@@ -40,21 +51,30 @@ export default function CurlClient() {
 
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (typeof j.input === 'string') setInput(j.input)
-      if (j.opts) setOpts({
-        async: j.opts.async ?? true,
-        tryCatch: !!j.opts.tryCatch,
-        maskSensitive: !!j.opts.maskSensitive,
-      })
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
+      const o = j as { input?: unknown; opts?: unknown }
+      if (typeof o.input === 'string') setInput(o.input)
+      if (o.opts && typeof o.opts === 'object') {
+        const jo = o.opts as Record<string, unknown>
+        setOpts({
+          async: typeof jo.async === 'boolean' ? jo.async : true,
+          tryCatch: jo.tryCatch === true,
+          maskSensitive: jo.maskSensitive === true,
+        })
+      }
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
-      localStorage.setItem(STORAGE_KEY, JSON.stringify({ input, opts }))
+      /* Authorization·Cookie·-u 등 민감 값이 든 입력은 저장하지 않음 (옵션만 저장) */
+      const payload = hasSensitiveInput(input) ? { opts } : { input, opts }
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(payload))
     } catch {}
   }, [input, opts])
 
@@ -71,8 +91,14 @@ export default function CurlClient() {
     }
   }
 
-  /* 파싱 */
-  const parseResult = useMemo(() => parseCurl(input), [input])
+  /* 파싱 — 예상 못 한 입력으로 예외가 나도 도구 전체가 오류 화면으로 바뀌지 않게 */
+  const parseResult = useMemo((): ParsedCurl | ParseError => {
+    try {
+      return parseCurl(input)
+    } catch (e) {
+      return { error: `파싱 중 오류: ${e instanceof Error ? e.message : String(e)}` }
+    }
+  }, [input])
   const parsed: ParsedCurl | null = parseResult && !('error' in parseResult) ? parseResult : null
   const parseErr = parseResult && 'error' in parseResult ? parseResult : null
 
@@ -128,12 +154,13 @@ export default function CurlClient() {
         <>
           <div className={s.card}>
             <div className={s.cardHeaderFlex}>
-              <span className={s.cardLabel} style={{ marginBottom: 0 }}>
+              <label htmlFor="curl-input" className={s.cardLabel} style={{ marginBottom: 0 }}>
                 cURL 명령 입력 ({formatBytes(byteLength(input))})
-              </span>
+              </label>
               <button className={s.smBtn} onClick={() => setInput('')} disabled={!input}>비우기</button>
             </div>
             <textarea
+              id="curl-input"
               value={input}
               onChange={(e) => onInputChange(e.target.value)}
               placeholder="curl -X POST 'https://api.example.com' -H 'Authorization: Bearer TOKEN' -d '{...}'"

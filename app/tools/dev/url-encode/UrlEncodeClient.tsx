@@ -1,3 +1,4 @@
+/* eslint-disable react-hooks/set-state-in-effect */
 'use client'
 
 import { useEffect, useMemo, useState } from 'react'
@@ -13,7 +14,10 @@ import {
 
 type Tab = 'encode' | 'parse' | 'clean' | 'guide'
 
-const STORAGE_KEY = 'youtil_url_encode_v1'
+const STORAGE_KEY = 'youtil_url_encode_v1' // 기존 키 유지 (개명 시 저장값 유실)
+const ENC_MODES: EncodingMode[] = ['auto', 'encode', 'decode']
+const ENC_FUNCS: EncodeFunc[] = ['component', 'uri']
+const SORT_MODES: SortMode[] = ['order', 'alpha']
 
 const DEFAULT_INPUT_ENCODE = '안녕하세요 한국 & world!'
 const DEFAULT_INPUT_PARSE = 'https://search.naver.com/search.naver?query=%ED%95%9C%EA%B5%AD&n_media=ad&utm_source=banner'
@@ -27,13 +31,14 @@ export default function UrlEncodeClient() {
   const [encMode, setEncMode] = useState<EncodingMode>('auto')
   const [encFunc, setEncFunc] = useState<EncodeFunc>('component')
   const [decRepeat, setDecRepeat] = useState<boolean>(true)
+  const [plusAsSpace, setPlusAsSpace] = useState<boolean>(false)
 
   /* ═══ 탭 2: URL 분해 + 쿼리 편집 ═══ */
   const [parseInput, setParseInput] = useState<string>(DEFAULT_INPUT_PARSE)
-  const [editParams, setEditParams] = useState<QueryParam[]>([])
+  /* 파라미터 편집값은 '어느 URL을 편집한 것인지'와 함께 저장 — URL이 바뀌면(입력·저장값 복원 모두) 새 URL 기준으로 다시 채움 */
+  const [paramEdits, setParamEdits] = useState<{ url: string; params: QueryParam[] } | null>(null)
   const [showRawValues, setShowRawValues] = useState<boolean>(false)
   const [sortMode, setSortMode] = useState<SortMode>('order')
-  const [parseInitialized, setParseInitialized] = useState<boolean>(false)
 
   /* ═══ 탭 3: 추적 정리 ═══ */
   const [cleanInput, setCleanInput] = useState<string>(DEFAULT_INPUT_CLEAN)
@@ -49,13 +54,14 @@ export default function UrlEncodeClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
       if (typeof j.encInput === 'string') setEncInput(j.encInput)
-      if (j.encMode) setEncMode(j.encMode)
-      if (j.encFunc) setEncFunc(j.encFunc)
+      if (ENC_MODES.includes(j.encMode)) setEncMode(j.encMode)
+      if (ENC_FUNCS.includes(j.encFunc)) setEncFunc(j.encFunc)
       if (typeof j.decRepeat === 'boolean') setDecRepeat(j.decRepeat)
       if (typeof j.parseInput === 'string') setParseInput(j.parseInput)
       if (typeof j.showRawValues === 'boolean') setShowRawValues(j.showRawValues)
-      if (j.sortMode) setSortMode(j.sortMode)
+      if (SORT_MODES.includes(j.sortMode)) setSortMode(j.sortMode)
       if (typeof j.cleanInput === 'string') setCleanInput(j.cleanInput)
     } catch {}
   }, [])
@@ -93,33 +99,29 @@ export default function UrlEncodeClient() {
     if (!encInput) return null
     return actualMode === 'encode'
       ? encodeUrl(encInput, encFunc)
-      : decodeUrl(encInput, decRepeat)
-  }, [encInput, actualMode, encFunc, decRepeat])
+      : decodeUrl(encInput, decRepeat, plusAsSpace)
+  }, [encInput, actualMode, encFunc, decRepeat, plusAsSpace])
 
   const koreanAnalysis = useMemo(() => analyzeKorean(encInput), [encInput])
 
   /* ═══ 탭 2 — URL 분해 + 표 편집 ═══ */
   const parsed = useMemo(() => parseUrl(parseInput), [parseInput])
 
-  /* parseInput 변경 시 editParams 초기화 (사용자 편집 보존을 위해 url 기준으로) */
-  useEffect(() => {
-    if (parsed && !('error' in parsed)) {
-      const newParams = parsed.params.map((p) => ({ key: p.key, value: p.value }))
-      /* 한 번만 초기화하거나 url이 본질적으로 바뀐 경우만 */
-      if (!parseInitialized) {
-        setEditParams(newParams)
-        setParseInitialized(true)
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [parseInput])
-
-  /* "URL 다시 분석" 액션 — 사용자 명시적 요청 */
-  const reparseUrl = () => {
-    if (parsed && !('error' in parsed)) {
-      setEditParams(parsed.params.map((p) => ({ key: p.key, value: p.value })))
-    }
+  /* 현재 URL에서 뽑은 파라미터 — 편집 전 기본값 */
+  const baseParams = useMemo<QueryParam[]>(
+    () => (parsed && !('error' in parsed) ? parsed.params.map((p) => ({ key: p.key, value: p.value })) : []),
+    [parsed],
+  )
+  const editParams = paramEdits && paramEdits.url === parseInput ? paramEdits.params : baseParams
+  const setEditParams = (fn: (prev: QueryParam[]) => QueryParam[]) => {
+    setParamEdits((prev) => ({
+      url: parseInput,
+      params: fn(prev && prev.url === parseInput ? prev.params : baseParams),
+    }))
   }
+
+  /* "URL 다시 분석" 액션 — 사용자 명시적 요청 (편집 내용 버리고 URL 기준으로) */
+  const reparseUrl = () => setParamEdits(null)
 
   const sortedEditParams = useMemo(() => {
     if (sortMode === 'alpha') {
@@ -249,10 +251,16 @@ export default function UrlEncodeClient() {
             )}
 
             {actualMode === 'decode' && (
-              <label className={s.checkLabel}>
-                <input type="checkbox" checked={decRepeat} onChange={(e) => setDecRepeat(e.target.checked)} />
-                <span>반복 디코드 (중첩 인코딩 풀기, 최대 5회)</span>
-              </label>
+              <>
+                <label className={s.checkLabel}>
+                  <input type="checkbox" checked={decRepeat} onChange={(e) => setDecRepeat(e.target.checked)} />
+                  <span>반복 디코드 (중첩 인코딩 풀기, 최대 5회)</span>
+                </label>
+                <label className={s.checkLabel}>
+                  <input type="checkbox" checked={plusAsSpace} onChange={(e) => setPlusAsSpace(e.target.checked)} />
+                  <span>+를 공백으로 (폼 전송·네이버·구글 검색 URL의 쿼리 값)</span>
+                </label>
+              </>
             )}
           </div>
 
@@ -260,13 +268,14 @@ export default function UrlEncodeClient() {
           <div className={s.splitGrid}>
             <div className={s.paneCard}>
               <div className={s.paneHeader}>
-                <span className={s.paneLabel}>입력</span>
+                <label className={s.paneLabel} htmlFor="url-encode-input">입력</label>
                 <div className={s.paneActions}>
                   <span className={s.paneStat}>{formatBytes(byteLength(encInput))}</span>
-                  <button className={s.smBtn} onClick={() => setEncInput('')} disabled={!encInput}>🗑️</button>
+                  <button className={s.smBtn} onClick={() => setEncInput('')} disabled={!encInput} aria-label="입력 지우기">🗑️</button>
                 </div>
               </div>
               <textarea
+                id="url-encode-input"
                 value={encInput}
                 onChange={(e) => guardInput(e.target.value, setEncInput)}
                 placeholder="인코드 또는 디코드할 텍스트 입력..."
@@ -280,16 +289,17 @@ export default function UrlEncodeClient() {
 
             <div className={s.paneCard}>
               <div className={s.paneHeader}>
-                <span className={s.paneLabel}>결과</span>
+                <label className={s.paneLabel} htmlFor="url-encode-output">결과</label>
                 <div className={s.paneActions}>
                   {encResult && <span className={s.paneStat}>{fmtMs(encResult.ms)}</span>}
-                  <button className={s.smBtn} onClick={() => copy('enc-result', encResult?.result || '')} disabled={!encResult?.result}>
+                  <button className={s.smBtn} onClick={() => copy('enc-result', encResult?.result || '')} disabled={!encResult?.result} aria-label="결과 복사">
                     {copiedKey === 'enc-result' ? '✓' : '📋'}
                   </button>
-                  <button className={s.smBtn} onClick={() => download(encResult?.result || '', 'txt')} disabled={!encResult?.result}>💾</button>
+                  <button className={s.smBtn} onClick={() => download(encResult?.result || '', 'txt')} disabled={!encResult?.result} aria-label="결과를 파일로 저장">💾</button>
                 </div>
               </div>
               <textarea
+                id="url-encode-output"
                 value={encResult?.result ?? ''}
                 readOnly
                 className={s.textarea}
@@ -297,7 +307,7 @@ export default function UrlEncodeClient() {
                 spellCheck={false}
               />
               {encResult && !encResult.error && (
-                <p className={s.statText}>
+                <p className={s.statText} role="status">
                   결과 {fmtInt((encResult.result || '').length)}자 ·{' '}
                   {actualMode === 'encode' && 'encodedCount' in encResult && `${fmtInt(encResult.encodedCount)}개 인코드됨`}
                   {actualMode === 'decode' && 'iterations' in encResult && `${encResult.iterations}회 디코드`}
@@ -346,10 +356,11 @@ export default function UrlEncodeClient() {
       {tab === 'parse' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>URL 입력</span>
+            <label className={s.cardLabel} htmlFor="url-parse-input">URL 입력</label>
             <textarea
+              id="url-parse-input"
               value={parseInput}
-              onChange={(e) => { guardInput(e.target.value, setParseInput); setParseInitialized(false) }}
+              onChange={(e) => guardInput(e.target.value, setParseInput)}
               placeholder="https://example.com/path?key=value#fragment"
               className={s.textarea}
               rows={3}
@@ -411,7 +422,7 @@ export default function UrlEncodeClient() {
                   <div className={s.paramList}>
                     {sortedEditParams.map((p) => {
                       const idx = editParams.indexOf(p)
-                      const isTracking = !!findTrackingGroup(p.key)
+                      const isTracking = !!findTrackingGroup(p.key, parsed.host)
                       return (
                         <div key={idx} className={`${s.paramRow} ${isTracking ? s.paramRowTracking : ''}`}>
                           <input
@@ -419,6 +430,7 @@ export default function UrlEncodeClient() {
                             value={p.key}
                             onChange={(e) => updateParam(idx, { key: e.target.value })}
                             placeholder="key"
+                            aria-label={`파라미터 ${idx + 1} 키`}
                             className={s.paramInput}
                           />
                           <span className={s.paramEq}>=</span>
@@ -427,10 +439,11 @@ export default function UrlEncodeClient() {
                             value={p.value}
                             onChange={(e) => updateParam(idx, { value: e.target.value })}
                             placeholder="value"
+                            aria-label={`파라미터 ${idx + 1} 값`}
                             className={s.paramInput}
                           />
                           {isTracking && <span className={s.trackingBadge}>추적</span>}
-                          <button className={s.smBtn} onClick={() => removeParam(idx)} title="삭제">🗑️</button>
+                          <button className={s.smBtn} onClick={() => removeParam(idx)} title="삭제" aria-label={`파라미터 ${idx + 1} 삭제`}>🗑️</button>
                         </div>
                       )
                     })}
@@ -463,6 +476,7 @@ export default function UrlEncodeClient() {
                   </div>
                 </div>
                 <textarea
+                  aria-label="재구성된 URL"
                   value={rebuiltUrl}
                   readOnly
                   className={s.textarea}
@@ -479,8 +493,9 @@ export default function UrlEncodeClient() {
       {tab === 'clean' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>URL 입력</span>
+            <label className={s.cardLabel} htmlFor="url-clean-input">URL 입력</label>
             <textarea
+              id="url-clean-input"
               value={cleanInput}
               onChange={(e) => guardInput(e.target.value, setCleanInput)}
               placeholder="추적 파라미터가 포함된 URL을 붙여넣기..."
@@ -559,10 +574,11 @@ export default function UrlEncodeClient() {
                     <button className={s.smBtn} onClick={() => copy('clean-result', cleanResult.cleanUrl)} disabled={!cleanResult.cleanUrl}>
                       {copiedKey === 'clean-result' ? '✓ ' : ''}복사
                     </button>
-                    <button className={s.smBtn} onClick={() => download(cleanResult.cleanUrl, 'txt')} disabled={!cleanResult.cleanUrl}>💾</button>
+                    <button className={s.smBtn} onClick={() => download(cleanResult.cleanUrl, 'txt')} disabled={!cleanResult.cleanUrl} aria-label="정리된 URL을 파일로 저장">💾</button>
                   </div>
                 </div>
                 <textarea
+                  aria-label="정리된 URL"
                   value={cleanResult.cleanUrl}
                   readOnly
                   className={s.textarea}
@@ -597,10 +613,12 @@ export default function UrlEncodeClient() {
                     <p className={s.dictDesc}>{g.desc}</p>
                     <p className={s.dictKeys}>
                       {g.keys.map((k) => <code key={k} className={s.dictKey}>{k}</code>)}
+                      {g.domainKeys?.keys.map((k) => <code key={k} className={s.dictKey} title={`${g.domainKeys!.domains.join('·')} 주소에서만 추적으로 분류`}>{k}*</code>)}
                     </p>
                   </div>
                 ))}
               </div>
+              <p className={s.hint}>* 표시 키는 다른 사이트에서 상품 ID·파일 경로 같은 기능용으로도 쓰여, 해당 플랫폼 주소일 때만 추적으로 봅니다.</p>
             </details>
           </div>
         </>
@@ -626,7 +644,7 @@ export default function UrlEncodeClient() {
                   </tr>
                   <tr>
                     <td><code className={s.codeMono}>encodeURI</code></td>
-                    <td>+ 예약 문자 (<code className={s.codeMonoSm}>: / ? # [ ] @ ! $ &amp; &apos; ( ) * + , ; =</code>)</td>
+                    <td>+ 예약 문자 (<code className={s.codeMonoSm}>: / ? # @ ! $ &amp; &apos; ( ) * + , ; =</code>)</td>
                     <td>그 외 (공백·한글 등)</td>
                     <td>전체 URL 인코딩</td>
                   </tr>
@@ -674,7 +692,7 @@ export default function UrlEncodeClient() {
               </table>
             </div>
             <p className={s.hint}>
-              💡 한국어 1글자 = 보통 3 bytes (BMP), 이모지 1글자 = 보통 4 bytes (Supplementary Plane). 따라서 <strong>&quot;한국&quot;이라는 2글자도 URL에서는 12자(%XX %XX %XX %XX %XX %XX) 차지</strong>합니다.
+              💡 한국어 1글자 = 보통 3 bytes (BMP), 이모지 1글자 = 보통 4 bytes (Supplementary Plane). 따라서 <strong>&quot;한국&quot;이라는 2글자도 URL에서는 18자(%XX 6개 × 3자) 차지</strong>합니다.
             </p>
           </div>
 
@@ -700,10 +718,12 @@ export default function UrlEncodeClient() {
                   <p className={s.dictDesc}>{g.desc}</p>
                   <p className={s.dictKeys}>
                     {g.keys.map((k) => <code key={k} className={s.dictKey}>{k}</code>)}
+                    {g.domainKeys?.keys.map((k) => <code key={k} className={s.dictKey} title={`${g.domainKeys!.domains.join('·')} 주소에서만 추적으로 분류`}>{k}*</code>)}
                   </p>
                 </div>
               ))}
             </div>
+            <p className={s.hint}>* 표시 키는 다른 사이트에서 상품 ID·파일 경로 같은 기능용으로도 쓰여, 해당 플랫폼 주소일 때만 추적으로 봅니다.</p>
           </div>
         </>
       )}
@@ -719,7 +739,7 @@ function PartCard({ label, value, onCopy, copied }: { label: string; value: stri
     <div className={s.partCard}>
       <div className={s.partHeader}>
         <span className={s.partLabel}>{label}</span>
-        <button className={s.smBtn} onClick={onCopy}>{copied ? '✓' : '📋'}</button>
+        <button className={s.smBtn} onClick={onCopy} aria-label={`${label} 복사`}>{copied ? '✓' : '📋'}</button>
       </div>
       <code className={s.partValue}>{value || '(empty)'}</code>
     </div>

@@ -74,7 +74,7 @@ const FAQ_LD = [
   { "q":"한글 1글자가 왜 %XX %XX %XX (3개)인가요?","a":"UTF-8 인코딩 때문입니다. URL은 ASCII 문자만 직접 사용 가능하므로, 비-ASCII 문자는 UTF-8 바이트로 변환됩니다. • 한글 (BMP, U+AC00 ~ U+D7A3): UTF-8에서 3 bytes → URL %XX %XX %XX • 이모지 (Supplementary Plane, U+1F000+): UTF-8에서 4 bytes → URL %XX %XX %XX %XX • 한자: BMP 내 한자는 3 bytes 예: 한(U+D55C) → UTF-8 0xED 0x95 0x9C → URL %ED%95%9C. 본 도구의 한글 분석 박스에서 글자별 변환 과정을 시각화합니다." },
   { "q":"+ 기호는 공백인가요? %20인가요?","a":"둘 다 공백이지만 사용 컨텍스트가 다릅니다. • RFC 3986 (표준 URL): 공백 = %20. +는 그냥 + 문자 • application/x-www-form-urlencoded (HTML 폼): 공백 = +. %20도 공백으로 디코드 실제 동작: • encodeURIComponent(\" \") = %20 (RFC 3986) • new URLSearchParams({a: ' '}).toString() = 'a=+' (form 변형) • 디코드 시 양쪽 모두 공백으로 인식 혼용 주의: 같은 URL에 %20과 + 섞이면 문제. 한 가지로 통일 권장. 본 도구는 %20 (encodeURIComponent) 출력." },
   { "q":"이중 인코딩(%2520)이 발생하는 이유?","a":"이미 인코딩된 값을 또 인코딩했기 때문입니다. 1단계: 공백 → %20 (정상) 2단계: %20의 % → %25 → 결과 %2520! 발생 시나리오: • 백엔드에서 디코드된 값을 받아 다시 인코드하면서 변환 • 프론트엔드에서 이미 인코딩된 URL을 또 encodeURIComponent 호출 • OAuth redirect_uri 등에서 중첩 escape 해결: 본 도구의 탭 1 디코드 + 반복 디코드 옵션으로 한 번에 풀기 (최대 5회). 코드에서는 인코드/디코드 횟수를 명확히 추적해야 합니다." },
-  { "q":"UTM 파라미터 제거해도 되나요?","a":"네, 일반적으로 안전합니다. UTM은 Google Analytics 추적용이며 페이지 콘텐츠에 영향을 주지 않습니다. • utm_source, utm_medium, utm_campaign 등은 분석 데이터일 뿐 • 제거해도 페이지는 정상 작동 • 깔끔한 URL 공유에 유리 (블로그·SNS·문서) 예외 주의: • 일부 사이트가 UTM으로 다국어·캠페인 페이지 분기 (드물지만 가능) • 광고주 입장에서는 추적 데이터가 사라지므로 본인 광고 클릭은 유지 권장 • OAuth state·CSRF 토큰처럼 보안 토큰은 절대 제거 X (본 도구는 추적이 아닌 키는 손대지 않음)" },
+  { "q":"UTM 파라미터 제거해도 되나요?","a":"네, 일반적으로 안전합니다. UTM은 Google Analytics 추적용이며 페이지 콘텐츠에 영향을 주지 않습니다. • utm_source, utm_medium, utm_campaign 등은 분석 데이터일 뿐 • 제거해도 페이지는 정상 작동 • 깔끔한 URL 공유에 유리 (블로그·SNS·문서) 예외 주의: • 일부 사이트가 UTM으로 다국어·캠페인 페이지 분기 (드물지만 가능) • 광고주 입장에서는 추적 데이터가 사라지므로 본인 광고 클릭은 유지 권장 • OAuth state·CSRF 토큰처럼 보안 토큰은 절대 제거 X (본 도구는 사전에 등록된 추적 키만 제거 대상으로 고르며, src·pid처럼 다른 사이트에서 기능용으로도 쓰이는 키는 해당 플랫폼 주소일 때만 추적으로 봅니다. 복사 전에 정리 결과를 한 번 확인하세요)" },
   { "q":"네이버 n_media 같은 파라미터는?","a":"네이버 검색·쇼핑·검색광고 추적 파라미터입니다. • n_media: 광고 매체 (예: cpc=검색광고) • n_query: 검색어 • n_keyword: 키워드 ID • n_rank: 검색 결과 순위 • n_ad_group·n_ad: 광고 그룹·광고 ID • n_campaign_type: 캠페인 유형 UTM과 동일하게 제거해도 페이지 작동에 영향 없음. 깔끔한 공유 URL을 만들 때 유용합니다. 본 도구의 네이버 그룹에서 일괄 제거 가능." },
   { "q":"URL 길이 제한은 얼마인가요?","a":"공식 표준에는 길이 제한이 없지만, 실용적 제한이 존재합니다: • 브라우저: Chrome/Firefox/Safari 대부분 ~32,000자 처리, 일부 구형 IE는 2,083자 • 웹 서버: Nginx 기본 8,192자, Apache 8,190자, IIS 16,384자 • 안전권장: 2,000자 이하 (모든 환경 호환) • SEO: 짧을수록 좋음 (~75자 권장) 한글 주의: 한글 1글자가 URL에서 9자(%ED%95%9C)를 차지하므로, 짧은 한국어 텍스트도 URL에서는 빨리 길어집니다. 긴 데이터는 POST body나 JSON 토큰으로 전달 권장." },
   { "q":"OAuth state·redirect_uri 디코드?","a":"OAuth 콜백 URL 디버깅에 본 도구가 매우 유용합니다. • state: CSRF 방지 토큰 (랜덤 문자열, 디코드해서 검증) • redirect_uri: 콜백 URL (이중 인코딩 자주 발생) • code: 인증 코드 (단발성, 1회 사용) • access_token: 액세스 토큰 (보안 민감!) ⚠️ 보안 주의: 1. access_token·refresh_token·session_id 디코드는 OK, 공유·수정은 절대 X (계정 탈취 위험) 2. state 토큰을 임의로 수정하면 CSRF 검증 실패 → 인증 오류 3. 공용 PC에서 사용 후 브라우저 캐시·localStorage 정리 (본 도구의 입력은 localStorage에 저장됨) 본 도구는 모든 처리가 클라이언트 측이라 외부 전송 없음." },
@@ -151,7 +151,7 @@ export default function UrlEncodePage() {
               </tr>
               <tr>
                 <td style={{ padding: '8px 10px' }}><code style={codeStyle}>encodeURI</code></td>
-                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>+ : / ? # [ ] @ ! $ &amp; &apos; ( ) * + , ; =</td>
+                <td style={{ padding: '8px 10px', color: 'var(--text)', fontFamily: 'var(--font-mono)', fontSize: 12 }}>+ : / ? # @ ! $ &amp; &apos; ( ) * + , ; =</td>
                 <td style={{ padding: '8px 10px', color: 'var(--text)' }}>전체 URL 인코딩</td>
               </tr>
               <tr>
@@ -203,7 +203,7 @@ export default function UrlEncodePage() {
           </table>
         </div>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 한국어 1글자 = 보통 3 bytes (BMP), 이모지 1글자 = 보통 4 bytes (Supplementary Plane). 따라서 <strong>&quot;한국&quot; 2글자도 URL에서는 12자(%XX 6번) 차지</strong>합니다.
+          💡 한국어 1글자 = 보통 3 bytes (BMP), 이모지 1글자 = 보통 4 bytes (Supplementary Plane). 따라서 <strong>&quot;한국&quot; 2글자도 URL에서는 18자(%XX 6번 × 3자) 차지</strong>합니다.
           이는 URL 길이 안전 권장선(약 2,000자 — 모든 환경 호환)에서 한글이 빨리 차오르는 이유.
         </p>
       </div>
@@ -239,7 +239,7 @@ export default function UrlEncodePage() {
             { emoji: '📘', name: 'Facebook·Meta', desc: 'fbclid·_fbp·_fbc — 페북 광고·픽셀 추적' },
             { emoji: '🇰🇷', name: '네이버', desc: 'n_media·n_query·n_keyword — 네이버 검색·검색광고' },
             { emoji: '💬', name: '카카오', desc: 'kakao_share_id·kakao_chat_id — 카톡 공유 추적' },
-            { emoji: '🛍️', name: '쿠팡', desc: '_xts_·src·addtag — 쿠팡 파트너스·검색 광고' },
+            { emoji: '🛍️', name: '쿠팡', desc: '_xts_·wPcid, 쿠팡 주소의 src·addtag — 쿠팡 파트너스·검색 광고' },
             { emoji: '🟦', name: 'Microsoft Bing', desc: 'msclkid·mc_eid — Bing 광고·MailChimp' },
             { emoji: '📊', name: '기타', desc: 'twclid·li_fat_id·yclid·igshid — Twitter·LinkedIn·Yandex·Instagram' },
           ].map((s, i) => (
@@ -334,7 +334,7 @@ export default function UrlEncodePage() {
           <strong>예외 주의</strong>:<br />
           • 일부 사이트가 UTM으로 다국어·캠페인 페이지 분기 (드물지만 가능)<br />
           • 광고주 입장에서는 추적 데이터가 사라지므로 본인 광고 클릭은 유지 권장<br />
-          • OAuth state·CSRF 토큰처럼 보안 토큰은 절대 제거 X (본 도구는 추적이 아닌 키는 손대지 않음)
+          • OAuth state·CSRF 토큰처럼 보안 토큰은 절대 제거 X (본 도구는 사전에 등록된 추적 키만 제거 대상으로 고르며, src·pid처럼 다른 사이트에서 기능용으로도 쓰이는 키는 해당 플랫폼 주소일 때만 추적으로 봅니다. 복사 전에 정리 결과를 한 번 확인하세요)
         </p>
       </details>
 

@@ -23,7 +23,7 @@ const sectionTitle: React.CSSProperties = {
 const FAQ_LD = [
   {
     q: '한영타 변환은 어떻게 하나요?',
-    a: '위 입력칸에 잘못 친 글자를 그대로 붙여넣으면 됩니다. <code>dkssud</code>처럼 영문이 들어오면 한글(<strong>안녕</strong>)로, <code>ㅗ디ㅣㅐ</code>처럼 한글 자모가 들어오면 영문(<strong>hello</strong>)으로 바뀝니다. 기본값은 입력에 한글이 있으면 자동으로 방향을 잡지만, 방향 버튼을 눌러 직접 고정할 수도 있습니다.',
+    a: '위 입력칸에 잘못 친 글자를 그대로 붙여넣으면 됩니다. <code>dkssud</code>처럼 영문이 들어오면 한글(<strong>안녕</strong>)로, <code>ㅗ디ㅣㅐ</code>처럼 한글 자모가 들어오면 영문(<strong>hello</strong>)으로 바뀝니다. 기본값은 입력을 보고 방향을 자동으로 잡습니다. 한글만 있으면 영문으로, 영문이 있으면 한글로 바꾸고, <code>오늘 dkssud</code>처럼 섞여 있으면 영문 부분만 한글로 바꿉니다. 방향 버튼을 눌러 직접 고정할 수도 있습니다.',
   },
   {
     q: 'dkssud이 무슨 뜻인가요?',
@@ -218,7 +218,7 @@ export default function KeyboardLayoutPage() {
               { t: '키 순서가 어긋난 입력', d: '중간에 백스페이스로 지웠다 다시 쳤거나 자동완성이 끼어든 글자는 실제 키 순서가 흐트러져 원본과 다르게 복원됩니다.' },
               { t: '세벌식으로 친 글자', d: '이 도구는 두벌식만 지원합니다. 세벌식은 같은 영문 키가 다른 자모로 매핑돼 복원이 어긋납니다.' },
               { t: '겹받침·겹모음 경계', d: '받침 뒤에 모음이 오면 받침이 다음 글자로 넘어가는 연음 처리, ㅘ·ㅢ 같은 겹모음 조합 시점이 IME마다 미세하게 다릅니다.' },
-              { t: '특수문자·이모지', d: '자판에 매핑되지 않는 문자는 변환하지 않고 그 자리에 그대로 둡니다. 한글·영문이 섞여 있어도 됩니다.' },
+              { t: '특수문자·이모지', d: '자판에 매핑되지 않는 문자는 변환하지 않고 그 자리에 그대로 둡니다. 한글·영문이 섞여 있으면 자동 모드에서는 영문 부분만 한글로 바꿉니다.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--cat-dev)', borderRadius: 12, padding: '14px 16px' }}>
                 <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, marginBottom: 6 }}>{c.t}</p>

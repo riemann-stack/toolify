@@ -6,15 +6,18 @@ import s from './regex.module.css'
 import {
   ALL_FLAGS, PATTERNS, CATEGORIES, CHEATSHEET,
   type FlagId, type PatternCategory, type LangId, type Mode,
-  buildRegex, runMatches, runReplace, runSplit,
+  type RunMatchesResult, type RunReplaceResult, type RunSplitResult,
+  buildRegex,
   tokenizeForHighlight, colorForMatch, formatLangSnippet,
   byteLength, fmtMs, fmtInt,
-  MAX_INPUT_BYTES, SLOW_THRESHOLD_MS,
+  MAX_INPUT_BYTES, MAX_MATCHES, SLOW_THRESHOLD_MS,
 } from './regexUtils'
+import { runRegexJob, REGEX_TIMEOUT_MS } from './regexWorker'
 
 type Tab = 'match' | 'replace' | 'library' | 'cheatsheet'
 
-const STORAGE_KEY = 'youtil_regex_v1'
+const STORAGE_KEY = 'youtil_regex_v1' // 기존 키 유지 (개명 시 저장값 유실)
+const EMPTY_MATCH: RunMatchesResult = { matches: [], executionMs: 0, truncated: false }
 
 export default function RegexClient() {
   const [tab, setTab] = useState<Tab>('match')
@@ -49,18 +52,18 @@ export default function RegexClient() {
           s: !!j.flags.s, u: !!j.flags.u, y: !!j.flags.y,
         })
       }
-      if (typeof j.text === 'string') setText(j.text)
-      if (j.mode) setMode(j.mode)
+      /* 테스트 문자열(text)은 개인정보(주민번호 등)가 들어갈 수 있어 저장·복원하지 않음 */
+      if (j.mode === 'replace' || j.mode === 'split') setMode(j.mode)
       if (typeof j.replacement === 'string') setReplacement(j.replacement)
     } catch {}
   }, [])
   useEffect(() => {
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
-        pattern, flags, text, mode, replacement,
+        pattern, flags, mode, replacement,
       }))
     } catch {}
-  }, [pattern, flags, text, mode, replacement])
+  }, [pattern, flags, mode, replacement])
 
   /* flags 문자열 */
   const flagsStr = useMemo(
@@ -71,35 +74,34 @@ export default function RegexClient() {
   /* 정규식 빌드 */
   const built = useMemo(() => buildRegex(pattern, flagsStr), [pattern, flagsStr])
 
-  /* 매치 실행 (디바운스 200ms) */
-  const [matchResult, setMatchResult] = useState<ReturnType<typeof runMatches>>({ matches: [], executionMs: 0, truncated: false })
+  /* 매칭·치환·분할 실행 — 별도 워커에서 (디바운스 200ms, 1초 넘으면 중단).
+     메인 스레드에서 돌리면 (a+)+$ 같은 패턴이 탭 전체를 멈추고, 패턴이 저장돼 새로고침 후에도 다시 멈춤 */
+  const [matchResult, setMatchResult] = useState<RunMatchesResult>(EMPTY_MATCH)
+  const [replaceResult, setReplaceResult] = useState<RunReplaceResult | null>(null)
+  const [splitResult, setSplitResult] = useState<RunSplitResult | null>(null)
+  const [timedOut, setTimedOut] = useState(false)
+  const jobMode: Mode | 'none' = tab === 'replace' ? mode : 'none'
   useEffect(() => {
+    if (!built.regex) {
+      setMatchResult(EMPTY_MATCH); setReplaceResult(null); setSplitResult(null); setTimedOut(false)
+      return
+    }
+    let cancel: (() => void) | null = null
+    let alive = true
     const handle = setTimeout(() => {
-      if (built.regex) {
-        try {
-          const r = runMatches(built.regex, text)
-          setMatchResult(r)
-        } catch {
-          setMatchResult({ matches: [], executionMs: 0, truncated: false })
+      const job = runRegexJob({ pattern, flags: flagsStr, text, mode: jobMode, replacement, max: MAX_MATCHES })
+      cancel = job.cancel
+      job.promise.then((r) => {
+        if (!alive) return
+        if (r.ok) {
+          setMatchResult(r.match); setReplaceResult(r.replace); setSplitResult(r.split); setTimedOut(false)
+        } else {
+          setMatchResult(EMPTY_MATCH); setReplaceResult(null); setSplitResult(null); setTimedOut(r.timedOut)
         }
-      } else {
-        setMatchResult({ matches: [], executionMs: 0, truncated: false })
-      }
+      })
     }, 200)
-    return () => clearTimeout(handle)
-  }, [built.regex, text])
-
-  /* 치환 결과 */
-  const replaceResult = useMemo(() => {
-    if (!built.regex || mode !== 'replace') return null
-    return runReplace(built.regex, text, replacement)
-  }, [built.regex, text, replacement, mode])
-
-  /* 분할 결과 */
-  const splitResult = useMemo(() => {
-    if (!built.regex || mode !== 'split') return null
-    return runSplit(built.regex, text)
-  }, [built.regex, text, mode])
+    return () => { alive = false; clearTimeout(handle); if (cancel) cancel() }
+  }, [built.regex, pattern, flagsStr, text, jobMode, replacement])
 
   /* 입력 길이 */
   const textBytes = useMemo(() => byteLength(text), [text])
@@ -161,10 +163,11 @@ export default function RegexClient() {
       {(tab === 'match' || tab === 'replace') && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>정규식 패턴</span>
+            <label className={s.cardLabel} htmlFor="regex-pattern">정규식 패턴</label>
             <div className={s.patternRow}>
               <span className={s.patternSlash}>/</span>
               <input
+                id="regex-pattern"
                 type="text"
                 value={pattern}
                 onChange={(e) => setPattern(e.target.value)}
@@ -178,6 +181,11 @@ export default function RegexClient() {
             {built.error && (
               <div className={s.errorBox}>
                 ⚠️ <strong>정규식 오류</strong>: {built.error}
+              </div>
+            )}
+            {timedOut && (
+              <div className={s.errorBox} role="alert">
+                ⏱️ <strong>실행 시간 초과</strong>: {REGEX_TIMEOUT_MS / 1000}초 안에 끝나지 않아 중단했습니다. 중첩 양화 한정자(예: <code>(a+)+</code>) 같은 catastrophic backtracking 패턴인지 확인하세요.
               </div>
             )}
           </div>
@@ -200,10 +208,11 @@ export default function RegexClient() {
           </div>
 
           <div className={s.card}>
-            <span className={s.cardLabel}>
+            <label className={s.cardLabel} htmlFor="regex-text">
               테스트 문자열 ({fmtInt(textBytes)} / {fmtInt(MAX_INPUT_BYTES)} bytes)
-            </span>
+            </label>
             <textarea
+              id="regex-text"
               value={text}
               onChange={(e) => onTextChange(e.target.value)}
               placeholder="여기에 테스트 문자열 입력..."
@@ -223,7 +232,7 @@ export default function RegexClient() {
         <>
           <div className={s.card}>
             <span className={s.cardLabel}>통계</span>
-            <p className={s.statText}>
+            <p className={s.statText} role="status">
               <strong className={s.statBig}>{fmtInt(matchResult.matches.length)}</strong>개 매치
               {' · '}실행 <strong className={matchResult.executionMs >= SLOW_THRESHOLD_MS ? s.slowText : ''}>{fmtMs(matchResult.executionMs)}</strong>
               {matchResult.executionMs >= SLOW_THRESHOLD_MS && ' ⚠️ 복잡한 패턴 — catastrophic backtracking 의심'}
@@ -297,7 +306,7 @@ export default function RegexClient() {
             </div>
           )}
 
-          {built.regex && matchResult.matches.length === 0 && !built.error && pattern && (
+          {built.regex && matchResult.matches.length === 0 && !built.error && !timedOut && pattern && (
             <div className={s.emptyState}>
               <p>정규식은 유효하지만 <strong>매치가 0개</strong>입니다. 패턴이 테스트 문자열과 일치하는지 확인해 보세요.</p>
             </div>
@@ -319,8 +328,9 @@ export default function RegexClient() {
           {mode === 'replace' && (
             <>
               <div className={s.card}>
-                <span className={s.cardLabel}>치환 패턴</span>
+                <label className={s.cardLabel} htmlFor="regex-replacement">치환 패턴</label>
                 <input
+                  id="regex-replacement"
                   type="text"
                   value={replacement}
                   onChange={(e) => setReplacement(e.target.value)}
@@ -343,8 +353,9 @@ export default function RegexClient() {
               {replaceResult && (
                 <>
                   <div className={s.card}>
-                    <span className={s.cardLabel}>치환 결과 (실행 {fmtMs(replaceResult.executionMs)})</span>
+                    <label className={s.cardLabel} htmlFor="regex-replace-out">치환 결과 (실행 {fmtMs(replaceResult.executionMs)})</label>
                     <textarea
+                      id="regex-replace-out"
                       value={replaceResult.result}
                       readOnly
                       rows={6}
@@ -462,12 +473,12 @@ export default function RegexClient() {
           <div className={s.warnBox}>
             <p className={s.warnTitle}>⚠️ JavaScript regex 한계 (PCRE/Python과 차이)</p>
             <ul className={s.warnList}>
-              <li><strong>가변폭 lookbehind</strong> — <code>(?&lt;=\w+)</code> 같이 길이가 달라지는 lookbehind는 일부 환경(구형 Safari) 미지원</li>
+              <li><strong>lookbehind 호환성</strong> — JS는 <code>(?&lt;=\w+)</code> 같은 가변폭 lookbehind까지 지원해 PCRE보다 자유롭지만, Safari 16.4 미만 같은 구형 브라우저에서는 lookbehind 자체가 문법 오류</li>
               <li><strong>Atomic group</strong> — <code>(?&gt;...)</code> PCRE 전용, JS 미지원</li>
               <li><strong>Possessive quantifier</strong> — <code>a*+</code> JS 미지원</li>
               <li><strong>재귀 패턴</strong> — <code>(?R)</code> JS 미지원 (PCRE 전용)</li>
               <li><strong>Verbose flag (re.X)</strong> — Python 전용, JS 미지원 (한 줄에 모두 작성)</li>
-              <li><strong>유니코드 속성</strong> — <code>{'\\p{L}'}</code>, <code>{'\\p{Emoji}'}</code>는 <strong>u flag 필수</strong></li>
+              <li><strong>유니코드 속성</strong> — <code>{'\\p{L}'}</code>, <code>{'\\p{Emoji}'}</code>는 <strong>u flag 필수</strong> (없으면 오류 없이 글자 &quot;p{'{'}L{'}'}&quot;로 해석)</li>
             </ul>
           </div>
 
@@ -477,7 +488,7 @@ export default function RegexClient() {
             <ul className={s.warnList}>
               <li><strong>메타문자 escape 빠뜨림</strong> — <code>.</code>은 모든 글자, 점 자체는 <code>\.</code>로 (예: 이메일 도메인)</li>
               <li><strong>Greedy 함정</strong> — <code>&lt;.*&gt;</code>는 첫 <code>&lt;</code>부터 마지막 <code>&gt;</code>까지 → <code>&lt;.*?&gt;</code> (lazy) 사용</li>
-              <li><strong>한글·이모지 매칭 시 u flag</strong> — <code>{'\\p{Emoji}'}</code>는 u flag 없으면 오류</li>
+              <li><strong>한글·이모지 매칭 시 u flag</strong> — <code>{'\\p{Emoji}'}</code>는 u flag가 없으면 오류 없이 글자 &quot;p{'{'}Emoji{'}'}&quot;를 찾는 패턴이 되어 조용히 틀립니다. <code>{'\\p{Emoji}'}</code>는 숫자·#·*까지 포함하니 이모지만 찾을 땐 <code>{'\\p{Extended_Pictographic}'}</code>을 쓰세요</li>
               <li><strong>캡처 vs 비캡처 그룹</strong> — 그룹화만 필요하면 <code>(?:...)</code>로 성능·가독성 ↑</li>
               <li><strong>Anchor 헷갈림</strong> — <code>^</code>·<code>$</code>는 기본 전체 문자열 시작·끝, <code>m</code> flag 시 줄 단위</li>
             </ul>

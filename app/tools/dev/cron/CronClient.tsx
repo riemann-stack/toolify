@@ -19,7 +19,6 @@ type Parsed = {
 type FieldKind = 'minute' | 'hour' | 'dom' | 'month' | 'dow'
 
 const DOW_KR = ['일', '월', '화', '수', '목', '금', '토']
-const MONTH_KR = ['', '1월', '2월', '3월', '4월', '5월', '6월', '7월', '8월', '9월', '10월', '11월', '12월']
 
 const RANGES: Record<FieldKind, [number, number]> = {
   minute: [0, 59],
@@ -42,6 +41,20 @@ const ALIASES: Record<string, string> = {
 // ─────────────────────────────────────────────
 // 파서
 // ─────────────────────────────────────────────
+/* 요일·월 이름(대소문자 무관, normalize에서 소문자화) — Vixie/cronie crontab(5) */
+const DOW_NAMES: Record<string, number> = { sun: 0, mon: 1, tue: 2, wed: 3, thu: 4, fri: 5, sat: 6 }
+const MONTH_NAMES: Record<string, number> = {
+  jan: 1, feb: 2, mar: 3, apr: 4, may: 5, jun: 6, jul: 7, aug: 8, sep: 9, oct: 10, nov: 11, dec: 12,
+}
+
+/* 숫자 토큰은 정수만 허용('1x'·'1.5' 거부). 요일·월 필드는 영문 3글자 이름도 허용 */
+function toNum(tok: string, kind: FieldKind, part: string): number {
+  if (/^\d+$/.test(tok)) return Number(tok)
+  const names = kind === 'dow' ? DOW_NAMES : kind === 'month' ? MONTH_NAMES : null
+  if (names && tok in names) return names[tok]
+  throw new Error(`숫자가 아닙니다: ${part}`)
+}
+
 function parseField(raw: string, kind: FieldKind): Field {
   const [lo, hi] = RANGES[kind]
   const values = new Set<number>()
@@ -52,7 +65,8 @@ function parseField(raw: string, kind: FieldKind): Field {
     let step = 1
     const slash = token.indexOf('/')
     if (slash !== -1) {
-      step = parseInt(token.slice(slash + 1), 10)
+      const stepTok = token.slice(slash + 1)
+      step = /^\d+$/.test(stepTok) ? Number(stepTok) : NaN
       if (!Number.isInteger(step) || step <= 0) throw new Error(`스텝 값이 잘못되었습니다: ${part}`)
       token = token.slice(0, slash)
     }
@@ -62,12 +76,15 @@ function parseField(raw: string, kind: FieldKind): Field {
       if (slash === -1) all = true
     } else if (token.includes('-')) {
       const seg = token.split('-')
-      start = parseInt(seg[0], 10)
-      end = parseInt(seg[1], 10)
-      if (!Number.isInteger(start) || !Number.isInteger(end)) throw new Error(`범위 숫자가 잘못되었습니다: ${part}`)
+      if (seg.length !== 2) throw new Error(`범위 숫자가 잘못되었습니다: ${part}`)
+      try {
+        start = toNum(seg[0], kind, part)
+        end = toNum(seg[1], kind, part)
+      } catch {
+        throw new Error(`범위 숫자가 잘못되었습니다: ${part}`)
+      }
     } else {
-      start = parseInt(token, 10)
-      if (!Number.isInteger(start)) throw new Error(`숫자가 아닙니다: ${part}`)
+      start = toNum(token, kind, part)
       end = slash === -1 ? start : hi
     }
     if (start < lo || end > hi || start > end) throw new Error(`${kind} 범위(${lo}~${hi})를 벗어났습니다: ${part}`)
@@ -102,36 +119,47 @@ function parse(input: string): { parsed: Parsed; parts: string[] } {
     dom: parseField(dm, 'dom'),
     month: parseField(mo, 'month'),
     dow: parseField(dw, 'dow'),
-    domRestricted: dm !== '*',
-    dowRestricted: dw !== '*',
+    // Vixie/cronie: 필드가 '*'로 시작하면(예: */2) 제한 없음(DOM_STAR/DOW_STAR)으로 보고 AND 판정
+    domRestricted: !dm.startsWith('*'),
+    dowRestricted: !dw.startsWith('*'),
   }
   return { parsed, parts }
 }
 
-function matches(p: Parsed, d: Date): boolean {
-  if (!p.minute.values.has(d.getMinutes())) return false
-  if (!p.hour.values.has(d.getHours())) return false
-  if (!p.month.values.has(d.getMonth() + 1)) return false
+function dayMatches(p: Parsed, d: Date): boolean {
   const domOk = p.dom.values.has(d.getDate())
   const dowOk = p.dow.values.has(d.getDay())
-  // Vixie/표준 cron: 일·요일 둘 다 제한이면 OR
+  // Vixie/cronie: 일·요일 둘 다 제한(*로 시작하지 않음)이면 OR, 아니면 AND ('*'는 전체 집합이라 AND여도 무관)
   if (p.domRestricted && p.dowRestricted) return domOk || dowOk
-  if (p.domRestricted) return domOk
-  if (p.dowRestricted) return dowOk
-  return true
+  return domOk && dowOk
 }
 
+/* 다음 실행 시각 — 월·일·시가 안 맞으면 그 단위로 건너뛰어 계산 (한 번도 안 맞는 식도 즉시 끝남) */
 function nextRuns(p: Parsed, from: Date, count: number): Date[] {
   const out: Date[] = []
   const cur = new Date(from.getTime())
   cur.setSeconds(0, 0)
   cur.setMinutes(cur.getMinutes() + 1) // 현재 분 다음부터
-  const LIMIT = 366 * 24 * 60 * 5 // 약 5년치 분 — 무한루프 방지 상한
-  let i = 0
-  while (out.length < count && i < LIMIT) {
-    if (matches(p, cur)) out.push(new Date(cur.getTime()))
-    cur.setMinutes(cur.getMinutes() + 1)
-    i++
+  const limit = new Date(from.getTime())
+  limit.setFullYear(limit.getFullYear() + 5) // 약 5년 — 이 안에 없으면 '실행 시각 없음'
+  let guard = 0
+  while (out.length < count && cur.getTime() <= limit.getTime() && guard++ < 100_000) {
+    if (!p.month.values.has(cur.getMonth() + 1)) {
+      cur.setMonth(cur.getMonth() + 1, 1)
+      cur.setHours(0, 0, 0, 0)
+      continue
+    }
+    if (!dayMatches(p, cur)) {
+      cur.setDate(cur.getDate() + 1)
+      cur.setHours(0, 0, 0, 0)
+      continue
+    }
+    if (!p.hour.values.has(cur.getHours())) {
+      cur.setHours(cur.getHours() + 1, 0, 0, 0)
+      continue
+    }
+    if (p.minute.values.has(cur.getMinutes())) out.push(new Date(cur.getTime()))
+    cur.setMinutes(cur.getMinutes() + 1, 0, 0)
   }
   return out
 }
@@ -143,7 +171,7 @@ function isFixed(token: string): boolean {
   return !token.includes('*') && !token.includes(',') && !token.includes('-') && !token.includes('/')
 }
 
-function timePhrase(mi: string, ho: string): string {
+function timePhrase(mi: string, ho: string, hours: Set<number>): string {
   const minFixed = isFixed(mi)
   const hourFixed = isFixed(ho)
   if (hourFixed && minFixed) {
@@ -157,7 +185,17 @@ function timePhrase(mi: string, ho: string): string {
     return m === 0 ? `${ampm} ${h12}시(${String(h).padStart(2, '0')}:00)에` : `${ampm} ${h12}시 ${m}분(${String(h).padStart(2, '0')}:${pad})에`
   }
   if (mi.startsWith('*/') && ho === '*') return `${mi.slice(2)}분마다`
-  if (ho.startsWith('*/') && (mi === '0' || mi === '*')) return mi === '0' ? `${ho.slice(2)}시간마다(정각)` : `${ho.slice(2)}시간마다`
+  if (ho.startsWith('*/') && mi === '0') return `${ho.slice(2)}시간마다(정각)`
+  if (ho.startsWith('*/') && mi === '*') {
+    // 분이 *이면 해당 시각대 60분 내내 매분 실행 — '2시간마다'가 아님
+    // 실제 실행 시각을 나열 — */12면 0·12시, */13이면 0·13시 (24시 이후 값은 없음)
+    const n = parseInt(ho.slice(2), 10)
+    const hs = [...hours].sort((a, b) => a - b)
+    const list = hs.length <= 3 ? hs.join('·') : `${hs[0]}·${hs[1]}·${hs[2]}…`
+    // 24의 약수일 때만 '간격'이 일정 — */5(0·5·…·20시 뒤 4시간 만에 0시)처럼 나누어떨어지지 않으면 시각만 표기
+    const lead = 24 % n === 0 && hs.length > 1 ? `${n}시간 간격(${list}시)` : `${list}시`
+    return `${lead} 시각대에 매분(시간당 60회)`
+  }
   if (ho === '*' && mi === '*') return '매분'
   if (ho === '*' && minFixed) return `매시 ${parseInt(mi, 10)}분에`
   if (hourFixed && mi === '*') {
@@ -170,50 +208,83 @@ function timePhrase(mi: string, ho: string): string {
   return `${ho}시 ${mi}분 조합에`
 }
 
-function dowLabel(token: string): string {
-  return token.split(',').map(t => {
-    if (t.includes('-')) {
-      const seg = t.split('-').map(n => parseInt(n, 10))
-      const a = seg[0] === 7 ? 0 : seg[0]
-      const b = seg[1] === 7 ? 0 : seg[1]
-      return `${DOW_KR[a]}~${DOW_KR[b]}요일`
-    }
-    let n = parseInt(t, 10)
-    if (n === 7) n = 0
-    return `${DOW_KR[n]}요일`
-  }).join('·')
+/* 값 집합 → '월~금' · '1·15' 식 압축 표기 (3개 이상 연속은 ~, 너무 길면 앞 3개…마지막) */
+function compressList(sorted: number[], name: (n: number) => string): string {
+  const segs: string[] = []
+  let i = 0
+  while (i < sorted.length) {
+    let j = i
+    while (j + 1 < sorted.length && sorted[j + 1] === sorted[j] + 1) j++
+    if (j - i >= 2) segs.push(`${name(sorted[i])}~${name(sorted[j])}`)
+    else for (let k = i; k <= j; k++) segs.push(name(sorted[k]))
+    i = j + 1
+  }
+  if (segs.length > 6) return `${segs.slice(0, 3).join('·')}…${segs[segs.length - 1]}`
+  return segs.join('·')
 }
 
-function describe(parts: string[]): string {
-  const [mi, ho, dm, mo, dw] = parts
-  const domAll = dm === '*'
-  const dowAll = dw === '*'
+/* 요일 집합(parseField 결과) → '월~금요일' · '월·수·금요일' (월요일부터 나열) */
+function dowLabel(values: Set<number>): string {
+  const order = [1, 2, 3, 4, 5, 6, 7] // 7 = 일요일(0) — 월~일 순서로 연속 구간 압축
+  const present = order.filter(v => values.has(v % 7))
+  return `${compressList(present, n => DOW_KR[n % 7])}요일`
+}
+
+function domLabel(values: Set<number>): string {
+  return `${compressList([...values].sort((a, b) => a - b), n => String(n))}일`
+}
+
+function describe(parts: string[], p: Parsed): string {
+  const [mi, ho] = parts
+  const domAll = p.dom.values.size === 31
+  const dowAll = p.dow.values.size === 7
+  const dowSet = [...p.dow.values].sort((a, b) => a - b).join(',')
+
+  const dowPhrase = dowSet === '1,2,3,4,5' ? '평일(월~금)에'
+    : dowSet === '0,6' ? '주말(토·일)에'
+    : `매주 ${dowLabel(p.dow.values)}에`
 
   let dayPhrase: string
-  if (domAll && dowAll) {
+  if (p.domRestricted && p.dowRestricted) {
+    // 일·요일 둘 다 제한 → OR (한쪽이 전체면 결국 매일)
+    dayPhrase = domAll || dowAll
+      ? '매일'
+      : `매월 ${domLabel(p.dom.values)} 또는 매주 ${dowLabel(p.dow.values)}에(둘 중 하나라도 맞으면 실행)`
+  } else if (domAll && dowAll) {
     dayPhrase = '매일'
-  } else if (!dowAll && domAll) {
-    if (dw === '1-5') dayPhrase = '평일(월~금)에'
-    else if (dw === '0,6' || dw === '6,0' || dw === '0,7' || dw === '7,0' || dw === '6,7' || dw === '7,6') dayPhrase = '주말(토·일)에'
-    else dayPhrase = `매주 ${dowLabel(dw)}에`
-  } else if (dowAll && !domAll) {
-    dayPhrase = `매월 ${dm}일에`
+  } else if (domAll) {
+    dayPhrase = dowPhrase
+  } else if (dowAll) {
+    dayPhrase = `매월 ${domLabel(p.dom.values)}에`
   } else {
-    // 일·요일 둘 다 제한 → OR
-    dayPhrase = `매월 ${dm}일 또는 매주 ${dowLabel(dw)}에(둘 중 하나라도 맞으면 실행)`
+    // 한쪽이 '*'로 시작(예: */2) → AND
+    dayPhrase = `매월 ${domLabel(p.dom.values)} 중 ${dowLabel(p.dow.values)}인 날에`
   }
 
-  const monthPhrase = mo === '*'
+  const monthPhrase = p.month.values.size === 12
     ? ''
-    : (isFixed(mo) ? `${MONTH_KR[parseInt(mo, 10)]}에 한해 ` : `${mo}월에 한해 `)
+    : `${compressList([...p.month.values].sort((a, b) => a - b), n => String(n))}월에 한해 `
 
-  const time = timePhrase(mi, ho)
+  // 월이 제한되면 '1월에 한해 매월 1일' 대신 '1월에 한해 1일'
+  if (monthPhrase) dayPhrase = dayPhrase.replace(/^매월 /, '')
+
+  const time = timePhrase(mi, ho, p.hour.values)
   // 매일 + 'N분마다' 같은 빈도 표현은 "매일"을 빼는 게 자연스럽다
   const freqStyle = /마다$/.test(time) || time === '매분'
-  if (domAll && dowAll && freqStyle) {
+  if (dayPhrase === '매일' && freqStyle) {
     return `${monthPhrase}${time} 실행`.replace(/\s+/g, ' ').trim()
   }
   return `${monthPhrase}${dayPhrase} ${time} 실행`.replace(/\s+/g, ' ').trim()
+}
+
+/* 흔한 실수 경고 — 분이 *인데 시가 제한되면 그 시간대 내내 매분 실행 */
+function warnings(parts: string[]): string[] {
+  const [mi, ho] = parts
+  const out: string[] = []
+  if (mi === '*' && ho !== '*') {
+    out.push('분이 *라서 지정한 시간대의 60분 내내 매분 실행됩니다. 정각에 한 번만 돌리려면 분을 0으로 두세요.')
+  }
+  return out
 }
 
 // ─────────────────────────────────────────────
@@ -260,21 +331,30 @@ export default function CronClient() {
     return () => clearInterval(t)
   }, [])
 
-  // 빌더 → 표현식 동기 (빌더 탭에서 input 갱신)
-  useEffect(() => {
-    if (mode !== 'build') return
-    const expr = `${b.minute || '*'} ${b.hour || '*'} ${b.dom || '*'} ${b.month || '*'} ${b.dow || '*'}`
-    setInput(expr)
-  }, [b, mode])
+  // 빌더 select를 바꿀 때만 표현식 갱신 — 탭 전환만으로는 직접 입력한 식을 덮어쓰지 않음
+  function updateBuilder(patch: Partial<BuilderState>) {
+    const nb = { ...b, ...patch }
+    setB(nb)
+    setInput(`${nb.minute || '*'} ${nb.hour || '*'} ${nb.dom || '*'} ${nb.month || '*'} ${nb.dow || '*'}`)
+  }
+
+  // 빌더 탭 진입 시 현재 식을 빌더에 반영 (해석할 수 없으면 빌더 값 유지)
+  function enterBuilder() {
+    try {
+      const { parts } = normalize(input)
+      setB({ minute: parts[0], hour: parts[1], dom: parts[2], month: parts[3], dow: parts[4] })
+    } catch { /* 잘못된 식 — 빌더는 이전 값 유지, 입력도 그대로 */ }
+    setMode('build')
+  }
 
   const result = useMemo(() => {
     const trimmed = input.trim()
     if (!trimmed) return { ok: false as const, error: '' }
     try {
       const { parsed, parts } = parse(input)
-      const desc = describe(parts)
+      const desc = describe(parts, parsed)
       const runs = now ? nextRuns(parsed, now, count) : []
-      return { ok: true as const, desc, runs, parts }
+      return { ok: true as const, desc, runs, parts, warns: warnings(parts) }
     } catch (e) {
       return { ok: false as const, error: (e as Error).message }
     }
@@ -290,9 +370,10 @@ export default function CronClient() {
 
   function copyExpr() {
     if (!input.trim()) return
-    navigator.clipboard.writeText(input.trim())
-    setCopied(true)
-    setTimeout(() => setCopied(false), 1500)
+    navigator.clipboard.writeText(input.trim()).then(() => {
+      setCopied(true)
+      setTimeout(() => setCopied(false), 1500)
+    }).catch(() => { /* 권한 거부·비보안 컨텍스트 — '복사됨'을 띄우지 않음 */ })
   }
 
   const fmtRun = (d: Date) => {
@@ -311,7 +392,7 @@ export default function CronClient() {
         <button className={`${s.tabBtn} ${mode === 'parse' ? s.tabActive : ''}`} onClick={() => setMode('parse')} type="button">
           표현식 해석
         </button>
-        <button className={`${s.tabBtn} ${mode === 'build' ? s.tabActive : ''}`} onClick={() => setMode('build')} type="button">
+        <button className={`${s.tabBtn} ${mode === 'build' ? s.tabActive : ''}`} onClick={enterBuilder} type="button">
           빌더로 만들기
         </button>
       </div>
@@ -326,7 +407,7 @@ export default function CronClient() {
             <BuilderSelect
               label="분"
               value={b.minute}
-              onChange={v => setB(s => ({ ...s, minute: v }))}
+              onChange={v => updateBuilder({ minute: v })}
               options={[
                 { v: '*', t: '매분' },
                 { v: '0', t: '0분(정각)' },
@@ -342,7 +423,7 @@ export default function CronClient() {
             <BuilderSelect
               label="시"
               value={b.hour}
-              onChange={v => setB(s => ({ ...s, hour: v }))}
+              onChange={v => updateBuilder({ hour: v })}
               options={[
                 { v: '*', t: '매시' },
                 ...Array.from({ length: 24 }, (_, h) => ({ v: String(h), t: `${h}시` })),
@@ -354,7 +435,7 @@ export default function CronClient() {
             <BuilderSelect
               label="일"
               value={b.dom}
-              onChange={v => setB(s => ({ ...s, dom: v }))}
+              onChange={v => updateBuilder({ dom: v })}
               options={[
                 { v: '*', t: '매일' },
                 { v: '1', t: '1일' },
@@ -367,7 +448,7 @@ export default function CronClient() {
             <BuilderSelect
               label="월"
               value={b.month}
-              onChange={v => setB(s => ({ ...s, month: v }))}
+              onChange={v => updateBuilder({ month: v })}
               options={[
                 { v: '*', t: '매월' },
                 ...Array.from({ length: 12 }, (_, i) => ({ v: String(i + 1), t: `${i + 1}월` })),
@@ -377,7 +458,7 @@ export default function CronClient() {
             <BuilderSelect
               label="요일"
               value={b.dow}
-              onChange={v => setB(s => ({ ...s, dow: v }))}
+              onChange={v => updateBuilder({ dow: v })}
               options={[
                 { v: '*', t: '매일' },
                 { v: '1-5', t: '평일(월~금)' },
@@ -445,6 +526,9 @@ export default function CronClient() {
             <div className={s.meaningCard} style={{ fontSize: 15, padding: '14px 18px' }}>
               <strong style={{ fontSize: 16 }}>{result.desc}</strong>
             </div>
+            {result.warns.map((w, i) => (
+              <div key={i} style={{ marginTop: 10, padding: '10px 14px', borderRadius: 'var(--radius-m)', border: '1px solid var(--warning)', background: 'var(--bg2)', color: 'var(--text)', fontSize: 13, lineHeight: 1.7 }}>⚠️ {w}</div>
+            ))}
 
             {/* 필드 분해 */}
             <div className={s.card} style={{ marginTop: 10 }}>
@@ -470,7 +554,7 @@ export default function CronClient() {
             {/* 다음 실행 시각 */}
             <div className={s.card} style={{ marginTop: 10 }}>
               <div className={s.cardTop}>
-                <label className={s.cardLabel}>다음 실행 시각 (KST · 내 기기 시간 기준)</label>
+                <label className={s.cardLabel}>다음 실행 시각 (이 기기 시간대 기준)</label>
                 <div style={{ display: 'flex', gap: 4 }}>
                   {[5, 10].map(n => (
                     <button
@@ -545,7 +629,7 @@ function BuilderSelect({
 }) {
   const has = options.some(o => o.v === value)
   return (
-    <div>
+    <label style={{ display: 'block' }}>
       <span style={{ fontSize: 11, color: 'var(--muted)', display: 'block', marginBottom: 4 }}>{label}</span>
       <select
         value={has ? value : '__custom'}
@@ -558,6 +642,6 @@ function BuilderSelect({
         ))}
         {!has && <option value="__custom">직접 입력: {value}</option>}
       </select>
-    </div>
+    </label>
   )
 }

@@ -66,7 +66,7 @@ const FAQ_LD = [
   { "q":"HMAC과 일반 해시의 차이는?","a":"HMAC(Hash-based MAC)은 비밀키 + 메시지를 함께 해싱해 생성하는 메시지 인증 코드입니다. • 일반 해시 (SHA-256 등): 누구나 메시지만 알면 같은 해시 생성 가능 → 위조 가능 • HMAC-SHA256: 키를 모르면 같은 해시 생성 불가능 → 메시지 위변조 검출 가능 공식: HMAC(key, msg) = H((key⊕opad) ‖ H((key⊕ipad) ‖ msg)) (RFC 2104) GitHub 웹훅, Slack, AWS Signature V4, JWT HS256 모두 HMAC-SHA256 사용. 본 도구의 [🔑 HMAC] 탭에서 4개 시나리오 프리셋 제공." },
   { "q":"파일 해시가 다른 사이트와 다른 값이 나와요","a":"가장 흔한 원인은 줄바꿈(newline) 차이입니다. Windows(CRLF)와 macOS/Linux(LF)는 같은 텍스트 파일이라도 바이트가 달라 해시가 달라집니다. 그 외 원인: ① 파일이 다운로드 중 손상, ② 메타데이터·BOM 포함 여부, ③ ZIP 압축 해제 시 시간 정보 변경, ④ 다른 알고리즘으로 계산 확인 방법: 같은 OS에서 같은 알고리즘으로 다시 계산해 보세요. 본 도구의 결과는 macOS/Linux의 shasum·md5sum과 100% 일치합니다 (UTF-8 기준)." },
   { "q":"큰 파일도 해시 가능한가요?","a":"가능합니다. 본 도구는 최대 1~2GB까지 브라우저 메모리 한도 내에서 처리 가능 (기기 RAM 의존). • SHA-1/256/512: Web Crypto API로 한 번에 계산 — 빠름 • MD5: 8MB 청크 단위 스트리밍 처리 (RFC 1321 inline 구현) — 느리지만 매우 큰 파일도 가능 100MB 초과 시 메모리 사용량·시간 경고가 표시됩니다. 수 GB 파일은 CLI(`shasum -a 256 file.iso`) 사용을 권장합니다." },
-  { "q":"SRI 해시(integrity)는 어떻게 만드나요?","a":"SRI(Subresource Integrity)는 CDN에서 로드되는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다. 생성 방법: 본 도구의 [📝 텍스트] 또는 [📁 파일] 탭에서 SHA-384 + Base64 출력을 사용 (또는 SHA-256/512). HTML 사용: <script src=\"...\" integrity=\"sha384-Base64결과\" crossorigin=\"anonymous\"></script> jsDelivr·cdnjs는 자동 생성 SRI를 제공합니다. 자체 호스팅 시 본 도구로 생성 가능." },
+  { "q":"SRI 해시(integrity)는 어떻게 만드나요?","a":"SRI(Subresource Integrity)는 CDN에서 로드되는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다. 생성 방법: 스크립트 파일을 본 도구의 [📁 파일] 탭에 넣으면 SRI 행에 sha384-Base64 값이 바로 나옵니다. 텍스트 탭에서 SHA-384 + Base64 출력을 써도 되지만, 붙여넣는 과정에서 줄바꿈(CRLF)이 LF로 바뀌면 실제 파일과 해시가 달라집니다. HTML 사용: <script src=\"...\" integrity=\"sha384-Base64결과\" crossorigin=\"anonymous\"></script> jsDelivr·cdnjs는 자동 생성 SRI를 제공합니다. 자체 호스팅 시 본 도구로 생성 가능." },
   { "q":"Base64와 hex 형식 어떻게 선택?","a":"hex (16진): 일반적·가독성 ↑·길이 2배. 대부분 CLI·로그·검증용 표준. Base64: 짧음(약 33% 압축)·HTTP 헤더·이메일 친화. SRI integrity= 속성, JWT 등에 사용. Base64URL: +→-, /→_, 패딩(=) 제거. URL·파일명·JWT(헤더·페이로드·서명)에 안전. 용도별 권장: • 파일 체크섬·CLI 비교 → hex • SRI integrity 속성 → Base64 (또는 Base64URL) • JWT 서명 → Base64URL (RFC 7515) • API 헤더 (대부분 GitHub/Slack 등) → hex" },
   { "q":"본 도구는 입력 데이터를 서버에 보내나요?","a":"아니요. 모든 계산이 브라우저(클라이언트)에서 수행됩니다. • MD5: 순수 JavaScript로 inline 구현 (외부 라이브러리·서버 호출 없음) • SHA-1/256/512: 브라우저 Web Crypto API (네이티브) • HMAC: Web Crypto API • 파일: FileReader로 메모리 내 처리, 업로드 없음 또한 입력 텍스트·Secret Key·파일은 localStorage에도 저장하지 않습니다 (옵션값만 저장). 공용 PC 사용 후 브라우저 탭을 닫으면 모든 데이터가 즉시 사라집니다. 추가 안전을 원하면 시크릿 모드·DevTools로 메모리 정리 권장." },
   { "q":"해시 충돌(collision)이란 무엇인가요?","a":"서로 다른 두 입력이 같은 해시값을 만드는 현상입니다. 해시 함수는 입력은 무한·출력은 유한이라 이론적으로 충돌은 항상 존재해요. 안전한 해시는 찾기가 사실상 불가능해야 합니다(비둘기 집 원리 + 출력 공간이 매우 큼). • MD5 충돌 (2004): 약 2^18 시도로 충돌 가능 → 디지털 서명 위조 가능 • SHA-1 SHAttered (2017): Google이 단일 GPU 기준 약 110년 분량(단일 CPU 약 6,500년)의 연산으로 같은 SHA-1을 갖는 두 PDF를 시연 • SHA-256: 2^128 시도 필요 → 우주 수명보다 긺 → 안전 충돌 위험이 있어도 무결성 확인(체크섬)은 OK — 우연한 손상은 충돌과 무관, 의도적 변조 위험만 문제." }
@@ -110,8 +110,8 @@ export default function HashPage() {
       <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
       <div style={card}>
         <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
-          <li><strong>탭 1 텍스트</strong> — 텍스트 입력 → MD5/SHA-1/SHA-256/SHA-512 4개 알고리즘 동시 출력 (디바운스 200ms 자동 재계산) + 안전성 배지</li>
-          <li><strong>탭 2 파일</strong> — 드래그앤드롭 또는 파일 선택 → 4 알고리즘 자동 계산 + 진행률 + 예상 해시와 자동 비교(무결성 검증)</li>
+          <li><strong>탭 1 텍스트</strong> — 텍스트 입력 → MD5/SHA-1/SHA-256/SHA-384/SHA-512 5개 알고리즘 동시 출력 (디바운스 200ms 자동 재계산) + 안전성 배지</li>
+          <li><strong>탭 2 파일</strong> — 드래그앤드롭 또는 파일 선택 → 5개 알고리즘과 SRI 값 자동 계산 + 진행률 + 예상 해시와 자동 비교(무결성 검증)</li>
           <li><strong>탭 3 HMAC</strong> — Secret Key + Message → HMAC-SHA1/256/384/512 서명 생성 + GitHub/Slack/AWS/JWT 시나리오 프리셋</li>
           <li><strong>탭 4 가이드</strong> — 알고리즘 비교·안전성 등급·SRI 사용법·CLI 명령 대조</li>
         </ol>
@@ -339,7 +339,7 @@ export default function HashPage() {
         <summary style={faqSummary}>Q7. SRI 해시(integrity)는 어떻게 만드나요?</summary>
         <p style={faqAnswer}>
           SRI(Subresource Integrity)는 CDN에서 로드되는 외부 스크립트가 변조되지 않았는지 검증하는 W3C 표준입니다.<br />
-          <strong>생성 방법</strong>: 본 도구의 [📝 텍스트] 또는 [📁 파일] 탭에서 <strong>SHA-384</strong> + <strong>Base64</strong> 출력을 사용 (또는 SHA-256/512).<br />
+          <strong>생성 방법</strong>: 스크립트 파일을 본 도구의 [📁 파일] 탭에 넣으면 SRI 행에 <strong>sha384-Base64</strong> 값이 바로 나옵니다. 텍스트 탭에서 <strong>SHA-384</strong> + <strong>Base64</strong> 출력을 써도 되지만, 붙여넣는 과정에서 줄바꿈(CRLF)이 LF로 바뀌면 실제 파일과 해시가 달라집니다.<br />
           <strong>HTML 사용</strong>:
           <br /><code style={{ background: 'var(--bg3)', padding: '4px 6px', borderRadius: 3, display: 'block', marginTop: 6, fontSize: 12 }}>
             &lt;script src=&quot;...&quot; integrity=&quot;sha384-Base64결과&quot; crossorigin=&quot;anonymous&quot;&gt;&lt;/script&gt;

@@ -14,7 +14,7 @@ interface LatencyStats {
   avg: number
   p95: number
   max: number
-  jitter: number  // 표준편차
+  jitter: number  // 연속 샘플 차이의 평균 (RFC 3550 방식 단순화)
   loss: number    // 실패 비율 (0~1)
 }
 
@@ -22,6 +22,7 @@ interface SiteResult {
   url: string
   label: string
   rttMs?: number
+  edgeRttMs?: number  // Edge → 사이트 구간 (서버 측정)
   status?: number
   error?: string
 }
@@ -51,8 +52,10 @@ function calcStats(samples: number[], loss: number): LatencyStats {
   const median = n > 0 ? sorted[Math.floor(n / 2)] : 0
   const p95 = n > 0 ? sorted[Math.floor(n * 0.95)] || sorted[n - 1] : 0
   const avg = n > 0 ? sorted.reduce((a, b) => a + b, 0) / n : 0
-  const variance = n > 0 ? sorted.reduce((acc, v) => acc + (v - avg) ** 2, 0) / n : 0
-  const jitter = Math.sqrt(variance)
+  // 지터 = 이웃한 샘플 간 차이의 평균 (측정 순서 기준) — 튀는 값 1개가 표준편차처럼 크게 부풀리지 않음
+  let diffSum = 0
+  for (let i = 1; i < samples.length; i++) diffSum += Math.abs(samples[i] - samples[i - 1])
+  const jitter = samples.length > 1 ? diffSum / (samples.length - 1) : 0
   return { samples, min, median, avg, p95, max, jitter, loss }
 }
 
@@ -71,10 +74,10 @@ function rateJitter(jitter: number): { label: string; color: string; desc: strin
   return { label: '🔴 매우 불안정', color: '#DC2626', desc: 'Wi-Fi 채널·라우터 점검' }
 }
 function rateSpeed(mbps: number): { label: string; color: string; desc: string } {
-  if (mbps >= 100) return { label: '🟢 매우 빠름', color: '#059669', desc: '광랜·5G' }
-  if (mbps >= 50) return { label: '🟢 빠름', color: '#0891B2', desc: '광랜·5G·우수 LTE' }
-  if (mbps >= 20) return { label: '🟡 보통', color: '#D97706', desc: 'LTE·일반 Wi-Fi' }
-  if (mbps >= 5) return { label: '🟠 느림', color: '#EA580C', desc: 'LTE 약함·Wi-Fi 2.4GHz' }
+  if (mbps >= 100) return { label: '🟢 매우 빠름', color: '#059669', desc: '고화질 영상·대용량 다운로드도 여유' }
+  if (mbps >= 50) return { label: '🟢 빠름', color: '#0891B2', desc: '일상 사용에 충분' }
+  if (mbps >= 20) return { label: '🟡 보통', color: '#D97706', desc: '웹·영상 스트리밍 가능' }
+  if (mbps >= 5) return { label: '🟠 느림', color: '#EA580C', desc: '약한 신호·혼잡한 Wi-Fi 의심' }
   return { label: '🔴 매우 느림', color: '#DC2626', desc: '회선 점검 필요' }
 }
 
@@ -104,7 +107,10 @@ async function measureSite(url: string): Promise<SiteResult> {
     const browserToEdge = performance.now() - t0
     if (data.ok) {
       // 브라우저 측정값과 Edge→사이트 RTT 둘 다 표현
-      return { url, label: '', rttMs: Math.round(browserToEdge), status: data.httpStatus }
+      return {
+        url, label: '', rttMs: Math.round(browserToEdge), status: data.httpStatus,
+        edgeRttMs: typeof data.rttMs === 'number' ? Math.round(data.rttMs) : undefined,
+      }
     }
     return { url, label: '', error: data.error || '실패' }
   } catch (e) {
@@ -113,16 +119,29 @@ async function measureSite(url: string): Promise<SiteResult> {
 }
 
 async function measureDownload(bytes: number): Promise<DownloadResult | null> {
-  const t0 = performance.now()
   try {
-    const r = await fetch(`/api/speedtest?bytes=${bytes}&t=${t0}`, {
+    const r = await fetch(`/api/speedtest?bytes=${bytes}&t=${performance.now()}`, {
       cache: 'no-store',
       signal: AbortSignal.timeout(30000),
     })
-    const blob = await r.blob()
-    const dur = performance.now() - t0
-    const mbps = (blob.size * 8) / (dur / 1000) / 1_000_000
-    return { bytes: blob.size, durationMs: dur, mbps }
+    if (!r.ok) return null
+    // 타이머는 응답 헤더를 받은 뒤부터 — 요청 왕복·서버 처리 시간(TTFB)을 빼고 본문 전송만 잰다
+    const t0 = performance.now()
+    let size = 0
+    if (r.body) {
+      const reader = r.body.getReader()
+      for (;;) {
+        const { done, value } = await reader.read()
+        if (done) break
+        size += value.byteLength
+      }
+    } else {
+      size = (await r.blob()).size
+    }
+    const dur = Math.max(1, performance.now() - t0)
+    if (size === 0) return null
+    const mbps = (size * 8) / (dur / 1000) / 1_000_000
+    return { bytes: size, durationMs: dur, mbps }
   } catch {
     return null
   }
@@ -140,16 +159,20 @@ export default function NetworkTestClient() {
   const [sites, setSites] = useState<SiteResult[]>([])
   const [download, setDownload] = useState<DownloadResult | null>(null)
   const [downloadSize, setDownloadSize] = useState<1 | 5>(1)
+  const [latencyFailed, setLatencyFailed] = useState(false)
 
   const runFullTest = useCallback(async () => {
     setLatency(null)
     setSites([])
     setDownload(null)
+    setLatencyFailed(false)
     setProgress(0)
 
-    // ── 1) 핑·지터 (20회) ──
+    // ── 1) 핑·지터 (워밍업 1회 + 20회) ──
     setPhase('latency')
     setProgressLabel('회선 핑 측정 중…')
+    // 첫 요청은 DNS·TLS 연결 수립이 섞여 느리므로 버림
+    await measureOnce()
     const N = 20
     const samples: number[] = []
     let failed = 0
@@ -161,6 +184,7 @@ export default function NetworkTestClient() {
     }
     const loss = failed / N
     setLatency(calcStats(samples, loss))
+    if (samples.length === 0) setLatencyFailed(true)
 
     // ── 2) 사이트 응답 시간 (병렬) ──
     setPhase('sites')
@@ -268,6 +292,21 @@ export default function NetworkTestClient() {
         )}
       </div>
 
+      {/* 스크린리더용 결과 알림 */}
+      <p className="srOnly" role="status">
+        {phase === 'done' && overall ? `측정 완료 — 종합 점수 ${overall.total}점` : phase === 'done' && latencyFailed ? '측정 실패 — 서버에 연결하지 못했습니다' : ''}
+      </p>
+
+      {latencyFailed && (
+        <div className={s.card}>
+          <div className={s.cardLabel}>⚠️ 핑을 측정하지 못했습니다</div>
+          <p className={s.note}>
+            20번의 요청이 모두 실패했습니다. 인터넷 연결이 끊겼거나, 회사·학교 방화벽·광고 차단 확장 프로그램이 요청을 막았을 수 있습니다.
+            연결을 확인한 뒤 다시 측정해 주세요.
+          </p>
+        </div>
+      )}
+
       {/* ─── 종합 결과 ─── */}
       {overall && (
         <div className={s.overallCard}>
@@ -314,7 +353,7 @@ export default function NetworkTestClient() {
               <div className={s.statSub}>P95 {latency.p95.toFixed(0)}ms</div>
             </div>
             <div className={s.statBox} style={{ borderColor: `${rateJitter(latency.jitter).color}66` }}>
-              <div className={s.statLabel}>지터 (표준편차)</div>
+              <div className={s.statLabel}>지터 (연속 차이 평균)</div>
               <div className={s.statNum} style={{ color: rateJitter(latency.jitter).color }}>
                 {latency.jitter.toFixed(1)}<span>ms</span>
               </div>
@@ -360,7 +399,7 @@ export default function NetworkTestClient() {
                         <span className={s.siteRtt} style={{ color: rateLatency(site.rttMs).color }}>
                           {site.rttMs}ms
                         </span>
-                        {site.status && <span className={s.siteStatus}>HTTP {site.status}</span>}
+                        {site.status && <span className={s.siteStatus}>HTTP {site.status}{site.edgeRttMs !== undefined ? ` · Edge→사이트 ${site.edgeRttMs}ms` : ''}</span>}
                       </>
                     ) : (
                       <span className={s.siteError}>❌ {site.error}</span>
@@ -392,18 +431,21 @@ export default function NetworkTestClient() {
           </div>
           <div className={s.dlBenchmark}>
             <div className={s.benchRow}>
-              <span>📶 LTE 평균 (한국)</span>
-              <span>20~50 Mbps</span>
+              <span>📶 LTE 평균 (과기정통부 2025 평가)</span>
+              <span>96 Mbps</span>
             </div>
             <div className={s.benchRow}>
-              <span>📡 5G 평균 (한국)</span>
-              <span>200~500 Mbps</span>
+              <span>📡 5G 평균 (과기정통부 2025 평가)</span>
+              <span>974 Mbps</span>
             </div>
             <div className={s.benchRow}>
-              <span>🏠 광랜 (1Gbps 상품)</span>
-              <span>500~900 Mbps</span>
+              <span>🏠 광랜 1Gbps 상품</span>
+              <span>최대 1,000 Mbps</span>
             </div>
           </div>
+          <p className={s.note}>
+            ⓘ 브라우저 한 연결로 잰 참고치라 실제 회선 최고 속도보다 낮게 나오는 게 보통입니다. 위 평균은 전용 측정 장비로 잰 정부 평가값(2025년 12월 발표)입니다.
+          </p>
         </div>
       )}
 

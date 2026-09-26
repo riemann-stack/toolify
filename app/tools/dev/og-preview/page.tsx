@@ -36,7 +36,7 @@ const FAQ_LD = [
               },
               {
                 q: 'og:image는 어느 크기·비율이 가장 안전한가요?',
-                a: '<strong>1200×630px (2:1)</strong>이 가장 보편적입니다. Facebook 권장 1.91:1, 카카오톡 2:1, X 2:1(summary_large_image) — 1200×630 한 장이면 모든 플랫폼에서 잘림 없이 표시됩니다. 파일 형식은 <strong>jpg(사진) 또는 png(텍스트·로고)</strong>, 용량은 <strong>5MB 이하</strong> 권장. 절대 URL(<code style="color: var(--text)">https://example.com/og.png</code>)을 사용해야 하며 상대 경로는 일부 플랫폼에서 표시 실패합니다.',
+                a: '<strong>1200×630px (약 1.91:1)</strong>이 가장 보편적입니다. Facebook·LinkedIn은 1.91:1, 카카오톡·X(summary_large_image)는 2:1에 가깝게 표시하므로 1200×630 한 장으로 대부분의 플랫폼에 쓸 수 있습니다. 다만 비율 차이로 가장자리가 조금씩 잘리니 제목·로고는 중앙 안전 영역에 두세요. 파일 형식은 <strong>jpg(사진) 또는 png(텍스트·로고)</strong>, 용량은 <strong>5MB 이하</strong> 권장. 절대 URL(<code style="color: var(--text)">https://example.com/og.png</code>)을 사용해야 하며 상대 경로는 일부 플랫폼에서 표시 실패합니다.',
               },
               {
                 q: 'URL 입력 모드에서 "페이지를 불러올 수 없다"고 나옵니다.',
@@ -153,7 +153,7 @@ export default function OgPreviewPage() {
               </thead>
               <tbody>
                 {[
-                  ['🇰🇷 카카오톡',  '2:1 (1200×630)',  '48시간',     'HTTPS·og 태그만, 캐시 초기화 도구 필수'],
+                  ['🇰🇷 카카오톡',  '2:1로 표시 (1200×630은 상하 약간 잘림)',  '48시간',     'HTTPS·og 태그만, 캐시 초기화 도구 필수'],
                   ['Facebook',    '1.91:1',          '24시간~',    'Sharing Debugger로 강제 새로고침 가능'],
                   ['X (Twitter)', '2:1 또는 1:1',    '7일',        'twitter:card 별도 — summary_large_image 권장'],
                   ['LinkedIn',    '1.91:1',          '7일',        'Post Inspector로 캐시 초기화'],

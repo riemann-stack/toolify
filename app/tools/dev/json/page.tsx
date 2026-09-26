@@ -20,7 +20,7 @@ const FAQ_LD = [
               },
               {
                 q: 'API 응답 JSON에서 TypeScript 타입을 자동 생성할 수 있나요?',
-                a: '네, 본 도구의 <strong>변환 탭 → TypeScript 인터페이스</strong>를 사용하세요. JSON을 붙여넣으면 자동으로 인터페이스를 생성합니다. 중첩 객체는 별도 인터페이스로 분리되어 재사용 가능하며, 키는 알파벳 순으로 정렬됩니다. <strong>옵셔널 필드(?)는 null 값일 때 자동 표시</strong>되며, 추가 검증·튜닝은 수동으로 진행하면 됩니다.',
+                a: '네, 본 도구의 <strong>변환 탭 → TypeScript 인터페이스</strong>를 사용하세요. JSON을 붙여넣으면 자동으로 인터페이스를 생성합니다. 중첩 객체는 별도 인터페이스로 분리되어 재사용 가능하며, 키는 알파벳 순으로 정렬됩니다. 샘플 값이 <code>null</code>인 필드는 실제 타입을 알 수 없어 <code>null</code>로 두고 주석을 달아 두니, <code>string | null</code>처럼 실제 타입으로 바꿔 쓰면 됩니다. 옵셔널 여부(<code>?</code>)는 JSON 한 건만으로는 판단할 수 없어 필요한 곳에 직접 붙이세요.',
               },
               {
                 q: 'JSON Beautify(정렬)와 Minify(압축) 차이는?',
@@ -131,8 +131,8 @@ export default function JsonPage() {
           }}>
             <div><span style={{ color: 'var(--muted)' }}># 실제로 깨지는 예 (Node.js·브라우저 공통)</span></div>
             <div>JSON.parse(&apos;{'{'}&quot;id&quot;: 1234567890123456789{'}'}&apos;).id</div>
-            <div><span style={{ color: '#DC2626' }}>// → 1234567890123456800  ← 끝 세 자리가 조용히 바뀜</span></div>
-            <div>JSON.parse(&apos;9007199254740993&apos;)  <span style={{ color: '#DC2626' }}>// → 9007199254740992</span></div>
+            <div><span style={{ color: '#DC2626' }}>{'// → 1234567890123456800  ← 끝 세 자리가 조용히 바뀜'}</span></div>
+            <div>JSON.parse(&apos;9007199254740993&apos;)  <span style={{ color: '#DC2626' }}>{'// → 9007199254740992'}</span></div>
           </div>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
             대처는 세 가지입니다. ① <strong style={{ color: 'var(--text)' }}>서버가 ID를 문자열로 직렬화</strong> — 트위터 API가 숫자 id와 별도로

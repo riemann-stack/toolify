@@ -13,7 +13,8 @@ import {
 
 type Tab = 'convert' | 'validate' | 'examples' | 'guide'
 
-const STORAGE_KEY = 'youtil_yaml_json_v1'
+const STORAGE_KEY = 'youtil_yaml_json_v1' // 기존 키 유지 (개명 시 저장값 유실)
+const DIRECTIONS: Direction[] = ['auto', 'y2j', 'j2y']
 
 const DEFAULT_INPUT = `# Kubernetes Pod 예시
 apiVersion: v1
@@ -54,9 +55,10 @@ export default function YamlJsonClient() {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
       const j = JSON.parse(raw)
+      if (!j || typeof j !== 'object') return
       if (typeof j.input === 'string') setInput(j.input)
-      if (j.direction) setDirection(j.direction)
-      if (j.indent) setIndent(j.indent)
+      if (DIRECTIONS.includes(j.direction)) setDirection(j.direction)
+      if (INDENT_OPTIONS.some((o) => o.id === j.indent)) setIndent(j.indent)
       if (typeof j.jsonCompact === 'boolean') setJsonCompact(j.jsonCompact)
       if (typeof j.sortKeys === 'boolean') setSortKeys(j.sortKeys)
       if (typeof j.validateInput === 'string') setValidateInput(j.validateInput)
@@ -91,24 +93,43 @@ export default function YamlJsonClient() {
     /* auto */
     if (detectedFormat === 'json') return 'j2y'
     if (detectedFormat === 'yaml') return 'y2j'
-    if (detectedFormat === 'ambiguous') return 'j2y'  /* JSON 우선 시도 */
+    if (detectedFormat === 'ambiguous') return 'j2y'  /* JSON 우선 시도 → 실패하면 YAML로 재시도 */
     return null
   }, [direction, detectedFormat])
 
   /* ═══ 변환 실행 (디바운스 200ms) ═══ */
   const opts = useMemo(() => ({ indent, jsonCompact, sortKeys }), [indent, jsonCompact, sortKeys])
   const [convertResult, setConvertResult] = useState<ReturnType<typeof yamlToJson> | null>(null)
+  /* 실제로 쓰인 방향 — 자동 모드에서 JSON이 실패해 YAML로 재시도하면 y2j */
+  const [resolvedDirection, setResolvedDirection] = useState<'y2j' | 'j2y' | null>(null)
   useEffect(() => {
     const handle = setTimeout(() => {
       if (!input.trim() || !actualDirection) {
         setConvertResult(null)
+        setResolvedDirection(null)
         return
       }
-      const r = actualDirection === 'y2j' ? yamlToJson(input, opts) : jsonToYaml(input, opts)
+      if (actualDirection === 'y2j') {
+        setConvertResult(yamlToJson(input, opts))
+        setResolvedDirection('y2j')
+        return
+      }
+      const r = jsonToYaml(input, opts)
+      if (!r.success && direction === 'auto' && detectedFormat === 'ambiguous') {
+        /* 모호한 입력만: JSON으로 실패하면 YAML로 한 번 더 (한글 키 YAML 등).
+           JSON으로 감지된 입력은 콤마 누락 같은 오류가 YAML로 조용히 다르게 읽히므로 재시도하지 않는다 */
+        const y = yamlToJson(input, opts)
+        if (y.success) {
+          setConvertResult(y)
+          setResolvedDirection('y2j')
+          return
+        }
+      }
       setConvertResult(r)
+      setResolvedDirection('j2y')
     }, 200)
     return () => clearTimeout(handle)
-  }, [input, opts, actualDirection])
+  }, [input, opts, actualDirection, direction, detectedFormat])
 
   /* ═══ 검증 결과 ═══ */
   const validation = useMemo(() => {
@@ -128,7 +149,7 @@ export default function YamlJsonClient() {
 
   const download = () => {
     if (!convertResult?.success || !convertResult.result) return
-    const ext = actualDirection === 'y2j' ? 'json' : 'yaml'
+    const ext = resolvedDirection === 'y2j' ? 'json' : 'yaml'
     const blob = new Blob([convertResult.result], { type: 'text/plain;charset=utf-8' })
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
@@ -229,13 +250,14 @@ export default function YamlJsonClient() {
             {/* 입력 */}
             <div className={s.paneCard}>
               <div className={s.paneHeader}>
-                <span className={s.paneLabel}>입력</span>
+                <label className={s.paneLabel} htmlFor="yaml-json-input">입력</label>
                 <div className={s.paneActions}>
                   <span className={s.paneStat}>{formatBytes(inputBytes)}</span>
-                  <button className={s.smBtn} onClick={() => setInput('')} disabled={!input}>🗑️</button>
+                  <button className={s.smBtn} onClick={() => setInput('')} disabled={!input} aria-label="입력 지우기">🗑️</button>
                 </div>
               </div>
               <textarea
+                id="yaml-json-input"
                 value={input}
                 onChange={(e) => onInputChange(e.target.value)}
                 placeholder="YAML 또는 JSON 붙여넣기..."
@@ -246,24 +268,24 @@ export default function YamlJsonClient() {
                 자동 감지: <strong>{
                   detectedFormat === 'json' ? '🟩 JSON' :
                   detectedFormat === 'yaml' ? '🟦 YAML' :
-                  detectedFormat === 'ambiguous' ? '🟧 모호 (JSON 우선)' :
+                  detectedFormat === 'ambiguous' ? '🟧 모호 (JSON 먼저, 실패 시 YAML)' :
                   '⚪ 빈 입력'
                 }</strong>
-                {actualDirection && <> · 변환: <strong>{actualDirection === 'y2j' ? 'YAML → JSON' : 'JSON → YAML'}</strong></>}
+                {(resolvedDirection ?? actualDirection) && <> · 변환: <strong>{(resolvedDirection ?? actualDirection) === 'y2j' ? 'YAML → JSON' : 'JSON → YAML'}</strong></>}
               </p>
             </div>
 
             {/* 출력 */}
             <div className={s.paneCard}>
               <div className={s.paneHeader}>
-                <span className={s.paneLabel}>
-                  결과 {convertResult?.success && actualDirection && <span className={s.formatBadge}>{actualDirection === 'y2j' ? 'JSON' : 'YAML'}</span>}
-                </span>
+                <label className={s.paneLabel} htmlFor="yaml-json-output">
+                  결과 {convertResult?.success && resolvedDirection && <span className={s.formatBadge}>{resolvedDirection === 'y2j' ? 'JSON' : 'YAML'}</span>}
+                </label>
                 <div className={s.paneActions}>
                   {convertResult?.stats && (
                     <span className={s.paneStat}>{fmtMs(convertResult.stats.ms)}</span>
                   )}
-                  <button className={s.smBtn} onClick={() => copy('result', convertResult?.result || '')} disabled={!convertResult?.success}>
+                  <button className={s.smBtn} onClick={() => copy('result', convertResult?.result || '')} disabled={!convertResult?.success} aria-label="결과 복사">
                     {copiedKey === 'result' ? '✓' : '📋'}
                   </button>
                   <button className={s.smBtn} onClick={download} disabled={!convertResult?.success} aria-label="파일로 저장">
@@ -272,6 +294,7 @@ export default function YamlJsonClient() {
                 </div>
               </div>
               <textarea
+                id="yaml-json-output"
                 value={convertResult?.result ?? ''}
                 readOnly
                 className={s.textarea}
@@ -288,10 +311,13 @@ export default function YamlJsonClient() {
 
           {/* 오류 표시 */}
           {convertResult && !convertResult.success && (
-            <div className={s.errorBox}>
+            <div className={s.errorBox} role="status">
               ❌ <strong>변환 오류</strong>: {convertResult.error}
               {convertResult.errorLine && (
                 <span className={s.errorPos}> (줄 {convertResult.errorLine}{convertResult.errorCol ? `, 열 ${convertResult.errorCol}` : ''})</span>
+              )}
+              {direction === 'auto' && detectedFormat === 'json' && (
+                <span className={s.errorPos}> — {'{a: 1}'} 같은 YAML flow 스타일이라면 방향에서 YAML → JSON을 선택하세요.</span>
               )}
             </div>
           )}
@@ -315,8 +341,9 @@ export default function YamlJsonClient() {
       {tab === 'validate' && (
         <>
           <div className={s.card}>
-            <span className={s.cardLabel}>YAML 또는 JSON 입력</span>
+            <label className={s.cardLabel} htmlFor="yaml-json-validate">YAML 또는 JSON 입력</label>
             <textarea
+              id="yaml-json-validate"
               value={validateInput}
               onChange={(e) => setValidateInput(e.target.value)}
               placeholder="검증할 YAML 또는 JSON 붙여넣기..."
@@ -339,7 +366,7 @@ export default function YamlJsonClient() {
                      validation.detectedAs === 'yaml' ? '🟦 YAML' :
                      validation.detectedAs === 'invalid' ? '🟥 오류' : '⚪ 빈 입력'}
                   </span>
-                  <span className={validation.valid ? s.validOk : s.validFail}>
+                  <span className={validation.valid ? s.validOk : s.validFail} role="status">
                     {validation.valid ? '✅ 유효' : '❌ 오류'}
                   </span>
                 </div>
@@ -351,6 +378,10 @@ export default function YamlJsonClient() {
                       <span className={s.errorPos}> (줄 {validation.errorLine}{validation.errorCol ? `, 열 ${validation.errorCol}` : ''})</span>
                     )}
                   </div>
+                )}
+
+                {validation.note && (
+                  <p className={s.statText} style={{ marginTop: 10 }}>ℹ️ {validation.note}</p>
                 )}
 
                 {validation.valid && validation.stats && (
@@ -470,7 +501,7 @@ export default function YamlJsonClient() {
               <li><strong>콜론 뒤 공백 누락</strong> — <code className={s.codeMono}>key:value</code> ❌ → <code className={s.codeMono}>key: value</code> ✅</li>
               <li><strong>들여쓰기 불일치</strong> — 같은 레벨에서 2/4 spaces 혼용 금지. 한 파일 내 통일</li>
               <li><strong>특수문자 escape</strong> — <code className={s.codeMono}>{`\\${'$'}{}`}</code>·콜론 포함 시 따옴표로 감싸기 (<code className={s.codeMono}>{`url: "https://api.com"`}</code>)</li>
-              <li><strong>중복 키</strong> — 같은 레벨 같은 키 → 마지막 값으로 덮어쓰기 (오류 아님, 디버깅 어려움)</li>
+              <li><strong>중복 키</strong> — 같은 레벨 같은 키는 YAML 스펙상 오류. 본 도구(js-yaml)는 오류로 알려 주지만, 일부 파서는 마지막 값으로 조용히 덮어써 디버깅이 어려움</li>
             </ol>
           </div>
 
@@ -479,9 +510,9 @@ export default function YamlJsonClient() {
             <p className={s.warnTitle}>⚠️ YAML → JSON 변환 시 손실되는 정보</p>
             <ul className={s.warnList}>
               <li><strong>주석 (#)</strong> — JSON은 주석 미지원, 변환 시 삭제됨 (역변환으로 복원 불가)</li>
-              <li><strong>앵커 (&) / 별칭 (*)</strong> — 펼쳐져 데이터 중복으로 변환됨 (참조 관계 손실)</li>
+              <li><strong>앵커 (&) / 별칭 (*)</strong> — 펼쳐져 데이터 중복으로 변환됨 (참조 관계 손실). 병합 키 <code className={s.codeMono}>{'<<: *defaults'}</code>도 값이 합쳐진 형태로 펼쳐짐</li>
               <li><strong>멀티 도큐먼트 (---)</strong> — JSON 배열로 통합 변환 (구분 정보 손실)</li>
-              <li><strong>YAML 1.1 자동 타입 추론</strong> — yes/no가 boolean, 8자리 숫자가 8진수로 해석 (본 도구는 JSON_SCHEMA로 엄격 처리)</li>
+              <li><strong>YAML 1.1 자동 타입 추론</strong> — yes/no가 boolean, 0으로 시작하는 숫자(예: 0755)가 8진수로 해석 (본 도구는 JSON_SCHEMA 기준이라 yes/no는 문자열로 유지하지만, 0755는 8진수가 아닌 10진수 755로 읽습니다. 파일 권한처럼 앞자리 0을 살려야 하면 따옴표로 감싸세요)</li>
               <li><strong>!!tag (커스텀 태그)</strong> — 라이브러리별 동작 다름, !!python/object 등은 표준 X</li>
               <li><strong>날짜·정규식 등 특수 타입</strong> — JSON에 없는 타입은 문자열로 변환</li>
             </ul>

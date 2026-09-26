@@ -24,11 +24,11 @@ const FAQ_LD = [
               },
               {
                 q: '한글을 Base64로 인코딩하면 깨지는 이유는?',
-                a: '브라우저 기본 <code>btoa()</code>는 ASCII 외 문자를 처리하지 못하는 한계가 있습니다. 본 도구는 <strong>UTF-8로 먼저 변환</strong>한 후 Base64 인코딩하므로 한글·이모지·특수문자도 안전합니다. 디코딩 시에도 동일한 방식을 사용해야 깨지지 않습니다. <code>btoa(unescape(encodeURIComponent(text)))</code> 패턴이 표준입니다.',
+                a: '브라우저 기본 <code>btoa()</code>는 ASCII 외 문자를 처리하지 못하는 한계가 있습니다. 본 도구는 <strong>UTF-8로 먼저 변환</strong>한 후 Base64 인코딩하므로 한글·이모지·특수문자도 안전합니다. 디코딩 시에도 같은 방식으로 UTF-8을 되살려야 깨지지 않습니다. 새 코드라면 <code>TextEncoder</code>로 UTF-8 바이트를 만든 뒤 인코딩하는 방식을 권장합니다. 예전 코드에 흔한 <code>btoa(unescape(encodeURIComponent(text)))</code>는 폐기된 <code>unescape</code>에 기대는 레거시 패턴입니다.',
               },
               {
                 q: 'URL-safe Base64는 언제 사용하나요?',
-                a: '표준 Base64에 포함된 <strong>+, /, =</strong>가 URL이나 파일명에서 특수한 의미를 가지므로 인코딩이 추가로 필요합니다. URL-safe는 이를 <strong>-, _</strong>로 치환하고 패딩을 생략해 그대로 URL이나 파일명에 사용할 수 있습니다. <strong>JWT, OAuth, URL 파라미터, S3 사전 서명 URL</strong> 등에서 표준입니다.',
+                a: '표준 Base64에 포함된 <strong>+, /, =</strong>가 URL이나 파일명에서 특수한 의미를 가지므로 인코딩이 추가로 필요합니다. URL-safe는 이를 <strong>-, _</strong>로 치환하고 패딩을 생략해 그대로 URL이나 파일명에 사용할 수 있습니다. <strong>JWT, OAuth PKCE(code_challenge), URL 파라미터</strong> 등에서 표준으로 쓰입니다.',
               },
               {
                 q: '이미지를 Base64 Data URI로 임베드하는 게 좋을까요?',
@@ -63,7 +63,7 @@ export default function Base64Page() {
           </h2>
           <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
             Base64는 바이너리 데이터를 <strong style={{ color: 'var(--text)' }}>64개의 ASCII 문자(A-Z, a-z, 0-9, +, /)</strong>로 표현하는 인코딩 방식입니다.
-            텍스트 기반 시스템에서 이진 데이터를 안전하게 전송하기 위해 1987년 RFC 1421(PEM)에서 처음 정의되었으며, 현재는 RFC 4648 표준입니다.
+            텍스트 기반 시스템에서 이진 데이터를 안전하게 전송하기 위해 1987년 RFC 989(PEM)에서 처음 등장했고, 1993년 RFC 1421을 거쳐 현재는 RFC 4648 표준입니다.
           </p>
           <div style={{
             background: 'var(--bg2)',
