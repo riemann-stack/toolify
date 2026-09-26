@@ -139,12 +139,13 @@ export function RailResult({ label }: { label: string }) {
     el.scrollIntoView({ block: 'center', behavior: reduce ? 'auto' : 'smooth' })
   }
 
+  // 숫자 결과를 못 찾으면(입력 전·결과가 글/표인 도구) 카드를 그리지 않는다 — 입력칸이 없는 도구에 '값을 입력하면…' 빈 자리가 보이지 않게
+  if (!mirror) return null
+
   return (
     <a className={styles.rlResult} href="#result" aria-hidden="true" tabIndex={-1} onClick={onClick}>
-      <span className={styles.rlResultL}>{lbl}<span>{mirror ? '결과 보기' : '입력하러 가기'}<UiIcon name="arrow-d" size={14} /></span></span>
-      {mirror
-        ? <span className={styles.rlResultN}>{mirror.num}{mirror.unit && <small>{mirror.unit}</small>}</span>
-        : <span className={styles.rlResultN}>—<span className={styles.rlResultE}>값을 입력하면 여기에 결과가 표시됩니다</span></span>}
+      <span className={styles.rlResultL}>{lbl}<span>결과 보기<UiIcon name="arrow-d" size={14} /></span></span>
+      <span className={styles.rlResultN}>{mirror.num}{mirror.unit && <small>{mirror.unit}</small>}</span>
     </a>
   )
 }

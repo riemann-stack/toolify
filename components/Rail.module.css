@@ -18,7 +18,6 @@
 .rlResultL span { display: inline-flex; align-items: center; gap: 2px; color: var(--accent-ink); }
 .rlResultN { display: block; margin-top: 4px; font-size: 28px; font-weight: 700; letter-spacing: -0.03em; line-height: 1.2; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .rlResultN small { margin-left: 2px; font-size: 15px; font-weight: 600; letter-spacing: 0; color: var(--muted-strong); }
-.rlResultE { display: block; margin-top: 6px; font-size: 13px; font-weight: 500; line-height: 1.55; letter-spacing: 0; color: var(--muted); white-space: normal; word-break: keep-all; } /* .rlResultN의 nowrap을 끊는다 */
 /* 목차 */
 .rlToc { padding: 16px 12px 12px 20px; }
 .rlToc ol { list-style: none; counter-reset: toc; margin: 0; padding: 0; max-height: max(160px, calc(100vh - var(--header-h) - 420px)); overflow-y: auto; overscroll-behavior: contain; }
