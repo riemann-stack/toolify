@@ -91,6 +91,11 @@ export default function MicrowaveClient() {
     }
     return audioCtxRef.current
   }
+  /* 언마운트 시 AudioContext 해제 — 사이트 내 이동마다 컨텍스트가 쌓이지 않게 (setState 호출 금지) */
+  useEffect(() => () => {
+    audioCtxRef.current?.close().catch(() => {})
+    audioCtxRef.current = null
+  }, [])
 
   /** 비프음 (3회 또는 1회) */
   const beep = (count = 1, freq = 880, duration = 0.15) => {
@@ -237,7 +242,7 @@ export default function MicrowaveClient() {
       </Disclaimer>
 
       {/* 탭 */}
-      <div className={`${s.tabs} ${s.tabs4}`}>
+      <div className={`${s.tabs} ${s.tabs4}`} role="tablist" aria-label="전자레인지 도구">
         {([
           { id: 'convert', label: '출력 환산' },
           { id: 'food',    label: '식품 프리셋' },
@@ -246,6 +251,8 @@ export default function MicrowaveClient() {
         ] as { id: Tab; label: string }[]).map((t) => (
           <button
             key={t.id}
+            role="tab"
+            aria-selected={tab === t.id}
             className={`${s.tab} ${tab === t.id ? s.tabActive : ''}`}
             onClick={() => setTab(t.id)}
             type="button"
@@ -443,6 +450,7 @@ export default function MicrowaveClient() {
                       {POWER_OPTIONS.map((w) => (
                         <button
                           key={w}
+                          aria-pressed={foodMyW === w}
                           className={`${s.pill} ${foodMyW === w ? s.pillActive : ''}`}
                           onClick={() => setFoodMyW(w)}
                           type="button"
@@ -467,7 +475,7 @@ export default function MicrowaveClient() {
                     />
                     <div className={s.pillRow} style={{ marginTop: 8 }}>
                       {[1, 2, 3, 4, 5].map((p) => (
-                        <button key={p} className={`${s.pill} ${portionN === p ? s.pillActive : ''}`} onClick={() => setPortions(String(p))} type="button">
+                        <button key={p} aria-pressed={portionN === p} className={`${s.pill} ${portionN === p ? s.pillActive : ''}`} onClick={() => setPortions(String(p))} type="button">
                           {food.defrostMode ? `${p * DEFROST_UNIT_G}g` : `${p}인분`}
                         </button>
                       ))}

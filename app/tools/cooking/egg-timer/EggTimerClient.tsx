@@ -177,12 +177,14 @@ export default function EggTimerClient() {
     return () => document.removeEventListener('visibilitychange', onVisibility)
   }, [running])
 
-  /* 언마운트 — 페이즈 전환 예약 취소 + Wake Lock 해제 + 제목 원복 */
+  /* 언마운트 — 페이즈 전환 예약 취소 + Wake Lock 해제 + 제목 원복 + AudioContext 해제(사이트 내 이동마다 쌓이지 않게) */
   useEffect(() => {
     return () => {
       clearPhaseTimeout()
       releaseWakeLock()
       restoreTitle()
+      audioCtxRef.current?.close().catch(() => {})
+      audioCtxRef.current = null
     }
   }, [])
 

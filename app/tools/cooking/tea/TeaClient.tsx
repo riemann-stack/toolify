@@ -87,9 +87,10 @@ export default function TeaClient() {
     setTeaId(id)
     setActualSec(String(recommendTime(next, strength, nextVessel)))
   }
-  const leaf = parseFloat(leafG) || 0
-  const water = parseFloat(waterMl) || 0
-  const sec = parseInt(actualSec) || 0
+  // type="number" min은 '-' 입력을 막지 못함 — 음수는 0으로 (음수 카페인·권장량, 탄닌 게이지 rect 음수 width 방지)
+  const leaf = Math.max(0, parseFloat(leafG) || 0)
+  const water = Math.max(0, parseFloat(waterMl) || 0)
+  const sec = Math.max(0, parseInt(actualSec) || 0)
 
   // 차별 허용 다구 — 비현실 조합 차단 (말차=차완, 옥로=다관/게이완). 선택값이 허용 밖이면 추천 다구로 대체
   const allowedVessels = tea.vessels ?? ALL_VESSELS

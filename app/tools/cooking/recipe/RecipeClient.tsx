@@ -50,7 +50,7 @@ export default function RecipeClient() {
         레시피 비율은 참고용입니다.
       </Disclaimer>
 
-      <div className={s.tabs}>
+      <div className={s.tabs} role="tablist" aria-label="레시피 계산 도구">
         {([
           ['scale',   '인분 비율 계산'],
           ['convert', '단위 환산'],
@@ -63,7 +63,8 @@ export default function RecipeClient() {
             key === 'saved'    ? s.tabActiveSaved :
             key === 'shopping' ? s.tabActiveShop : s.tabActive
           return (
-            <button key={key} className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
+            <button key={key} type="button" role="tab" aria-selected={tab === key}
+              className={`${s.tabBtn} ${cls}`} onClick={() => setTab(key)}>
               {label}
             </button>
           )
@@ -185,7 +186,7 @@ function ScaleTab() {
             </div>
             <div className={s.presets}>
               {BASE_PRESETS.map(p => (
-                <button key={p}
+                <button key={p} type="button" aria-pressed={basePeople === String(p)}
                   className={`${s.presetBtn} ${basePeople === String(p) ? s.presetActive : ''}`}
                   onClick={() => setBasePeople(String(p))}>{p}</button>
               ))}
@@ -201,7 +202,7 @@ function ScaleTab() {
             </div>
             <div className={s.presets}>
               {TARGET_PRESETS.map(p => (
-                <button key={p}
+                <button key={p} type="button" aria-pressed={targetPeople === String(p)}
                   className={`${s.presetBtn} ${targetPeople === String(p) ? s.presetActive : ''}`}
                   onClick={() => setTargetPeople(String(p))}>{p}</button>
               ))}
@@ -220,10 +221,11 @@ function ScaleTab() {
           <span className={s.cardLabelHint}>{filteredPresets.length}개</span>
         </label>
         <div className={s.catRow}>
-          <button className={`${s.catChip} ${activeCategory === 'all' ? s.catActive : ''}`}
+          <button type="button" aria-pressed={activeCategory === 'all'}
+            className={`${s.catChip} ${activeCategory === 'all' ? s.catActive : ''}`}
             onClick={() => setActiveCategory('all')}>전체</button>
           {RECIPE_CATEGORIES.map(c => (
-            <button key={c.id}
+            <button key={c.id} type="button" aria-pressed={activeCategory === c.id}
               className={`${s.catChip} ${activeCategory === c.id ? s.catActive : ''}`}
               onClick={() => setActiveCategory(c.id)}>
               {c.emoji} {c.name}
@@ -321,6 +323,7 @@ function ScaleTab() {
               <button
                 key={lv.id}
                 type="button"
+                aria-pressed={seasoningRatio === lv.ratio}
                 className={`${s.seasonLevelBtn} ${seasoningRatio === lv.ratio ? s.seasonLevelActive : ''}`}
                 onClick={() => setSeasoningRatio(lv.ratio)}
               >
@@ -439,12 +442,12 @@ function ConvertTab() {
           <span className={s.cardLabelHint}>재료명을 입력하면 밀도 기반 변환</span>
         </label>
         <div className={s.convertGrid}>
-          <input className={s.textInput} type="text" placeholder="재료명 (예: 밀가루)"
+          <input className={s.textInput} type="text" placeholder="재료명 (예: 밀가루)" aria-label="환산할 재료명"
             value={name} onChange={e => setName(e.target.value)}
             list="recipe-ingredient-suggestions" />
-          <input className={s.textInput} type="number" inputMode="decimal" step={0.1} min={0} placeholder="양"
+          <input className={s.textInput} type="number" inputMode="decimal" step={0.1} min={0} placeholder="양" aria-label="환산할 양"
             value={amount} onChange={e => setAmount(e.target.value)} />
-          <select className={s.selectInput} value={unit}
+          <select className={s.selectInput} value={unit} aria-label="환산할 단위"
             onChange={e => setUnit(e.target.value as UnitKey)}>
             {UNIT_OPTIONS.map(u => {
               const ud = UNITS.find(x => x.key === u)
@@ -904,14 +907,14 @@ function ShoppingTab({ active }: { active: boolean }) {
         </p>
 
         <div className={s.shopAddRow}>
-          <select className={s.selectInput} value={pickRecipeId}
+          <select className={s.selectInput} value={pickRecipeId} aria-label="장보기에 추가할 레시피"
             onChange={e => setPickRecipeId(e.target.value)}>
             <option value="">+ 레시피 선택</option>
             {recipeChoices.map(c => <option key={c.value} value={c.value}>{c.label}</option>)}
           </select>
           <div style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
             <input className={s.textInput} type="number" inputMode="decimal" min={0.5} max={50} step={0.5}
-              value={pickPeople} onChange={e => setPickPeople(e.target.value)} />
+              aria-label="추가할 레시피 인분" value={pickPeople} onChange={e => setPickPeople(e.target.value)} />
             <span style={{ fontSize: 13, color: 'var(--muted)', whiteSpace: 'nowrap' }}>인분</span>
           </div>
         </div>
@@ -971,6 +974,7 @@ function ShoppingTab({ active }: { active: boolean }) {
                       className={`${s.shopItem} ${isChecked ? s.shopItemChecked : ''}`}
                       onClick={() => toggleCheck(key)}>
                       <input type="checkbox" className={s.shopItemCheck} checked={isChecked}
+                        aria-label={`${it.name} 구매 완료`}
                         onChange={() => toggleCheck(key)} onClick={e => e.stopPropagation()} />
                       <span className={s.shopItemName}>
                         {it.name}

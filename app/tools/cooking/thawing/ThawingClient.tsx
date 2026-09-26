@@ -269,7 +269,7 @@ function ThawTab() {
         <div className={s.foodGrid}>
           {FOODS.map(item => (
             <button
-              key={item.key}
+              key={item.key} type="button" aria-pressed={food === item.key}
               className={`${s.foodBtn} ${food === item.key ? s.foodActive : ''}`}
               onClick={() => setFood(item.key)}
             >
@@ -313,11 +313,11 @@ function ThawTab() {
       <div className={s.card}>
         <span className={s.cardLabel}>3. 냉동 상태</span>
         <div className={s.btnGroup}>
-          <button
+          <button type="button" aria-pressed={frozen === 'full'}
             className={`${s.toggleBtn} ${frozen === 'full' ? s.toggleActive : ''}`}
             onClick={() => setFrozen('full')}
           >완전냉동 (−18°C)</button>
-          <button
+          <button type="button" aria-pressed={frozen === 'partial'}
             className={`${s.toggleBtn} ${frozen === 'partial' ? s.toggleActive : ''}`}
             onClick={() => setFrozen('partial')}
           >부분냉동 (−5°C)</button>
@@ -330,7 +330,7 @@ function ThawTab() {
           <span className={s.cardLabel}>4. 전자레인지 출력 (W)</span>
           <div className={s.microPowerRow}>
             {MICROWAVE_POWERS.map(p => (
-              <button key={p.id}
+              <button key={p.id} type="button" aria-pressed={microPower === p.id}
                 className={`${s.microPowerBtn} ${microPower === p.id ? s.microPowerBtnActive : ''}`}
                 onClick={() => setMicroPower(p.id)}>
                 {p.name}
@@ -461,9 +461,9 @@ function ThawTab() {
       <div className={s.card}>
         <span className={s.cardLabel}>역산: 조리 예정 시각 → 해동 시작 시각</span>
         <div className={s.btnGroup} style={{ marginBottom: 10 }}>
-          <button className={`${s.toggleBtn} ${!reverseMode ? s.toggleActive : ''}`}
+          <button type="button" aria-pressed={!reverseMode} className={`${s.toggleBtn} ${!reverseMode ? s.toggleActive : ''}`}
             onClick={() => setReverseMode(false)}>정방향 (지금 시작)</button>
-          <button className={`${s.toggleBtn} ${reverseMode ? s.toggleActive : ''}`}
+          <button type="button" aria-pressed={reverseMode} className={`${s.toggleBtn} ${reverseMode ? s.toggleActive : ''}`}
             onClick={() => setReverseMode(true)}>역산 (조리 예정)</button>
         </div>
         {reverseMode && (
@@ -582,7 +582,7 @@ function FreezeTab() {
         <div className={s.foodGrid}>
           {FOODS.map(item => (
             <button
-              key={item.key}
+              key={item.key} type="button" aria-pressed={food === item.key}
               className={`${s.foodBtn} ${food === item.key ? s.foodActive : ''}`}
               onClick={() => setFood(item.key)}
             >
@@ -629,15 +629,15 @@ function FreezeTab() {
           <div>
             <span className={s.fieldLabel} id="thawing-init-temp">초기 온도</span>
             <div className={s.btnGroup} role="group" aria-labelledby="thawing-init-temp">
-              <button
+              <button type="button" aria-pressed={initialTemp === 'fridge'}
                 className={`${s.toggleBtnMini} ${initialTemp === 'fridge' ? s.toggleActive : ''}`}
                 onClick={() => setInitialTemp('fridge')}
               >냉장<small>4°C</small></button>
-              <button
+              <button type="button" aria-pressed={initialTemp === 'room'}
                 className={`${s.toggleBtnMini} ${initialTemp === 'room' ? s.toggleActive : ''}`}
                 onClick={() => setInitialTemp('room')}
               >실온<small>20°C</small></button>
-              <button
+              <button type="button" aria-pressed={initialTemp === 'hot'}
                 className={`${s.toggleBtnMini} ${initialTemp === 'hot' ? s.toggleActive : ''}`}
                 onClick={() => setInitialTemp('hot')}
               >조리 직후<small>70°C</small></button>
@@ -646,11 +646,11 @@ function FreezeTab() {
           <div>
             <span className={s.fieldLabel} id="thawing-freezer-temp">냉동고 온도</span>
             <div className={s.btnGroup} role="group" aria-labelledby="thawing-freezer-temp">
-              <button
+              <button type="button" aria-pressed={freezerTemp === 'normal'}
                 className={`${s.toggleBtnMini} ${freezerTemp === 'normal' ? s.toggleActive : ''}`}
                 onClick={() => setFreezerTemp('normal')}
               >일반<small>−18°C</small></button>
-              <button
+              <button type="button" aria-pressed={freezerTemp === 'fast'}
                 className={`${s.toggleBtnMini} ${freezerTemp === 'fast' ? s.toggleActive : ''}`}
                 onClick={() => setFreezerTemp('fast')}
               >급속<small>−24°C</small></button>
@@ -804,16 +804,16 @@ export default function ThawingClient() {
 
   return (
     <div className={s.wrap}>
-      <div className={s.tabs}>
-        <button
+      <div className={s.tabs} role="tablist" aria-label="해동·냉동 도구">
+        <button type="button" role="tab" aria-selected={tab === 'thaw'}
           className={`${s.tab} ${tab === 'thaw' ? s.tabThawActive : ''}`}
           onClick={() => setTab('thaw')}
         >해동</button>
-        <button
+        <button type="button" role="tab" aria-selected={tab === 'freeze'}
           className={`${s.tab} ${tab === 'freeze' ? s.tabFreezeActive : ''}`}
           onClick={() => setTab('freeze')}
         >냉동</button>
-        <button
+        <button type="button" role="tab" aria-selected={tab === 'guide'}
           className={`${s.tab} ${tab === 'guide' ? s.tabGuideActive : ''}`}
           onClick={() => setTab('guide')}
         >식품별 가이드</button>

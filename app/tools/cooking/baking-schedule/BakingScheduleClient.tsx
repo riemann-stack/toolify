@@ -360,8 +360,8 @@ function DDTPanel(p: CommonInputsProps) {
 
       <div className={s.ddtFieldRow}>
         <div className={s.ddtField}>
-          <span className={s.ddtFieldLabel}>목표 반죽 온도 (℃)</span>
-          <input type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={18} max={30}
+          <label htmlFor="baking-schedule-ddt-target" className={s.ddtFieldLabel}>목표 반죽 온도 (℃)</label>
+          <input id="baking-schedule-ddt-target" type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={18} max={30}
             value={p.targetDoughC}
             onChange={e => p.setTargetDoughC(Number(e.target.value) || 25)} />
           {preset?.ddtTargetC !== undefined && (
@@ -372,8 +372,8 @@ function DDTPanel(p: CommonInputsProps) {
         </div>
 
         <div className={s.ddtField}>
-          <span className={s.ddtFieldLabel}>밀가루 온도 (℃)</span>
-          <input type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={0} max={40}
+          <label htmlFor="baking-schedule-ddt-flour" className={s.ddtFieldLabel}>밀가루 온도 (℃)</label>
+          <input id="baking-schedule-ddt-flour" type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={0} max={40}
             value={p.flourTempC ?? p.roomTempC}
             onChange={e => {
               const v = e.target.value
@@ -387,8 +387,8 @@ function DDTPanel(p: CommonInputsProps) {
 
       {hasLevain && (
         <div className={s.ddtField}>
-          <span className={s.ddtFieldLabel}>{prefermentName} 온도 (℃)</span>
-          <input type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={0} max={40}
+          <label htmlFor="baking-schedule-ddt-levain" className={s.ddtFieldLabel}>{prefermentName} 온도 (℃)</label>
+          <input id="baking-schedule-ddt-levain" type="number" inputMode="decimal" className={s.ddtNumInput} step={0.5} min={0} max={40}
             value={p.levainTempC ?? p.roomTempC}
             onChange={e => {
               const v = e.target.value
@@ -486,7 +486,8 @@ function TimelineList({ result }: { result: ScheduleResult }) {
               ${step.observationKey ? s.tlObservation : ''}
               ${step.isOptional ? s.tlOptional : ''}
               ${isChecked ? s.tlChecked : ''}`}>
-            <input type="checkbox" className={s.tlChk} checked={isChecked} onChange={() => toggle(r.idx)} />
+            <input type="checkbox" className={s.tlChk} checked={isChecked} onChange={() => toggle(r.idx)}
+              aria-label={`${fmtTime(step.startTime)} ${step.name} 완료`} />
             <span className={s.tlTime}>{fmtTime(step.startTime)}</span>
             <span className={s.tlEmoji}>{step.emoji}</span>
             <span className={s.tlBody}>
@@ -900,8 +901,8 @@ function RecipeTab({
           <div className={s.recipeFormTitle}>{editingId ? '레시피 편집' : '새 레시피 저장'}</div>
 
           <div>
-            <span className={s.inlineLabel}>레시피 이름 *</span>
-            <input className={s.textInput} type="text" placeholder="예: 내 사워도우 - 수분율 78%"
+            <label htmlFor="baking-schedule-recipe-name" className={s.inlineLabel}>레시피 이름 *</label>
+            <input id="baking-schedule-recipe-name" className={s.textInput} type="text" placeholder="예: 내 사워도우 - 수분율 78%"
               value={name} onChange={e => setName(e.target.value)} maxLength={50} />
           </div>
 
@@ -925,8 +926,8 @@ function RecipeTab({
           </div>
 
           <div>
-            <span className={s.inlineLabel}>메모 (선택)</span>
-            <textarea className={s.textInput} rows={3} maxLength={300}
+            <label htmlFor="baking-schedule-recipe-notes" className={s.inlineLabel}>메모 (선택)</label>
+            <textarea id="baking-schedule-recipe-notes" className={s.textInput} rows={3} maxLength={300}
               placeholder="예: 냉장 16시간이 가장 좋음, 르방 100g 사용"
               value={notes} onChange={e => setNotes(e.target.value)}
               style={{ fontFamily: 'var(--font-sans)', resize: 'vertical' }} />

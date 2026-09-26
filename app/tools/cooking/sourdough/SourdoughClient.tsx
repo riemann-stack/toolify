@@ -334,7 +334,7 @@ export default function SourdoughClient() {
                   { k: 'mixed-rye',    l: '호밀 혼합' },
                   { k: 'mixed-both',   l: '통밀+호밀' },
                 ] as const).map(f => (
-                  <button key={f.k}
+                  <button key={f.k} type="button" aria-pressed={flour === f.k}
                     className={`${styles.segBtn} ${flour === f.k ? styles.segBtnActive : ''}`}
                     onClick={() => setFlour(f.k)}>{f.l}</button>
                 ))}
@@ -350,7 +350,7 @@ export default function SourdoughClient() {
                     { v: 15 as WholePct, l: '10~20%' },
                     { v: 40 as WholePct, l: '30~50%' },
                   ] as const).map(w => (
-                    <button key={w.v}
+                    <button key={w.v} type="button" aria-pressed={wholePct === w.v}
                       className={`${styles.segBtn} ${wholePct === w.v ? styles.segBtnActive : ''}`}
                       onClick={() => setWholePct(w.v)}>{w.l}</button>
                   ))}
@@ -362,7 +362,7 @@ export default function SourdoughClient() {
               <span className={styles.label} id="sourdough-grp-3">하루 급이 횟수</span>
               <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-3">
                 {([1, 2] as FeedFreq[]).map(f => (
-                  <button key={f}
+                  <button key={f} type="button" aria-pressed={freq === f}
                     className={`${styles.segBtn} ${freq === f ? styles.segBtnActive : ''}`}
                     onClick={() => setFreq(f)}>{f}회</button>
                 ))}
@@ -373,7 +373,7 @@ export default function SourdoughClient() {
               <span className={styles.label} id="sourdough-grp-4">급이 비율 <span className={styles.labelSub}>(스타터:물:밀가루)</span></span>
               <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-4">
                 {([1, 2, 3, 5] as Ratio[]).map(r => (
-                  <button key={r}
+                  <button key={r} type="button" aria-pressed={!customRatio && ratio === r}
                     className={`${styles.segBtn} ${!customRatio && ratio === r ? styles.segBtnActive : ''}`}
                     onClick={() => { setRatio(r); setCustomRatio('') }}>{`1:${r}:${r}`}</button>
                 ))}
@@ -505,7 +505,7 @@ export default function SourdoughClient() {
               <span className={styles.label} id="sourdough-grp-5">급이 비율</span>
               <div className={styles.segRow} role="group" aria-labelledby="sourdough-grp-5">
                 {([1, 2, 3, 5] as Ratio[]).map(r => (
-                  <button key={r}
+                  <button key={r} type="button" aria-pressed={!pCustomRatio && pRatio === r}
                     className={`${styles.segBtn} ${!pCustomRatio && pRatio === r ? styles.segBtnActive : ''}`}
                     onClick={() => { setPRatio(r); setPCustomRatio('') }}>{`1:${r}:${r}`}</button>
                 ))}
@@ -528,7 +528,7 @@ export default function SourdoughClient() {
                   { k: 'whole' as PFlour, l: '통밀 혼합' },
                   { k: 'rye'   as PFlour, l: '호밀 혼합' },
                 ] as const).map(f => (
-                  <button key={f.k}
+                  <button key={f.k} type="button" aria-pressed={pFlour === f.k}
                     className={`${styles.segBtn} ${pFlour === f.k ? styles.segBtnActive : ''}`}
                     onClick={() => setPFlour(f.k)}>{f.l}</button>
                 ))}
@@ -561,7 +561,7 @@ export default function SourdoughClient() {
                   { k: 'deflated' as Cond,  e: '💤', l: '꺼진 후 급이',        d: '느림' },
                   { k: 'fridge' as Cond,    e: '🧊', l: '냉장 보관 후 급이',   d: '가장 느림' },
                 ] as const).map(c => (
-                  <button key={c.k}
+                  <button key={c.k} type="button" aria-pressed={pCond === c.k}
                     className={`${styles.condBtn} ${pCond === c.k ? styles.condBtnActive : ''}`}
                     onClick={() => setPCond(c.k)}>
                     <span className={styles.condEmoji}>{c.e}</span>

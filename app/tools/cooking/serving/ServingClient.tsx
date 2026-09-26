@@ -537,6 +537,7 @@ export default function ServingClient() {
                           <td>
                             <input type="number" inputMode="numeric" min={0} max={9999}
                               className={styles.fridgeInput}
+                              aria-label={`${item.name} 보유량 (${u})`}
                               value={fridge[item.key] ?? 0}
                               onChange={(e) => {
                                 const v = Math.max(0, +e.target.value || 0)
@@ -596,11 +597,13 @@ export default function ServingClient() {
                   <div key={m.id} className={styles.familyRow}>
                     <span className={styles.familyIdx}>{i + 1}</span>
                     <input type="text" className={styles.familyName}
+                      aria-label={`가족 ${i + 1} 이름`}
                       placeholder={i === 0 ? '본인' : `가족 ${i + 1}`}
                       value={m.name ?? ''}
                       maxLength={10}
                       onChange={(e) => updateMember(m.id, { name: e.target.value })} />
                     <select className={styles.familySelect}
+                      aria-label={`가족 ${i + 1} 연령대`}
                       value={m.age}
                       onChange={(e) => updateMember(m.id, { age: e.target.value as AgeBand })}>
                       {(Object.keys(AGE_BAND_LABEL) as AgeBand[]).map((k) => (
@@ -608,6 +611,7 @@ export default function ServingClient() {
                       ))}
                     </select>
                     <select className={styles.familySelect}
+                      aria-label={`가족 ${i + 1} 식사량`}
                       value={m.appetite}
                       onChange={(e) => updateMember(m.id, { appetite: e.target.value as Appetite })}>
                       <option value="small">적게</option>
@@ -617,7 +621,7 @@ export default function ServingClient() {
                     <span className={styles.familyFactor}>
                       ×{(AGE_BAND_FACTOR[m.age] * APPETITE_MULT[m.appetite]).toFixed(2)}
                     </span>
-                    <button className={styles.familyRemove} onClick={() => removeMember(m.id)} aria-label="삭제">✕</button>
+                    <button className={styles.familyRemove} onClick={() => removeMember(m.id)} aria-label={`가족 ${i + 1} 삭제`}>✕</button>
                   </div>
                 ))}
               </div>

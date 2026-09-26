@@ -60,6 +60,7 @@ export default function BakerPercentPage() {
           { label: "King Arthur Baking — Baker's Percentage", href: 'https://www.kingarthurbaking.com/pro/reference/bakers-percentage' },
           { label: 'King Arthur Baking — Yeast', href: 'https://www.kingarthurbaking.com/pro/reference/yeast' },
           { label: 'King Arthur Baking — Preferment', href: 'https://www.kingarthurbaking.com/pro/reference/preferment' },
+          { label: 'AVPN — International Regulations (Verace Pizza Napoletana)', href: 'https://www.pizzanapoletana.org/en/ricetta_pizza_napoletana' },
         ]}
       />
 
@@ -143,7 +144,7 @@ export default function BakerPercentPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 통용 범위는 참고값이며 레시피마다 차이가 있습니다. 브리오슈 프리셋은 계란 40%·우유 20%로 물을 넣지 않아, 액체 비율 합(60%)과 달리 수분 환산 후 48.0%로 표시됩니다. 크루아상은 충전용 버터 50%까지 총 배합률에 포함됩니다.
+            ※ 통용 범위는 참고값이며 레시피마다 차이가 있습니다. 브리오슈 프리셋은 계란 40%·우유 20%로 물을 넣지 않아, 액체 비율 합(60%)과 달리 수분 환산 후 48.0%로 표시됩니다. 크루아상은 충전용 버터 50%까지 총 배합률에 포함됩니다. 피자 도우 프리셋은 가정용 오븐(250℃ 안팎)을 전제로 올리브오일 3%를 넣은 배합입니다. 나폴리 피자 협회(AVPN) 국제 규정의 나폴리 피자는 반죽에 기름·설탕을 넣지 않고(밀가루·물·소금·효모만), 밀가루는 연질밀 00(또는 0) 타입(W 250~320)이 기본입니다. 나폴리식에 가깝게 만들려면 올리브오일 행을 지우고 강력분 자리에 00 밀가루를 쓰세요.
           </p>
         </div>
 
