@@ -216,14 +216,16 @@ function consistency(entries: SleepEntry[], period: Period, todayDate: string): 
 /* ════════════════════════════════════════════════════════════
    COMPONENT
    ════════════════════════════════════════════════════════════ */
-export default function SleepDebtClient() {
+export default function SleepDebtClient({ buildDate }: { buildDate: string }) {
   const [entries, setEntries] = useState<SleepEntry[]>([])
   const [targetHours, setTargetHours] = useState(8)
   const [period, setPeriod] = useState<Period>(7)
-  const [todayDate, setTodayDate] = useState(() => todayStr())
+  // SSG·hydration 첫 렌더는 page.tsx가 빌드 때 넘긴 날짜(buildDate)로 맞춘다.
+  // 초기값을 todayStr()로 두면 hydration 때 이미 오늘 날짜라 마운트 동기화가 no-op → 서버 HTML의 max(빌드일)가 그대로 남는다.
+  const [todayDate, setTodayDate] = useState(buildDate)
 
   // 입력 폼
-  const [inputDate, setInputDate] = useState(() => todayStr())
+  const [inputDate, setInputDate] = useState(buildDate)
   const [bedtime, setBedtime] = useState('23:30')
   const [wakeTime, setWakeTime] = useState('07:00')
   const [directMode, setDirectMode] = useState(false)

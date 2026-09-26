@@ -65,6 +65,20 @@ export default function ScaleClient() {
   const playEndTimerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
   const [isPlaying, setIsPlaying] = useState(false)
 
+  /* 언마운트(사이트 안 다른 페이지로 이동) 시 예약된 오실레이터·타이머를 정리하고 AudioContext를 닫는다.
+     정리가 없으면 순차 재생 중 이동해도 남은 음이 새 페이지에서 계속 울리고, 방문마다 컨텍스트가 쌓인다(morse-code와 같은 패턴).
+     언마운트 뒤 setState를 피하려고 stopAll() 대신 ref만 정리한다. */
+  useEffect(() => () => {
+    activeNodesRef.current.forEach(({ osc, gain }) => {
+      try { osc.stop() } catch {}
+      try { osc.disconnect(); gain.disconnect() } catch {}
+    })
+    activeNodesRef.current = []
+    if (playEndTimerRef.current) { clearTimeout(playEndTimerRef.current); playEndTimerRef.current = null }
+    try { audioCtxRef.current?.close().catch(() => {}) } catch {}
+    audioCtxRef.current = null
+  }, [])
+
   const stopAll = () => {
     activeNodesRef.current.forEach(({ osc, gain }) => {
       try { osc.stop() } catch {}

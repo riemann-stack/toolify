@@ -97,6 +97,7 @@ const PLATES: Plate[] = [
   { kg: 2.5,  color: '#1F2937' },
   { kg: 1.25, color: '#9CA3AF', dark: true },
 ]
+const PLATE_TARGET_MAX_KG = 1000 // 원판 세팅 목표 상한 — 실제 바벨 중량보다 넉넉한 값(계산 폭주 방지용)
 function platesFor(target: number): { side: Plate[]; loadable: boolean; actual: number; base: number } {
   const base = BAR + 2 * COLLAR
   const side: Plate[] = []
@@ -188,7 +189,9 @@ export default function StrengthLevelClient() {
 
   // 원판
   const target = num(targetStr)
-  const plate = platesFor(target)
+  // 상한 클램프: platesFor는 원판 1장씩 push하는 루프라 비정상적으로 큰 값이면 탭 멈춤·RangeError(Invalid array length)
+  const targetOverLimit = target > PLATE_TARGET_MAX_KG
+  const plate = platesFor(targetOverLimit ? 0 : target)
   // 시도 무게 퀵버튼용
   const attemptQuick = attempts.flatMap((a) =>
     a.set ? [
@@ -451,7 +454,9 @@ export default function StrengthLevelClient() {
               ))}
             </div>
           )}
-          {target >= plate.base ? (
+          {targetOverLimit ? (
+            <div className={styles.emptyHint}>목표 무게는 {fmtKg(PLATE_TARGET_MAX_KG)}kg 이하로 입력하세요.</div>
+          ) : target >= plate.base ? (
             <>
               <div className={styles.plateStack} role="img"
                 aria-label={`한쪽 원판: ${plate.side.length ? plate.side.map((p) => p.kg + 'kg').join(', ') : '없음(바와 칼라만)'}`}>
@@ -465,7 +470,7 @@ export default function StrengthLevelClient() {
                   ))}
               </div>
               <p className={styles.plateLine}>
-                한쪽 = {plate.side.length ? plate.side.map((p) => fmtKg(p.kg)).join(' + ') + ' kg' : '없음'} · 양쪽 동일
+                한쪽 = {plate.side.length ? plate.side.map((p) => p.kg.toLocaleString('ko-KR', { maximumFractionDigits: 2 })).join(' + ') + ' kg' : '없음'} · 양쪽 동일
               </p>
               {!plate.loadable && (
                 <p className={styles.plateWarn}>

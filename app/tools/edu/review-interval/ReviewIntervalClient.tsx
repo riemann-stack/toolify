@@ -571,18 +571,18 @@ export default function ReviewIntervalClient() {
             <div style={{ marginTop: 14 }}>
               <span className={s.subLabel}>학습 난이도</span>
               <div className={s.choiceRow}>
-                <button className={`${s.choiceBtn} ${s.choiceEasy}   ${difficulty === 'easy'   ? s.choiceActive : ''}`} onClick={() => setDifficulty('easy')}>🟢 쉬움</button>
-                <button className={`${s.choiceBtn} ${s.choiceNormal} ${difficulty === 'normal' ? s.choiceActive : ''}`} onClick={() => setDifficulty('normal')}>🟡 보통</button>
-                <button className={`${s.choiceBtn} ${s.choiceHard}   ${difficulty === 'hard'   ? s.choiceActive : ''}`} onClick={() => setDifficulty('hard')}>🔴 어려움</button>
+                <button type="button" aria-pressed={difficulty === 'easy'} className={`${s.choiceBtn} ${s.choiceEasy}   ${difficulty === 'easy' ? s.choiceActive : ''}`} onClick={() => setDifficulty('easy')}>🟢 쉬움</button>
+                <button type="button" aria-pressed={difficulty === 'normal'} className={`${s.choiceBtn} ${s.choiceNormal} ${difficulty === 'normal' ? s.choiceActive : ''}`} onClick={() => setDifficulty('normal')}>🟡 보통</button>
+                <button type="button" aria-pressed={difficulty === 'hard'} className={`${s.choiceBtn} ${s.choiceHard}   ${difficulty === 'hard' ? s.choiceActive : ''}`} onClick={() => setDifficulty('hard')}>🔴 어려움</button>
               </div>
             </div>
 
             <div style={{ marginTop: 14 }}>
               <span className={s.subLabel}>복습 강도</span>
               <div className={s.choiceRow}>
-                <button className={`${s.choiceBtn} ${s.choiceFast}    ${intensity === 'fast'    ? s.choiceActive : ''}`} onClick={() => setIntensity('fast')}>⚡ 빠르게</button>
-                <button className={`${s.choiceBtn} ${s.choiceNormal}  ${intensity === 'normal'  ? s.choiceActive : ''}`} onClick={() => setIntensity('normal')}>⚙️ 일반</button>
-                <button className={`${s.choiceBtn} ${s.choiceRelaxed} ${intensity === 'relaxed' ? s.choiceActive : ''}`} onClick={() => setIntensity('relaxed')}>🌊 여유있게</button>
+                <button type="button" aria-pressed={intensity === 'fast'} className={`${s.choiceBtn} ${s.choiceFast}    ${intensity === 'fast' ? s.choiceActive : ''}`} onClick={() => setIntensity('fast')}>⚡ 빠르게</button>
+                <button type="button" aria-pressed={intensity === 'normal'} className={`${s.choiceBtn} ${s.choiceNormal}  ${intensity === 'normal' ? s.choiceActive : ''}`} onClick={() => setIntensity('normal')}>⚙️ 일반</button>
+                <button type="button" aria-pressed={intensity === 'relaxed'} className={`${s.choiceBtn} ${s.choiceRelaxed} ${intensity === 'relaxed' ? s.choiceActive : ''}`} onClick={() => setIntensity('relaxed')}>🌊 여유있게</button>
               </div>
             </div>
           </div>
@@ -698,6 +698,7 @@ export default function ReviewIntervalClient() {
                 <button
                   key={o.v}
                   className={`${s.scoreBtn} ${s['score' + o.v]} ${sm2Quality === o.v ? s.scoreActive : ''}`}
+                  aria-pressed={sm2Quality === o.v}
                   onClick={() => setSm2Quality(o.v)}
                   type="button"
                 >
@@ -834,17 +835,17 @@ export default function ReviewIntervalClient() {
                 <div>
                   <span className={s.subLabel}>난이도</span>
                   <div className={s.choiceRow}>
-                    <button className={`${s.choiceBtn} ${s.choiceEasy}   ${newDiff === 'easy'   ? s.choiceActive : ''}`} onClick={() => setNewDiff('easy')}>🟢 쉬움</button>
-                    <button className={`${s.choiceBtn} ${s.choiceNormal} ${newDiff === 'normal' ? s.choiceActive : ''}`} onClick={() => setNewDiff('normal')}>🟡 보통</button>
-                    <button className={`${s.choiceBtn} ${s.choiceHard}   ${newDiff === 'hard'   ? s.choiceActive : ''}`} onClick={() => setNewDiff('hard')}>🔴 어려움</button>
+                    <button type="button" aria-pressed={newDiff === 'easy'} className={`${s.choiceBtn} ${s.choiceEasy}   ${newDiff === 'easy' ? s.choiceActive : ''}`} onClick={() => setNewDiff('easy')}>🟢 쉬움</button>
+                    <button type="button" aria-pressed={newDiff === 'normal'} className={`${s.choiceBtn} ${s.choiceNormal} ${newDiff === 'normal' ? s.choiceActive : ''}`} onClick={() => setNewDiff('normal')}>🟡 보통</button>
+                    <button type="button" aria-pressed={newDiff === 'hard'} className={`${s.choiceBtn} ${s.choiceHard}   ${newDiff === 'hard' ? s.choiceActive : ''}`} onClick={() => setNewDiff('hard')}>🔴 어려움</button>
                   </div>
                 </div>
                 <div>
                   <span className={s.subLabel}>복습 강도</span>
                   <div className={s.choiceRow}>
-                    <button className={`${s.choiceBtn} ${s.choiceFast}    ${newIntens === 'fast'    ? s.choiceActive : ''}`} onClick={() => setNewIntens('fast')}>⚡ 빠르게</button>
-                    <button className={`${s.choiceBtn} ${s.choiceNormal}  ${newIntens === 'normal'  ? s.choiceActive : ''}`} onClick={() => setNewIntens('normal')}>⚙️ 일반</button>
-                    <button className={`${s.choiceBtn} ${s.choiceRelaxed} ${newIntens === 'relaxed' ? s.choiceActive : ''}`} onClick={() => setNewIntens('relaxed')}>🌊 여유</button>
+                    <button type="button" aria-pressed={newIntens === 'fast'} className={`${s.choiceBtn} ${s.choiceFast}    ${newIntens === 'fast' ? s.choiceActive : ''}`} onClick={() => setNewIntens('fast')}>⚡ 빠르게</button>
+                    <button type="button" aria-pressed={newIntens === 'normal'} className={`${s.choiceBtn} ${s.choiceNormal}  ${newIntens === 'normal' ? s.choiceActive : ''}`} onClick={() => setNewIntens('normal')}>⚙️ 일반</button>
+                    <button type="button" aria-pressed={newIntens === 'relaxed'} className={`${s.choiceBtn} ${s.choiceRelaxed} ${newIntens === 'relaxed' ? s.choiceActive : ''}`} onClick={() => setNewIntens('relaxed')}>🌊 여유</button>
                   </div>
                 </div>
                 <div className={s.itemActions}>

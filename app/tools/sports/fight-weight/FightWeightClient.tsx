@@ -530,6 +530,7 @@ export default function FightWeightClient() {
               key={s.id}
               type="button"
               className={`${styles.sportBtn} ${styles[s.cls]} ${sportId === s.id ? styles.sportActive : ''}`}
+              aria-pressed={sportId === s.id}
               onClick={() => selectSport(s.id)}
             >
               {s.label}

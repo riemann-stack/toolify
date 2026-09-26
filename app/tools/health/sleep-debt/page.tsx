@@ -8,6 +8,7 @@ import Disclaimer from '@/components/Disclaimer'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolPage from '@/components/ToolPage'
+import { todayStr } from '@/lib/date'
 
 export const metadata = buildMetadata({
   path: '/tools/health/sleep-debt',
@@ -114,7 +115,8 @@ export default function SleepDebtPage() {
         ]}
       />
 
-      <SleepDebtClient />
+      {/* buildDate: SSG와 hydration이 같은 날짜를 쓰고, 마운트 뒤 실제 오늘로 보정해 날짜 입력 max가 빌드일에 묶이지 않게 한다 */}
+      <SleepDebtClient buildDate={todayStr()} />
 
       <GuideDivider />
       <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>

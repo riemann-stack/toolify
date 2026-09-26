@@ -634,6 +634,7 @@ export default function IntervalTrainingClient() {
                   className={`${s.distBtn} ${d === 800 ? s.dist800 : ''} ${selectedDistances.has(d) ? s.distActive : ''}`}
                   onClick={() => toggleDist(d)}
                   type="button"
+                  aria-pressed={selectedDistances.has(d)}
                 >
                   {d === 1600 ? '1.6km' : d >= 1000 ? `${d / 1000}km` : `${d}m`}
                   {d === 800 && <span className={s.distYassoBadge}>야소</span>}
@@ -779,7 +780,7 @@ export default function IntervalTrainingClient() {
                   <span className={s.subLabel}>인터벌 거리</span>
                   <div className={s.customDistGrid}>
                     {[200, 400, 600, 800, 1000, 1200, 1600, 2000].map(d => (
-                      <button key={d} type="button"
+                      <button key={d} type="button" aria-pressed={customDist === d}
                         className={`${s.customDistBtn} ${customDist === d ? s.customDistBtnActive : ''}`}
                         onClick={() => setCustomDist(d)}>
                         {d >= 1000 ? `${d / 1000}km` : `${d}m`}
@@ -788,9 +789,9 @@ export default function IntervalTrainingClient() {
                   </div>
                 </div>
                 <div>
-                  <span className={s.subLabel}>반복 횟수: {customReps}회</span>
+                  <label className={s.subLabel} htmlFor="interval-training-custom-reps">반복 횟수: {customReps}회</label>
                   <div className={s.sliderRow}>
-                    <input type="range" min={1} max={12} value={customReps}
+                    <input id="interval-training-custom-reps" type="range" min={1} max={12} value={customReps}
                       onChange={e => setCustomReps(Number(e.target.value))} />
                     <span className={s.sliderValue}>{customReps}회</span>
                   </div>
@@ -946,9 +947,9 @@ export default function IntervalTrainingClient() {
                   <input className={s.timeInput} aria-label="800m 평균 기록 초" type="number" inputMode="numeric" min="0" max="59" value={yYsec} onChange={e => setYYsec(e.target.value)} />
                 </div>
                 <div style={{ marginTop: 12 }}>
-                  <span className={s.subLabel}>반복 횟수: {yReps}회</span>
+                  <label className={s.subLabel} htmlFor="interval-training-yasso-reps">반복 횟수: {yReps}회</label>
                   <div className={s.sliderRow}>
-                    <input type="range" min={1} max={12} value={yReps} onChange={e => setYReps(Number(e.target.value))} />
+                    <input id="interval-training-yasso-reps" type="range" min={1} max={12} value={yReps} onChange={e => setYReps(Number(e.target.value))} />
                     <span className={s.sliderValue}>{yReps}회</span>
                   </div>
                 </div>
@@ -1176,9 +1177,9 @@ export default function IntervalTrainingClient() {
             <div className={s.cardLabel}>
               <span>현재 상태 입력</span>
             </div>
-            <span className={s.subLabel}>주간 러닝 거리: {weeklyKm}km</span>
+            <label className={s.subLabel} htmlFor="interval-training-weekly-km">주간 러닝 거리: {weeklyKm}km</label>
             <div className={s.sliderRow}>
-              <input type="range" min={0} max={150} step={5} value={weeklyKm} onChange={e => setWeeklyKm(Number(e.target.value))} />
+              <input id="interval-training-weekly-km" type="range" min={0} max={150} step={5} value={weeklyKm} onChange={e => setWeeklyKm(Number(e.target.value))} />
               <span className={s.sliderValue}>{weeklyKm}km</span>
             </div>
 
@@ -1198,9 +1199,9 @@ export default function IntervalTrainingClient() {
             </div>
 
             <div style={{ marginTop: 14 }}>
-              <span className={s.subLabel}>대회까지 남은 주: {weeksLeft}주</span>
+              <label className={s.subLabel} htmlFor="interval-training-weeks-left">대회까지 남은 주: {weeksLeft}주</label>
               <div className={s.sliderRow}>
-                <input type="range" min={4} max={16} value={weeksLeft} onChange={e => setWeeksLeft(Number(e.target.value))} />
+                <input id="interval-training-weeks-left" type="range" min={4} max={16} value={weeksLeft} onChange={e => setWeeksLeft(Number(e.target.value))} />
                 <span className={s.sliderValue}>{weeksLeft}주</span>
               </div>
             </div>

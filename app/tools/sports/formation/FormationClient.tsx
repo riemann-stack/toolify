@@ -42,12 +42,38 @@ export default function FormationClient() {
   const grassId = `grass${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
   const [actionError, setActionError] = useState('')
 
-  // 편집 모달 — Esc로 닫기
+  // 편집 모달 — 연 요소(피치 선수·명단 버튼)를 기억해 닫을 때 포커스를 되돌린다
+  const modalRef = useRef<HTMLDivElement | null>(null)
+  const openerRef = useRef<HTMLElement | SVGElement | null>(null)
+  const openEdit = (idx: number, opener: HTMLElement | SVGElement) => {
+    openerRef.current = opener
+    setEditingIdx(idx)
+  }
+  // 편집 모달 — Esc로 닫기 + Tab 포커스 가두기(aria-modal인데 Tab이 뒤쪽 명단으로 빠지던 문제)
   useEffect(() => {
     if (editingIdx === null) return
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') setEditingIdx(null) }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') { setEditingIdx(null); return }
+      if (e.key !== 'Tab') return
+      const modal = modalRef.current
+      if (!modal) return
+      const f = Array.from(modal.querySelectorAll<HTMLElement>('button:not([disabled]), input:not([disabled])'))
+      if (f.length === 0) return
+      const first = f[0], last = f[f.length - 1]
+      const active = document.activeElement
+      if (!active || !modal.contains(active)) { e.preventDefault(); (e.shiftKey ? last : first).focus() }
+      else if (e.shiftKey && active === first) { e.preventDefault(); last.focus() }
+      else if (!e.shiftKey && active === last) { e.preventDefault(); first.focus() }
+    }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
+  }, [editingIdx])
+  // 모달이 닫히면(Esc·배경·×·완료 모두) 연 요소로 포커스 복귀 — 그대로 두면 <body>로 떨어짐
+  useEffect(() => {
+    if (editingIdx !== null) return
+    const el = openerRef.current
+    openerRef.current = null
+    if (el && el.isConnected) el.focus()
   }, [editingIdx])
 
   /* localStorage 복원 */
@@ -362,8 +388,8 @@ export default function FormationClient() {
           className={s.pitchSvg}
           preserveAspectRatio="xMidYMid meet"
           xmlns="http://www.w3.org/2000/svg"
-          role="img"
-          aria-label="축구 포메이션 배치도"
+          role="group"
+          aria-label={`축구 포메이션 배치도 — 공격 방향 ${direction === 'up' ? '위' : '아래'}`}
         >
           {/* 잔디 그라데이션 (세로 스트라이프) */}
           <defs>
@@ -372,6 +398,8 @@ export default function FormationClient() {
               <rect x="50" width="50" height="100" fill="#338944" />
             </pattern>
           </defs>
+          {/* 잔디·라인은 장식 — role=group 안에서 보조기기에 노출하지 않음 (선수 버튼만 노출) */}
+          <g aria-hidden="true">
           <rect width="800" height="1000" fill={`url(#${grassId})`} />
 
           {/* 외곽선 */}
@@ -415,6 +443,7 @@ export default function FormationClient() {
               />
             )
           })}
+          </g>
 
           {/* 선수 카드 — 큰 폰트로 가독성 ↑ */}
           {positions.map((pos) => {
@@ -430,8 +459,8 @@ export default function FormationClient() {
             const cardY = Math.min(pos.y + 54, 1000 - 4 - 40)
             return (
               <g key={pos.idx} className={s.playerGroup}
-                onClick={() => setEditingIdx(pos.idx)}
-                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); setEditingIdx(pos.idx) } }}
+                onClick={e => openEdit(pos.idx, e.currentTarget)}
+                onKeyDown={e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openEdit(pos.idx, e.currentTarget) } }}
                 role="button" tabIndex={0}
                 aria-label={`${pos.label} ${p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}번 ${p.name || '이름 미입력'} 편집`}
                 style={{ cursor: 'pointer' }}
@@ -491,8 +520,8 @@ export default function FormationClient() {
             const tipDx = 14
             const tipDy = isUp ? 24 : -24
             return (
-              <g>
-                {/* 본체 (굵은 라인) */}
+              <g aria-hidden="true">
+                {/* 본체 (굵은 라인) — 방향은 svg aria-label로 전달 */}
                 <line x1={arrowX} y1={tailY} x2={arrowX} y2={tipY}
                   stroke="#fff" strokeWidth="8" strokeLinecap="round" opacity="0.85" />
                 {/* 화살촉 */}
@@ -526,7 +555,7 @@ export default function FormationClient() {
       {/* ── 선수 편집 모달 ── */}
       {editingIdx !== null && players[editingIdx] && (
         <div className={s.modalBackdrop} onClick={() => setEditingIdx(null)}>
-          <div className={s.modal} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="선수 편집">
+          <div ref={modalRef} className={s.modal} onClick={e => e.stopPropagation()} role="dialog" aria-modal="true" aria-label="선수 편집">
             <div className={s.modalHeader}>
               <span>{positions.find(p => p.idx === editingIdx)?.label ?? ''} 편집</span>
               <button type="button" className={s.modalClose} aria-label="닫기"
@@ -567,7 +596,7 @@ export default function FormationClient() {
             return (
               <button key={pos.idx} type="button"
                 className={s.rosterItem}
-                onClick={() => setEditingIdx(pos.idx)}>
+                onClick={e => openEdit(pos.idx, e.currentTarget)}>
                 <span className={s.rosterPos}>{pos.label}</span>
                 <span className={s.rosterNum}>#{p.number || (pos.idx === 0 ? '1' : pos.idx + 1)}</span>
                 <span className={s.rosterName}>{p.name || <em>미입력</em>}</span>

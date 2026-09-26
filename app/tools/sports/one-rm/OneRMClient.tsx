@@ -1045,15 +1045,23 @@ function calcPlates(targetKg: number, barKg: number, available: number[]): {
   return { perSide: result, totalPerSide: achievedPerSide, achieved, exact, alt }
 }
 
+const PLATE_TARGET_MAX_KG = 1000 // 원판 계산 목표 상한 — 실제 바벨 중량보다 넉넉한 값(DP 배열 폭주 방지용)
+
 function PlateTab({
   targetWeight, setTargetWeight, unit, setUnit,
   barWeight, setBarWeight, barCustom, setBarCustom,
   enabledPlates, setEnabledPlates,
 }: PlateTabProps) {
+  // 상한 클램프: calcPlates의 DP 배열 길이가 목표 무게에 비례 → 비정상적으로 큰 값은 탭 멈춤·RangeError로 이어짐
+  const targetOverLimit = useMemo(() => {
+    const v = parseFloat(targetWeight)
+    return isFinite(v) && (unit === 'kg' ? v : lbToKg(v)) > PLATE_TARGET_MAX_KG
+  }, [targetWeight, unit])
   const targetKg = useMemo(() => {
     const v = parseFloat(targetWeight)
     if (!isFinite(v) || v <= 0) return 0
-    return unit === 'kg' ? v : lbToKg(v)
+    const kg = unit === 'kg' ? v : lbToKg(v)
+    return kg > PLATE_TARGET_MAX_KG ? 0 : kg
   }, [targetWeight, unit])
 
   const actualBarKg = useMemo(() => {
@@ -1101,6 +1109,9 @@ function PlateTab({
             </div>
           </div>
           <input id="one-rm-plate-target" type="number" inputMode="decimal" className={s.input} value={targetWeight} min={0} onChange={(e) => setTargetWeight(e.target.value)} />
+          {targetOverLimit && (
+            <div className={s.warnMsg}>목표 중량은 {unit === 'kg' ? `${PLATE_TARGET_MAX_KG.toLocaleString('ko-KR')}kg` : `${Math.floor(kgToLb(PLATE_TARGET_MAX_KG)).toLocaleString('ko-KR')}lb`} 이하로 입력하세요.</div>
+          )}
         </div>
 
         <div className={s.field}>

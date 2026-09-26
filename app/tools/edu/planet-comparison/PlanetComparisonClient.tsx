@@ -316,8 +316,8 @@ export default function PlanetComparisonClient() {
         </div>
 
         <div className={s.presetRow} style={{ marginTop: 12 }}>
-          <button className={`${s.presetBtn} ${weight === 75 && age === 35 ? s.presetActive : ''}`} onClick={() => applyPreset('maleAvg')}   type="button">평균 한국 성인 남성 (75kg, 35세)</button>
-          <button className={`${s.presetBtn} ${weight === 60 && age === 35 ? s.presetActive : ''}`} onClick={() => applyPreset('femaleAvg')} type="button">평균 한국 성인 여성 (60kg, 35세)</button>
+          <button aria-pressed={weight === 75 && age === 35} className={`${s.presetBtn} ${weight === 75 && age === 35 ? s.presetActive : ''}`} onClick={() => applyPreset('maleAvg')}   type="button">평균 한국 성인 남성 (75kg, 35세)</button>
+          <button aria-pressed={weight === 60 && age === 35} className={`${s.presetBtn} ${weight === 60 && age === 35 ? s.presetActive : ''}`} onClick={() => applyPreset('femaleAvg')} type="button">평균 한국 성인 여성 (60kg, 35세)</button>
           {/* ⚠️ 예전에는 onClick이 빈 함수라 눌러도 아무 일이 없었다. 실제로 입력 칸으로 보낸다. */}
           <button className={s.presetBtn} type="button"
             onClick={() => { document.getElementById('pc-weight')?.focus() }}>내 정보 직접 입력 ↓</button>

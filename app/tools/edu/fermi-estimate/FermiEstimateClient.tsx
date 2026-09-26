@@ -585,6 +585,7 @@ export default function FermiEstimateClient() {
                 <button
                   key={c.key}
                   className={`${s.catBtn} ${c.cls} ${activeCat === c.key ? s.catActive : ''}`}
+                  aria-pressed={activeCat === c.key}
                   onClick={() => setActiveCat(c.key)}
                   type="button"
                 >

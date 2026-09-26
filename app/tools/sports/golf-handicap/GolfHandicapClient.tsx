@@ -423,16 +423,8 @@ function ScoreTab({ courseHandicap, setCourseHandicap }: { courseHandicap: strin
   // 홀별 핸디캡 스트로크 분배 (코스핸디캡 만큼 홀 순서대로 1스트로크씩 — 실제는 스트로크 인덱스順)
   const holeStrokes = useMemo(() => {
     if (isNaN(ch) || ch <= 0) return Array(18).fill(0)
-    const strokes = Array(18).fill(0)
-    let remaining = ch
-    // 18홀 씩 전체 분배
-    while (remaining > 0) {
-      for (let i = 0; i < 18 && remaining > 0; i++) {
-        strokes[i] += 1
-        remaining -= 1
-      }
-    }
-    return strokes
+    // 18홀씩 한 바퀴 돌며 1타씩 나누는 것과 같은 닫힌 식 — 큰 입력에도 루프가 입력값만큼 돌지 않음(탭 멈춤 방지)
+    return Array.from({ length: 18 }, (_, i) => Math.floor(ch / 18) + (i < ch % 18 ? 1 : 0))
   }, [ch])
 
   const stablefordPoints = useMemo(() => {
