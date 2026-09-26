@@ -87,7 +87,7 @@ const FAQ_LD = [
               },
               {
                 q: '한국에서 어떤 기년법을 어떻게 쓰나요?',
-                a: '상황별 기년법:<br/>• <strong>서기 (표준)</strong> — 학교·관공서·일반 공식 문서<br/>• <strong>불기</strong> — 사찰·법회·경전·불교 기념일<br/>• <strong>단기</strong> — 단군교·대종교·일부 보수 단체<br/>• <strong>서기 + 간지</strong> — 결혼식·택일·돌잔치·환갑·제사<br/>• <strong>띠</strong> — 돌·궁합·인연 (12지지)<br/>본 도구로 모두 즉시 양방향 변환 가능.',
+                a: '상황별 기년법:<br/>• <strong>서기 (표준)</strong> — 학교·관공서·일반 공식 문서<br/>• <strong>불기</strong> — 사찰·법회·경전·불교 기념일<br/>• <strong>단기</strong> — 1948~1961년 대한민국 공용 연호, 현재는 대종교·개천절 행사 등<br/>• <strong>서기 + 간지</strong> — 결혼식·택일·돌잔치·환갑·제사<br/>• <strong>띠</strong> — 돌·궁합·인연 (12지지)<br/>본 도구로 모두 즉시 양방향 변환 가능.',
               },
             ]
 
@@ -102,12 +102,13 @@ export default function HistoryEraPage() {
       </p>
 
       <UpdatedMeta
-        date="2026년 7월"
+        date="2026년 9월"
         basis="조선왕조실록 기년(유년칭원법) 기준"
         sources={[
           { label: '조선왕조실록', href: 'https://sillok.history.go.kr' },
           { label: '한국사데이터베이스', href: 'https://db.history.go.kr' },
           { label: '우리역사넷', href: 'http://contents.history.go.kr' },
+          { label: '연호에 관한 법률', href: 'https://www.law.go.kr/법령/연호에관한법률' },
         ]}
       />
 
@@ -157,6 +158,12 @@ export default function HistoryEraPage() {
               </tbody>
             </table>
           </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            주의할 점은 <strong>기원전과 서기 사이에 「0년」이 없다</strong>는 것입니다. 서기 1년의 바로 앞 해가 기원전 1년이라, 결과가 기원전으로 넘어가면 단순 뺄셈이 1년 어긋납니다.
+            예컨대 단기 1년에 공식을 그대로 적용하면 1 − 2333 = −2332가 나오지만 실제로는 <strong>기원전 2333년</strong>입니다.
+            본 도구는 내부적으로 천문학식 연도(0년 = 기원전 1년)로 계산한 뒤 표시할 때 「기원전 N년」으로 바꾸므로 이 차이를 자동으로 처리합니다.
+            간지 공식도 같은 천문학식 연도를 넣어야 맞습니다.
+          </p>
         </div>
 
         {/* ── 2. 조선 27대 왕 연호표 ── */}
@@ -189,7 +196,7 @@ export default function HistoryEraPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '10px' }}>
+          <p className="g-note">
             * 순종은 통용 표기(융희 4년 = 1910 경술국치)에 맞춰 융희 연호 기년(원년 1907)을 사용합니다.
             조선왕조실록의 순종 기년(원년 1908)과는 1년 차이가 있습니다.
           </p>
@@ -204,7 +211,7 @@ export default function HistoryEraPage() {
             천간·지지의 전체 구성과 띠·환갑 등 60갑자 순환 원리는{' '}
             <Link href="/tools/date/lunar" style={{ color: 'var(--accent)', fontWeight: 600 }}>양력 음력 변환기</Link>에서 자세히 다룹니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(219,39,119,0.2)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-date) 20%, transparent)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
             <p style={{ fontSize: '12px', color: 'var(--cat-date)', fontWeight: 600, letterSpacing: '0.04em', textTransform: 'uppercase', marginBottom: '8px' }}>간지 공식</p>
             <p style={{ fontFamily: 'var(--font-sans)', fontSize: '16px', fontWeight: 700, color: 'var(--text)', lineHeight: 1.7 }}>
               천간 = ((서기년 − 4) mod 10 + 10) mod 10<br />
@@ -215,9 +222,7 @@ export default function HistoryEraPage() {
 
         {/* ── 4. 한국 통합 연표 (단군~현재) (NEW) ── */}
         <div>
-          <h2 className="g-h2">
-            🇰🇷 한국 통합 연표 (단군~현재)
-          </h2>
+          <h2 className="g-h2">한국 통합 연표 (단군~현재)</h2>
           <p className="g-p">
             본 도구의 [역사 연표] 탭에서 70+ 사건을 시대별 필터로 조회 가능. 시대 구조:
           </p>
@@ -254,11 +259,11 @@ export default function HistoryEraPage() {
 
         {/* ── 5. 동아시아 연호 동시 비교 (NEW) ── */}
         <div>
-          <h2 className="g-h2">
-            🌏 동아시아 연호 동시 비교
-          </h2>
+          <h2 className="g-h2">동아시아 연호 동시 비교</h2>
           <p className="g-p">
-            본 도구의 [서기→연호] 탭에서 한 연도 입력 시 한국·중국·일본·기타 매핑을 동시에 표시. 동아시아 격동기 비교.
+            같은 해가 나라마다 어떻게 적혔는지 비교한 표입니다. 본 도구의 [서기→연호] 탭은 단기·불기·간지·조선 왕 기년·대한제국 연호와
+            일본 메이지 이후 연호, 중국 주요 연호(홍무·영락·강희·건륭·광서·선통·민국)를 한 번에 계산합니다.
+            아래 표의 덴쇼·분로쿠·간에이·만력·숭정·숭덕처럼 도구 목록에 없는 연호는 대조용으로 함께 적었습니다.
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
@@ -272,7 +277,7 @@ export default function HistoryEraPage() {
               </thead>
               <tbody>
                 {[
-                  { ad: '1592', kr: '조선 선조 25년 (임진왜란)', jp: '분로쿠(文禄) 1년', cn: '명 만력 20년' },
+                  { ad: '1592', kr: '조선 선조 25년 (임진왜란)', jp: '덴쇼(天正) 20년 — 음력 12월 8일(양력 1593. 1. 10.) 분로쿠(文禄)로 개원', cn: '명 만력 20년' },
                   { ad: '1636', kr: '조선 인조 14년 (병자호란)', jp: '간에이 13년',      cn: '명 숭정 9년·청 숭덕 1년' },
                   { ad: '1894', kr: '조선 고종 31년 (갑오개혁)', jp: '메이지 27년 (청일전쟁)', cn: '청 광서 20년' },
                   { ad: '1910', kr: '대한제국 융희 4년 (경술국치)', jp: '메이지 43년',       cn: '청 선통 2년' },
@@ -294,9 +299,7 @@ export default function HistoryEraPage() {
 
         {/* ── 6. 한국 주요 역사 사건 30선 (NEW) ── */}
         <div>
-          <h2 className="g-h2">
-            📌 한국 주요 역사 사건 30선
-          </h2>
+          <h2 className="g-h2">한국 주요 역사 사건 20선</h2>
           <p className="g-p">
             학교 과제·시험 자주 출제되는 사건. 본 도구의 [역사 연표] 탭 검색에서 사건명 또는 연도 입력으로 즉시 조회.
           </p>
@@ -345,17 +348,18 @@ export default function HistoryEraPage() {
 
         {/* ── 7. 한국 기년법 사용 가이드 (NEW) ── */}
         <div>
-          <h2 className="g-h2">
-            📚 한국에서 어떤 기년법을 쓰나?
-          </h2>
+          <h2 className="g-h2">한국에서 어떤 기년법을 쓰나?</h2>
           <p className="g-p">
-            상황에 따라 다른 기년법을 사용합니다. 본 도구로 모두 즉시 변환 가능.
+            오늘날 공식 문서의 기준은 서기지만, 처음부터 그랬던 것은 아닙니다. 정부 수립 직후인 1948년 9월 「연호에 관한 법률」이 <strong>단기를 대한민국의 공용 연호</strong>로 정했고,
+            1961년 말 법률을 바꿔 <strong>1962년 1월 1일부터 서력기원(서기)</strong>을 공용 연호로 삼았습니다.
+            그래서 1948~1961년의 관보·신문·호적·토지 서류에는 「단기 4283년」처럼 적힌 경우가 많고, 여기서 2333을 빼면 서기 1950년이 됩니다.
+            옛 서류의 연도를 읽을 때는 먼저 어떤 기년법인지부터 확인하세요 — 상황별 쓰임은 아래와 같습니다.
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '10px' }}>
             {[
               { e: '🌐', t: '서기 (표준)', d: '학교·관공서·일반 모든 공식 문서. 한국 표준.' },
               { e: '☸️', t: '불기', d: '사찰·법회·경전·불교 기념일 (석가모니 열반 BC 544 기준)' },
-              { e: '🌳', t: '단기', d: '단군교·대종교·일부 보수 단체 (단군 BC 2333 기준)' },
+              { e: '🌳', t: '단기', d: '1948~1961년 공용 연호. 지금은 대종교·개천절 행사 등에서 사용 (단군 BC 2333 기준)' },
               { e: '💍', t: '서기 + 간지', d: '결혼식·택일·돌잔치·환갑 등 전통 행사 (예: 갑진년)' },
               { e: '⚱️', t: '간지·연호', d: '제사·전통 행사·서예 작품 (예: 갑진년 봄)' },
               { e: '🎂', t: '띠', d: '돌·생일·궁합·인연 (12지지 기반 — (서기 − 4)를 12로 나눈 나머지가 띠 순번)' },
@@ -371,30 +375,29 @@ export default function HistoryEraPage() {
 
         {/* ── 자료 기준 및 한계 ── */}
         <div>
-          <h2 className="g-h2">
-            📖 자료 기준 및 한계
-          </h2>
+          <h2 className="g-h2">자료 기준 및 한계</h2>
           <p className="g-p">
             본 도구의 변환 기준과, 사료·표기 방식에 따라 결과가 달라질 수 있는 지점입니다.
           </p>
-          <ul style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '18px', display: 'flex', flexDirection: 'column', gap: '6px' }}>
+          <ul className="g-list">
             <li>
-              <strong style={{ color: 'var(--text)' }}>조선 왕 기년</strong> — <a href="https://sillok.history.go.kr" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>조선왕조실록</a>(국사편찬위원회)
+              <strong>조선 왕 기년</strong> — <a href="https://sillok.history.go.kr" target="_blank" rel="noopener noreferrer">조선왕조실록</a>(국사편찬위원회)
               연대목록의 유년칭원법 기준. 즉위한 해를 1년으로 세는 문헌과는 1년 차이가 날 수 있으며, 순종은 통용 표기에 맞춰 융희 연호 기년(원년 1907)을 씁니다.
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>일본 연호</strong> — 개원 정령·관보 기준
-              (레이와: <a href="https://elaws.e-gov.go.jp/document?lawid=431CO0000000143" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>元号を改める政令 ↗</a>).
+              <strong>일본 연호</strong> — 개원 정령·관보 기준
+              (레이와: <a href="https://elaws.e-gov.go.jp/document?lawid=431CO0000000143" target="_blank" rel="noopener noreferrer">元号を改める政令 ↗</a>).
               변환은 연 단위라 경계 연도(1912·1926·1989·2019)는 월일에 따라 두 연호가 병존합니다 — 1989년 1월 7일까지 쇼와 64년, 1월 8일부터 헤이세이 원년.
               계산기 결과에도 경계 연도 안내가 표시됩니다.
+              메이지 이전에는 한 해 중간에 개원하는 일이 잦아, 예컨대 임진왜란이 난 1592년은 덴쇼 20년이었고 그해 음력 12월에야 분로쿠로 바뀌었습니다(일본 사료는 이 전쟁을 「분로쿠의 역」이라 부릅니다).
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>민국 기년</strong> — 대만(중화민국)에서 현행 공식 사용
-              (<a href="https://www.dgpa.gov.tw/" target="_blank" rel="noopener noreferrer" style={{ color: 'var(--accent-ink)', textDecoration: 'underline', textUnderlineOffset: '2px' }}>행정원 인사행정총처 ↗</a> 달력 기준, 2026년 = 민국 115년).
+              <strong>민국 기년</strong> — 대만(중화민국)에서 현행 공식 사용
+              (<a href="https://www.dgpa.gov.tw/" target="_blank" rel="noopener noreferrer">행정원 인사행정총처 ↗</a> 달력 기준, 2026년 = 민국 115년).
               중국 대륙은 1949년 이후 서기만 사용합니다.
             </li>
             <li>
-              <strong style={{ color: 'var(--text)' }}>음력 기반 사료</strong> — 조선·중국 연호는 음력 기반이라 연말~연초의 사건은
+              <strong>음력 기반 사료</strong> — 조선·중국 연호는 음력 기반이라 연말~연초의 사건은
               사료 날짜에 따라 서기 연도가 ±1년 다르게 표기될 수 있습니다. 논문·과제 등 정밀 인용에는 원사료의 월일을 확인하세요.
             </li>
           </ul>

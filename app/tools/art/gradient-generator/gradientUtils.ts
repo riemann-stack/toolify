@@ -280,7 +280,8 @@ export function buildMeshCss(mesh: MeshCorners): string {
 export function exportCss(cfg: GradientConfig): string {
   const noise = cfg.noise > 0 ? `${noiseSvgUrl(cfg.noise)},\n  ` : ''
   if (cfg.type === 'mesh' && cfg.mesh) {
-    return `background:\n  ${noise}${buildMeshCss(cfg.mesh).split(', ').join(',\n  ')};`
+    // 레이어 경계('), ')에서만 줄바꿈 — ', '로 나누면 radial-gradient 인자 중간이 쪼개진다
+    return `background:\n  ${noise}${buildMeshCss(cfg.mesh).replace(/\s{2,}/g, ' ').split('), ').join('),\n  ')};`
   }
   // RGB 외 보간(in oklch 등)은 Safari 16.1·Firefox 126 이하에서 선언 전체가 무효 —
   // dense stop 선언을 먼저 두고 native 선언으로 덮어쓰는 캐스케이드 폴백

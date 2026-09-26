@@ -184,6 +184,14 @@ export function panelWidthFor(finishedCircumferenceCm: number, mode: 'flat' | 'r
   return mode === 'flat' ? finishedCircumferenceCm / 2 : finishedCircumferenceCm
 }
 
+/**
+ * 사이즈 칩 → 가로 입력값(cm). 화면 입력칸과 같은 0.1cm 반올림을 거친 값이라
+ * 도구 화면과 가이드 예시 표가 반드시 같은 코 수를 낸다 (49.75cm → 49.8cm).
+ */
+export function deriveWidthCm(bustCm: number, easeCm: number, mode: 'flat' | 'round'): number {
+  return Math.round(panelWidthFor(bustCm + easeCm, mode) * 10) / 10
+}
+
 export const getBodyPart = (id: BodyPartId) => BODY_PARTS.find((b) => b.id === id) ?? BODY_PARTS[0]
 
 /* ─────────────────────────────────────────────

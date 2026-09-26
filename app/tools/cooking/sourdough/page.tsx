@@ -2,7 +2,9 @@ import Link from 'next/link'
 import SourdoughClient from './SourdoughClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
 
@@ -39,6 +41,15 @@ export default function SourdoughPage() {
       <p className="tp-lead">
         스타터 안정화 진단 + 피크 시간 예측 + <strong style={{ color: 'var(--text)' }}>급이 일정 자동 스케줄러</strong>.
       </p>
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="냉장 관리·부활 절차·후치와 폐기 신호는 King Arthur Baking 공식 가이드와 콜로라도·사우스다코타 주립대 익스텐션 자료 · 피크 시간은 도구의 경험식(24°C 기준, 10°C 낮아질 때마다 약 2배 느림)"
+        sources={[
+          { label: 'King Arthur Baking — Sourdough Starter', href: 'https://www.kingarthurbaking.com/recipes/sourdough-starter-recipe' },
+          { label: 'Colorado State University Extension', href: 'https://extension.colostate.edu' },
+          { label: 'South Dakota State University Extension', href: 'https://extension.sdstate.edu' },
+        ]}
+      />
 
       <SourdoughClient />
 
@@ -55,12 +66,12 @@ export default function SourdoughPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { title: '🍞 깊은 풍미',  desc: '젖산·초산이 만드는 복합적인 산미와 감칠맛. 상업 이스트 빵에서는 얻을 수 없는 향미.' },
-              { title: '🌾 소화 흡수',  desc: '긴 발효 중 글루텐이 일부 분해되고 피트산이 중화되어, 일반 빵보다 소화가 잘 됩니다.' },
-              { title: '🕰️ 긴 보존성',  desc: '산성 환경 덕분에 곰팡이 억제 효과가 있어 상업 빵보다 오래 보관할 수 있습니다.' },
+              { title: '깊은 풍미',  desc: '젖산·초산이 만드는 복합적인 산미와 감칠맛. 이스트만으로 빨리 부풀린 빵과는 다른 향미.' },
+              { title: '긴 발효',  desc: '긴 발효 중 피트산이 분해되고 글루텐 일부가 분해되어 속이 편하다는 사람이 많습니다. 다만 글루텐 대부분은 그대로 남아 있어 셀리악병이 있다면 사워도우도 먹으면 안 됩니다.' },
+              { title: '보존성',  desc: '산성 환경이 곰팡이 번식을 늦춰, 보존료 없이 이스트만으로 만든 빵보다 대체로 오래갑니다.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '6px' }}>{c.title}</p>
+                <p style={{ fontSize: '13px', color: 'var(--accent-ink)', fontWeight: 700, marginBottom: '6px' }}>{c.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{c.desc}</p>
               </div>
             ))}
@@ -91,7 +102,7 @@ export default function SourdoughPage() {
                   { d: '12~14일',  s: '예측 가능한 피크',          n: '요거트+빵 냄새',    a: '베이킹 테스트!' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.d}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{r.d}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.n}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.a}</td>
@@ -108,7 +119,7 @@ export default function SourdoughPage() {
             급이 비율 이해하기
           </h2>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '18px 22px', marginBottom: '14px' }}>
-            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 800, color: 'var(--accent)', textAlign: 'center', margin: '0 0 8px' }}>
+            <p style={{ fontFamily: 'var(--font-sans)', fontSize: '22px', fontWeight: 800, color: 'var(--accent-ink)', textAlign: 'center', margin: '0 0 8px' }}>
               1 : 1 : 1
             </p>
             <p style={{ fontSize: '13px', color: 'var(--muted)', textAlign: 'center', margin: 0 }}>
@@ -132,7 +143,7 @@ export default function SourdoughPage() {
                   { r: '1:5:5', f: '음식 많음 → 느림',    p: '7~10시간',  t: '25°C 이상' },
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row.r}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row.r}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{row.f}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-sans)', fontWeight: 500 }}>{row.p}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{row.t}</td>
@@ -142,8 +153,24 @@ export default function SourdoughPage() {
             </table>
           </div>
           <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: '12px' }}>
-            ※ 피크 속도는 <strong style={{ color: 'var(--text)' }}>24°C·백밀·피크 직후 급이</strong> 기준 (위 계산기와 동일). 온도가 10°C 낮아지면 약 2배 느려지고, 통밀·호밀을 섞으면 빨라집니다. &lsquo;적합 온도&rsquo;는 각 비율에 권장하는 보관 환경입니다.
+            ※ 피크 속도는 <strong style={{ color: 'var(--text)' }}>24°C·백밀·피크에서 급이</strong> 기준으로 위 계산기와 같은 식에서 나온 값입니다(피크 직후에 급이하면 약 1.2배 늘어남). 온도가 10°C 낮아지면 약 2배 느려지고, 통밀·호밀을 섞으면 빨라집니다. &lsquo;적합 온도&rsquo;는 각 비율에 권장하는 보관 환경입니다.
           </p>
+        </div>
+
+        {/* ── 3-1. 피크 시간 계산식 ── */}
+        <div>
+          <h2 className="g-h2">피크 시간은 이렇게 예측합니다</h2>
+          <p className="g-p">
+            피크 예측 탭은 <strong>24°C·백밀·1:1:1·피크에서 급이</strong>일 때 약 3.2시간을 기준으로 네 가지 계수를 곱합니다. 온도는 24°C보다 10°C 낮을 때마다 2배(높을 때마다 절반)로 계산하고, 급이 비율은 먹이가 많을수록 로그 곡선으로 늘어나 1:2:2는 1:1:1의 약 1.6배, 1:5:5는 약 2.6배가 됩니다.
+            밀가루는 통밀 혼합 0.85배, 호밀 혼합 0.7배로 빨라지고, 급이 시점은 피크 직후 1.2배·꺼진 뒤 1.5배·냉장에서 꺼내 바로 급이 2.5배로 느려집니다. 화면의 범위는 이 기준값의 ±20%를 반올림한 것입니다.
+          </p>
+          <p className="g-p">
+            예를 들어 겨울 실내 21°C에서 1:2:2로, 피크를 조금 지난 스타터에 급이하면 기준값은 약 7.5시간이고 화면에는 6~9시간으로 나옵니다. 저녁 10시에 급이하면 다음 날 새벽 4시~아침 7시 사이가 피크이므로, 아침에 반죽하려면 이 비율과 온도가 맞습니다.
+            더 늦게 반죽하고 싶다면 비율을 1:3:3으로 늘리고, 더 빨리 쓰고 싶다면 따뜻한 곳(24~26°C)으로 옮기면 됩니다. 진단 탭에서 통밀·호밀 비율을 고르면 그 비율만큼 밀가루 계수를 섞어(예: 호밀 15%면 0.955배) 계산합니다.
+          </p>
+          <Callout tone="note" title="예측값은 출발점입니다">
+            계수는 가정용 스타터의 일반적인 경향을 단순화한 경험식이라, 같은 조건이라도 스타터마다 1~2시간씩 차이가 납니다. 급이할 때 병에 고무줄로 높이를 표시하고 실제 피크 시각을 두세 번 기록해, 우리 집 스타터가 예측보다 빠른지 느린지 파악해 두세요.
+          </Callout>
         </div>
 
         {/* ── 4. 온도별 발효 가이드 ── */}
@@ -153,14 +180,14 @@ export default function SourdoughPage() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { t: '15~18°C', c: '#0891B2', title: '느린 발효', desc: '피크 12~18시간. 복잡한 산미 발달에 유리합니다. 겨울철 실내 일반.' },
-              { t: '20~22°C', c: '#059669', title: '표준 속도', desc: '균형 잡힌 발효. 대부분의 레시피가 가정하는 기준 온도입니다.' },
-              { t: '23~25°C', c: '#0EA5E9', title: '빠른 발효', desc: '여름 실내 일반. 급이 주기를 12시간 이하로 짧게 가져가세요.' },
-              { t: '26~28°C', c: '#EA580C', title: '매우 빠름', desc: '급이 비율을 1:3:3 이상으로 늘려야 과발효를 막을 수 있습니다.' },
-              { t: '28°C+',   c: '#DC2626', title: '주의 구간', desc: '아세톤 생성 위험. 냉장 보관이나 에어컨 공간 활용을 고려하세요.' },
+              { t: '15~18°C', c: 'var(--cyan-600)', title: '느린 발효', desc: '24°C보다 약 1.5~1.9배 느림. 1:2:2면 약 6~11시간, 1:5:5면 10~19시간. 산미가 진해지는 편이고, 겨울철 실내에서 흔한 온도입니다.' },
+              { t: '20~22°C', c: 'var(--success)', title: '표준 속도', desc: '1:2:2 기준 약 5~8시간. 하루 1~2회 급이 리듬을 맞추기 쉬운 온도입니다.' },
+              { t: '23~25°C', c: 'var(--teal-600)', title: '빠른 발효', desc: '1:2:2 기준 약 4~7시간. 여름 실내에서 흔하며, 급이 주기를 12시간 이하로 짧게 가져가세요.' },
+              { t: '26~28°C', c: 'var(--orange-600)', title: '매우 빠름', desc: '1:1:1이면 2~3시간 만에 피크. 급이 비율을 1:3:3 이상으로 늘려야 먹이가 금방 떨어지지 않습니다.' },
+              { t: '28°C 이상', c: 'var(--danger)', title: '주의 구간', desc: '먹이가 빨리 떨어져 아세톤 냄새·후치가 생기기 쉽습니다. 비율을 크게 늘리거나 더 시원한 곳으로 옮기세요.' },
             ].map((z, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${z.c}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 800, color: z.c, marginBottom: '4px' }}>{z.t}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${z.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontFamily: 'var(--font-sans)', fontSize: '15px', fontWeight: 800, color: 'var(--text)', marginBottom: '4px' }}>{z.t}</p>
                 <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 600, marginBottom: '6px' }}>{z.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{z.desc}</p>
               </div>
@@ -195,7 +222,7 @@ export default function SourdoughPage() {
                   { s: '오래 걸렀을 때', a: '먼저 1회 급이해 실온에서 12시간 관찰, 2배로 부풀 때까지 급이 반복', j: '여러 번·며칠 소요 가능' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
-                    <td style={{ padding: '10px 12px', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-sans)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.s}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.a}</td>
                     <td style={{ padding: '10px 12px', color: 'var(--muted)', whiteSpace: 'nowrap' }}>{r.j}</td>
                   </tr>
@@ -208,11 +235,11 @@ export default function SourdoughPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px', marginTop: '14px' }}>
             {[
-              { title: '🌾 굼뜬 스타터 부스트', desc: '반응이 느릴 때 흰 밀가루 대비 통밀·호밀 10~20%를 섞어 1~2회만 급이하는 처방입니다. 통곡물에는 사워도우에 유익한 미생물이 더 많고, 호밀은 효모·박테리아가 이용하기 쉬운 유리당이 많고 전분 분해 효소 함량이 높아 발효가 빨라집니다. 이 정도 소량은 풍미를 바꾸지 않으며 정밀 계량도 필요 없습니다. 상시 급이용 처방은 아니고, 평상시 유지에는 무표백 중력분도 충분합니다.' },
-              { title: '♻️ 폐기 스타터(discard)', desc: '급이 때 덜어내는 부분입니다. 아까워서 버리는 것이 아니라 미생물을 건강하게 유지하고 양이 불어나는 것을 막는 과정입니다. King Arthur는 와플·팬케이크·피자 도우·크래커·바나나 브레드·쿠키 등 디스카드 전용 레시피를 공식 운영하고, 굽지 않을 때는 퇴비화하거나 유산지에 얇게 펴 말려 버리는 방법도 안내합니다. 보관은 뚜껑 있는 용기에 냉장이며, 공식 표현은 "여러 주(several weeks)"로 정확한 일수를 못박지 않습니다.' },
+              { title: '굼뜬 스타터 부스트', desc: '반응이 느릴 때 흰 밀가루 대비 통밀·호밀 10~20%를 섞어 1~2회만 급이하는 처방입니다. 통곡물에는 사워도우에 유익한 미생물이 더 많고, 호밀은 효모·박테리아가 이용하기 쉬운 유리당이 많고 전분 분해 효소 함량이 높아 발효가 빨라집니다. 이 정도 소량은 풍미를 바꾸지 않으며 정밀 계량도 필요 없습니다. 상시 급이용 처방은 아니고, 평상시 유지에는 무표백 중력분도 충분합니다.' },
+              { title: '폐기 스타터(discard)', desc: '급이 때 덜어내는 부분입니다. 아까워서 버리는 것이 아니라 미생물을 건강하게 유지하고 양이 불어나는 것을 막는 과정입니다. King Arthur는 와플·팬케이크·피자 도우·크래커·바나나 브레드·쿠키 등 디스카드 전용 레시피를 공식 운영하고, 굽지 않을 때는 퇴비화하거나 유산지에 얇게 펴 말려 버리는 방법도 안내합니다. 보관은 뚜껑 있는 용기에 냉장이며, 공식 표현은 "여러 주(several weeks)"로 정확한 일수를 못박지 않습니다.' },
             ].map((c, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-                <p style={{ fontSize: '13px', color: 'var(--accent)', fontWeight: 700, marginBottom: '6px' }}>{c.title}</p>
+                <p style={{ fontSize: '13px', color: 'var(--accent-ink)', fontWeight: 700, marginBottom: '6px' }}>{c.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{c.desc}</p>
               </div>
             ))}
@@ -229,10 +256,10 @@ export default function SourdoughPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '10px' }}>
             {[
-              { c: 'var(--success)', title: '✅ 급이하면 되는 상태', desc: '표면에 고인 액체(후치), 알코올 섞인 시큼한 냄새, 줄어든 팽창 폭 — 평소대로 급이하면 회복됩니다.' },
-              { c: 'var(--danger)',  title: '🚫 폐기해야 하는 신호', desc: '분홍색·주황색 기미나 줄무늬, 색깔 있거나 솜털 같은 곰팡이, 불쾌한 냄새, 초록·분홍·주황 반점. 일부만 덜어내 살리지 말고 전량 버린 뒤 용기를 깨끗이 씻고 헹궈 처음부터 다시 시작합니다.' },
+              { c: 'var(--success)', title: '급이하면 되는 상태', desc: '표면에 고인 액체(후치), 알코올 섞인 시큼한 냄새, 줄어든 팽창 폭 — 평소대로 급이하면 회복됩니다.' },
+              { c: 'var(--danger)',  title: '폐기해야 하는 신호', desc: '분홍색·주황색 기미나 줄무늬, 색깔 있거나 솜털 같은 곰팡이, 불쾌한 냄새, 초록·분홍·주황 반점. 일부만 덜어내 살리지 말고 전량 버린 뒤 용기를 깨끗이 씻고 헹궈 처음부터 다시 시작합니다.' },
             ].map((z, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${z.c}`, borderRadius: '10px', padding: '14px 18px' }}>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${z.c}`, borderRadius: 'var(--radius-s)', padding: '14px 18px' }}>
                 <p style={{ fontSize: '13px', color: z.c, fontWeight: 700, marginBottom: '6px' }}>{z.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>{z.desc}</p>
               </div>
@@ -250,14 +277,14 @@ export default function SourdoughPage() {
           </h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
-              { p: '🧪 아세톤/매니큐어 냄새', c: '#DC2626', s: '과산성화 상태. 스타터 일부만 남기고 1:5:5 비율로 리셋. 2~3회 급이 후 정상화됩니다.' },
-              { p: '💥 초반 폭발 후 조용해짐', c: '#0EA5E9', s: '유해균→효모로 교체되는 정상 과정. 2~3일 더 급이를 유지하면 다시 반응이 올라옵니다.' },
-              { p: '⏱️ 피크가 너무 빠름 (2시간 이내)', c: '#EA580C', s: '온도가 과도하게 높습니다. 더 시원한 곳으로 옮기거나 급이 비율을 1:3:3 이상으로 늘리세요.' },
-              { p: '⏳ 24시간 동안 피크 없음', c: '#0891B2', s: '너무 차갑습니다. 22~25°C 공간으로 옮기거나 호밀가루 10~20%를 섞어 활성화 속도를 높이세요.' },
-              { p: '💧 물처럼 묽어짐', c: '#EA580C', s: '과발효로 글루텐이 분해된 상태. 급이 횟수를 1일 2회로 늘리고, 밀가루 비율을 스타터의 2배로.' },
+              { p: '아세톤·매니큐어 냄새', c: 'var(--danger)', s: '먹이가 떨어진(배고픈) 상태에서 산과 알코올 부산물이 쌓인 신호입니다. 스타터를 조금만 남기고 1:5:5처럼 큰 비율로 급이해 2~3회 반복하면 대개 사라집니다.' },
+              { p: '초반 폭발 후 조용해짐', c: 'var(--cyan-600)', s: '초기 세균이 물러나고 효모·젖산균이 자리 잡는 정상 과정. 2~3일 더 같은 시간에 급이하면 다시 반응이 올라옵니다.' },
+              { p: '피크가 너무 빠름 (2시간 이내)', c: 'var(--orange-600)', s: '온도가 높거나 먹이가 적습니다. 더 시원한 곳으로 옮기거나 급이 비율을 1:3:3 이상으로 늘리세요.' },
+              { p: '24시간 동안 피크 없음', c: 'var(--cyan-600)', s: '너무 차갑거나 아직 안정화 전입니다. 22~25°C 공간으로 옮기거나 호밀가루 10~20%를 섞어 1~2회 급이해 보세요.' },
+              { p: '물처럼 묽어짐', c: 'var(--orange-600)', s: '오래 굶어 산이 쌓이면 글루텐이 약해져 묽어집니다. 급이 간격을 줄이고(하루 2회) 밀가루를 스타터 무게의 2배 이상으로 급이하세요.' },
             ].map((m, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${m.c}55`, borderLeft: `3px solid ${m.c}`, borderRadius: '10px', padding: '14px 18px' }}>
-                <p style={{ fontSize: '13px', fontWeight: 700, color: m.c, marginBottom: '6px' }}>{m.p}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${m.c}`, borderRadius: 'var(--radius-s)', padding: '14px 18px' }}>
+                <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--text)', marginBottom: '6px' }}>{m.p}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, margin: 0 }}>{m.s}</p>
               </div>
             ))}
@@ -274,34 +301,25 @@ export default function SourdoughPage() {
           </p>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '10px' }}>
             {[
-              { icon: '✅', title: '뜨면', color: '#059669', desc: '충분한 가스 생성 = 베이킹 준비 완료. 피크 직후 타이밍일 가능성이 높습니다.' },
-              { icon: '❌', title: '가라앉으면', color: '#DC2626', desc: '아직 미성숙이거나 이미 피크를 지난 상태. 1~2시간 더 기다리거나 다음 급이 후 재테스트.' },
-              { icon: '⚠️', title: '주의', color: '#EA580C', desc: '묽은 스타터·호밀 비율이 높은 경우 부정확할 수 있습니다. 부피 2배 팽창 확인을 병행하세요.' },
+              { title: '뜨면', color: 'var(--success)', desc: '충분한 가스가 차 있다는 뜻. 피크 전후라 반죽에 쓰기 좋은 타이밍일 가능성이 높습니다.' },
+              { title: '가라앉으면', color: 'var(--danger)', desc: '아직 덜 올라왔거나 이미 피크를 지난 상태. 1~2시간 더 기다리거나 다음 급이 후 다시 테스트합니다.' },
             ].map((f, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: `1px solid ${f.color}44`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
-                <p style={{ fontSize: '18px', marginBottom: '6px' }}>{f.icon}</p>
-                <p style={{ fontSize: '13px', color: f.color, fontWeight: 700, marginBottom: '6px' }}>{f.title}</p>
+              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${f.color}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
+                <p style={{ fontSize: '13px', color: 'var(--text)', fontWeight: 700, marginBottom: '6px' }}>{f.title}</p>
                 <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, margin: 0 }}>{f.desc}</p>
               </div>
             ))}
+          </div>
+          <div style={{ marginTop: '12px' }}>
+            <Callout tone="warn" title="플로트 테스트만 믿지 마세요">
+              수분이 많은 묽은 스타터나 호밀·통밀 비율이 높은 스타터는 충분히 활발해도 가라앉을 수 있습니다. 병에 표시한 높이로 부피가 2배 이상 올랐는지, 윗면이 둥글게 부풀고 기포가 가득한지를 함께 보세요.
+            </Callout>
           </div>
         </div>
 
         {/* ── 9. FAQ ── */}
         <div>
-          <h2 className="g-h2">자주 묻는 질문 (FAQ)</h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '12px' }}>
-            {FAQ_LD.map((faq, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '0', overflow: 'hidden' }}>
-                <summary style={{ cursor: 'pointer', padding: '16px 20px', fontSize: '14px', fontWeight: 500, color: 'var(--text)', listStyle: 'none', display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: '12px' }}>
-                  <span>Q. {faq.q}</span>
-                  <span style={{ fontSize: '12px', color: 'var(--muted)', flexShrink: 0 }}>▼</span>
-                </summary>
-                <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.8, padding: '0 20px 16px', margin: 0, borderTop: '1px solid var(--border)', paddingTop: '12px' }}>A. {faq.a}</p>
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 10. 함께 쓰면 좋은 도구 ── */}

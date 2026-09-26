@@ -9,7 +9,8 @@ import {
   SERVING_DATA, CAT_LABEL, MEAL_LABEL, APPETITE_LABEL, AGE_LABEL,
   APPETITE_MULT, VARIANT_CHOICES, DIETARY_LABEL,
   AGE_BAND_LABEL, AGE_BAND_FACTOR,
-  loadFamily, saveFamily, familyToEffectivePeople,
+  loadFamily, saveFamily, familyToEffectivePeople, calcItem,
+  type Applied,
   type Category, type ServingData, type MealType, type Appetite,
   type AgeGroup, type Carb, type DietaryFlag,
   type FamilyMember, type AgeBand,
@@ -18,7 +19,6 @@ import {
 type TabKey = 'serving' | 'shopping' | 'family'
 
 function fmt(v: number): string { return Math.round(v).toLocaleString() }
-function roundTo(v: number, step: number): number { return Math.round(v / step) * step }
 function uid(): string { return Math.random().toString(36).slice(2, 10) }
 
 // 보조 개수 단위 환산 힌트 — 'g (모)' 처럼 괄호 단위 + gramsPerPiece 있을 때 "약 N모"
@@ -31,39 +31,6 @@ function pieceHint(item: ServingData, min: number, max: number): string | null {
   const lo = f(min / item.gramsPerPiece)
   const hi = f(max / item.gramsPerPiece)
   return lo === hi ? `약 ${lo}${u}` : `약 ${lo}~${hi}${u}`
-}
-
-interface Applied {
-  meal: MealType
-  appetite: Appetite
-  carb: Carb
-  variant: string | null
-}
-
-function calcItem(item: ServingData, peopleEff: number, a: Applied) {
-  let base = item.basePerPerson[a.meal]
-  if (a.variant && item.variantAdjust[a.variant] !== undefined) base += item.variantAdjust[a.variant]
-  const isCarbFood = item.category === 'noodle' || item.category === 'grain'
-  if (!isCarbFood) {
-    if (a.carb === 'yes') base -= item.withCarbReduction
-    else base += item.withoutCarbIncrease
-  }
-  if (base < 0) base = 0
-  const perPerson = base * APPETITE_MULT[a.appetite]
-  const total = perPerson * peopleEff
-  // '개' 단위(만두)는 1개 단위로 — 5단위 반올림하면 1인 메인 4개가 '5~5개', 곁들임 2개가 '0~0개'가 됨
-  const isCount = item.unit === '개'
-  const step = isCount ? 1 : (item.category === 'meat' || item.category === 'noodle' ? 10 : 5)
-  // 필요량이 있으면 반올림으로 0이 되지 않도록 최소 1단위 보장
-  const floor = total > 0 ? step : 0
-  const mid = Math.max(floor, roundTo(total, step))
-  const min = isCount ? Math.max(floor, Math.floor(total * 0.9)) : Math.max(floor, roundTo(total * 0.9, step))
-  const max = isCount ? Math.max(min, Math.ceil(total * 1.1)) : Math.max(floor, roundTo(total * 1.1, step))
-  return {
-    perPerson, mid, min, max,
-    cookedMin: Math.round(min * item.rawToCooked),
-    cookedMax: Math.round(max * item.rawToCooked),
-  }
 }
 
 // ─────────────────────────────────────────────────────────────

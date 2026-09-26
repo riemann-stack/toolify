@@ -1,17 +1,34 @@
 {
  "/tools/art/capo": {
   "slug": "/tools/art/capo",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "카포 1프렛 = 반음 1개(12평균율 프렛) · 추천 = 장조 다이아토닉 3화음(M-m-m-M-M-m-°) 중 오픈 코드 수 → 바레 수 → 낮은 프렛 순(0~5프렛) · 단조 곡은 같은 조표의 나란한 장조로 계산 · 애창곡 원키·통용 카포 = 악보바다·ezcho·Ultimate Guitar(2026-07 확인)",
+  "sources": [
+   {
+    "label": "Merriam-Webster — capotasto(카포) 정의",
+    "org": "",
+    "href": "https://www.merriam-webster.com/dictionary/capotasto"
+   },
+   {
+    "label": "Music Theory for the 21st-Century Classroom — 장조의 다이아토닉 화음",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/DiatonicChordsInMajor.html"
+   },
+   {
+    "label": "Music Theory for the 21st-Century Classroom — 단조 조표와 나란한조",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/MinorKeySignatures.html"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/art/charcount": {
   "slug": "/tools/art/charcount",
-  "reviewed": "2026-07",
+  "reviewed": "2026-08",
   "updated": "2026-09-26",
-  "basis": "총 글자수 = UTF-16 코드 유닛(String.length) 기준 · 플랫폼 한도는 공식 문서 확인값",
+  "basis": "총 글자수 = UTF-16 코드 유닛(String.length) 기준 · X 가중치 = 공식 twitter-text config v3(4구간·기본 가중치 2·URL 23자 고정·NFC 정규화·이모지 엔티티 1개당 2자) · 플랫폼 한도는 항목별로 공식 문서 확인값/공식 미문서화 통용값/편의 프리셋을 구분해 표시 · SMS 90바이트는 EUC-KR 기준",
   "sources": [
    {
     "label": "유튜브 고객센터",
@@ -19,9 +36,34 @@
     "href": "https://support.google.com/youtube/answer/57404?hl=ko"
    },
    {
-    "label": "X twitter-text 공식 설정",
+    "label": "twitter-text 공식 설정 (config/v3.json)",
     "org": "",
     "href": "https://github.com/twitter/twitter-text/blob/master/config/v3.json"
+   },
+   {
+    "label": "X — 글자수 세는 법",
+    "org": "",
+    "href": "https://docs.x.com/fundamentals/counting-characters"
+   },
+   {
+    "label": "Google — 제목 링크 가이드",
+    "org": "",
+    "href": "https://developers.google.com/search/docs/appearance/title-link?hl=ko"
+   },
+   {
+    "label": "Google — 스니펫 가이드",
+    "org": "",
+    "href": "https://developers.google.com/search/docs/appearance/snippet?hl=ko"
+   },
+   {
+    "label": "WHATWG HTML — maxlength(코드 유닛 길이)",
+    "org": "",
+    "href": "https://html.spec.whatwg.org/multipage/form-control-infrastructure.html#attr-fe-maxlength"
+   },
+   {
+    "label": "Unicode UAX #29 — 그래핌 경계",
+    "org": "",
+    "href": "https://www.unicode.org/reports/tr29/"
    }
   ],
   "ymyl": false,
@@ -29,17 +71,51 @@
  },
  "/tools/art/chord": {
   "slug": "/tools/art/chord",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "구성음 = 근음 + 코드 종류별 반음 간격(12평균율, 31종) · 도수에 맞춘 이론 철자 · 로마숫자와 단조 Ⅴ7 표기는 Open Music Theory 기준",
+  "sources": [
+   {
+    "label": "Open Music Theory — Roman Numerals",
+    "org": "",
+    "href": "https://viva.pressbooks.pub/openmusictheory/chapter/roman-numerals/"
+   },
+   {
+    "label": "Open Music Theory — ii–V–I",
+    "org": "",
+    "href": "https://viva.pressbooks.pub/openmusictheory/chapter/ii-v-i/"
+   },
+   {
+    "label": "Music Theory Online 23.3 — Richards, Axis Progressions",
+    "org": "",
+    "href": "https://mtosmt.org/issues/mto.17.23.3/mto.17.23.3.richards.html"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/art/color": {
   "slug": "/tools/art/color",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "W3C WCAG 2.2 명도 대비 기준 · CSS Color 4(lab()·oklch()) · 질병관리청 색각이상 유병률",
+  "sources": [
+   {
+    "label": "W3C WCAG 2.2",
+    "org": "",
+    "href": "https://www.w3.org/TR/WCAG22/"
+   },
+   {
+    "label": "W3C CSS Color Module Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-color-4/"
+   },
+   {
+    "label": "질병관리청 국가건강정보포털 — 색각이상",
+    "org": "",
+    "href": "https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=1469"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -75,7 +151,7 @@
  },
  "/tools/art/fov": {
   "slug": "/tools/art/fov",
-  "reviewed": "2026-08",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
   "basis": "센서 치수 = 제조사 공식 사양(소니 a6700 23.3×15.5 · 니콘 Z fc·후지 X-T5 23.5×15.7 · 캐논 R10 22.3×14.9 · OM SYSTEM 17.3×13.0 · 1형 13.2×8.8) · 크롭 팩터는 제조사 표기 관행값(소니·니콘 ×1.5, 후지 ×1.52, 캐논 ×1.6)이라 대각선 계산값과 최대 2% 차이 · 렌즈 분류 경계는 표준 규정이 아니라 제조사(캐논·리코펜탁스) 관행",
   "sources": [
@@ -98,6 +174,11 @@
     "label": "삼성 ISOCELL HP2 (1/1.3형)",
     "org": "",
     "href": "https://news.samsungsemiconductor.com/global/introducing-isocell-hp2-experience-more-pictures-and-epic-details-on-the-galaxy-s23-ultra/"
+   },
+   {
+    "label": "CIPA DC-008 Exif 2.3 — 35mm 환산 초점거리 태그",
+    "org": "",
+    "href": "https://www.cipa.jp/std/documents/e/DC-008-2012_E.pdf"
    }
   ],
   "ymyl": false,
@@ -105,9 +186,9 @@
  },
  "/tools/art/frequency": {
   "slug": "/tools/art/frequency",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "ISO 16:1975(2022년 재확인) 기준 조율 주파수 · ISO 226:2023 등청감곡선",
+  "basis": "ISO 16:1975(2022년 재확인) 기준 조율 주파수 · ISO 226:2023 등청감곡선 · 12음 평균율 산출식",
   "sources": [
    {
     "label": "ISO 16:1975",
@@ -118,6 +199,11 @@
     "label": "ISO 226:2023",
     "org": "",
     "href": "https://www.iso.org/standard/83117.html"
+   },
+   {
+    "label": "UNSW Music Acoustics — 음이름·주파수",
+    "org": "",
+    "href": "https://newt.phys.unsw.edu.au/jw/notes.html"
    }
   ],
   "ymyl": false,
@@ -125,17 +211,71 @@
  },
  "/tools/art/golden-ratio": {
   "slug": "/tools/art/golden-ratio",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "φ = (1+√5)/2 — 유클리드 『원론』 6권 정의 3(외중비) · 자연·예술 사례 검증 = Markowsky(1992)·Falbo(2005)·Swinton & Ochu(2016) · 종이 비율 = ISO 216 · 썸네일 규격 = YouTube 고객센터",
+  "sources": [
+   {
+    "label": "유클리드 『원론』 6권 정의 3 — 외중비 (D. Joyce 편, Clark Univ.)",
+    "org": "",
+    "href": "https://mathcs.clarku.edu/~djoyce/elements/bookVI/defVI3.html"
+   },
+   {
+    "label": "OEIS A001622 — φ의 소수 전개",
+    "org": "",
+    "href": "https://oeis.org/A001622"
+   },
+   {
+    "label": "Markowsky, Misconceptions about the Golden Ratio (1992)",
+    "org": "",
+    "href": "https://doi.org/10.1080/07468342.1992.11973428"
+   },
+   {
+    "label": "Swinton & Ochu, 해바라기 나선 시민과학 실측 (2016)",
+    "org": "",
+    "href": "https://royalsocietypublishing.org/doi/10.1098/rsos.160091"
+   },
+   {
+    "label": "ISO 216 (A·B 시리즈 용지 규격)",
+    "org": "",
+    "href": "https://www.iso.org/standard/36631.html"
+   },
+   {
+    "label": "YouTube 고객센터 — 맞춤 미리보기 이미지",
+    "org": "",
+    "href": "https://support.google.com/youtube/answer/72431"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/art/gradient-generator": {
   "slug": "/tools/art/gradient-generator",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "W3C CSS Images 4(그라디언트 문법)·CSS Color 4(oklch·lab 보간) · WCAG 2.2 대비 기준",
+  "sources": [
+   {
+    "label": "W3C CSS Images Module Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-images-4/"
+   },
+   {
+    "label": "W3C CSS Color Module Level 4",
+    "org": "",
+    "href": "https://www.w3.org/TR/css-color-4/"
+   },
+   {
+    "label": "W3C WCAG 2.2",
+    "org": "",
+    "href": "https://www.w3.org/TR/WCAG22/"
+   },
+   {
+    "label": "MDN <color-interpolation-method>",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/CSS/color-interpolation-method"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -221,17 +361,34 @@
  },
  "/tools/art/paint-mix": {
   "slug": "/tools/art/paint-mix",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "색 계산 = sRGB(IEC 61966-2-1) · CIELAB(D65)·ΔE*ab(CIE76, CIE 015) · RYB = Gossett & Chen(2004) 색 큐브(단순화) · 식용 색소 = 식약처 「식품첨가물의 기준 및 규격」 품목별 사용기준",
+  "sources": [
+   {
+    "label": "CIE 015:2018 Colorimetry (CIELAB·색차)",
+    "org": "",
+    "href": "https://cie.co.at/publications/colorimetry-4th-edition"
+   },
+   {
+    "label": "IEC 61966-2-1 (sRGB 색공간)",
+    "org": "",
+    "href": "https://webstore.iec.ch/en/publication/6169"
+   },
+   {
+    "label": "식품안전나라 — 식용색소적색제102호 사용기준 (식약처)",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/foodcode/04_03.jsp?idx=8200241"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/art/print-resolution": {
   "slug": "/tools/art/print-resolution",
-  "reviewed": "2026-08",
+  "reviewed": "2026-09",
   "updated": "2026-08-03",
-  "basis": "사진 인화 규격 = 후지필름 공식 스토어 표기(L 89×127 · KG 102×152 · 2L 127×178 · 六切 203×254) · A규격 = ISO 216 · 명함 90×50(한국 관행) · 증명사진 35×45(외교부 여권 규격) · 300 PPI 기준 = 하프톤 150 lpi × 품질계수 2 · 250 PPI = Ghent Workgroup 일반 상업 인쇄 규정값",
+  "basis": "사진 인화 규격 = 후지필름 공식 스토어 표기(L 89×127 · KG 102×152 · 2L 127×178 · 六切 203×254) · A규격 = ISO 216 · 명함 90×50(한국 관행) · 증명사진 35×45(외교부 여권 규격) · 300 PPI 기준 = 하프톤 150 lpi × 품질계수 2 · 250 PPI = 일반 상업 인쇄 실무 권장값 · 관람 거리 한계 = 시력 1.0(1분각, ISO 8596) 기준 계산",
   "sources": [
    {
     "label": "후지필름 프린트 사이즈 (L·KG·2L)",
@@ -247,6 +404,16 @@
     "label": "Adobe — 프린터 해상도와 이미지 해상도",
     "org": "",
     "href": "https://helpx.adobe.com/photoshop/desktop/crop-resize-transform/resize-adjust-resolution/printer-resolution.html"
+   },
+   {
+    "label": "ISO 216 — A·B 시리즈 용지 규격",
+    "org": "",
+    "href": "https://www.iso.org/standard/36631.html"
+   },
+   {
+    "label": "ISO 8596 — 시력 검사 표준 시표(1.0 = 1분각)",
+    "org": "",
+    "href": "https://www.iso.org/standard/69042.html"
    }
   ],
   "ymyl": false,
@@ -254,9 +421,36 @@
  },
  "/tools/art/scale": {
   "slug": "/tools/art/scale",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "장음계 간격 W-W-H-W-W-W-H · 음이름은 도수마다 A~G 글자를 한 번씩(레터워크) · 교회 모드 = 장음계의 회전 · 블루스 = 마이너 펜타토닉 + ♭5 경과음 · 다이어토닉 7화음 로마숫자 표기(대문자 장·소문자 단·ø 반감7) · 재생음 A4 = 440Hz 12평균율",
+  "sources": [
+   {
+    "label": "Music Theory for the 21st-Century Classroom — 장음계 (Univ. of Puget Sound)",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/TheMajorScale.html"
+   },
+   {
+    "label": "같은 교재 — 단음계 3종",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/MinorScales.html"
+   },
+   {
+    "label": "같은 교재 — 다이어토닉 7화음 로마숫자",
+    "org": "",
+    "href": "https://musictheory.pugetsound.edu/mt21c/RomanNumeralsOfDiatonicSeventhChords.html"
+   },
+   {
+    "label": "Open Music Theory — Diatonic Modes",
+    "org": "",
+    "href": "https://viva.pressbooks.pub/openmusictheory/chapter/diatonic-modes/"
+   },
+   {
+    "label": "Open Music Theory — Blues Melodies and the Blues Scale",
+    "org": "",
+    "href": "https://viva.pressbooks.pub/openmusictheory/chapter/blues-melodies-and-the-blues-scale/"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -277,11 +471,22 @@
  },
  "/tools/art/vocal-range": {
   "slug": "/tools/art/vocal-range",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
+  "basis": "음이름↔주파수 = 12평균율·A4 440Hz(ISO 16) · MIDI = 69 + 12·log₂(f/440) · 옥타브는 국제 표기(C4 = 가운데 도)와 한국 대중음악 관행(국제 옥타브 − 2)을 병기 · 성부 음역은 교재 관행값이라 자료마다 1~2음 차이",
   "sources": [
    {
-    "label": "NIDCD — Taking Care of Your Voice (음성 건강 지침)",
+    "label": "ISO 16:1975 표준 음높이(A = 440Hz)",
+    "org": "",
+    "href": "https://www.iso.org/standard/3601.html"
+   },
+   {
+    "label": "MDN — getUserMedia(보안 컨텍스트 필요)",
+    "org": "",
+    "href": "https://developer.mozilla.org/en-US/docs/Web/API/MediaDevices/getUserMedia"
+   },
+   {
+    "label": "NIDCD — Taking Care of Your Voice",
     "org": "",
     "href": "https://www.nidcd.nih.gov/health/taking-care-your-voice"
    },
@@ -296,14 +501,24 @@
  },
  "/tools/cooking/baby-porridge": {
   "slug": "/tools/cooking/baby-porridge",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-07-11",
-  "basis": "육아 서적·레시피 플랫폼 통용 관행 종합 (배죽은 공식 규격이 아닌 관행 수치)",
+  "basis": "배죽 물양은 육아 서적·레시피 플랫폼 통용 관행 종합(공식 규격이 아닌 관행 수치) · 이유식 시작 시기·안전 수칙은 질병관리청(모유 6개월 이후·분유 4~6개월)·WHO 2023 보완식 지침(생후 6개월) 기준",
   "sources": [
    {
     "label": "질병관리청 국가건강정보포털",
     "org": "",
     "href": "https://health.kdca.go.kr"
+   },
+   {
+    "label": "질병관리청 — 이유기보충식(이유식)",
+    "org": "",
+    "href": "https://health.kdca.go.kr/healthinfo/biz/health/gnrlzHealthInfo/gnrlzHealthInfo/gnrlzHealthInfoView.do?cntnts_sn=5470"
+   },
+   {
+    "label": "WHO — 6~23개월 보완식 지침(2023)",
+    "org": "",
+    "href": "https://www.who.int/publications/i/item/9789240081864"
    }
   ],
   "ymyl": false,
@@ -311,9 +526,26 @@
  },
  "/tools/cooking/baker-percent": {
   "slug": "/tools/cooking/baker-percent",
+  "reviewed": "2026-09",
   "updated": "2026-07-29",
-  "basis": "",
-  "sources": [],
+  "basis": "베이커 퍼센트 정의(밀가루 = 100%)·소금 1.8~2.2%·이스트 환산(생 3 : 액티브 1.2~1.25 : 인스턴트 1)·프리퍼먼트 수분율은 King Arthur Baking 전문가 레퍼런스 기준, 계란 75%·우유 90% 수분 환산은 본 도구 기준값",
+  "sources": [
+   {
+    "label": "King Arthur Baking — Baker's Percentage",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/pro/reference/bakers-percentage"
+   },
+   {
+    "label": "King Arthur Baking — Yeast",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/pro/reference/yeast"
+   },
+   {
+    "label": "King Arthur Baking — Preferment",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/pro/reference/preferment"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -339,25 +571,71 @@
  },
  "/tools/cooking/baking-schedule": {
   "slug": "/tools/cooking/baking-schedule",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "22℃ 표준 일정 × 실내 온도 배율(발효 단계만) · 물 온도는 DDT 공식(목표 반죽 온도×3 또는 ×4 − 실내·밀가루·발효종 온도 − 마찰열)",
+  "sources": [
+   {
+    "label": "King Arthur Baking — Dough Temperature",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/pro/reference/dough-temperature"
+   },
+   {
+    "label": "King Arthur Baking — Friction factor",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/blog/2018/08/27/determining-the-friction-factor-in-baking"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/brew": {
   "slug": "/tools/cooking/brew",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "SCA 골든컵(물 1L당 원두 55g ±10% · TDS 1.15~1.35% · 추출 수율 18~22%)과 추출법별 통용 레시피 · 카페인 1일 최대 섭취 권고량은 식약처 기준",
+  "sources": [
+   {
+    "label": "SCA — Protocols & Best Practices (골든컵·추출 기준)",
+    "org": "",
+    "href": "https://sca.coffee/research/protocols-best-practices"
+   },
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "FDA — How Much Caffeine is Too Much?",
+    "org": "",
+    "href": "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/egg-timer": {
   "slug": "/tools/cooking/egg-timer",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "계란 크기는 축산법 시행규칙 중량규격(2XL~S, 2026.5.21 명칭 개편) · 가열 기준은 식약처 살모넬라 예방 수칙(중심온도 75℃ 1분 이상)",
+  "sources": [
+   {
+    "label": "농림축산식품부 계란 중량규격 명칭 개편(2026.5.21)",
+    "org": "",
+    "href": "https://www.mafra.go.kr/home/5109/subview.do?enc=Zm5jdDF8QEB8JTJGYmJzJTJGaG9tZSUyRjc5MiUyRjU3Nzk4MiUyRmFydGNsVmlldy5kbyUzRg%3D%3D"
+   },
+   {
+    "label": "식약처 살모넬라 식중독 예방",
+    "org": "",
+    "href": "https://www.mfds.go.kr/brd/m_99/view.do?seq=43647"
+   },
+   {
+    "label": "USDA FSIS Shell Eggs from Farm to Table",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/eggs/shell-eggs-farm-table"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -370,6 +648,16 @@
     "label": "식약처 「식품유형별 소비기한 설정 보고서」 — 식품안전나라 소비기한 자료실",
     "org": "",
     "href": "https://www.foodsafetykorea.go.kr/portal/board/board.do?menu_grp=MENU_NEW01&menu_no=4612"
+   },
+   {
+    "label": "소비기한 표시제 Q&A — 대한민국 정책브리핑",
+    "org": "",
+    "href": "https://www.korea.kr/news/healthView.do?newsId=148911057"
+   },
+   {
+    "label": "USDA FSIS — Freezing and Food Safety",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/freezing-and-food-safety"
    }
   ],
   "ymyl": false,
@@ -397,9 +685,26 @@
  },
  "/tools/cooking/frying": {
   "slug": "/tools/cooking/frying",
+  "reviewed": "2026-09",
   "updated": "2026-07-30",
-  "basis": "",
-  "sources": [],
+  "basis": "안전 중심온도는 식약처 식중독 예방 수칙(육류 75℃·어패류 85℃, 1분 이상)과 USDA FSIS 안전 최저 내부온도표 · 재료별 온도·시간은 가정 조리 참고값",
+  "sources": [
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "USDA FSIS Safe Minimum Internal Temperature Chart",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/safe-temperature-chart"
+   },
+   {
+    "label": "소방청",
+    "org": "",
+    "href": "https://www.nfa.go.kr"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -407,7 +712,7 @@
   "slug": "/tools/cooking/holiday-table",
   "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "aT 차례상 비용 조사(2026년 설 2.6·추석 9.18)·KAMIS 일별 시세 기준",
+  "basis": "aT 차례상 비용 조사(2026년 설 2.6·추석 9.18)·KAMIS 일별 시세 기준 · 성균관 의례정립위원회 차례상 표준안(2022.9)·제례 현대화 권고안(2023.11)",
   "sources": [
    {
     "label": "aT 한국농수산식품유통공사",
@@ -418,6 +723,11 @@
     "label": "KAMIS 농산물유통정보",
     "org": "",
     "href": "https://www.kamis.or.kr"
+   },
+   {
+    "label": "성균관 — 차례상 표준안·제례 권고안 발표 기관",
+    "org": "",
+    "href": "https://www.skkok.com"
    }
   ],
   "ymyl": false,
@@ -425,81 +735,241 @@
  },
  "/tools/cooking/kimjang": {
   "slug": "/tools/cooking/kimjang",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "배추 1포기(절임 전 약 3kg·절임 후 약 2.5kg) 기준 가정 비율 · 가격은 KAMIS 서울 소매가(조회 실패·미연동 품목은 2025년 11월 평균가)",
+  "sources": [
+   {
+    "label": "KAMIS 농산물유통정보",
+    "org": "",
+    "href": "https://www.kamis.or.kr"
+   },
+   {
+    "label": "aT 한국농수산식품유통공사",
+    "org": "",
+    "href": "https://www.at.or.kr"
+   },
+   {
+    "label": "기상청 날씨누리",
+    "org": "",
+    "href": "https://www.weather.go.kr"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/microwave": {
   "slug": "/tools/cooking/microwave",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "출력 환산은 시간 × (기준 W ÷ 새 W) 반비례에 본 도구의 경험적 보정(600W 이하 +7%·1000W 이상 −5%)을 곱한 값 · 용기·안전 안내는 식약처·미국 FDA·USDA FSIS 기준",
+  "sources": [
+   {
+    "label": "식품안전나라 — 전자레인지 전용 식품용기, 바로 알고 사용해요",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/portal/board/boardDetail.do?menu_no=2694&menu_grp=MENU_NEW01&bbs_no=bbs231&ntctxt_no=1082132"
+   },
+   {
+    "label": "U.S. FDA — Microwave Ovens",
+    "org": "",
+    "href": "https://www.fda.gov/radiation-emitting-products/resources-you-radiation-emitting-products/microwave-ovens"
+   },
+   {
+    "label": "USDA FSIS — Cooking with Microwave Ovens",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/cooking-microwave-ovens"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/nuts": {
   "slug": "/tools/cooking/nuts",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "셀레늄 권장 60μg·상한 400μg(2020 한국인 영양소 섭취기준) · 영양 성분은 USDA FoodData Central 평균값",
+  "sources": [
+   {
+    "label": "보건복지부 2020 한국인 영양소 섭취기준",
+    "org": "",
+    "href": "https://www.mohw.go.kr/board.es?mid=a10411010100&bid=0019&act=view&list_no=362385"
+   },
+   {
+    "label": "USDA FoodData Central",
+    "org": "",
+    "href": "https://fdc.nal.usda.gov/"
+   },
+   {
+    "label": "NIH ODS 셀레늄 팩트시트",
+    "org": "",
+    "href": "https://ods.od.nih.gov/factsheets/Selenium-HealthProfessional/"
+   },
+   {
+    "label": "NIAID 땅콩 알레르기 예방 지침(2017)",
+    "org": "",
+    "href": "https://www.niaid.nih.gov/sites/default/files/addendum-peanut-allergy-prevention-guidelines.pdf"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/ramen": {
   "slug": "/tools/cooking/ramen",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "물양·시간·영양은 제조사 봉지/용기 표기(1개) 기준, 개수·농도·토핑 보정은 도구 자체 경험값 · 나트륨 비교는 WHO 성인 권고(하루 2,000mg 미만)",
+  "sources": [
+   {
+    "label": "WHO Sodium reduction 팩트시트",
+    "org": "",
+    "href": "https://www.who.int/news-room/fact-sheets/detail/sodium-reduction"
+   },
+   {
+    "label": "식약처 식품영양성분 데이터베이스",
+    "org": "",
+    "href": "https://various.foodsafetykorea.go.kr/nutrient/"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/recipe": {
   "slug": "/tools/cooking/recipe",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "한국 계량 1컵 200ml·1큰술 15ml·1작은술 5ml, 미국 컵 240ml · 부피↔무게는 계산기 내장 재료 밀도(g/ml, 가정용 근사값)로 환산",
+  "sources": [
+   {
+    "label": "USDA FoodData Central (재료별 계량 단위 무게)",
+    "org": "",
+    "href": "https://fdc.nal.usda.gov/"
+   },
+   {
+    "label": "King Arthur Baking — Ingredient Weight Chart",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/learn/ingredient-weight-chart"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/serving": {
   "slug": "/tools/cooking/serving",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "1인분 기준값은 이 계산기의 재료 데이터(가정 식사량 통용값 — 공식 기준 아님) · 비교용 1회 분량은 2020 한국인 영양소 섭취기준 활용자료(보건복지부·한국영양학회, 2022) — 2025년 개정판 식사구성안 반영 전",
+  "sources": [
+   {
+    "label": "보건복지부 — 2020 한국인 영양소 섭취기준 활용자료",
+    "org": "",
+    "href": "https://www.mohw.go.kr/board.es?mid=a10411010100&bid=0019&act=view&list_no=370012"
+   },
+   {
+    "label": "한국영양학회 — 한국인 영양소 섭취기준 자료실",
+    "org": "",
+    "href": "https://www.kns.or.kr/FileRoom/FileRoom.asp?BoardID=Kdr"
+   }
+  ],
   "ymyl": false,
   "hasResult": false
  },
  "/tools/cooking/sourdough": {
   "slug": "/tools/cooking/sourdough",
+  "reviewed": "2026-07",
   "updated": "2026-07-31",
-  "basis": "",
-  "sources": [],
+  "basis": "냉장 관리·부활 절차·후치와 폐기 신호는 King Arthur Baking 공식 가이드와 콜로라도·사우스다코타 주립대 익스텐션 자료 · 피크 시간은 도구의 경험식(24°C 기준, 10°C 낮아질 때마다 약 2배 느림)",
+  "sources": [
+   {
+    "label": "King Arthur Baking — Sourdough Starter",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/recipes/sourdough-starter-recipe"
+   },
+   {
+    "label": "Colorado State University Extension",
+    "org": "",
+    "href": "https://extension.colostate.edu"
+   },
+   {
+    "label": "South Dakota State University Extension",
+    "org": "",
+    "href": "https://extension.sdstate.edu"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/substitute": {
   "slug": "/tools/cooking/substitute",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "대체 비율은 제과·요리 통용 환산 종합(꿀 대체·계량 무게는 King Arthur Baking 등 제과 레퍼런스 참고) · 알레르기 표시 대상은 「식품등의 표시기준」 기준",
+  "sources": [
+   {
+    "label": "국가법령정보센터 — 식품등의 표시기준",
+    "org": "",
+    "href": "https://www.law.go.kr/행정규칙/식품등의표시기준"
+   },
+   {
+    "label": "식품안전나라 — 알레르기 유발 식품 표시",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/portal/board/boardDetail.do?menu_no=3120&menu_grp=MENU_NEW01&bbs_no=bbs001&ntctxt_no=1091412"
+   },
+   {
+    "label": "King Arthur Baking — Ingredient Weight Chart",
+    "org": "",
+    "href": "https://www.kingarthurbaking.com/learn/ingredient-weight-chart"
+   }
+  ],
   "ymyl": false,
   "hasResult": false
  },
  "/tools/cooking/tea": {
   "slug": "/tools/cooking/tea",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "카페인 1일 권고량은 식약처(성인 400mg·임산부 300mg·어린이·청소년 체중 1kg당 2.5mg) · 말차·침출액 카페인은 일본식품표준성분표(8정) · 온도·시간·비율은 일반 우림 관행",
+  "sources": [
+   {
+    "label": "식품의약품안전처",
+    "org": "",
+    "href": "https://www.mfds.go.kr"
+   },
+   {
+    "label": "일본 문부과학성 식품성분 데이터베이스",
+    "org": "",
+    "href": "https://fooddb.mext.go.jp/"
+   },
+   {
+    "label": "FDA — How Much Caffeine is Too Much?",
+    "org": "",
+    "href": "https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
  "/tools/cooking/thawing": {
   "slug": "/tools/cooking/thawing",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "안전 해동법(냉장·흐르는 찬물·전자레인지)·위험 온도대 2시간 규칙은 식약처·USDA FSIS 안내, 냉장 해동 시간은 USDA '5파운드당 24시간'(≈1kg당 10.6시간)에 맞춘 도구 모델",
+  "sources": [
+   {
+    "label": "식약처 식품안전나라",
+    "org": "",
+    "href": "https://www.foodsafetykorea.go.kr/"
+   },
+   {
+    "label": "USDA FSIS The Big Thaw",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/big-thaw-safe-defrosting-methods"
+   },
+   {
+    "label": "USDA FSIS Freezing and Food Safety",
+    "org": "",
+    "href": "https://www.fsis.usda.gov/food-safety/safe-food-handling-and-preparation/food-safety-basics/freezing-and-food-safety"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -530,6 +1000,11 @@
     "href": "https://www.law.go.kr"
    },
    {
+    "label": "공휴일에 관한 법률 — 국가법령정보센터",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/공휴일에관한법률"
+   },
+   {
     "label": "한국산업인력공단 Q-Net",
     "org": "",
     "href": "https://www.q-net.or.kr"
@@ -545,7 +1020,7 @@
  },
  "/tools/date/history-era": {
   "slug": "/tools/date/history-era",
-  "reviewed": "2026-07",
+  "reviewed": "2026-09",
   "updated": "2026-07-29",
   "basis": "조선왕조실록 기년(유년칭원법) 기준",
   "sources": [
@@ -563,6 +1038,11 @@
     "label": "우리역사넷",
     "org": "",
     "href": "http://contents.history.go.kr"
+   },
+   {
+    "label": "연호에 관한 법률",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/연호에관한법률"
    }
   ],
   "ymyl": false,
@@ -605,9 +1085,31 @@
  },
  "/tools/date/jet-lag": {
   "slug": "/tools/date/jet-lag",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "시차·서머타임 = IANA 시간대 데이터(출발일 기준) · 적응 속도 = 동쪽 1시간/일·서쪽 1.5시간/일 (CDC Yellow Book)",
+  "sources": [
+   {
+    "label": "CDC Yellow Book — Jet Lag Disorder",
+    "org": "",
+    "href": "https://www.cdc.gov/yellow-book/hcp/travel-air-sea/jet-lag-disorder.html"
+   },
+   {
+    "label": "AASM 임상 진료지침 (SLEEP 2007)",
+    "org": "",
+    "href": "https://aasm.org/wp-content/uploads/2017/07/PP_CircadianRhythm.pdf"
+   },
+   {
+    "label": "NHS — Jet lag",
+    "org": "",
+    "href": "https://www.nhs.uk/conditions/jet-lag/"
+   },
+   {
+    "label": "IANA Time Zone Database",
+    "org": "",
+    "href": "https://www.iana.org/time-zones"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -693,17 +1195,56 @@
  },
  "/tools/date/server-time": {
   "slug": "/tools/date/server-time",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "NTP(RFC 5905) 방식 왕복 지연 보정 · 외부 사이트는 HTTP Date 헤더(RFC 9110, 초 단위) 기준",
+  "sources": [
+   {
+    "label": "RFC 5905 (NTPv4)",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc5905"
+   },
+   {
+    "label": "RFC 9110 (HTTP Date 헤더)",
+    "org": "",
+    "href": "https://www.rfc-editor.org/rfc/rfc9110"
+   },
+   {
+    "label": "한국표준과학연구원(KRISS)",
+    "org": "",
+    "href": "https://www.kriss.re.kr"
+   },
+   {
+    "label": "공연법",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/공연법"
+   }
+  ],
   "ymyl": false,
   "hasResult": false
  },
  "/tools/date/timezone": {
   "slug": "/tools/date/timezone",
+  "reviewed": "2026-09",
   "updated": "2026-09-26",
-  "basis": "",
-  "sources": [],
+  "basis": "IANA 시간대 데이터베이스(브라우저 내장 tzdata) · 한국 표준시 UTC+9(표준시에 관한 법률)",
+  "sources": [
+   {
+    "label": "IANA Time Zone Database",
+    "org": "",
+    "href": "https://www.iana.org/time-zones"
+   },
+   {
+    "label": "표준시에 관한 법률",
+    "org": "",
+    "href": "https://www.law.go.kr/법령/표준시에관한법률"
+   },
+   {
+    "label": "BIPM 제27차 CGPM 결의 4 (UTC·윤초)",
+    "org": "",
+    "href": "https://www.bipm.org/en/cgpm-2022/resolution-4"
+   }
+  ],
   "ymyl": false,
   "hasResult": true
  },
@@ -1145,7 +1686,8 @@
    "full": true,
    "tests": [
     "tests/golden/annualLeave.test.mts"
-   ]
+   ],
+   "date": "2026-09-26"
   },
   "ymyl": true,
   "hasResult": true
@@ -1198,6 +1740,7 @@
  "/tools/finance/brokerage-fee": {
   "slug": "/tools/finance/brokerage-fee",
   "reviewed": "2026-09",
+  "updated": "2026-09-26",
   "basis": "공인중개사법 §32, 시행규칙 §20·별표 1(주택, 시행)·§20④1호·별표 2(주거용 오피스텔, 요율 시행·협의 문구 시행), 서울특별시 주택 중개보수 등에 관한 조례 기준",
   "sources": [
    {
@@ -1247,7 +1790,8 @@
    "full": true,
    "tests": [
     "tests/golden/brokerageFee.test.mts"
-   ]
+   ],
+   "date": "2026-09-26"
   },
   "ymyl": true,
   "hasResult": true
@@ -1396,6 +1940,7 @@
  },
  "/tools/finance/deposit-interest": {
   "slug": "/tools/finance/deposit-interest",
+  "updated": "2026-09-26",
   "basis": "이자소득 원천징수 % + 지방소득세 %(합계 %, 각 원 미만 절사) · 비과세종합저축·상호금융 예탁금은 2025년 12월 23일 개정 조세특례제한법 §88의2·§89의3(가입일 기준) 조문 대조 · 이자는 월 단위(개월/12) 공식",
   "sources": [],
   "verified": {
@@ -1404,7 +1949,8 @@
    "full": true,
    "tests": [
     "tests/golden/depositInterest.test.mts"
-   ]
+   ],
+   "date": "2026-09-26"
   },
   "ymyl": true,
   "hasResult": true
@@ -1565,7 +2111,8 @@
    "full": true,
    "tests": [
     "tests/golden/hourlyPay.test.mts"
-   ]
+   ],
+   "date": "2026-09-26"
   },
   "ymyl": true,
   "hasResult": true

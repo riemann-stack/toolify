@@ -175,7 +175,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   sugar: {
     original: '설탕', emoji: '🍯', category: '감미료', group: 'sweet',
     options: [
-      { name: '꿀',         ratio: 0.75, ratioNote: '설탕 100g → 꿀 75g, 액체 1/4컵 줄이기', grade: 'good', useFor: ['머핀', '쿠키', '드레싱'], taste: '꿀 특유의 향', texture: '더 촉촉, 갈색 더 진함', warning: '160°C 이하로 굽기 (꿀이 빨리 탐)' },
+      { name: '꿀',         ratio: 0.75, ratioNote: '설탕 100g → 꿀 75g, 다른 액체 약 13ml 줄이기 (꿀 1컵 340g당 1/4컵)', grade: 'good', useFor: ['머핀', '쿠키', '드레싱'], taste: '꿀 특유의 향', texture: '더 촉촉, 갈색 더 진함', warning: '오븐 온도 약 15°C(25°F) 낮추기 — 꿀이 빨리 갈변' },
       { name: '메이플시럽',  ratio: 0.75, substituteUnit: 'ml', ratioNote: '설탕 100g → 시럽 75ml, 액체 줄이기', grade: 'good', useFor: ['팬케이크', '머핀', '쿠키'], taste: '메이플 향, 풍부함', texture: '약간 더 촉촉' },
       { name: '알룰로스',    ratio: 1.3,  ratioNote: '설탕 100g → 알룰로스 130g (단맛 약함)', grade: 'good', useFor: ['저당 디저트', '음료', '드레싱'], taste: '깔끔한 단맛', texture: '거의 동일', warning: '캐러멜화 약함 (색·풍미 약간 차이)' },
       { name: '스테비아',    ratio: 0.02, ratioNote: '설탕 1컵 = 스테비아 1작은술', grade: 'okay', useFor: ['음료', '드레싱', '제로 디저트'], taste: '쓴맛 후미 (제품에 따라 다름)', texture: '부피 손실로 베이킹은 부피 보충 필요', warning: '베이킹은 다른 부피 재료 추가 필요' },
@@ -217,7 +217,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
       { name: '두부 (으깬 것)',           ratio: 1.0, ratioNote: '계란 1개 = 부드러운 두부 60g', grade: 'okay', useFor: ['스크램블', '키슈', '베이킹'], taste: '거의 무미', texture: '부드럽고 촉촉' },
       { name: '으깬 바나나',              ratio: 1.0, ratioNote: '계란 1개 = 바나나 1/2개', grade: 'okay', useFor: ['머핀', '브라우니', '팬케이크'], taste: '바나나 향', texture: '촉촉, 색 진해짐' },
       { name: '사과소스 (무가당)',         ratio: 1.0, ratioNote: '계란 1개 = 사과소스 1/4컵', grade: 'good', useFor: ['머핀', '케이크'], taste: '약한 사과 향', texture: '촉촉' },
-      { name: '아쿠아파바 (병아리콩 삶은 물)', ratio: 1.0, ratioNote: '계란 1개 흰자 = 아쿠아파바 3큰술', grade: 'good', useFor: ['머랭', '비건 디저트'], taste: '거의 무미', texture: '거품 잘 남' },
+      { name: '아쿠아파바 (병아리콩 삶은 물)', ratio: 1.0, ratioNote: '계란 1개 = 아쿠아파바 3큰술 (흰자 1개 = 2큰술)', grade: 'good', useFor: ['머랭', '비건 디저트'], taste: '거의 무미', texture: '거품 잘 남' },
     ],
   },
   flour: {
@@ -253,7 +253,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   bakingSoda: {
     original: '베이킹소다', emoji: '🥄', category: '팽창제', group: 'flour',
     options: [
-      { name: '베이킹파우더', ratio: 3.0, ratioNote: '베이킹소다 1작은술 = 베이킹파우더 3작은술', grade: 'okay', useFor: ['일부 베이킹'], taste: '거의 동일', texture: '약간의 차이', warning: '소다보다 약함, 산성 재료가 많은 레시피는 부적합' },
+      { name: '베이킹파우더', ratio: 3.0, ratioNote: '베이킹소다 1작은술 = 베이킹파우더 3작은술', grade: 'okay', useFor: ['일부 베이킹'], taste: '거의 동일', texture: '약간의 차이', warning: '3배를 넣어야 해 쓴맛이 날 수 있고, 레시피 속 산(버터밀크·요거트)이 중화되지 않아 신맛이 남고 색이 옅어짐' },
     ],
   },
   lemonJuice: {
@@ -420,7 +420,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   gochugaru: {
     original: '고춧가루', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
     options: [
-      { name: '카이엔페퍼 + 파프리카', ratio: 1.0, ratioNote: '카이엔 1/2 + 파프리카 1/2', combinedWith: '파프리카', grade: 'good', useFor: ['김치·고추장 응급'], taste: '비슷한 매·색', texture: '동일' },
+      { name: '카이엔페퍼 + 파프리카', ratio: 1.0, ratioNote: '파프리카 가루 위주 + 카이엔 소량 (카이엔이 훨씬 매움 — 맛보며 조절)', combinedWith: '파프리카', grade: 'good', useFor: ['김치·고추장 응급'], taste: '비슷한 색·매운맛 조절 필요', texture: '입자 더 고움', warning: '카이엔을 반씩 섞으면 고춧가루보다 훨씬 매워짐' },
       { name: '레드 페퍼 플레이크',   ratio: 0.7, grade: 'okay', useFor: ['파스타·이탈리안'], taste: '비슷·거친 입자', texture: '거침' },
       { name: '칠리파우더 (멕시칸)',  ratio: 0.7, grade: 'okay', useFor: ['응급 대체'], taste: '쿠민·마늘 향 포함', texture: '동일', warning: '쿠민·마늘 향 포함' },
     ],
@@ -461,7 +461,7 @@ const SUBSTITUTE_DATA: Record<string, SubstituteData> = {
   moolyeot: {
     original: '물엿', emoji: '🇰🇷', category: '한국 식재료', group: 'korean',
     options: [
-      { name: '꿀',          ratio: 0.7, grade: 'good', useFor: ['조림·반찬'], taste: '단맛 ↑·향 추가', texture: '동일', warning: '160°C 이하 (탐)' },
+      { name: '꿀',          ratio: 0.7, grade: 'good', useFor: ['조림·반찬'], taste: '단맛 ↑·향 추가', texture: '동일', warning: '물엿보다 쉽게 타므로 약불에서 마지막에 넣기' },
       { name: '옥수수시럽',   ratio: 1.0, grade: 'good', useFor: ['모든 용도'], taste: '비슷', texture: '동일' },
       { name: '쌀엿',        ratio: 1.0, grade: 'good', useFor: ['전통 한과'], taste: '비슷·전통적', texture: '동일' },
       { name: '메이플시럽',   ratio: 0.8, grade: 'okay', useFor: ['응급 대체'], taste: '메이플 향', texture: '동일' },

@@ -9,7 +9,7 @@ import {
   type GaugeUnit, type YarnId, type BodyPartId, type ProjectId, type SizeMeta,
   normalizeGauge, gaugePerCm, estimateYarnWeight, needleSizeForGauge,
   convertPattern, sizeToCounts, distributeIncDec, distributeShaping, estimateYarn,
-  fitToRepeat, skeinPlan, fitPresetForEase, isBelowFitRange, panelWidthFor, denormalizeGauge,
+  fitToRepeat, skeinPlan, fitPresetForEase, isBelowFitRange, deriveWidthCm, denormalizeGauge,
   getBodyPart, getSize, getYarn,
   fmt, fmtInt, fmtSign,
 } from './knitGaugeUtils'
@@ -198,7 +198,6 @@ export default function KnitGaugeClient() {
     [widthCm, heightCm, stsPer10cm, rowsPer10cm, ease, lengthEaseCm],
   )
 
-  const round1 = (n: number) => Math.round(n * 10) / 10
   const round2 = (n: number) => Math.round(n * 100) / 100
 
   /* 측정 단위를 바꿀 때 값을 그대로 두면 22코/10cm가 22코/1cm(=220코/10cm)로 조용히 10배가 된다.
@@ -229,7 +228,7 @@ export default function KnitGaugeClient() {
      예전에는 칩이 무조건 '가슴/2'를 넣어서, 원형 몸통을 뜨면 둘레가 절반인 옷이 나오고
      여유분은 아예 0(몸에 붙는 핏)으로 고정돼 있었다. */
   const deriveWidth = (sz: SizeMeta, easeCm: number, mode: 'flat' | 'round') =>
-    round1(panelWidthFor(sz.bust + easeCm, mode))
+    deriveWidthCm(sz.bust, easeCm, mode)
 
   /** 사이즈 칩은 항상 스웨터 몸통 기준이다 — 모자·양말에서 눌러도 부위를 스웨터로 옮긴다.
       스웨터 몸통은 widthMeaning이 'either'라 유도 기준은 언제나 사용자가 고른 workMode다. */

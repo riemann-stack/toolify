@@ -5,6 +5,9 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import Callout from '@/components/Callout'
+import { offsetMinutes, partsInZone } from './timezoneData'
 
 export const metadata = buildMetadata({
   path: '/tools/date/timezone',
@@ -36,7 +39,7 @@ const FAQ_LD = [
               },
               {
                 q: 'UTC와 GMT의 차이가 뭔가요?',
-                a: '실용적으로는 동일합니다. <strong>GMT</strong>는 그리니치 천문대의 천문 관측 기반(1884년 채택), <strong>UTC</strong>는 원자시계 기반의 현재 국제 표준(1972년 채택)입니다. UTC는 윤초로 평균 태양시(=GMT)와의 차이를 0.9초 이내로 유지합니다.<br/><br/>일상 변환에서는 둘을 같은 것으로 다뤄도 무방하지만, 영국 자체는 <strong>겨울엔 GMT(UTC+0), 여름엔 BST(UTC+1)</strong>를 씁니다. 참고로 2022년 국제도량형총회(CGPM) 결의에 따라 늦어도 2035년까지 윤초 삽입이 중단될 예정입니다.',
+                a: '실용적으로는 동일합니다. <strong>GMT</strong>는 그리니치 천문대의 천문 관측 기반(1884년 채택), <strong>UTC</strong>는 원자시계 기반의 현재 국제 표준(1972년 채택)입니다. UTC는 윤초로 평균 태양시(=GMT)와의 차이를 0.9초 이내로 유지합니다.<br/><br/>일상 변환에서는 둘을 같은 것으로 다뤄도 무방하지만, 영국 자체는 <strong>겨울엔 GMT(UTC+0), 여름엔 BST(UTC+1)</strong>를 씁니다. 참고로 2022년 국제도량형총회(CGPM)는 늦어도 2035년까지 UT1−UTC 허용 폭을 넓혀 윤초를 사실상 없애기로 결의했고, 새 허용 폭 등 세부안은 이후 총회에서 정합니다. 윤초가 사라져도 UTC 기준 시차 계산은 달라지지 않습니다.',
               },
               {
                 q: '날짜가 바뀌는 도시(+1d, -1d)는 어떻게 표시되나요?',
@@ -50,7 +53,48 @@ const FAQ_LD = [
                 q: '선택한 도시 목록이 저장되나요?',
                 a: '네. 기준 도시·선택 도시·근무시간 설정은 <strong>브라우저 로컬 저장소</strong>에 저장되어 다음 방문 시 자동 복원됩니다. 다른 기기·브라우저 간에는 동기화되지 않습니다.',
               },
+              {
+                q: '1988년이나 1960년 날짜를 넣으면 서울 시차가 9시간이 아니게 나와요.',
+                a: '오류가 아니라 실제 역사입니다. IANA 시간대 데이터에는 서울의 과거 표준시 변경이 기록되어 있고, 본 도구는 입력한 날짜의 규칙을 그대로 적용합니다.<br/><br/>· <strong>1954년 3월 21일~1961년 8월 9일</strong> — 동경 127.5° 기준 <strong>UTC+8:30</strong> (1955~1960년 여름엔 서머타임으로 +9:30)<br/>· <strong>1961년 8월 10일~</strong> — 「표준시에 관한 법률」에 따라 동경 135° 기준 <strong>UTC+9</strong><br/>· <strong>1987·1988년 5~10월</strong> — 서울올림픽 전후 서머타임으로 <strong>UTC+10</strong> (카드에 DST 배지 표시)<br/><br/>옛 신문·외신 기록의 시각을 환산할 때는 이 차이를 감안해야 합니다.',
+              },
             ]
+
+/* 서머타임 전환 일시 — 빌드 시점에 도구와 같은 tzdata 헬퍼(offsetMinutes·partsInZone)로 계산.
+   하루 단위(UTC 정오)로 오프셋 변화를 찾은 뒤 그 24시간을 15분 간격으로 훑어 전환 순간을 확정한다. */
+const DST_ZONES = [
+  { name: '뉴욕 (미국·캐나다 동부)', tz: 'America/New_York' },
+  { name: '런던 (영국)', tz: 'Europe/London' },
+  { name: '파리·베를린 (EU)', tz: 'Europe/Paris' },
+  { name: '시드니 (호주 동남부)', tz: 'Australia/Sydney' },
+  { name: '오클랜드 (뉴질랜드)', tz: 'Pacific/Auckland' },
+]
+const WD = ['일', '월', '화', '수', '목', '금', '토']
+const hh = (n: number) => String(n).padStart(2, '0')
+
+function dstShifts(tz: string, year: number): { start: string; end: string } {
+  const DAY = 86400000, STEP = 900000
+  const out = { start: '—', end: '—' }
+  let prevT = Date.UTC(year, 0, 1, 12)
+  let prev = offsetMinutes(new Date(prevT), tz)
+  for (let t = prevT + DAY; new Date(t).getUTCFullYear() === year; t += DAY) {
+    const o = offsetMinutes(new Date(t), tz)
+    if (o !== prev) {
+      let x = prevT
+      while (x < t && offsetMinutes(new Date(x), tz) === prev) x += STEP
+      const after = partsInZone(new Date(x), tz)
+      const beforeMin = after.hour * 60 + after.minute - (o - prev)
+      const label = `${after.month}/${after.day}(${WD[after.weekday]}) ${hh(Math.floor(((beforeMin % 1440) + 1440) % 1440 / 60))}:00→${hh(after.hour)}:00`
+      if (o > prev) out.start = label
+      else out.end = label
+      prev = o
+    }
+    prevT = t
+  }
+  return out
+}
+
+const DST_YEAR = new Date().getFullYear()
+const DST_ROWS = DST_ZONES.map(z => ({ ...z, y0: dstShifts(z.tz, DST_YEAR), y1: dstShifts(z.tz, DST_YEAR + 1) }))
 
 export default function TimezonePage() {
   return (
@@ -62,6 +106,16 @@ export default function TimezonePage() {
         UTC·KST·EST·PST·BST·시드니·인도(+5:30)·이란(+3:30)·네팔(+5:45) 등 <strong style={{ color: 'var(--text)' }}>28개 도시 동시 변환</strong>.
         DST(서머타임) 자동 적용 · 국제 회의 잡기용 <strong style={{ color: 'var(--text)' }}>겹치는 근무시간 슬롯 추천</strong>.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="IANA 시간대 데이터베이스(브라우저 내장 tzdata) · 한국 표준시 UTC+9(표준시에 관한 법률)"
+        sources={[
+          { label: 'IANA Time Zone Database', href: 'https://www.iana.org/time-zones' },
+          { label: '표준시에 관한 법률', href: 'https://www.law.go.kr/법령/표준시에관한법률' },
+          { label: 'BIPM 제27차 CGPM 결의 4 (UTC·윤초)', href: 'https://www.bipm.org/en/cgpm-2022/resolution-4' },
+        ]}
+      />
 
       <TimezoneClient />
 
@@ -89,12 +143,38 @@ export default function TimezonePage() {
           </div>
         </div>
 
+        {/* 1-1. 계산 원리 */}
+        <div>
+          <h2 className="g-h2">계산 원리 — 모든 도시 시각은 UTC 한 순간에서 나옵니다</h2>
+          <p className="g-p">
+            이 변환기는 「서울 −14시간」처럼 고정된 시차를 빼지 않습니다. 먼저 기준 도시에 입력한 날짜·시각을 <strong>UTC 기준의 한 순간</strong>으로 바꾸고,
+            그 순간을 각 도시의 IANA 시간대 ID(Asia/Seoul, America/New_York, Asia/Kathmandu 등)에 담긴 규칙으로 다시 풀어 현지 시각을 표시합니다.
+            그래서 날짜에 따라 달라지는 서머타임, 인도·네팔의 30·45분 오프셋, 나라별 과거 제도 변경이 모두 그 날짜 기준으로 반영됩니다.
+          </p>
+          <p className="g-p">
+            까다로운 부분은 첫 단계입니다. 현지 시각을 UTC로 바꾸려면 그 시점의 오프셋을 알아야 하는데, 오프셋 자체가 시점에 따라 바뀝니다.
+            도구는 입력값을 일단 UTC로 가정해 오프셋을 구하고 다시 보정하는 과정을 반복하며, 서머타임 경계 근처에서는 전날·당일·다음 날의 오프셋 후보를 모두 대입해
+            <strong> 입력한 현지 시각으로 정확히 되돌아오는 값만</strong> 채택합니다.
+          </p>
+          <h3 className="g-h3">예시 — 같은 「서울 오전 10시」라도 주가 바뀌면 결과가 다릅니다 (2026년)</h3>
+          <ul className="g-list">
+            <li>3월 6일(금) 서울 10:00 → 뉴욕 <strong>3월 5일(목) 20:00 EST</strong> — 14시간 차이</li>
+            <li>3월 9일(월) 서울 10:00 → 뉴욕 <strong>3월 8일(일) 21:00 EDT</strong> — 13시간 차이 (뉴욕은 3월 8일 새벽 서머타임 시작)</li>
+            <li>같은 3월 9일 런던은 01:00 GMT — 영국은 3월 29일에야 서머타임을 시작하므로 서울과 여전히 9시간 차이</li>
+          </ul>
+          <p className="g-p">
+            즉 2026년에는 <strong>3월 8일~28일 3주 동안 뉴욕–런던 차이가 평소 5시간이 아니라 4시간</strong>이고(미국은 3월 둘째 일요일, 유럽은 마지막 일요일에 시작하므로 해마다 2~3주),
+            가을에도 유럽이 먼저 서머타임을 끝내는 10월 25일~31일 한 주간 같은 일이 생깁니다.
+            미국·유럽 참석자가 함께 있는 정기 회의가 이 기간에 한 시간씩 어긋나는 흔한 이유입니다.
+          </p>
+        </div>
+
         {/* 2. DST 설명 */}
         <div>
           <h2 className="g-h2">DST(서머타임) — 시기에 따라 시차가 바뀌는 이유</h2>
           <p className="g-p">
             북미·유럽·호주 등 많은 국가는 <strong style={{ color: 'var(--text)' }}>여름철에 시계를 1시간 앞당기는 일광절약제(Daylight Saving Time)</strong>를 시행합니다.
-            그래서 같은 서울→뉴욕이라도 <strong style={{ color: 'var(--accent)' }}>겨울엔 14시간 차이, 여름엔 13시간 차이</strong>가 납니다.
+            그래서 같은 서울→뉴욕이라도 <strong style={{ color: 'var(--accent-ink)' }}>겨울엔 14시간 차이, 여름엔 13시간 차이</strong>가 납니다.
             본 도구는 IANA 시간대 데이터를 사용해 입력 날짜의 DST 적용 여부를 자동 판정합니다.
           </p>
           <div className="tableScroll">
@@ -113,6 +193,7 @@ export default function TimezonePage() {
                   ['영국 (런던)',           '3월 마지막 일요일', '10월 마지막 일요일', '여름 -8h / 겨울 -9h'],
                   ['EU (파리·베를린)',      '3월 마지막 일요일', '10월 마지막 일요일', '여름 -7h / 겨울 -8h'],
                   ['호주 (시드니)',         '10월 첫째 일요일', '4월 첫째 일요일', '여름 +2h / 겨울 +1h'],
+                  ['뉴질랜드 (오클랜드)',   '9월 마지막 일요일', '4월 첫째 일요일', '여름 +4h / 겨울 +3h'],
                   ['한국·일본·중국·인도',   '시행 안함', '—', '연중 동일'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -125,6 +206,52 @@ export default function TimezonePage() {
               </tbody>
             </table>
           </div>
+          <p className="g-p" style={{ marginTop: 20 }}>
+            규칙을 실제 날짜로 풀면 아래와 같습니다. 이 표는 페이지를 만들 때 계산기와 같은 tzdata 함수로 전환 순간을 찾아 채운 값이며, 시각은 모두 <strong>그 도시의 현지 시계</strong> 기준입니다.
+            남반구(시드니·오클랜드)는 한 해 안에서 4월에 서머타임이 끝나고 9~10월에 다시 시작합니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
+              <caption className="srOnly">{DST_YEAR}~{DST_YEAR + 1}년 도시별 서머타임 전환 일시 (현지 시각, 앞 시각→뒤 시각)</caption>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>도시</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>{DST_YEAR} 시작</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>{DST_YEAR} 종료</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>{DST_YEAR + 1} 시작</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>{DST_YEAR + 1} 종료</th>
+                </tr>
+              </thead>
+              <tbody>
+                {DST_ROWS.map((r, i) => (
+                  <tr key={r.tz} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <th scope="row" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--text)', fontWeight: 500 }}>{r.name}</th>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{r.y0.start}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{r.y0.end}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{r.y1.start}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{r.y1.end}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            예) 「02:00→03:00」은 새벽 2시가 되는 순간 시계를 3시로 넘긴다는 뜻으로, 그날 02:00~02:59는 존재하지 않습니다. 「02:00→01:00」은 1시대가 두 번 지나갑니다.
+          </p>
+        </div>
+
+        {/* 2-1. DST 경계 처리 */}
+        <div>
+          <h2 className="g-h2">존재하지 않는 시각, 두 번 오는 시각 — 전환일 입력 주의</h2>
+          <p className="g-p">
+            서머타임이 시작되는 날 새벽에는 한 시간이 통째로 사라지고, 끝나는 날에는 한 시간이 반복됩니다.
+            2026년 뉴욕을 기준 도시로 두고 <strong>3월 8일 02:30</strong>을 입력하면 그런 현지 시각은 실제로 없으므로, 도구가 경고 문구와 함께 실제 계산에 쓴 인접 시각을 보여 줍니다.
+            <strong> 11월 1일 01:30</strong>은 EDT(UTC−4)로 한 번, EST(UTC−5)로 또 한 번 오기 때문에, 도구는 앞선 시점(서머타임 쪽)을 택하고 그 사실을 알려 줍니다.
+          </p>
+          <p className="g-p">
+            이런 모호함은 <strong>기준 도시에 입력할 때만</strong> 생깁니다. 변환 대상 도시의 시각은 UTC 한 순간에서 한 방향으로 계산하므로 항상 하나로 정해집니다.
+            한국은 서머타임이 없어 서울을 기준으로 두면 경계 문제를 피할 수 있습니다. 다만 1987·1988년 여름과 1954~1961년(8월 9일까지) 날짜는 한국도 UTC+9가 아니었으니 아래 FAQ를 참고하세요.
+          </p>
         </div>
 
         {/* 3. 특수 오프셋 */}
@@ -184,31 +311,23 @@ export default function TimezonePage() {
         {/* 5. 회의 잡기 팁 */}
         <div>
           <h2 className="g-h2">국제 회의 잡기 — 실전 팁</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(260px, 1fr))', gap: '12px' }}>
-            <div style={{ background: 'rgba(16,185,129,0.06)', border: '1px solid rgba(16,185,129,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--emerald-600)', marginBottom: '10px' }}>✅ 권장</p>
-              <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {[
-                  '한·미·유럽 회의: 한국 오후 9~10시 = 미동부 오전 8~9시 = 유럽 오후 2~3시',
-                  '한·미 서부 회의: 한국 오전 9~10시 = LA는 전날 오후 5~6시 (LA 입장 약간 불편)',
-                  '한·호주 회의: 한국 오전 8~10시 = 시드니 오전 9~11시 (가장 이상적)',
-                  '위 환산은 북반구 서머타임 시기 기준 — 겨울(11~3월)엔 미국·유럽 현지 시각이 1시간 이르고, 시드니는 남반구라 반대로 10~4월이 서머타임(+1h)입니다',
-                  'DST 전환 직후 한 주는 시차 확인 한 번 더',
-                ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>• {t}</li>)}
-              </ul>
-            </div>
-            <div style={{ background: 'rgba(220,38,38,0.06)', border: '1px solid rgba(220,38,38,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
-              <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--red-600)', marginBottom: '10px' }}>⚠️ 주의</p>
-              <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
-                {[
-                  '미국은 "EST/PST" 약어가 DST 시기에도 관용적으로 쓰임 — 실제론 EDT/PDT',
-                  '"오후 3시" 같은 12시간 표기보다 "15:00 KST"가 안전',
-                  '캘린더 초대 시 시작 시각의 시간대를 명시 (Outlook/Google Calendar는 자동)',
-                  '회의 결과 메일엔 모든 참석자 현지 시각 병기',
-                ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>• {t}</li>)}
-              </ul>
-            </div>
-          </div>
+          <h3 className="g-h3">무난한 시간대 (북반구 서머타임 시기 기준)</h3>
+          <ul className="g-list">
+            {[
+              '한·미·유럽 회의: 한국 오후 9~10시 = 미동부 오전 8~9시 = 중부유럽 오후 2~3시',
+              '한·미 서부 회의: 한국 오전 9~10시 = LA는 전날 오후 5~6시 (LA 입장 약간 불편)',
+              '한·호주 회의: 한국 오전 8~10시 = 시드니 오전 9~11시 (가장 이상적)',
+              '겨울(11~3월)엔 같은 한국 시각이 미국·유럽 현지로는 1시간 이르고, 시드니는 남반구라 반대로 10~4월이 서머타임(+1h)입니다',
+              '서머타임 전환 직후 한 주, 특히 미국·유럽이 엇갈리는 3월·10월 말에는 시차를 한 번 더 확인하세요',
+            ].map((t, i) => <li key={i}>{t}</li>)}
+          </ul>
+          <Callout tone="warn" title="자주 하는 실수">
+            <ul>
+              <li>미국은 서머타임 기간에도 「EST/PST」라고 관용적으로 쓰는 경우가 많습니다 — 실제로는 EDT/PDT이므로 날짜를 넣어 확인하세요.</li>
+              <li>「오후 3시」 같은 12시간 표기보다 「15:00 KST」처럼 24시간제+시간대 약어가 안전합니다. CST·IST·BST처럼 한 약어가 여러 나라를 뜻하기도 합니다.</li>
+              <li>캘린더 초대는 시작 시각의 시간대를 명시하고(Outlook·Google 캘린더는 자동 변환), 회의 결과 메일엔 참석자별 현지 시각을 병기하세요.</li>
+            </ul>
+          </Callout>
         </div>
 
         {/* 6. FAQ */}

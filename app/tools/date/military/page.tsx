@@ -7,6 +7,7 @@ import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import Disclaimer from '@/components/Disclaimer'
+import Callout from '@/components/Callout'
 import ToolPage from '@/components/ToolPage'
 
 export const metadata = buildMetadata({
@@ -136,7 +137,7 @@ export default function MilitaryPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ <strong style={{ color: 'var(--text)' }}>의무경찰·의무소방·해양경찰</strong> 제도는 2023년 모두 폐지되어 신규 선발이 종료되었습니다. 이전 복무자는 본 계산기의 <strong style={{ color: 'var(--text)' }}>「직접 입력」</strong>으로 복무 기간을 지정해 사용하세요.
           </p>
         </div>
@@ -144,7 +145,7 @@ export default function MilitaryPage() {
         {/* ── 3. 군 복무 마일스톤 ── */}
         <div>
           <h2 className="g-h2">
-            🎯 군 복무 주요 마일스톤 가이드
+            군 복무 주요 마일스톤 가이드
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: '8px' }}>
             {[
@@ -217,7 +218,7 @@ export default function MilitaryPage() {
               </ul>
             </div>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ 이 밖에 「병역법」 제18조제4항의 <strong style={{ color: 'var(--text)' }}>전역 보류</strong>(형사사건 구속, 공상 입원치료 계속, 중요 작전·훈련 수행)에 해당하면
             의무복무 만료일 이후로 전역이 미뤄질 수 있습니다.
           </p>
@@ -226,7 +227,7 @@ export default function MilitaryPage() {
         {/* ── 5. 계급 진급 시점 (육군 18개월 기준) ── */}
         <div>
           <h2 className="g-h2">
-            🎖️ 현역병 계급 진급 시점
+            현역병 계급 진급 시점
           </h2>
           <p className="g-p">
             근거는 <strong style={{ color: 'var(--text)' }}>「군인사법 시행규칙」 제32조</strong>(병의 진급 등)입니다. 최저복무기간이 지나면
@@ -260,7 +261,7 @@ export default function MilitaryPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '10px', lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ 위는 <strong style={{ color: 'var(--text)' }}>최저</strong> 기간이라 실제 진급일은 <strong style={{ color: 'var(--text)' }}>빨라질 수도 늦어질 수도</strong> 있습니다.
             <strong style={{ color: 'var(--text)' }}> 빨라지는 쪽</strong> — 같은 조 제3항은 근무성적 우수자(해당 계급 진급인원의 10분의 1 이내)에게
             상병 4개월·병장 5개월로 단축을 허용하고, 제4항은 그 인원을 전투부대 10분의 2·경계부대 10분의 3까지 넓힙니다(개정 2025-10-24).
@@ -269,11 +270,11 @@ export default function MilitaryPage() {
             <strong style={{ color: 'var(--text)' }}> 늦어지는 쪽</strong> — 제2항 단서는 참모총장이 국방부장관 승인을 받아 1개월 범위에서 연장할 수 있게 하고,
             제36조는 유죄판결·징계 시 1~3개월의 진급제한기간을 둡니다. 정확한 진급일은 인사담당자에게 확인하세요.
           </p>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ 병 진급은 <strong style={{ color: 'var(--text)' }}>매월 1일 자로 시행</strong>합니다. 1일에 입대하지 않았다면 최저복무기간을 채운 뒤 돌아오는 첫 1일에 진급합니다.
             예를 들어 5월 1일 입대자는 7월 1일에, 5월 2일 입대자는 8월 1일에 일병이 됩니다. 위 계산기의 진급 마일스톤도 이 기준으로 표시합니다.
           </p>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.7 }}>
+          <p className="g-note">
             ※ 계급은 <strong style={{ color: 'var(--text)' }}>현역병·상근예비역</strong>에만 해당합니다. 사회복무요원·산업기능요원·전문연구요원·대체복무요원은 병 계급이 없어
             위 진급 마일스톤이 적용되지 않으며, 계산기도 해당 복무 형태에서는 진급 항목을 표시하지 않습니다.
           </p>
@@ -282,7 +283,7 @@ export default function MilitaryPage() {
         {/* ── 5-1. 한국 군 복무 기간 단축 역사 ── */}
         <div>
           <h2 className="g-h2">
-            📜 한국 군 복무 기간 단축 역사
+            한국 군 복무 기간 단축 역사
           </h2>
           <p className="g-p">
             육군 기준 복무 기간은 6·25 직후 36개월에서 시작해 현재 <strong style={{ color: 'var(--text)' }}>18개월</strong>까지 줄었습니다.
@@ -318,6 +319,10 @@ export default function MilitaryPage() {
               </tbody>
             </table>
           </div>
+          <p className="g-note">
+            ※ 주요 전환점만 추린 표입니다. 1968년 연장과 1993년 26개월 사이에도 1970~80년대에 단계적 조정이 있었고, 해군·공군 기간은 시기별로 1~2개월씩 차이 나는 기록이 있어 표에서는 생략하거나 대표값으로 적었습니다.
+            현재 기간(2021년 행)만 본 계산기의 기준입니다.
+          </p>
         </div>
 
         {/* ── 6. 직접 계산 공식 ── */}
@@ -339,24 +344,23 @@ export default function MilitaryPage() {
             <div><span style={{ color: 'var(--muted)' }}>총 복무 일수</span> = 전역일 − 입대일 + 1  <span style={{ color: 'var(--muted)' }}>(양 끝 포함)</span></div>
             <div><span style={{ color: 'var(--muted)' }}>복무율 (%)</span> = (오늘 − 입대일 + 1) ÷ 총 복무 일수 × 100</div>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12 }}>
+          <p className="g-p" style={{ marginTop: 12 }}>
             예시: 2026년 1월 15일에 18개월 육군으로 입대 → 전역일은 <strong style={{ color: 'var(--accent-ink)' }}>2027년 7월 14일</strong>, 총 546일.
             입대일과 전역일을 <strong style={{ color: 'var(--text)' }}>모두 복무 일수에 넣습니다</strong> — 입대 당일이 1일차, 전역 당일이 100%입니다.
           </p>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: '3px solid var(--warning)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12 }}>
-            <p style={{ fontSize: 13, fontWeight: 700, color: 'var(--text)', marginBottom: 6 }}>월말에 입영했다면 — 「−1일」이 그대로 통하지 않습니다</p>
-            <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-              8월 31일에 18개월로 입영하면 「+18개월」이 <strong style={{ color: 'var(--text)' }}>2월 31일</strong>이라 존재하지 않습니다.
-              「병역법」에는 만료일 계산 규칙이 없어 <strong style={{ color: 'var(--text)' }}>「민법」 제155조</strong>에 따라 민법 기간 규정이 준용되는데,
-              제160조제2항은 해당일이 있으면 <strong style={{ color: 'var(--text)' }}>그 전일</strong>에(= 통념 공식의 −1일), 제160조제3항은 해당일이 없으면
-              <strong style={{ color: 'var(--text)' }}> 그 달의 말일</strong>에 기간이 만료한다고 정합니다. 즉 <strong style={{ color: 'var(--text)' }}>2월 말일이 곧 전역일</strong>이며
+          <Callout tone="warn" title="월말에 입영했다면 — 「−1일」이 그대로 통하지 않습니다">
+            <p>
+              8월 31일에 18개월로 입영하면 「+18개월」이 <strong>2월 31일</strong>이라 존재하지 않습니다.
+              「병역법」에는 만료일 계산 규칙이 없어 <strong>「민법」 제155조</strong>에 따라 민법 기간 규정이 준용되는데,
+              제160조제2항은 해당일이 있으면 <strong>그 전일</strong>에(= 통념 공식의 −1일), 제160조제3항은 해당일이 없으면
+              <strong> 그 달의 말일</strong>에 기간이 만료한다고 정합니다. 즉 <strong>2월 말일이 곧 전역일</strong>이며
               여기서 다시 1일을 빼지 않습니다. 본 계산기는 이 규정대로 산정합니다.
             </p>
-            <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7, marginTop: 8 }}>
-              ※ 병무청은 공식 전역일 계산기를 제공하지 않아 <strong style={{ color: 'var(--text)' }}>월말 입영 사례의 실무 처리를 1차출처로 확인하지 못했습니다</strong>.
+            <p>
+              ※ 병무청은 공식 전역일 계산기를 제공하지 않아 <strong>월말 입영 사례의 실무 처리를 1차출처로 확인하지 못했습니다</strong>.
               위는 민법 규정에 따른 산정이므로, 월말 입영자는 소속 부대·병무청에 확인하시기 바랍니다.
             </p>
-          </div>
+          </Callout>
         </div>
 
         {/* FAQ 직후 광고 슬롯 */}
@@ -377,7 +381,7 @@ export default function MilitaryPage() {
               { href: '/tools/date/dday',      icon: '📅', name: 'D-Day 계산기', desc: '두 날짜 사이·페이스 통합' },
               { href: '/tools/date/age',       icon: '🎂', name: '만 나이 계산기',    desc: '법 개정 기준 만 나이' },
               { href: '/tools/date/jet-lag',   icon: '✈️', name: '시차 적응 계산기',  desc: '여행 시차 적응 일정' },
-              { href: '/tools/date/life-time', icon: '⏳', name: '생애 시간 계산기',  desc: '기대수명 기준 시간 환산' },
+              { href: '/tools/date/age?tab=life', icon: '⏳', name: '생애 시간 보기',  desc: '기대수명 기준 시간 환산' },
             ].map((t, i) => (
               <Link
                 key={i}

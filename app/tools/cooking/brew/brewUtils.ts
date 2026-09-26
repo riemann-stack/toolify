@@ -133,9 +133,11 @@ export interface RoastMeta {
 }
 
 export const ROASTS: RoastMeta[] = [
-  { id: 'light',  label: '라이트 (시나몬·시티)',     desc: '신맛·꽃향·과일향 강조',         ratioAdjust: '1:14~15 진하게 추출',       color: '#C9A77D' },
-  { id: 'medium', label: '미디엄 (시티·풀시티)',     desc: '균형 잡힌 단맛·바디',           ratioAdjust: '1:15~17 (핸드드립 표준)',    color: '#7B4F2C' },
-  { id: 'dark',   label: '다크 (프렌치·이탈리안)',   desc: '쓴맛·캐러멜·초콜릿',            ratioAdjust: '1:16~18 약하게 (쓴맛 완화)', color: '#3A1E10' },
+  // 일본식 8단계 로스팅 명칭 기준 — 라이트·시나몬(약배전) / 미디엄·하이·시티(중배전~중강배전) / 풀시티·프렌치·이탈리안(강배전).
+  // (기존 '라이트 (시나몬·시티)'·'미디엄 (시티·풀시티)'는 시티가 두 단계에 겹쳐 있어 바로잡음)
+  { id: 'light',  label: '라이트 (라이트·시나몬)',   desc: '신맛·꽃향·과일향 강조',         ratioAdjust: '1:14~15 진하게 추출',       color: '#C9A77D' },
+  { id: 'medium', label: '미디엄 (미디엄·하이·시티)', desc: '균형 잡힌 단맛·바디',           ratioAdjust: '1:15~17 (핸드드립 표준)',    color: '#7B4F2C' },
+  { id: 'dark',   label: '다크 (풀시티·프렌치·이탈리안)', desc: '쓴맛·캐러멜·초콜릿',            ratioAdjust: '1:16~18 약하게 (쓴맛 완화)', color: '#3A1E10' },
 ]
 
 /* ─────────────────────────────────────────────

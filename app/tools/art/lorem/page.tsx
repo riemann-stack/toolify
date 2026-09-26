@@ -2,7 +2,8 @@ import LoremClient from './LoremClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
 import Link from 'next/link'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolPage from '@/components/ToolPage'
@@ -106,9 +107,9 @@ export default function LoremPage() {
         {/* 3. tone guide */}
         <section>
           <h2 className="g-h2">9가지 톤이 만드는 차이</h2>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginBottom: '14px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
-            톤이 적용되는 곳은 <strong style={{ color: 'var(--text)' }}>한글 문단 · UI 문구(19종 중 11종) · 카드 목업(아티클·프로필 카드) · UX 라이팅</strong>입니다. 영문 Lorem Ipsum은 의사 라틴어라 톤 개념이 성립하지 않고, 이름·상품 카드의 상품명·JSON 더미는 문체가 아니라 <strong style={{ color: 'var(--text)' }}>값</strong>이라 톤과 무관합니다. 각 화면에도 같은 안내를 표시합니다.
-          </p>
+          <Callout tone="note" title="톤이 적용되는 범위">
+            톤이 적용되는 곳은 <strong>한글 문단 · UI 문구(19종 중 11종) · 카드 목업(아티클·프로필 카드) · UX 라이팅</strong>입니다. 영문 Lorem Ipsum은 의사 라틴어라 톤 개념이 성립하지 않고, 이름·상품 카드의 상품명·JSON 더미는 문체가 아니라 <strong>값</strong>이라 톤과 무관합니다. 각 화면에도 같은 안내를 표시합니다.
+          </Callout>
           <p className="g-p">
             같은 &quot;시작하기&quot; 문구도 톤에 따라 분위기가 완전히 달라집니다. 디자인 시안의 무드보드를 정한 뒤, 이에 맞는 톤을 선택해 일관된 더미 콘텐츠를 채우면 시안의 설득력이 올라갑니다.
           </p>
@@ -195,7 +196,7 @@ export default function LoremPage() {
               <thead>
                 <tr>
                   {['키케로 원문 (기원전 45년)', '표준 필러 텍스트', '변화'].map((h, i) => (
-                    <th key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', padding: '8px 10px', textAlign: 'left', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{h}</th>
+                    <th key={i} scope="col" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', padding: '8px 10px', textAlign: 'left', color: 'var(--text)', fontWeight: 600, whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
               </thead>
@@ -215,19 +216,19 @@ export default function LoremPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
+          <p className="g-note" style={{ marginBottom: '12px' }}>
             표준 필러 열은 본 도구의 영문 문단 탭이 생성하는 텍스트와 동일합니다(본 도구 기준값).
           </p>
           <p className="g-p">
             필러가 dolorem이 아니라 <strong style={{ color: 'var(--text)' }}>lorem으로 시작하는 이유</strong>에도 물증이 있습니다. 1914년 Loeb Classical Library판(라틴·영문 대역) 스캔을 보면 라틴어 34면이 &quot;Neque porro quisquam est qui do-&quot;로 끊기고, 36면이 &quot;lorem ipsum quia dolor sit amet…&quot;로 시작합니다 — &apos;dolorem&apos;의 &apos;do-&apos;가 앞 페이지 끝에 걸려 잘렸고, 필러 텍스트는 이 페이지 첫머리를 그대로 따른 것입니다.
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
-            <strong style={{ color: 'var(--text)' }}>원본을 직접 확인하실 수 있습니다.</strong> 1914년판 스캔은 인터넷 아카이브에 저작권 소멸 자료로 공개돼 있습니다 — <a href="https://archive.org/details/definibusbonoru02cicegoog/page/n72" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">De finibus bonorum et malorum (1914, W. Heinemann·Macmillan) — 문제의 라틴어 36면</a>. 이 페이지 넘김을 문헌으로 처음 정리한 것은 프랑스 사회학자 필리프 시부아의 2012년 글입니다 — <a href="https://enseignement-latin.hypotheses.org/5449" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">Lorem ipsum: nouvel état de la question</a>. 아래 영역문은 <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Cicero/de_Finibus/1*.html" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">LacusCurtius가 재현한 Loeb판</a>과 글자까지 일치합니다.
-          </p>
+          <Callout tone="note" title="원본을 직접 확인하실 수 있습니다">
+            1914년판 스캔은 인터넷 아카이브에 저작권 소멸 자료로 공개돼 있습니다 — <a href="https://archive.org/details/definibusbonoru02cicegoog/page/n72" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">De finibus bonorum et malorum (1914, W. Heinemann·Macmillan) — 문제의 라틴어 36면</a>. 이 페이지 넘김을 문헌으로 처음 정리한 것은 프랑스 사회학자 필리프 시부아의 2012년 글입니다 — <a href="https://enseignement-latin.hypotheses.org/5449" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">Lorem ipsum: nouvel état de la question</a>. 아래 영역문은 <a href="https://penelope.uchicago.edu/Thayer/E/Roman/Texts/Cicero/de_Finibus/1*.html" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">LacusCurtius가 재현한 Loeb판</a>과 글자까지 일치합니다.
+          </Callout>
           <p className="g-p">
             이 출처를 밝혀낸 사람은 미국 <a href="https://www.hsc.edu/" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">햄든-시드니 칼리지</a>에서 라틴어를 가르치며 출판부장을 지낸 <strong style={{ color: 'var(--text)' }}>리처드 매클린톡(Richard McClintock)</strong>입니다. 필러에 든 희귀 라틴어 consectetur의 고전 문헌 인용례를 역추적해 키케로 원전을 확인했고, 1990년대에 디자인 잡지 「Before &amp; After」 편집장에게 서한을 보내 잡지가 정정을 실었습니다.
           </p>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.8, marginBottom: '12px' }}>
+          <p className="g-note" style={{ marginBottom: '12px' }}>
             이 대목은 예전에 두 군데가 틀렸던 것을 바로잡은 것입니다. ① 그를 &apos;라틴어 교수&apos;라 부르는 것이 부정확하다고 적었지만, 그렇게 볼 근거가 어디에도 없습니다 — 2001년 <a href="https://www.straightdope.com/21343427/what-does-the-filler-text-lorem-ipsum-mean" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">The Straight Dope 칼럼</a>은 그를 &quot;라틴어 교수에서 출판부장이 된 인물&quot;로 소개하고, 대학 아카이브는 1975년부터 출판부장이었다고 적습니다(두 역할이 순차였는지 병행이었는지도 확정할 수 없어 단정하지 않았습니다). ② 정정 기사 제목을 &apos;Lorem Oopsum&apos;이라고 적었는데, 이 제목을 대는 곳은 무출처 웹문서뿐입니다. 서한 본문을 가장 원본에 가깝게 옮긴 <a href="https://nwalsh.com/comp.fonts/FAQ/cf_36.htm" style={{ color: 'var(--accent-ink)', textDecoration: 'underline' }} target="_blank" rel="noopener nofollow">comp.fonts FAQ</a>(&quot;Before and After Magazine, Volume 4 Number 2&quot;)에도, Priceonomics 기사에도 그런 제목은 없습니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginBottom: '12px' }}>
@@ -267,9 +268,9 @@ export default function LoremPage() {
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: '520px' }}>
               <thead>
                 <tr style={{ borderBottom: '2px solid var(--border)' }}>
-                  <th style={{ textAlign: 'left', padding: '9px 10px' }}>항목</th>
-                  <th style={{ textAlign: 'left', padding: '9px 10px' }}>본 도구가 쓰는 값</th>
-                  <th style={{ textAlign: 'left', padding: '9px 10px' }}>근거</th>
+                  <th scope="col" style={{ textAlign: 'left', padding: '9px 10px' }}>항목</th>
+                  <th scope="col" style={{ textAlign: 'left', padding: '9px 10px' }}>본 도구가 쓰는 값</th>
+                  <th scope="col" style={{ textAlign: 'left', padding: '9px 10px' }}>근거</th>
                 </tr>
               </thead>
               <tbody style={{ color: 'var(--muted)' }}>
@@ -296,12 +297,12 @@ export default function LoremPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '12px' }}>
+          <p className="g-p" style={{ marginTop: '16px' }}>
             참고로 한국에는 미국의 <strong style={{ color: 'var(--text)' }}>555-0100~0199</strong>(NANP가 드라마·예시용으로 예약)에 해당하는 <strong style={{ color: 'var(--text)' }}>공식 예약 번호대가 없습니다</strong>. 우편번호도 마찬가지로 RFC 2606의 example.com 같은 &lsquo;예시 전용 예약 대역&rsquo;이 제도적으로 존재하지 않습니다. 그래서 &lsquo;예약된 값&rsquo;을 쓰는 대신 <strong style={{ color: 'var(--text)' }}>&lsquo;현재 부여되지 않는 값&rsquo;</strong>을 쓰는 것이 현재로선 가장 안전한 선택입니다.
           </p>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.9, marginTop: '10px', background: 'var(--bg3)', border: '1px solid var(--border)', borderRadius: '10px', padding: '11px 14px' }}>
-            <strong style={{ color: 'var(--text)' }}>한 가지 유의점</strong> — 전화번호의 0·1 대역과 우편번호 64000 이상은 &lsquo;영구히 쓰지 않기로 정한 값&rsquo;이 아니라 <strong style={{ color: 'var(--text)' }}>아직 배정하지 않은 예비 대역</strong>입니다. 제도가 바뀌면 언젠가 실재하는 값이 될 수 있습니다. 이메일(RFC 2606)만이 규범으로 영구 예약된 경우입니다.
-          </p>
+          <Callout tone="warn" title="한 가지 유의점">
+            전화번호의 0·1 대역과 우편번호 64000 이상은 &lsquo;영구히 쓰지 않기로 정한 값&rsquo;이 아니라 <strong style={{ color: 'var(--text)' }}>아직 배정하지 않은 예비 대역</strong>입니다. 제도가 바뀌면 언젠가 실재하는 값이 될 수 있습니다. 이메일(RFC 2606)만이 규범으로 영구 예약된 경우입니다.
+          </Callout>
         </section>
 
         {/* 7. legal */}
@@ -316,12 +317,12 @@ export default function LoremPage() {
           <p className="g-p">
             예전에는 이 자리에 &quot;무작위로 조합된 가상 정보이며 저작권이 발생하지 않는다&quot;고 적혀 있었는데, 정확하지 않아 바로잡습니다. 이유는 세 가지입니다.
           </p>
-          <ul style={{ fontSize: '14px', color: 'var(--muted)', lineHeight: 1.9, paddingLeft: '20px', display: 'flex', flexDirection: 'column', gap: '8px', marginBottom: '12px' }}>
+          <ul className="g-list">
             <li><strong style={{ color: 'var(--text)' }}>무작위인 것은 &lsquo;고르는 방식&rsquo;일 뿐입니다.</strong> 뽑히는 문장 자체는 운영자가 미리 써 둔 고정 텍스트입니다. 무작위로 골랐다는 사실이 그 문장의 성격을 바꾸지는 않습니다.</li>
             <li><strong style={{ color: 'var(--text)' }}>짧다고 반드시 보호 밖인 것은 아닙니다.</strong> 한국저작권위원회 「2025 저작권 상담 사례집」 Q17은 아주 적은 수의 단어로 된 단문은 원칙적으로 저작물로 인정되기 어렵다고 하면서도(책·영화 제목, 흔한 광고문구 등은 부정), &quot;분량이 짧다고 하여 무조건 저작물성이 부정되는 것은 아니다&quot;라고 밝힙니다. 실제로 음반에 쓰인 문구 한 문장을 백화점이 네온사인으로 무단 사용한 사건에서 법원이 창작성을 인정한 예가 있습니다(서울중앙지법 2018. 9. 4. 선고 2017가소7712215 — 소액사건 1심). 기준은 길이가 아니라 창작적 개성의 유무이고, 인정 여부는 문안마다 달리 판단됩니다.</li>
             <li><strong style={{ color: 'var(--text)' }}>&lsquo;저작권 없음&rsquo; 선언은 효력이 없습니다.</strong> 「저작권법」 제10조제2항은 저작권이 창작과 동시에 발생하며 어떤 절차나 형식도 필요하지 않다고 정합니다(무방식주의). 권리자가 없다고 써도 이미 생긴 권리가 사라지지 않습니다. 그래서 본 도구는 &lsquo;권리 없음&rsquo;이 아니라 같은 법 제46조의 <strong style={{ color: 'var(--text)' }}>이용허락</strong> 형식으로 안내합니다 — 이용자 입장에서 실제로 쓸 수 있는 범위는 오히려 더 분명해집니다.</li>
           </ul>
-          <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.85, marginBottom: '12px' }}>
+          <p className="g-p">
             참고로 CC0 같은 퍼블릭도메인 서약도 국내에서는 &lsquo;완전한 포기&rsquo;로 성립하지 않습니다. 저작인격권은 저작자 일신에 전속해(제14조제1항) 양도·포기가 불가능하기 때문입니다. CC0 약관 자체가 포기가 무효인 법역에서는 무상 라이선스로 전환되도록 설계돼 있어 실무상으로는 작동하지만, 결과는 결국 &lsquo;이용허락&rsquo;입니다.
           </p>
           <p className="g-p">
@@ -348,25 +349,9 @@ export default function LoremPage() {
           </div>
         </section>
 
-        {/* FAQ */}
+        {/* FAQ — 화면 목록과 FAQPage JSON-LD를 같은 배열에서 렌더 */}
         <section>
-          <h2 className="g-h2">
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </section>
 
         {/* 관련 도구 */}

@@ -22,7 +22,7 @@ const FAQ_LD = [
               },
               {
                 q: '음력 생일은 매년 양력으로 바뀌나요?',
-                a: '네. 음력 생일은 매년 양력 날짜가 달라집니다. 예를 들어 <strong>음력 1월 1일(설날)은 2026년 2월 17일, 2027년 2월 7일</strong>입니다.<br/><br/>편차는 보통 ±11일 이내지만, 윤달이 끼면 그해는 같은 음력 날짜라도 양력 30일 이상 뒤로 밀릴 수 있습니다. 매년 본 계산기로 그해 양력 날짜를 확인해 미리 일정에 표시하는 것을 권장합니다.',
+                a: '네. 음력 생일은 매년 양력 날짜가 달라집니다. 예를 들어 <strong>음력 1월 1일(설날)은 2026년 2월 17일, 2027년 2월 7일, 2028년 1월 27일, 2029년 2월 13일</strong>입니다.<br/><br/>음력 1년(354~355일)이 양력보다 짧아 같은 음력 날짜는 해마다 대개 <strong>10~12일 앞당겨지고</strong>, 그 사이에 윤달이 한 번 끼면 반대로 <strong>17~20일 늦춰집니다</strong>(위 예의 2028→2029년은 2028년 윤5월 때문에 17일 늦춰짐). 그래서 양력 날짜는 약 한 달 폭 안에서 오르내립니다. 매년 본 계산기로 그해 양력 날짜를 확인해 미리 일정에 표시하는 것을 권장합니다.',
               },
               {
                 q: '60갑자는 어떻게 계산되나요?',
@@ -34,11 +34,11 @@ const FAQ_LD = [
               },
               {
                 q: '설날·추석 양력 날짜는 매년 어떻게 정해지나요?',
-                a: '설날 = 음력 1월 1일, 추석 = 음력 8월 15일로 음력 자체는 고정입니다. 양력 날짜는 그 해의 음력↔양력 매핑에 따라 결정되며, 한국천문연구원이 산출하고 정부가 매년 「월력요항」으로 발표합니다.<br/><br/>1900~2049년 실측 기준 —<br/>· 설날 양력 범위 — <strong>1월 22일 ~ 2월 20일</strong><br/>· 추석 양력 범위 — <strong>9월 8일 ~ 10월 8일</strong>',
+                a: '설날 = 음력 1월 1일, 추석 = 음력 8월 15일로 음력 자체는 고정입니다. 양력 날짜는 그 해의 음력↔양력 매핑에 따라 결정되며, 한국천문연구원이 산출하고 정부(현재 우주항공청)가 매년 이듬해 달력의 기준인 「월력요항」으로 발표합니다.<br/><br/>1900~2049년 실측 기준 —<br/>· 설날 양력 범위 — <strong>1월 22일 ~ 2월 20일</strong><br/>· 추석 양력 범위 — <strong>9월 8일 ~ 10월 8일</strong>',
               },
               {
-                q: '이 계산기는 얼마나 정확한가요?',
-                a: '한국천문연구원(KASI) 음력 데이터와 전 구간(1900~2049년) 일치를 검증했고, 2025~2030년 국가 공휴일 발표(설날·추석·부처님오신날)와도 교차 확인했습니다. 상한이 2049년인 이유는 KASI가 확정 계산해 배포한 음양력 자료가 2050년까지이기 때문입니다.<br/><br/>주의: 흔히 쓰이는 중국력 기반 변환기와는 <strong>다른 날이 있습니다</strong>. 한국 음력은 KST(UTC+9) 합삭 기준이라 예컨대 한국 설날 2027년은 2월 7일, 중국 춘절은 2월 6일로 하루 다릅니다.',
+                q: '이 계산기의 기준은 무엇이고, 왜 2049년까지만 되나요?',
+                a: '한국천문연구원(KASI) 음력 데이터와 전 구간(1900~2049년) 일치를 검증했고, 2025~2030년 국가 공휴일 발표(설날·추석·부처님오신날)와도 교차 확인했습니다. 상한이 2049년인 이유는 KASI가 확정 계산해 배포한 음양력 자료가 2050년까지이기 때문입니다.',
               },
               {
                 q: '한국·중국·일본 음력이 모두 같은가요?',
@@ -78,28 +78,28 @@ export default function LunarPage() {
         <div>
           <h2 className="g-h2">양력과 음력, 무엇이 다를까?</h2>
           <p className="g-p">
-            <strong style={{ color: 'var(--text)' }}>양력(태양력)</strong>은 지구가 태양을 한 바퀴 도는 365.25일을 기준으로 하며 현재 세계 표준 달력입니다.
-            <strong style={{ color: 'var(--text)' }}> 음력(태음력)</strong>은 달이 차고 기우는 주기 약 29.5일을 한 달로 삼아 1년이 약 354일로 양력보다 11일가량 짧습니다.
+            <strong style={{ color: 'var(--text)' }}>양력(태양력)</strong>은 계절이 한 바퀴 도는 태양년(약 365.2422일)에 맞춘 달력으로, 오늘날 쓰는 그레고리력은 평년 365일에 윤년을 끼워 평균 365.2425일이 되게 합니다.
+            <strong style={{ color: 'var(--text)' }}> 음력</strong>은 달이 차고 기우는 주기(삭망월, 약 29.53일)를 한 달로 삼아 1년이 354~355일로 양력보다 11일가량 짧습니다. 한국 음력은 윤달로 계절을 맞추므로 정확히는 <strong style={{ color: 'var(--text)' }}>태음태양력</strong>입니다.
             이 차이를 보정하기 위해 중기(中氣)가 들지 않는 달을 윤달로 삼는 <strong style={{ color: 'var(--accent)' }}>무중치윤법</strong>으로 윤달을 끼워 넣으며, 결과적으로 약 19년에 7번꼴(메톤 주기 근사)이 됩니다.
           </p>
           <p className="g-p">
             한국의 공식 달력은 을미개혁 때 음력 1895년 11월 17일을 <strong style={{ color: 'var(--text)' }}>양력 1896년 1월 1일(건양 원년)</strong>로 삼은 이후 양력이지만, <strong style={{ color: 'var(--text)' }}>설날·추석·부처님오신날·단오·제사·음력 생일</strong> 등 전통 절기는 여전히 음력 기준으로 챙깁니다. 일부 가정은 음력 생일·양력 생일을 모두 챙기기도 합니다.
           </p>
-          <div style={{ overflowX: 'auto', marginTop: 14 }}>
+          <div className="tableScroll" style={{ marginTop: 14 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>구분</th>
                   <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--accent)', fontWeight: 700 }}>양력 (태양력)</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--cat-health)', fontWeight: 700 }}>음력 (태음력)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--cat-health)', fontWeight: 700 }}>음력 (태음태양력)</th>
                 </tr>
               </thead>
               <tbody>
                 {[
                   ['기준', '지구의 태양 공전', '달의 차오름·이지러짐'],
-                  ['1년 길이', '365일 (윤년 366일)', '약 354일 (윤달 든 해 383~385일)'],
-                  ['1개월 길이', '28~31일 고정', '29일 또는 30일'],
-                  ['윤 보정', '4년마다 윤일(2/29) 추가', '무중치윤법 (약 19년에 7번꼴)'],
+                  ['1년 길이', '365일 (윤년 366일)', '354~355일 (윤달 든 해 383~385일)'],
+                  ['1개월 길이', '28~31일 고정', '29일(작은달) 또는 30일(큰달) — 해마다 배치가 다름'],
+                  ['윤 보정', '4년마다 윤일(2/29) — 단 100의 배수 해는 빼고 400의 배수 해는 넣음', '무중치윤법 (약 19년에 7번꼴)'],
                   ['시작', '1896년 채택 (을미개혁·건양)', '신라·고려·조선~현재'],
                   ['주 용도', '일상·법정·국제', '설·추석·제사·음력 생일'],
                 ].map((r, i) => (
@@ -149,9 +149,65 @@ export default function LunarPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+          <p className="g-note">
             ※ 한국천문연구원 데이터·국가 공휴일 발표 기준. 2027년 설날(2/7)·2028년 설날(1/27)은 중국 춘절(각 2/6·1/26)과 하루 다른 해입니다 —
             한국 음력은 KST 합삭 기준이라 중국력 기반 달력·앱과 차이가 날 수 있습니다.
+          </p>
+        </div>
+
+        {/* 2-1. 윤달 — 값은 LunarClient의 LUNAR_INFO(KASI 기준)로 lunarToSolar를 돌려 확인한 결과 */}
+        <div>
+          <h2 className="g-h2">윤달 — 언제 오고, 어떻게 입력하나</h2>
+          <p className="g-p">
+            윤달은 바로 앞 달의 이름을 한 번 더 쓰는 달이라, 윤달이 든 해에는 같은 음력 날짜가 두 번 있습니다.
+            2028년에는 윤5월이 들어 <strong>음력 5월 10일은 양력 6월 2일, 윤5월 10일은 양력 7월 2일</strong>로 한 달이 떨어집니다.
+            이 계산기의 「음력 → 양력」에서는 그해에 그 달의 윤달이 있을 때만 「윤O월로 계산」 체크박스가 나타납니다.
+            윤달에 있었던 날짜(윤달생 생일·윤달 기일 등)를 옮길 때만 체크하고, 평달 날짜라면 체크하지 않은 채로 두세요.
+          </p>
+          <p className="g-p">
+            같은 달의 윤달이 다시 오는 일은 드뭅니다. 예컨대 2020년 윤4월 15일(양력 6월 6일)에 태어났다면, 이 계산기가 다루는 2049년까지 윤4월은 다시 오지 않습니다.
+            그래서 윤달생 생일이나 윤달 기일은 흔히 평달의 같은 날짜(이 예에서는 음력 4월 15일 — 2026년 양력 5월 31일)로 챙기는데, 집안 관례에 따라 다를 수 있습니다.
+          </p>
+          <p className="g-p">
+            1900~2049년 150년 동안 윤달은 55번 들었고, 그중 <strong>윤5월이 13번</strong>으로 가장 많았습니다. 반면 윤9·10·11월은 각 1번뿐이고 윤12월·윤1월은 한 번도 없습니다.
+            지구가 태양에 가장 가까운 1월 초 무렵에는 공전이 빨라 중기(中氣) 사이 간격이 한 달보다 짧아지므로, 겨울 달에는 중기가 빠지는 일(= 윤달 조건)이 거의 생기지 않기 때문입니다.
+            이장·수의 준비처럼 윤달에 맞춰 일정을 잡으려면 아래 기간을 참고하세요.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 420 }}>
+              <caption className="srOnly">2025~2047년 윤달과 양력 기간 (한국천문연구원 음력 기준)</caption>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>음력 연도</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>윤달</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>양력 기간 (윤달 1일 ~ 말일)</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontWeight: 500 }}>일수</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  ['2025', '윤6월', '2025. 7. 25.(금) ~ 8. 22.(금)', '29일'],
+                  ['2028', '윤5월', '2028. 6. 23.(금) ~ 7. 21.(금)', '29일'],
+                  ['2031', '윤3월', '2031. 4. 22.(화) ~ 5. 20.(화)', '29일'],
+                  ['2033', '윤11월', '2033. 12. 22.(목) ~ 2034. 1. 19.(목)', '29일'],
+                  ['2036', '윤6월', '2036. 7. 23.(수) ~ 8. 21.(목)', '30일'],
+                  ['2039', '윤5월', '2039. 6. 22.(수) ~ 7. 20.(수)', '29일'],
+                  ['2042', '윤2월', '2042. 3. 22.(토) ~ 4. 19.(토)', '29일'],
+                  ['2044', '윤7월', '2044. 8. 23.(화) ~ 9. 20.(화)', '29일'],
+                  ['2047', '윤5월', '2047. 6. 23.(일) ~ 7. 22.(월)', '30일'],
+                ].map((r, i) => (
+                  <tr key={r[0]} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500, fontVariantNumeric: 'tabular-nums' }}>{r[0]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{r[1]}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontVariantNumeric: 'tabular-nums', whiteSpace: 'nowrap' }}>{r[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'right', color: 'var(--muted)', fontVariantNumeric: 'tabular-nums' }}>{r[3]}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            ※ 2025년 윤6월은 지난 윤달로, 그해 윤달생의 생일 확인용으로 함께 적었습니다. 2033년 윤11월은 옛 계산 방식을 따른 일부 달력·프로그램이 윤7월로 적어 온 드문 사례(이른바 「2033년 문제」)이니, 그 무렵 일정은 해당 연도 월력요항으로 다시 확인하세요.
           </p>
         </div>
 
@@ -174,7 +230,7 @@ export default function LunarPage() {
                 己(기) · 庚(경) · 辛(신) · 壬(임) · 癸(계)
               </p>
             </div>
-            <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
+            <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-health) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '14px 18px' }}>
               <p style={{ fontSize: 13, color: 'var(--cat-health)', fontWeight: 700, marginBottom: 8 }}>지지 (12) · 띠</p>
               <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, fontFamily: 'var(--font-sans)' }}>
                 子(자·쥐) · 丑(축·소) · 寅(인·범) · 卯(묘·토끼)<br/>
@@ -183,7 +239,7 @@ export default function LunarPage() {
               </p>
             </div>
           </div>
-          <div style={{ overflowX: 'auto', marginTop: 14 }}>
+          <div className="tableScroll" style={{ marginTop: 14 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -261,7 +317,7 @@ export default function LunarPage() {
               { href: '/tools/date/dday',       icon: '📅', name: 'D-Day 계산기',        desc: '두 날짜 사이·페이스' },
               { href: '/tools/date/military',   icon: '🎖️', name: '군대 전역일 계산기',  desc: '전역일·복무율' },
               { href: '/tools/date/history-era', icon: '📜', name: '연호·연대 변환기',   desc: '단기·조선왕·간지·한·중·일' },
-              { href: '/tools/date/life-time',  icon: '⏳', name: '생애 시간 계산기',    desc: '살아온 시간·앞으로의 시간' },
+              { href: '/tools/date/holiday-bridge', icon: '🌉', name: '징검다리 연휴 플래너', desc: '설·추석 연휴에 연차 붙이기' },
             ].map(t => (
               <Link key={t.href} href={t.href} style={{
                 display: 'flex', alignItems: 'center', gap: '12px',

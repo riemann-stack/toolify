@@ -120,7 +120,7 @@ export default function CharCountClient() {
     const twc = twitterCount(text)
     const tw = twc.weighted
 
-    // 읽기·말하기 시간 (한국어 기준 약 300자/분 묵독, 150자/분 발화)
+    // 읽기·말하기 시간 — 300자/분 묵독·150자/분 발화는 계산용 가정값(공식 통계 아님)
     const readingMin = len / 300
     const speakingMin = len / 150
     const englishWPM = words / 200
@@ -367,7 +367,7 @@ export default function CharCountClient() {
           </div>
 
           <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-            ※ 원고지는 200자 기준(공백 포함) · 묵독 약 300자/분 · 발화 약 150자/분 (한국어 표준 기준 추정)
+            ※ 원고지는 200자 기준(공백 포함) · 묵독 약 300자/분 · 발화 약 150자/분 (계산용 가정값 — 공식 통계 아님)
           </p>
         </>
       )}

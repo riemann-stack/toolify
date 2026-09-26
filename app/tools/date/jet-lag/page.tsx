@@ -5,6 +5,8 @@ import { GuideDivider } from "@/components/ToolSection"
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import Callout from '@/components/Callout'
 
 export const metadata = buildMetadata({
   path: '/tools/date/jet-lag',
@@ -24,7 +26,7 @@ const FAQ_LD = [
               },
               {
                 q: '동쪽과 서쪽 이동 중 어느 쪽이 더 힘드나요?',
-                a: '시간대 기준 <strong>동쪽 이동(시계 앞당김)</strong>이 더 어렵습니다. 인간의 생체시계는 자연적으로 약 24.2시간 주기로 작동해 「늘리는 것(서쪽)」은 쉽지만 「줄이는 것(동쪽)」은 힘듭니다. 같은 시차라도 동쪽은 서쪽보다 약 <strong>1.5배</strong> 더 긴 적응 기간이 필요합니다.<br/><br/>예) 서울→호주(시드니, +1h)는 동쪽 이동 — 시차는 작지만 적응이 미묘하게 어려움.',
+                a: '시간대 기준 <strong>동쪽 이동(시계 앞당김)</strong>이 더 어렵습니다. 인간의 생체시계는 자연적으로 약 24.2시간 주기로 작동해 「늘리는 것(서쪽)」은 쉽지만 「줄이는 것(동쪽)」은 힘듭니다. 같은 시차라도 동쪽은 서쪽보다 약 <strong>1.5배</strong> 더 긴 적응 기간이 필요합니다.<br/><br/>예) 서울→호놀룰루는 생체시계를 5시간 앞당겨야 해 약 5일, 반대로 호놀룰루→서울은 5시간 늦춤이라 약 4일 — 같은 5시간이라도 동쪽형이 하루 더 걸립니다(서울↔두바이도 가는 길 늦춤 4일, 귀국 앞당김 5일). 1~2시간처럼 작은 시차는 두 방향 모두 1~2일이라 차이가 거의 드러나지 않습니다.',
               },
               {
                 q: '비행기에서 언제 자는 게 좋나요?',
@@ -48,7 +50,7 @@ const FAQ_LD = [
               },
               {
                 q: '햇빛 노출이 정말 시차 적응에 도움이 되나요?',
-                a: '네. 햇빛은 가장 강력한 <strong>생체시계 동기화 신호(zeitgeber)</strong>입니다.<br/>· <strong>아침 햇빛(6~10시)</strong> — 생체시계를 앞당김 → 동쪽 이동 적응에 도움<br/>· <strong>저녁 햇빛(15~19시)</strong> — 생체시계를 늦춤 → 서쪽 이동 적응에 도움<br/><br/>실내에서도 창가에 앉거나 야외 산책 10~30분만으로 효과가 있습니다. 야외는 흐린 날에도 실내 조명(300~500 lux)보다 수 배~수십 배 밝습니다(짙은 흐림 1,000~2,000 lux, 밝은 흐림 1만 lux 이상, 맑은 날 직사광 10만 lux).',
+                a: '네. 햇빛은 가장 강력한 <strong>생체시계 동기화 신호(zeitgeber)</strong>입니다.<br/>· <strong>아침 햇빛(6~10시)</strong> — 생체시계를 앞당김 → 동쪽 이동 적응에 도움(단, 크게 앞당기는 여행의 첫 1~2일은 본문 「햇빛 타이밍」 섹션처럼 체온 최저점 이후로 미루세요)<br/>· <strong>저녁 햇빛(15~19시)</strong> — 생체시계를 늦춤 → 서쪽 이동 적응에 도움<br/><br/>실내에서도 창가에 앉거나 야외 산책 10~30분만으로 효과가 있습니다. 야외는 흐린 날에도 실내 조명(300~500 lux)보다 수 배~수십 배 밝습니다(짙은 흐림 1,000~2,000 lux, 밝은 흐림 1만 lux 이상, 맑은 날 직사광 10만 lux).',
               },
               {
                 q: '7일 적응 스케줄대로 안 따르면 어떻게 되나요?',
@@ -65,6 +67,17 @@ export default function JetLagPage() {
       <p className="tp-lead">
         여행 전·중·후 <strong style={{ color: 'var(--text)' }}>시차 적응 일정과 수면 타이밍</strong> 자동 가이드.
       </p>
+
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="시차·서머타임 = IANA 시간대 데이터(출발일 기준) · 적응 속도 = 동쪽 1시간/일·서쪽 1.5시간/일 (CDC Yellow Book)"
+        sources={[
+          { label: 'CDC Yellow Book — Jet Lag Disorder', href: 'https://www.cdc.gov/yellow-book/hcp/travel-air-sea/jet-lag-disorder.html' },
+          { label: 'AASM 임상 진료지침 (SLEEP 2007)', href: 'https://aasm.org/wp-content/uploads/2017/07/PP_CircadianRhythm.pdf' },
+          { label: 'NHS — Jet lag', href: 'https://www.nhs.uk/conditions/jet-lag/' },
+          { label: 'IANA Time Zone Database', href: 'https://www.iana.org/time-zones' },
+        ]}
+      />
 
       <JetLagClient />
 
@@ -84,70 +97,108 @@ export default function JetLagPage() {
           </p>
         </div>
 
-        {/* 2. 여행지별 시차 표 */}
+        {/* 2. 여행지별 시차 표 — 값은 JetLagClient의 circadian()·적응일수 규칙으로 2026-01-15/07-15 정오(UTC) 기준 산출·검산 */}
         <div>
-          <h2 className="g-h2">인기 여행지별 시차 & 적응 기간</h2>
+          <h2 className="g-h2">인기 여행지별 시차 &amp; 적응 기간 (가는 길·귀국)</h2>
+          <p className="g-p">
+            서울 출발 기준으로 계산기가 내놓는 값을 그대로 옮겼습니다. 서머타임을 쓰는 도시는 <strong>1월(표준시)</strong>과 <strong>7월(서머타임)</strong> 값이 다르고, 남반구 시드니는 반대로 1월이 서머타임입니다.
+            귀국 칸은 현지에 완전히 적응한 뒤 서울로 돌아올 때의 역(逆)시차입니다.
+          </p>
           <div className="tableScroll">
-            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px' }}>
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 560 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>목적지</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>시계 차이</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>생체시계 방향</th>
-                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)', fontWeight: 500 }}>예상 적응</th>
+                  {['목적지', '시계 차이 (1월 / 7월)', '가는 길: 생체시계 이동 → 적응', '귀국: 생체시계 이동 → 적응'].map((h, i) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: i === 0 ? 'left' : 'center', color: 'var(--muted)', fontWeight: 500 }}>{h}</th>
+                  ))}
                 </tr>
               </thead>
               <tbody>
                 {[
-                  ['도쿄', '0시간', '—', '없음'],
-                  ['방콕', '-2시간', '서쪽 (늦춤)', '1~2일'],
-                  ['두바이', '-5시간', '서쪽 (늦춤)', '3~4일'],
-                  ['파리', '-8시간', '서쪽 (늦춤)', '5~6일'],
-                  ['런던', '-9시간', '서쪽 (늦춤)', '6일'],
-                  ['뉴욕', '-14시간', '서쪽 (늦춤)', '약 10일'],
-                  ['LA', '-17시간', '동/서 (경계)', '7~11일'],
-                  ['호놀룰루', '-19시간', '동쪽 (앞당김 5h)', '약 5일'],
-                  ['시드니', '+1시간', '동쪽 (앞당김)', '1~2일'],
+                  ['도쿄', '0시간', '없음', '없음'],
+                  ['방콕', '−2시간', '늦춤 2h → 2일', '앞당김 2h → 2일'],
+                  ['두바이', '−5시간', '늦춤 5h → 4일', '앞당김 5h → 5일'],
+                  ['파리', '−8 / −7시간', '늦춤 8h → 6일 / 늦춤 7h → 5일', '늦춤 16h → 11일 / 앞당김 7h → 7일'],
+                  ['런던', '−9 / −8시간', '늦춤 9h → 6일 / 늦춤 8h → 6일', '늦춤 15h → 10일 / 늦춤 16h → 11일'],
+                  ['뉴욕', '−14 / −13시간', '늦춤 14h → 10일 / 늦춤 13h → 9일', '늦춤 10h → 7일 / 늦춤 11h → 8일'],
+                  ['LA', '−17 / −16시간', '앞당김 7h → 7일 / 늦춤 16h → 11일', '늦춤 7h → 5일 / 늦춤 8h → 6일'],
+                  ['호놀룰루', '−19시간', '앞당김 5h → 5일', '늦춤 5h → 4일'],
+                  ['시드니', '+2 / +1시간', '앞당김 2h → 2일 / 앞당김 1h → 1일', '늦춤 2h → 2일 / 늦춤 1h → 1일'],
                 ].map((row, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{row[0]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent)', fontFamily: 'var(--font-sans)', fontWeight: 700 }}>{row[1]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[2]}</td>
-                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{row[3]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--accent-ink)', fontWeight: 700, whiteSpace: 'nowrap' }}>{row[1]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--text)' }}>{row[2]}</td>
+                    <td style={{ padding: '10px 12px', textAlign: 'center', color: 'var(--muted)' }}>{row[3]}</td>
                   </tr>
                 ))}
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', marginTop: '8px', lineHeight: 1.6 }}>
-            ※ 서울(UTC+9) 기준. 「시계 차이」는 실제 시각 차이, 「생체시계 방향」은 실제 적응 방향입니다.
-            뉴욕·LA·호놀룰루처럼 시계 차이가 12시간을 넘으면 더 짧은 반대 방향으로 적응하며, LA는 서머타임 여부에 따라 경계(동↔서)에 걸칩니다.
-            위 계산기는 입력한 출발일 기준으로 서머타임을 반영하므로 표(표준시)와 1시간가량 다를 수 있습니다.
+          <p className="g-note">
+            ※ 값이 하나면 1월·7월이 같습니다. 「늦춤」은 서쪽형, 「앞당김」은 동쪽형 적응입니다. 뉴욕·LA·호놀룰루처럼 시계 차이가 12시간을 넘으면 더 짧은 반대 방향으로 셉니다.
+            LA는 1월엔 7시간 앞당김, 7월엔 16시간 늦춤으로 판정이 갈려 적응일수가 7일↔11일로 크게 달라집니다. 실제 출발일을 넣으면 그날의 서머타임이 반영됩니다.
+          </p>
+          <p className="g-p">
+            눈여겨볼 곳은 <strong>유럽→서울 귀국</strong>입니다. 겨울 파리→서울은 시계로 8시간 앞당겨야 하는데, 계산기는 앞당김이 8시간 이상이면 몸이 반대로 16시간을 늦춰 맞춘다고 보고(아래 계산 방식 ②) 적응일수를 11일로 냅니다.
+            연구에서도 이 구간에서는 앞당김으로 적응하는 사람과 늦춤으로 도는 사람이 섞여 나오므로, 실제로는 앞당김 기준 약 8일(8시간 ÷ 1시간/일)과 11일 사이로 보는 것이 현실적입니다.
+            여름(서머타임)에는 같은 노선이 7시간 앞당김이라 7일로 바로 떨어집니다.
           </p>
         </div>
 
-        {/* 3. 공식 */}
+        {/* 3. 계산 방식 — JetLagClient.tsx 로직과 1:1 */}
         <div>
-          <h2 className="g-h2">시차 적응 핵심 공식</h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {[
-              { title: '적응 기간 (동쪽·앞당김)', formula: '위상이동 시간 ÷ 1시간/일 (예: 호놀룰루 5시간 앞당김 → 약 5일)' },
-              { title: '적응 기간 (서쪽·늦춤)', formula: '위상이동 시간 ÷ 1.5시간/일 (예: 파리 8시간 늦춤 → 약 6일)' },
-              { title: '카페인 컷오프 (반감기 약 5h + 잔류효과 고려 보수 버퍼)', formula: '평소 취침 시각 − 8시간(안전 버퍼) = 마지막 허용 시각' },
-              { title: '낮잠 허용 기준', formula: '현지 오후 3시 이전 + 20~30분 이내 = 안전' },
-            ].map((item, i) => (
-              <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: '12px', flexWrap: 'wrap' }}>
-                <span style={{ fontSize: '13px', color: 'var(--muted)' }}>{item.title}</span>
-                <code style={{ fontFamily: 'var(--font-mono)', fontSize: '14px', color: 'var(--accent)', fontWeight: 700 }}>{item.formula}</code>
-              </div>
-            ))}
-          </div>
+          <h2 className="g-h2">계산기는 이렇게 계산합니다</h2>
+          <ol className="g-list">
+            <li><strong>시계 차이</strong> — 입력한 출발일 정오(UTC) 시점의 두 도시 UTC 오프셋을 IANA 시간대 데이터로 구해 뺍니다. 서머타임 시작·종료일이 도시마다 달라 날짜가 바뀌면 결과도 바뀝니다.</li>
+            <li><strong>생체시계 방향</strong> — 시계 차이를 −12~+12시간 사이의 가장 짧은 이동으로 바꿉니다. 앞당김이 8시간 이상이면 몸이 늦춤(24 − 앞당김)으로 재동조하는 경향을 반영해 서쪽형으로 처리합니다(Eastman &amp; Burgess, 2009).</li>
+            <li><strong>완전 적응 일수</strong> — 앞당김은 하루 1시간, 늦춤은 하루 1.5시간씩 옮겨진다고 보고 올림합니다. 50%·80% 적응 시점은 이 값의 절반·80%를 올림한 날입니다.</li>
+            <li><strong>출국 전 조정표</strong> — 하루 조정폭은 이동량 ÷ 5를 올림하되 최대 2시간, 출국 전에 미리 옮기는 총량은 최대 3시간으로 제한합니다. 집에서 3시간 넘게 생활을 옮기기는 어렵기 때문입니다.</li>
+            <li><strong>도착 현지 시각</strong> = 이륙 시각(출발지) + 비행 시간 + 시계 차이.</li>
+            <li><strong>기내 수면 권장 구간</strong> — 비행 중 도착지 시각을 15분 단위로 훑어 22:00~06:00에 걸리는 가장 긴 구간을 고릅니다.</li>
+            <li><strong>카페인 마감</strong> = 평소 취침 − 8시간. <strong>낮잠</strong>은 도착 시각이 15시 전이면 30분, 15~17시면 15분, 17시 이후면 금지이고, 평소 취침~기상 사이에 도착하면 바로 취침으로 판정합니다.</li>
+            <li><strong>피로도</strong> — 기내 수면을 비행 시간의 약 3분의 1(최대 6시간)로 가정하고, 도착 후 취침까지 버틸 시간과 함께 4단계로 나눕니다.</li>
+          </ol>
+        </div>
+
+        {/* 3-1. 계산 예시 — 계산기 출력값과 일치 (서울→파리, 출발일 1월 중순) */}
+        <div>
+          <h2 className="g-h2">계산 예시 — 서울→파리, 1월, 13:00 이륙</h2>
+          <p className="g-p">
+            비행 14시간, 평소 23:00 취침·07:00 기상, 체류 7일로 넣으면 다음과 같이 나옵니다. 1월 파리는 표준시(UTC+1)라 시계 차이는 8시간입니다.
+          </p>
+          <ul className="g-list">
+            <li><strong>판정</strong> — 생체시계 8시간 늦춤(서쪽형), 완전 적응 약 6일(50%는 3일, 80%는 5일 후).</li>
+            <li><strong>출국 전</strong> — 하루 2시간씩 늦춰 D-2 23:00 → D-1 01:00 → 출발일 02:00 취침(기상은 07:00 → 09:00 → 10:00). 총 3시간에서 멈춥니다.</li>
+            <li><strong>기내</strong> — 이륙 순간 파리는 05:00, 도착은 파리 19:00입니다. 파리 밤(22~06시)과 겹치는 건 이륙 후 첫 1시간뿐이라 권장 수면은 1.0시간이고, 나머지는 깨어 있는 편이 도착 첫날 밤잠에 유리합니다.</li>
+            <li><strong>도착 후</strong> — 현지 23:00 취침까지 4시간을 버티면 됩니다(피로도 「보통」). 19시 도착이라 낮잠은 「금지」, 카페인은 15:00 이후 끊고, 햇빛은 현지 15~19시에 쬐고 이른 아침(05~08시) 강한 빛은 피합니다.</li>
+            <li><strong>첫 2~3일 주의</strong> — 서울의 23:00~07:00이 파리의 15:00~23:00이라 오후 늦게 졸음이 몰리고, 반대로 한밤중에 눈이 떠지기 쉽습니다.</li>
+          </ul>
+          <p className="g-note">
+            ※ 같은 노선을 7월에 가면 시계 차이 7시간(늦춤 7h)이라 적응 약 5일, 도착 현지 시각도 20:00으로 1시간 늦어집니다.
+          </p>
+        </div>
+
+        {/* 3-2. 햇빛 타이밍 — 위상반응곡선 */}
+        <div>
+          <h2 className="g-h2">햇빛 타이밍 — 체온이 가장 낮은 시각이 기준</h2>
+          <p className="g-p">
+            빛이 생체시계를 앞당길지 늦출지는 시계 시각이 아니라 <strong>몸의 심부체온이 가장 낮아지는 시각</strong>(보통 평소 기상 2~3시간 전)을 기준으로 정해집니다.
+            그 <strong>이전</strong>에 받는 빛은 시계를 늦추고, <strong>이후</strong>에 받는 빛은 앞당깁니다. 도착 직후 몸은 아직 서울 시각대로 움직이므로 이 기준점도 서울 시각에 머물러 있습니다.
+          </p>
+          <p className="g-p">
+            평소 07:00에 일어나는 사람의 체온 최저점은 서울 새벽 4~5시 무렵입니다. 파리(겨울)로 가면 이 시점이 현지 저녁 8~9시라, 계산기가 권하는 오후 3~7시 빛은 최저점 이전 → 늦춤 방향으로 정확히 작동합니다.
+            반면 호놀룰루(5시간 앞당김)에선 최저점이 현지 오전 9~10시에 놓여, 첫날 이른 아침 햇빛은 오히려 시계를 늦출 수 있습니다.
+          </p>
+          <Callout tone="tip" title="큰 폭으로 앞당겨야 하는 동쪽형 여행의 첫 1~2일">
+            계산기의 「현지 06~10시 햇빛」은 적응이 진행된 뒤의 일반 원칙입니다. 첫날은 서울 기준 체온 최저점(평소 기상 2~3시간 전)을 현지 시각으로 옮긴 시각까지는 선글라스 등으로 빛을 피하고, 그 이후에 밖으로 나가세요 — 평소 07:00 기상이라면 호놀룰루(앞당김 5h)는 현지 10시 이후, 1월 LA(앞당김 7h)는 정오 이후입니다. 적응이 진행되면 최저점이 하루 1시간 정도씩 앞당겨지므로 햇빛 시간대도 그만큼 앞으로 옮기면 됩니다.
+          </Callout>
         </div>
 
         {/* 4. 방향별 가이드 */}
         <div>
           <h2 className="g-h2">이동 방향별 완전 가이드</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px' }}>
             <div style={{ background: 'color-mix(in srgb, var(--cyan-600) 6%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-health)', marginBottom: '10px' }}>← 서쪽 이동 (미주·유럽)</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
@@ -159,13 +210,13 @@ export default function JetLagPage() {
                 ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>• {t}</li>)}
               </ul>
             </div>
-            <div style={{ background: 'rgba(234,88,12,0.06)', border: '1px solid rgba(234,88,12,0.25)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
+            <div style={{ background: 'color-mix(in srgb, var(--cat-life) 6%, transparent)', border: '1px solid color-mix(in srgb, var(--cat-life) 25%, transparent)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--cat-life)', marginBottom: '10px' }}>→ 동쪽 이동 (호주·하와이)</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '출국 전: 매일 1~2시간씩 취침 앞당기기',
                   '기내: 현지 낮 시간대 각성 유지',
-                  '도착 후: 아침 햇빛 최대 노출',
+                  '도착 후: 아침 햇빛 — 단, 첫 1~2일은 체온 최저점이 지난 뒤부터 (위 햇빛 타이밍 참고)',
                   '주의: 서쪽보다 1.5배 더 어려움',
                 ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--text)', lineHeight: 1.7 }}>• {t}</li>)}
               </ul>
@@ -176,14 +227,14 @@ export default function JetLagPage() {
         {/* 5. 단기 vs 장기 */}
         <div>
           <h2 className="g-h2">단기 출장 vs 장기 여행 전략</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '12px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(240px, 100%), 1fr))', gap: '12px' }}>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px' }}>
               <p style={{ fontSize: '13px', fontWeight: 700, color: 'var(--accent)', marginBottom: '10px' }}>단기 출장 (2~3일)</p>
               <ul style={{ margin: 0, padding: 0, listStyle: 'none', display: 'flex', flexDirection: 'column', gap: '6px' }}>
                 {[
                   '적응 포기, 한국 시간 유지 전략',
                   '회의는 한국 낮 시간대에 맞춰 일정',
-                  '카페인·수면제 단기 활용 고려',
+                  '카페인은 한국 낮 시간대에 맞춰 활용, 수면제는 의사 상담 후',
                 ].map((t, i) => <li key={i} style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7 }}>• {t}</li>)}
               </ul>
             </div>
@@ -198,6 +249,21 @@ export default function JetLagPage() {
               </ul>
             </div>
           </div>
+        </div>
+
+        {/* 5-1. 전문가 상담 */}
+        <div>
+          <h2 className="g-h2">자주 하는 실수와 상담이 필요한 경우</h2>
+          <ul className="g-list">
+            <li><strong>출발지 기준 시각을 도착지 시각으로 착각</strong> — 이륙 시각은 항공권의 출발지 현지 시각을 넣어야 도착 시각·기내 수면 구간이 맞습니다. 경유편은 대기 시간을 포함한 총 이동 시간을 넣으세요.</li>
+            <li><strong>서머타임 전환 주간을 표준시로 계산</strong> — 3~4월·10~11월 전후 출발이면(미국·유럽·호주의 전환일이 서로 다릅니다) 반드시 실제 출발일을 입력하세요. 1시간 차이로 LA처럼 적응 방향이 뒤집히는 노선이 있습니다.</li>
+            <li><strong>도착 첫날 긴 낮잠</strong> — 오후 늦게 1~2시간 깊이 자면 그날 밤잠이 흐트러져 현지 리듬에 맞추기가 더 늦어집니다.</li>
+            <li><strong>귀국 후 역시차를 계획하지 않음</strong> — 위 표처럼 귀국 적응이 가는 길보다 긴 노선이 있습니다. 귀국 다음 날 중요한 일정을 잡을 때 참고하세요.</li>
+          </ul>
+          <p className="g-p">
+            계산기의 적응 일수는 평균적인 속도를 가정한 추정입니다. 예상 기간이 지나도 불면·낮 졸림·소화 장애가 계속되거나, 잦은 장거리 비행·교대근무로 수면 리듬이 만성적으로 깨졌다면 수면의학 진료를 받아 보세요.
+            수면제나 멜라토닌(국내 전문의약품)을 쓰려면 복용 시각·용량·운전 등 다음 날 활동까지 의사·약사와 상의해야 합니다.
+          </p>
         </div>
 
         {/* 6. FAQ */}

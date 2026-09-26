@@ -671,8 +671,11 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
 }) {
   const targetBed = parseHHMM(bedtime)
   const wakeHour = parseHHMM(waketime)
-  // 밤 도착 판정: 현지 도착이 목표 취침~기상 사이면 버틸 필요 없이 바로 취침
-  const nightArrival = arrivalLocalH >= targetBed || arrivalLocalH < wakeHour
+  // 밤 도착 판정: 현지 도착이 목표 취침~기상 사이면 버틸 필요 없이 바로 취침.
+  // 취침이 자정 이후(00:00~02:00 선택지)면 취침 < 기상이라 구간이 자정을 넘지 않는다 → AND로 판정.
+  const nightArrival = targetBed > wakeHour
+    ? (arrivalLocalH >= targetBed || arrivalLocalH < wakeHour)
+    : (arrivalLocalH >= targetBed && arrivalLocalH < wakeHour)
   const hoursToEndure = nightArrival ? 0 : ((targetBed - arrivalLocalH) + 24) % 24
 
   // 비행 길이 기반 추정 수면 (대략 비행시간의 1/3, 최대 6시간)
@@ -684,7 +687,8 @@ function PostTab({ arrivalLocalH, flightHours, direction, adaptDays, stayDays, a
     hoursToEndure <= 8 && estimatedFlightSleep >= 2 ? 'high' : 'veryHigh'
 
   // 낮잠 판정 — 도착 시각 기준 (밤 도착은 낮잠이 아니라 바로 취침)
-  const napH = arrivalLocalH
+  // 자정 이후~늦은 취침 사이 도착(예: 01:00 취침, 00:30 도착)은 '17시 이후'와 같은 저녁 구간 → +24로 금지 쪽에 둔다
+  const napH = arrivalLocalH < wakeHour ? arrivalLocalH + 24 : arrivalLocalH
   const napDecision: { status: 'ok' | 'warn' | 'no' | 'sleep'; max: number; note: string } =
     nightArrival ? { status: 'sleep', max: 0, note: '이미 현지 밤 시간대에 도착했습니다. 낮잠 대신 바로 정상 취침하세요.' }
     : napH < 15 ? { status: 'ok', max: 30, note: '짧은 낮잠은 회복에 도움이 됩니다. 알람 설정 필수!' }

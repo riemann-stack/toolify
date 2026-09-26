@@ -333,3 +333,39 @@ export function saveFamily(s: UserFamilySettings): void {
 export function familyToEffectivePeople(members: FamilyMember[]): number {
   return members.reduce((sum, m) => sum + AGE_BAND_FACTOR[m.age] * APPETITE_MULT[m.appetite], 0)
 }
+
+// ── 재료별 분량 계산 (계산기·페이지 가이드 표가 같은 식을 쓰도록 여기 한 곳에 둔다) ──
+export interface Applied {
+  meal: MealType
+  appetite: Appetite
+  carb: Carb
+  variant: string | null
+}
+
+function roundTo(v: number, step: number): number { return Math.round(v / step) * step }
+
+export function calcItem(item: ServingData, peopleEff: number, a: Applied) {
+  let base = item.basePerPerson[a.meal]
+  if (a.variant && item.variantAdjust[a.variant] !== undefined) base += item.variantAdjust[a.variant]
+  const isCarbFood = item.category === 'noodle' || item.category === 'grain'
+  if (!isCarbFood) {
+    if (a.carb === 'yes') base -= item.withCarbReduction
+    else base += item.withoutCarbIncrease
+  }
+  if (base < 0) base = 0
+  const perPerson = base * APPETITE_MULT[a.appetite]
+  const total = perPerson * peopleEff
+  // '개' 단위(만두)는 1개 단위로 — 5단위 반올림하면 1인 메인 4개가 '5~5개', 곁들임 2개가 '0~0개'가 됨
+  const isCount = item.unit === '개'
+  const step = isCount ? 1 : (item.category === 'meat' || item.category === 'noodle' ? 10 : 5)
+  // 필요량이 있으면 반올림으로 0이 되지 않도록 최소 1단위 보장
+  const floor = total > 0 ? step : 0
+  const mid = Math.max(floor, roundTo(total, step))
+  const min = isCount ? Math.max(floor, Math.floor(total * 0.9)) : Math.max(floor, roundTo(total * 0.9, step))
+  const max = isCount ? Math.max(min, Math.ceil(total * 1.1)) : Math.max(floor, roundTo(total * 1.1, step))
+  return {
+    perPerson, mid, min, max,
+    cookedMin: Math.round(min * item.rawToCooked),
+    cookedMax: Math.round(max * item.rawToCooked),
+  }
+}

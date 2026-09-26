@@ -5,7 +5,8 @@
 export type AllergyGroup = 'tree' | 'legume' | 'seed'
 
 export const ALLERGY_GROUP_LABEL: Record<AllergyGroup, string> = {
-  tree: '핵과류 (Tree nuts)',
+  // '핵과류'는 복숭아·자두 같은 핵과(核果)를 가리키는 말 — 알레르기 분류명은 '나무 견과류(tree nuts)'
+  tree: '나무 견과류 (Tree nuts)',
   legume: '콩과 (Legume)',
   seed: '씨앗류 (Seeds)',
 }

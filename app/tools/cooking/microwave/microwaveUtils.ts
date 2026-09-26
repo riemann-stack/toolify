@@ -249,7 +249,6 @@ export const VESSELS: VesselInfo[] = [
     category: 'caution',
     items: [
       { emoji: '🛍️', label: '비닐봉투',         desc: '전용만 가능. 일반 비닐은 녹을 수 있음. 한쪽 끝 자르기.' },
-      { emoji: '🍽️', label: '멜라민 식기',       desc: '저출력·짧은 시간만. 일부 변형·갈변 가능.' },
       { emoji: '🍯', label: '도자기 빈티지',     desc: '오래된 그릇·금색 테두리는 스파크 위험.' },
     ],
   },
@@ -259,6 +258,7 @@ export const VESSELS: VesselInfo[] = [
       { emoji: '🥫', label: '알루미늄 캔·호일',   desc: '🚨 스파크 → 화재 위험. 절대 X.' },
       { emoji: '🔩', label: '금속 그릇·포크',     desc: '🚨 스파크 발생.' },
       { emoji: '✨', label: '금색·은색 테두리',   desc: '🚨 가장 흔한 사고 원인. 중고 그릇 주의.' },
+      { emoji: '🍽️', label: '멜라민 식기',       desc: '🚨 가열 시 포름알데히드가 나올 수 있어 식약처 사용 불가 재질.' },
       { emoji: '🥤', label: '일반 플라스틱',      desc: '🚨 녹거나 환경호르몬 용출.' },
       { emoji: '🥚', label: '계란 (통째)',        desc: '🚨 폭발 위험. 풀어서만 가열.' },
       { emoji: '📦', label: '닫힌 용기·캔',       desc: '🚨 압력 폭발 위험. 뚜껑 살짝 열기.' },

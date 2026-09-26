@@ -2,9 +2,12 @@ import Link from 'next/link'
 import BrewClient from './BrewClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
+import { BREW_METHODS, ROASTS, fmtTime, fmt, buildPourSchedule, coffeeToWater, waterToCoffee } from './brewUtils'
 
 export const metadata = buildMetadata({
   path: '/tools/cooking/brew',
@@ -13,55 +16,42 @@ export const metadata = buildMetadata({
   keywords: ['커피 비율', '핸드드립 비율', '1:15 비율', 'SCA 골든컵', '콜드브루 비율', '에스프레소 추출', '푸어 스케줄', '블루밍', '홈카페 계산', '원두 g 물 ml'],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '22px',
-  fontWeight: 700,
-  marginBottom: '14px',
-  marginTop: '48px',
-  letterSpacing: '-0.5px',
-}
-const card: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: 'var(--radius-card)',
-  padding: '20px 22px',
-  marginBottom: '14px',
-}
-const faqDetails: React.CSSProperties = {
-  background: 'var(--bg2)',
-  border: '1px solid var(--border)',
-  borderRadius: 'var(--radius-m)',
-  padding: '14px 18px',
-  marginBottom: '8px',
-}
-const faqSummary: React.CSSProperties = {
-  cursor: 'pointer',
-  fontSize: '15px',
-  fontWeight: 600,
-  color: 'var(--text)',
-  padding: '4px 0',
-}
-const faqAnswer: React.CSSProperties = {
-  marginTop: '10px',
-  paddingTop: '10px',
-  borderTop: '1px solid var(--border)',
-  fontSize: '14px',
-  color: 'var(--muted)',
-  lineHeight: 1.8,
-}
+/* ── 가이드 표·예시 — 도구의 brewUtils로 빌드 시 생성 (계산기와 같은 값) ── */
+const METHOD_ROWS = BREW_METHODS.map(m => ({
+  id: m.id,
+  name: m.shortName,
+  ratio: m.id === 'espresso' ? `1:${m.ratioMin}~${m.ratioMax} (원두:샷)` : `1:${m.ratioMin}~${m.ratioMax}`,
+  def: m.ratioDefault,
+  temp: `${m.tempMin}~${m.tempMax}°C`,
+  time: m.timeMin === m.timeMax ? fmtTime(m.timeMin) : `${fmtTime(m.timeMin)}~${fmtTime(m.timeMax)}`,
+  grind: m.grind,
+}))
+const EX_COFFEE = 20
+const EX_RATIO = 16
+const EX_WATER = coffeeToWater(EX_COFFEE, EX_RATIO)          // 320
+const EX_CUP_IN = EX_WATER - EX_COFFEE * 2                    // 분쇄 원두가 머금는 물(원두 무게의 약 2배)을 뺀 예상 음료량
+const EX_TWO_MUGS = waterToCoffee(2 * 250, EX_RATIO)          // 머그 2잔 → 원두 g
+const EX_COLD = waterToCoffee(1000, 9)                        // 콜드브루 1L · 1:9
+const POUR = buildPourSchedule(EX_COFFEE, EX_WATER)
+const EY_TDS = 1.3
+const EX_EY = (EY_TDS * EX_CUP_IN) / EX_COFFEE                // 추출 수율(%) = TDS% × 음료 g ÷ 원두 g
+/* 비용 탭 기본값(원두 20g·1:16·머그 250ml·100g당 8,000원·카페 4,500원)과 같은 식 */
+const COST_CUPS = EX_WATER / 250
+const COST_BEAN_PER_CUP = EX_COFFEE / COST_CUPS
+const COST_PER_CUP = COST_BEAN_PER_CUP * (8000 / 100)
+const COST_SAVE = 4500 - COST_PER_CUP
 
 const FAQ_LD = [
-  { "q":"1:15 비율이면 정확히 얼마인가요?","a":"원두 1g당 물 15ml이라는 뜻입니다. 즉 원두 20g + 물 300ml, 원두 30g + 물 450ml처럼 쉽게 곱셈으로 환산할 수 있어요. 국내 핸드드립·프렌치프레스 레시피에서 가장 흔한 1:15~17 구간의 시작점입니다. 참고로 SCA 골든컵 기준(물 1L당 원두 55g)은 약 1:18로 이보다 조금 연합니다." },
-  { "q":"핸드드립 표준 비율은?","a":"1:15 ~ 1:17이 가장 일반적입니다. V60·하리오·칼리타·케맥스 모두 비슷해요. 진하게 마시고 싶으면 1:14~15, 연하게 마시고 싶으면 1:17~18. 일반 머그(250ml) 기준으로 1:16이라면 원두 약 16g + 물 250ml가 표준입니다." },
-  { "q":"콜드브루는 왜 1:8로 진하게 추출하나요?","a":"콜드브루는 보통 농축액(Concentrate) 형태로 만들고, 마실 때 물·우유·얼음으로 1:1 또는 1:2 희석해서 마시기 때문입니다. 1:8 농축액을 1:1 희석하면 결과적으로 1:16의 일반 추출과 비슷한 농도가 됩니다. 바로 마실 거라면 1:15~17 비율로 만들면 됩니다." },
-  { "q":"에스프레소 1:2 비율은 어떻게 측정하나요?","a":"에스프레소의 비율은 인풋(원두):아웃풋(추출된 샷)을 의미합니다. 예: 원두 18g + 추출된 샷 36g = 1:2. 다른 추출법과 달리 \"물의 양\"이 아니라 \"추출된 샷의 무게\"를 기준으로 합니다. 일반적으로 1:1.5(리스트레토), 1:2(노멀), 1:2.5~3(룽고)으로 분류해요. 에스프레소 머신의 저울 또는 샷글라스로 측정합니다." },
-  { "q":"블루밍은 왜 하나요?","a":"신선한 원두에는 로스팅 중 발생한 CO₂ 가스가 갇혀 있어요. 첫 푸어를 적게 부어 30초 휴지하면 가스가 빠지면서 원두가 부풀어 오릅니다(블루밍·꽃피기). 이 과정 없이 바로 본 추출을 하면 가스가 물의 침투를 방해해 추출이 고르지 않게 됩니다. 거품이 거의 안 올라오면 로스팅 후 1주일 이상 지난 원두일 가능성이 높아요." },
-  { "q":"라이트와 다크 로스팅 비율 차이는?","a":"• 라이트 로스팅: 밀도가 높고 추출이 어려워 1:14~15로 진하게. 신맛·꽃향·과일향이 두드러집니다. • 미디엄: 핸드드립 표준 1:15~17. 균형이 가장 좋아요. • 다크 로스팅: 밀도가 낮고 쓴맛이 강해 1:16~18로 약하게. 쓴맛·캐러멜·초콜릿 향이 강조됩니다." },
-  { "q":"아이스 커피는 얼음 무게를 어떻게 빼나요?","a":"핫푸어 후 얼음 위에 부어 만드는 \"재패니즈 아이스\"는 얼음이 녹으면서 희석되는 만큼 추출수에서 빼야 합니다. 예: 300ml 아이스를 만들려면 얼음 100g + 추출수 200ml (총 300ml). 추출수 비율은 1:13~14로 평소보다 진하게 빼는 것이 기본입니다. 콜드브루는 처음부터 차게 추출하므로 얼음 보정이 필요 없어요." },
-  { "q":"SCA 골든 컵은 무엇인가요?","a":"SCA(Specialty Coffee Association)가 정한 \"가장 균형 잡힌 추출 영역\". 비율은 물 1L당 원두 55g ±10%(약 1:16.5~1:20, 중심 1:18), TDS 1.15~1.35%, 추출 수율 18~22%, 물 온도 90~96°C 기준입니다. 이 범위 안에서 신맛·단맛·쓴맛이 가장 조화롭다는 것이 SCA의 권장이며, 국내 핸드드립 레시피는 대개 이보다 조금 진한 1:15~17에서 시작합니다." },
-  { "q":"홈브루가 카페보다 얼마나 싼가요?","a":"원두 가격에 따라 차이가 큽니다. 대용량 일반 원두는 100g에 2,000~3,000원대, 스페셜티 원두는 100g에 7,000~14,000원 정도라서 원두 16g을 쓰는 1잔 원가는 약 300~2,200원입니다. 카페 1잔 4,500원과 비교하면 1잔당 2,300~4,200원을 아끼는 셈이고, 하루 1잔이면 한 달에 약 7~13만원입니다. 판매처와 시기에 따라 가격이 달라지니 비용 비교 탭에 실제 구입가를 넣어 계산해 보세요." },
-  { "q":"추출 후 맛이 너무 쓰면? (과추출 진단)","a":"쓴맛은 과추출(Over-extraction)의 신호입니다. 원인 순서: ① 분쇄가 너무 가늘다 — 한 단계 굵게 ② 추출 시간이 너무 길다 — 푸어를 더 빠르게 ③ 물 온도가 너무 높다 — 90°C 이하로 ④ 비율이 너무 진하다 — 1:16~17로 늘리기 ⑤ 다크 로스팅 원두 — 1:17~18 권장. 반대로 신맛만 강하고 단맛이 부족하면 과소추출(Under) — 분쇄를 가늘게, 시간 길게, 비율 진하게로 조정합니다." }
+  { q: '1:15 비율이면 정확히 얼마인가요?', a: '원두 1g당 물 15ml라는 뜻입니다. <strong>원두 20g + 물 300ml</strong>, <strong>원두 30g + 물 450ml</strong>처럼 곱셈으로 바로 환산됩니다. 국내 핸드드립·프렌치프레스 레시피에서 흔한 1:15~17 구간의 진한 쪽 끝이고, SCA 골든컵 기준(물 1L당 원두 55g)은 약 1:18로 이보다 조금 연합니다.' },
+  { q: '핸드드립 표준 비율은?', a: '<strong>1:15~1:17</strong>이 가장 일반적입니다. V60·칼리타·케멕스 모두 이 범위에서 시작합니다. 진하게 마시고 싶으면 1:14~15, 연하게는 1:17~18. 머그 250ml 한 잔을 1:16으로 내리면 원두 약 16g(250÷16=15.6g)이 필요합니다.' },
+  { q: '콜드브루는 왜 1:8로 진하게 추출하나요?', a: '콜드브루는 보통 <strong>농축액</strong>으로 만들어 두고 마실 때 물·우유·얼음으로 1:1~1:2 희석하기 때문입니다. 1:8 농축액을 같은 양의 물로 희석하면 원두 대비 전체 물이 약 1:16이 되어 일반 추출과 비슷한 비율이 됩니다. 희석하지 않고 바로 마실 거라면 처음부터 1:15~17로 우리면 됩니다.' },
+  { q: '에스프레소 1:2 비율은 어떻게 측정하나요?', a: '에스프레소 비율은 <strong>인풋(원두):아웃풋(추출된 샷 무게)</strong>입니다. 원두 18g으로 샷 36g을 뽑으면 1:2. 다른 추출법처럼 부은 물이 아니라 컵에 나온 음료 무게를 재므로, 샷 잔을 저울에 올려 두고 추출합니다. 흔히 1:1~1.5를 리스트레토, 1:2 안팎을 노멀, 1:2.5~3을 룽고로 부릅니다. 계산기도 에스프레소를 고르면 입력을 원두→샷 기준으로 고정합니다.' },
+  { q: '블루밍은 왜 하나요?', a: '로스팅된 원두에는 <strong>이산화탄소</strong>가 갇혀 있어, 첫 물을 적게 부어 30초쯤 기다리면 가스가 빠지며 커피 층이 부풀어 오릅니다. 이 과정 없이 바로 많은 물을 부으면 가스가 물의 침투를 막아 추출이 고르지 않게 됩니다. 거품이 거의 안 올라오면 로스팅 후 수 주 이상 지났거나 미리 갈아 둔 원두일 가능성이 높고, 반대로 로스팅 직후(2~3일 이내) 원두는 가스가 너무 많아 추출이 불안정할 수 있습니다.' },
+  { q: '라이트와 다크 로스팅 비율 차이는?', a: '• <strong>라이트(약배전)</strong>: 조직이 단단해 잘 우러나지 않으므로 1:14~15로 진하게, 물 온도도 높은 쪽으로. 산미·꽃향·과일향이 두드러집니다.<br/>• <strong>미디엄</strong>: 핸드드립 표준 1:15~17.<br/>• <strong>다크(강배전)</strong>: 잘 우러나고 쓴맛이 빨리 나오므로 1:16~18로 연하게, 물 온도는 낮은 쪽으로. 캐러멜·초콜릿 향이 강조됩니다.' },
+  { q: '아이스 커피는 얼음 무게를 어떻게 빼나요?', a: '얼음 위로 뜨거운 물을 내리는 <strong>재패니즈 아이스</strong>는 녹는 얼음도 물로 칩니다. 평소 비율을 <strong>뜨거운 물 + 얼음 합계</strong>로 맞추고 그중 1/3~40% 정도를 얼음으로 바꾸는 방식이 흔합니다. 예: 원두 20g, 총 300g = 뜨거운 물 200ml + 얼음 100g → 전체로는 1:15, 뜨거운 물만 보면 1:10으로 진하게 내린 셈이라 얼음이 녹으며 농도가 맞춰집니다. 계산기에서는 얼음을 포함한 총량으로 물을 계산한 뒤 그 일부를 얼음 무게로 바꿔 부으면 됩니다. 콜드브루는 처음부터 차갑게 우리므로 이 보정이 필요 없습니다.' },
+  { q: 'SCA 골든컵은 무엇인가요?', a: 'SCA(Specialty Coffee Association)가 권장하는 <strong>균형 잡힌 추출 범위</strong>입니다. 비율은 물 1L당 원두 55g ±10%(약 1:16.5~1:20, 중심 1:18), 음료 농도 TDS 1.15~1.35%, 추출 수율 18~22%, 물 온도 약 90~96°C가 기준입니다. 국내 핸드드립 레시피는 대개 이보다 조금 진한 1:15~17에서 시작합니다.' },
+  { q: '홈브루가 카페보다 얼마나 싼가요?', a: '원두 가격에 따라 차이가 큽니다. 1잔에 원두 16g을 쓴다면 100g에 2,000~3,000원대인 대용량 원두는 1잔 원가가 약 320~480원, 100g에 7,000~14,000원인 스페셜티 원두는 약 1,120~2,240원입니다. 카페 1잔 4,500원과 비교하면 1잔당 약 2,300~4,200원, 하루 1잔이면 한 달에 약 7~13만원 차이입니다. 가격은 판매처·시기마다 다르니 비용 비교 탭에 실제 구입가를 넣어 계산해 보세요(종이필터·물·전기 비용은 빠져 있습니다).' },
+  { q: '추출 후 맛이 너무 쓰면? (과추출 진단)', a: '쓴맛과 떫은 뒷맛은 <strong>과추출</strong>의 신호입니다. 한 번에 한 가지씩 바꿔 보세요: ① 분쇄를 한 단계 굵게 ② 총 추출 시간을 줄이도록 푸어를 빠르게 ③ 물 온도를 2~3°C 낮게 ④ 비율을 1:16~17로 연하게 ⑤ 다크 로스팅이면 1:17~18. 반대로 <strong>시큼하고 단맛이 없고 묽으면</strong> 과소추출이므로 분쇄를 가늘게, 시간은 길게, 온도는 높게 조정합니다.' },
 ]
 
 export default function BrewPage() {
@@ -73,253 +63,209 @@ export default function BrewPage() {
       <p className="tp-lead">
         핸드드립·콜드브루·에어로프레스 <strong style={{ color: 'var(--text)' }}>6가지 추출법</strong> + 비율·온도·시간·분쇄도 매트릭스.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="SCA 골든컵(물 1L당 원두 55g ±10% · TDS 1.15~1.35% · 추출 수율 18~22%)과 추출법별 통용 레시피 · 카페인 1일 최대 섭취 권고량은 식약처 기준"
+        sources={[
+          { label: 'SCA — Protocols & Best Practices (골든컵·추출 기준)', href: 'https://sca.coffee/research/protocols-best-practices' },
+          { label: '식품의약품안전처', href: 'https://www.mfds.go.kr' },
+          { label: 'FDA — How Much Caffeine is Too Much?', href: 'https://www.fda.gov/consumers/consumer-updates/spilling-beans-how-much-caffeine-too-much' },
+        ]}
+      />
 
       <BrewClient />
 
       <GuideDivider />
+      <div style={{ display: 'flex', flexDirection: 'column', gap: '40px' }}>
 
-      {/* 1. 어떻게 사용하나요? */}
-      <h2 style={sectionTitle}>🛠️ 어떻게 사용하나요?</h2>
-      <div style={card}>
-        <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
-          <li><strong>추출법 선택</strong> — 6종 카드 (핸드드립이 가장 흔함)</li>
-          <li><strong>비율 선택</strong> — 추출법별 권장 비율 기본 (핸드드립 1:16, SCA 골든컵 약 1:18) 또는 1:5~25 슬라이더</li>
-          <li><strong>입력 모드 선택</strong> — 원두→물 / 물→원두 / 잔수 기준</li>
-          <li><strong>결과 확인</strong> — 원두·물·잔수 + 권장 온도·시간·분쇄도</li>
-        </ol>
-        <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          💡 <strong style={{ color: 'var(--accent)' }}>푸어 스케줄 탭</strong>에서 핸드드립의 블루밍·1차·2차 푸어
-          시간과 물량을 단계별로 확인할 수 있어요.
-        </p>
-      </div>
+        {/* 1. 사용법 */}
+        <section>
+          <h2 className="g-h2">어떻게 사용하나요?</h2>
+          <ol className="g-list">
+            <li><strong>추출법 선택</strong> — 6가지 카드 중 고르면 지금 비율이 그 추출법의 권장 범위를 벗어난 경우에만 기본값(핸드드립 1:16, 콜드브루 1:9, 에스프레소 1:2 등)으로 바뀝니다. 범위 안이면 쓰던 비율이 유지됩니다(예: 핸드드립 1:15에서 에어로프레스로 바꾸면 권장 1:13~15 안이라 1:15 그대로).</li>
+            <li><strong>비율 조정</strong> — 프리셋(1:12~1:20) 또는 1:5~25 슬라이더. 에스프레소는 1:1~4 범위로 따로 움직입니다.</li>
+            <li><strong>입력 모드</strong> — 원두→물 / 물→원두 / 잔수 기준 중 가진 정보에 맞춰 고릅니다.</li>
+            <li><strong>결과 확인</strong> — 원두·물·잔수와 함께 권장 온도·시간·분쇄도가 표시됩니다.</li>
+          </ol>
+          <Callout tone="tip">
+            <strong>푸어 스케줄 탭</strong>은 핸드드립의 블루밍·1차·2차 푸어를 초 단위로, <strong>강도·로스팅 탭</strong>은 지금 비율이 어느 강도 구간인지, <strong>비용 비교 탭</strong>은 홈브루 1잔 원가를 보여 줍니다.
+          </Callout>
+        </section>
 
-      {/* 2. 추출법별 황금 비율 */}
-      <h2 style={sectionTitle}>📊 추출법별 황금 비율 매트릭스</h2>
-      <div style={{ ...card, padding: 0, overflow: 'hidden' }}>
-        <div className="tableScroll">
-          <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 560 }}>
-            <thead>
-              <tr style={{ background: 'var(--bg3)' }}>
-                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>추출법</th>
-                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>비율</th>
-                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>온도</th>
-                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>시간</th>
-                <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontSize: 11 }}>분쇄</th>
-              </tr>
-            </thead>
-            <tbody>
-              {[
-                ['☕ 핸드드립',     '1:15~17', '90~93°C', '2:30~3:30', '중간 🧂'],
-                ['🪶 프렌치프레스', '1:15~17', '92~95°C', '4분 침지',   '굵게 🧂'],
-                ['💉 에어로프레스', '1:13~15', '80~85°C', '1:30~2:00', '중세'],
-                ['🧊 콜드브루',     '1:8~10',  '4~22°C',  '12~24시간',  '굵게 🧂'],
-                ['☕ 모카포트',     '1:7~10',  '95~100°C', '4~6분',      '매우 가늘게 🌾'],
-                ['💪 에스프레소',   '1:1.5~2.5','92~94°C','25~30초',    '매우 가늘게 🌾'],
-              ].map((row, i) => (
-                <tr key={i} style={{ borderBottom: '1px solid var(--border)' }}>
-                  {row.map((cell, j) => (
-                    <td key={j} style={{
-                      padding: '9px 12px',
-                      fontFamily: j === 0 ? 'var(--font-sans)' : 'var(--font-sans)',
-                      color: j === 1 ? 'var(--accent)' : 'var(--text)',
-                      fontWeight: j === 0 ? 700 : 600,
-                    }}>{cell}</td>
+        {/* 2. 계산 원리 */}
+        <section>
+          <h2 className="g-h2">비율 1:N은 이렇게 계산됩니다</h2>
+          <p className="g-p">
+            1:N은 <strong>원두 1g당 물 N ml</strong>라는 뜻이고, 물 1ml는 약 1g이라 저울 하나로 둘 다 잴 수 있습니다. 계산기의 식은 세 가지뿐입니다 — 원두를 알 때 <strong>물 = 원두 × N</strong>, 물을 알 때 <strong>원두 = 물 ÷ N</strong>, 잔수를 알 때 <strong>물 = 잔수 × 1잔 용량</strong>을 구한 뒤 다시 N으로 나눕니다.
+            예를 들어 원두 {EX_COFFEE}g을 1:{EX_RATIO}로 내리면 물 {EX_WATER}ml, 머그(250ml) 2잔을 1:{EX_RATIO}로 내리려면 원두 {fmt(EX_TWO_MUGS, 1)}g, 콜드브루 농축액 1L를 1:9로 우리려면 원두 {fmt(EX_COLD, 0)}g이 필요합니다.
+          </p>
+          <p className="g-p">
+            주의할 점은 <strong>부은 물이 모두 컵에 담기지는 않는다</strong>는 것입니다. 젖은 원두 가루가 자기 무게의 약 2배 물을 머금은 채 버려지므로, 원두 {EX_COFFEE}g에 물 {EX_WATER}ml를 부으면 컵에는 약 {EX_CUP_IN}ml가 남습니다. 잔 용량을 딱 맞춰야 한다면 잔수 모드에서 1잔 용량을 10~15% 넉넉하게 넣으세요.
+            에스프레소만은 예외로, 비율이 부은 물이 아니라 <strong>컵에 나온 샷 무게</strong> 기준이라 입력이 원두→샷으로 고정됩니다.
+          </p>
+        </section>
+
+        {/* 3. 추출법별 매트릭스 — BREW_METHODS */}
+        <section>
+          <h2 className="g-h2">추출법별 비율·온도·시간·분쇄도</h2>
+          <p className="g-p">
+            계산기가 추출법을 고를 때 쓰는 권장 범위입니다. 같은 원두라도 추출법마다 물과 닿는 시간과 압력이 달라, 비율과 분쇄도가 함께 움직입니다 — 접촉 시간이 짧을수록(에스프레소) 가늘게 갈고 진한 비율을, 길수록(콜드브루·프렌치프레스) 굵게 갈아야 과추출을 피할 수 있습니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 600 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['추출법', '비율', '기본값', '물 온도', '추출 시간', '분쇄도'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
                   ))}
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
-      </div>
-
-      {/* 3. SCA 골든 컵 */}
-      <h2 style={sectionTitle}>🏆 SCA 골든 컵 표준이란?</h2>
-      <div style={card}>
-        <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
-          <strong>SCA(Specialty Coffee Association)</strong>가 정한 &quot;가장 균형 잡힌 추출 영역&quot;을 골든 컵(Golden Cup)이라고 합니다.
-        </p>
-        <ul style={{ paddingLeft: 18, margin: '12px 0 0', fontSize: 13, color: 'var(--muted)', lineHeight: 1.95 }}>
-          <li><strong style={{ color: 'var(--text)' }}>비율</strong>: 물 1L당 원두 55g ±10% (약 1:16.5~1:20, 중심 1:18)</li>
-          <li><strong style={{ color: 'var(--text)' }}>TDS (Total Dissolved Solids)</strong>: 1.15~1.35% (음료의 총 용해 고형분 농도)</li>
-          <li><strong style={{ color: 'var(--text)' }}>추출 수율</strong>: 18~22% (원두 무게 중 물에 녹은 비율)</li>
-          <li><strong style={{ color: 'var(--text)' }}>물 온도</strong>: 90~96°C</li>
-        </ul>
-        <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          이 영역에서 신맛·단맛·쓴맛이 가장 균형을 이룬다는 것이 SCA의 권장입니다.
-          국내 핸드드립 레시피는 이보다 조금 진한 1:15~17을 많이 쓰고, 취향에 따라 1:14 안팎의 진한 추출도 충분히 매력적이에요.
-        </p>
-      </div>
-
-      {/* 4. 로스팅 정도별 */}
-      <h2 style={sectionTitle}>🔥 로스팅 정도별 비율 조정법</h2>
-      <div style={card}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-          {[
-            { t: '🌾 라이트 (시나몬·시티)', d: '신맛·꽃향·과일향. 1:14~15로 진하게 추출하면 산미·단맛이 균형.', c: '#C9A77D' },
-            { t: '🍂 미디엄 (시티·풀시티)', d: '균형 잡힌 단맛·바디. 핸드드립 표준 1:15~17 적용 권장.',                c: '#7B4F2C' },
-            { t: '🌑 다크 (프렌치·이탈리안)', d: '쓴맛·캐러멜·초콜릿. 1:16~18로 약하게 빼면 쓴맛 완화.',           c: '#3A1E10' },
-          ].map((g, i) => (
-            <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
-              <p style={{ fontSize: 13, color: g.c === '#3A1E10' ? 'var(--amber-600)' : g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
-              <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{g.d}</p>
-            </div>
-          ))}
-        </div>
-        <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
-          ⚠️ 비율보다 더 큰 영향을 주는 변수: <strong style={{ color: 'var(--text)' }}>원두 신선도(로스팅 일자 7~21일) → 분쇄도 → 물 온도 → 추출 시간 → 비율</strong> 순서.
-          신선한 원두 + 적절한 분쇄도가 비율 미세 조정보다 큰 차이를 만듭니다.
-        </p>
-      </div>
-
-      {/* 5. 푸어 스케줄 의미 */}
-      <h2 style={sectionTitle}>⏱️ 푸어 스케줄 — 블루밍·1차·2차 의미</h2>
-      <div style={card}>
-        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: 10 }}>
-          {[
-            { t: '🌱 블루밍 (Bloom)', d: '원두 무게 × 2g의 물로 적셔 30초 휴지. CO₂ 가스가 빠지며 부풀어 오릅니다. 신선한 원두는 거품이 잘 일어나요.', c: 'var(--teal-600)' },
-            { t: '💧 1차 푸어',        d: '0:30~1:30, 누적 60%까지. 가운데서 원형으로 천천히 따릅니다. 가장 진한 추출이 일어나는 단계.',         c: 'var(--cyan-600)' },
-            { t: '💧 2차 푸어',        d: '1:30~2:30, 누적 100%까지. 안쪽 원만 따라 균형을 맞춥니다. 산미·향이 추출되는 단계.',                  c: 'var(--orange-600)' },
-            { t: '⏳ 추출 마무리',     d: '2:30~3:30, 드리퍼의 물이 모두 빠질 때까지 대기. 너무 빠르면 굵은 분쇄, 너무 느리면 가는 분쇄.',         c: 'var(--amethyst)' },
-          ].map((g, i) => (
-            <div key={i} style={{ background: 'var(--bg3)', borderTop: `3px solid ${g.c}`, borderRadius: 10, padding: '12px 14px' }}>
-              <p style={{ fontSize: 13, color: g.c, fontWeight: 700, margin: '0 0 4px' }}>{g.t}</p>
-              <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.7 }}>{g.d}</p>
-            </div>
-          ))}
-        </div>
-      </div>
-
-      {/* FAQ */}
-      <h2 style={sectionTitle}>자주 묻는 질문 (FAQ)</h2>
-      <FaqJsonLd items={FAQ_LD} />
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q1. 1:15 비율이면 정확히 얼마인가요?</summary>
-        <p style={faqAnswer}>
-          원두 1g당 물 15ml이라는 뜻입니다. 즉 <strong>원두 20g + 물 300ml</strong>, <strong>원두 30g + 물 450ml</strong>처럼
-          쉽게 곱셈으로 환산할 수 있어요. 국내 핸드드립·프렌치프레스 레시피에서 가장 흔한 1:15~17 구간의 시작점입니다.
-          참고로 SCA 골든컵 기준(물 1L당 원두 55g)은 약 1:18로 이보다 조금 연합니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q2. 핸드드립 표준 비율은?</summary>
-        <p style={faqAnswer}>
-          <strong>1:15 ~ 1:17</strong>이 가장 일반적입니다. V60·하리오·칼리타·케맥스 모두 비슷해요.
-          진하게 마시고 싶으면 1:14~15, 연하게 마시고 싶으면 1:17~18. 일반 머그(250ml) 기준으로
-          1:16이라면 원두 약 16g + 물 250ml가 표준입니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q3. 콜드브루는 왜 1:8로 진하게 추출하나요?</summary>
-        <p style={faqAnswer}>
-          콜드브루는 보통 <strong>농축액(Concentrate)</strong> 형태로 만들고, 마실 때 물·우유·얼음으로
-          1:1 또는 1:2 희석해서 마시기 때문입니다. 1:8 농축액을 1:1 희석하면 결과적으로 1:16의
-          일반 추출과 비슷한 농도가 됩니다. 바로 마실 거라면 1:15~17 비율로 만들면 됩니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q4. 에스프레소 1:2 비율은 어떻게 측정하나요?</summary>
-        <p style={faqAnswer}>
-          에스프레소의 비율은 <strong>인풋(원두):아웃풋(추출된 샷)</strong>을 의미합니다.
-          예: 원두 18g + 추출된 샷 36g = 1:2. 다른 추출법과 달리 &quot;물의 양&quot;이 아니라
-          &quot;추출된 샷의 무게&quot;를 기준으로 합니다. 일반적으로 1:1.5(리스트레토), 1:2(노멀),
-          1:2.5~3(룽고)으로 분류해요. 에스프레소 머신의 저울 또는 샷글라스로 측정합니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q5. 블루밍은 왜 하나요?</summary>
-        <p style={faqAnswer}>
-          신선한 원두에는 <strong>로스팅 중 발생한 CO₂ 가스</strong>가 갇혀 있어요. 첫 푸어를 적게 부어
-          30초 휴지하면 가스가 빠지면서 원두가 부풀어 오릅니다(블루밍·꽃피기). 이 과정 없이 바로
-          본 추출을 하면 가스가 물의 침투를 방해해 추출이 고르지 않게 됩니다.
-          <strong> 거품이 거의 안 올라오면 로스팅 후 1주일 이상 지난 원두</strong>일 가능성이 높아요.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q6. 라이트와 다크 로스팅 비율 차이는?</summary>
-        <p style={faqAnswer}>
-          • <strong>라이트 로스팅</strong>: 밀도가 높고 추출이 어려워 <strong>1:14~15로 진하게</strong>.
-          신맛·꽃향·과일향이 두드러집니다.<br />
-          • <strong>미디엄</strong>: 핸드드립 표준 <strong>1:15~17</strong>. 균형이 가장 좋아요.<br />
-          • <strong>다크 로스팅</strong>: 밀도가 낮고 쓴맛이 강해 <strong>1:16~18로 약하게</strong>.
-          쓴맛·캐러멜·초콜릿 향이 강조됩니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q7. 아이스 커피는 얼음 무게를 어떻게 빼나요?</summary>
-        <p style={faqAnswer}>
-          핫푸어 후 얼음 위에 부어 만드는 &quot;재패니즈 아이스&quot;는 얼음이 녹으면서 희석되는 만큼
-          <strong> 추출수에서 빼야</strong> 합니다. 예: 300ml 아이스를 만들려면 얼음 100g + 추출수 200ml
-          (총 300ml). 추출수 비율은 1:13~14로 평소보다 진하게 빼는 것이 기본입니다.
-          콜드브루는 처음부터 차게 추출하므로 얼음 보정이 필요 없어요.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q8. SCA 골든 컵은 무엇인가요?</summary>
-        <p style={faqAnswer}>
-          <strong>SCA(Specialty Coffee Association)</strong>가 정한 &quot;가장 균형 잡힌 추출 영역&quot;.
-          비율은 물 1L당 원두 55g ±10%(약 1:16.5~1:20, 중심 1:18), TDS 1.15~1.35%, 추출 수율 18~22%, 물 온도 90~96°C 기준입니다.
-          이 범위 안에서 신맛·단맛·쓴맛이 가장 조화롭다는 것이 SCA의 권장이며,
-          국내 핸드드립 레시피는 대개 이보다 조금 진한 1:15~17에서 시작합니다.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q9. 홈브루가 카페보다 얼마나 싼가요?</summary>
-        <p style={faqAnswer}>
-          원두 가격에 따라 차이가 큽니다. 대용량 일반 원두는 100g에 2,000~3,000원대, 스페셜티 원두는 100g에 7,000~14,000원 정도라서
-          원두 16g을 쓰는 <strong>1잔 원가는 약 300~2,200원</strong>입니다.
-          카페 1잔 4,500원과 비교하면 <strong>1잔당 2,300~4,200원</strong>을 아끼는 셈이고,
-          하루 1잔이면 <strong>한 달에 약 7~13만원</strong>입니다.
-          판매처와 시기에 따라 가격이 달라지니 비용 비교 탭에 실제 구입가를 넣어 계산해 보세요.
-        </p>
-      </details>
-
-      <details style={faqDetails}>
-        <summary style={faqSummary}>Q10. 추출 후 맛이 너무 쓰면? (과추출 진단)</summary>
-        <p style={faqAnswer}>
-          쓴맛은 <strong>과추출(Over-extraction)</strong>의 신호입니다. 원인 순서:<br />
-          ① <strong>분쇄가 너무 가늘다</strong> — 한 단계 굵게<br />
-          ② <strong>추출 시간이 너무 길다</strong> — 푸어를 더 빠르게<br />
-          ③ <strong>물 온도가 너무 높다</strong> — 90°C 이하로<br />
-          ④ <strong>비율이 너무 진하다</strong> — 1:16~17로 늘리기<br />
-          ⑤ <strong>다크 로스팅 원두</strong> — 1:17~18 권장.<br />
-          반대로 <strong>신맛만 강하고 단맛이 부족</strong>하면 과소추출(Under) — 분쇄를 가늘게,
-          시간 길게, 비율 진하게로 조정합니다.
-        </p>
-      </details>
-
-      {/* cooking 도구 크로스링크 */}
-      <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
-        <Link href="/tools/cooking/recipe" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>📐</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>레시피 비율·단위 변환</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            인분·큰술·g 환산
+              </thead>
+              <tbody>
+                {METHOD_ROWS.map((r, i) => (
+                  <tr key={r.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.name}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700, whiteSpace: 'nowrap' }}>{r.ratio}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>1:{r.def}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>{r.temp}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>{r.time}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.grind}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-note">
+            ※ 콜드브루 온도 4~22°C는 냉장 또는 실온 침지를 뜻합니다. 모카포트 비율은 바스켓에 담기는 원두와 보일러 물 기준의 대략값으로, 기구 크기(1·3·6컵)가 사실상 비율을 정합니다.
           </p>
-        </Link>
-        <Link href="/tools/cooking/baker-percent" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>🥖</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>베이커 퍼센트 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            제빵 배합비·수분율
+        </section>
+
+        {/* 4. SCA 골든컵 */}
+        <section>
+          <h2 className="g-h2">SCA 골든컵 표준과 TDS·추출 수율</h2>
+          <p className="g-p">
+            <strong>SCA(Specialty Coffee Association)</strong>가 권장하는 &lsquo;골든컵&rsquo;은 맛이 가장 균형 잡힌다고 보는 추출 범위입니다. 비율 하나가 아니라 농도와 수율을 함께 봅니다.
           </p>
-        </Link>
-        <Link href="/tools/cooking/baking-schedule" style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
-          <p style={{ fontSize: 22, margin: '0 0 4px' }}>🍞</p>
-          <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>제빵 타임라인 계산기</p>
-          <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>
-            발효·굽기 일정 자동
+          <ul className="g-list">
+            <li><strong>비율</strong>: 물 1L당 원두 55g ±10% (약 1:16.5~1:20, 중심 1:18)</li>
+            <li><strong>TDS(총용존고형물)</strong>: 1.15~1.35% — 음료 무게 중 녹아 나온 커피 성분의 비율, 즉 &lsquo;농도&rsquo;</li>
+            <li><strong>추출 수율</strong>: 18~22% — 원두 무게 중 물에 녹아 나온 비율, 즉 &lsquo;얼마나 우려냈나&rsquo;</li>
+            <li><strong>물 온도</strong>: 약 90~96°C (원두에 닿는 시점 기준)</li>
+          </ul>
+          <p className="g-p">
+            수율은 <strong>TDS(%) × 음료 무게(g) ÷ 원두 무게(g)</strong>로 구합니다. 위 예시처럼 원두 {EX_COFFEE}g으로 음료 약 {EX_CUP_IN}g을 얻고 TDS 측정기가 {EY_TDS}%를 가리켰다면 수율은 {EY_TDS} × {EX_CUP_IN} ÷ {EX_COFFEE} = <strong>{fmt(EX_EY, 1)}%</strong>로 골든컵 범위 안입니다.
+            농도(TDS)는 비율로, 수율은 분쇄도·시간·온도로 조절한다고 기억하면 됩니다 — 너무 진하면 물을 늘리고, 쓰거나 떫으면(수율 과다) 굵게 갈거나 시간을 줄입니다.
+            TDS 측정기가 없다면 비율은 계산기로 고정하고 분쇄도만 한 단계씩 바꿔 가며 맛을 비교하는 것이 가장 현실적인 방법입니다.
           </p>
-        </Link>
+        </section>
+
+        {/* 5. 로스팅 — ROASTS */}
+        <section>
+          <h2 className="g-h2">로스팅 정도별 비율 조정법</h2>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 460 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['로스팅 (8단계 명칭)', '맛 특징', '권장 비율'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {ROASTS.map((r, i) => (
+                  <tr key={r.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700 }}>{r.label}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.desc}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700 }}>{r.ratioAdjust}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            약하게 볶은 원두는 조직이 단단해 성분이 잘 우러나지 않으므로 진한 비율과 높은 물 온도로, 강하게 볶은 원두는 빨리 우러나고 쓴맛이 먼저 나오므로 연한 비율과 조금 낮은 온도로 맞추는 것이 일반적입니다. 원두 봉투에 &lsquo;시티&rsquo;, &lsquo;풀시티&rsquo;처럼 일본식 8단계 명칭이 적혀 있다면 위 표의 괄호를 참고하세요.
+          </p>
+          <Callout tone="warn" title="비율보다 먼저 볼 변수">
+            원두 신선도(로스팅 후 약 1~3주가 무난) → 분쇄도 → 물 온도 → 추출 시간 → 비율 순으로 맛에 미치는 영향이 큽니다. 오래된 원두나 맞지 않는 분쇄도는 비율 미세 조정으로 되살리기 어렵습니다.
+          </Callout>
+        </section>
+
+        {/* 6. 푸어 스케줄 — buildPourSchedule */}
+        <section>
+          <h2 className="g-h2">푸어 스케줄 — 블루밍·1차·2차의 의미</h2>
+          <p className="g-p">
+            푸어 스케줄 탭은 세 가지 규칙으로 물량을 나눕니다 — 블루밍은 <strong>원두 무게 × 2</strong>, 1차 푸어는 <strong>누적 60%</strong>까지, 2차 푸어는 <strong>100%</strong>까지. 아래는 원두 {EX_COFFEE}g · 1:{EX_RATIO}(물 {EX_WATER}ml)로 넣었을 때 계산기가 내놓는 일정입니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['단계', '시간', '이번에 붓는 물', '누적'].map(h => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {POUR.map((p, i) => (
+                  <tr key={p.id} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 700, whiteSpace: 'nowrap' }}>{p.label}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>{Math.floor(p.startSec / 60)}:{String(p.startSec % 60).padStart(2, '0')}~{Math.floor(p.endSec / 60)}:{String(p.endSec % 60).padStart(2, '0')}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontWeight: 700, whiteSpace: 'nowrap' }}>{p.waterMl > 0 ? `${p.waterMl}ml` : '—'}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', whiteSpace: 'nowrap' }}>{p.cumulativeMl}ml</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 16 }}>
+            블루밍 30초 동안 가스가 빠지고, 1차 푸어에서 가운데부터 원을 그리며 대부분의 성분을 우려내며, 2차 푸어는 안쪽 원만 따라 농도를 맞춥니다. 마지막 물이 다 빠지는 시점이 2분 30초~3분 30초 사이면 분쇄도가 맞는 것입니다.
+            3분 30초를 넘기면 가늘게 간 것이니 한 단계 굵게, 2분 30초보다 빨리 끝나면 한 단계 가늘게 조정하세요.
+          </p>
+        </section>
+
+        {/* 7. 비용 — 비용 비교 탭과 같은 식 */}
+        <section>
+          <h2 className="g-h2">홈카페 1잔 원가는 이렇게 나옵니다</h2>
+          <p className="g-p">
+            비용 비교 탭은 <strong>1잔 원가 = 1잔에 쓰는 원두(g) × 100g당 가격 ÷ 100</strong>으로 계산합니다. 1잔에 쓰는 원두는 전체 원두를 &lsquo;물 ÷ 1잔 용량&rsquo;으로 나눈 값이라, 반올림한 잔수가 아니라 실제 비율로 나눕니다.
+            기본값(원두 {EX_COFFEE}g · 1:{EX_RATIO} · 머그 250ml · 100g당 8,000원)이면 물 {EX_WATER}ml는 {fmt(COST_CUPS, 2)}잔, 1잔에 원두 {fmt(COST_BEAN_PER_CUP, 1)}g이 들어가 <strong>1잔 원가 {fmt(COST_PER_CUP, 0)}원</strong>입니다. 카페 아메리카노 4,500원과 비교하면 1잔에 {fmt(COST_SAVE, 0)}원, 하루 1잔 기준 30일이면 {fmt(COST_SAVE * 30, 0)}원 차이입니다.
+            종이필터·물·전기, 드리퍼·그라인더 같은 도구 구입비는 빠져 있으니 실제 절감액은 이보다 조금 작습니다.
+          </p>
+        </section>
+
+        {/* 8. 카페인 */}
+        <section>
+          <h2 className="g-h2">하루 몇 잔까지 — 카페인 기준</h2>
+          <p className="g-p">
+            비율을 진하게 바꾸거나 잔 크기를 키우면 한 잔에 쓰는 원두가 늘어나고 카페인도 함께 늘어납니다. 식품의약품안전처가 제시하는 카페인 1일 최대 섭취 권고량은 <strong>성인 400mg 이하, 임산부 300mg 이하, 어린이·청소년은 체중 1kg당 2.5mg 이하</strong>이고, 미국 FDA는 성인 400mg을 대략 커피 4~5잔에 해당하는 양으로 안내합니다.
+            한 잔의 실제 카페인은 원두 품종(아라비카·로부스타), 원두 양, 추출 방식에 따라 크게 달라지므로 잔 수만으로 단정하기 어렵습니다. 1:12처럼 진하게 내리거나 텀블러(500ml)로 마신다면 &lsquo;잔&rsquo;이 아니라 사용한 원두 g으로 하루 양을 가늠하세요.
+          </p>
+          <Callout tone="note">
+            시간대별로 몸에 남은 카페인은 <Link href="/tools/health/caffeine">카페인 잔존량 트래커</Link>로 확인할 수 있습니다. 임신 중이거나 불면·두근거림이 있다면 섭취량은 의료진과 상의하세요.
+          </Callout>
+        </section>
+
+        <section>
+          <Faq items={FAQ_LD} />
+        </section>
+
+        {/* 관련 도구 */}
+        <section>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
+            {[
+              { href: '/tools/cooking/recipe', icon: '📐', name: '레시피 비율·단위 변환', desc: '인분·큰술·g 환산' },
+              { href: '/tools/health/caffeine', icon: '☕', name: '카페인 잔존량 트래커', desc: '시간대별 체내 카페인' },
+              { href: '/tools/cooking/baker-percent', icon: '🥖', name: '베이커 퍼센트 계산기', desc: '제빵 배합비·수분율' },
+            ].map(t => (
+              <Link key={t.href} href={t.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', textDecoration: 'none', color: 'inherit' }}>
+                <p style={{ fontSize: 20, margin: '0 0 4px' }} aria-hidden="true">{t.icon}</p>
+                <p style={{ fontSize: 14, color: 'var(--text)', fontWeight: 700, margin: '0 0 2px' }}>{t.name}</p>
+                <p style={{ fontSize: 12, color: 'var(--muted)', margin: 0, lineHeight: 1.6 }}>{t.desc}</p>
+              </Link>
+            ))}
+          </div>
+        </section>
+
       </div>
     </ToolPage>
   )

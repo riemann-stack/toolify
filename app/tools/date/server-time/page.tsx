@@ -5,6 +5,8 @@ import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
+import UpdatedMeta from '@/components/UpdatedMeta'
+import Callout from '@/components/Callout'
 
 // FAQ 본문 + 구조화 데이터(FAQPage)를 함께 쓰기 위해 배열로 추출
 const FAQS = [
@@ -14,7 +16,7 @@ const FAQS = [
   },
   {
     q: '내 PC 시계와 서버 시간이 차이 나는 이유?',
-    a: 'OS 시계가 NTP 동기화가 안 됐거나 오래된 경우입니다.<br/><br/>· <strong>Windows 10·11</strong> — 기본은 1주일에 한 번만 동기화(주기 604,800초). 그 사이 시계 품질에 따라 수 초 이상 어긋날 수 있음<br/>· <strong>macOS</strong> — timed 데몬이 수시로(적응형) 자동 동기화, 비교적 정확<br/>· <strong>스마트폰</strong> — NTP 자동 동기화(Android는 time.android.com 우선, 통신사 시각은 보조) — 보통 1초 이내<br/>· <strong>슬립·재부팅 직후</strong> — 일시적 오차 ↑<br/><br/>「내 PC 시계」 표시가 1초 이상 차이나면 OS 시계를 강제 동기화하세요.',
+    a: 'OS 시계가 NTP 동기화가 안 됐거나 오래된 경우입니다.<br/><br/>· <strong>Windows 10·11</strong> — 기본은 1주일에 한 번만 동기화(주기 604,800초). 그 사이 시계 품질에 따라 수 초 이상 어긋날 수 있음<br/>· <strong>macOS</strong> — timed 데몬이 수시로(적응형) 자동 동기화, 비교적 정확<br/>· <strong>스마트폰</strong> — 통신사 시각(NITZ)과 NTP(Android는 time.android.com, iPhone은 time.apple.com)로 자동 동기화 — 우선순위는 기기·제조사 설정에 따라 다르지만 보통 1초 이내<br/>· <strong>슬립·재부팅 직후</strong> — 일시적 오차 ↑<br/><br/>「내 PC 시계」 표시가 1초 이상 차이나면 OS 시계를 강제 동기화하세요.',
   },
   {
     q: 'F5 새로고침 vs URL 직접 접속, 어느 게 빠른가요?',
@@ -22,7 +24,7 @@ const FAQS = [
   },
   {
     q: '카운트다운이 0이 되는 정확한 순간에 클릭하면 되나요?',
-    a: '아니요, <strong>0이 되기 0.3~0.5초 전</strong>이 황금 시점입니다.<br/><br/>이유 —<br/>· 마우스 클릭에서 서버 응답까지 평균 100~200ms<br/>· 사이트 자체 검증·렌더링에 100~200ms<br/>· 합계 200~400ms를 미리 보내야 정각에 도착<br/><br/>본 도구의 알림음(3초 / 1초 / 정각)을 활용해 1초 전부터 마우스 클릭 준비 → 0.5초 전 클릭 시작이 안정적입니다.',
+    a: '아니요, <strong>0이 되기 0.3~0.5초 전</strong>이 황금 시점입니다.<br/><br/>이유 —<br/>· 요청이 서버에 닿는 시간 ≈ 위 「측정 정확도」 RTT의 절반<br/>· 알림음을 듣고 실제로 클릭하기까지의 반응 지연<br/>· 0.3~0.5초는 이 둘을 감안한 경험적 여유이며, 이보다 일찍 누르면 「아직 시작 안 됨」으로 튕길 수 있습니다<br/><br/>본 도구의 알림음(3초 / 1초 / 정각)을 활용해 1초 전부터 마우스 클릭 준비 → 0.5초 전 클릭 시작이 안정적입니다.',
   },
   {
     q: 'Wi-Fi vs 유선 인터넷, 차이가 큰가요?',
@@ -57,13 +59,6 @@ export const metadata = buildMetadata({
   ],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
-
 export default function ServerTimePage() {
   return (
     <ToolPage width={760} slug="/tools/date/server-time">
@@ -74,6 +69,17 @@ export default function ServerTimePage() {
         수강신청·티켓팅을 위한 <strong style={{ color: 'var(--text)' }}>NTP 동기화 KST를 밀리초</strong>로. 카운트다운·알림음 포함.
       </p>
 
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="NTP(RFC 5905) 방식 왕복 지연 보정 · 외부 사이트는 HTTP Date 헤더(RFC 9110, 초 단위) 기준"
+        sources={[
+          { label: 'RFC 5905 (NTPv4)', href: 'https://www.rfc-editor.org/rfc/rfc5905' },
+          { label: 'RFC 9110 (HTTP Date 헤더)', href: 'https://www.rfc-editor.org/rfc/rfc9110' },
+          { label: '한국표준과학연구원(KRISS)', href: 'https://www.kriss.re.kr' },
+          { label: '공연법', href: 'https://www.law.go.kr/법령/공연법' },
+        ]}
+      />
+
       <ServerTimeClient />
 
       <GuideDivider />
@@ -81,7 +87,7 @@ export default function ServerTimePage() {
 
         {/* 1. 왜 정확한 서버 시간이 중요한가 */}
         <section>
-          <h2 style={sectionTitle}>왜 정확한 서버 시간이 중요한가?</h2>
+          <h2 className="g-h2">왜 정확한 서버 시간이 중요한가?</h2>
           <p className="g-p">
             수강신청·티켓팅에서는 서버 기준 시각보다 <strong style={{ color: 'var(--text)' }}>0.1초만 늦어도 매진</strong>되는 일이 흔합니다. 반대로 너무 빨리 새로고침하면 「아직 시작 안 됨」 페이지로 튕겨 다시 대기열에 밀려납니다.
           </p>
@@ -95,7 +101,7 @@ export default function ServerTimePage() {
 
         {/* 2. 한국 주요 티켓팅·신청 사이트 정시 */}
         <section>
-          <h2 style={sectionTitle}>한국 주요 티켓팅·신청 사이트 정시</h2>
+          <h2 className="g-h2">한국 주요 티켓팅·신청 사이트 정시</h2>
           <p className="g-p">
             대부분 시스템은 KST 기준 정각/30분 단위로 열립니다. 사이트별 권장 새로고침 타이밍.
           </p>
@@ -128,14 +134,14 @@ export default function ServerTimePage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+          <p className="g-note">
             ※ 권장 새로고침은 일반적인 사이트 응답 기준입니다. 실제로는 사이트별·시기별로 다를 수 있으니 미리 사전 접속해 「대기 페이지」 패턴을 익혀두세요.
           </p>
         </section>
 
         {/* 3. 마라톤 대회 신청 — 광클 전쟁 + 성공 스토리 */}
         <section>
-          <h2 style={sectionTitle}>마라톤 대회 신청, 이제는 콘서트 티켓팅만큼 어렵습니다</h2>
+          <h2 className="g-h2">마라톤 대회 신청, 이제는 콘서트 티켓팅만큼 어렵습니다</h2>
           <p className="g-p">
             러닝 인구가 폭발적으로 늘면서 인기 대회는 <strong style={{ color: 'var(--text)' }}>접수 시작 수 분, 빠르면 수십 초 만에 마감</strong>됩니다. 동아마라톤(서울)·JTBC 서울마라톤·춘천마라톤·손기정평화마라톤 같은 메이저 대회는 물론, 지방 대회들도 오픈과 동시에 품절이 뜨는 게 일상이 됐습니다.
           </p>
@@ -144,7 +150,7 @@ export default function ServerTimePage() {
           </p>
 
           {/* 실사용 스토리 */}
-          <div style={{ background: 'var(--bg2)', border: '1px solid rgba(13,148,136,0.35)', borderLeft: '3px solid var(--cat-edu)', borderRadius: 'var(--radius-card)', padding: '18px 20px' }}>
+          <div style={{ background: 'var(--bg2)', border: '1px solid color-mix(in srgb, var(--cat-edu) 35%, transparent)', borderLeft: '3px solid var(--cat-edu)', borderRadius: 'var(--radius-card)', padding: '18px 20px' }}>
             <p style={{ fontSize: '12px', color: 'var(--cat-edu)', fontWeight: 700, letterSpacing: '0.04em', marginBottom: '10px' }}>
               실사용 사례 — 2026 경주 동아마라톤 접수 성공 (2026. 05. 26. 19시)
             </p>
@@ -158,14 +164,14 @@ export default function ServerTimePage() {
               결과 — 대기열 앞쪽에 진입해 결제까지 2분 만에 완료, 그렇게 어렵던 <strong style={{ color: 'var(--cat-edu)' }}>풀코스 배번을 확보</strong>했습니다. 1초의 차이가 완주의 출발선이 됐습니다. 🏃
             </p>
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 10 }}>
+          <p className="g-note">
             ※ 개인 경험담이며 결과를 보장하지 않습니다. 대회 정원·접수 정책은 주최 측 공지를 따르세요. 매크로·자동화 접수는 금지됩니다.
           </p>
         </section>
 
         {/* 4. 작동 원리 */}
         <section>
-          <h2 style={sectionTitle}>본 도구의 정확도 — 작동 원리</h2>
+          <h2 className="g-h2">본 도구의 정확도 — 작동 원리</h2>
           <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
             {[
               { step: '1', title: '5회 측정', content: '클라이언트가 `/api/time`을 5번 호출하며 매 측정마다 RTT(왕복 시간)을 기록합니다.' },
@@ -182,14 +188,63 @@ export default function ServerTimePage() {
               </div>
             ))}
           </div>
-          <p style={{ fontSize: '12px', color: 'var(--muted)', lineHeight: 1.7, marginTop: 12 }}>
+          <p className="g-note">
             일반적 정확도는 RTT/2 (보통 10~50ms). 「측정 정확도」 영역에서 확인 가능.
           </p>
         </section>
 
+        {/* 4-1. 측정값 읽는 법 */}
+        <section>
+          <h2 className="g-h2">측정값 읽는 법 — 오프셋·정확도·외부 사이트 차이</h2>
+          <p className="g-p">
+            한 번의 측정은 이렇게 계산됩니다. 요청을 보낸 순간 내 시계가 10:00:00.000, 응답을 받은 순간 10:00:00.080이었다면 왕복 시간(RTT)은 80ms입니다.
+            서버가 응답에 적은 시각이 10:00:00.130이라면, 응답이 돌아오는 데 왕복의 절반인 40ms가 걸렸다고 보고 <strong>수신 순간의 서버 시각을 10:00:00.170</strong>으로 추정합니다.
+            내 시계(…00.080)와 90ms 차이이므로 화면에는 「내 PC 시계 0.09초 느림」, 「측정 정확도 ±40ms (RTT 80ms)」로 표시됩니다.
+          </p>
+          <p className="g-p">
+            「±RTT/2」가 정확도의 상한인 이유는 가는 길과 오는 길의 지연이 같다는 가정 때문입니다. 극단적으로 80ms가 전부 한쪽 방향에서 걸렸다면 실제 오차는 최대 40ms가 됩니다.
+            그래서 도구는 5번 측정해 RTT가 가장 짧은 표본 하나만 씁니다 — 대기열 지연이 가장 적게 섞인 표본일수록 오차 범위가 좁기 때문이며, NTP 표준(RFC 5905)의 클록 필터도 같은 원리로 지연이 가장 작은 표본을 고릅니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>표시</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>도구의 판정 구간</th>
+                  <th scope="col" style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500 }}>이렇게 하세요</th>
+                </tr>
+              </thead>
+              <tbody>
+                {[
+                  { s: '내 PC 시계 「거의 정확」', t: '차이 50ms 미만', p: '기기 시계를 그대로 봐도 됩니다' },
+                  { s: '내 PC 시계 0.05~0.5초',   t: '50ms 이상 500ms 미만', p: '티켓팅엔 이 페이지 시계를 기준으로' },
+                  { s: '내 PC 시계 0.5~2초',      t: '500ms 이상 2초 미만', p: 'OS 시계 동기화 권장 (아래 방법)' },
+                  { s: '내 PC 시계 2초 이상',      t: '2초 이상',            p: '자동 동기화가 꺼졌을 가능성 — 즉시 동기화' },
+                  { s: '측정 정확도 ±RTT/2',      t: '보통 10~50ms',         p: '100ms를 넘으면 유선·5GHz로 바꾼 뒤 다시 동기화' },
+                  { s: '외부 사이트 「1초 미만」',  t: 'Date 헤더 해상도(1초) 이내 — 실제 차이는 약 −1~+2초일 수 있음', p: '이 방식으로는 1초 미만 차이를 가릴 수 없습니다 — 이 도구 시계를 기준으로 하고, 오픈 직후 대기 페이지 여부로 한 번 더 확인하세요' },
+                  { s: '외부 사이트 「약 +N초 / −N초」', t: '1초 이상 차이',       p: '+N초면 그 사이트 시계가 N초 빠르고, −N초면 느림 — 그 사이트 시계에 맞춰 새로고침' },
+                ].map((r, i) => (
+                  <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 500 }}>{r.s}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{r.p}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <Callout tone="note" title="외부 사이트 측정은 왜 초 단위인가요?">
+            <p>
+              티켓·수강신청 사이트는 시각 API를 공개하지 않으므로, 도구는 그 사이트에 요청을 보내 응답의 HTTP <code>Date</code> 헤더를 읽습니다.
+              HTTP 표준(RFC 9110)상 이 헤더는 「Sun, 06 Nov 1994 08:49:37 GMT」처럼 <strong>초까지만</strong> 적고 소수점 아래는 버리므로, 읽은 값은 그 사이트의 실제 시각보다 최대 1초 뒤처져 있을 수 있습니다.
+              그래서 외부 사이트 차이는 초 단위로만 표시하고, 1초 미만은 구분하지 않습니다. CDN 캐시 응답이면 <code>Age</code> 헤더만큼 보정합니다.
+            </p>
+          </Callout>
+        </section>
+
         {/* 4. PC 시계 동기화 가이드 */}
         <section>
-          <h2 style={sectionTitle}>내 PC·스마트폰 시계 동기화하기</h2>
+          <h2 className="g-h2">내 PC·스마트폰 시계 동기화하기</h2>
           <p className="g-p">
             본 도구로 오차가 ±1초 이상 나면 OS 시계를 강제 동기화하세요. 한국에서는 <strong style={{ color: 'var(--text)' }}>한국표준과학연구원(KRISS) NTP 서버 (ntp.kriss.re.kr)</strong>가 가장 정확합니다.
           </p>
@@ -214,8 +269,8 @@ export default function ServerTimePage() {
               <p style={{ fontSize: 14, color: 'var(--warning)', fontWeight: 700, marginBottom: 6 }}>📱 Android·iPhone</p>
               <p style={{ fontSize: 13, color: 'var(--text)', lineHeight: 1.8, margin: 0 }}>
                 설정 → 일반 → 날짜 및 시간 → 「자동 설정」 ON<br/>
-                NTP 자동 동기화 (Android는 time.android.com 우선,<br/>
-                통신사 시각은 보조) — 보통 1초 이내
+                통신사 시각(NITZ)·NTP 자동 동기화<br/>
+                (우선순위는 기기마다 다름) — 보통 1초 이내
               </p>
             </div>
           </div>
@@ -228,7 +283,7 @@ export default function ServerTimePage() {
 
         {/* 6. 관련 도구 */}
         <section>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: '10px' }}>
             {[
               { href: '/tools/date/dday',     icon: '📅', name: 'D-Day 계산기',         desc: '특정 날짜까지 D-day·진행률' },
