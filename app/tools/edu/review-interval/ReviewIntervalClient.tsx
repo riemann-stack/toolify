@@ -5,19 +5,15 @@ import Disclaimer from '@/components/Disclaimer'
 import { todayStr } from '@/lib/date'
 import { useEffect, useMemo, useState } from 'react'
 import s from './review-interval.module.css'
+import {
+  type Difficulty, type Intensity, scheduleOffsets, addDays, diffDays, buildSimpleSchedule, sm2,
+  CURVE_BASE_STABILITY, CURVE_GROWTH, examLoad, examShortage, DAILY_REVIEW_SHARE, DAILY_REVIEW_MAX, REVIEW_COST_RATIO,
+} from './reviewIntervalUtils'
 
 // ─────────────────────────────────────────────
 // 데이터·상수
 // ─────────────────────────────────────────────
-type Difficulty = 'easy' | 'normal' | 'hard'
-type Intensity = 'fast' | 'normal' | 'relaxed'
-
-const SIMPLE_INTERVALS: Record<Difficulty, number[]> = {
-  easy:   [1, 4, 10, 21, 45],
-  normal: [1, 3, 7, 14, 30],
-  hard:   [1, 2, 5, 10, 21],
-}
-const INTENSITY_MULT: Record<Intensity, number> = { fast: 0.7, normal: 1.0, relaxed: 1.5 }
+// 난이도·강도 간격, SM-2, 망각곡선 모델, 시험일 역산식은 reviewIntervalUtils (가이드 표와 단일 소스)
 
 const SCORE_OPTIONS = [
   { v: 0, l: '전혀 기억 X', emoji: '😵' },
@@ -41,15 +37,6 @@ function parseISO(s: string): Date {
 function isValidISO(s: unknown): s is string {
   return typeof s === 'string' && /^\d{4}-\d{2}-\d{2}$/.test(s) && !Number.isNaN(parseISO(s).getTime())
 }
-function addDays(date: Date, days: number): Date {
-  const r = new Date(date)
-  r.setDate(r.getDate() + days)
-  return r
-}
-function diffDays(a: Date, b: Date): number {
-  const ms = b.getTime() - a.getTime()
-  return Math.round(ms / (1000 * 60 * 60 * 24))
-}
 function fmtDate(d: Date): string {
   const month = d.getMonth() + 1
   const day = d.getDate()
@@ -68,33 +55,9 @@ function dDay(target: Date, base: Date = new Date()): string {
 }
 
 // ─────────────────────────────────────────────
-// SM-2 알고리즘
-// ─────────────────────────────────────────────
-type SM2Input = { quality: number; repetitions: number; ef: number; interval: number }
-type SM2Output = { nextInterval: number; nextEF: number; nextRepetitions: number }
-function sm2(input: SM2Input): SM2Output {
-  const { quality } = input
-  let ef = input.ef + (0.1 - (5 - quality) * (0.08 + (5 - quality) * 0.02))
-  ef = Math.max(1.3, ef)
-  let reps: number, interval: number
-  if (quality < 3) {
-    reps = 0
-    interval = 1
-  } else {
-    reps = input.repetitions + 1
-    if (reps === 1) interval = 1
-    else if (reps === 2) interval = 6
-    else interval = Math.round(input.interval * ef)
-  }
-  return { nextInterval: interval, nextEF: ef, nextRepetitions: reps }
-}
-
-// ─────────────────────────────────────────────
 // 망각곡선 SVG
 // ─────────────────────────────────────────────
-// 단순 지수 모델: R = e^(−t/S)·100, 복습마다 100% 회복 + 안정도 S ×1.6
-const CURVE_BASE_STABILITY = 2.5
-const CURVE_GROWTH = 1.6
+// 단순 지수 모델: R = e^(−t/S)·100, 복습마다 100% 회복 + 안정도 S ×CURVE_GROWTH
 /** 각 복습 직전 유지율(%) — 그래프와 같은 모델 */
 function preReviewRetention(reviewDays: number[], baseStability = CURVE_BASE_STABILITY): number[] {
   let last = 0
@@ -307,36 +270,7 @@ export default function ReviewIntervalClient() {
   const studyDateValid = isValidISO(studyDate)
   const simpleSchedule = useMemo(() => {
     if (!isValidISO(studyDate)) return []
-    const start = parseISO(studyDate)
-    const baseIntervals = SIMPLE_INTERVALS[difficulty]
-    const mult = INTENSITY_MULT[intensity]
-    const exam = isValidISO(examDate) ? parseISO(examDate) : null
-
-    const items = baseIntervals.map((interval, i) => {
-      const adjusted = Math.max(1, Math.round(interval * mult))
-      const date = addDays(start, adjusted)
-      const valid = !exam || date < exam
-      return { round: i + 1, interval: adjusted, date, valid, recommended: i < 2 ? '10~15분' : i < 4 ? '15~20분' : '20~30분' }
-    }).filter(x => x.valid)
-
-    // 시험 전 최종 복습 (시험일 -2일)
-    const finalReview = exam ? addDays(exam, -(difficulty === 'hard' ? 1 : 2)) : null
-    if (finalReview && finalReview > start) {
-      // 마지막 일반 복습 이후
-      const lastReview = items[items.length - 1]
-      if (!lastReview || finalReview > lastReview.date) {
-        items.push({
-          round: items.length + 1,
-          interval: diffDays(start, finalReview),
-          date: finalReview,
-          valid: true,
-          recommended: '30분~ (최종 복습)',
-          isFinal: true,
-        } as typeof items[0] & { isFinal?: boolean })
-      }
-    }
-
-    return items
+    return buildSimpleSchedule(parseISO(studyDate), difficulty, intensity, isValidISO(examDate) ? parseISO(examDate) : null)
   }, [studyDate, difficulty, intensity, examDate])
 
   // 망각곡선용 복습일들 (학습일 0 기준)
@@ -369,9 +303,7 @@ export default function ReviewIntervalClient() {
   function addItem() {
     if (!newTitle.trim() || !isValidISO(newDate)) return
     const start = parseISO(newDate)
-    const baseIntervals = SIMPLE_INTERVALS[newDiff]
-    const mult = INTENSITY_MULT[newIntens]
-    const firstInterval = Math.max(1, Math.round(baseIntervals[0] * mult))
+    const firstInterval = scheduleOffsets(newDiff, newIntens)[0]
     const item: StudyItem = {
       id: `item-${Date.now()}-${Math.random().toString(36).slice(2, 6)}`,
       title: newTitle.trim(),
@@ -509,28 +441,14 @@ export default function ReviewIntervalClient() {
     if (total <= 0 || dailyHrs <= 0 || perMin <= 0) return null
     // 항목 하나가 하루 시간을 넘으면 일별 계획이 '신규 0개'로 멈추므로 먼저 막는다
     if (perMin > dailyHrs * 60) return { error: '항목당 학습 시간이 하루 공부 가능 시간보다 깁니다. 하루 시간을 늘리거나 항목을 더 잘게 나눠 주세요.' }
-    const dailyMinutes = dailyHrs * 60
-    const itemsPerDay = Math.max(1, Math.floor(dailyMinutes / perMin))
-    // 신규 학습 일수 추정 — 매일 itemsPerDay개씩 학습 (단, 복습 시간이 점점 늘어남 고려)
-    // 단순 모델: 신규 학습은 절반 시간, 복습은 절반 시간
-    const newItemsPerDay = Math.max(1, Math.floor(itemsPerDay * 0.5))
-    const learnDays = Math.ceil(total / newItemsPerDay)
-    const totalLearnHours = (total * perMin) / 60
-    const totalReviewHours = totalLearnHours * 1.5  // 복습 = 신규의 1.5배
-    const totalRequiredHours = totalLearnHours + totalReviewHours
-    const totalAvailableHours = daysLeft * dailyHrs
+    // 단순 모델: 하루 처리량의 절반은 신규 학습, 복습 총시간 = 신규의 1.5배 (reviewIntervalUtils.examLoad)
+    const load = examLoad(total, dailyHrs, perMin)
     // 시험 2일 전까지 신규 학습 완료 + 총 필요 시간이 가능 시간 이내여야 '가능'
-    const isShortage = learnDays > daysLeft - 2 || totalRequiredHours > totalAvailableHours
     return {
       daysLeft,
-      newItemsPerDay,
-      itemsPerDay,
-      learnDays,
-      totalLearnHours,
-      totalReviewHours,
-      totalRequiredHours,
-      totalAvailableHours,
-      isShortage,
+      ...load,
+      totalAvailableHours: daysLeft * dailyHrs,
+      isShortage: examShortage(load, daysLeft, dailyHrs),
       exam,
     }
   }, [examTargetDate, totalItems, dailyHours, minPerItem, todayStart])
@@ -542,7 +460,7 @@ export default function ReviewIntervalClient() {
     const total = parseFloat(totalItems) || 0
     const perMin = parseFloat(minPerItem) || 2
     const budget = (parseFloat(dailyHours) || 0) * 60  // 하루 가능 시간(분) — 이 상한을 넘기지 않는다
-    const reviewCost = perMin * 0.7
+    const reviewCost = perMin * REVIEW_COST_RATIO
     const newPerDay = examPlan.newItemsPerDay         // 하루 시간의 절반 이하
     let learned = 0
     for (let i = 0; i < Math.min(examPlan.daysLeft, 30); i++) {
@@ -551,7 +469,7 @@ export default function ReviewIntervalClient() {
       // 복습 대상 추정(어제까지 익힌 항목의 약 40%, 최대 150개). 신규 학습분 시간을 먼저 떼어 두고
       // 남은 시간 안에서만 복습을 배정 — 예전엔 상한이 없어 하루 2시간 입력에 4.5시간 계획이 나왔다
       const newWanted = Math.max(0, Math.min(newPerDay, total - learned))
-      const reviewWanted = Math.min(learned, Math.round(Math.min(150, learned * 0.4)))
+      const reviewWanted = Math.min(learned, Math.round(Math.min(DAILY_REVIEW_MAX, learned * DAILY_REVIEW_SHARE)))
       const reviewCap = Math.floor(Math.max(0, budget - newWanted * perMin) / reviewCost)
       const reviewToday = Math.max(0, Math.min(reviewWanted, reviewCap))
       const remaining = budget - reviewToday * reviewCost
@@ -702,7 +620,7 @@ export default function ReviewIntervalClient() {
                   {simpleSchedule.map((r, i) => {
                     const isToday = diffDays(todayStart, r.date) === 0
                     const isMissed = diffDays(todayStart, r.date) < 0
-                    const isFinal = 'isFinal' in r && (r as { isFinal?: boolean }).isFinal
+                    const isFinal = !!r.isFinal
                     return (
                       <tr key={i} className={isToday ? s.rowToday : isMissed ? s.rowMissed : isFinal ? s.rowFinal : ''}>
                         <td>{isFinal ? '최종' : r.round + '차'}</td>

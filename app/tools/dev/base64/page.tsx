@@ -3,7 +3,9 @@ import Base64Client from './Base64Client'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
+import Callout from '@/components/Callout'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
 
@@ -25,17 +27,24 @@ const FAQ_LD = [
               },
               {
                 q: '한글을 Base64로 인코딩하면 깨지는 이유는?',
-                a: '브라우저 기본 <code>btoa()</code>는 ASCII 외 문자를 처리하지 못하는 한계가 있습니다. 본 도구는 <strong>UTF-8로 먼저 변환</strong>한 후 Base64 인코딩하므로 한글·이모지·특수문자도 안전합니다. 디코딩 시에도 같은 방식으로 UTF-8을 되살려야 깨지지 않습니다. 새 코드라면 <code>TextEncoder</code>로 UTF-8 바이트를 만든 뒤 인코딩하는 방식을 권장합니다. 예전 코드에 흔한 <code>btoa(unescape(encodeURIComponent(text)))</code>는 폐기된 <code>unescape</code>에 기대는 레거시 패턴입니다.',
+                a: '브라우저 기본 <code>btoa()</code>는 Latin-1(코드 0~255) 밖의 문자, 즉 한글·이모지를 넣으면 <code>InvalidCharacterError</code>가 납니다. 본 도구는 <strong>UTF-8로 먼저 변환</strong>한 후 Base64 인코딩하므로 한글·이모지·특수문자도 안전합니다. 디코딩 시에도 같은 방식으로 UTF-8을 되살려야 깨지지 않습니다. 새 코드라면 <code>TextEncoder</code>로 UTF-8 바이트를 만든 뒤 인코딩하는 방식을 권장합니다. 예전 코드에 흔한 <code>btoa(unescape(encodeURIComponent(text)))</code>는 폐기된 <code>unescape</code>에 기대는 레거시 패턴입니다.',
               },
               {
                 q: 'URL-safe Base64는 언제 사용하나요?',
-                a: '표준 Base64에 포함된 <strong>+, /, =</strong>가 URL이나 파일명에서 특수한 의미를 가지므로 인코딩이 추가로 필요합니다. URL-safe는 이를 <strong>-, _</strong>로 치환하고 패딩을 생략해 그대로 URL이나 파일명에 사용할 수 있습니다. <strong>JWT, OAuth PKCE(code_challenge), URL 파라미터</strong> 등에서 표준으로 쓰입니다.',
+                a: '표준 Base64에 포함된 <strong>+, /, =</strong>가 URL이나 파일명에서 특수한 의미를 가지므로 인코딩이 추가로 필요합니다. URL-safe(RFC 4648 §5)는 이를 <strong>-, _</strong>로 치환하고, 끝의 패딩(=)도 보통 생략해 그대로 URL이나 파일명에 쓸 수 있게 합니다(JWT는 생략이 규칙이며, 이 도구의 URL-safe 모드도 패딩을 뺍니다). <strong>JWT, OAuth PKCE(code_challenge), URL 파라미터</strong> 등에서 표준으로 쓰입니다.',
               },
               {
                 q: '이미지를 Base64 Data URI로 임베드하는 게 좋을까요?',
                 a: '경우에 따라 다릅니다. <strong>5KB 이하 작은 아이콘</strong>은 HTTP 요청 절감·CSS 통합 면에서 유리하지만, <strong>50KB 이상 큰 이미지</strong>는 ① 33% 크기 증가, ② 캐시 분리 불가, ③ 페이지 초기 로딩 지연 등의 단점이 큽니다. 일반적으로 <strong>SVG 아이콘 단일·이메일 템플릿</strong>은 Data URI, <strong>일반 이미지</strong>는 CDN 사용을 권장합니다.',
               },
             ]
+
+/* 패딩 예시 — 손으로 적지 않고 빌드 시 UTF-8 바이트에서 직접 인코딩한다 */
+const PAD_ROWS = ['A', 'AB', 'ABC', 'Hi', '한', '한글'].map((t) => {
+  const bytes = Buffer.from(t, 'utf8')
+  const std = bytes.toString('base64')
+  return { t, n: bytes.length, std, url: bytes.toString('base64url'), pad: (std.match(/=/g) || []).length }
+})
 
 export default function Base64Page() {
   return (
@@ -46,6 +55,15 @@ export default function Base64Page() {
       <p className="tp-lead">
         텍스트 ↔ Base64 <strong style={{ color: 'var(--text)' }}>즉시 변환</strong> + URL 안전 모드.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="RFC 4648(Base64·Base64URL) · RFC 2397(data URL) · 브라우저 btoa()/atob() 정의"
+        sources={[
+          { label: 'RFC 4648 Base16·32·64 인코딩', href: 'https://www.rfc-editor.org/rfc/rfc4648' },
+          { label: 'RFC 2397 data URL', href: 'https://www.rfc-editor.org/rfc/rfc2397' },
+          { label: 'MDN btoa()', href: 'https://developer.mozilla.org/en-US/docs/Web/API/Window/btoa' },
+        ]}
+      />
 
       <Base64Client />
 
@@ -59,8 +77,8 @@ export default function Base64Page() {
           <h2 className="g-h2">
             Base64 인코딩 원리
           </h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            Base64는 바이너리 데이터를 <strong style={{ color: 'var(--text)' }}>64개의 ASCII 문자(A-Z, a-z, 0-9, +, /)</strong>로 표현하는 인코딩 방식입니다.
+          <p className="g-p">
+            Base64는 바이너리 데이터를 <strong>64개의 ASCII 문자(A-Z, a-z, 0-9, +, /)</strong>로 표현하는 인코딩 방식입니다.
             텍스트 기반 시스템에서 이진 데이터를 안전하게 전송하기 위해 1987년 RFC 989(PEM)에서 처음 등장했고, 1993년 RFC 1421을 거쳐 현재는 RFC 4648 표준입니다.
           </p>
           <div style={{
@@ -81,10 +99,37 @@ export default function Base64Page() {
             <div>→ 010000 110110 000101 110100</div>
             <div>→ 16(<span style={{ color: 'var(--cyan-600)' }}>Q</span>) 54(<span style={{ color: 'var(--cyan-600)' }}>2</span>) 5(<span style={{ color: 'var(--cyan-600)' }}>F</span>) 52(<span style={{ color: 'var(--cyan-600)' }}>0</span>)</div>
           </div>
-          <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '14px 18px', marginTop: 12, fontSize: 13, color: 'var(--muted)', lineHeight: 1.85 }}>
-            📐 <strong style={{ color: 'var(--text)' }}>크기 변화:</strong> Base64는 항상 원본보다 약 <strong style={{ color: 'var(--orange-600)' }}>33% 증가</strong>합니다 (3바이트 → 4문자 = 4/3 ≈ 1.33).
-            10MB 파일을 Base64로 변환하면 약 13.3MB가 됩니다.
+          <p className="g-p" style={{ marginTop: 16 }}>
+            입력이 3바이트로 나누어떨어지지 않으면 마지막 묶음을 0비트로 채워 인코딩하고, 모자란 자리를 <code>=</code>로 표시합니다. 1바이트가 남으면 <code>==</code>, 2바이트가 남으면 <code>=</code> 하나가 붙어
+            출력 길이는 항상 <strong>4 × ⌈바이트 수 ÷ 3⌉</strong>입니다. 한글 한 글자는 UTF-8로 3바이트라 패딩 없이 4문자가 되고, 글자 수가 아니라 <strong>바이트 수</strong>가 길이를 정한다는 점이 중요합니다.
+            위 인코더에 같은 글자를 넣으면 표와 같은 값이 나오고, URL-safe 모드로 바꾸면 마지막 열처럼 <code>=</code>가 빠집니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['입력', 'UTF-8 바이트', '표준 Base64', '패딩', 'URL-safe (패딩 제거)'].map((h) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: '12px', whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {PAD_ROWS.map((r) => (
+                  <tr key={r.t} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.t}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.n}바이트</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)', fontFamily: 'var(--font-mono)' }}>{r.std}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--muted)' }}>{r.pad === 0 ? '없음' : `${r.pad}개`}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--accent-ink)', fontFamily: 'var(--font-mono)' }}>{r.url}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
           </div>
+          <Callout tone="note" title="크기 변화">
+            Base64는 원본보다 약 <strong>33% 커집니다</strong> (3바이트 → 4문자 = 4/3 ≈ 1.33). 10MB 파일은 약 13.3MB가 되고,
+            이메일(MIME)처럼 76자마다 줄바꿈을 넣는 형식은 줄바꿈 문자만큼 더 늘어납니다. 입력이 짧을수록 패딩 때문에 증가율이 더 커집니다 (1바이트 → 4문자).
+          </Callout>
         </div>
 
         {/* ── 2. 사용 사례 ── */}
@@ -94,12 +139,12 @@ export default function Base64Page() {
           </h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: 10 }}>
             {[
-              { t: '📧 이메일 첨부파일',      c: 'var(--accent)', d: 'MIME 표준에서 이미지·문서를 7-bit ASCII로 안전하게 전송' },
-              { t: '🔑 JWT 토큰',            c: 'var(--cyan-600)',       d: 'JSON Web Token의 헤더·페이로드를 URL-safe Base64로 인코딩' },
-              { t: '🖼️ 이미지 Data URI',     c: 'var(--emerald-600)',       d: 'HTML/CSS에 이미지를 직접 임베드 (data:image/png;base64,...)' },
-              { t: '🔐 HTTP Basic 인증',     c: 'var(--yellow-700)',       d: 'Authorization 헤더에 user:password를 Base64로 전송' },
-              { t: '📦 PDF 임베드',          c: 'var(--orange-600)',       d: 'API 응답에 PDF 바이너리를 텍스트로 포함' },
-              { t: '🔒 PEM 인증서',          c: 'var(--amethyst)',       d: 'X.509 인증서·SSH 키를 텍스트 파일로 저장' },
+              { t: '이메일 첨부파일',      c: 'var(--accent)', d: 'MIME 표준에서 이미지·문서를 7-bit ASCII로 안전하게 전송' },
+              { t: 'JWT 토큰',            c: 'var(--cyan-600)',       d: 'JSON Web Token의 헤더·페이로드를 URL-safe Base64로 인코딩' },
+              { t: '이미지 Data URI',     c: 'var(--emerald-600)',       d: 'HTML/CSS에 이미지를 직접 임베드 (data:image/png;base64,...)' },
+              { t: 'HTTP Basic 인증',     c: 'var(--yellow-700)',       d: 'Authorization 헤더에 user:password를 Base64로 전송' },
+              { t: 'PDF 임베드',          c: 'var(--orange-600)',       d: 'API 응답에 PDF 바이너리를 텍스트로 포함' },
+              { t: 'PEM 인증서',          c: 'var(--amethyst)',       d: 'X.509 인증서·SSH 키를 텍스트 파일로 저장' },
             ].map((g, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${g.c}`, borderRadius: 'var(--radius-m)', padding: '14px 16px' }}>
                 <p style={{ fontSize: 13, color: g.c, fontWeight: 700, marginBottom: 6 }}>{g.t}</p>
@@ -127,7 +172,7 @@ export default function Base64Page() {
                 {[
                   { k: '치환',          v1: '+, /, =', v2: '-, _, (없음)' },
                   { k: '패딩 (=)',      v1: '항상 포함', v2: '생략 가능' },
-                  { k: 'URL/파일명',    v1: '⚠️ 인코딩 필요', v2: '✓ 그대로 사용' },
+                  { k: 'URL/파일명',    v1: '퍼센트 인코딩 필요', v2: '그대로 사용' },
                   { k: '주요 사용처',    v1: '이메일·일반', v2: 'JWT·OAuth·URL' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
@@ -139,11 +184,10 @@ export default function Base64Page() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'color-mix(in srgb, var(--cyan-600) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-            💡 <strong style={{ color: 'var(--cyan-600)' }}>예시:</strong>
-            표준 <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4 }}>SGVsbG8/V29ybGQ+</code> →
-            URL-safe <code style={{ background: 'var(--bg3)', padding: '1px 6px', borderRadius: 4 }}>SGVsbG8_V29ybGQ-</code>
-          </div>
+          <Callout tone="tip" title="치환 예시">
+            표준 <code>SGVsbG8/V29ybGQ+</code> → URL-safe <code>SGVsbG8_V29ybGQ-</code>. 표준 Base64를 쿼리 문자열에 그대로 넣으면 <code>+</code>가 공백으로 해석돼 디코딩이 깨지는 일이 흔합니다.
+            URL에 넣을 값이라면 처음부터 URL-safe로 인코딩하거나, 표준 값을 퍼센트 인코딩(<code>%2B</code>·<code>%2F</code>·<code>%3D</code>)하세요.
+          </Callout>
         </div>
 
         {/* ── 4. 환경별 코드 스니펫 ── */}
@@ -151,9 +195,9 @@ export default function Base64Page() {
           <h2 className="g-h2">
             환경별 Base64 코드 — 한글 처리 3종 비교
           </h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            브라우저의 <code>btoa()</code>는 Latin-1(0~255) 범위 문자만 받으므로 한글을 직접 넣으면 <strong style={{ color: 'var(--text)' }}>InvalidCharacterError</strong>가 발생합니다.
-            해결의 핵심은 어떤 환경이든 <strong style={{ color: 'var(--text)' }}>문자열을 UTF-8 바이트로 먼저 변환</strong>하는 것이며, 아래 세 패턴 모두 &quot;한글&quot;을 동일한 결과 <code>7ZWc6riA</code>로 인코딩합니다.
+          <p className="g-p">
+            브라우저의 <code>btoa()</code>는 Latin-1(0~255) 범위 문자만 받으므로 한글을 직접 넣으면 <strong>InvalidCharacterError</strong>가 발생합니다.
+            해결의 핵심은 어떤 환경이든 <strong>문자열을 UTF-8 바이트로 먼저 변환</strong>하는 것이며, 아래 세 패턴 모두 &quot;한글&quot;을 동일한 결과 <code>7ZWc6riA</code>로 인코딩합니다.
           </p>
           <div style={{
             background: 'var(--bg2)',
@@ -178,7 +222,7 @@ export default function Base64Page() {
             <div>{"Buffer.from('한글', 'utf8').toString('base64')  // \"7ZWc6riA\""}</div>
             <div>{"Buffer.from(b64, 'base64').toString('utf8')     // \"한글\""}</div>
           </div>
-          <div style={{ overflowX: 'auto', marginTop: 12 }}>
+          <div className="tableScroll" style={{ marginTop: 12 }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 480 }}>
               <thead>
                 <tr style={{ borderBottom: '1px solid var(--border)' }}>
@@ -204,11 +248,11 @@ export default function Base64Page() {
               </tbody>
             </table>
           </div>
-          <div style={{ background: 'color-mix(in srgb, var(--cyan-600) 5%, transparent)', border: '1px solid color-mix(in srgb, var(--cyan-600) 30%, transparent)', borderRadius: 'var(--radius-m)', padding: '12px 16px', fontSize: 13, color: 'var(--text)', marginTop: 12, lineHeight: 1.85 }}>
-            💡 <strong style={{ color: 'var(--cyan-600)' }}>선택 기준:</strong> 새로 작성하는 브라우저 코드는 ② TextEncoder, 서버 코드는 ③ Buffer가 기본입니다.
+          <Callout tone="tip" title="선택 기준">
+            새로 작성하는 브라우저 코드는 ② TextEncoder, 서버 코드는 ③ Buffer가 기본입니다.
             ①은 <code>unescape</code>가 폐기 API라 신규 코드에는 권장되지 않지만, 기존 코드 해석을 위해 알아둘 가치가 있습니다.
             ②에서 수십 KB 이상 대용량을 다룰 땐 <code>String.fromCharCode(...bytes)</code>의 인수 개수 제한 때문에 바이트 배열을 청크로 나눠 처리해야 합니다.
-          </div>
+          </Callout>
         </div>
 
         {/* ── 5. JWT 구조 ── */}
@@ -243,20 +287,11 @@ export default function Base64Page() {
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>HEADER.PAYLOAD를 비밀키로 서명. 위변조 검증용.</p>
             </div>
           </div>
-          <div style={{
-            background: 'rgba(234,88,12,0.05)',
-            border: '1px solid rgba(234,88,12,0.30)',
-            borderRadius: 'var(--radius-m)',
-            padding: '12px 16px',
-            fontSize: 13,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.85,
-          }}>
-            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>보안 주의:</strong> JWT의 PAYLOAD는 <strong>암호화가 아닌 인코딩</strong>입니다.
+          <Callout tone="warn" title="보안 주의">
+            JWT의 PAYLOAD는 <strong>암호화가 아닌 인코딩</strong>입니다.
             누구나 디코딩 가능하므로 <strong>비밀번호·민감 정보는 PAYLOAD에 절대 포함하지 마세요.</strong>
             서명 검증은 비밀키가 있어야 가능하며, 본 도구는 디코딩만 수행합니다.
-          </div>
+          </Callout>
         </div>
 
         {/* ── 6. JWT exp·iat 읽기 ── */}
@@ -264,10 +299,10 @@ export default function Base64Page() {
           <h2 className="g-h2">
             JWT exp·iat 읽는 법 — epoch 초 → 한국 시간
           </h2>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            JWT 표준(RFC 7519)은 <strong style={{ color: 'var(--text)' }}>exp</strong>(만료)·<strong style={{ color: 'var(--text)' }}>iat</strong>(발급)·<strong style={{ color: 'var(--text)' }}>nbf</strong>(활성 시작)를
-            1970-01-01 00:00 UTC부터 경과한 <strong style={{ color: 'var(--text)' }}>초 단위 숫자(NumericDate)</strong>로 정의합니다.
-            JavaScript의 <code>Date</code>는 밀리초 기준이므로 <strong style={{ color: 'var(--text)' }}>1000을 곱한 뒤</strong> 변환하고, 한국 시간(KST)은 UTC보다 9시간 빠릅니다.
+          <p className="g-p">
+            JWT 표준(RFC 7519)은 <strong>exp</strong>(만료)·<strong>iat</strong>(발급)·<strong>nbf</strong>(활성 시작)를
+            1970-01-01 00:00 UTC부터 경과한 <strong>초 단위 숫자(NumericDate)</strong>로 정의합니다.
+            JavaScript의 <code>Date</code>는 밀리초 기준이므로 <strong>1000을 곱한 뒤</strong> 변환하고, 한국 시간(KST)은 UTC보다 9시간 빠릅니다.
           </p>
           <div style={{
             background: 'var(--bg2)',
@@ -291,24 +326,15 @@ export default function Base64Page() {
             <div><span style={{ color: 'var(--muted)' }}># 만료 판정 — 현재 시각도 초 단위로 맞춰 비교</span></div>
             <div>{"Math.floor(Date.now() / 1000) >= exp  // true면 만료"}</div>
           </div>
-          <p style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12 }}>
-            위 예시 토큰은 <strong style={{ color: 'var(--text)' }}>2026-01-01 08:00 KST에 발급(iat)되어 09:00 KST에 만료(exp)</strong>되는
+          <p className="g-p" style={{ marginTop: 12 }}>
+            위 예시 토큰은 <strong>2026-01-01 08:00 KST에 발급(iat)되어 09:00 KST에 만료(exp)</strong>되는
             유효기간 1시간짜리입니다 (1767225600 − 1767222000 = 3,600초). 본 도구의 JWT 모드에 토큰을 붙여 넣으면 이 변환을 자동으로 수행합니다.
           </p>
-          <div style={{
-            background: 'rgba(234,88,12,0.05)',
-            border: '1px solid rgba(234,88,12,0.30)',
-            borderRadius: 'var(--radius-m)',
-            padding: '12px 16px',
-            fontSize: 13,
-            color: 'var(--text)',
-            marginTop: 12,
-            lineHeight: 1.85,
-          }}>
-            ⚠️ <strong style={{ color: 'var(--orange-600)' }}>흔한 실수 — 초 vs 밀리초:</strong> ×1000을 빼먹고 <code>new Date(1767225600)</code>을 호출하면
+          <Callout tone="warn" title="흔한 실수 — 초 vs 밀리초">
+            ×1000을 빼먹고 <code>new Date(1767225600)</code>을 호출하면
             <strong> 1970-01-21</strong>로 계산되어 &quot;항상 만료&quot;로 오판합니다. 반대로 서버가 밀리초 값을 exp에 넣으면 수만 년 뒤 만료로 인식돼 사실상 무기한 토큰이 됩니다.
-            exp가 <strong style={{ color: 'var(--text)' }}>10자리(초, 2001~2286년 구간)인지 13자리(밀리초)인지</strong>부터 확인하세요.
-          </div>
+            exp가 <strong>10자리(초, 2001~2286년 구간)인지 13자리(밀리초)인지</strong>부터 확인하세요.
+          </Callout>
         </div>
 
         {/* ── 7. Data URI ── */}
@@ -385,49 +411,25 @@ export default function Base64Page() {
         {/* ── 9. 보안 주의 ── */}
         <div>
           <h2 className="g-h2">
-            ⚠️ Base64는 암호화가 아닙니다
+            Base64는 암호화가 아닙니다
           </h2>
-          <div style={{
-            background: 'rgba(220,38,38,0.05)',
-            border: '1px solid rgba(220,38,38,0.30)',
-            borderRadius: 'var(--radius-card)',
-            padding: '16px 20px',
-            fontSize: 13,
-            color: 'var(--text)',
-            lineHeight: 1.85,
-          }}>
-            <p style={{ marginBottom: 10 }}>
-              <strong style={{ color: 'var(--red-600)' }}>흔한 오해:</strong> &quot;Base64는 암호화 같다&quot;라고 생각하는 경우가 있지만, 사실 Base64는 단순 <strong>인코딩</strong>이며 누구나 디코딩할 수 있습니다.
-            </p>
-            <ul style={{ paddingLeft: 22, color: 'var(--muted)', margin: 0 }}>
-              <li>비밀번호·API 키·신용카드 정보를 Base64로 &quot;감춰서&quot; 저장하는 것은 보안에 도움이 되지 않습니다</li>
-              <li>JWT의 PAYLOAD는 누구나 디코딩 가능 — 민감 정보 포함 금지</li>
-              <li>실제 보호가 필요하면 <strong style={{ color: 'var(--text)' }}>HTTPS, 암호화(AES·RSA), 해싱(bcrypt·argon2)</strong>을 사용하세요</li>
-            </ul>
-          </div>
+          <p className="g-p">
+            &quot;Base64로 바꿔 두면 알아볼 수 없으니 안전하다&quot;는 흔한 오해입니다. Base64는 키가 없는 <strong>인코딩</strong>이라 누구나 같은 규칙으로 즉시 되돌릴 수 있고,
+            <code>eyJ</code>로 시작하거나 <code>=</code>로 끝나는 모양만 봐도 Base64임을 쉽게 알아챕니다.
+          </p>
+          <ul className="g-list">
+            <li>비밀번호·API 키·카드 번호를 Base64로 &quot;감춰서&quot; 저장하거나 설정 파일에 넣는 것은 평문 저장과 같습니다.</li>
+            <li>HTTP Basic 인증의 <code>Authorization: Basic …</code> 값도 <code>user:password</code>를 Base64로 바꾼 것일 뿐이라 HTTPS 없이 보내면 그대로 노출됩니다.</li>
+            <li>JWT의 PAYLOAD는 누구나 디코딩할 수 있으므로 민감 정보를 넣지 않습니다.</li>
+            <li>실제 보호가 필요하면 전송은 <strong>HTTPS(TLS)</strong>, 저장 데이터는 <strong>암호화(AES 등)</strong>, 비밀번호는 <strong>느린 해시(bcrypt·argon2)</strong>를 씁니다.</li>
+          </ul>
         </div>
 
         <AdSlot position="between-tools" minHeight={250} />
 
         {/* ── 10. FAQ ── */}
         <div>
-          <h2 className="g-h2">
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 11. 관련 도구 ── */}

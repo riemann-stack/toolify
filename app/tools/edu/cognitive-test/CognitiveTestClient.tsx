@@ -3,12 +3,15 @@
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import Disclaimer from '@/components/Disclaimer'
 import s from './cognitive-test.module.css'
+import {
+  ROUNDS, REACTION_DELAY_MS, REACTION_GRADES, getReactionGrade, gradeRangeText,
+  STROOP_BANDS, DUAL_BANDS, interferenceBand, BAND_LABEL, bandsText, calcTotalScore,
+} from './cognitiveTestUtils'
 
 // ─────────────────────────────────────────────
 // 상수·데이터
 // ─────────────────────────────────────────────
-const ROUNDS = { reaction: 6, stroop: 20, dualSingle: 5, dualDouble: 10 } as const
-// reaction은 6회 시행 중 첫 1회 warm-up 제외하여 5회 평균
+// 시행 수·등급·점수 환산은 cognitiveTestUtils (가이드 표와 단일 소스)
 
 const STROOP_COLORS = [
   { name: '빨강', code: '#FF4444' },
@@ -18,18 +21,6 @@ const STROOP_COLORS = [
   { name: '보라', code: 'var(--amethyst)' },
   { name: '주황', code: 'var(--orange-600)' },
 ]
-
-type Grade = { key: string; label: string; emoji: string; range: [number, number]; color: string }
-const REACTION_GRADES: Grade[] = [
-  { key: 'excellent', label: '매우 빠름',   emoji: '🚀', range: [0, 200],     color: 'var(--teal-600)' },
-  { key: 'fast',      label: '빠름',         emoji: '✨', range: [201, 250],   color: 'var(--emerald-600)' },
-  { key: 'avg',       label: '평균',         emoji: '⭐', range: [251, 300],   color: 'var(--accent)' },
-  { key: 'below',     label: '평균 이하',    emoji: '👍', range: [301, 350],   color: 'var(--yellow-700)' },
-  { key: 'slow',      label: '느림',         emoji: '🐢', range: [351, 9999],  color: 'var(--orange-600)' },
-]
-function getReactionGrade(ms: number): Grade {
-  return REACTION_GRADES.find(g => ms >= g.range[0] && ms <= g.range[1]) ?? REACTION_GRADES[4]
-}
 
 // ─────────────────────────────────────────────
 // 공유 결과 (localStorage)
@@ -133,7 +124,7 @@ export default function CognitiveTestClient() {
   function startReactionRound() {
     if (rTimeoutRef.current) clearTimeout(rTimeoutRef.current)
     setRPhase('waiting')
-    const delay = 1500 + Math.random() * 3500
+    const delay = REACTION_DELAY_MS.min + Math.random() * (REACTION_DELAY_MS.max - REACTION_DELAY_MS.min)
     rTimeoutRef.current = window.setTimeout(() => {
       rStartRef.current = performance.now()
       setRPhase('go')
@@ -448,27 +439,10 @@ export default function CognitiveTestClient() {
   // ─────────────────────────────────────────────
   // 종합 점수 (탭 4)
   // ─────────────────────────────────────────────
-  const totalScore = useMemo(() => {
-    let score = 0
-    let count = 0
-    if (records.lastReaction !== undefined) {
-      // 반응속도 점수: 200ms=100, 350ms=0
-      const r = Math.max(0, Math.min(100, ((350 - records.lastReaction) / 150) * 100))
-      score += r; count++
-    }
-    if (records.lastStroop !== undefined) {
-      // 스트룹 간섭: 0ms=100, 500ms=0
-      const r = Math.max(0, Math.min(100, ((500 - records.lastStroop) / 500) * 100))
-      score += r; count++
-    }
-    if (records.lastDual !== undefined) {
-      // 이중 과제 간섭률: 0%=100, 50%=0
-      const r = Math.max(0, Math.min(100, ((50 - records.lastDual) / 50) * 100))
-      score += r; count++
-    }
-    if (count === 0) return null
-    return { value: Math.round(score / count), count }
-  }, [records])
+  const totalScore = useMemo(
+    () => calcTotalScore({ reaction: records.lastReaction, stroop: records.lastStroop, dual: records.lastDual }),
+    [records],
+  )
 
   function clearRecords() {
     if (!confirm('모든 기록을 삭제하시겠습니까?')) return
@@ -508,7 +482,7 @@ export default function CognitiveTestClient() {
         related={[
           { href: '/tools/edu/review-interval', label: '복습 간격' },
           { href: '/tools/edu/fermi-estimate', label: '페르미 추정' },
-          { href: '/tools/edu/sci-units', label: '과학 단위' },
+          { href: '/tools/edu/sig-figs?tab=notation', label: '과학적 표기·단위' },
         ]}
       >
         본 도구는 인지 심리학 게임을 시각화한 <strong>참고용</strong>이며 의학적 진단·평가가 아닙니다. 실제 인지 능력은 수면·피로·스트레스·집중도, 기기 성능·입력 지연·모니터 주사율(60Hz vs 144Hz), 시간대·주변 환경에 따라 달라집니다. <strong>ADHD·인지 장애·치매 등 진단은 신경과·정신건강의학과 전문의</strong>에게 받으시고, 본 결과로 자가 진단하지 마세요.
@@ -516,7 +490,7 @@ export default function CognitiveTestClient() {
 
       {/* 디바이스 안내 */}
       <div className={s.deviceNote}>
-        <strong>모바일 안내:</strong> 모바일은 터치 지연으로 데스크탑보다 약 20~50ms 느릴 수 있습니다.
+        <strong>모바일 안내:</strong> 터치 입력은 기기에 따라 마우스보다 수십 ms 느릴 수 있습니다.
         정확한 측정은 마우스·키보드 사용을 권장합니다.
       </div>
 
@@ -538,7 +512,7 @@ export default function CognitiveTestClient() {
               <p className={s.startDesc}>
                 <strong style={{ color: '#FF4444' }}>화면이 빨간색</strong>일 때는 기다리고,
                 <br /><strong style={{ color: 'var(--emerald-600)' }}>초록색으로 바뀌면 즉시 클릭</strong>하세요.
-                <br />6회 측정 (첫 1회 warm-up 제외, 5회 평균)
+                <br />{ROUNDS.reaction}회 측정 (첫 1회 연습 제외, {ROUNDS.reaction - 1}회 평균)
               </p>
               <button type="button" className={s.startBtn} onClick={startReactionRound}>테스트 시작</button>
             </div>
@@ -605,7 +579,7 @@ export default function CognitiveTestClient() {
                   <p className={s.heroBadge} style={{ background: `color-mix(in srgb, ${grade.color} 13%, transparent)`, color: grade.color }}>
                     {grade.emoji} {grade.label}
                   </p>
-                  <p className={s.heroSub}>5회 평균 (warm-up 1회 제외) · 일반 성인 250~300ms</p>
+                  <p className={s.heroSub}>{ROUNDS.reaction - 1}회 평균 (연습 1회 제외)</p>
                 </div>
 
                 <div className={s.card}>
@@ -629,15 +603,10 @@ export default function CognitiveTestClient() {
                       <div key={g.key} className={`${s.gradeRow} ${grade.key === g.key ? s.gradeRowActive : ''}`} style={{ color: g.color }}>
                         <span className={s.gradeEmoji}>{g.emoji}</span>
                         <span className={s.gradeLabel}>{g.label}</span>
-                        <span className={s.gradeRange} style={{ color: g.color }}>{g.range[1] >= 9999 ? '351ms+' : `${g.range[0]}~${g.range[1]}ms`}</span>
+                        <span className={s.gradeRange} style={{ color: g.color }}>{gradeRangeText(g)}</span>
                       </div>
                     ))}
                   </div>
-                </div>
-
-                <div className={s.compareCard}>
-                  <strong>참고:</strong> F1 드라이버 약 <strong>200ms</strong> · 프로 게이머 <strong>180~220ms</strong> · 일반 성인 <strong>250ms</strong>.
-                  실제 반응속도는 수면·피로·집중도·기기 성능에 따라 달라집니다.
                 </div>
 
                 <div className={s.actionRow}>
@@ -723,7 +692,7 @@ export default function CognitiveTestClient() {
                   ) : (
                     <>이번 측정에서는 간섭이 거의 나타나지 않았습니다 (조건별 10회라 오차 범위일 수 있어요)</>
                   )}
-                  <br />일반 성인 범위: 150~400ms
+                  <br />이 도구 기준: {bandsText(STROOP_BANDS, 'ms')}
                 </p>
               </div>
 
@@ -859,7 +828,7 @@ export default function CognitiveTestClient() {
                   ) : (
                     <>이번 측정에서는 이중 과제가 더 느려지지 않았습니다 (1단계 5회가 먼저라 익숙해진 효과일 수 있어요)</>
                   )}
-                  <br />일반 성인 범위: 20~40%
+                  <br />이 도구 기준: {bandsText(DUAL_BANDS, '%')}
                 </p>
               </div>
 
@@ -893,8 +862,8 @@ export default function CognitiveTestClient() {
 
               <div className={s.interpretCard}>
                 💡 <strong>이중 과제 간섭</strong>은 두 작업을 동시에 수행할 때 인지 자원이 분산되는 정도입니다.
-                연구에 따르면 진정한 멀티태스킹은 사실상 불가능하며, 뇌는 빠르게 작업을 전환할 뿐입니다(Task Switching).
-                한 번에 한 작업에 집중할 때 효율이 가장 높습니다.
+                두 과제가 &lsquo;어떤 반응을 할지 고르는 단계&rsquo;에서 겹치면 한쪽이 기다려야 해(Pashler 1994), 둘 다 주의가 필요한 일을 동시에 하면 반응이 느려지거나 틀리기 쉽습니다.
+                아주 익숙한 동작끼리는 간섭이 작습니다.
               </div>
 
               <div className={s.actionRow}>
@@ -949,7 +918,7 @@ export default function CognitiveTestClient() {
               </p>
               <p className={s.summaryStatus}>
                 {records.lastStroop !== undefined
-                  ? records.lastStroop <= 0 ? '오차 범위 (다시 측정 권장)' : records.lastStroop < 200 ? '낮음 (좋음)' : records.lastStroop < 400 ? '평균' : '높음'
+                  ? BAND_LABEL[interferenceBand(records.lastStroop, STROOP_BANDS)]
                   : '미측정'}
               </p>
             </div>
@@ -961,7 +930,7 @@ export default function CognitiveTestClient() {
               </p>
               <p className={s.summaryStatus}>
                 {records.lastDual !== undefined
-                  ? records.lastDual <= 0 ? '오차 범위 (다시 측정 권장)' : records.lastDual < 25 ? '낮음 (좋음)' : records.lastDual < 40 ? '평균' : '높음'
+                  ? BAND_LABEL[interferenceBand(records.lastDual, DUAL_BANDS)]
                   : '미측정'}
               </p>
             </div>

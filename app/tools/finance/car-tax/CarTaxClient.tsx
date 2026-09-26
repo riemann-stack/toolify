@@ -357,7 +357,7 @@ export default function CarTaxClient() {
               <strong>자동차세 본세</strong>
               <span className={s.taxSub}>
                 {exemption === 'disabled' || exemption === 'merit'
-                  ? '장애인·국가유공자 — 자동차세 면제'
+                  ? '장애인·상이 국가유공자 — 자동차세 면제'
                   : carType === 'ev' ? '전기차 정액 10만원 (본세)'
                   : carType === 'business' ? `${cc}cc × ${cc > 2500 ? '24' : cc > 1600 ? '19' : '18'}원/cc (영업용)`
                   : `${cc}cc × ${cc > 1600 ? '200' : cc > 1000 ? '140' : '80'}원/cc`}

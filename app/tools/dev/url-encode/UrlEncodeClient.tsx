@@ -20,8 +20,8 @@ const ENC_FUNCS: EncodeFunc[] = ['component', 'uri']
 const SORT_MODES: SortMode[] = ['order', 'alpha']
 
 const DEFAULT_INPUT_ENCODE = '안녕하세요 한국 & world!'
-const DEFAULT_INPUT_PARSE = 'https://search.naver.com/search.naver?query=%ED%95%9C%EA%B5%AD&n_media=ad&utm_source=banner'
-const DEFAULT_INPUT_CLEAN = 'https://www.coupang.com/vp/products/12345?_xts_=foo&src=search&utm_source=naver&fbclid=ABC123&n_media=cpc&n_keyword=shopping'
+const DEFAULT_INPUT_PARSE = 'https://search.naver.com/search.naver?query=%ED%95%9C%EA%B5%AD&n_media=27758&utm_source=banner'
+const DEFAULT_INPUT_CLEAN = 'https://www.coupang.com/vp/products/12345?_xts_=foo&src=search&utm_source=naver&fbclid=ABC123&n_media=27758&n_keyword=shopping'
 
 export default function UrlEncodeClient() {
   const [tab, setTab] = useState<Tab>('encode')
@@ -333,7 +333,7 @@ export default function UrlEncodeClient() {
               <span className={s.cardLabel}>
                 한글·이모지 UTF-8 bytes 분석 ({koreanAnalysis.length}개 글자 · {koreanAnalysis.reduce((a, b) => a + b.bytes.length, 0)} bytes)
               </span>
-              <table className={s.koreanTable}>
+              <div className="tableScroll"><table className={s.koreanTable}>
                 <thead>
                   <tr><th scope="col">글자</th><th scope="col">코드포인트</th><th scope="col">UTF-8 bytes</th><th scope="col">URL 인코딩</th></tr>
                 </thead>
@@ -347,7 +347,7 @@ export default function UrlEncodeClient() {
                     </tr>
                   ))}
                 </tbody>
-              </table>
+              </table></div>
               {koreanAnalysis.length > 50 && (
                 <p className={s.hint}>... 첫 50개만 표시 (전체 {koreanAnalysis.length}개)</p>
               )}

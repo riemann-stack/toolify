@@ -407,7 +407,7 @@ export function assessRisk(opts: {
 
   const recommendations: string[] = []
   if (opts.jeonsePriceRatio > 80) recommendations.push('전세가율 80% 초과 — 보증금 회수 위험. 시세 재확인 또는 다른 매물 검토')
-  if (!opts.hugInsured) recommendations.push('HUG 전세보증보험 가입 (보증금 사고 시 100% 보호)')
+  if (!opts.hugInsured) recommendations.push('HUG 전세보증보험 가입 (보증 한도·약관 범위 내 보증금 반환 보장)')
   if (!opts.registered) recommendations.push('계약 당일 확정일자 + 전입신고 (우선변제권 확보)')
   if (!opts.registryChecked) recommendations.push('등기부등본 확인 — 근저당·신탁·압류 여부')
   if (!opts.landlordVerified) recommendations.push('임대인 신분증 vs 등기부 명의 일치 확인')

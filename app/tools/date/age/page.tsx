@@ -426,7 +426,7 @@ export default function AgePage() {
         {/* 6. 탄생석·탄생화 */}
         <section>
           <h2 className="g-h2">월별 탄생석·탄생화</h2>
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: '6px' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, minmax(0, 1fr))', gap: '6px', overflowWrap: 'anywhere' }}>
             {[
               ['1월', '가넷', '카네이션', '진실'],
               ['2월', '자수정', '아이리스', '평화'],

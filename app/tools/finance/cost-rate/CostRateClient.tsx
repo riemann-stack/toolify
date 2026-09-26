@@ -200,7 +200,8 @@ export default function CostRateClient() {
     if (channel !== 'all') return []
     // isDelivery: 포장재·배달비·광고비가 드는 배달 채널 여부. 자체 페이지도 배달이므로 true(앱 수수료만 0%).
     const buildRow = (label: string, appRate_: number, isDelivery: boolean, cls: string) => {
-      const comm = price * ((appRate_ + payRate) / 100)
+      // 매장은 앱·결제 수수료 0 — 메인 계산의 '매장' 채널(useDelivery=false → 수수료 0)과 같은 기준
+      const comm = isDelivery ? price * ((appRate_ + payRate) / 100) : 0
       const variable = ingredient + (isDelivery ? packaging + accessory : 0) // 매장은 포장재·1회용품 없음 (메인 계산과 같은 기준)
       const burden = isDelivery ? deliveryBurden : 0
       const ad = isDelivery ? adCost : 0

@@ -420,6 +420,10 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
   const warnings: string[] = []
   let headMode = false
   let jsonMode = false
+  /* -d @파일처럼 본문을 파일에서 읽는 옵션 — 본문은 코드에 못 옮기지만 curl은 POST로 보낸다 */
+  let bodyFromFile = false
+  /* 도구가 추정해 붙인 Content-Type (-G로 본문이 쿼리로 옮겨가면 다시 뺀다) */
+  let autoContentType = false
 
   let i = 0
   while (i < tokens.length) {
@@ -443,6 +447,7 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
       unsupportedFlags.push(t)
       /* 일부는 다음 토큰을 값으로 가짐 → 스킵 */
       if (['--cert', '-E', '--key', '--cacert', '--cert-type', '--proxy', '-x', '--proxy-user',
+            '--socks5', '--socks4',  /* host[:port] 값을 받음 — 건너뛰지 않으면 URL로 오인 */
             '-T', '--upload-file', '-o', '--output', '-r', '--range',
             '-C', '--continue-at', '--resolve', '--connect-to', '--limit-rate'].includes(t)) {
         i += 2
@@ -495,6 +500,7 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         const v = next()
         if (v.startsWith('@')) {
           warnings.push(`-d @${v.slice(1)} (파일 업로드) — 미지원, 직접 처리 필요`)
+          bodyFromFile = true
         } else {
           dataItems.push({ value: v, mode: 'data' })
         }
@@ -510,6 +516,7 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         const v = next()
         if (v.startsWith('@')) {
           warnings.push(`--data-binary @${v.slice(1)} (파일 업로드) — 미지원`)
+          bodyFromFile = true
         } else {
           dataItems.push({ value: v, mode: 'data-binary' })
         }
@@ -526,6 +533,7 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         const v = next()
         if (v.startsWith('@')) {
           warnings.push(`--json @${v.slice(1)} (파일 업로드) — 미지원`)
+          bodyFromFile = true
         } else {
           dataItems.push({ value: v, mode: 'data-binary' })
         }
@@ -702,6 +710,7 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
         /* Content-Type 없으면 추가 */
         if (!ct) {
           headers.push({ key: 'Content-Type', value: 'application/x-www-form-urlencoded' })
+          autoContentType = true
         }
       } else {
         /* JSON 시도 */
@@ -710,7 +719,10 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
           if (trimmed.startsWith('{') || trimmed.startsWith('[')) {
             bodyParsed = JSON.parse(trimmed)
             bodyType = 'json'
-            if (!ct) headers.push({ key: 'Content-Type', value: 'application/json' })
+            if (!ct) {
+              headers.push({ key: 'Content-Type', value: 'application/json' })
+              autoContentType = true
+            }
           } else {
             bodyType = 'raw'
           }
@@ -744,7 +756,7 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
   if (!method) {
     if (headMode) method = 'HEAD'
     else if (flags.get) method = 'GET'
-    else if (rawBody || formItems.length > 0) method = 'POST'
+    else if (rawBody || formItems.length > 0 || bodyFromFile) method = 'POST'
     else method = 'GET'
   }
 
@@ -754,6 +766,13 @@ export function parseCurl(input: string): ParsedCurl | ParseError {
     finalUrl = url + (url.includes('?') ? '&' : '?') + rawBody
     rawBody = ''
     bodyType = null
+    bodyParsed = undefined
+    bodyForm = undefined
+    /* 본문이 없어졌으니 도구가 추정해 붙인 Content-Type도 뺀다 (curl -G도 보내지 않음) */
+    if (autoContentType) {
+      const idx = headers.findIndex((h) => h.key.toLowerCase() === 'content-type')
+      if (idx >= 0) headers.splice(idx, 1)
+    }
   }
 
   /* URL 분해 */
@@ -811,6 +830,13 @@ function effectiveValue(h: ParsedHeader, opts: GenOpts): string {
   return h.value
 }
 
+/* Basic 인증 user:pass → Base64. btoa()는 Latin-1 밖 문자(한글 등)에서 예외 → UTF-8 바이트로 먼저 변환 (curl도 입력 바이트 그대로 인코딩) */
+function basicAuthB64(userPass: string): string {
+  let bin = ''
+  for (const b of new TextEncoder().encode(userPass)) bin += String.fromCharCode(b)
+  return btoa(bin)
+}
+
 function escapePyString(s: string): string {
   return s.replace(/\\/g, '\\\\').replace(/'/g, "\\'").replace(/\n/g, '\\n').replace(/\r/g, '\\r')
 }
@@ -858,7 +884,7 @@ export function generateFetch(p: ParsedCurl, opts: GenOpts): string {
   }
   if (p.auth) {
     const userPass = `${p.auth.user}:${p.auth.password}`
-    const masked = opts.maskSensitive ? '***' : btoa(userPass)
+    const masked = opts.maskSensitive ? '***' : basicAuthB64(userPass)
     headers['Authorization'] = `Basic ${masked}`
   }
 
@@ -1108,7 +1134,7 @@ export function generateNodeHttp(p: ParsedCurl, opts: GenOpts): string {
   }
   if (p.auth) {
     const userPass = `${p.auth.user}:${p.auth.password}`
-    const auth64 = opts.maskSensitive ? '***' : btoa(userPass)
+    const auth64 = opts.maskSensitive ? '***' : basicAuthB64(userPass)
     headers['Authorization'] = `Basic ${auth64}`
   }
 

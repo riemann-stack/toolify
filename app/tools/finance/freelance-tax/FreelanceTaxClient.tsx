@@ -343,12 +343,12 @@ function QuickCalcTab({ inputs, result, update, legacyIndustry }: {
         )}
         {!result.canUseSimple && inputs.expenseMode === 'simple' && (
           <p className={styles.warn}>
-            ⚠️ 단순경비율 한도({fmtKRW(result.appliedSimpleLimit)}, {inputs.isNewBusiness ? '신규 기준' : '계속사업자 직전연도 기준'}) 초과 — 기준경비율 추계 적용. 본 도구는 주요경비(매입·임차·인건비) 증빙 미반영·배율 비교한도 기준이라, 증빙이 많으면 장부 작성이 유리할 수 있습니다.
+            ⚠️ 단순경비율 한도({fmtKRW(result.appliedSimpleLimit)}, {inputs.isNewBusiness ? '신규 기준' : '계속사업자 직전연도 기준'}) 이상 — 기준경비율 추계 적용{result.isComplexBookRequired ? '(복식부기의무자는 기준경비율의 1/2)' : ''}. 본 도구는 주요경비(매입·임차·인건비) 증빙 미반영·배율 비교한도 기준이라, 증빙이 많으면 장부 작성이 유리할 수 있습니다.
           </p>
         )}
         {result.isComplexBookRequired && (
           <p className={styles.warn}>
-            📒 매출 {fmtKRW(result.bookThreshold)} 초과 — <strong>복식부기 의무 대상</strong>. 미작성 시 무기장 가산세 20%.
+            📒 매출 {fmtKRW(result.bookThreshold)} 이상 — <strong>복식부기 의무 대상</strong>. 미작성 시 무기장 가산세 20%.
           </p>
         )}
       </section>

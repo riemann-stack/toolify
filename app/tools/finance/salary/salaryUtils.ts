@@ -44,7 +44,7 @@ export const NON_TAXABLE_ITEMS: NonTaxableItem[] = [
   { id: 'transport', name: '자가운전보조금', monthlyMax: 200_000,
     desc: '본인 차량 업무 사용 시 월 20만원',     recommended: false },
   { id: 'childcare', name: '육아수당',       monthlyMax: 200_000,
-    desc: '6세 이하 자녀, 월 20만원',            recommended: false },
+    desc: '6세 이하 자녀 1명당 월 20만원 (1명 기준)', recommended: false },
   { id: 'research',  name: '연구활동비',     monthlyMax: 200_000,
     desc: '연구원 등 특정 직군',                 recommended: false },
 ]

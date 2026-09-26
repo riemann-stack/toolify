@@ -47,8 +47,7 @@ export const TRACKING_GROUPS: TrackingGroup[] = [
   {
     id: 'kakao', emoji: '💬', label: '카카오·다음',
     desc: '카카오톡·카카오 모먼트·다음 추적',
-    keys: ['kakao_share_id', 'kakao_chat_id', '_branch_match_id',
-           'kakao_ref', 'kakao_referer'],
+    keys: ['kakao_share_id', 'kakao_chat_id', 'kakao_ref', 'kakao_referer'],
     domainKeys: { domains: ['kakao.com', 'daum.net', 'kakaocorp.com'], keys: ['taid', 'pid'] },
   },
   {
@@ -62,13 +61,14 @@ export const TRACKING_GROUPS: TrackingGroup[] = [
   },
   {
     id: 'microsoft', emoji: '🟦', label: 'Microsoft·Bing',
-    desc: 'Bing 광고·MailChimp·Microsoft 추적',
-    keys: ['msclkid', 'mc_eid', 'mc_cid', 'mkt_tok'],
+    desc: 'Bing·Microsoft 광고 클릭 추적',
+    keys: ['msclkid'],
   },
   {
     id: 'other', emoji: '📊', label: '기타 마케팅',
-    desc: 'Twitter·LinkedIn·Yandex·기타 추적 도구',
+    desc: 'X·LinkedIn·Yandex·Mailchimp·Marketo·HubSpot·Branch 등 기타 추적 도구',
     keys: ['igshid', 'twclid', 'li_fat_id', 'yclid', 'piwik_*',
+           'mc_eid', 'mc_cid', 'mkt_tok', '_branch_match_id',
            'oly_anon_id', 'oly_enc_id', 'rb_clickid', 'ttclid',
            'ScCid', 'ICID', 'WT.mc_id', 'epik', '_kx',
            '_hsenc', '_hsmi', 'hsa_*'],

@@ -193,7 +193,8 @@ export interface CalcResult {
 export function applyProgressiveTax(taxableBase: number): { tax: number; bracket: TaxBracket } {
   if (taxableBase <= 0) return { tax: 0, bracket: PROGRESSIVE_BRACKETS[0] }
   const bracket = PROGRESSIVE_BRACKETS.find((b) => taxableBase > b.min && taxableBase <= b.max) ?? PROGRESSIVE_BRACKETS[0]
-  const tax = Math.max(0, taxableBase * bracket.rate - bracket.deduction)
+  // 원 미만 절사 — 1e-6은 부동소수 오차(예: 9,000만 × 0.35 = 31,499,999.99…) 흡수용
+  const tax = Math.max(0, Math.floor(taxableBase * bracket.rate - bracket.deduction + 1e-6))
   return { tax, bracket }
 }
 
@@ -246,13 +247,15 @@ export function calculate(inputs: CalcInputs): CalcResult {
   const industry = getIndustry(inputs.industryId)
   const rates = effectiveRates(inputs)
 
-  // 단순경비율 적용 가능 여부
-  //  - 계속사업자: 직전연도 수입 기준 (본 도구는 입력 매출을 직전연도로 간주)
+  // 단순경비율 적용 가능 여부 (소득세법 시행령 §143④ — 한도 '미달'만 허용)
+  //  - 계속사업자: 직전연도 수입 3,600만 미만 (본 도구는 입력 매출을 직전연도로 간주)
   //  - 신규사업자(개업 첫해): 당해 수입이 복식부기 의무 기준 미만이면 단순경비율 가능
+  // 복식부기 의무: 간편장부대상자(§208⑤ — 신규사업자 또는 직전연도 7,500만 '미만')가 아닌 자
+  //  → 계속사업자 7,500만 이상. 신규사업자는 첫해 간편장부대상자 (단, 7,500만 이상이면 단순경비율은 불가 — §143④1호)
   const complexLimit = industry.bookThreshold
   const appliedSimpleLimit = inputs.isNewBusiness ? complexLimit : industry.simpleLimit
-  const canUseSimple = inputs.revenue <= appliedSimpleLimit
-  const isComplexBookRequired = inputs.revenue > complexLimit
+  const canUseSimple = inputs.revenue < appliedSimpleLimit
+  const isComplexBookRequired = !inputs.isNewBusiness && inputs.revenue >= complexLimit
 
   // 경비
   let expenseAmount: number
@@ -263,11 +266,14 @@ export function calculate(inputs: CalcInputs): CalcResult {
       expenseAmount = simpleExpense(inputs.revenue, rates.simpleRate)
       expenseRate = inputs.revenue > 0 ? (expenseAmount / inputs.revenue) * 100 : rates.simpleRate
     } else {
-      /* 단순경비율 한도 초과 → 기준경비율 추계 (무증빙 보수적 기준)
+      /* 단순경비율 한도 이상 → 기준경비율 추계 (무증빙 보수적 기준)
          추계 소득금액 = min( 매출 − 매출×기준경비율,  단순경비율 소득금액 × 배율 )
+         복식부기 의무자는 기준경비율의 1/2만 적용 (소득세법 시행령 §143③1호)
          배율: 복식부기 의무자 3.4 / 간편장부 대상자 2.8
          ※ 주요경비(매입·임차·인건비) 증빙은 본 도구 미반영 */
-      const baseMethodIncome = inputs.revenue - mulRate(inputs.revenue, rates.baseRate)
+      const baseRateTenths = Math.round(rates.baseRate * 10)   // 0.1%p 정수 — 1/2 적용 시 반올림 오차 방지
+      const baseMethodExpense = Math.floor((inputs.revenue * baseRateTenths) / (isComplexBookRequired ? 2000 : 1000))
+      const baseMethodIncome = inputs.revenue - baseMethodExpense
       const simpleMethodIncome = inputs.revenue - mulRate(inputs.revenue, rates.simpleRate)
       const multiplier = isComplexBookRequired ? 3.4 : 2.8
       const estimatedIncome = Math.min(baseMethodIncome, Math.round(simpleMethodIncome * multiplier))

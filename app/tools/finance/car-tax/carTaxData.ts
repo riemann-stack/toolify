@@ -44,7 +44,7 @@ export function dieselEnvironmentFee(cc: number): number {
 
 /* ─── 유류세 (L당, 2025~2026 평균) ─── */
 export interface FuelTaxInfo {
-  /** L당 세금 (원) — 교통세 + 교육세 + 주행세 + 부가세 */
+  /** L당 세금 (원) — 교통·에너지·환경세(탄력세율) + 교육세 15% + 주행세 26%. 부가가치세 별도·한시 인하 전 기준 */
   taxPerLiter: number
   /** L당 평균 소매가 (참고용) */
   pricePerLiter: number
@@ -108,7 +108,7 @@ export function calcCarTax(inp: CarTaxInputs): CarTaxResult {
     : inp.carType === 'hybrid' ? Math.min(grossAcqTax, HYBRID_TAX_CAP)
     : 0
 
-  // 자격 감면 (다자녀·장애인·국가유공자)
+  // 자격 감면 (다자녀·장애인·상이 국가유공자)
   let qualDed = 0
   if (inp.exemption === 'multi_child' && inp.carType !== 'business') {
     // 3자녀 이상: 면제 — 6인승 이하 승용 140만 한도(7인승↑ 등은 한도 다름) — 본 도구는 140만 한도로 보수 가정
@@ -117,7 +117,7 @@ export function calcCarTax(inp: CarTaxInputs): CarTaxResult {
     // 2자녀: 50% 경감 — 6인승 이하 승용 70만 한도
     qualDed = Math.min(grossAcqTax * TWO_CHILD_TAX_RATE, TWO_CHILD_TAX_CAP)
   } else if (inp.exemption === 'disabled' || inp.exemption === 'merit') {
-    // 장애인·국가유공자: 본인 명의 1대 면세
+    // 장애인·상이 국가유공자: 본인 명의 1대 면세
     qualDed = grossAcqTax
   }
 
@@ -136,7 +136,7 @@ export function calcCarTax(inp: CarTaxInputs): CarTaxResult {
   // ─── 연간 ───
   const isBusiness = inp.carType === 'business'
   const isEV = inp.carType === 'ev'
-  // 장애인·국가유공자: 본인 명의 1대 — 취득세뿐 아니라 자동차세(+지방교육세)도 면제
+  // 장애인·상이 국가유공자: 본인 명의 1대 — 취득세뿐 아니라 자동차세(+지방교육세)도 면제
   const fullExempt = inp.exemption === 'disabled' || inp.exemption === 'merit'
 
   // 자동차세 본세 (현재 시점 — 올해 차령 = 경과 년수 + 1)
@@ -232,7 +232,7 @@ export const EXEMPTION_LABEL = {
   two_child:   { name: '다자녀 (18세 미만 2명)', desc: '1대 취득세 50% 경감 — 6인승↓ 70만 한도 (2027년까지)' },
   multi_child: { name: '다자녀 (18세 미만 3명+)', desc: '1대 취득세 면제 — 6인승↓ 140만 한도 (2027년까지)' },
   disabled:    { name: '장애인 (장애 정도 심함 등)', desc: '본인 명의 1대 — 취득세·자동차세 면제 (승용 2000cc↓ 가정)' },
-  merit:       { name: '국가유공자',     desc: '본인 명의 1대 — 취득세·자동차세 면제' },
+  merit:       { name: '상이 국가유공자', desc: '상이등급 판정 등 요건 충족 본인 명의 1대 — 취득세·자동차세 면제' },
 } as const
 
 export type Exemption = keyof typeof EXEMPTION_LABEL
@@ -265,7 +265,7 @@ export const SAVING_TIPS = [
   { title: '⚡ 친환경차 선택',         detail: '전기차 취득세 140만원 면제 + 자동차세 13만원 정액. 5년 보유 시 약 200~400만원 절감' },
   { title: '👨‍👩‍👧‍👦 다자녀 가구',      detail: '18세 미만 자녀 3명 이상은 1대 취득세 면제(6인승↓ 140만 한도), 2명은 50% 경감(70만 한도) — 2027년까지' },
   { title: '🚙 경차 선택',             detail: '취득세 75만원까지 면제(2027년까지)·공채 매입 면제, 경차 유류세 환급 연 30만원 한도' },
-  { title: '🏥 장애인·국가유공자',     detail: '본인 명의 1대 한정 — 취득세·자동차세 모두 면제' },
+  { title: '🏥 장애인·상이 국가유공자', detail: '요건을 갖춘 본인 명의 1대 한정 — 취득세·자동차세 모두 면제' },
   { title: '🛢️ 노후 경유차',           detail: '유로4 이하(대략 2011년 이전 제작) 경유차는 환경개선부담금 부과. 조기폐차 지원금 활용' },
   { title: '⏳ 12년 이상 보유',        detail: '자동차세 최대 50% 감면. 장기 보유 가성비 ↑' },
   { title: '🏎️ 배기량 선택',           detail: '1600cc 이하는 cc당 140원, 초과는 200원. 단가 차이로 연 10만원+ 차이' },

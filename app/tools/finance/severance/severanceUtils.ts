@@ -74,11 +74,18 @@ export function taxServiceYears(start: Date, end: Date): number {
 
 /** 퇴사 전 3개월 산정기간 — 퇴사일(마지막 재직일) 포함
  *  checkEligibility의 재직일수 해석(퇴사일 포함)과 동일 기준.
+ *  산정 사유 발생일(퇴직일 = 마지막 근무일 다음 날) 이전 3개월 (근로기준법 §2①6).
  *  예: 퇴사일 12월 31일 → 10월 1일 ~ 12월 31일 (92일)
+ *      퇴사일 4월 30일 → 2월 1일 ~ 4월 30일 (89일, 평년) — 월말 퇴사는 직전 3개 역월 전체.
+ *      (이전 구현 '3개월 전 같은 날 + 1일'은 4/30·6/30·11/30·2월 말 퇴사를 1/31·3/31·8/31·11/29부터 잡아
+ *       분모가 1~2일 커지고 평균임금이 1~2% 낮게 나왔다)
  */
 export function calcThreeMonthPeriod(exitDate: Date): { start: Date; end: Date; days: number } {
   const end = new Date(exitDate)              // 퇴사일 포함
-  const start = addDays(addMonths(end, -3), 1) // 3개월 전 같은 날(월말 클램프) + 1일
+  const next = addDays(end, 1)                // 퇴직일(산정 사유 발생일)
+  const start = next.getDate() === 1
+    ? new Date(next.getFullYear(), next.getMonth() - 3, 1) // 월말 퇴사: 직전 3개 역월 (89~92일)
+    : addDays(addMonths(end, -3), 1)          // 그 외: 3개월 전 같은 날(월말 클램프) + 1일
   return {
     start,
     end,

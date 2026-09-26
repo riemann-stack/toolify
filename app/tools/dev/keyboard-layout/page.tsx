@@ -3,6 +3,7 @@ import KeyboardLayoutClient from './KeyboardLayoutClient'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from '@/components/ToolSection'
 import Faq from '@/components/Faq'
+import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import ToolPage from '@/components/ToolPage'
 
@@ -14,12 +15,21 @@ export const metadata = buildMetadata({
   keywords: ['한영타 변환', '한영 변환기', '두벌식 자판', '키보드 오타 복원', '한영키', 'dkssud 뜻', '한글 영타'],
 })
 
-const sectionTitle: React.CSSProperties = {
-  fontFamily: 'var(--font-sans)',
-  fontSize: '20px',
-  fontWeight: 700,
-  marginBottom: '16px',
-}
+const code: React.CSSProperties = { background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }
+
+/* 유니코드 완성형 음절 순서(초성 19 · 중성 21 · 종성 28) — 표의 순번·코드포인트는 빌드 시 글자에서 직접 분해해 계산 */
+const CHO = ['ㄱ','ㄲ','ㄴ','ㄷ','ㄸ','ㄹ','ㅁ','ㅂ','ㅃ','ㅅ','ㅆ','ㅇ','ㅈ','ㅉ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ']
+const JUNG = ['ㅏ','ㅐ','ㅑ','ㅒ','ㅓ','ㅔ','ㅕ','ㅖ','ㅗ','ㅘ','ㅙ','ㅚ','ㅛ','ㅜ','ㅝ','ㅞ','ㅟ','ㅠ','ㅡ','ㅢ','ㅣ']
+const JONG = ['(없음)','ㄱ','ㄲ','ㄳ','ㄴ','ㄵ','ㄶ','ㄷ','ㄹ','ㄺ','ㄻ','ㄼ','ㄽ','ㄾ','ㄿ','ㅀ','ㅁ','ㅂ','ㅄ','ㅅ','ㅆ','ㅇ','ㅈ','ㅊ','ㅋ','ㅌ','ㅍ','ㅎ']
+/* 두벌식 키는 도구 변환기로 검산한 값 (dks→안, sud→녕, rkqt→값, rhos→괜, qnpfr→뷁) */
+const SYLLABLE_ROWS = ([['안', 'dks'], ['녕', 'sud'], ['값', 'rkqt'], ['괜', 'rhos'], ['뷁', 'qnpfr']] as const).map(([ch, keys]) => {
+  const cp = ch.charCodeAt(0)
+  const idx = cp - 0xAC00
+  const cho = Math.floor(idx / 588)
+  const jung = Math.floor((idx % 588) / 28)
+  const jong = idx % 28
+  return { ch, keys, cho, jung, jong, hex: 'U+' + cp.toString(16).toUpperCase(), dec: cp }
+})
 
 const FAQ_LD = [
   {
@@ -63,6 +73,14 @@ export default function KeyboardLayoutPage() {
       <p className="tp-lead">
         한/영 전환을 깜빡하고 친 글자를 원래 의도한 글자로 되돌립니다. <code style={{ background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>dkssud</code> → <strong style={{ color: 'var(--text)' }}>안녕</strong>, <code style={{ background: 'var(--bg2)', padding: '2px 6px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>ㅗ디ㅣㅐ</code> → <strong style={{ color: 'var(--text)' }}>hello</strong>처럼 양방향으로 변환합니다.
       </p>
+      <UpdatedMeta
+        date="2026년 9월"
+        basis="KS X 5002(정보 처리용 건반 배열) 두벌식 · 유니코드 한글 음절 조합 규칙(3.12절)"
+        sources={[
+          { label: 'KS X 5002 정보 처리용 건반 배열 (e나라표준인증)', href: 'https://standard.go.kr/KSCI/standardIntro/getStandardSearchView.do?menuId=503&topMenuId=502&ksNo=KSX5002&tmprKsNo=KSX5002&reformNo=00' },
+          { label: '유니코드 표준 3장 (3.12 Conjoining Jamo Behavior)', href: 'https://www.unicode.org/versions/Unicode17.0.0/core-spec/chapter-3/' },
+        ]}
+      />
 
       <KeyboardLayoutClient />
 
@@ -72,9 +90,9 @@ export default function KeyboardLayoutPage() {
 
         {/* 1. 오타가 나는 이유 */}
         <div>
-          <h2 style={sectionTitle}>한영타 오타가 나는 이유</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            한글과 영문은 같은 키보드의 같은 키를 공유합니다. 운영체제의 입력기(IME)가 지금 어느 모드인지에 따라 같은 키 <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>d</code>가 <strong style={{ color: 'var(--text)' }}>ㅇ</strong>이 되기도, <strong style={{ color: 'var(--text)' }}>d</strong>가 되기도 합니다. 한/영 키를 누르지 않은 채 타이핑하면 의도한 글자 대신 반대 언어가 입력됩니다.
+          <h2 className="g-h2">한영타 오타가 나는 이유</h2>
+          <p className="g-p">
+            한글과 영문은 같은 키보드의 같은 키를 공유합니다. 운영체제의 입력기(IME)가 지금 어느 모드인지에 따라 같은 키 <code style={code}>d</code>가 <strong>ㅇ</strong>이 되기도, <strong>d</strong>가 되기도 합니다. 한/영 키를 누르지 않은 채 타이핑하면 의도한 글자 대신 반대 언어가 입력됩니다.
           </p>
           <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '16px 18px', fontFamily: 'var(--font-mono)', fontSize: 13, color: 'var(--text)', lineHeight: 2 }}>
             <div><span style={{ color: 'var(--muted)' }}># 한글 모드라고 착각하고 &quot;안녕&quot;을 타이핑</span></div>
@@ -87,9 +105,12 @@ export default function KeyboardLayoutPage() {
 
         {/* 2. 자판 매핑 표 */}
         <div>
-          <h2 style={sectionTitle}>두벌식 자판 매핑 표</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            두벌식은 자음 19개와 모음 21개를 QWERTY 키에 배치합니다. 왼손 자리에 자음, 오른손 자리에 모음이 모여 있어 한 손씩 번갈아 누르도록 설계됐습니다. Shift를 함께 누르면 된소리(ㅃㅉㄸㄲㅆ)와 이중모음(ㅒㅖ)이 나옵니다.
+          <h2 className="g-h2">두벌식 자판 매핑 표</h2>
+          <p className="g-p">
+            두벌식은 1982년 국가 표준으로 정해진 뒤 지금의 KS X 5002(정보 처리용 건반 배열)로 이어지는 표준 한글 자판입니다. 알파벳 26개 키에 기본 자음 14개와 모음 12개를 하나씩 놓고, 대체로 왼손 쪽에 자음, 오른손 쪽에 모음을 모아 자음과 모음을 번갈아 치게 했습니다. Shift를 함께 누르면 된소리 5개(ㅃㅉㄸㄲㅆ)와 모음 2개(ㅒㅖ)가 나와, 키로 바로 칠 수 있는 자모는 자음 19개·모음 14개입니다.
+          </p>
+          <p className="g-p">
+            한글 모음 21개 중 나머지 7개(ㅘㅙㅚㅝㅞㅟㅢ)는 전용 키가 없고 두 모음 키를 이어 쳐서 만듭니다. 예를 들어 ㅘ는 ㅗ(h)+ㅏ(k), ㅢ는 ㅡ(m)+ㅣ(l)입니다. 겹받침 11개(ㄳㄵㄶㄺㄻㄼㄽㄾㄿㅀㅄ)도 마찬가지로 자음 키 두 개의 조합이라, 이 도구는 이런 조합표를 따로 두고 한글 → 영문 변환 때 두 키로 다시 풀어냅니다.
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
@@ -124,9 +145,9 @@ export default function KeyboardLayoutPage() {
 
         {/* 3. 빈출 오타 조견표 */}
         <div>
-          <h2 style={sectionTitle}>빈출 한영타 오타 조견표</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            한/영 전환 실수는 인사말·감사 인사처럼 손에 익어 빠르게 치는 문장에서 자주 반복됩니다. 많이 찾는 오타 문자열과 복원 결과를 조견표로 정리했습니다. 된소리(ㅃㅉㄸㄲㅆ)와 ㅒ·ㅖ는 Shift 키에 있으므로 <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>dPQmek</code>처럼 <strong style={{ color: 'var(--text)' }}>대문자를 그대로 유지</strong>해야 정확히 복원됩니다. 마지막 세 줄은 반대로 한글 모드인 채 영어 단어를 친 경우로, 한글 → 영문 방향의 복원 결과입니다. 표에 없는 문장은 공백·숫자·문장부호가 섞여 있어도 그대로 두고 변환되므로, 통째로 붙여넣으면 됩니다.
+          <h2 className="g-h2">빈출 한영타 오타 조견표</h2>
+          <p className="g-p">
+            한/영 전환 실수는 인사말·감사 인사처럼 손에 익어 빠르게 치는 문장에서 자주 반복됩니다. 많이 찾는 오타 문자열과 복원 결과를 조견표로 정리했습니다. 된소리(ㅃㅉㄸㄲㅆ)와 ㅒ·ㅖ는 Shift 키에 있으므로 <code style={code}>dPQmek</code>처럼 <strong>대문자를 그대로 유지</strong>해야 정확히 복원됩니다. 마지막 세 줄은 반대로 한글 모드인 채 영어 단어를 친 경우로, 한글 → 영문 방향의 복원 결과입니다. 표에 없는 문장은 공백·숫자·문장부호가 섞여 있어도 그대로 두고 변환되므로, 통째로 붙여넣으면 됩니다.
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
@@ -172,9 +193,9 @@ export default function KeyboardLayoutPage() {
 
         {/* 4. 도깨비불 현상 */}
         <div>
-          <h2 style={sectionTitle}>받침이 다음 글자로 넘어가는 이유 — 도깨비불 현상</h2>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginBottom: 12 }}>
-            두벌식 자판의 자음 키에는 초성용·종성용 구분이 없습니다. 그래서 입력기는 모음 뒤에 온 자음을 <strong style={{ color: 'var(--text)' }}>일단 받침으로 붙여 두고</strong>, 다음 입력이 모음이면 그 받침을 떼어 다음 음절의 초성으로 넘깁니다. 받침이 다음 칸으로 옮겨붙으며 화면 글자가 깜빡이듯 바뀌는 모습 때문에 이를 <strong style={{ color: 'var(--text)' }}>도깨비불 현상</strong>이라고 부릅니다. <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>rkrtk</code>를 한 키씩 눌렀을 때 화면이 바뀌는 과정입니다.
+          <h2 className="g-h2">받침이 다음 글자로 넘어가는 이유 — 도깨비불 현상</h2>
+          <p className="g-p">
+            두벌식 자판의 자음 키에는 초성용·종성용 구분이 없습니다. 그래서 입력기는 모음 뒤에 온 자음을 <strong>일단 받침으로 붙여 두고</strong>, 다음 입력이 모음이면 그 받침을 떼어 다음 음절의 초성으로 넘깁니다. 받침이 다음 칸으로 옮겨붙으며 화면 글자가 깜빡이듯 바뀌는 모습 때문에 이를 <strong>도깨비불 현상</strong>이라고 부릅니다. <code style={code}>rkrtk</code>를 한 키씩 눌렀을 때 화면이 바뀌는 과정입니다.
           </p>
           <div className="tableScroll">
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 460 }}>
@@ -203,14 +224,56 @@ export default function KeyboardLayoutPage() {
               </tbody>
             </table>
           </div>
-          <p style={{ fontSize: 14, color: 'var(--muted)', lineHeight: 1.85, marginTop: 12 }}>
-            마지막 단계에서 겹받침 ㄳ이 쪼개져 ㅅ만 다음 글자로 넘어갔습니다. 이 규칙 때문에 한영타 복원은 글자 하나씩 바꾸는 단순 치환으로는 불가능하고, 이 도구처럼 키 순서 전체를 오토마타로 다시 실행해야 합니다. 같은 자음 키가 위치에 따라 초성도 종성도 되지만, 키 순서가 정해지면 결과는 한 가지로 결정됩니다. <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>rkqtl</code>은 항상 <strong style={{ color: 'var(--text)' }}>갑시</strong>, ㅇ(d)이 하나 끼어든 <code style={{ background: 'var(--bg2)', padding: '1px 5px', borderRadius: 4, fontFamily: 'var(--font-mono)', fontSize: 13 }}>rkqtdl</code>은 항상 <strong style={{ color: 'var(--text)' }}>값이</strong>로 복원되는 이유입니다.
+          <p className="g-p" style={{ marginTop: 12 }}>
+            마지막 단계에서 겹받침 ㄳ이 쪼개져 ㅅ만 다음 글자로 넘어갔습니다. 이 규칙 때문에 한영타 복원은 글자 하나씩 바꾸는 단순 치환으로는 불가능하고, 이 도구처럼 키 순서 전체를 오토마타로 다시 실행해야 합니다. 같은 자음 키가 위치에 따라 초성도 종성도 되지만, 키 순서가 정해지면 결과는 한 가지로 결정됩니다. <code style={code}>rkqtl</code>은 항상 <strong>갑시</strong>, ㅇ(d)이 하나 끼어든 <code style={code}>rkqtdl</code>은 항상 <strong>값이</strong>로 복원되는 이유입니다.
           </p>
         </div>
 
-        {/* 5. 변환이 안 되는 경우 */}
+        {/* 5. 음절 조합식 */}
         <div>
-          <h2 style={sectionTitle}>변환이 안 되거나 깨지는 경우</h2>
+          <h2 className="g-h2">키 순서가 글자가 되는 계산 — 유니코드 음절 조합식</h2>
+          <p className="g-p">
+            오토마타가 초성·중성·종성을 확정하면, 도구는 완성형 음절 목록에서 글자를 하나하나 찾지 않고 유니코드 코드포인트를 직접 계산합니다. 현대 한글 완성형 음절 11,172자(초성 19 × 중성 21 × 종성 28, 종성 0은 받침 없음)는
+            U+AC00 &lsquo;가&rsquo;부터 U+D7A3 &lsquo;힣&rsquo;까지 이 순서대로 빈틈없이 배열돼 있어서 <strong>음절 코드 = 0xAC00 + (초성 순번 × 21 + 중성 순번) × 28 + 종성 순번</strong> 식 하나로 조합이 끝납니다.
+            &lsquo;안&rsquo;은 초성 ㅇ(11)·중성 ㅏ(0)·종성 ㄴ(4)이므로 44,032 + (11 × 21 + 0) × 28 + 4 = 50,504, 곧 U+C548입니다.
+          </p>
+          <p className="g-p">
+            한글 → 영문 방향은 이 계산을 거꾸로 합니다. 코드포인트에서 0xAC00을 뺀 값을 588(21 × 28)로 나눈 몫이 초성, 나머지를 28로 나눈 몫이 중성, 마지막 나머지가 종성 순번입니다.
+            아래 표로 식을 따라가 볼 수 있고, 두벌식 키 열의 영문을 위 변환기에 넣으면 왼쪽 음절로 바뀝니다.
+          </p>
+          <div className="tableScroll">
+            <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: 13, minWidth: 520 }}>
+              <thead>
+                <tr style={{ borderBottom: '1px solid var(--border)' }}>
+                  {['음절', '초성 (순번)', '중성 (순번)', '종성 (순번)', '코드포인트', '두벌식 키'].map((h) => (
+                    <th scope="col" key={h} style={{ padding: '10px 12px', textAlign: 'left', color: 'var(--muted)', fontWeight: 500, fontSize: 12, whiteSpace: 'nowrap' }}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {SYLLABLE_ROWS.map((r) => (
+                  <tr key={r.ch} style={{ borderBottom: '1px solid var(--border)' }}>
+                    <td style={{ padding: '10px 12px', color: 'var(--cat-dev)', fontWeight: 700, fontSize: 15 }}>{r.ch}</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{CHO[r.cho]} ({r.cho})</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{JUNG[r.jung]} ({r.jung})</td>
+                    <td style={{ padding: '10px 12px', color: 'var(--text)' }}>{JONG[r.jong]} ({r.jong})</td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', color: 'var(--text)', whiteSpace: 'nowrap' }}>{r.hex} <span style={{ color: 'var(--muted)' }}>({r.dec.toLocaleString('ko-KR')})</span></td>
+                    <td style={{ padding: '10px 12px', fontFamily: 'var(--font-mono)', color: 'var(--text)', fontWeight: 600 }}>{r.keys}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+          <p className="g-p" style={{ marginTop: 12 }}>
+            종성 목록에는 ㄸ·ㅃ·ㅉ이 없습니다. 그래서 Shift로 친 ㅆ은 <code style={code}>rkT</code> → <strong>갔</strong>처럼 받침이 되지만,
+            <code style={code}>rkE</code>는 ㄸ이 받침이 될 수 없어 <strong>가ㄸ</strong>으로 새 글자가 시작되고, 뒤에 모음이 오면 <code style={code}>rkEk</code> → <strong>가따</strong>가 됩니다.
+            &lsquo;뷁&rsquo;처럼 겹모음(ㅞ)과 겹받침(ㄺ)이 함께 든 글자도 키 다섯 개(<code style={code}>qnpfr</code>)의 순서만 맞으면 한 번에 복원됩니다.
+          </p>
+        </div>
+
+        {/* 6. 변환이 안 되는 경우 */}
+        <div>
+          <h2 className="g-h2">변환이 안 되거나 깨지는 경우</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {[
               { t: '키 순서가 어긋난 입력', d: '중간에 백스페이스로 지웠다 다시 쳤거나 자동완성이 끼어든 글자는 실제 키 순서가 흐트러져 원본과 다르게 복원됩니다.' },
@@ -226,14 +289,14 @@ export default function KeyboardLayoutPage() {
           </div>
         </div>
 
-        {/* 6. FAQ */}
+        {/* 7. FAQ */}
         <div>
           <Faq items={FAQ_LD} />
         </div>
 
-        {/* 7. 관련 도구 */}
+        {/* 8. 관련 도구 */}
         <div>
-          <h2 style={sectionTitle}>함께 쓰면 좋은 도구</h2>
+          <h2 className="g-h2">함께 쓰면 좋은 도구</h2>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 10 }}>
             {relatedTools.map((t, i) => (
               <Link

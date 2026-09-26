@@ -454,10 +454,10 @@ export default function SeveranceClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>월 통상임금 입력</span>
             <div className={s.field}>
-              <label className={s.fieldLabel} htmlFor="severance-f7">월 통상임금 (기본급 + 고정수당, 만원)</label>
+              <label className={s.fieldLabel} htmlFor="severance-f7">월 통상임금 (기본급 + 고정수당 + 정기상여금÷12, 만원)</label>
               <input id="severance-f7" type="number" inputMode="decimal" className={s.input} value={monthlyOrdinary} onChange={(e) => setMonthlyOrdinary(e.target.value)} min={0} max={5000} step={1} />
               <p className={s.helpText}>
-                통상임금 = 변동성 없는 정기·일률·고정 지급분 (기본급 + 직책수당·식대 등 고정수당)
+                통상임금 = 소정근로 대가로 정기적·일률적으로 지급하기로 정한 임금 — 기본급·고정수당(직책수당·식대 등)에 정기상여금 연액÷12를 더합니다. 재직조건이 붙어도 포함(대법원 2024.12.19. 2020다247190 전원합의체), 성과급·연장수당은 제외
               </p>
             </div>
           </div>
@@ -485,9 +485,9 @@ export default function SeveranceClient() {
                 월 통상임금({monthlyOrdinary}만원) ÷ 209시간 × {dailyHrs}시간
               </p>
               <ul className={s.compareList}>
-                <li>기본급 + 고정수당만</li>
-                <li>상여금 X (변동성 있음)</li>
-                <li>연차수당 X</li>
+                <li>기본급 + 고정수당</li>
+                <li>+ 정기상여금 ÷12 (재직조건 무관)</li>
+                <li>성과급·연장수당·연차수당 X</li>
               </ul>
             </div>
           </div>
@@ -510,8 +510,8 @@ export default function SeveranceClient() {
               근로기준법 §2 ②: <strong>평균임금이 통상임금보다 적으면 통상임금을 평균임금으로 함.</strong><br />
               → 근로자에게 유리한 큰 금액 적용 원칙.<br />
               <br />
-              일반적으로 상여금·수당이 많은 직장은 평균임금이 더 크지만,
-              기본급 위주이고 상여금이 적은 경우 통상임금이 더 클 수 있어요.
+              일반적으로 성과급·연장근로수당 같은 변동급이 많은 직장은 평균임금이 더 크지만,
+              고정급(정기상여금 포함) 위주라면 통상임금이 더 클 수 있어요.
             </p>
           </div>
         </>

@@ -444,7 +444,7 @@ export default function NetworkTestClient() {
             </div>
           </div>
           <p className={s.note}>
-            ⓘ 브라우저 한 연결로 잰 참고치라 실제 회선 최고 속도보다 낮게 나오는 게 보통입니다. 위 평균은 전용 측정 장비로 잰 정부 평가값(2025년 12월 발표)입니다.
+            ⓘ 브라우저 한 연결로 잰 참고치라 실제 회선 최고 속도보다 낮게 나오는 게 보통입니다. 위 평균은 전국 평가 지점에서 정해진 절차로 잰 정부 평가값(2025년 12월 발표)입니다.
           </p>
         </div>
       )}
@@ -458,7 +458,7 @@ export default function NetworkTestClient() {
           <li><strong>실패율(Loss)</strong> — 요청이 아예 응답 없는 비율. 5% 초과면 회선 문제</li>
           <li><strong>다운로드 속도</strong> — 티켓팅보다는 영상·다운로드용. 핑 빠르면 1MB도 즉시 받음</li>
           <li><strong>5G ≠ 항상 빠름</strong> — 같은 5G도 기지국 거리·시간대로 핑 차이 큼. 측정 권장</li>
-          <li><strong>Wi-Fi 2.4GHz vs 5GHz</strong> — 5GHz가 핑·속도 모두 30~50% 빠름. 라우터 가까이</li>
+          <li><strong>Wi-Fi 2.4GHz vs 5GHz</strong> — 5GHz가 간섭이 적고 빠른 대신 벽 투과·도달 거리가 짧음. 공유기 가까이에서 5GHz 권장</li>
         </ul>
       </div>
     </div>

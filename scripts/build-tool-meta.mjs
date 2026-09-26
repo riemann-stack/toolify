@@ -92,6 +92,8 @@ const GOLDEN = [
     scope: '소득세 기본세율 구간', full: false },
   { slug: '/tools/finance/severance', file: 'tests/golden/incomeTax.test.mts', suite: /./,
     scope: '소득세 기본세율 구간', full: false },
+  { slug: '/tools/finance/severance', file: 'tests/golden/severancePeriod.test.mts', suite: /./,
+    scope: '평균임금 산정기간(3개월) 경계', full: false },
   { slug: '/tools/finance/dividend', file: 'tests/golden/incomeTax.test.mts', suite: /./,
     scope: '소득세 기본세율 구간', full: false },
   { slug: '/tools/finance/inheritance', file: 'tests/golden/inheritanceTax.test.mts', suite: /./,

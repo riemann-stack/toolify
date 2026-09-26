@@ -734,7 +734,7 @@ export const ALL_CODES: StatusCode[] = [
     code: 494, category: 'nonstandard', name: 'Request Header Too Large', nameKr: '요청 헤더 너무 큼',
     emoji: '📋',
     shortDesc: 'nginx — 헤더 크기 초과 (431과 유사)',
-    longDesc: 'nginx 자체 코드. 표준은 431.',
+    longDesc: 'nginx 내부 코드. 클라이언트 응답과 access.log에는 400으로 기록되며, error_page 494로만 따로 처리할 수 있음. 표준에서 같은 뜻은 431.',
     whenItHappens: ['거대한 쿠키·헤더', 'nginx large_client_header_buffers 초과'],
     howToFix: ['nginx large_client_header_buffers 4 32k;', '쿠키 정리'],
     isStandard: false, source: 'nginx',
@@ -1001,7 +1001,7 @@ export const DEBUG_SCENARIOS: DebugScenario[] = [
    ───────────────────────────────────────────── */
 export const CONFUSION_PAIRS: { a: number; b: number; aDesc: string; bDesc: string; usage: string }[] = [
   { a: 401, b: 403, aDesc: '인증 정보 없음·만료', bDesc: '인증은 됐지만 권한 없음', usage: '401: 토큰 누락/만료, 403: 토큰 있지만 스코프 부족·IP 차단' },
-  { a: 301, b: 302, aDesc: '영구 이동 (캐시·SEO)', bDesc: '임시 이동 (SEO 영향 X)', usage: 'SEO 영구 이동은 301, 일시적 분기·테스트는 302' },
+  { a: 301, b: 302, aDesc: '영구 이동 (캐시·새 URL 색인)', bDesc: '임시 이동 (원래 URL 색인 유지 경향)', usage: 'SEO 영구 이동은 301, 일시적 분기·테스트는 302' },
   { a: 502, b: 504, aDesc: '백엔드 다운·잘못된 응답', bDesc: '백엔드 응답 너무 느림 (timeout)', usage: '502: nginx upstream 다운, 504: API Gateway 29초 한도 초과·DB 슬로우 쿼리' },
   { a: 200, b: 204, aDesc: '성공 + 응답 본문 있음', bDesc: '성공 + 본문 없음 (DELETE 후)', usage: '데이터 반환=200, DELETE/PUT 후 헤더만=204' },
   { a: 200, b: 201, aDesc: '단순 성공 (조회·수정)', bDesc: '성공 + 새 리소스 생성 (POST)', usage: 'GET/PUT 결과=200, POST로 생성=201 (Location 헤더)' },

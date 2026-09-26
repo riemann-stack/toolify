@@ -247,7 +247,7 @@ export default function LlmVramClient() {
         variant="default"
         related={[
           { href: '/tools/dev/token-counter', label: 'AI 토큰 카운터' },
-          { href: '/tools/dev/tech-stack', label: '기술 스택 추천기' },
+          { href: '/tools/dev/curl', label: 'cURL 변환기' },
           { href: '/tools/unit/converter', label: '단위 변환기' },
         ]}
         sources={[

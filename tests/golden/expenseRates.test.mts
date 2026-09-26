@@ -72,14 +72,29 @@ describe('freelance-tax 적용 한도 판정', () => {
     assert.equal(calculate(inputs(75_000_001, { isNewBusiness: true })).canUseSimple, false)
     assert.equal(calculate(inputs(75_000_001)).isComplexBookRequired, true)
   })
-  test('수입 정확히 3,600만이면 단순경비율 불가 (§143④ "미달")', {
-    todo: '현재 revenue <= 한도로 판정 → 3,600만 정확히는 단순경비율 허용 (L3 followup #1, 결과가 바뀌는 수정이라 보류)',
-  }, () => {
+  test('수입 정확히 3,600만이면 단순경비율 불가 (§143④ "미달")', () => {
+    assert.equal(calculate(inputs(35_999_999)).canUseSimple, true)
     assert.equal(calculate(inputs(36_000_000)).canUseSimple, false)
+    assert.equal(calculate(inputs(36_000_000)).expenseAmount, 6_120_000)   // 3,600만 × 기준 17%
   })
-  test('수입 정확히 7,500만이면 복식부기 의무 (§208⑤ "미만"의 반대 = 이상)', {
-    todo: '현재 revenue > 7,500만으로 판정 (L3 followup #1)',
-  }, () => {
+  test('수입 정확히 7,500만이면 복식부기 의무 (§208⑤ "미만"의 반대 = 이상)', () => {
+    assert.equal(calculate(inputs(74_999_999)).isComplexBookRequired, false)
     assert.equal(calculate(inputs(75_000_000)).isComplexBookRequired, true)
+  })
+  test('신규사업자는 첫해 간편장부대상자 — 7,500만 이상이면 단순경비율만 불가 (§208⑤1호·§143④1호)', () => {
+    const r = calculate(inputs(75_000_000, { isNewBusiness: true }))
+    assert.equal(r.canUseSimple, false)
+    assert.equal(r.isComplexBookRequired, false)
+    assert.equal(r.expenseAmount, 12_750_000)   // 7,500만 × 기준 17% (전액)
+  })
+})
+
+describe('freelance-tax 기준경비율 추계', () => {
+  test('복식부기의무자는 기준경비율의 1/2 (§143③1호)', () => {
+    assert.equal(calculate(inputs(100_000_000)).expenseAmount, 8_500_000)                          // 1억 × 17% ÷ 2
+    assert.equal(calculate(inputs(90_000_000, { industryId: 'developer' })).expenseAmount, 9_405_000) // 9천만 × 20.9% ÷ 2 (10.45%)
+  })
+  test('간편장부대상자는 기준경비율 전액', () => {
+    assert.equal(calculate(inputs(50_000_000)).expenseAmount, 8_500_000)   // 5천만 × 17%
   })
 })

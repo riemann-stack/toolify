@@ -228,18 +228,6 @@
 .gradeLabel { color: var(--text); font-family: var(--font-sans); font-weight: 600; }
 .gradeRange { font-family: var(--font-sans); font-weight: 700; text-align: right; }
 
-/* ── 비교 카드 ── */
-.compareCard {
-  background: var(--bg3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-m);
-  padding: 14px 18px;
-  font-size: 13px;
-  color: var(--muted);
-  line-height: 1.85;
-}
-.compareCard strong { color: var(--teal-600); font-family: var(--font-sans); font-weight: 800; }
-
 /* ── 스트룹 ── */
 .stroopWord {
   font-family: var(--font-sans);

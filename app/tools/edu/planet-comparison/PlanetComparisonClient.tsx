@@ -281,7 +281,7 @@ export default function PlanetComparisonClient() {
         variant="default"
         related={[
           { href: '/tools/edu/cosmic-calendar', label: '코스믹 캘린더' },
-          { href: '/tools/edu/sci-units', label: '과학 단위 변환' },
+          { href: '/tools/edu/sig-figs?tab=notation', label: '과학적 표기·단위 변환' },
           { href: '/tools/edu/cognitive-test', label: '인지 테스트' }
         ]}
       >

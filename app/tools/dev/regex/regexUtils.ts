@@ -47,7 +47,7 @@ export const PATTERNS: PatternDef[] = [
   /* ─── 한국 데이터 (10) ─── */
   { id: 'ko-mobile', category: 'korean', name: '한국 휴대폰', pattern: '^010-?\\d{3,4}-?\\d{4}$', flags: '', desc: '010-1234-5678 또는 01012345678', example: '010-1234-5678' },
   { id: 'ko-tel',    category: 'korean', name: '한국 일반전화', pattern: '^0\\d{1,2}-?\\d{3,4}-?\\d{4}$', flags: '', desc: '02·031·051 등 지역번호 + 본번호', example: '02-1234-5678' },
-  { id: 'ko-rrn',    category: 'korean', name: '주민등록번호 (앞-뒤)', pattern: '^\\d{6}-[1-4]\\d{6}$', flags: '', desc: '내국인 주민번호 형식 검증 (체크섬 X)', example: '901231-1234567', warning: '⚠️ 개인정보 — KISA·OWASP 가이드 + 체크섬 검증 별도' },
+  { id: 'ko-rrn',    category: 'korean', name: '주민등록번호 (앞-뒤)', pattern: '^\\d{6}-[1-4]\\d{6}$', flags: '', desc: '내국인 주민번호 형식 검증 (체크섬 X)', example: '901231-1234567', warning: '⚠️ 개인정보 — 2020년 10월 이후 부여 번호는 끝자리가 검증번호가 아니므로 체크섬으로 거르지 말 것' },
   { id: 'ko-frn',    category: 'korean', name: '외국인등록번호', pattern: '^\\d{6}-[5-8]\\d{6}$', flags: '', desc: '외국인 등록번호 형식 검증', example: '901231-5234567', warning: '⚠️ 개인정보 — 보안 절차 필수' },
   { id: 'ko-biz',    category: 'korean', name: '사업자등록번호', pattern: '^\\d{3}-?\\d{2}-?\\d{5}$', flags: '', desc: '123-45-67890 또는 1234567890', example: '123-45-67890' },
   { id: 'ko-corp',   category: 'korean', name: '법인등록번호', pattern: '^\\d{6}-?\\d{7}$', flags: '', desc: '110111-1234567 형식', example: '110111-1234567' },
@@ -61,7 +61,7 @@ export const PATTERNS: PatternDef[] = [
   { id: 'gen-url',   category: 'general', name: 'URL (http/https)', pattern: '^https?:\\/\\/[^\\s/$.?#].[^\\s]*$', flags: '', desc: '기본적인 HTTP/HTTPS URL', example: 'https://youtil.kr/tools' },
   { id: 'gen-ipv4',  category: 'general', name: 'IPv4 주소', pattern: '^(?:(?:25[0-5]|2[0-4]\\d|[01]?\\d{1,2})\\.){3}(?:25[0-5]|2[0-4]\\d|[01]?\\d{1,2})$', flags: '', desc: '0.0.0.0 ~ 255.255.255.255', example: '192.168.0.1' },
   { id: 'gen-ipv6',  category: 'general', name: 'IPv6 주소 (단순화)', pattern: '^(?:[A-Fa-f0-9]{1,4}:){7}[A-Fa-f0-9]{1,4}$', flags: '', desc: '8개 16진수 그룹 (압축 표기 제외)', example: '2001:0db8:85a3:0000:0000:8a2e:0370:7334' },
-  { id: 'gen-hex',   category: 'general', name: '16진 색상 (#RGB·#RRGGBB)', pattern: '^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$', flags: '', desc: 'CSS HEX 색상 코드', example: 'var(--cyan-600)' },
+  { id: 'gen-hex',   category: 'general', name: '16진 색상 (#RGB·#RRGGBB)', pattern: '^#?([0-9a-fA-F]{6}|[0-9a-fA-F]{3})$', flags: '', desc: 'CSS HEX 색상 코드', example: '#1A2B3C' },
   { id: 'gen-pwd',   category: 'general', name: '강한 비밀번호 (8+, 영숫특)', pattern: '^(?=.*[a-zA-Z])(?=.*\\d)(?=.*[!@#$%^&*]).{8,}$', flags: '', desc: '영문·숫자·특수문자 각 1개+ & 8자 이상', example: 'Hello123!' },
   { id: 'gen-uuid',  category: 'general', name: 'UUID v4', pattern: '^[0-9a-f]{8}-[0-9a-f]{4}-4[0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}$', flags: 'i', desc: 'RFC 9562(구 RFC 4122) v4 UUID', example: '550e8400-e29b-41d4-a716-446655440000' },
   { id: 'gen-slug',  category: 'general', name: 'URL 슬러그', pattern: '^[a-z0-9]+(?:-[a-z0-9]+)*$', flags: '', desc: '소문자·숫자·하이픈만 (블로그 URL용)', example: 'hello-world-2026' },
