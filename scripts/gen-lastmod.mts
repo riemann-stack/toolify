@@ -92,8 +92,15 @@ const map: Record<string, string> = {}
 map['/'] = lastCommit(['app/page.tsx', 'app/HomeClient.tsx', 'components/HomeIntro.tsx', 'components/CollectionBanner.tsx'])
 map['/tools'] = lastCommit(['app/tools/page.tsx', 'app/tools/ToolsBrowser.tsx', 'lib/tools.ts'])
 map['/collections'] = lastCommit(['app/collections/page.tsx', 'lib/collections.ts'])
-for (const s of ['about', 'contact', 'privacy', 'terms', 'disclaimer']) {
-  map[`/${s}`] = lastCommit([`app/${s}/page.tsx`])
+// 신뢰 페이지 — page.tsx + 화면 본문을 만드는 데이터 파일. 공용 셸(app/_trust/TrustPage.tsx)은 표현 틀이라 넣지 않는다.
+//   목록은 app/sitemap.ts STATIC_PATHS의 신뢰 페이지와 같게 유지(빠지면 그 URL은 lastmod 없이 나간다).
+const TRUST_PAGE_DATA: Record<string, string[]> = {
+  updates: ['app/_trust/updatesData.ts'], // 기록 본문 전체가 이 데이터
+  'ads-policy': ['lib/ads.ts'], // 광고 제외 도구 목록을 빌드 시 읽어 표시
+  'editorial-policy': ['app/_trust/updatesData.ts'], // 정정 건수(fixCount)를 본문에 표시
+}
+for (const s of ['about', 'contact', 'privacy', 'terms', 'disclaimer', 'editorial-policy', 'updates', 'ads-policy']) {
+  map[`/${s}`] = lastCommit([`app/${s}/page.tsx`, ...(TRUST_PAGE_DATA[s] ?? [])])
 }
 
 // 도구 — 도구 디렉터리 전체(page·Client·Utils·css 중 무엇이 바뀌어도 렌더된 페이지가 변경됨)

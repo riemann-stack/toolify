@@ -28,6 +28,13 @@ const RETIRED: Record<string, string> = {
   '/tools/life/fart-risk': '/tools/health', // 생활(재미·교양)에 있었지만 내용이 소화기 증상·저FODMAP — 예외
 }
 
+/** 통폐합 이전에 옮기거나 지운 옛 도구 주소 — git 기록상 공개됐던 경로(next.config.ts 주석의 커밋 참고) */
+const LEGACY: Record<string, string> = {
+  '/tools/life/recipe': '/tools/cooking/recipe', // e903ae5 이동
+  '/tools/unit/cooking': '/tools/unit/converter', // e903ae5 → cooking/unit, 338b6ae 삭제·흡수 — 최종 목적지로 바로
+  '/tools/cooking/unit': '/tools/unit/converter', // 338b6ae 삭제 — 컵·큰술·근·오븐 온도는 통합 단위 변환기로
+}
+
 describe('next.config.ts redirects', async () => {
   assert.equal(typeof config.redirects, 'function', 'next.config.ts에 redirects()가 없음')
   const rules = await config.redirects!()
@@ -61,6 +68,12 @@ describe('next.config.ts redirects', async () => {
 
   test('폐지 도구는 분야 허브로', () => {
     for (const [src, dst] of Object.entries(RETIRED)) {
+      assert.equal(bySource.get(src)?.destination, dst, src)
+    }
+  })
+
+  test('옛 도구 주소는 최종 목적지로', () => {
+    for (const [src, dst] of Object.entries(LEGACY)) {
       assert.equal(bySource.get(src)?.destination, dst, src)
     }
   })

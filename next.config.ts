@@ -18,6 +18,12 @@ const nextConfig: NextConfig = {
       { source: '/tools/life/golf-handicap',    destination: '/tools/sports/golf-handicap',  permanent: true },
       { source: '/tools/life/golf-cost',        destination: '/tools/sports/golf-cost',      permanent: true },
       { source: '/tools/life/golf-distance',    destination: '/tools/sports/golf-distance',  permanent: true },
+      // 요리 도구 이동·통합 — e903ae5(2026-04-22): life/recipe → cooking/recipe, unit/cooking → cooking/unit
+      //   338b6ae(2026-05-05): cooking/unit(컵·큰술·근·오븐 온도) 삭제 → 통합 단위 변환기(부피·무게·온도)로 흡수.
+      //   두 옛 요리 단위 주소 모두 체인 없이 최종 목적지(unit/converter)로.
+      { source: '/tools/life/recipe',           destination: '/tools/cooking/recipe',        permanent: true },
+      { source: '/tools/unit/cooking',          destination: '/tools/unit/converter',        permanent: true },
+      { source: '/tools/cooking/unit',          destination: '/tools/unit/converter',        permanent: true },
 
       // ─────────────────────────────────────────────────────────────────────────
       // 음악 → 예술·창작 카테고리 확장 (2026-05-05)

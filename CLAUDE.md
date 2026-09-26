@@ -7,7 +7,7 @@
 - 도구 간 복붙은 의도된 구조 — 무리한 공용화 금지. 단 **법정·공식 수치(세율·요율·최저시급·상하한·기준표)는 반드시 `lib/` 단일 소스** 사용. 페이지 문구의 법정 숫자도 lib 값을 보간한다(손으로 치지 않기):
   - 소득세 누진세율·지방소득세 비율: `lib/krIncomeTax.ts` · 연말정산: `lib/krYearEndTax.ts`
   - 4대보험 요율·최저시급·월 209시간: `lib/krInsuranceRates.ts` (연도 키 + `minHourlyWageFor(year)`, 국민연금 기준소득월액은 7월 기준 기간 `pensionBaseAt()`, 연금 보험료율 연도 스케줄)
-  - 그 밖: 취득세 `krAcquisitionTax` · 이자·배당 원천징수 `krFinancialIncomeTax` · 중개보수 `krBrokerageFee` · 연차 `krLabor` · 주휴·가산수당 `krHourlyPay` · 구직급여(상한 기간표·이직 연도별 하한) `krUnemployment` · 국민연금 `krNationalPension` · 보유세 `krPropertyTax` · 상속·증여 `krInheritanceTax` · 전기요금 `krElectricityRates` · 유가 `krFuelPrices` · 자동차세 `krVehicleTax` · 관세 `krCustoms` · 경비율 `krExpenseRates` · 대출 규칙 `krLoanRules` · 음주운전 `krDrunkDriving` · 러닝 계수 `running`
+  - 그 밖: 취득세 `krAcquisitionTax` · 이자·배당 원천징수 `krFinancialIncomeTax` · 중개보수 `krBrokerageFee` · 연차 `krLabor` · 주휴·가산수당 `krHourlyPay` · 구직급여(상한 기간표·이직 연도별 하한) `krUnemployment` · 국민연금 `krNationalPension` · 보유세 `krPropertyTax` · 상속·증여 `krInheritanceTax` · 전기요금 `krElectricityRates` · 유가 `krFuelPrices` · 자동차세 `krVehicleTax` · 관세 `krCustoms` · 경비율 `krExpenseRates` · 대출 규칙 `krLoanRules` · 음주운전 `krDrunkDriving` · 노란우산공제 한도 `krYellowUmbrella` · TPMS 경고 기준 `krTpms` · 창유리 투과율 하한 `krWindowTint` · 계란 중량규격 `krEggGrades` · 러닝 계수 `running`
   - 시점에 따라 바뀌는 값은 '연도/기간 키 + 조회 함수'로 둔다(하드코딩된 `[2026]` 인덱스 대신). 기준일·조문을 주석에 적는다.
   - 오늘 날짜 문자열: `lib/date.ts` `todayStr()` — `toISOString().slice(0,10)` 금지 (KST 00~09시 어제 버그). 날짜가 결과에 영향을 주면 SSG·하이드레이션 불일치가 없게 `buildDate={todayStr()}` prop + 클라이언트 보정(4-insurance·unemployment-benefit 패턴).
 - 날짜 파싱: `new Date('YYYY-MM-DD')` 직접 금지 (UTC 해석) — `new Date(y, m-1, d)` 분해 파싱 또는 `'T00:00:00'` 접미.

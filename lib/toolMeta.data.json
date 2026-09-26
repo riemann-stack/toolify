@@ -544,6 +544,11 @@
     "label": "King Arthur Baking — Preferment",
     "org": "",
     "href": "https://www.kingarthurbaking.com/pro/reference/preferment"
+   },
+   {
+    "label": "AVPN — International Regulations (Verace Pizza Napoletana)",
+    "org": "",
+    "href": "https://www.pizzanapoletana.org/en/ricetta_pizza_napoletana"
    }
   ],
   "ymyl": false,
@@ -2172,7 +2177,7 @@
    }
   ],
   "verified": {
-   "cases": 68,
+   "cases": 74,
    "scope": "취득 원인별 취득세·지방교육세·농특세",
    "full": true,
    "tests": [
@@ -2731,7 +2736,7 @@
    }
   ],
   "verified": {
-   "cases": 26,
+   "cases": 29,
    "scope": "경비율·단순경비율 적용 한도 · 소득세 기본세율 구간",
    "full": false,
    "tests": [
@@ -3376,7 +3381,7 @@
    }
   ],
   "verified": {
-   "cases": 33,
+   "cases": 37,
    "scope": "구직급여 1일액 상·하한",
    "full": false,
    "tests": [
@@ -3460,7 +3465,7 @@
   "slug": "/tools/finance/year-end-tax",
   "reviewed": "2026",
   "updated": "2026-09-26",
-  "basis": "2026년 귀속(2027년 1~2월 정산) 종합소득세율·근로소득공제·공제 한도 기준, 신용카드 자녀 한도 가산(2026년 사용분부터) 반영",
+  "basis": "2026년 귀속(2027년 1~2월 정산) 종합소득세율·근로소득공제·공제 한도 기준, 신용카드 자녀 한도 가산(2026년 사용분부터)·자녀세액공제 나이 상향(2026.4.21 소득세법 개정) 반영",
   "sources": [
    {
     "label": "국세청 홈택스(hometax.go.kr)",
@@ -3484,7 +3489,7 @@
    }
   ],
   "verified": {
-   "cases": 17,
+   "cases": 24,
    "scope": "세액공제·소득공제 구성요소",
    "full": false,
    "tests": [
@@ -4572,7 +4577,7 @@
   "slug": "/tools/life/height-rank",
   "reviewed": "2026-07",
   "updated": "2026-09-26",
-  "basis": "사이즈코리아 8차 한국인 인체치수조사 (직접측정 2020~2021, 20~69세 6,839명) 성별·연령대별 실측 통계",
+  "basis": "사이즈코리아 8차 한국인 인체치수조사(2020~2023) 인체데이터 — 20~69세 성별·연령대별 실측 통계(평균·표준편차·백분위)",
   "sources": [
    {
     "label": "사이즈코리아",

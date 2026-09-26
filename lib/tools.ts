@@ -49,7 +49,7 @@ export const categories: Category[] = [
       { href: '/tools/finance/brokerage-fee', icon: '🤝', name: '중개보수(복비) 계산기', desc: '매매·전세·월세 법정 상한 복비. 월세 환산·한도액·부가세·오피스텔까지.' },
       { href: '/tools/finance/capital-gains-tax', icon: '🏠', name: '1주택 양도소득세 계산기', desc: '1세대 1주택 양도세를 12억 비과세·고가주택 안분·장기보유특별공제(최대 80%)·단기 중과세율까지 단계별로. 2026 국세청 기준.', badge: 'new' },
       { href: '/tools/finance/property-holding-tax', icon: '🏡', name: '주택 보유세 계산기', desc: '공시가격으로 재산세·종합부동산세·도시지역분·농특세까지. 1세대 1주택 특례와 고령·장기보유 세액공제 반영한 2026 보유세 추정.', badge: 'new' },
-      { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기', desc: '84점 만점(무주택 32 + 부양가족 35 + 통장 17) 자동 + 최근 평균 당첨 가점 비교 + 가점 향상 시뮬 + 5가지 특공 자가진단 (2025 기준).', badge: 'new' },
+      { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기', desc: '84점 만점(무주택 32 + 부양가족 35 + 통장 17) 자동 + 최근 평균 당첨 가점 비교 + 가점 향상 시뮬 + 6가지 특공 자격 가이드.', badge: 'new' },
       { href: '/tools/finance/cost-rate', icon: '🍽️', name: '음식점 원가율 계산기', desc: '재료비·배달 수수료·포장재 반영한 실질 원가율과 마진. 메뉴 가격 결정에 바로.' },
       { href: '/tools/finance/installment', icon: '💳', name: '카드 할부 계산기', desc: '할부 개월수별 진짜 이자와 일시불·무이자 비교. 카드 선택의 기준을 숫자로.' },
       { href: '/tools/finance/4-insurance', icon: '🏥', name: '4대보험 계산기', desc: '국민연금·건강·고용·산재 — 근로자/사업주 부담 정확히. 알바·프리랜서 비교까지.' },

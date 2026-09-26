@@ -279,7 +279,7 @@ export default function SavingsPage() {
             { href: '/tools/finance/dividend',    icon: '💰', name: '월배당 목표 자산',      desc: '은퇴 자산 + 배당 ETF 시뮬' },
             { href: '/tools/finance/inheritance', icon: '🏛️', name: '상속·증여세 계산기',     desc: '관계별 공제·10년 합산' },
             { href: '/tools/finance/loan',        icon: '💳', name: '대출이자 계산기',       desc: '원리금균등·갈아타기·중도상환' },
-            { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기',    desc: '84점 만점 자동 + 특공 자가진단' },
+            { href: '/tools/finance/housing-score', icon: '🏠', name: '청약 가점 계산기',    desc: '84점 만점 자동 + 특공 자격 가이드' },
           ].map((tool, i) => (
             <Link key={i} href={tool.href} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: 'var(--radius-m)', padding: '12px 14px', textDecoration: 'none', display: 'grid', gridTemplateColumns: '32px 1fr', gap: '10px', alignItems: 'center' }}>
               <span style={{ fontSize: '22px' }}>{tool.icon}</span>

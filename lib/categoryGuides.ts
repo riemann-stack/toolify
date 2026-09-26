@@ -5,6 +5,19 @@
 // 목적: 링크 그리드(doorway) → 실질 콘텐츠 페이지로 전환.
 // ──────────────────────────────────────────────────────
 
+import { HOLIDAY_YEAR_MIN, HOLIDAY_YEAR_MAX, HOLIDAY_YEARS, holidaysInYear, isHolidayStr } from './krHolidays'
+
+/* 날짜 허브 FAQ용 — 공휴일 데이터(lib/krHolidays)에 실제로 들어 있는 선거일을 데이터에서 뽑아 문구에 넣는다.
+   임기만료 선거일은 「관공서의 공휴일에 관한 규정」 제2조의 공휴일이다.
+   2028-04-12(수) 제23대 국회의원선거일: 공직선거법 제34조제1항 — 국회의원선거는 임기만료일(2028-05-29) 전
+   50일(04-09 일) 이후 첫 수요일. 이 날이 데이터에 없는 동안은 FAQ가 공백을 밝히고, 데이터에 넣으면 문장에서 빠진다. */
+const ELECTION_DAYS_IN_DATA = HOLIDAY_YEARS.flatMap(holidaysInYear).filter(h => h.name.includes('선거'))
+const ELECTION_DAYS_TEXT = ELECTION_DAYS_IN_DATA.map(h => {
+  const [y, m, d] = h.date.split('-').map(Number)
+  return `${y}년 ${m}월 ${d}일(${h.name})`
+}).join(', ')
+const GE23_MISSING = isHolidayStr('2028-04-12') === null
+
 export interface CategoryFaq {
   q: string
   a: string
@@ -24,16 +37,8 @@ export interface CategoryGuide {
   faqs: CategoryFaq[]
 }
 
-/** 공통 FAQ 한 줄 — 개인정보(전 카테고리 공통이지만 표현은 약간씩 다르게) */
-const PRIVACY_FAQ: CategoryFaq = {
-  q: '로그인이나 개인정보 입력이 필요한가요?',
-  a: '아니요. 계산 입력값(급여·건강 수치 등)은 여러분의 브라우저 안에서만 처리됩니다. 다만 서버 시간 확인·시세 조회 같은 일부 조회형 도구는 이용자가 입력한 공개 정보(웹사이트 주소·조회 품목)를 서버로 보내 결과를 받아오며, 자세한 내용은 개인정보처리방침에 안내되어 있습니다. 회원가입·로그인 없이 바로 사용할 수 있고, 일부 도구의 저장 기능도 기기(localStorage)에만 남습니다.',
-}
-
-const MOBILE_FAQ: CategoryFaq = {
-  q: '모바일에서도 잘 되나요?',
-  a: '네. 모든 도구는 휴대폰 화면(320px 이상)에 맞춰 반응형으로 설계되어 있어, 앱 설치 없이 모바일 브라우저에서 그대로 사용할 수 있습니다.',
-}
+/* 허브 FAQ는 그 분야 도구에 대한 질문만 둔다 — 로그인·모바일·무료 같은 사이트 공통 문답을 11개 허브에 복제하지 않는다
+   (CLAUDE.md '형식적 FAQ·도구 간 복제 문단 금지'). 개인정보·이용 조건은 홈 FAQ와 개인정보처리방침이 맡는다. */
 
 export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
   finance: {
@@ -60,8 +65,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '어떤 연도 기준으로 계산하나요?',
         a: '2026년 기준 세율·요율을 반영하는 것을 원칙으로 하며, 법정 수치를 쓰는 도구에는 적용 기준을 함께 표기합니다. 세법·금리는 자주 바뀌므로 표기된 기준 연도를 함께 확인해 주세요.',
       },
-      { ...PRIVACY_FAQ, a: '아니요. 연봉·자산 같은 민감한 숫자도 브라우저 안에서만 계산되며 서버로 전송·저장되지 않습니다. 회원가입·로그인 없이 바로 사용할 수 있습니다.' },
-      MOBILE_FAQ,
     ],
   },
 
@@ -89,8 +92,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '어떤 공식을 사용하나요?',
         a: 'BMI는 표준 체질량지수, 기초대사량은 Mifflin-St Jeor, 체지방률은 미국 해군 방식 등 학계·기관에서 널리 쓰는 공식을 사용하며 각 도구 본문에 출처를 밝힙니다.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 
@@ -118,8 +119,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '한국 식재료·계량 단위도 반영하나요?',
         a: '네. 큰술·작은술 같은 한국 계량 단위와 두부 모, 라면 봉지처럼 한국에서 자주 쓰는 단위를 함께 다루며, 명절·김장 등 한국 상황에 맞춘 도구를 제공합니다.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 
@@ -147,8 +146,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '여행 예산·팁 금액은 어디에 근거하나요?',
         a: '도시·국가별 평균 물가와 일반적인 팁 관행을 기준으로 한 추정입니다. 환율·시즌·개인 소비 성향에 따라 실제 지출은 달라질 수 있으니 참고 출발점으로 활용하세요.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 
@@ -176,8 +173,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '어떤 트레이닝 공식을 쓰나요?',
         a: '러닝 페이스·LSD, 인터벌 구간, 1RM 환산 등 코칭 현장과 문헌에서 널리 쓰이는 공식을 사용하며 각 도구에 설명을 덧붙입니다.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 
@@ -205,8 +200,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '평과 제곱미터는 어떻게 환산하나요?',
         a: '1평은 약 3.3058㎡입니다. 본 도구는 이 표준 계수로 환산하며, 분양 면적·전용 면적 등 표기 기준이 다를 수 있으니 계약서상 면적도 함께 확인하세요.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 
@@ -234,8 +227,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '소수점까지 정확하게 나오나요?',
         a: '표준 계수로 계산하며 필요한 자릿수까지 표시합니다. 다만 화면 표시 과정에서 반올림이 적용될 수 있으니, 매우 정밀한 값이 필요하면 표시 자릿수를 함께 고려하세요.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 
@@ -263,8 +254,10 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '쉥겐 체류 한도는 어떻게 계산하나요?',
         a: '임의의 180일 안에서 체류일이 90일을 넘지 않아야 한다는 규정을 반영해, 과거 출입국 기록을 바탕으로 남은 체류 가능일을 계산합니다. 실제 입국 심사는 국경 당국 판단이 우선이니 여유를 두세요.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
+      {
+        q: '영업일·연휴 계산에는 몇 년 치 공휴일이 들어 있나요?',
+        a: `D-day 계산기의 영업일 계산과 징검다리 연휴 플래너는 같은 공휴일 데이터(${HOLIDAY_YEAR_MIN}~${HOLIDAY_YEAR_MAX}년)를 씁니다. 설·추석 연휴와 대체공휴일까지 날짜별로 들어 있지만, 정부가 그때그때 지정하는 임시공휴일은 없고, 선거일은 ${ELECTION_DAYS_TEXT}만 들어 있습니다${GE23_MISSING ? '(2028년 4월 12일 국회의원선거일 등 그 뒤 선거일은 아직 없음)' : ''}. 이런 날은 따로 빼고 보세요. 연휴 플래너는 이 범위 안의 연도만 고를 수 있고, D-day 계산기에서 범위 밖의 해를 넣으면 공휴일을 빼지 못해 영업일이 평일 수와 같게 나오며 화면에 그 사실을 알려 줍니다.`,
+      },
     ],
   },
 
@@ -292,8 +285,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '모스부호는 어떤 표준을 쓰나요?',
         a: '국제 모스부호(International Morse Code) 표를 기준으로 알파벳·숫자·기호를 변환합니다.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 
@@ -321,8 +312,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '어떤 정의·표준을 따르나요?',
         a: 'SI 단위계와 교과 표준 정의를 기준으로 하며, 천문 데이터 등은 공개된 과학 자료를 참고합니다. 도구별로 근거를 본문에 표기합니다.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 
@@ -350,8 +339,6 @@ export const CATEGORY_GUIDES: Record<string, CategoryGuide> = {
         q: '표준 알고리즘을 따르나요?',
         a: 'Base64·URL 인코딩, 해시, 정규식 등은 표준 사양을 따릅니다. 다만 브라우저 환경 특성상 매우 큰 입력은 처리 속도가 느려질 수 있습니다.',
       },
-      PRIVACY_FAQ,
-      MOBILE_FAQ,
     ],
   },
 }
@@ -502,7 +489,7 @@ export const CATEGORY_HUBS: Record<string, CategoryHub> = {
     ],
   },
   unit: {
-    h1: '단위 변환기',
+    h1: '단위 변환기 모음',
     guideTitle: '단위 변환기, 이렇게 쓰세요',
     groups: [
       { name: '일상 변환', blurb: '길이·무게·온도, 평수, 옷·신발 사이즈, 배터리 용량', hrefs: t('unit', 'converter', 'area', 'size', 'battery') },
