@@ -3,7 +3,7 @@ import RoomAreaClient from './RoomAreaClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -261,7 +261,7 @@ export default function RoomAreaPage() {
               { i: '🎨', t: '페인트 시공',   d: '"실제 벽 면적" + 천장 도장 시 천장 추가. 칠할 횟수 × 1L당 도장 면적.', color: '#EA580C' },
               { i: '🪵', t: '바닥재 시공',   d: '"바닥 면적"으로 마루·강마루·장판. 로스율 5~10% 추가.', color: 'var(--success)' },
               { i: '🟦', t: '타일 시공',     d: '바닥 또는 벽의 면적 ÷ 타일 1개 면적. 줄눈·로스율 반영.', color: 'var(--cat-health)' },
-              { i: '❄️', t: '에어컨 평형',  d: '"바닥 면적" 기준 1㎡당 약 123W(KS C 9306) — 평당 약 400W. 에어컨 평형 계산기와 동일 기준.', color: '#9B59B6' },
+              { i: '❄️', t: '에어컨 평형',  d: '"바닥 면적" 기준 1㎡당 약 123W(KS C 9306) — 평당 약 400W. 이 계산기는 기본 부하만 본 약식이라, 향·층·인원·가전 보정까지 넣은 에어컨 평형 계산기 결과가 한두 단계 클 수 있습니다.', color: '#9B59B6' },
               { i: '💡', t: '조명 밝기',     d: '"바닥 면적"으로 권장 루멘. 거실 300~400 lux × 면적.', color: 'var(--cat-sports)' },
             ].map((s, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderLeft: `3px solid ${s.color}`, borderRadius: 12, padding: '14px 16px' }}>
@@ -379,23 +379,7 @@ export default function RoomAreaPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 9. 관련 도구 ── */}

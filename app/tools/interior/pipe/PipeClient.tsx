@@ -34,16 +34,26 @@ export default function PipeClient() {
 
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.size && PIPE_SIZES.includes(j.size)) setSize(j.size)
-      if (j.material && MATERIALS.some((m) => m.id === j.material)) setMaterial(j.material)
-      if (typeof j.grade === 'string') setGrade(j.grade)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object' || Array.isArray(j)) return
+      const o = j as Record<string, unknown>
+      const savedSize = PIPE_SIZES.find((p) => p === o.size)
+      if (savedSize) setSize(savedSize)
+      const savedMat = MATERIALS.find((m) => m.id === o.material)
+      if (savedMat) {
+        setMaterial(savedMat.id)
+        // 등급은 해당 재질의 등급 목록에 있을 때만 복원(그 외는 아래 리셋 effect가 첫 등급으로 맞춤)
+        const savedGrade = savedMat.grades?.find((g) => g.id === o.grade)
+        if (savedGrade) setGrade(savedGrade.id)
+      }
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try { localStorage.setItem(STORAGE_KEY, JSON.stringify({ size, material, grade })) } catch {}
   }, [size, material, grade])
 
@@ -156,8 +166,8 @@ export default function PipeClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>호칭경 · 등급</span>
 
-            <div className={s.field}>
-              <label className={s.fieldLabel}>호칭 (A호칭·인치·DN — 모두 같은 값)</label>
+            <div className={s.field} role="group" aria-labelledby="pipe-size-label">
+              <span className={s.fieldLabel} id="pipe-size-label">호칭 (A호칭·인치·DN — 모두 같은 값)</span>
               <div className={s.pillRow}>
                 {PIPE_SIZES.map((p) => {
                   const m = getSizeMeta(p)
@@ -178,8 +188,8 @@ export default function PipeClient() {
             </div>
 
             {matMeta.grades && matMeta.grades.length > 0 && (
-              <div className={s.field}>
-                <label className={s.fieldLabel}>등급 / 두께 종류</label>
+              <div className={s.field} role="group" aria-labelledby="pipe-grade-label">
+                <span className={s.fieldLabel} id="pipe-grade-label">등급 / 두께 종류</span>
                 <div className={s.pillRow}>
                   {matMeta.grades.map((g) => (
                     <button

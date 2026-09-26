@@ -47,18 +47,31 @@ export interface ProductTier {
   label: string
   space: string
 }
+/* space: 평상시 기준 이 계산기가 해당 등급을 추천하는 대략의 면적 상한
+   (정격 ÷ 평당 계수 — 아파트 0.76L·주택 1.02L·지하 1.49L/평·일) */
 export const PRODUCT_TIERS: ProductTier[] = [
-  { ratedL: 10, watt: 150, label: '10L급', space: '원룸·작은방' },
-  { ratedL: 16, watt: 195, label: '16L급', space: '10평대 방·거실' },
-  { ratedL: 20, watt: 265, label: '20L급', space: '20평대 아파트' },
-  { ratedL: 30, watt: 440, label: '30L급', space: '넓은 거실·주택·지하' },
+  { ratedL: 10, watt: 150, label: '10L급', space: '원룸·작은방 (아파트 약 13평까지)' },
+  { ratedL: 16, watt: 195, label: '16L급', space: '아파트 약 21평·주택 약 15평까지' },
+  { ratedL: 20, watt: 265, label: '20L급', space: '아파트 약 26평·주택 약 19평까지' },
+  { ratedL: 30, watt: 440, label: '30L급', space: '아파트 약 39평·주택 약 29평·지하 약 20평까지' },
 ]
+
+/* 한전 주택용(저압) 누진 구간별 전력량요금 (원/kWh) — 2023-05-16 조정분, 2026년 현재 적용.
+   기본요금·기후환경요금·연료비조정요금·부가세·전력기반기금 별도. 7~8월은 구간이 300/450kWh로 확대.
+   출처: 한국전력 주택용 전기요금표 https://home.kepco.co.kr/kepco/front/html/CY/E/E/CYEEHP00101.html
+   TODO(lib 이관): 전기요금은 lib/krElectricityRates.ts 단일 소스로 옮길 것 */
+export const KEPCO_RESIDENTIAL_TIER_KRW = { tier1: 120.0, tier2: 214.6, tier3: 307.3 } as const
+
+/** 하루 가동시간 상한 (시간) */
+export const MAX_HOURS_PER_DAY = 24
 
 export interface DehumResult {
   areaSqm: number
   dailyLiters: number     // 하루 제거해야 할 수분량 추정 (실사용)
   tier: ProductTier       // 매칭된 권장 제품 등급
-  monthlyKwh: number      // 월 소비전력량
+  units: number           // 필요 대수 — 최대 등급을 넘으면 2대 이상
+  exceedsMax: boolean     // 필요량이 가정용 최대 등급(정격) 초과
+  monthlyKwh: number      // 월 소비전력량 (units대 합계)
   monthlyCost: number     // 월 추가 전기요금 추정
 }
 
@@ -81,15 +94,17 @@ export function calcDehumidifier(
   const dailyLiters = area * coeff * mult
 
   // 권장 제품 = 일 제거량 이상을 정격으로 내는 가장 작은 등급 (정격은 고온다습 조건이라 여유분 포함)
-  const tier =
-    PRODUCT_TIERS.find((t) => t.ratedL >= dailyLiters) ??
-    PRODUCT_TIERS[PRODUCT_TIERS.length - 1]
+  // 최대 등급(30L)으로도 모자라면 그 등급 여러 대로 나눠 운용 — 1대로 조용히 폴백하지 않는다
+  const maxTier = PRODUCT_TIERS[PRODUCT_TIERS.length - 1]
+  const exceedsMax = dailyLiters > maxTier.ratedL
+  const tier = PRODUCT_TIERS.find((t) => t.ratedL >= dailyLiters) ?? maxTier
+  const units = exceedsMax ? Math.ceil(dailyLiters / maxTier.ratedL) : 1
 
-  const h = Math.max(0, hoursPerDay)
-  const monthlyKwh = (tier.watt / 1000) * h * 30
+  const h = Math.min(MAX_HOURS_PER_DAY, Math.max(0, hoursPerDay))
+  const monthlyKwh = (tier.watt / 1000) * h * 30 * units
   const monthlyCost = monthlyKwh * Math.max(0, wonPerKwh)
 
-  return { areaSqm: area, dailyLiters, tier, monthlyKwh, monthlyCost }
+  return { areaSqm: area, dailyLiters, tier, units, exceedsMax, monthlyKwh, monthlyCost }
 }
 
 export const pyeongToSqm = (p: number) => p * SQM_PER_PYEONG

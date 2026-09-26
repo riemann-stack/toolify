@@ -36,10 +36,10 @@ const MATERIALS: {
   label: string
   cls: string
 }[] = [
-  { key: 'pvc',     name: 'PVC',     pricePerM: 1500, label: '저렴·셀프',   cls: s.matPvc },
+  { key: 'pvc',     name: 'PVC',     pricePerM: 1500, label: '저렴·욕실 OK', cls: s.matPvc },
   { key: 'mdf',     name: 'MDF',     pricePerM: 2500, label: '도장 후 사용', cls: s.matMdf },
   { key: 'wood',    name: '우드',    pricePerM: 5000, label: '천연 우드',   cls: s.matWood },
-  { key: 'gypsum',  name: '석고',    pricePerM: 4000, label: '고급·욕실',   cls: s.matGypsum },
+  { key: 'gypsum',  name: '석고',    pricePerM: 4000, label: '고급·곡선',   cls: s.matGypsum },
   { key: 'styrene', name: '스티렌',  pricePerM: 1000, label: '저렴·가벼움', cls: s.matStyrene },
   { key: 'custom',  name: '직접 입력', pricePerM: 2000, label: '사용자 가격', cls: s.matCustom },
 ]
@@ -172,9 +172,9 @@ export default function MoldingClient() {
       grandCost += cost
     }
 
-    // 시공비: m당 5,000원 (전문)
+    // 시공비: m당 5,000원 (전문) — 실제 설치 길이(기본 길이) 기준, 로스·모서리 여유분은 자재에만 반영
     const proLaborPerM = 5000
-    const proLaborCost = grandTotal * proLaborPerM
+    const proLaborCost = grandBase * proLaborPerM
 
     return {
       rows,
@@ -220,7 +220,7 @@ export default function MoldingClient() {
     try {
       await navigator.clipboard.writeText(lines.join('\n'))
       setCopied(true)
-      setTimeout(() => setCopied(false), 1200)
+      setTimeout(() => setCopied(false), 1500)
     } catch {}
   }
 
@@ -558,6 +558,7 @@ export default function MoldingClient() {
                 <span>몰딩 종류별 분석</span>
                 <span className={s.cardLabelHint}>기본 + 모서리·로스 = 총 길이</span>
               </div>
+              <div className="tableScroll">
               <table className={s.analysisTable}>
                 <thead>
                   <tr>
@@ -587,6 +588,7 @@ export default function MoldingClient() {
                   </tr>
                 </tbody>
               </table>
+              </div>
             </div>
           )}
 
@@ -606,7 +608,7 @@ export default function MoldingClient() {
                 <strong>{fmtKRW(calc.grandCost)}</strong>
               </div>
               <div className={s.costRow}>
-                <span>전문 시공비 (m당 5,000원)</span>
+                <span>전문 시공비 (설치 {fmt(calc.grandBase, 1)}m × 5,000원)</span>
                 <strong>{fmtKRW(calc.proLaborCost)}</strong>
               </div>
               <div className={s.costSplit}>
@@ -654,6 +656,7 @@ export default function MoldingClient() {
               <div className={s.cardLabel}>
                 <span>평수별 빠른 참조 ({selectedMaterial.name} · {effectiveUnitLen}m, +{lossRate}% 로스)</span>
               </div>
+              <div className="tableScroll">
               <table className={s.refTable}>
                 <thead>
                   <tr>
@@ -691,6 +694,7 @@ export default function MoldingClient() {
                   })}
                 </tbody>
               </table>
+              </div>
               <p style={{ fontSize: 11, color: 'var(--muted)', marginTop: 8, lineHeight: 1.7 }}>
                 * 걸레받이는 문 1개(폭 0.9m) 제외 가정. 천장 몰딩 + 걸레받이 모두 시공 기준.
               </p>
@@ -732,10 +736,10 @@ export default function MoldingClient() {
             <h3 className={s.guideCardTitle}>재질별 가격·특징</h3>
             <div className={s.guideRowGrid}>
               {[
-                { n: 'PVC 몰딩',     d: '가장 저렴. 셀프 시공 쉬움. 방수·변색 적음.',          s: '1,500원/m · 셀프 OK' },
+                { n: 'PVC 몰딩',     d: '가장 저렴. 셀프 시공 쉬움. 방수·변색 적어 욕실에도 OK.', s: '1,500원/m · 셀프 OK' },
                 { n: 'MDF 몰딩',     d: '도장 후 사용 (한국 인기). 깔끔한 마감. 표준 선택.',  s: '2,500원/m · 표준' },
                 { n: '우드 몰딩',    d: '천연 우드. 자연 무늬. 고급 인테리어용.',              s: '5,000~10,000원/m · 프리미엄' },
-                { n: '석고 몰딩',    d: '욕실·고급 인테리어. 곡선 디자인 가능.',               s: '4,000원/m · 고급' },
+                { n: '석고 몰딩',    d: '고급 인테리어·곡선 디자인 가능. 습기에 약해 욕실은 PVC 권장.', s: '4,000원/m · 고급' },
                 { n: '스티렌 몰딩',  d: '가장 저렴·가벼움. 임시·저예산용.',                    s: '1,000원/m · 저예산' },
               ].map((g, i) => (
                 <div key={i} className={s.guideRow}>

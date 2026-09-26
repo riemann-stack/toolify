@@ -5,7 +5,7 @@ export type BoltSize =
   | 'M12' | 'M14' | 'M16' | 'M18' | 'M20' | 'M22' | 'M24'
 
 export type BoltType = 'hex' | 'socket' | 'button' | 'flat' | 'set'
-export type Standard = 'iso' | 'jis'
+export type Standard = 'iso' | 'din' | 'jis'
 
 export const BOLT_SIZES: BoltSize[] = [
   'M3', 'M4', 'M5', 'M6', 'M8', 'M10',
@@ -33,9 +33,10 @@ export const BOLT_TYPES: BoltTypeInfo[] = [
    ───────────────────────────────────────────── */
 
 export interface BoltData {
-  /* 외부 6각 머리 대변 거리 (스패너 = 소켓 mm) */
-  spannerISO: number      // ISO 4014/4017, DIN 933(신), KS B 1002 — 현행
-  spannerJIS: number      // 옛 JIS B 1180 — 1990s 이전 일본·한국
+  /* 외부 6각 머리 대변 거리 (스패너 = 소켓 mm) — M10·M12·M14·M22에서 규격별로 갈림 */
+  spannerISO: number      // ISO 4014/4017 (= DIN EN ISO 4017, KS B 1002·JIS B 1180 본체) — 현행: M10 16·M12 18·M14 21·M22 34
+  spannerDIN: number      // 구 DIN 933/934 · KS·JIS 부속서(보통형) — M10 17·M12 19·M14 22·M22 32 (유통품에 많이 남아 있음)
+  spannerJIS: number      // JIS 소형 6각 (JIS B 1180 부속서 소형) — M8 12·M10 14·M12 17 … 일본차·옛 설비
   /* 내부 6각 (알렌렌치) — 머리 종류별로 다름 */
   allenSocket: number     // 소켓캡 (DIN 912 / ISO 4762)
   allenButton: number     // 버튼헤드 (ISO 7380)
@@ -64,25 +65,25 @@ export interface BoltData {
 }
 
 export const BOLT_DATA: Record<BoltSize, BoltData> = {
-  M3:  { spannerISO: 5.5, spannerJIS: 5.5, allenSocket: 2.5, allenButton: 2,   allenFlat: 2,   allenSet: 1.5, nutStd: 2.4,  nutThin: 1.8,  washerInner: 3.2,  washerOuter: 7,    washerThick: 0.5, springInner: 3.1,  springOuter: 5.6,  springThick: 0.8, clearanceHole: 3.4,  pitchCoarse: 0.5,  torque4_8: 0.6,   torque8_8: 1.2,    torque10_9: 1.7,   torque12_9: 2.0   },
-  M4:  { spannerISO: 7,   spannerJIS: 7,   allenSocket: 3,   allenButton: 2.5, allenFlat: 2.5, allenSet: 2,   nutStd: 3.2,  nutThin: 2.2,  washerInner: 4.3,  washerOuter: 9,    washerThick: 0.8, springInner: 4.1,  springOuter: 7.6,  springThick: 0.9, clearanceHole: 4.5,  pitchCoarse: 0.7,  torque4_8: 1.4,   torque8_8: 2.9,    torque10_9: 4.0,   torque12_9: 4.8   },
-  M5:  { spannerISO: 8,   spannerJIS: 8,   allenSocket: 4,   allenButton: 3,   allenFlat: 3,   allenSet: 2.5, nutStd: 4.0,  nutThin: 2.7,  washerInner: 5.3,  washerOuter: 10,   washerThick: 1.0, springInner: 5.1,  springOuter: 9.2,  springThick: 1.2, clearanceHole: 5.5,  pitchCoarse: 0.8,  torque4_8: 2.7,   torque8_8: 5.7,    torque10_9: 8.1,   torque12_9: 9.7   },
-  M6:  { spannerISO: 10,  spannerJIS: 10,  allenSocket: 5,   allenButton: 4,   allenFlat: 4,   allenSet: 3,   nutStd: 5.0,  nutThin: 3.2,  washerInner: 6.4,  washerOuter: 12,   washerThick: 1.6, springInner: 6.1,  springOuter: 11.8, springThick: 1.6, clearanceHole: 6.6,  pitchCoarse: 1.0,  torque4_8: 4.6,   torque8_8: 9.8,    torque10_9: 14,    torque12_9: 17    },
-  M8:  { spannerISO: 13,  spannerJIS: 12,  allenSocket: 6,   allenButton: 5,   allenFlat: 5,   allenSet: 4,   nutStd: 6.5,  nutThin: 4.0,  washerInner: 8.4,  washerOuter: 16,   washerThick: 1.6, springInner: 8.2,  springOuter: 14.8, springThick: 2.0, clearanceHole: 9,    pitchCoarse: 1.25, torque4_8: 11,    torque8_8: 24,     torque10_9: 33,    torque12_9: 40    },
-  M10: { spannerISO: 17,  spannerJIS: 14,  allenSocket: 8,   allenButton: 6,   allenFlat: 6,   allenSet: 5,   nutStd: 8.0,  nutThin: 5.0,  washerInner: 10.5, washerOuter: 20,   washerThick: 2.0, springInner: 10.2, springOuter: 18.1, springThick: 2.2, clearanceHole: 11,   pitchCoarse: 1.5,  torque4_8: 23,    torque8_8: 47,     torque10_9: 65,    torque12_9: 79    },
-  M12: { spannerISO: 19,  spannerJIS: 17,  allenSocket: 10,  allenButton: 8,   allenFlat: 8,   allenSet: 6,   nutStd: 10.0, nutThin: 6.0,  washerInner: 13,   washerOuter: 24,   washerThick: 2.5, springInner: 12.2, springOuter: 21.1, springThick: 2.5, clearanceHole: 13.5, pitchCoarse: 1.75, torque4_8: 39,    torque8_8: 81,     torque10_9: 114,   torque12_9: 136   },
-  M14: { spannerISO: 22,  spannerJIS: 21,  allenSocket: 12,  allenButton: 10,  allenFlat: 10,  allenSet: 6,   nutStd: 11.0, nutThin: 7.0,  washerInner: 15,   washerOuter: 28,   washerThick: 2.5, springInner: 14.2, springOuter: 24.1, springThick: 3.0, clearanceHole: 15.5, pitchCoarse: 2.0,  torque4_8: 62,    torque8_8: 128,    torque10_9: 181,   torque12_9: 217   },
-  M16: { spannerISO: 24,  spannerJIS: 24,  allenSocket: 14,  allenButton: 10,  allenFlat: 10,  allenSet: 8,   nutStd: 13.0, nutThin: 8.0,  washerInner: 17,   washerOuter: 30,   washerThick: 3.0, springInner: 16.2, springOuter: 27.4, springThick: 3.5, clearanceHole: 17.5, pitchCoarse: 2.0,  torque4_8: 96,    torque8_8: 197,    torque10_9: 277,   torque12_9: 333   },
-  M18: { spannerISO: 27,  spannerJIS: 27,  allenSocket: 14,  allenButton: 12,  allenFlat: 12,  allenSet: 10,  nutStd: 15.0, nutThin: 9.0,  washerInner: 19,   washerOuter: 34,   washerThick: 3.0, springInner: 18.2, springOuter: 31.4, springThick: 4.0, clearanceHole: 20,   pitchCoarse: 2.5,  torque4_8: 132,   torque8_8: 273,    torque10_9: 384,   torque12_9: 461   },
-  M20: { spannerISO: 30,  spannerJIS: 30,  allenSocket: 17,  allenButton: 14,  allenFlat: 12,  allenSet: 10,  nutStd: 16.0, nutThin: 10.0, washerInner: 21,   washerOuter: 37,   washerThick: 3.0, springInner: 20.2, springOuter: 33.6, springThick: 4.0, clearanceHole: 22,   pitchCoarse: 2.5,  torque4_8: 187,   torque8_8: 385,    torque10_9: 541,   torque12_9: 649   },
-  M22: { spannerISO: 32,  spannerJIS: 32,  allenSocket: 17,  allenButton: 14,  allenFlat: 14,  allenSet: 12,  nutStd: 18.0, nutThin: 11.0, washerInner: 23,   washerOuter: 39,   washerThick: 3.0, springInner: 22.5, springOuter: 36.6, springThick: 4.5, clearanceHole: 24,   pitchCoarse: 2.5,  torque4_8: 256,   torque8_8: 528,    torque10_9: 743,   torque12_9: 891   },
-  M24: { spannerISO: 36,  spannerJIS: 36,  allenSocket: 19,  allenButton: 14,  allenFlat: 14,  allenSet: 12,  nutStd: 19.0, nutThin: 12.0, washerInner: 25,   washerOuter: 44,   washerThick: 4.0, springInner: 24.5, springOuter: 40,   springThick: 5.0, clearanceHole: 26,   pitchCoarse: 3.0,  torque4_8: 325,   torque8_8: 666,    torque10_9: 940,   torque12_9: 1130  },
+  M3:  { spannerISO: 5.5,  spannerDIN: 5.5,  spannerJIS: 5.5, allenSocket: 2.5, allenButton: 2,   allenFlat: 2,   allenSet: 1.5, nutStd: 2.4,  nutThin: 1.8,  washerInner: 3.2,  washerOuter: 7,    washerThick: 0.5, springInner: 3.1,  springOuter: 5.6,  springThick: 0.8, clearanceHole: 3.4,  pitchCoarse: 0.5,  torque4_8: 0.6,   torque8_8: 1.2,    torque10_9: 1.7,   torque12_9: 2.0   },
+  M4:  { spannerISO: 7,    spannerDIN: 7,    spannerJIS: 7,   allenSocket: 3,   allenButton: 2.5, allenFlat: 2.5, allenSet: 2,   nutStd: 3.2,  nutThin: 2.2,  washerInner: 4.3,  washerOuter: 9,    washerThick: 0.8, springInner: 4.1,  springOuter: 7.6,  springThick: 0.9, clearanceHole: 4.5,  pitchCoarse: 0.7,  torque4_8: 1.4,   torque8_8: 2.9,    torque10_9: 4.0,   torque12_9: 4.8   },
+  M5:  { spannerISO: 8,    spannerDIN: 8,    spannerJIS: 8,   allenSocket: 4,   allenButton: 3,   allenFlat: 3,   allenSet: 2.5, nutStd: 4.0,  nutThin: 2.7,  washerInner: 5.3,  washerOuter: 10,   washerThick: 1.0, springInner: 5.1,  springOuter: 9.2,  springThick: 1.2, clearanceHole: 5.5,  pitchCoarse: 0.8,  torque4_8: 2.7,   torque8_8: 5.7,    torque10_9: 8.1,   torque12_9: 9.7   },
+  M6:  { spannerISO: 10,   spannerDIN: 10,   spannerJIS: 10,  allenSocket: 5,   allenButton: 4,   allenFlat: 4,   allenSet: 3,   nutStd: 5.0,  nutThin: 3.2,  washerInner: 6.4,  washerOuter: 12,   washerThick: 1.6, springInner: 6.1,  springOuter: 11.8, springThick: 1.6, clearanceHole: 6.6,  pitchCoarse: 1.0,  torque4_8: 4.6,   torque8_8: 9.8,    torque10_9: 14,    torque12_9: 17    },
+  M8:  { spannerISO: 13,   spannerDIN: 13,   spannerJIS: 12,  allenSocket: 6,   allenButton: 5,   allenFlat: 5,   allenSet: 4,   nutStd: 6.5,  nutThin: 4.0,  washerInner: 8.4,  washerOuter: 16,   washerThick: 1.6, springInner: 8.2,  springOuter: 14.8, springThick: 2.0, clearanceHole: 9,    pitchCoarse: 1.25, torque4_8: 11,    torque8_8: 24,     torque10_9: 33,    torque12_9: 40    },
+  M10: { spannerISO: 16,   spannerDIN: 17,   spannerJIS: 14,  allenSocket: 8,   allenButton: 6,   allenFlat: 6,   allenSet: 5,   nutStd: 8.0,  nutThin: 5.0,  washerInner: 10.5, washerOuter: 20,   washerThick: 2.0, springInner: 10.2, springOuter: 18.1, springThick: 2.2, clearanceHole: 11,   pitchCoarse: 1.5,  torque4_8: 23,    torque8_8: 47,     torque10_9: 65,    torque12_9: 79    },
+  M12: { spannerISO: 18,   spannerDIN: 19,   spannerJIS: 17,  allenSocket: 10,  allenButton: 8,   allenFlat: 8,   allenSet: 6,   nutStd: 10.0, nutThin: 6.0,  washerInner: 13,   washerOuter: 24,   washerThick: 2.5, springInner: 12.2, springOuter: 21.1, springThick: 2.5, clearanceHole: 13.5, pitchCoarse: 1.75, torque4_8: 39,    torque8_8: 81,     torque10_9: 114,   torque12_9: 136   },
+  M14: { spannerISO: 21,   spannerDIN: 22,   spannerJIS: 19,  allenSocket: 12,  allenButton: 10,  allenFlat: 10,  allenSet: 6,   nutStd: 11.0, nutThin: 7.0,  washerInner: 15,   washerOuter: 28,   washerThick: 2.5, springInner: 14.2, springOuter: 24.1, springThick: 3.0, clearanceHole: 15.5, pitchCoarse: 2.0,  torque4_8: 62,    torque8_8: 128,    torque10_9: 181,   torque12_9: 217   },
+  M16: { spannerISO: 24,   spannerDIN: 24,   spannerJIS: 22,  allenSocket: 14,  allenButton: 10,  allenFlat: 10,  allenSet: 8,   nutStd: 13.0, nutThin: 8.0,  washerInner: 17,   washerOuter: 30,   washerThick: 3.0, springInner: 16.2, springOuter: 27.4, springThick: 3.5, clearanceHole: 17.5, pitchCoarse: 2.0,  torque4_8: 96,    torque8_8: 197,    torque10_9: 277,   torque12_9: 333   },
+  M18: { spannerISO: 27,   spannerDIN: 27,   spannerJIS: 24,  allenSocket: 14,  allenButton: 12,  allenFlat: 12,  allenSet: 10,  nutStd: 15.0, nutThin: 9.0,  washerInner: 19,   washerOuter: 34,   washerThick: 3.0, springInner: 18.2, springOuter: 31.4, springThick: 4.0, clearanceHole: 20,   pitchCoarse: 2.5,  torque4_8: 132,   torque8_8: 273,    torque10_9: 384,   torque12_9: 461   },
+  M20: { spannerISO: 30,   spannerDIN: 30,   spannerJIS: 27,  allenSocket: 17,  allenButton: 14,  allenFlat: 12,  allenSet: 10,  nutStd: 16.0, nutThin: 10.0, washerInner: 21,   washerOuter: 37,   washerThick: 3.0, springInner: 20.2, springOuter: 33.6, springThick: 4.0, clearanceHole: 22,   pitchCoarse: 2.5,  torque4_8: 187,   torque8_8: 385,    torque10_9: 541,   torque12_9: 649   },
+  M22: { spannerISO: 34,   spannerDIN: 32,   spannerJIS: 30,  allenSocket: 17,  allenButton: 14,  allenFlat: 14,  allenSet: 12,  nutStd: 18.0, nutThin: 11.0, washerInner: 23,   washerOuter: 39,   washerThick: 3.0, springInner: 22.5, springOuter: 36.6, springThick: 4.5, clearanceHole: 24,   pitchCoarse: 2.5,  torque4_8: 256,   torque8_8: 528,    torque10_9: 743,   torque12_9: 891   },
+  M24: { spannerISO: 36,   spannerDIN: 36,   spannerJIS: 32,  allenSocket: 19,  allenButton: 14,  allenFlat: 14,  allenSet: 12,  nutStd: 19.0, nutThin: 12.0, washerInner: 25,   washerOuter: 44,   washerThick: 4.0, springInner: 24.5, springOuter: 40,   springThick: 5.0, clearanceHole: 26,   pitchCoarse: 3.0,  torque4_8: 325,   torque8_8: 666,    torque10_9: 940,   torque12_9: 1130  },
 }
 
 /* M27, M30 표 전용 */
 export const BOLT_DATA_EXTRA = {
-  M27: { spannerISO: 41, spannerJIS: 41, allenSocket: 19, nutStd: 22, washerInner: 28, washerOuter: 50, torque8_8: 981 },
-  M30: { spannerISO: 46, spannerJIS: 46, allenSocket: 22, nutStd: 24, washerInner: 31, washerOuter: 56, torque8_8: 1330 },
+  M27: { spannerISO: 41, spannerDIN: 41, spannerJIS: 41, allenSocket: 19, nutStd: 22, washerInner: 28, washerOuter: 50, torque8_8: 981 },
+  M30: { spannerISO: 46, spannerDIN: 46, spannerJIS: 46, allenSocket: 22, nutStd: 24, washerInner: 31, washerOuter: 56, torque8_8: 1330 },
 }
 
 /* ─────────────────────────────────────────────
@@ -133,12 +134,29 @@ export const WASHER_TYPES: WasherTypeInfo[] = [
    계산 함수
    ───────────────────────────────────────────── */
 
+export const STANDARDS: Standard[] = ['iso', 'din', 'jis']
+
+/** 규격 이름 — 선택 버튼·결과 표시용 */
+export const STD_LABEL: Record<Standard, string> = {
+  iso: 'ISO (현행 KS·JIS 본체)',
+  din: '구 DIN·KS 부속서',
+  jis: 'JIS 소형',
+}
+/** 짧은 이름 — 역검색·표 셀용 */
+export const STD_SHORT: Record<Standard, string> = {
+  iso: 'ISO',
+  din: '구 DIN',
+  jis: 'JIS 소형',
+}
+
 export function getSpanner(size: BoltSize, std: Standard): number {
-  return std === 'iso' ? BOLT_DATA[size].spannerISO : BOLT_DATA[size].spannerJIS
+  const d = BOLT_DATA[size]
+  return std === 'iso' ? d.spannerISO : std === 'din' ? d.spannerDIN : d.spannerJIS
 }
 
 export function isStandardDifferent(size: BoltSize): boolean {
-  return BOLT_DATA[size].spannerISO !== BOLT_DATA[size].spannerJIS
+  const d = BOLT_DATA[size]
+  return d.spannerISO !== d.spannerDIN || d.spannerISO !== d.spannerJIS
 }
 
 export function getAllen(size: BoltSize, type: BoltType): number | null {
@@ -162,11 +180,14 @@ export interface ReverseHit {
 export function reverseLookupSpanner(spannerMm: number): ReverseHit[] {
   const hits: ReverseHit[] = []
   BOLT_SIZES.forEach((size) => {
-    const d = BOLT_DATA[size]
-    if (d.spannerISO === spannerMm) hits.push({ size, std: 'iso', stdLabel: 'ISO·DIN·KS' })
-    if (d.spannerJIS === spannerMm && d.spannerJIS !== d.spannerISO) {
-      hits.push({ size, std: 'jis', stdLabel: '옛 JIS' })
-    }
+    // 같은 볼트에서 여러 규격이 같은 값이면 한 카드로 묶어 표시
+    const matched = STANDARDS.filter((st) => getSpanner(size, st) === spannerMm)
+    if (matched.length === 0) return
+    hits.push({
+      size,
+      std: matched[0],
+      stdLabel: matched.length === STANDARDS.length ? '공통 (모든 규격)' : matched.map((st) => STD_SHORT[st]).join(' · '),
+    })
   })
   return hits
 }
@@ -218,18 +239,20 @@ export const INCH_SPANNERS: InchSpanner[] = [
 ]
 
 /* 인치 스패너에 가장 가까운 mm 매칭 */
-export function findClosestMetric(inchMm: number, tolMm = 0.6): { iso: BoltSize | null; jis: BoltSize | null } {
-  let iso: BoltSize | null = null
-  let jis: BoltSize | null = null
-  let isoMin = Infinity
-  let jisMin = Infinity
-  BOLT_SIZES.forEach((s) => {
-    const dIso = Math.abs(BOLT_DATA[s].spannerISO - inchMm)
-    const dJis = Math.abs(BOLT_DATA[s].spannerJIS - inchMm)
-    if (dIso < isoMin && dIso <= tolMm) { isoMin = dIso; iso = s }
-    if (dJis < jisMin && dJis <= tolMm) { jisMin = dJis; jis = s }
-  })
-  return { iso, jis }
+export function findClosestMetric(
+  inchMm: number,
+  tolMm = 0.6,
+): { iso: BoltSize | null; din: BoltSize | null; jis: BoltSize | null } {
+  const closest = (std: Standard): BoltSize | null => {
+    let best: BoltSize | null = null
+    let min = Infinity
+    BOLT_SIZES.forEach((s) => {
+      const d = Math.abs(getSpanner(s, std) - inchMm)
+      if (d < min && d <= tolMm) { min = d; best = s }
+    })
+    return best
+  }
+  return { iso: closest('iso'), din: closest('din'), jis: closest('jis') }
 }
 
 /* ─────────────────────────────────────────────

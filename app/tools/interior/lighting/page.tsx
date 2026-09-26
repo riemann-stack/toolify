@@ -3,7 +3,7 @@ import LightingClient from './LightingClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 import UpdatedMeta from '@/components/UpdatedMeta'
 
@@ -336,7 +336,7 @@ export default function LightingPage() {
             📏 천장 높이·벽 반사율에 따른 루멘 보정
           </h2>
           <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '12px' }}>
-            앞의 공식은 표준 천장(약 2.3~2.4m)·밝은 마감을 전제로 합니다. 실제 조명설계의 <strong style={{ color: 'var(--text)' }}>광속법</strong>에서는 실제 작업면에 도달하는 빛의 비율인 <strong style={{ color: 'var(--text)' }}>조명률(U)</strong>을 곱하는데, 이 값은 천장이 높을수록, 벽·천장·바닥이 어두울수록 낮아집니다. 즉 조건이 나쁠수록 <strong style={{ color: 'var(--text)' }}>더 많은 루멘</strong>이 필요합니다.
+            앞의 공식은 등에서 나온 빛이 모두 바닥·책상 높이에 닿는다고 보는(조명률 1) 약식입니다. 실제 조명설계의 <strong style={{ color: 'var(--text)' }}>광속법</strong>에서는 실제 작업면에 도달하는 빛의 비율인 <strong style={{ color: 'var(--text)' }}>조명률(U)</strong>을 곱하는데, 이 값은 천장이 높을수록, 벽·천장·바닥이 어두울수록 낮아집니다. 즉 조건이 나쁠수록 <strong style={{ color: 'var(--text)' }}>더 많은 루멘</strong>이 필요합니다.
           </p>
           <div style={{ overflowX: 'auto' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '13px', minWidth: 440 }}>
@@ -349,10 +349,10 @@ export default function LightingPage() {
               </thead>
               <tbody>
                 {[
-                  { s: '천장 2.3~2.4m (표준)', v: '기준', u: '표에서 계산한 루멘 그대로' },
+                  { s: '천장 2.3~2.4m (표준)', v: '기준', u: '약식 루멘 그대로 — 실제 조도는 이보다 낮음' },
                   { s: '천장 2.7~3.0m',       v: '가산', u: '높을수록 조명률↓ — 루멘 상향' },
                   { s: '어두운 벽지·바닥',      v: '가산', u: '반사 감소 — 루멘 상향' },
-                  { s: '밝은 벽·화이트 천장',   v: '여유', u: '반사 이득 — 기준값으로 충분' },
+                  { s: '밝은 벽·화이트 천장',   v: '기준', u: '반사 이득 — 약식 루멘과 가장 가깝게 나옴(그래도 실제 조도는 다소 낮음)' },
                 ].map((r, i) => (
                   <tr key={i} style={{ borderBottom: '1px solid var(--border)', background: i % 2 === 0 ? 'transparent' : 'var(--bg2)' }}>
                     <td style={{ padding: '10px 12px', color: 'var(--text)', fontWeight: 600 }}>{r.s}</td>
@@ -373,23 +373,7 @@ export default function LightingPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 9. 관련 도구 ── */}

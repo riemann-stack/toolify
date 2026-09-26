@@ -45,18 +45,25 @@ export default function RebarClient() {
 
   /* localStorage */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.size && REBAR_SIZES.includes(j.size)) setSize(j.size)
-      if (j.strength in STRENGTH_META) setStrength(j.strength)
-      if (typeof j.pricePerTon === 'string') setPricePerTon(j.pricePerTon)
-      if ((STANDARD_LENGTHS as readonly number[]).includes(j.standardLen)) setStandardLen(j.standardLen)
-      if (typeof j.count === 'string') setCount(j.count)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object' || Array.isArray(j)) return
+      const o = j as Record<string, unknown>
+      const savedSize = REBAR_SIZES.find((b) => b === o.size)
+      if (savedSize) setSize(savedSize)
+      const savedStrength = (Object.keys(STRENGTH_META) as Strength[]).find((st) => st === o.strength)
+      if (savedStrength) setStrength(savedStrength)
+      if (typeof o.pricePerTon === 'string') setPricePerTon(o.pricePerTon)
+      const savedLen = STANDARD_LENGTHS.find((l) => l === o.standardLen)
+      if (savedLen !== undefined) setStandardLen(savedLen)
+      if (typeof o.count === 'string') setCount(o.count)
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({
         size, strength, pricePerTon, standardLen, count,
@@ -151,8 +158,8 @@ export default function RebarClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>길이 · 본수 입력</span>
 
-            <div className={s.field}>
-              <label className={s.fieldLabel}>길이 모드</label>
+            <div className={s.field} role="group" aria-labelledby="rebar-lenmode-label">
+              <span className={s.fieldLabel} id="rebar-lenmode-label">길이 모드</span>
               <div className={s.pillRow}>
                 <button
                   aria-pressed={lengthMode === 'standard'}
@@ -174,8 +181,8 @@ export default function RebarClient() {
             </div>
 
             {lengthMode === 'standard' ? (
-              <div className={s.field}>
-                <label className={s.fieldLabel}>표준 길이 (m)</label>
+              <div className={s.field} role="group" aria-labelledby="rebar-stdlen-label">
+                <span className={s.fieldLabel} id="rebar-stdlen-label">표준 길이 (m)</span>
                 <div className={s.pillRow}>
                   {STANDARD_LENGTHS.map((l) => (
                     <button
@@ -254,8 +261,8 @@ export default function RebarClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>강도 등급 · 단가</span>
             <div className={s.row2}>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>강도 등급 (가격 보정)</label>
+              <div className={s.field} role="group" aria-labelledby="rebar-strength-label">
+                <span className={s.fieldLabel} id="rebar-strength-label">강도 등급 (가격 보정)</span>
                 <div className={s.pillRow}>
                   {(Object.keys(STRENGTH_META) as Strength[]).map((st) => (
                     <button
@@ -411,8 +418,8 @@ export default function RebarClient() {
                   </div>
                 </div>
               )}
-              <div className={s.field}>
-                <label className={s.fieldLabel}>철근 길이 (m)</label>
+              <div className={s.field} role="group" aria-labelledby="rebar-revlen-label">
+                <span className={s.fieldLabel} id="rebar-revlen-label">철근 길이 (m)</span>
                 <div className={s.pillRow}>
                   {STANDARD_LENGTHS.map((l) => (
                     <button
@@ -480,7 +487,7 @@ export default function RebarClient() {
             <p>
               • 같은 1톤이라도 D10은 약 <strong>298본</strong>, D25는 약 <strong>42본</strong><br />
               • 운반 차량 적재 한도 기준 본수 미리 가늠<br />
-              • 고철 매도 시 추정에도 활용 — 철근 1톤은 시세에 따라 약 25~50만원 (등락 큼)
+              • 고철 매도 시 추정에도 활용 — kg당 200~400원이면 철근 1톤은 약 20~40만원 (등락 큼)
             </p>
           </div>
         </>
@@ -511,8 +518,8 @@ export default function RebarClient() {
                   ))}
                 </div>
               </div>
-              <div className={s.field}>
-                <label className={s.fieldLabel}>최대 철근 길이 (m)</label>
+              <div className={s.field} role="group" aria-labelledby="rebar-shiplen-label">
+                <span className={s.fieldLabel} id="rebar-shiplen-label">최대 철근 길이 (m)</span>
                 <div className={s.pillRow}>
                   {STANDARD_LENGTHS.map((l) => (
                     <button
@@ -551,10 +558,17 @@ export default function RebarClient() {
                       최대 길이 <strong>{t.maxLengthM}m</strong>
                     </p>
                     {canCarry ? (
-                      <p className={s.truckTrips}>
-                        필요 회차{' '}
-                        <strong className={s.cellAccent}>{trips}회</strong>
-                      </p>
+                      <>
+                        <p className={s.truckTrips}>
+                          필요 회차{' '}
+                          <strong className={s.cellAccent}>{trips}회</strong>
+                        </p>
+                        {t.legalLenM !== undefined && shipMaxLen > t.legalLenM && (
+                          <p className={s.truckNote} style={{ color: 'var(--warning)' }}>
+                            ⚠️ 법정 적재길이(약 {t.legalLenM}m) 초과 — 경찰서장 허가 또는 절단 필요
+                          </p>
+                        )}
+                      </>
                     ) : (
                       <p className={s.truckTrips} style={{ color: '#DB2777' }}>
                         ❌ 길이 초과
@@ -571,11 +585,14 @@ export default function RebarClient() {
           <div className={s.warnCard}>
             <strong>트럭 선정 팁</strong>
             <p>
-              • <strong>1톤 트럭</strong>은 6m 철근 적재 길이 가능 (적재함 위로 살짝 돌출 가능)<br />
-              • <strong>12m 철근</strong>은 5톤 카고 이상 필수, 적재 결박 강하게<br />
+              • 화물 <strong>적재 길이는 차 길이의 110%까지</strong>입니다(도로교통법 시행령 제22조). 넘으면 출발지 관할 경찰서장 허가가 필요해요<br />
+              • <strong>1톤 트럭</strong>(전장 약 5.1m)은 한도가 약 5.6m라 6m 철근은 허가를 받거나 잘라서 실어야 해요<br />
+              • <strong>12m 철근</strong>은 5톤 이상 장축 카고로 운반하고 결박을 강하게<br />
               • 회차가 많아지면 5톤 1회보다 11톤 1회가 경제적인 경우 多<br />
-              • 운반비는 거리·시기·결박 작업 포함 여부로 변동<br />
-              • {availableTrucks.length === 0 && '⚠️ 선택한 길이를 운반할 수 있는 트럭이 없습니다 — 절단 필요'}
+              • 운반비는 거리·시기·결박 작업 포함 여부로 변동
+              {availableTrucks.length === 0 && (
+                <><br />• ⚠️ 선택한 길이를 운반할 수 있는 트럭이 없습니다 — 절단 필요</>
+              )}
             </p>
           </div>
         </>
@@ -606,11 +623,11 @@ export default function RebarClient() {
           <div className={s.warnCard}>
             <strong>배근 기본 원칙</strong>
             <p>
-              • <strong>피복두께</strong>: 콘크리트 표면에서 철근까지 거리. 옥내 30~40mm, 옥외 50mm, 토중 70mm 이상.<br />
+              • <strong>피복두께</strong>: 콘크리트 표면에서 철근까지 거리. 흙에 접해 타설·영구 매립 75mm, 흙·옥외 공기에 노출 D19 이상 50mm·D16 이하 40mm, 옥내 슬래브·벽 20mm 이상 (KDS 14 20 50 최소값).<br />
               • <strong>이음 길이</strong>: 일반 40d (D10이면 400mm), 인장은 60d 이상.<br />
               • <strong>결속</strong>: 교차점은 모두 결속선으로 묶음 (간격 1m마다 1회).<br />
               • <strong>스페이서</strong>: 1m²당 5~8개 사용해 피복두께 유지.<br />
-              • 구조 부재(주택 슬래브·옹벽 1.5m↑)는 반드시 구조기술사 도면에 따라 시공.
+              • 구조 부재(주택 슬래브·옹벽 1.5m↑)는 반드시 구조기술사 도면에 따라 시공. 높이 2m를 넘는 옹벽은 공작물 축조신고 대상입니다.
             </p>
           </div>
         </>

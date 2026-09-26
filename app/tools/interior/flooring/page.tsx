@@ -3,7 +3,7 @@ import FlooringClient from './FlooringClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
 export const metadata = buildMetadata({
@@ -16,7 +16,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '강화마루와 강마루 차이가 뭐예요?',
-                a: '<strong>강화마루</strong>는 HDF(고밀도 섬유판)에 멜라민 필름을 압착한 합성 마루로 가격이 저렴하고 스크래치에 강합니다. <strong>강마루</strong>는 합판 위에 천연 무늬목을 붙인 형태로 더 부드럽고 따뜻한 질감이며 난방에도 적합합니다. 가격은 강마루가 1.5~2배 비싸지만 거주감과 내구성에서 우수해 아파트 거실·아이방에서 가장 많이 선택됩니다.',
+                a: '<strong>강화마루</strong>는 HDF(고밀도 섬유판)에 멜라민 필름을 압착한 합성 마루로 가격이 저렴하고 스크래치에 강합니다. <strong>강마루</strong>는 합판 기재 위에 고압 멜라민(HPM) 표면재(주로 인쇄 무늬지)를 압착한 제품으로, 합판이라 치수 변화가 적어 바닥 난방에 잘 맞고 찍힘에도 강합니다. 합판 위에 천연 무늬목을 붙인 제품은 합판마루·원목마루로 따로 구분합니다. 가격은 강마루가 1.5~2배 비싸지만 거주감과 내구성에서 우수해 아파트 거실·아이방에서 가장 많이 선택됩니다.',
               },
               {
                 q: '바닥재 1박스는 몇 평인가요?',
@@ -221,7 +221,7 @@ export default function FlooringPage() {
             </table>
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 10, lineHeight: 1.7 }}>
-            ※ 표준 박스 면적 기준(강화 2.4㎡ / 강마루 2.6㎡ / 원목 2.0㎡ / 데코타일 3.3㎡), 헤링본·쉐브론 시공 시 1.5~2박스 추가 권장
+            ※ 표준 박스 면적 기준(강화 2.4㎡ / 강마루 2.6㎡ / 원목 2.0㎡ / 데코타일 3.3㎡), 헤링본은 +10%, 쉐브론은 +15% 자재를 더 잡으세요(15평 강화마루면 헤링본 약 2박스, 쉐브론 약 3박스 추가)
           </p>
         </div>
 
@@ -234,20 +234,20 @@ export default function FlooringPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🛠️ 셀프 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>자재비 (23박스): <strong>약 130만원</strong></li>
+                <li>자재비 (23박스 × 2.4㎡ × 28,000원): <strong>약 155만원</strong></li>
                 <li>본드·몰딩·보양재: <strong>약 12만원</strong></li>
                 <li>공구 대여 (1일): <strong>약 5만원</strong></li>
-                <li style={{ color: 'var(--accent)', fontWeight: 700, marginTop: 4 }}>총: 약 147만원</li>
+                <li style={{ color: 'var(--accent)', fontWeight: 700, marginTop: 4 }}>총: 약 172만원</li>
                 <li style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>※ 작업 시간: 2~3일</li>
               </ul>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #EA580C', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: '#EA580C', fontWeight: 700, marginBottom: 8 }}>👷 전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>자재비: <strong>약 130만원</strong></li>
+                <li>자재비: <strong>약 155만원</strong></li>
                 <li>인건비 (㎡당 1.5만원): <strong>약 75만원</strong></li>
                 <li>철거·정리: <strong>약 20만원</strong></li>
-                <li style={{ color: '#EA580C', fontWeight: 700, marginTop: 4 }}>총: 약 225만원</li>
+                <li style={{ color: '#EA580C', fontWeight: 700, marginTop: 4 }}>총: 약 250만원</li>
                 <li style={{ color: 'var(--muted)', fontSize: 12, marginTop: 6 }}>※ 작업 시간: 1일 (헤링본 +50%)</li>
               </ul>
             </div>
@@ -315,23 +315,7 @@ export default function FlooringPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 9. 관련 도구 ── */}

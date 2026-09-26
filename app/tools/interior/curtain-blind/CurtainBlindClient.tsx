@@ -16,14 +16,15 @@ const PRODUCTS = [
 ] as const
 type ProductId = typeof PRODUCTS[number]['id']
 
-/* 창문 위치 프리셋 */
+/* 창문 위치 프리셋 — fromFloor: 창문 하단~바닥(cm). 대형 거실창·베란다 창은 바닥 가까이에서 시작하므로
+   하단 높이도 함께 바꿔야 천장(기본 240cm)보다 높은 창이 만들어지지 않는다 */
 const LOCATIONS = [
-  { id: 'normal',  label: '일반 방 창',     hint: '120~180 × 120~150', w: 150, h: 130 },
-  { id: 'living',  label: '거실 창 (중)',   hint: '200~250 × 150',      w: 220, h: 150 },
-  { id: 'big',     label: '거실 창 (대형)',  hint: '300~400 × 200',      w: 350, h: 200 },
-  { id: 'veranda', label: '베란다 창',      hint: '150 × 200~230',      w: 150, h: 220 },
-  { id: 'small',   label: '욕실·작은 창',  hint: '60~90 × 60~90',      w: 80,  h: 80  },
-  { id: 'custom',  label: '직접 입력',      hint: '',                   w: 0,   h: 0   },
+  { id: 'normal',  label: '일반 방 창',     hint: '120~180 × 120~150', w: 150, h: 130, fromFloor: 90 },
+  { id: 'living',  label: '거실 창 (중)',   hint: '200~250 × 150',      w: 220, h: 150, fromFloor: 70 },
+  { id: 'big',     label: '거실 창 (대형)',  hint: '300~400 × 200',      w: 350, h: 200, fromFloor: 20 },
+  { id: 'veranda', label: '베란다 창',      hint: '150 × 200~230',      w: 150, h: 220, fromFloor: 10 },
+  { id: 'small',   label: '욕실·작은 창',  hint: '60~90 × 60~90',      w: 80,  h: 80,  fromFloor: 120 },
+  { id: 'custom',  label: '직접 입력',      hint: '',                   w: 0,   h: 0,   fromFloor: 0 },
 ]
 
 const INSTALL_TYPES = [
@@ -56,6 +57,12 @@ function n(v: string | number, min = 0): number {
   if (!Number.isFinite(x) || x < min) return min
   return x
 }
+/** 입력 문자열 → 숫자. 빈 값·비숫자는 fallback, 범위 밖은 [min, max]로 클램프 (계산 단계 전용 — onChange 클램프는 첫 타자를 치환함) */
+function parseClamp(s: string, min: number, max: number, fallback = min): number {
+  const x = parseFloat(s)
+  if (!Number.isFinite(x)) return fallback
+  return Math.min(max, Math.max(min, x))
+}
 function fmt(v: number, dec = 0): string {
   return (Math.round(v * Math.pow(10, dec)) / Math.pow(10, dec)).toLocaleString('ko-KR')
 }
@@ -71,10 +78,14 @@ export default function CurtainBlindClient() {
 
   /* 창문 입력 */
   const [locationId, setLocationId] = useState('living')
-  const [winW, setWinW] = useState(220)
-  const [winH, setWinH] = useState(150)
+  // 가로·세로·천장 높이는 문자열로 보관하고 계산 시 클램프 — onChange 클램프(min 1·150)는 '260' 입력을 15060으로 만든다
+  const [winWStr, setWinWStr] = useState('220')
+  const [winHStr, setWinHStr] = useState('150')
   const [winFromFloor, setWinFromFloor] = useState(70)   // 창문 하단~바닥 (cm)
-  const [ceilingH, setCeilingH] = useState(240)            // cm
+  const [ceilingHStr, setCeilingHStr] = useState('240')    // cm
+  const winW = parseClamp(winWStr, 1, 2000)
+  const winH = parseClamp(winHStr, 1, 1000)
+  const ceilingH = parseClamp(ceilingHStr, 150, 500, 240)
   const [frameDepth, setFrameDepth] = useState(7)          // 창문틀 깊이 (cm) — 인사이드 마운트 가능 여부
 
   /* 설치 방식 — 커튼만 wall-mount 기본, 블라인드·롤·버티칼·로만은 inside-mount 기본 */
@@ -101,8 +112,9 @@ export default function CurtainBlindClient() {
     setLocationId(id)
     const loc = LOCATIONS.find(l => l.id === id)
     if (loc && loc.id !== 'custom') {
-      setWinW(loc.w)
-      setWinH(loc.h)
+      setWinWStr(String(loc.w))
+      setWinHStr(String(loc.h))
+      setWinFromFloor(loc.fromFloor)
     }
   }
 
@@ -134,12 +146,13 @@ export default function CurtainBlindClient() {
         else if (lengthOpt === 'window') curtainLength = ceilingH - winFromFloor  // 천장 봉 ~ 창문 하단(=창문 전체 가림)
         else curtainLength = ceilingH - 50  // knee — 천장에서 바닥 50cm(무릎) 위까지
       } else {
-        // 벽 부착 기준 (창문 위 약 10cm 위에 봉)
+        // 벽 부착 기준 (창문 위 약 10cm 위에 봉) — 봉 높이는 천장을 넘을 수 없으므로 천장 높이로 제한
         const rodAboveWindow = 10
-        if (lengthOpt === 'window') curtainLength = winH + 10
-        else if (lengthOpt === 'knee') curtainLength = winH + rodAboveWindow + winFromFloor - 50  // 무릎 50cm
-        else if (lengthOpt === 'floor') curtainLength = winH + rodAboveWindow + winFromFloor - 5
-        else curtainLength = winH + rodAboveWindow + winFromFloor + 15  // pooling
+        const rodTop = Math.min(winFromFloor + winH + rodAboveWindow, ceilingH)
+        if (lengthOpt === 'window') curtainLength = rodTop - winFromFloor
+        else if (lengthOpt === 'knee') curtainLength = rodTop - 50  // 무릎 50cm
+        else if (lengthOpt === 'floor') curtainLength = rodTop - 5
+        else curtainLength = rodTop + 15  // pooling
       }
       const finishedLength = Math.max(0, curtainLength)   // 완성(걸었을 때) 길이
       const orderLength = finishedLength + 10              // 원단 재단 주문 길이 (헴 10cm 포함)
@@ -203,7 +216,7 @@ export default function CurtainBlindClient() {
     if (doubleLayer) lines.push('이중 커튼 (시어 + 암막)')
     lines.push('youtil.kr/tools/interior/curtain-blind')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -229,7 +242,7 @@ export default function CurtainBlindClient() {
     <div className={styles.wrap}>
 
       <Disclaimer
-        variant="safety"
+        variant="default"
         related={[
           { href: '/tools/interior/wallpaper', label: '도배 소요량' },
           { href: '/tools/interior/paint', label: '페인트 계산' },
@@ -282,9 +295,9 @@ export default function CurtainBlindClient() {
             <div style={{ height: 14 }} />
             <span className={styles.subLabel}>창문 가로 × 세로 (cm)</span>
             <div className={styles.dimRow}>
-              <input className={styles.bigInput} aria-label="창문 가로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winW} onChange={e => { setWinW(n(e.target.value, 1)); setLocationId('custom') }} />
+              <input className={styles.bigInput} aria-label="창문 가로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winWStr} onChange={e => { setWinWStr(e.target.value); setLocationId('custom') }} />
               <span className={styles.dimSep}>×</span>
-              <input className={styles.bigInput} aria-label="창문 세로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winH} onChange={e => { setWinH(n(e.target.value, 1)); setLocationId('custom') }} />
+              <input className={styles.bigInput} aria-label="창문 세로 (cm)" type="number" inputMode="decimal" min={1} step={1} value={winHStr} onChange={e => { setWinHStr(e.target.value); setLocationId('custom') }} />
             </div>
 
             {(productId === 'curtain') && (
@@ -292,13 +305,13 @@ export default function CurtainBlindClient() {
                 <div style={{ height: 12 }} />
                 <span className={styles.subLabel}>창문 하단 ~ 바닥 (cm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} aria-label="창문 하단에서 바닥까지 (cm)" type="number" inputMode="decimal" min={0} max={300} value={winFromFloor} onChange={e => setWinFromFloor(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="창문 하단에서 바닥까지 (cm)" type="number" inputMode="decimal" min={0} max={300} value={winFromFloor} onChange={e => setWinFromFloor(Math.min(300, n(e.target.value)))} />
                   <span className={styles.unit}>cm</span>
                 </div>
                 <div style={{ height: 8 }} />
                 <span className={styles.subLabel}>천장 높이 (cm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} aria-label="천장 높이 (cm)" type="number" inputMode="decimal" min={150} max={500} value={ceilingH} onChange={e => setCeilingH(n(e.target.value, 150))} />
+                  <input className={styles.smallInput} aria-label="천장 높이 (cm)" type="number" inputMode="decimal" min={150} max={500} value={ceilingHStr} onChange={e => setCeilingHStr(e.target.value)} />
                   <span className={styles.unit}>cm</span>
                 </div>
               </>
@@ -310,11 +323,11 @@ export default function CurtainBlindClient() {
                 <div style={{ height: 12 }} />
                 <span className={styles.subLabel}>창문틀 깊이 (cm)</span>
                 <div className={styles.inputRow}>
-                  <input className={styles.smallInput} aria-label="창문틀 깊이 (cm)" type="number" inputMode="decimal" min={0} max={50} value={frameDepth} onChange={e => setFrameDepth(n(e.target.value))} />
+                  <input className={styles.smallInput} aria-label="창문틀 깊이 (cm)" type="number" inputMode="decimal" min={0} max={50} value={frameDepth} onChange={e => setFrameDepth(Math.min(50, n(e.target.value)))} />
                   <span className={styles.unit}>cm</span>
                 </div>
                 {frameDepth > 0 && frameDepth < 6 && (
-                  <div role="alert" style={{ marginTop: 8, background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '10px 12px', fontSize: 12.5, color: 'var(--text)', lineHeight: 1.6 }}>
+                  <div role="alert" style={{ marginTop: 8, background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '10px 12px', fontSize: 13, color: 'var(--text)', lineHeight: 1.6 }}>
                     ⚠️ 창문틀 깊이 {fmt(frameDepth)}cm — 인사이드 마운트는 <strong>6cm 이상</strong> 권장. 깊이가 부족하면 본체가 튀어나오니 <strong>아웃사이드(창문틀 밖)</strong>를 권장합니다.
                   </div>
                 )}
@@ -437,7 +450,7 @@ export default function CurtainBlindClient() {
               <div role="alert" style={{ background: 'var(--bg2)', border: '1px solid var(--danger)', borderLeft: '3px solid var(--danger)', borderRadius: 10, padding: '12px 14px', fontSize: 13, color: 'var(--text)', lineHeight: 1.7 }}>
                 {isCeil
                   ? `⚠️ 천장 높이(${fmt(ceilingH)}cm)가 창문 상단(${fmt(windowTop)}cm = 하단 ${fmt(winFromFloor)} + 높이 ${fmt(winH)})보다 낮습니다. 천장 높이 또는 창문 하단~바닥 값을 확인하세요.`
-                  : `⚠️ 벽 부착 봉 위치(창문 상단 +10cm = ${fmt(wallRodTop)}cm)가 천장(${fmt(ceilingH)}cm)보다 높습니다. 창문이 천장에 닿을 듯 높아 벽면 봉 설치가 어렵습니다 — 천장 부착을 고려하거나 입력값을 확인하세요.`}
+                  : `⚠️ 벽 부착 봉 위치(창문 상단 +10cm = ${fmt(wallRodTop)}cm)가 천장(${fmt(ceilingH)}cm)보다 높습니다. 창문이 천장에 닿을 듯 높아 벽면 봉 설치가 어렵습니다 — 천장 부착을 고려하거나 입력값을 확인하세요. 아래 길이는 봉을 천장 높이에 단다고 보고 계산했습니다.`}
               </div>
             )
           })()}

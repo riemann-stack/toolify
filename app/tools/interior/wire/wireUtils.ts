@@ -33,6 +33,30 @@ export const AMPACITY_HIV: Record<WireSize, number> = {
   240: 470,
 }
 
+/* 삼상(도체 3개 부하)용 허용전류 (A) — IEC 60364-5-52 표 B.52.5, PVC·동선·30°C·부설방법 C.
+   단상(도체 2개 부하)보다 도체 발열이 커서 같은 굵기라도 허용전류가 약 8~15% 낮음 */
+export const AMPACITY_HIV_3C: Record<WireSize, number> = {
+  1.5: 17.5,
+  2.5: 24,
+  4:   32,
+  6:   41,
+  10:  57,
+  16:  76,
+  25:  96,
+  35:  119,
+  50:  144,
+  70:  184,
+  95:  223,
+  120: 259,
+  150: 299,
+  185: 341,
+  240: 403,
+}
+
+/** 상(相)에 맞는 기본 허용전류표 값 — 단상은 도체 2개 부하, 삼상은 도체 3개 부하 */
+export const baseAmpacity = (sqMm: WireSize, phase: Phase = 'single'): number =>
+  phase === 'three' ? AMPACITY_HIV_3C[sqMm] : AMPACITY_HIV[sqMm]
+
 /* 차단기 표준 사이즈 (A) */
 export const BREAKER_SIZES = [
   10, 15, 20, 30, 40, 50, 60, 75, 100, 125, 150, 175, 200, 250, 300, 400,
@@ -129,15 +153,16 @@ export function calcDropPercent(dropV: number, voltage: Voltage): number {
 
 /**
  * 보정 후 허용전류
- * = 기본 허용전류 × 재질계수 × 환경계수 × 온도계수
+ * = 기본 허용전류(단상 2선·삼상 3선 부하 표) × 재질계수 × 환경계수 × 온도계수
  */
 export function correctedAmpacity(
   sqMm: WireSize,
   kind: WireKind,
   env: Environment,
   tempC: number,
+  phase: Phase = 'single',
 ): number {
-  const base = AMPACITY_HIV[sqMm]
+  const base = baseAmpacity(sqMm, phase)
   const k = getWireKind(kind).factor
   const e = ENV_FACTOR[env].factor
   const t = TEMP_FACTOR[tempC] ?? 1.0
@@ -154,18 +179,23 @@ export function recommendWireSize(
   kind: WireKind,
   env: Environment,
   tempC: number,
+  phase: Phase = 'single',
 ): WireSize | null {
   if (currentA <= 0) return null
   const target = currentA * 1.25
   for (const sq of WIRE_SIZES) {
-    if (correctedAmpacity(sq, kind, env, tempC) >= target) return sq
+    if (correctedAmpacity(sq, kind, env, tempC, phase) >= target) return sq
   }
   return null
 }
 
 /**
- * 전압강하 한도까지 만족하는 전선 굵기 추천
- * (recommendWireSize 결과보다 한 단계 큰 굵기로 강하율을 만족시킴)
+ * 전선 굵기 + 차단기를 함께 추천
+ * - ampacitySize: 허용전류 ≥ 부하전류 × 1.25
+ * - breaker: 부하전류 × 1.25 이상의 가장 작은 표준 차단기
+ * - protectSize: 허용전류 ≥ 차단기 정격 (IB ≤ In ≤ Iz — 전선이 차단기보다 먼저 과열되지 않게)
+ * - dropSize: 전압강하 한도를 만족하는 최소 굵기
+ * - finalSize: 위 조건을 모두 만족하는 굵기 (허용전류·보호 조건을 못 채우면 null)
  */
 export function recommendWireSizeWithDrop(
   currentA: number,
@@ -176,25 +206,35 @@ export function recommendWireSizeWithDrop(
   env: Environment,
   tempC: number,
   app: Application,
-): { ampacitySize: WireSize | null; dropSize: WireSize | null; finalSize: WireSize | null } {
-  if (currentA <= 0) return { ampacitySize: null, dropSize: null, finalSize: null }
-  const ampacitySize = recommendWireSize(currentA, kind, env, tempC)
+): {
+  ampacitySize: WireSize | null
+  protectSize: WireSize | null
+  dropSize: WireSize | null
+  finalSize: WireSize | null
+  breaker: number | null
+} {
+  if (currentA <= 0) return { ampacitySize: null, protectSize: null, dropSize: null, finalSize: null, breaker: null }
+  const ampacitySize = recommendWireSize(currentA, kind, env, tempC, phase)
+  const breaker = recommendBreaker(currentA)
+  const protectSize = breaker ? breakerToSizes(breaker, kind, env, tempC, phase) : null
   const limit = (DROP_LIMIT[app].pct / 100) * voltage
   let dropSize: WireSize | null = null
   for (const sq of WIRE_SIZES) {
     const drop = calcVoltageDrop(currentA, lengthM, sq, phase)
     if (drop <= limit) { dropSize = sq; break }
   }
-  // 허용전류(안전) 조건은 필수 — 만족하는 전선이 없으면 전압강하만으로 추천하지 않음(범위 초과)
+  // 허용전류(안전)·차단기 보호 조건은 필수 — 만족하는 전선이 없으면 전압강하만으로 추천하지 않음(범위 초과)
+  // 차단기 정격이 표준값 범위를 넘으면(breaker null) 보호 조건은 판단하지 않고 허용전류 기준만 사용
+  const safeSize: WireSize | null = !ampacitySize ? null : breaker ? protectSize : ampacitySize
   let finalSize: WireSize | null
-  if (!ampacitySize) {
+  if (!safeSize) {
     finalSize = null
   } else if (dropSize) {
-    finalSize = ampacitySize >= dropSize ? ampacitySize : dropSize
+    finalSize = safeSize >= dropSize ? safeSize : dropSize
   } else {
-    finalSize = ampacitySize   // 허용전류는 충족하나 강하 목표는 최대 굵기로도 미달(경고는 강하% 표시로)
+    finalSize = safeSize   // 허용전류는 충족하나 강하 목표는 최대 굵기로도 미달(경고는 강하% 표시로)
   }
-  return { ampacitySize, dropSize, finalSize }
+  return { ampacitySize, protectSize, dropSize, finalSize, breaker }
 }
 
 /** 권장 차단기 사이즈 (부하전류 × 1.25 이상의 가장 작은 표준값) */
@@ -221,9 +261,15 @@ export function maxBreakerForAmpacity(ampacityA: number): number | null {
 }
 
 /** 차단기 사이즈 → 가능한 전선 굵기 후보 */
-export function breakerToSizes(breakerA: number, kind: WireKind, env: Environment, tempC: number): WireSize | null {
+export function breakerToSizes(
+  breakerA: number,
+  kind: WireKind,
+  env: Environment,
+  tempC: number,
+  phase: Phase = 'single',
+): WireSize | null {
   for (const sq of WIRE_SIZES) {
-    if (correctedAmpacity(sq, kind, env, tempC) >= breakerA) return sq
+    if (correctedAmpacity(sq, kind, env, tempC, phase) >= breakerA) return sq
   }
   return null
 }

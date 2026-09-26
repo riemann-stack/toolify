@@ -3,7 +3,7 @@ import WallpaperClient from './WallpaperClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import UpdatedMeta from '@/components/UpdatedMeta'
 import ToolIconBadge from '@/components/ToolIconBadge'
 
@@ -21,7 +21,7 @@ const FAQ_LD = [
               },
               {
                 q: '벽지 1롤로 몇 ㎡를 시공할 수 있나요?',
-                a: '한국 표준 실크벽지 1롤은 <strong>폭 106cm × 길이 15.6m로 약 16.5㎡</strong>입니다. 합지벽지는 폭 93cm × 길이 17.5m로 약 16.3㎡입니다. 다만 무늬 맞춤·절단 손실 등으로 실제 시공 가능 면적은 90% 정도(약 14~15㎡)로 보는 것이 안전합니다.',
+                a: '한국 표준 실크벽지 1롤은 <strong>폭 106cm × 길이 15.6m로 약 16.5㎡</strong>입니다. 합지벽지(광폭)는 폭 93cm × 길이 17.75m로 역시 약 16.5㎡입니다. 다만 무늬 맞춤·절단 손실 등으로 실제 시공 가능 면적은 90% 정도(약 14~15㎡)로 보는 것이 안전합니다.',
               },
               {
                 q: '로스율 10%는 무엇을 의미하나요?',
@@ -29,15 +29,15 @@ const FAQ_LD = [
               },
               {
                 q: '셀프 도배가 가능한가요?',
-                a: '가능합니다. 다음을 추천합니다:<br/>① <strong>합지벽지로 시작</strong> (실수 복구 쉬움)<br/>② <strong>방 1개부터 도전</strong> (전체는 부담)<br/>③ <strong>큰 무늬 벽지 피하기</strong> (패턴 맞춤 어려움)<br/>④ 유튜브 시공 영상 학습 후 도전<br/>한 방(7~10평) 셀프 도배는 1일 정도 소요되며 비용은 5~10만원 수준입니다.',
+                a: '가능합니다. 다음을 추천합니다:<br/>① <strong>합지벽지로 시작</strong> (실수 복구 쉬움)<br/>② <strong>방 1개부터 도전</strong> (전체는 부담)<br/>③ <strong>큰 무늬 벽지 피하기</strong> (패턴 맞춤 어려움)<br/>④ 유튜브 시공 영상 학습 후 도전<br/>한 방(7~10평) 셀프 도배는 1일 정도 걸리고, 재료비는 이 계산기 기본 단가로 7평 합지(3롤) 약 11만원, 10평 실크(4롤) 약 19만원입니다(벽지·풀·도구 포함).',
               },
               {
                 q: '도배 비용은 평당 얼마인가요?',
-                a: '2026년 기준 한국 시장 평균(바닥 평당):<br/>• 셀프 도배: <strong>평당 5,000~10,000원</strong> (재료비만)<br/>• 일반 시공 (합지): <strong>평당 8,000~12,000원</strong> (벽지 포함)<br/>• 일반 시공 (실크): <strong>평당 15,000~25,000원</strong> (벽지 포함)<br/>• 고급 시공 (수입·디자이너): 평당 25,000원 이상<br/>※ 지역·시기·시공사에 따라 차이가 크며, 견적 비교 시 참고용으로만 활용하세요.',
+                a: '업체 견적은 보통 <strong>아파트 전체·공급면적 평</strong> 기준이며, 흔히 안내되는 대략적인 범위는 다음과 같습니다.<br/>• 합지 전문 시공: <strong>평당 약 3~5만원</strong> (벽지·인건비 포함)<br/>• 실크 전문 시공: <strong>평당 약 5~8만원</strong> (벽지·인건비 포함) — 24평 전체 약 120~200만원<br/>• 셀프 도배: 재료비(벽지·풀·도구)만 들어 실크 기준 평당 약 1.5~3.5만원<br/>※ 기존 벽지 철거, 천장 포함 여부, 지역·시기·자재 등급에 따라 차이가 크므로 현장 실측 견적으로 확인하세요.',
               },
               {
                 q: '합지벽지와 실크벽지는 무엇이 다른가요?',
-                a: '벽지 제조사 LX하우시스(LX Z:IN) 공식 가이드의 구분입니다. <strong>실크벽지</strong>는 이름과 달리 실크 섬유가 아니라 <strong>종이 위에 PVC(염화비닐수지)를 코팅한 비닐 벽지</strong>로, 표면 오염을 물걸레로 닦아낼 수 있습니다. <strong>합지벽지</strong>는 종이 위에 종이를 붙여 만든 <strong>순수 종이 벽지</strong>(속지+겉지)로, 물걸레질하면 종이가 벗겨질 수 있어 주의해야 하는 대신 속지·겉지가 분리되는 구조라 재시공이 쉽고 가격이 저렴합니다. 규격도 달라서 본 계산기 기준 실크는 폭 106cm × 15.6m, 합지는 폭 93cm × 17.5m입니다.',
+                a: '벽지 제조사 LX하우시스(LX Z:IN) 공식 가이드의 구분입니다. <strong>실크벽지</strong>는 이름과 달리 실크 섬유가 아니라 <strong>종이 위에 PVC(염화비닐수지)를 코팅한 비닐 벽지</strong>로, 표면 오염을 물걸레로 닦아낼 수 있습니다. <strong>합지벽지</strong>는 종이 위에 종이를 붙여 만든 <strong>순수 종이 벽지</strong>(속지+겉지)로, 물걸레질하면 종이가 벗겨질 수 있어 주의해야 하는 대신 속지·겉지가 분리되는 구조라 재시공이 쉽고 가격이 저렴합니다. 규격도 달라서 본 계산기 기준 실크는 폭 106cm × 15.6m, 합지(광폭)는 폭 93cm × 17.75m입니다.',
               },
               {
                 q: '기존 벽지 위에 그대로 덧방 시공해도 되나요?',
@@ -67,8 +67,8 @@ export default function WallpaperPage() {
       </p>
 
       <UpdatedMeta
-        date="2026년 7월"
-        basis="국내 유통 표준 규격(실크 폭 106cm×15.6m · 합지 93cm×17.5m) 기준 — 벽지·시공 단가는 시장 변동치(견적 시 재확인)"
+        date="2026년 9월"
+        basis="국내 유통 표준 규격(실크 폭 106cm×15.6m · 광폭 합지 93cm×17.75m) 기준 — 벽지·시공 단가는 흔히 안내되는 대략적 범위(견적 시 재확인)"
       />
 
       <WallpaperClient />
@@ -114,7 +114,7 @@ export default function WallpaperPage() {
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(240px, 1fr))', gap: '10px' }}>
             {[
               { i: '🧵', name: '실크벽지', spec: '폭 106cm × 길이 15.6m', area: '1롤 약 16.5㎡', price: '2~5만원', tip: '주거용 일반', color: 'var(--accent)' },
-              { i: '📄', name: '합지벽지', spec: '폭 93cm × 길이 17.5m',  area: '1롤 약 16.3㎡', price: '1~2만원', tip: '저렴, 셀프 입문 추천', color: '#059669' },
+              { i: '📄', name: '합지벽지', spec: '폭 93cm × 길이 17.75m', area: '1롤 약 16.5㎡', price: '1~2만원', tip: '저렴, 셀프 입문 추천', color: '#059669' },
               { i: '🛡️', name: 'PVC벽지', spec: '폭 106cm × 길이 15.6m', area: '방수·내구성',     price: '3~6만원', tip: '욕실·주방 추천',    color: '#0891B2' },
             ].map((w, i) => (
               <div key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: `3px solid ${w.color}`, borderRadius: 12, padding: '14px 16px' }}>
@@ -256,7 +256,7 @@ export default function WallpaperPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🔧 셀프 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>평당 5,000~10,000원 (재료비만)</li>
+                <li>재료비만 — 실크 기준 평당 약 1.5~3.5만원</li>
                 <li>시간 오래 걸림 (한 방 1일)</li>
                 <li>만족도·성취감 높음</li>
                 <li>실수 복구 가능 (합지 추천)</li>
@@ -265,10 +265,10 @@ export default function WallpaperPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid #0891B2', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: '#0891B2', fontWeight: 700, marginBottom: 8 }}>🏗️ 전문 시공</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>평당 15,000~25,000원 (벽지 포함)</li>
+                <li>실크 평당 약 5~8만원 (벽지·인건비 포함)</li>
                 <li>빠르고 깔끔 (24평 1~2일)</li>
                 <li>패턴 맞춤 정확</li>
-                <li>24평 기준 약 36~60만원</li>
+                <li>24평 실크 전체 약 120~200만원</li>
               </ul>
             </div>
           </div>
@@ -337,23 +337,7 @@ export default function WallpaperPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 9. 관련 도구 ── */}

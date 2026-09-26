@@ -515,7 +515,7 @@
 }
 .compareTable td:first-child { color: var(--text); font-weight: 700; }
 .compareTable td:nth-child(2) { color: var(--muted); }
-.compareTable td:nth-child(3) { color: var(--accent); font-family: 'Inter, "Noto Sans KR", system-ui, sans-serif', 'Noto Sans KR', sans-serif; font-weight: 700; font-size: 13px; }
+.compareTable td:nth-child(3) { color: var(--accent); font-family: 'Inter', 'Noto Sans KR', system-ui, sans-serif; font-weight: 700; font-size: 13px; }
 .compareTable td:last-child {
   font-family: 'Inter', system-ui, sans-serif;
   font-weight: 800;

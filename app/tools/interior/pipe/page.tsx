@@ -82,7 +82,7 @@ export default function PipePage() {
         <p style={{ margin: '0 0 6px', fontSize: 13, fontWeight: 700, color: 'var(--text)' }}>📐 데이터 기준 · 참고 표준</p>
         표시 치수는 KS·ASME·ISO <strong style={{ color: 'var(--text)' }}>표준 일반치 참고용</strong>입니다 (최종 점검 2026.6).
         <br />· <strong style={{ color: 'var(--text)' }}>호칭 체계</strong>: A호칭 KS B 1503 · 인치(B) ASME B36.10 · DN ISO 6708
-        <br />· <strong style={{ color: 'var(--text)' }}>재질·두께</strong>: 강관 KS D 3507·3562 / Sch ASME B36.10M · PVC KS M 3404 · PB KS M 3363 · XL KS M 3357 · 동관 KS D 5301 · STS 위생관 일반치
+        <br />· <strong style={{ color: 'var(--text)' }}>재질·두께</strong>: 강관 KS D 3507(SGP)·KS D 3562(STPG Sch 40·80, JIS G 3454와 동일 치수) · PVC KS M 3404 · PB KS M 3363 · XL KS M 3357 · 동관 KS D 5301(ASTM B88 K·L·M 두께) · STS 위생관 일반치
         <br />· 실제 제품의 외경·두께·압력 등급은 <strong style={{ color: 'var(--text)' }}>제조사 도면·시방서가 우선</strong>합니다. 특히 <strong>STS·프레스 시스템</strong>은 제품별 외경이 달라 도면 확인이 필수입니다.
       </div>
 

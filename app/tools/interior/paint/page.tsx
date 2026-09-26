@@ -3,8 +3,9 @@ import PaintClient from './PaintClient'
 import AdSlot from '@/components/AdSlot'
 import { buildMetadata } from '@/lib/seo'
 import { GuideDivider } from "@/components/ToolSection"
-import FaqJsonLd from '@/components/FaqJsonLd'
+import Faq from '@/components/Faq'
 import ToolIconBadge from '@/components/ToolIconBadge'
+import UpdatedMeta from '@/components/UpdatedMeta'
 
 export const metadata = buildMetadata({
   path: '/tools/interior/paint',
@@ -16,7 +17,7 @@ export const metadata = buildMetadata({
 const FAQ_LD = [
               {
                 q: '24평 아파트 벽 페인트 시공에 페인트 몇 통이 필요한가요?',
-                a: '24평 아파트 벽 전체를 2회 도장 시 약 <strong>18~22L</strong>가 필요합니다. 한국 표준 4L 통으로 약 5통 또는 18L 통 1개로 충분합니다. 천장까지 함께 도장한다면 25~30L로 늘어납니다. 벽지 제거 후 시공할지 벽지 위 도장할지에 따라 약간의 차이가 있습니다.',
+                a: '계산기 [간편 계산]에 24평을 넣으면 <strong>정사각형 한 공간</strong>(거실 하나처럼 칸막이 없는 벽 약 81㎡) 기준이라 2회 도장에 약 <strong>18L</strong>가 나옵니다. 방·거실·주방으로 나뉜 24평 아파트 <strong>집 전체</strong>는 칸막이 벽이 더해져 벽 면적이 그보다 훨씬 넓으므로, 구조에 따라 <strong>대략 30L 이상</strong>(18L 통 2개 수준)을 잡는 것이 안전합니다. 정확한 양은 [상세 계산] 탭에서 방마다 벽을 입력해 합산하세요. 천장까지 칠하면 그만큼 더 늘어나고, 벽지 위에 칠하는지 벽지를 뜯고 칠하는지에 따라서도 흡수량이 달라집니다.',
               },
               {
                 q: '페인트는 몇 회 도장해야 하나요?',
@@ -36,7 +37,7 @@ const FAQ_LD = [
               },
               {
                 q: '남은 페인트는 어떻게 버리나요?',
-                a: '남은 페인트는 환경부 <strong>「생활계 유해폐기물 관리지침」</strong>의 관리 대상이라 일반 쓰레기로 버리면 안 됩니다. 공식 경로는 관할 유역환경청의 <strong>소량 지정폐기물 수거 서비스</strong>(처리비 kg당 600원 + 방문 수거비 회당 1만원, 직접 운반 시 방문비 면제 — 2026년 7월 확인 기준)이고, 서울시는 내용물이 남은 페인트·락카 통을 특수규격마대로 배출하도록 안내합니다. 흔히 알려진 ‘굳혀서 종량제 배출’은 지자체마다 허용 여부가 달라 거주지 시·군·구 확인이 먼저 필요합니다.',
+                a: '남은 페인트는 환경부 <strong>「생활계 유해폐기물 관리지침」</strong>의 관리 대상이라 일반 쓰레기로 버리면 안 됩니다. 공식 경로는 관할 유역환경청의 <strong>소량 지정폐기물 수거 서비스</strong>(처리비 kg당 600원에 방문 수거비가 회당 1만~2만원 붙으며, 금액은 지역 안내마다 다르고 직접 운반하면 방문비가 면제됨)이고, 서울시는 내용물이 남은 페인트·락카 통을 특수규격마대로 배출하도록 안내합니다. 흔히 알려진 ‘굳혀서 종량제 배출’은 지자체마다 허용 여부가 달라 거주지 시·군·구 확인이 먼저 필요합니다.',
               },
             ]
 
@@ -49,9 +50,19 @@ export default function PaintPage() {
       <h1 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: 'clamp(28px, 5vw, 42px)', fontWeight: 800, letterSpacing: '-1px', marginBottom: '12px' }}>
         <ToolIconBadge catId="interior" />페인트 계산기
       </h1>
-      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '40px' }}>
+      <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '20px' }}>
         벽·천장 면적과 칠할 횟수로 <strong style={{ color: 'var(--text)' }}>필요한 페인트량</strong>과 구매 조합.
       </p>
+
+      <UpdatedMeta
+        date="2026년 7월"
+        basis="수성 1L당 약 10㎡(1회 도장) 기준 — 페인트·시공 단가는 시장 통용 범위, 폐페인트 처리비는 유역환경청·지자체 안내 기준"
+        sources={[
+          { label: '서울 중구청 소량 지정폐기물 처리 서비스', href: 'https://www.junggu.seoul.kr/content.do?cmsid=15486' },
+          { label: '인천시 소량 유해폐기물 처리 서비스 안내', href: 'https://incheon.go.kr/IC010101/view?curPage=&nttNo=2042396&srchKey=&srchSiteRealmCode=&srchWord=' },
+          { label: '서울시 재활용 비해당품목 배출기준', href: 'https://news.seoul.go.kr/env/archives/563504' },
+        ]}
+      />
 
       <PaintClient />
 
@@ -193,7 +204,7 @@ export default function PaintPage() {
             ))}
           </div>
           <p style={{ fontSize: 12, color: 'var(--muted)', marginTop: 12, lineHeight: 1.7 }}>
-            💡 <strong style={{ color: 'var(--text)' }}>경제적 조합 팁</strong> — 18L 1통이 4L 4통(16L) 보다 약 10~15% 저렴합니다. 16L 이상 필요 시 18L 단독 구매가 유리합니다.
+            💡 <strong style={{ color: 'var(--text)' }}>경제적 조합 팁</strong> — 18L 1통이 4L 4통(16L)보다 저렴한 경우가 많습니다. 계산기는 남는 양이 가장 적은 조합을 추천하므로, 필요량이 16L를 넘으면 추천 조합과 18L 1통의 가격을 한 번 비교해 보세요.
           </p>
         </div>
 
@@ -276,7 +287,7 @@ export default function PaintPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 18px' }}>
               <p style={{ fontSize: 14, color: 'var(--accent)', fontWeight: 700, marginBottom: 8 }}>🔧 셀프 페인트</p>
               <ul style={{ paddingLeft: 18, margin: 0, fontSize: 13, color: 'var(--text)', lineHeight: 1.85 }}>
-                <li>24평 기준 약 17~25만원 (재료비)</li>
+                <li>24평 집 전체 약 35~40만원 (재료비, 페인트 약 30~36L 기준)</li>
                 <li>시간: 2~3일 (천천히)</li>
                 <li>만족도 매우 높음</li>
                 <li>페인트는 도배보다 셀프 진입 쉬움</li>
@@ -309,7 +320,7 @@ export default function PaintPage() {
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--success)', borderRadius: 12, padding: '14px 16px' }}>
               <p style={{ fontSize: 13, color: 'var(--success)', fontWeight: 700, marginBottom: 6 }}>① 유역환경청 소량 지정폐기물 수거</p>
               <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.75 }}>
-                가정에서 나온 폐페인트·폐락카 등 <strong style={{ color: 'var(--text)' }}>소량 지정폐기물 7종</strong>을 전화 신청으로 방문 수거합니다. 처리비 <strong style={{ color: 'var(--text)' }}>kg당 600원</strong> + 방문 수거비 <strong style={{ color: 'var(--text)' }}>회당 1만원</strong>이며, 환경청으로 직접 가져가면 방문비가 면제됩니다(10kg 미만 직접 운반 가능, 위험성이 낮으면 20kg까지). 서울권은 한강유역환경청, 세종권은 금강유역환경청 등 관할 유역환경청에 신청합니다. (서울 중구청·세종시 안내, 2026년 7월 확인 기준)
+                가정에서 나온 폐페인트·폐락카 등 <strong style={{ color: 'var(--text)' }}>소량 지정폐기물 7종</strong>을 전화 신청으로 방문 수거합니다. 처리비 <strong style={{ color: 'var(--text)' }}>kg당 600원</strong> + 방문 수거비 <strong style={{ color: 'var(--text)' }}>회당 1만~2만원</strong>(지역 안내마다 다름)이며, 지정 접수처로 직접 가져가면 방문비가 면제됩니다(10kg 미만 직접 운반 가능, 위험성이 낮으면 20kg까지). 서울권은 한강유역환경청, 세종권은 금강유역환경청 등 관할 유역환경청에 신청합니다. (서울 중구청·세종시·인천시 안내 기준)
               </p>
             </div>
             <div style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderTop: '3px solid var(--accent)', borderRadius: 12, padding: '14px 16px' }}>
@@ -329,23 +340,7 @@ export default function PaintPage() {
 
         {/* ── 8. FAQ ── */}
         <div>
-          <h2 style={{ fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif', fontSize: '20px', fontWeight: 700, marginBottom: '16px' }}>
-            자주 묻는 질문 (FAQ)
-          </h2>
-          <FaqJsonLd items={FAQ_LD} />
-          <div style={{ display: 'flex', flexDirection: 'column', gap: '10px' }}>
-            {FAQ_LD.map((f, i) => (
-              <details key={i} style={{ background: 'var(--bg2)', border: '1px solid var(--border)', borderRadius: '12px', padding: '12px 14px' }}>
-                <summary style={{ cursor: 'pointer', fontSize: '14px', fontWeight: 600, color: 'var(--text)' }}>
-                  Q{i + 1}. {f.q}
-                </summary>
-                <p
-                  style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.75, marginTop: '10px' }}
-                  dangerouslySetInnerHTML={{ __html: f.a }}
-                />
-              </details>
-            ))}
-          </div>
+          <Faq items={FAQ_LD} />
         </div>
 
         {/* ── 9. 관련 도구 ── */}

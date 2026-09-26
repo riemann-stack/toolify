@@ -8,7 +8,7 @@ import ToolIconBadge from '@/components/ToolIconBadge'
 export const metadata = buildMetadata({
   path: '/tools/interior/bolt-wrench',
   title: '볼트 스패너 계산기 — M3~M24 + ISO/DIN/KS vs JIS + 알렌·와셔·토크',
-  description: '볼트 머리 공구 선택·토크 중심 — M3~M24 스패너·알렌렌치 사이즈, ISO/DIN/KS vs 옛 JIS 비교, 와셔·너트·강도등급, 공구 세트 4프리셋.',
+  description: '볼트 머리 공구 선택·토크 중심 — M3~M24 스패너·알렌렌치 사이즈, ISO·구 DIN·JIS 소형 머리 크기 비교, 와셔·너트·강도등급, 공구 세트 4프리셋.',
   keywords: ['볼트 스패너 사이즈', 'M8 스패너', '알렌렌치 사이즈', '소켓 사이즈', 'ISO JIS 차이', '와셔 사이즈', '너트 높이', '체결 토크', '강도등급', '공구 세트'],
 })
 
@@ -52,7 +52,7 @@ const faqAnswer: React.CSSProperties = {
 }
 
 const FAQ_LD = [
-  { "q":"M8 스패너는 13mm인가요 12mm인가요?","a":"현행 ISO·DIN·KS 규격은 13mm입니다. 다만 1990년대 이전에 만들어진 일본·한국산 기계·자전거·구형 자동차에는 옛 JIS 기준 12mm가 잔존합니다. 내 스패너가 헐겁게 들어가면 옛 JIS 사이즈를 의심해 보세요. 13mm 스패너를 12mm 볼트에 쓰면 머리가 둥글게 마모(rounded)될 수 있으니 주의." },
+  { "q":"M8 스패너는 13mm인가요 12mm인가요?","a":"현행 ISO·KS 규격과 구 DIN 규격 모두 13mm입니다. 다만 일본차나 옛 일본산 기계·자전거에는 JIS 소형 규격의 12mm 머리가 쓰인 경우가 있습니다. 내 스패너가 헐겁게 들어가면 JIS 소형 사이즈를 의심해 보세요. 13mm 스패너를 12mm 볼트에 쓰면 머리가 둥글게 마모(rounded)될 수 있으니 주의." },
   { "q":"알렌렌치 인치(SAE)와 mm 차이가 큰가요?","a":"가까운 사이즈 차이가 0.05~0.15mm로 매우 작습니다. 예: 1/8\" ≈ 3.18mm로 3mm 알렌과 거의 같음. 그래서 응급 시 인치 알렌으로 mm 볼트를 풀 수는 있지만, 꽉 조여진 볼트는 둥글림 위험이 높아 권장하지 않습니다. 자가정비라면 mm·인치 둘 다 갖추는 게 안전합니다." },
   { "q":"몽키스패너로 모든 볼트를 풀어도 되나요?","a":"가능하지만 권장하지 않습니다. 몽키는 한 면만 잡아서 토크가 비대칭이고, 조 간격이 흔들리면 머리가 둥글게 마모됩니다. 임시·예비용으로만 사용하세요. 스패너/소켓이 정공구이며, 둥글게 마모된 볼트를 풀 때는 오히려 한 사이즈 작은 SAE(인치) 소켓을 망치로 때려 박아 사용하는 방법이 효과적입니다." },
   { "q":"임팩트 드라이버 소켓이랑 핸드 소켓이 다른가요?","a":"네, 다릅니다. 핸드 소켓(은색·크롬바나듐)은 매끈하고 얇으며 손 토크용입니다. 여기에 임팩트를 사용하면 깨져 파편이 튈 위험이 있습니다. 임팩트는 반드시 임팩트 전용 소켓(검정색·크롬몰리)을 사용하세요. 최근에는 임팩트 겸용으로 표시된 제품도 있습니다." },
@@ -74,7 +74,7 @@ export default function BoltWrenchPage() {
         <ToolIconBadge catId="interior" />볼트 스패너 계산기
       </h1>
       <p style={{ fontSize: '15px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '10px' }}>
-        M3~M24 + ISO/DIN/KS vs 옛 JIS 비교 + <strong style={{ color: 'var(--text)' }}>알렌렌치·와셔·너트·토크 등급</strong>.
+        M3~M24 + ISO·구 DIN·JIS 소형 머리 크기 비교 + <strong style={{ color: 'var(--text)' }}>알렌렌치·와셔·너트·토크 등급</strong>.
       </p>
       <p style={{ fontSize: '13px', color: 'var(--muted)', lineHeight: 1.7, marginBottom: '32px' }}>
         이 도구는 <strong style={{ color: 'var(--text)' }}>볼트 머리에 맞는 공구 사이즈 선택·체결 토크</strong> 중심입니다.
@@ -92,7 +92,7 @@ export default function BoltWrenchPage() {
         <ol style={{ margin: 0, paddingLeft: 20, fontSize: 14, color: 'var(--text)', lineHeight: 2 }}>
           <li><strong>볼트 종류 선택</strong> — 외부 6각(육각볼트)인지 내부 6각(소켓캡·버튼·플랫·세트)인지</li>
           <li><strong>사이즈 선택</strong> — M3 ~ M24 (가장 흔한 M6 / M8 / M10)</li>
-          <li><strong>규격 토글</strong> — 외부 6각의 경우 ISO·DIN·KS 현행 ↔ 옛 JIS</li>
+          <li><strong>규격 토글</strong> — 외부 6각의 경우 ISO(현행) · 구 DIN·KS 부속서 · JIS 소형 중 선택</li>
           <li><strong>결과 확인</strong> — 스패너/알렌 사이즈 + 와셔·너트·토크 한 번에</li>
         </ol>
         <p style={{ marginTop: 12, fontSize: 12, color: 'var(--muted)', lineHeight: 1.7 }}>
@@ -101,26 +101,27 @@ export default function BoltWrenchPage() {
         </p>
       </div>
 
-      {/* 2. JIS와 ISO/DIN/KS 차이 */}
-      <h2 style={sectionTitle}>⚠️ JIS와 ISO/DIN/KS, 왜 다른가요?</h2>
+      {/* 2. ISO·구 DIN·JIS 소형 차이 */}
+      <h2 style={sectionTitle}>⚠️ ISO·구 DIN·JIS 소형, 머리 크기가 왜 다른가요?</h2>
       <div style={card}>
         <p style={{ fontSize: 14, color: 'var(--text)', lineHeight: 1.85, marginTop: 0 }}>
           한국 정비·DIY 현장에서 가장 헷갈리는 지점입니다.
-          같은 <strong>M8 볼트</strong>라도 만든 시기·국적에 따라 머리 크기가 다릅니다.
+          같은 <strong>M10 볼트</strong>라도 따르는 규격에 따라 머리 크기가 16·17·14mm로 다릅니다.
         </p>
         <ul style={{ fontSize: 13, color: 'var(--muted)', lineHeight: 1.95, paddingLeft: 18, margin: '8px 0 12px' }}>
-          <li><strong style={{ color: 'var(--text)' }}>1990년대 이전</strong>: 일본·한국은 JIS B 1180 기준. M8=12mm, M10=14mm, M12=17mm</li>
-          <li><strong style={{ color: 'var(--text)' }}>현재</strong>: ISO 4014/4017 · DIN 933 · KS B 1002 모두 통일. M8=13mm, M10=17mm, M12=19mm</li>
-          <li><strong style={{ color: 'var(--text)' }}>주의 영역</strong>: 옛 자전거·기계·구형 자동차에 옛 JIS 사이즈가 잔존</li>
+          <li><strong style={{ color: 'var(--text)' }}>현행 ISO</strong>: ISO 4014/4017(= KS B 1002·JIS B 1180 본체). M8=13mm, M10=16mm, M12=18mm, M14=21mm</li>
+          <li><strong style={{ color: 'var(--text)' }}>구 DIN 933 · KS·JIS 부속서</strong>: ISO 전환 전 치수. M10=17mm, M12=19mm, M14=22mm — 지금도 유통품에 많이 남아 있어요</li>
+          <li><strong style={{ color: 'var(--text)' }}>JIS 소형</strong>: 머리를 한 치수 작게 만든 일본식 규격. M8=12mm, M10=14mm, M12=17mm — 일본차·옛 설비에서 자주 보여요</li>
         </ul>
         <div style={{ background: 'var(--bg3)', borderRadius: 10, padding: '12px 16px', marginTop: 12 }}>
           <p style={{ fontSize: 12, color: 'var(--muted)', margin: '0 0 8px' }}>주요 차이 사이즈</p>
           <table style={{ width: '100%', fontSize: 13, borderCollapse: 'collapse' }}>
             <tbody>
-              <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 13 mm / JIS 12 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 17 mm / JIS 14 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 19 mm / JIS 17 mm</td></tr>
-              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 22 mm / JIS 21 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M8</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 13 / 구 DIN 13 / JIS 소형 12 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M10</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 16 / 구 DIN 17 / JIS 소형 14 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M12</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 18 / 구 DIN 19 / JIS 소형 17 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M14</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 21 / 구 DIN 22 / JIS 소형 19 mm</td></tr>
+              <tr><td style={{ padding: '4px 0' }}>M22</td><td style={{ color: 'var(--accent)', fontFamily: 'Inter, "Noto Sans KR", system-ui, sans-serif' }}>ISO 34 / 구 DIN 32 / JIS 소형 30 mm</td></tr>
             </tbody>
           </table>
         </div>
@@ -201,9 +202,9 @@ export default function BoltWrenchPage() {
       <details style={faqDetails}>
         <summary style={faqSummary}>Q1. M8 스패너는 13mm인가요 12mm인가요?</summary>
         <p style={faqAnswer}>
-          <strong>현행 ISO·DIN·KS 규격은 13mm</strong>입니다. 다만 1990년대 이전에 만들어진
-          일본·한국산 기계·자전거·구형 자동차에는 <strong>옛 JIS 기준 12mm</strong>가 잔존합니다.
-          내 스패너가 헐겁게 들어가면 옛 JIS 사이즈를 의심해 보세요. 13mm 스패너를 12mm 볼트에 쓰면
+          <strong>현행 ISO·KS 규격과 구 DIN 규격 모두 13mm</strong>입니다. 다만 일본차나 옛 일본산
+          기계·자전거에는 <strong>JIS 소형 규격의 12mm</strong> 머리가 쓰인 경우가 있습니다.
+          내 스패너가 헐겁게 들어가면 JIS 소형 사이즈를 의심해 보세요. 13mm 스패너를 12mm 볼트에 쓰면
           머리가 둥글게 마모(rounded)될 수 있으니 주의.
         </p>
       </details>

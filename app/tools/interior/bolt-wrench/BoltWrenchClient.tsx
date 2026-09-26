@@ -8,7 +8,7 @@ import s from './boltWrench.module.css'
 import {
   BOLT_SIZES, BOLT_TYPES, BOLT_DATA, BOLT_DATA_EXTRA,
   NUT_TYPES, WASHER_TYPES, TOOL_KITS, GRADE_INFO,
-  INCH_SPANNERS, type BoltSize, type BoltType, type Standard,
+  INCH_SPANNERS, STANDARDS, STD_LABEL, STD_SHORT, type BoltSize, type BoltType, type Standard,
   getSpanner, getAllen, isStandardDifferent,
   reverseLookupSpanner, reverseLookupAllen, findClosestMetric,
   fmt,
@@ -38,16 +38,23 @@ export default function BoltWrenchClient() {
 
   /* localStorage 복원·저장 */
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       const raw = localStorage.getItem(STORAGE_KEY)
       if (!raw) return
-      const j = JSON.parse(raw)
-      if (j.size && BOLT_SIZES.includes(j.size)) setSize(j.size)
-      if (j.boltType && BOLT_TYPES.some((t) => t.id === j.boltType)) setBoltType(j.boltType)
-      if (j.std === 'iso' || j.std === 'jis') setStd(j.std)
+      const j: unknown = JSON.parse(raw)
+      if (!j || typeof j !== 'object' || Array.isArray(j)) return
+      const o = j as Record<string, unknown>
+      const savedSize = BOLT_SIZES.find((b) => b === o.size)
+      if (savedSize) setSize(savedSize)
+      const savedType = BOLT_TYPES.find((t) => t.id === o.boltType)
+      if (savedType) setBoltType(savedType.id)
+      const savedStd = STANDARDS.find((st) => st === o.std)
+      if (savedStd) setStd(savedStd)
     } catch {}
   }, [])
   useEffect(() => {
+    if (typeof window === 'undefined') return
     try {
       localStorage.setItem(STORAGE_KEY, JSON.stringify({ size, boltType, std }))
     } catch {}
@@ -91,7 +98,7 @@ export default function BoltWrenchClient() {
           { href: '/tools/interior/room-area', label: '방 면적 계산' }
         ]}
       >
-        사용 안내 표시 사이즈·토크는 KS·ISO·DIN <strong>표준 일반치 참고용</strong>입니다. 고강도·안전부품·고급 차량은 반드시 <strong>제조사 매뉴얼·도면</strong>을 따르세요. 옛 JIS 사이즈는 1990년대 이전 일본·한국 산 부품에 주로 잔존합니다.
+        사용 안내 표시 사이즈·토크는 KS·ISO·DIN <strong>표준 일반치 참고용</strong>입니다. 고강도·안전부품·고급 차량은 반드시 <strong>제조사 매뉴얼·도면</strong>을 따르세요. M10·M12·M14·M22는 규격마다 머리 크기가 달라 구 DIN 치수(M10=17mm 등)도 여전히 흔하고, JIS 소형 치수는 일본차·옛 일본산 설비에 주로 남아 있습니다.
       </Disclaimer>
 
       {/* 탭 */}
@@ -142,8 +149,8 @@ export default function BoltWrenchClient() {
           <div className={s.card}>
             <span className={s.cardLabel}>볼트 사이즈 · 규격</span>
 
-            <div className={s.field}>
-              <label className={s.fieldLabel}>볼트 사이즈</label>
+            <div className={s.field} role="group" aria-labelledby="bw-size-label">
+              <span className={s.fieldLabel} id="bw-size-label">볼트 사이즈</span>
               <div className={s.pillRow}>
                 {BOLT_SIZES.map((b) => (
                   <button
@@ -160,25 +167,20 @@ export default function BoltWrenchClient() {
             </div>
 
             {!usesAllen && (
-              <div className={s.field}>
-                <label className={s.fieldLabel}>규격 (외부 6각만 차이)</label>
+              <div className={s.field} role="group" aria-labelledby="bw-std-label">
+                <span className={s.fieldLabel} id="bw-std-label">규격 (외부 6각만 차이)</span>
                 <div className={s.pillRow}>
-                  <button
-                    aria-pressed={std === 'iso'}
-                    className={`${s.pill} ${std === 'iso' ? s.pillActive : ''}`}
-                    onClick={() => setStd('iso')}
-                    type="button"
-                  >
-                    ISO·DIN·KS (현행)
-                  </button>
-                  <button
-                    aria-pressed={std === 'jis'}
-                    className={`${s.pill} ${std === 'jis' ? s.pillActive : ''}`}
-                    onClick={() => setStd('jis')}
-                    type="button"
-                  >
-                    옛 JIS
-                  </button>
+                  {STANDARDS.map((st) => (
+                    <button
+                      key={st}
+                      aria-pressed={std === st}
+                      className={`${s.pill} ${std === st ? s.pillActive : ''}`}
+                      onClick={() => setStd(st)}
+                      type="button"
+                    >
+                      {STD_LABEL[st]}
+                    </button>
+                  ))}
                 </div>
               </div>
             )}
@@ -189,7 +191,7 @@ export default function BoltWrenchClient() {
             <p className={s.heroLabel}>
               {BOLT_TYPES.find((t) => t.id === boltType)!.emoji} {size}{' '}
               {BOLT_TYPES.find((t) => t.id === boltType)!.label}
-              {!usesAllen && ` · ${std === 'iso' ? 'ISO·DIN·KS' : '옛 JIS'}`}
+              {!usesAllen && ` · ${STD_LABEL[std]}`}
             </p>
             {usesAllen ? (
               <p className={s.heroValue}>
@@ -207,11 +209,8 @@ export default function BoltWrenchClient() {
             </p>
             {!usesAllen && diffWarn && (
               <div className={s.warnBadge}>
-                ⚠️ {size}는 ISO {data.spannerISO}mm vs 옛 JIS {data.spannerJIS}mm,
-                같은 볼트라도 규격이 다르면 안 맞습니다.
-                {std === 'iso'
-                  ? ` 옛 한국·일본 제품은 ${data.spannerJIS}mm일 수 있어요.`
-                  : ` 현행 ISO·DIN 제품은 ${data.spannerISO}mm 이에요.`}
+                ⚠️ {size} 머리 크기는 규격마다 달라요 — ISO {data.spannerISO}mm · 구 DIN·KS 부속서 {data.spannerDIN}mm · JIS 소형 {data.spannerJIS}mm.
+                공구가 헐겁게 물리면 다른 규격 볼트일 수 있으니 위 치수를 차례로 대어 보세요.
               </div>
             )}
           </div>
@@ -231,8 +230,9 @@ export default function BoltWrenchClient() {
                   <tr><td>표준 피치 (거친나사)</td><td className={s.cellMono}>{data.pitchCoarse} mm</td></tr>
                   <tr><td>관통홀 (중간 클리어런스)</td><td className={s.cellMono}>⌀ {data.clearanceHole} mm</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>스패너 / 소켓 (외부 6각)</td></tr>
-                  <tr><td>ISO·DIN·KS 현행</td><td className={`${s.cellMono} ${diffWarn ? s.cellAccent : ''}`}>{data.spannerISO} mm</td></tr>
-                  <tr><td>옛 JIS</td><td className={`${s.cellMono} ${diffWarn ? s.cellAccent : ''}`}>{data.spannerJIS} mm</td></tr>
+                  <tr><td>ISO 4014/4017 (현행 KS·JIS 본체)</td><td className={`${s.cellMono} ${diffWarn ? s.cellAccent : ''}`}>{data.spannerISO} mm</td></tr>
+                  <tr><td>구 DIN 933 · KS·JIS 부속서</td><td className={`${s.cellMono} ${diffWarn ? s.cellAccent : ''}`}>{data.spannerDIN} mm</td></tr>
+                  <tr><td>JIS 소형</td><td className={`${s.cellMono} ${diffWarn ? s.cellAccent : ''}`}>{data.spannerJIS} mm</td></tr>
                   <tr className={s.cellSubtitle}><td colSpan={2}>알렌렌치 (내부 6각, 머리 종류별)</td></tr>
                   <tr><td>소켓캡 (DIN 912)</td><td className={s.cellMono}>{data.allenSocket} mm</td></tr>
                   <tr><td>버튼헤드 (ISO 7380)</td><td className={s.cellMono}>{data.allenButton} mm</td></tr>
@@ -301,7 +301,7 @@ export default function BoltWrenchClient() {
             <p>
               표시 토크는 ISO 일반 참고치이며 실제 적용은 제조사 매뉴얼이 우선입니다.
               <br />안전부품(에어백·브레이크·휠너트·시트벨트 등)은 정비공장 권장.
-              <br />옛 JIS 사이즈는 1990년대 이전 제품에 주로 잔존합니다.
+              <br />JIS 소형 사이즈는 일본차·옛 일본산 설비 부품에 주로 남아 있습니다.
             </p>
           </div>
         </>
@@ -325,7 +325,7 @@ export default function BoltWrenchClient() {
                 step={0.5}
               />
               <div className={s.pillRow} style={{ marginTop: 8 }}>
-                {[10, 12, 13, 14, 17, 19, 22, 24].map((mm) => (
+                {[10, 12, 13, 14, 16, 17, 18, 19, 22, 24].map((mm) => (
                   <button
                     key={mm}
                     className={s.pill}
@@ -416,8 +416,8 @@ export default function BoltWrenchClient() {
           {/* 인치 호환표 */}
           <div className={s.card}>
             <span className={s.cardLabel}>인치 스패너 ↔ 미터 호환</span>
-            <div className={s.field}>
-              <label className={s.fieldLabel}>인치 사이즈 선택</label>
+            <div className={s.field} role="group" aria-labelledby="bw-inch-label">
+              <span className={s.fieldLabel} id="bw-inch-label">인치 사이즈 선택</span>
               <div className={s.pillRow}>
                 {INCH_SPANNERS.map((i) => (
                   <button
@@ -438,8 +438,9 @@ export default function BoltWrenchClient() {
                 <p className={s.convertLabel}>{inchMatch.fraction}</p>
                 <p className={s.convertValue}>{inchMatch.mm.toFixed(2)} mm</p>
                 <p className={s.convertSub}>
-                  ≈ {inchMatch.iso ? `${inchMatch.iso}(ISO)` : '직접 매칭 없음'}
-                  {inchMatch.jis && inchMatch.jis !== inchMatch.iso ? ` · ${inchMatch.jis}(옛 JIS)` : ''}
+                  ≈ {inchMatch.iso ? `${inchMatch.iso}(ISO)` : 'ISO 매칭 없음'}
+                  {inchMatch.din && inchMatch.din !== inchMatch.iso ? ` · ${inchMatch.din}(${STD_SHORT.din})` : ''}
+                  {inchMatch.jis && inchMatch.jis !== inchMatch.iso ? ` · ${inchMatch.jis}(${STD_SHORT.jis})` : ''}
                 </p>
               </div>
             )}
@@ -451,7 +452,8 @@ export default function BoltWrenchClient() {
                     <th scope="col">인치</th>
                     <th scope="col">mm</th>
                     <th scope="col">ISO 매칭</th>
-                    <th scope="col">옛 JIS 매칭</th>
+                    <th scope="col">구 DIN 매칭</th>
+                    <th scope="col">JIS 소형 매칭</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -462,6 +464,7 @@ export default function BoltWrenchClient() {
                         <td className={s.cellMono}>{i.fraction}</td>
                         <td className={s.cellMono}>{i.mm.toFixed(2)}</td>
                         <td className={s.cellMono}>{m.iso ?? '—'}</td>
+                        <td className={s.cellMono}>{m.din && m.din !== m.iso ? m.din : '—'}</td>
                         <td className={s.cellMono}>{m.jis && m.jis !== m.iso ? m.jis : '—'}</td>
                       </tr>
                     )
@@ -523,7 +526,7 @@ export default function BoltWrenchClient() {
                 <thead>
                   <tr>
                     <th scope="col">사이즈</th>
-                    <th scope="col">스패너 (ISO)</th>
+                    <th scope="col">스패너 (DIN 934)</th>
                     <th scope="col">표준 높이</th>
                     <th scope="col">박형 높이</th>
                   </tr>
@@ -532,7 +535,7 @@ export default function BoltWrenchClient() {
                   {BOLT_SIZES.map((b) => (
                     <tr key={b}>
                       <td className={s.cellMono}>{b}</td>
-                      <td className={s.cellMono}>{BOLT_DATA[b].spannerISO} mm</td>
+                      <td className={s.cellMono}>{BOLT_DATA[b].spannerDIN} mm</td>
                       <td className={s.cellMono}>{BOLT_DATA[b].nutStd} mm</td>
                       <td className={s.cellMono}>{BOLT_DATA[b].nutThin} mm</td>
                     </tr>

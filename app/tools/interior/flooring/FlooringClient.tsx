@@ -1,8 +1,9 @@
 'use client'
 
 import Disclaimer from '@/components/Disclaimer'
-import { useMemo, useState } from 'react'
+import { useId, useMemo, useState } from 'react'
 import styles from './flooring.module.css'
+import { rollMetersToBuy } from './flooringUtils'
 
 /* ID 카운터 (모듈 레벨) */
 let _flIdCounter = 0
@@ -36,7 +37,7 @@ const FLOORING_TYPES: FlooringType[] = [
   { id: 'laminate',   name: '강화마루',        icon: '🪵', unitType: 'box',  unitArea: 2.4, unitLabel: '박스',
     avgPrice: 28000, badge: '표준', badgeCls: 'bgLaminate', cls: 'flLaminate', note: 'HDF + 데코필름, 콜리지·층간소음↓' },
   { id: 'engineered', name: '강마루',          icon: '🪵', unitType: 'box',  unitArea: 2.6, unitLabel: '박스',
-    avgPrice: 45000, badge: '고급', badgeCls: 'bgEngineered', cls: 'flEngineered', note: '천연무늬목 + 합판, 천연감 우수' },
+    avgPrice: 45000, badge: '고급', badgeCls: 'bgEngineered', cls: 'flEngineered', note: '합판 + 고압 멜라민(HPM) 표면, 난방 적합·찍힘에 강함' },
   { id: 'hardwood',   name: '원목마루',        icon: '🌳', unitType: 'box',  unitArea: 2.0, unitLabel: '박스',
     avgPrice: 80000, badge: '프리미엄', badgeCls: 'bgHardwood', cls: 'flHardwood', note: '천연원목, 보수 가능' },
   { id: 'decoTile',   name: '데코타일 (LVT)',  icon: '⬜',  unitType: 'box',  unitArea: 3.3, unitLabel: '박스',
@@ -67,9 +68,9 @@ const INSTALL_METHODS = [
 const PYUNG_TO_M2 = 3.3058
 
 /* 유틸 */
-/* 박스/단위 올림 — 부동소수 오차 보정 (예: 24×1.1÷2.4 = 11.0000002 → 11) */
+/* 박스/단위 올림 — 부동소수 오차 보정 (예: 24×1.1÷2.4 = 11.0000002 → 11), 면적 0일 때 -0 표기 방지 */
 function ceilUnits(x: number): number {
-  return Math.ceil(x - 1e-9)
+  return Math.max(0, Math.ceil(x - 1e-9))
 }
 function n(v: string | number, min = 0): number {
   const x = typeof v === 'number' ? v : Number(v)
@@ -112,7 +113,8 @@ export default function FlooringClient() {
   /* 공간 정보 */
   const [sizeMode, setSizeMode] = useState<SizeMode>('pyung')
   const [pyung, setPyung] = useState(15)
-  const [pyungCustom, setPyungCustom] = useState<number | null>(null)
+  /* 직접 입력 평수 — 입력 문자열 그대로 보관(null이면 목록 선택 모드) */
+  const [pyungCustomStr, setPyungCustomStr] = useState<string | null>(null)
   const [widthM, setWidthM]   = useState('5.0')
   const [lengthM, setLengthM] = useState('4.0')
 
@@ -162,8 +164,15 @@ export default function FlooringClient() {
   /* 복사 피드백 */
   const [copied, setCopied] = useState(false)
 
+  /* SVG clipPath id — 인스턴스별 고유화 */
+  const clipId = `roomClip${useId().replace(/[^a-zA-Z0-9_-]/g, '')}`
+
   /* ─── 면적 ─── */
-  const effectivePyung = pyungCustom ?? pyung
+  const effectivePyung = useMemo(() => {
+    if (pyungCustomStr === null) return pyung
+    const v = parseFloat(pyungCustomStr)
+    return Number.isFinite(v) && v > 0 ? Math.min(300, v) : 0
+  }, [pyung, pyungCustomStr])
   const dims = useMemo(() => {
     if (sizeMode === 'pyung') {
       const m2 = effectivePyung * PYUNG_TO_M2
@@ -185,45 +194,63 @@ export default function FlooringClient() {
   const calc = useMemo(() => {
     const baseArea = dims.area
     const totalLossPct = lossPct + method.loss
-    const requiredArea = baseArea * (1 + totalLossPct / 100)
-    const requiredUnits = effectiveUnitArea > 0 ? ceilUnits(requiredArea / effectiveUnitArea) : 0
-    const totalPurchasedArea = requiredUnits * effectiveUnitArea
+    let requiredArea: number
+    let requiredUnits: number
+    let totalPurchasedArea: number
+    /* 로스 적용 전 배치 면적 — 박스·타일은 시공 면적, 장판은 롤 폭 단위 배치(재단 손실 포함) 면적 */
+    let layoutArea = baseArea
+    let displayUnitDesc = ''
+
+    if (fl.unitType === 'roll' && fl.rollWidth) {
+      // 장판: 면적÷폭이 아니라 폭(줄) 단위 배치로 길이 산출 → 로스율 더해 정수 미터 구매
+      const r = rollMetersToBuy(dims.width, dims.length, fl.rollWidth, totalLossPct)
+      layoutArea = r.layout.lengthM * fl.rollWidth
+      requiredArea = r.requiredM * fl.rollWidth
+      requiredUnits = r.buyM
+      totalPurchasedArea = requiredUnits * fl.rollWidth
+      displayUnitDesc = r.layout.strips > 0
+        ? `폭 ${fl.rollWidth}m ${r.layout.strips}줄 × ${fmt(r.layout.stripLenM, 1)}m → 구매 권장 ${requiredUnits}m`
+        : `폭 ${fl.rollWidth}m`
+    } else {
+      requiredArea = baseArea * (1 + totalLossPct / 100)
+      requiredUnits = effectiveUnitArea > 0 ? ceilUnits(requiredArea / effectiveUnitArea) : 0
+      totalPurchasedArea = requiredUnits * effectiveUnitArea
+      displayUnitDesc = fl.unitType === 'tile'
+        ? `${fl.tileSize ?? ''} 타일 ${requiredUnits}장`
+        : `1박스 ${effectiveUnitArea}㎡`
+    }
     const surplusArea = totalPurchasedArea - baseArea
 
     const materialCost = baseArea * effectivePrice
     const lossCost = (totalPurchasedArea - baseArea) * effectivePrice
     const totalCost = totalPurchasedArea * effectivePrice
 
-    /* 장판은 미터 단위로 표기 — 1롤 길이 = unitArea / rollWidth 가정 */
-    let displayUnitDesc = ''
-    if (fl.unitType === 'roll' && fl.rollWidth) {
-      // 장판: 폭 1.8m, 실제 필요 길이(로스 포함) → 정수 미터로 구매 권장
-      const requiredMeters = Math.ceil(requiredArea / fl.rollWidth * 10 - 1e-9) / 10
-      displayUnitDesc = `폭 ${fl.rollWidth}m · 필요 ${requiredMeters}m → 구매 권장 ${requiredUnits}m`
-    } else if (fl.unitType === 'tile') {
-      displayUnitDesc = `${fl.tileSize ?? ''} 타일 ${requiredUnits}장`
-    } else {
-      displayUnitDesc = `1박스 ${effectiveUnitArea}㎡`
-    }
-
     return {
-      baseArea, totalLossPct, requiredArea,
+      baseArea, totalLossPct, layoutArea, requiredArea,
       requiredUnits, totalPurchasedArea, surplusArea,
       materialCost, lossCost, totalCost,
       displayUnitDesc,
     }
-  }, [dims.area, effectiveUnitArea, lossPct, method.loss, effectivePrice, fl])
+  }, [dims.area, dims.width, dims.length, effectiveUnitArea, lossPct, method.loss, effectivePrice, fl])
 
   /* 빠른 참조표 (선택 바닥재 기준 평수별) */
   const refTable = useMemo(() => {
     const pyOpts = [5, 7, 10, 15, 20, 24, 30]
     return pyOpts.map(p => {
       const area = p * PYUNG_TO_M2
-      const reqArea = area * (1 + (lossPct + method.loss) / 100)
-      const units = effectiveUnitArea > 0 ? ceilUnits(reqArea / effectiveUnitArea) : 0
+      const loss = lossPct + method.loss
+      let units: number
+      if (fl.unitType === 'roll' && fl.rollWidth) {
+        // 장판은 정사각형 방 가정으로 폭 배치 길이 산출
+        const side = Math.sqrt(area)
+        units = rollMetersToBuy(side, side, fl.rollWidth, loss).buyM
+      } else {
+        const reqArea = area * (1 + loss / 100)
+        units = effectiveUnitArea > 0 ? ceilUnits(reqArea / effectiveUnitArea) : 0
+      }
       return { p, area, units }
     })
-  }, [effectiveUnitArea, lossPct, method.loss])
+  }, [effectiveUnitArea, lossPct, method.loss, fl])
 
   /* ─── 탭 2 방별 계산 ─── */
   const t2Rooms = useMemo(() => {
@@ -232,15 +259,25 @@ export default function FlooringClient() {
       const flT = FLOORING_TYPES.find(f => f.id === r.flooringId)!
       const m = INSTALL_METHODS.find(x => x.id === r.methodId)!
       const totalLoss = r.lossPct + m.loss
-      const reqArea = area * (1 + totalLoss / 100)
-      const units = flT.unitArea > 0 ? ceilUnits(reqArea / flT.unitArea) : 0
-      const cost = units * flT.unitArea * flT.avgPrice
+      let reqArea: number
+      let units: number
+      if (flT.unitType === 'roll' && flT.rollWidth) {
+        const rr = rollMetersToBuy(r.width, r.length, flT.rollWidth, totalLoss)
+        reqArea = rr.requiredM * flT.rollWidth
+        units = rr.buyM
+      } else {
+        reqArea = area * (1 + totalLoss / 100)
+        units = flT.unitArea > 0 ? ceilUnits(reqArea / flT.unitArea) : 0
+      }
+      const buyArea = units * flT.unitArea   // 실제 구매 면적(박스·정수 m 올림)
+      const cost = buyArea * flT.avgPrice
       return {
-        id: r.id, name: r.name, area,
+        id: r.id, name: r.name.trim() || '방', area,
         flooringName: flT.name,
+        avgPrice: flT.avgPrice,
         unitLabel: flT.unitLabel,
         methodName: m.name,
-        units, cost,
+        buyArea, units, cost,
       }
     })
   }, [rooms])
@@ -261,16 +298,25 @@ export default function FlooringClient() {
 
   /* ─── 탭 3 견적 ─── */
   const usedArea = quoteSrc === 'detail' ? t2Total.area : calc.baseArea
-  const usedReqArea = quoteSrc === 'detail'
-    ? rooms.reduce((s, r) => {
-        const a = r.width * r.length
-        const m = INSTALL_METHODS.find(x => x.id === r.methodId)!
-        return s + a * (1 + (r.lossPct + m.loss) / 100)
-      }, 0)
-    : calc.requiredArea
+  /* 자재비는 실제 구매 수량(박스·정수 m 올림) 기준 — 단가가 같으면 간편·상세 탭의 자재비 합계와 일치 */
+  const usedBuyArea = quoteSrc === 'detail'
+    ? t2Rooms.reduce((s, r) => s + r.buyArea, 0)
+    : calc.totalPurchasedArea
   const usedPyung = usedArea / PYUNG_TO_M2
   const pricePerSqm = parseComma(pricePerSqmStr)
-  const materialCostQuote = usedReqArea * pricePerSqm
+  /* 상세 기준: 방별로 고른 바닥재의 평균 단가를 적용해 바닥재별 소계로 묶음 */
+  const detailMaterialRows = useMemo(() => {
+    const map = new Map<string, { name: string; price: number; buyArea: number }>()
+    t2Rooms.forEach(r => {
+      const g = map.get(r.flooringName) ?? { name: r.flooringName, price: r.avgPrice, buyArea: 0 }
+      g.buyArea += r.buyArea
+      map.set(r.flooringName, g)
+    })
+    return [...map.values()].map(g => ({ ...g, cost: g.buyArea * g.price }))
+  }, [t2Rooms])
+  const materialCostQuote = quoteSrc === 'detail'
+    ? detailMaterialRows.reduce((s, g) => s + g.cost, 0)
+    : usedBuyArea * pricePerSqm
   const adhesiveTotal = usedArea * adhesiveCostPerSqm
   const moldingTotal = moldingMeter * moldingPricePerM
   const selfTotal = materialCostQuote + adhesiveTotal + moldingTotal + protectCost
@@ -323,16 +369,22 @@ export default function FlooringClient() {
       })
       lines.push(`합계: ${fmt(t2Total.area)}㎡ → ${t2UnitsByLabel} (${fmtKRW(t2Total.cost)})`)
     } else {
+      lines.push('🪵 바닥재 견적')
+      if (quoteSrc === 'detail') {
+        detailMaterialRows.forEach(g => {
+          lines.push(`${g.name} ${fmt(g.buyArea)}㎡ × ${fmt(g.price)}원 = ${fmtKRW(g.cost)}`)
+        })
+      } else {
+        lines.push(`${fl.name} ${fmt(usedBuyArea)}㎡ × ${fmt(pricePerSqm)}원 = ${fmtKRW(materialCostQuote)}`)
+      }
       lines.push(
-        '🪵 바닥재 견적',
-        `${fl.name} ${fmt(usedReqArea)}㎡ × ${fmt(pricePerSqm)}원 = ${fmtKRW(materialCostQuote)}`,
         `셀프 자재 합계: ${fmtKRW(selfTotal)}`,
         `전문 시공 합계: ${fmtKRW(proTotal)}`,
       )
     }
     lines.push('youtil.kr/tools/interior/flooring')
     navigator.clipboard?.writeText(lines.join('\n')).then(() => {
-      setCopied(true); window.setTimeout(() => setCopied(false), 1200)
+      setCopied(true); window.setTimeout(() => setCopied(false), 1500)
     })
   }
 
@@ -370,21 +422,23 @@ export default function FlooringClient() {
 
             {sizeMode === 'pyung' ? (
               <>
-                <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustom !== null ? 'custom' : pyung} onChange={e => {
-                  if (e.target.value === 'custom') { setPyungCustom(15) }
-                  else { setPyungCustom(null); setPyung(Number(e.target.value)) }
+                <select className={styles.pyungSelect} aria-label="평수 선택" value={pyungCustomStr !== null ? 'custom' : pyung} onChange={e => {
+                  if (e.target.value === 'custom') { setPyungCustomStr('15') }
+                  else { setPyungCustomStr(null); setPyung(Number(e.target.value)) }
                 }}>
                   {pyungOptions.map(p => <option key={p} value={p}>{p}평</option>)}
                   <option value="custom">직접 입력…</option>
                 </select>
-                {pyungCustom !== null && (
+                {pyungCustomStr !== null && (
                   <div style={{ marginTop: 8 }}>
-                    <input className={styles.smallInput} aria-label="평수 직접 입력" type="number" inputMode="decimal" min={1} max={300}
-                      value={pyungCustom}
-                      onChange={e => setPyungCustom(Math.max(1, Math.min(300, Number(e.target.value) || 1)))} />
+                    <input className={styles.smallInput} aria-label="평수 직접 입력" type="number" inputMode="decimal" min={0.1} max={300}
+                      value={pyungCustomStr}
+                      onChange={e => setPyungCustomStr(e.target.value)} />
                   </div>
                 )}
-                <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (정사각형 가정)</p>
+                {dims.area > 0
+                  ? <p className={styles.areaShow}>약 {fmt(dims.area)}㎡ (정사각형 가정)</p>
+                  : <p className={styles.areaShow} style={{ color: 'var(--danger)' }}>⚠️ 평수를 입력하세요</p>}
               </>
             ) : (
               <>
@@ -519,7 +573,10 @@ export default function FlooringClient() {
               <tbody>
                 <tr><td>시공 면적</td><td>{fmt(dims.area)}㎡ ({fmt(dims.area / PYUNG_TO_M2, 1)}평)</td></tr>
                 <tr><td>시공 방식 ({method.name})</td><td>로스 +{method.loss}%</td></tr>
-                <tr className={styles.addRow}><td>로스율 +{lossPct}% 추가</td><td>+{fmt(dims.area * (lossPct + method.loss) / 100)}㎡</td></tr>
+                {fl.unitType === 'roll' && (
+                  <tr><td>롤 폭 배치·재단 여유</td><td>+{fmt(calc.layoutArea - dims.area)}㎡</td></tr>
+                )}
+                <tr className={styles.addRow}><td>총 로스 +{calc.totalLossPct}% (방식 {method.loss}% + 로스율 {lossPct}%)</td><td>+{fmt(calc.layoutArea * calc.totalLossPct / 100)}㎡</td></tr>
                 <tr className={styles.totalRow}><td>필요 시공 면적</td><td>{fmt(calc.requiredArea)}㎡</td></tr>
                 <tr><td>1{fl.unitLabel} 면적</td><td>{effectiveUnitArea}㎡</td></tr>
                 <tr className={styles.totalRow}><td>필요 {fl.unitLabel}</td><td>{calc.requiredUnits}{fl.unitLabel}</td></tr>
@@ -609,14 +666,14 @@ export default function FlooringClient() {
                 return (
                   <svg className={styles.floorPlanSvg} viewBox={`0 0 ${VBW} ${VBH}`} aria-hidden="true">
                     <defs>
-                      <clipPath id="roomClip">
+                      <clipPath id={clipId}>
                         <rect x={x0} y={y0} width={drawW} height={drawH} />
                       </clipPath>
                     </defs>
                     {/* 방 배경 */}
                     <rect x={x0} y={y0} width={drawW} height={drawH} fill="rgba(234,88,12,0.05)" stroke="#fff" strokeWidth={2} />
                     {/* 박스 패턴 (방 안에서만) */}
-                    <g clipPath="url(#roomClip)">{patterns}</g>
+                    <g clipPath={`url(#${clipId})`}>{patterns}</g>
                     {/* 치수 */}
                     <text x={x0 + drawW / 2} y={y0 - 8} textAnchor="middle" fill="var(--muted)" fontSize="10" fontFamily="monospace">{w.toFixed(1)}m</text>
                     <text x={x0 - 8} y={y0 + drawH / 2 + 4} textAnchor="end" fill="var(--muted)" fontSize="10" fontFamily="monospace">{l.toFixed(1)}m</text>
@@ -660,10 +717,11 @@ export default function FlooringClient() {
         <>
           {rooms.map(r => {
             const calc = t2Rooms.find(c => c.id === r.id)!
+            const roomLabel = calc.name
             return (
               <div key={r.id} className={styles.roomBlock}>
                 <div className={styles.roomHeader}>
-                  <input className={styles.roomHeaderInput} aria-label="방 이름" type="text" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value || '방' })} />
+                  <input className={styles.roomHeaderInput} aria-label="방 이름" type="text" placeholder="방" value={r.name} onChange={e => updateRoom(r.id, { name: e.target.value })} />
                   {rooms.length > 1 && (
                     <button type="button" className={styles.removeRoomBtn} onClick={() => removeRoom(r.id)}>방 삭제</button>
                   )}
@@ -672,18 +730,18 @@ export default function FlooringClient() {
                 <div className={styles.roomDimRow}>
                   <div>
                     <span className={styles.subLabel}>가로 (m)</span>
-                    <input className={styles.smallInput} aria-label={`${r.name} 가로 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={r.width} onChange={e => updateRoom(r.id, { width: n(e.target.value) })} />
+                    <input className={styles.smallInput} aria-label={`${roomLabel} 가로 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={r.width} onChange={e => updateRoom(r.id, { width: n(e.target.value) })} />
                   </div>
                   <div>
                     <span className={styles.subLabel}>세로 (m)</span>
-                    <input className={styles.smallInput} aria-label={`${r.name} 세로 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={r.length} onChange={e => updateRoom(r.id, { length: n(e.target.value) })} />
+                    <input className={styles.smallInput} aria-label={`${roomLabel} 세로 (m)`} type="number" inputMode="decimal" step={0.1} min={0} value={r.length} onChange={e => updateRoom(r.id, { length: n(e.target.value) })} />
                   </div>
                 </div>
 
                 <div className={styles.roomTypeRow}>
                   <div>
                     <span className={styles.subLabel}>바닥재</span>
-                    <select className={styles.roomMiniSelect} aria-label={`${r.name} 바닥재`} value={r.flooringId} onChange={e => updateRoom(r.id, { flooringId: e.target.value })}>
+                    <select className={styles.roomMiniSelect} aria-label={`${roomLabel} 바닥재`} value={r.flooringId} onChange={e => updateRoom(r.id, { flooringId: e.target.value })}>
                       {FLOORING_TYPES.filter(f => f.id !== 'custom').map(f => (
                         <option key={f.id} value={f.id}>{f.icon} {f.name} (1{f.unitLabel} {f.unitArea}㎡)</option>
                       ))}
@@ -694,13 +752,13 @@ export default function FlooringClient() {
                 <div className={styles.roomDimRow}>
                   <div>
                     <span className={styles.subLabel}>시공 방식</span>
-                    <select className={styles.roomMiniSelect} aria-label={`${r.name} 시공 방식`} value={r.methodId} onChange={e => updateRoom(r.id, { methodId: e.target.value as RoomInput['methodId'] })}>
+                    <select className={styles.roomMiniSelect} aria-label={`${roomLabel} 시공 방식`} value={r.methodId} onChange={e => updateRoom(r.id, { methodId: e.target.value as RoomInput['methodId'] })}>
                       {INSTALL_METHODS.map(m => <option key={m.id} value={m.id}>{m.name} ({m.hint})</option>)}
                     </select>
                   </div>
                   <div>
                     <span className={styles.subLabel}>로스율</span>
-                    <select className={styles.roomMiniSelect} aria-label={`${r.name} 로스율`} value={r.lossPct} onChange={e => updateRoom(r.id, { lossPct: Number(e.target.value) })}>
+                    <select className={styles.roomMiniSelect} aria-label={`${roomLabel} 로스율`} value={r.lossPct} onChange={e => updateRoom(r.id, { lossPct: Number(e.target.value) })}>
                       <option value={5}>5%</option>
                       <option value={10}>10%</option>
                       <option value={15}>15%</option>
@@ -805,13 +863,21 @@ export default function FlooringClient() {
             </div>
             <div style={{ height: 12 }} />
 
-            <span className={styles.subLabel}>1㎡당 가격</span>
-            <div className={styles.inputRow}>
-              <input className={styles.smallInput} aria-label="1㎡당 가격" type="text" inputMode="numeric"
-                value={fmt(pricePerSqm, 0)}
-                onChange={e => setPricePerSqmStr(parseComma(e.target.value).toString())} />
-              <span className={styles.unit}>원/㎡</span>
-            </div>
+            {quoteSrc === 'simple' ? (
+              <>
+                <span className={styles.subLabel}>1㎡당 가격</span>
+                <div className={styles.inputRow}>
+                  <input className={styles.smallInput} aria-label="1㎡당 가격" type="text" inputMode="numeric"
+                    value={fmt(pricePerSqm, 0)}
+                    onChange={e => setPricePerSqmStr(parseComma(e.target.value).toString())} />
+                  <span className={styles.unit}>원/㎡</span>
+                </div>
+              </>
+            ) : (
+              <p style={{ fontSize: 12, color: 'var(--muted)', lineHeight: 1.6, margin: 0 }}>
+                상세 계산 기준은 방마다 고른 바닥재의 평균 단가로 자재비를 계산해요.
+              </p>
+            )}
 
             <div style={{ height: 12 }} />
             <span className={styles.subLabel}>본드·접착제 (1㎡당)</span>
@@ -860,12 +926,21 @@ export default function FlooringClient() {
                   <tr><th scope="col">항목</th><th scope="col">단가</th><th scope="col">수량</th><th scope="col">합계</th></tr>
                 </thead>
                 <tbody>
-                  <tr className={styles.selfRow}>
-                    <td>{fl.name}</td>
-                    <td>{fmt(pricePerSqm, 0)}원/㎡</td>
-                    <td>{fmt(usedReqArea, 1)}㎡</td>
-                    <td>{fmtKRW(materialCostQuote)}</td>
-                  </tr>
+                  {quoteSrc === 'detail' ? detailMaterialRows.map(g => (
+                    <tr key={g.name} className={styles.selfRow}>
+                      <td>{g.name}</td>
+                      <td>{fmt(g.price, 0)}원/㎡</td>
+                      <td>{fmt(g.buyArea, 1)}㎡</td>
+                      <td>{fmtKRW(g.cost)}</td>
+                    </tr>
+                  )) : (
+                    <tr className={styles.selfRow}>
+                      <td>{fl.name}</td>
+                      <td>{fmt(pricePerSqm, 0)}원/㎡</td>
+                      <td>{fmt(usedBuyArea, 1)}㎡</td>
+                      <td>{fmtKRW(materialCostQuote)}</td>
+                    </tr>
+                  )}
                   <tr className={styles.selfRow}>
                     <td>본드·접착제</td>
                     <td>{fmt(adhesiveCostPerSqm, 0)}원/㎡</td>
